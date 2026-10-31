@@ -48,6 +48,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -737,6 +738,15 @@ fun SettingsDialog(
                         }
                     }
                 }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(
+                    text = if (isEnglish) "Close" else "बंद करें",
+                    fontWeight = FontWeight.Bold,
+                    color = DeepNavy
+                )
             }
         },
         shape = RoundedCornerShape(20.dp)
