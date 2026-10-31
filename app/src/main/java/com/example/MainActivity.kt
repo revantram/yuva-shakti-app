@@ -397,9 +397,6 @@ fun MainScreen(viewModel: MainViewModel) {
                         events = events,
                         isAdmin = uiState.isAdmin,
                         onAddEventClick = { viewModel.openAddEventDialog(true) },
-                        onPhotoClick = { uri, title ->
-                            eventPhotoToView = Pair(uri, title)
-                        },
                         onDeleteEvent = { viewModel.deleteEvent(it) }
                     )
                 }
@@ -414,10 +411,9 @@ fun MainScreen(viewModel: MainViewModel) {
                         // 1. Daily Inspirational Thought (दैनिक सुविचार) - Rotates Daily
                         item {
                             DailyThoughtCard(
-                                todayThought = DailyThoughtHelper.getTodayThought(),
-                                onShareClick = {
-                                    val text = DailyThoughtHelper.generateShareText(DailyThoughtHelper.getTodayThought())
-                                    shareToWhatsApp(context, text)
+                                thought = DailyThoughtHelper.getTodayThought(),
+                                onNotifyClick = {
+                                    viewModel.sendDailyThoughtNotification()
                                 }
                             )
                         }
