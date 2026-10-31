@@ -3,6 +3,7 @@ package com.example.data
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.util.CloudBackupHelper
+import com.example.util.FirestoreSyncHelper
 import com.example.util.NotificationHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -94,15 +95,38 @@ class MemberRepository(
             title = "👋 नया सदस्य जुड़ा: ${member.name}",
             message = "${member.name} जी युवा शक्ति ग्रुप बहीखाता में जुड़े (अंशदान: ₹${member.monthlyAmount})।"
         )
-        id
+        id.also { newId ->
+            FirestoreSyncHelper.saveSingleMember(member.copy(id = newId))
+        }
     }
 
     suspend fun updateMember(member: MemberEntity) = withContext(Dispatchers.IO) {
         memberDao.updateMember(member)
+        FirestoreSyncHelper.saveSingleMember(member)
     }
 
     suspend fun deleteMember(member: MemberEntity) = withContext(Dispatchers.IO) {
         memberDao.deleteMember(member)
+        FirestoreSyncHelper.deleteMember(member.id)
+    }
+
+    suspend fun syncWithFirestore(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val localMembers = memberDao.getAllMembersList()
+            if (localMembers.isNotEmpty()) {
+                FirestoreSyncHelper.uploadMembersToFirestore(localMembers)
+            } else {
+                val cloudMembers = FirestoreSyncHelper.fetchMembersFromFirestore()
+                if (cloudMembers.isNotEmpty()) {
+                    for (m in cloudMembers) {
+                        memberDao.insertMember(m)
+                    }
+                }
+            }
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
     suspend fun insertExpense(

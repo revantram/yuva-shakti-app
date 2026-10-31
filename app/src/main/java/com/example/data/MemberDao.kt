@@ -13,6 +13,9 @@ interface MemberDao {
     @Query("SELECT * FROM members ORDER BY sortOrder ASC, id ASC")
     fun getAllMembers(): Flow<List<MemberEntity>>
 
+    @Query("SELECT * FROM members ORDER BY sortOrder ASC, id ASC")
+    suspend fun getAllMembersList(): List<MemberEntity>
+
     @Query("SELECT COUNT(*) FROM members")
     suspend fun getMemberCount(): Int
 

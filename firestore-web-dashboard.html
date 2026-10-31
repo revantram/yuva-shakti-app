@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>युवा शक्ति ग्रुप - क्लाउड बहीखाता (Firebase Firestore)</title>
+  <style>
+    :root {
+      --primary: #1e1b4b;
+      --accent: #d97706;
+      --success: #059669;
+      --danger: #dc2626;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
+    .container { max-width: 900px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 24px; padding: 20px; background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 16px; border: 1.5px solid #d97706; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    .header h1 { font-size: 22px; color: #fbbf24; margin-bottom: 6px; }
+    .header p { font-size: 13px; color: #cbd5e1; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(5,150,105,0.2); color: #34d399; padding: 4px 12px; border-radius: 999px; font-size: 11px; margin-top: 10px; border: 1px solid #059669; }
+    .dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+    .card { background: var(--card-bg); border-radius: 14px; border: 1px solid var(--border); padding: 18px; margin-bottom: 20px; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: #0f172a; border-radius: 12px; padding: 14px; text-align: center; border: 1px solid var(--border); }
+    .stat-val { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+    .stat-lbl { font-size: 11px; color: var(--text-muted); }
+    .controls { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .search-box { flex: 1; min-width: 200px; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border); border-radius: 10px; color: #fff; font-size: 13px; }
+    .btn { padding: 10px 16px; border-radius: 10px; border: none; font-weight: bold; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: #f59e0b; color: #451a03; }
+    .btn-primary:hover { background: #d97706; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 12px; background: #0f172a; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); }
+    td { padding: 12px; border-bottom: 1px solid var(--border); }
+    tr:hover { background: rgba(255,255,255,0.03); }
+    .badge { padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-block; }
+    .badge-paid { background: rgba(5,150,105,0.2); color: #34d399; border: 1px solid #059669; }
+    .badge-pending { background: rgba(220,38,38,0.2); color: #f87171; border: 1px solid #dc2626; }
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>🚩 युवा शक्ति ग्रुप (भाटी परिवार कुचेरा) 🚩</h1>
+      <p>गूगल फ़ायरबेस लाइव क्लाउड बहीखाता (Firebase Firestore)</p>
+      <div class="status-badge">
+        <span class="dot"></span>
+        <span>प्रोजेक्ट: yuva-shakti-group • लाइव कनेक्टेड</span>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val" id="totalMembers">0</div>
+        <div class="stat-lbl">कुल सदस्य</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color: #34d399;" id="paidMembers">0</div>
+        <div class="stat-lbl">जमा सदस्य</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color: #f87171;" id="pendingMembers">0</div>
+        <div class="stat-lbl">बाकी सदस्य</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="controls">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 सदस्य का नाम या फ़ोन नंबर खोजें...">
+        <button id="refreshBtn" class="btn btn-primary">🔄 रीफ्रेश करें</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>क्रमांक</th>
+              <th>सदस्य का नाम</th>
+              <th>मोबाइल नंबर</th>
+              <th>अंशदान</th>
+              <th>स्थिति</th>
+              <th>भुगतान विवरण</th>
+            </tr>
+          </thead>
+          <tbody id="membersTableBody">
+            <tr>
+              <td colspan="6" class="empty-state">क्लाउड डेटा लोड हो रहा है... कृपया प्रतीक्षा करें।</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs (v10.8.0) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // युवा शक्ति ग्रुप - प्रमाणित Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDjBcyZZIQZSX8MMJ-FaO_uuc2EoSrFVuA",
+      authDomain: "yuva-shakti-group.firebaseapp.com",
+      projectId: "yuva-shakti-group",
+      storageBucket: "yuva-shakti-group.firebasestorage.app",
+      messagingSenderId: "122021296018",
+      appId: "1:122021296018:android:a1fbd7b69b2f7b5654734b"
+    };
+
+    // Firebase इनिशियलाइज़
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allMembers = [];
+
+    // 'members' कलेक्शन से लाइव डेटा लोड करने का फंक्शन
+    async function loadMembers() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "members"));
+        const members = [];
+        querySnapshot.forEach((doc) => {
+          members.push({ id: doc.id, ...doc.data() });
+        });
+        allMembers = members;
+        renderMembers(allMembers);
+        updateStats(allMembers);
+      } catch (error) {
+        console.error("Data load error: ", error);
+        document.getElementById("membersTableBody").innerHTML = `
+          <tr>
+            <td colspan="6" class="empty-state" style="color: #f87171;">
+              ⚠️ डेटा लोड करने में त्रुटि: ${error.message}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    // रियल-टाइम लिसनर (Realtime Sync)
+    onSnapshot(collection(db, "members"), (snapshot) => {
+      const members = [];
+      snapshot.forEach((doc) => {
+        members.push({ id: doc.id, ...doc.data() });
+      });
+      allMembers = members;
+      renderMembers(allMembers);
+      updateStats(allMembers);
+    }, (error) => {
+      console.warn("Realtime sync warning:", error);
+    });
+
+    function updateStats(members) {
+      const total = members.length;
+      const paid = members.filter(m => m.status === "Paid").length;
+      const pending = total - paid;
+
+      document.getElementById("totalMembers").innerText = total;
+      document.getElementById("paidMembers").innerText = paid;
+      document.getElementById("pendingMembers").innerText = pending;
+    }
+
+    function renderMembers(members) {
+      const tbody = document.getElementById("membersTableBody");
+      if (members.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="empty-state">कोई सदस्य नहीं मिला।</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = members.map((m, idx) => {
+        const isPaid = m.status === "Paid";
+        const badgeClass = isPaid ? "badge-paid" : "badge-pending";
+        const statusText = isPaid ? "जमा (Paid)" : "बाकी (Pending)";
+        const paymentInfo = m.paidDate ? `${m.paidDate} • ${m.paymentMode || 'UPI'}` : '-';
+
+        return `
+          <tr>
+            <td>${idx + 1}</td>
+            <td><strong>${m.name || 'सदस्य'}</strong></td>
+            <td>${m.phone || '-'}</td>
+            <td>₹${m.monthlyAmount || 200}</td>
+            <td><span class="badge ${badgeClass}">${statusText}</span></td>
+            <td>${paymentInfo}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // सर्च फ़िल्टर
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = allMembers.filter(m => 
+        (m.name && m.name.toLowerCase().includes(q)) ||
+        (m.phone && m.phone.includes(q))
+      );
+      renderMembers(filtered);
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+      loadMembers();
+    });
+
+    // प्रारंभिक लोड
+    loadMembers();
+  </script>
+</body>
+</html>

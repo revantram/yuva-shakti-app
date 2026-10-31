@@ -450,6 +450,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         backupToGoogleDrive(context)
     }
 
+    fun syncWithFirestore() {
+        viewModelScope.launch {
+            try {
+                val ok = repository.syncWithFirestore()
+                if (ok) {
+                    _snackbarMessage.value = "🔥 Firebase Firestore से डेटा सफलतापूर्वक सिंक हुआ!"
+                } else {
+                    _snackbarMessage.value = "⚠️ Firestore सिंक नहीं हो सका, कृपया इंटरनेट चेक करें।"
+                }
+            } catch (e: Exception) {
+                _snackbarMessage.value = "त्रुटि: ${e.message}"
+            }
+        }
+    }
+
     fun restoreFromCloudBackup(jsonString: String, onComplete: (Boolean, Int) -> Unit = { _, _ -> }) {
         viewModelScope.launch {
             try {

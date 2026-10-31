@@ -845,6 +845,7 @@ fun MainScreen(viewModel: MainViewModel) {
             onBackupToGoogleDrive = { viewModel.backupToGoogleDrive(context) },
             onBackupToJioCloud = { viewModel.backupToJioCloud(context) },
             onRestoreFromLocalBackup = { viewModel.restoreFromLocalBackup() },
+            onSyncFirestore = { viewModel.syncWithFirestore() },
             onDismiss = { viewModel.openSettingsDialog(false) },
             onThemeSelect = { mode -> viewModel.setThemeMode(mode) },
             onLanguageSelect = { lang -> viewModel.setAppLanguage(lang) },

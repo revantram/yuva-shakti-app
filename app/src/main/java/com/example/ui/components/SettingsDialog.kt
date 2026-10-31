@@ -136,6 +136,7 @@ fun SettingsDialog(
     onBackupToGoogleDrive: () -> Unit = {},
     onBackupToJioCloud: () -> Unit = onBackupToGoogleDrive,
     onRestoreFromLocalBackup: () -> Unit = {},
+    onSyncFirestore: () -> Unit = {},
     onDismiss: () -> Unit,
     onThemeSelect: (String) -> Unit,
     onLanguageSelect: (String) -> Unit,
@@ -416,6 +417,93 @@ fun SettingsDialog(
                                             color = if (isDark) Color(0xFF93C5FD) else Color(0xFF2563EB)
                                         )
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Section 0B2: Firebase Firestore Live Database
+                item {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isDark) Color(0xFF1E1B4B) else Color(0xFFFFFBEB)
+                        ),
+                        shape = RoundedCornerShape(14.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.2.dp, if (isDark) SaffronGold.copy(alpha = 0.5f) else Color(0xFFFDE68A), RoundedCornerShape(14.dp))
+                    ) {
+                        Column(modifier = Modifier.padding(14.dp)) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(34.dp)
+                                        .background(Color(0xFFF59E0B), CircleShape),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Cloud,
+                                        contentDescription = null,
+                                        tint = Color(0xFF451A03),
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Column {
+                                    Text(
+                                        text = "🔥 फ़ायरबेस लाइव डेटाबेस (Firestore)",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 13.5.sp,
+                                        color = if (isDark) Color(0xFFFDE68A) else Color(0xFF92400E)
+                                    )
+                                    Text(
+                                        text = "प्रोजेक्ट: yuva-shakti-group • 100% ऑनलाइन",
+                                        fontSize = 10.5.sp,
+                                        color = if (isDark) Color(0xFFFEF3C7) else Color(0xFFB45309)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Text(
+                                text = "आपका बहीखाता सीधे गूगल फ़ायरबेस फ़ायरस्टोर (Cloud Firestore) से जुड़ा है। ऐप अपडेट या अनइंस्टॉल करने पर भी डेटा पूरी तरह सुरक्षित रहेगा।",
+                                fontSize = 11.sp,
+                                color = if (isDark) Color(0xFFCBD5E1) else Color(0xFF334155),
+                                lineHeight = 15.sp
+                            )
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            Surface(
+                                color = Color(0xFFF59E0B),
+                                shape = RoundedCornerShape(10.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onSyncFirestore() }
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.CloudUpload,
+                                        contentDescription = null,
+                                        tint = Color(0xFF451A03),
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = "🔥 लाइव क्लाउड सिंक करें (Sync Now)",
+                                        fontSize = 11.5.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF451A03)
+                                    )
                                 }
                             }
                         }
