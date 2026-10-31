@@ -1,5 +1,9 @@
 package com.example.ui.components
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -10,6 +14,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +38,9 @@ import androidx.compose.material.icons.filled.AddPhotoAlternate
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DoneAll
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.PendingActions
 import androidx.compose.material.icons.filled.PhotoCamera
@@ -93,6 +100,40 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+private fun launchUpiIntent(
+    context: Context,
+    packageName: String?,
+    upiId: String,
+    payeeName: String = "युवा शक्ति परिवार कुचेरा",
+    amount: String = ""
+) {
+    try {
+        val uriBuilder = Uri.Builder()
+            .scheme("upi")
+            .authority("pay")
+            .appendQueryParameter("pa", upiId)
+            .appendQueryParameter("pn", payeeName)
+            .appendQueryParameter("cu", "INR")
+        if (amount.isNotBlank()) {
+            uriBuilder.appendQueryParameter("am", amount)
+        }
+        val uri = uriBuilder.build()
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        if (!packageName.isNullOrBlank()) {
+            intent.setPackage(packageName)
+        }
+        val pm = context.packageManager
+        if (intent.resolveActivity(pm) != null) {
+            context.startActivity(intent)
+        } else {
+            val genericIntent = Intent(Intent.ACTION_VIEW, uri)
+            context.startActivity(Intent.createChooser(genericIntent, "UPI ऐप चुनें"))
+        }
+    } catch (e: Exception) {
+        Toast.makeText(context, "UPI ऐप खोलने में त्रुटि: ${e.message}", Toast.LENGTH_SHORT).show()
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnlinePaymentDialog(
@@ -100,6 +141,8 @@ fun OnlinePaymentDialog(
     isAdmin: Boolean,
     members: List<MemberEntity>,
     pendingRequestsCount: Int,
+    upiId: String = "revantrambhati@upi",
+    onUpdateUpiId: (String) -> Unit = {},
     onDismiss: () -> Unit,
     onUploadQrCode: (String) -> Unit,
     onRequestVerificationClick: () -> Unit,
@@ -107,6 +150,15 @@ fun OnlinePaymentDialog(
     onSubmitDirectDeposit: (member: MemberEntity, mode: String, utr: String) -> Unit
 ) {
     val context = LocalContext.current
+    val isDark = isSystemInDarkTheme()
+    val dialogBg = if (isDark) Color(0xFF1E293B) else Color.White
+    val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
+    val textSecondary = if (isDark) Color(0xFF94A3B8) else Color(0xFF64748B)
+
+    var currentUpiId by remember(upiId) { mutableStateOf(upiId) }
+    var showEditUpiDialog by remember { mutableStateOf(false) }
+    var newUpiInput by remember { mutableStateOf(upiId) }
+
     var showDirectSubmit by remember { mutableStateOf(false) }
     var selectedMember by remember { mutableStateOf(members.firstOrNull { it.status == "Pending" } ?: members.firstOrNull()) }
     var expandedDropdown by remember { mutableStateOf(false) }
@@ -124,6 +176,7 @@ fun OnlinePaymentDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        containerColor = dialogBg,
         title = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -134,7 +187,7 @@ fun OnlinePaymentDialog(
                     Icon(
                         imageVector = Icons.Default.QrCode2,
                         contentDescription = "QR Code",
-                        tint = DeepNavy,
+                        tint = if (isDark) SaffronGold else DeepNavy,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -142,11 +195,11 @@ fun OnlinePaymentDialog(
                         text = "स्कैन करें और भुगतान करें",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color(0xFF0F172A)
+                        color = textPrimary
                     )
                 }
                 IconButton(onClick = onDismiss, modifier = Modifier.size(28.dp)) {
-                    Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "Close", tint = textSecondary)
                 }
             }
         },
@@ -205,7 +258,7 @@ fun OnlinePaymentDialog(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    UpiQrVisualPattern(upiId = "YuvaShaktiGroupFund")
+                                    UpiQrVisualPattern(upiId = currentUpiId)
                                 }
                             }
                         }
@@ -253,6 +306,189 @@ fun OnlinePaymentDialog(
                             }
                         }
                     }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // UPI ID & PhonePe/GPay number card with Copy & Edit
+                Surface(
+                    color = if (isDark) Color(0xFF0F172A) else Color(0xFFF8FAFC),
+                    shape = RoundedCornerShape(12.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0xFF334155) else BorderSlate),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(modifier = Modifier.padding(10.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "📱 ऑफिशियल UPI ID / फ़ोनपे नंबर",
+                                    fontSize = 11.sp,
+                                    color = textSecondary,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = currentUpiId,
+                                    fontSize = 13.5.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (isDark) SaffronGold else DeepNavy
+                                )
+                            }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Surface(
+                                    color = if (isDark) Color(0xFF334155) else Color(0xFFEEF2FF),
+                                    shape = RoundedCornerShape(8.dp),
+                                    modifier = Modifier.clickable {
+                                        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                        clipboard.setPrimaryClip(ClipData.newPlainText("UPI ID", currentUpiId))
+                                        Toast.makeText(context, "UPI ID कॉपी हो गई: $currentUpiId", Toast.LENGTH_SHORT).show()
+                                    }
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.ContentCopy,
+                                            contentDescription = "Copy UPI ID",
+                                            tint = if (isDark) SaffronGold else DeepNavy,
+                                            modifier = Modifier.size(13.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(
+                                            text = "कॉपी",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = if (isDark) Color.White else DeepNavy
+                                        )
+                                    }
+                                }
+
+                                if (isAdmin) {
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    IconButton(
+                                        onClick = { showEditUpiDialog = !showEditUpiDialog },
+                                        modifier = Modifier.size(28.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Edit,
+                                            contentDescription = "Edit UPI ID",
+                                            tint = SaffronGold,
+                                            modifier = Modifier.size(15.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        if (showEditUpiDialog && isAdmin) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            OutlinedTextField(
+                                value = newUpiInput,
+                                onValueChange = { newUpiInput = it },
+                                label = { Text("नया UPI ID या Google Pay / PhonePe नंबर") },
+                                placeholder = { Text("उदा. 9929xxxxxx@ybl या username@upi") },
+                                singleLine = true,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Button(
+                                onClick = {
+                                    if (newUpiInput.isNotBlank()) {
+                                        currentUpiId = newUpiInput.trim()
+                                        onUpdateUpiId(currentUpiId)
+                                        showEditUpiDialog = false
+                                        Toast.makeText(context, "UPI ID सफलतापूर्वक अपडेट हुई!", Toast.LENGTH_SHORT).show()
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = SaffronGold),
+                                shape = RoundedCornerShape(8.dp),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("सुरक्षित करें", color = Color(0xFF451A03), fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // 1-Tap Direct UPI Payment Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // PhonePe Button
+                    Button(
+                        onClick = {
+                            launchUpiIntent(
+                                context = context,
+                                packageName = "com.phonepe.app",
+                                upiId = currentUpiId,
+                                payeeName = "Yuva Shakti Parivar"
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5F259F)),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        ) {
+                            Text(text = "💜 PhonePe", fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Color.White)
+                            Text(text = "सीधा भुगतान", fontSize = 10.sp, color = Color(0xFFE9D5FF))
+                        }
+                    }
+
+                    // Google Pay Button
+                    Button(
+                        onClick = {
+                            launchUpiIntent(
+                                context = context,
+                                packageName = "com.google.android.apps.nbu.paisa.user",
+                                upiId = currentUpiId,
+                                payeeName = "Yuva Shakti Parivar"
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E3A8A)),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        ) {
+                            Text(text = "💙 Google Pay", fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Color.White)
+                            Text(text = "सीधा भुगतान", fontSize = 10.sp, color = Color(0xFFBFDBFE))
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                // Other UPI Apps Button
+                OutlinedButton(
+                    onClick = {
+                        launchUpiIntent(
+                            context = context,
+                            packageName = null,
+                            upiId = currentUpiId,
+                            payeeName = "Yuva Shakti Parivar"
+                        )
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "⚡ अन्य UPI ऐप से भुगतान (Paytm, BHIM)",
+                        fontSize = 11.5.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (isDark) Color(0xFF93C5FD) else DeepNavy
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))

@@ -3,6 +3,7 @@ package com.example.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -41,9 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.theme.BorderSlate
 import com.example.ui.theme.DeepNavy
-import com.example.ui.theme.PaidGreen
 import com.example.ui.theme.SaffronGold
 import com.example.util.AmavasyaCalculator
+import com.example.util.FestivalHelper
 import java.util.Calendar
 
 @Composable
@@ -51,6 +53,13 @@ fun AmavasyaMiniCalendar(
     targetAmavasyaMillis: Long,
     modifier: Modifier = Modifier
 ) {
+    val isDark = isSystemInDarkTheme()
+    val cardBg = if (isDark) Color(0xFF1E293B) else Color.White
+    val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
+    val textSecondary = if (isDark) Color(0xFF94A3B8) else Color(0xFF64748B)
+    val borderClr = if (isDark) Color(0xFF334155) else BorderSlate
+    val navIconTint = if (isDark) Color(0xFFCBD5E1) else Color(0xFF475569)
+
     val todayCal = remember { Calendar.getInstance() }
     val todayYear = todayCal.get(Calendar.YEAR)
     val todayMonth = todayCal.get(Calendar.MONTH)
@@ -58,7 +67,7 @@ fun AmavasyaMiniCalendar(
 
     var displayYear by remember { mutableIntStateOf(todayYear) }
     var displayMonth by remember { mutableIntStateOf(todayMonth) }
-    var selectedDay by remember { mutableStateOf<Int?>(null) }
+    var selectedDay by remember { mutableStateOf<Int?>(todayDay) }
 
     // Target Amavasya Calendar
     val targetAmavasyaCal = remember(targetAmavasyaMillis) {
@@ -88,12 +97,12 @@ fun AmavasyaMiniCalendar(
     val firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK) // Sunday = 1, Saturday = 7
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = cardBg),
         shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, BorderSlate, RoundedCornerShape(18.dp))
+            .border(1.dp, borderClr, RoundedCornerShape(18.dp))
             .testTag("amavasya_mini_calendar")
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -107,23 +116,23 @@ fun AmavasyaMiniCalendar(
                     Icon(
                         imageVector = Icons.Default.CalendarMonth,
                         contentDescription = null,
-                        tint = DeepNavy,
+                        tint = if (isDark) SaffronGold else DeepNavy,
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "${monthNamesHindi[displayMonth]} $displayYear",
-                        fontSize = 14.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF0F172A)
+                        color = textPrimary
                     )
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Jump to today if not in today's month
+                    // Jump to today button
                     if (displayYear != todayYear || displayMonth != todayMonth) {
                         Surface(
-                            color = Color(0xFFEEF2FF),
+                            color = if (isDark) Color(0xFF334155) else Color(0xFFEEF2FF),
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
                                 .clickable {
@@ -137,7 +146,7 @@ fun AmavasyaMiniCalendar(
                                 text = "आज",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = DeepNavy,
+                                color = if (isDark) SaffronGold else DeepNavy,
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                             )
                         }
@@ -158,7 +167,7 @@ fun AmavasyaMiniCalendar(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Previous Month",
-                            tint = Color(0xFF475569),
+                            tint = navIconTint,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -178,7 +187,7 @@ fun AmavasyaMiniCalendar(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = "Next Month",
-                            tint = Color(0xFF475569),
+                            tint = navIconTint,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -195,9 +204,9 @@ fun AmavasyaMiniCalendar(
                 daysOfWeekHindi.forEachIndexed { index, dayName ->
                     Text(
                         text = dayName,
-                        fontSize = 10.5.sp,
+                        fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (index == 0) Color(0xFFDC2626) else Color(0xFF64748B),
+                        color = if (index == 0) Color(0xFFEF4444) else textSecondary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.weight(1f)
                     )
@@ -223,11 +232,12 @@ fun AmavasyaMiniCalendar(
                             val isToday = (displayYear == todayYear && displayMonth == todayMonth && dayNum == todayDay)
                             val isAmavasya = (displayYear == amavasyaYear && displayMonth == amavasyaMonth && dayNum == amavasyaDay)
                             val isSelected = selectedDay == dayNum
+                            val hasEvent = FestivalHelper.hasSpecialEvent(displayYear, displayMonth, dayNum, targetAmavasyaMillis)
 
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .height(36.dp)
+                                    .height(38.dp)
                                     .padding(2.dp)
                                     .clickable { selectedDay = dayNum },
                                 contentAlignment = Alignment.Center
@@ -237,7 +247,7 @@ fun AmavasyaMiniCalendar(
                                         // Auspicious glowing Amavasya indicator
                                         Box(
                                             modifier = Modifier
-                                                .size(32.dp)
+                                                .size(34.dp)
                                                 .background(Color(0xFF1E1B4B), CircleShape)
                                                 .border(2.dp, SaffronGold, CircleShape),
                                             contentAlignment = Alignment.Center
@@ -259,42 +269,72 @@ fun AmavasyaMiniCalendar(
                                     isToday -> {
                                         Box(
                                             modifier = Modifier
-                                                .size(30.dp)
+                                                .size(32.dp)
                                                 .background(Color(0xFF3B82F6), CircleShape),
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            Text(
-                                                text = "$dayNum",
-                                                color = Color.White,
-                                                fontSize = 11.5.sp,
-                                                fontWeight = FontWeight.Bold
-                                            )
+                                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                                Text(
+                                                    text = "$dayNum",
+                                                    color = Color.White,
+                                                    fontSize = 11.5.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                                if (hasEvent) {
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .size(4.dp)
+                                                            .background(SaffronGold, CircleShape)
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
                                     isSelected -> {
                                         Box(
                                             modifier = Modifier
-                                                .size(28.dp)
-                                                .background(Color(0xFFEEF2FF), CircleShape)
-                                                .border(1.5.dp, DeepNavy, CircleShape),
+                                                .size(32.dp)
+                                                .background(if (isDark) Color(0xFF334155) else Color(0xFFEEF2FF), CircleShape)
+                                                .border(1.5.dp, if (isDark) SaffronGold else DeepNavy, CircleShape),
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            Text(
-                                                text = "$dayNum",
-                                                color = DeepNavy,
-                                                fontSize = 11.sp,
-                                                fontWeight = FontWeight.Bold
-                                            )
+                                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                                Text(
+                                                    text = "$dayNum",
+                                                    color = if (isDark) Color(0xFFFEF08A) else DeepNavy,
+                                                    fontSize = 11.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                                if (hasEvent) {
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .size(4.dp)
+                                                            .background(Color(0xFFEA580C), CircleShape)
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
                                     else -> {
-                                        Text(
-                                            text = "$dayNum",
-                                            color = if (col == 0) Color(0xFFDC2626) else Color(0xFF1E293B),
-                                            fontSize = 11.sp,
-                                            fontWeight = FontWeight.Normal,
-                                            textAlign = TextAlign.Center
-                                        )
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            verticalArrangement = Arrangement.Center
+                                        ) {
+                                            Text(
+                                                text = "$dayNum",
+                                                color = if (col == 0) Color(0xFFEF4444) else textPrimary,
+                                                fontSize = 11.5.sp,
+                                                fontWeight = FontWeight.Normal,
+                                                textAlign = TextAlign.Center
+                                            )
+                                            if (hasEvent) {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .size(4.dp)
+                                                        .background(if (isDark) SaffronGold else Color(0xFFD97706), CircleShape)
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -307,11 +347,84 @@ fun AmavasyaMiniCalendar(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Calendar Legend & Amavasya Quick Reminder Banner
+            // Interactive Festival / Tithi Details Card when a day is tapped
+            selectedDay?.let { selDay ->
+                val festival = FestivalHelper.getFestivalInfo(displayYear, displayMonth, selDay, targetAmavasyaMillis)
+                val isAmavasyaSelected = (displayYear == amavasyaYear && displayMonth == amavasyaMonth && selDay == amavasyaDay)
+
+                Surface(
+                    color = if (isDark) Color(0xFF0F172A) else Color(0xFFFFFBEB),
+                    shape = RoundedCornerShape(12.dp),
+                    border = androidx.compose.foundation.BorderStroke(
+                        1.dp,
+                        if (isAmavasyaSelected) SaffronGold else if (isDark) Color(0xFF334155) else Color(0xFFFDE68A)
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(modifier = Modifier.padding(10.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = festival.icon,
+                                    fontSize = 18.sp,
+                                    modifier = Modifier.padding(end = 6.dp)
+                                )
+                                Column {
+                                    Text(
+                                        text = festival.name,
+                                        fontSize = 13.5.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = if (isDark) Color(0xFFFDE047) else Color(0xFF92400E)
+                                    )
+                                    Text(
+                                        text = "${festival.dateString} • ${festival.tithi}",
+                                        fontSize = 10.5.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        color = if (isDark) Color(0xFF94A3B8) else Color(0xFFB45309)
+                                    )
+                                }
+                            }
+
+                            Surface(
+                                color = if (isDark) Color(0xFF1E293B) else Color(0xFFFEF3C7),
+                                shape = RoundedCornerShape(6.dp)
+                            ) {
+                                Text(
+                                    text = festival.category,
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (isDark) Color(0xFFFDE047) else Color(0xFF78350F),
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = festival.description,
+                            fontSize = 11.sp,
+                            color = if (isDark) Color(0xFFE2E8F0) else Color(0xFF451A03),
+                            lineHeight = 15.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            // Monthly Amavasya Meeting & Tithi Status Banner
             Surface(
-                color = Color(0xFFFEF3C7),
+                color = if (isDark) Color(0xFF1E1B4B) else Color(0xFFFEF3C7),
                 shape = RoundedCornerShape(10.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFCD34D)),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    if (isDark) SaffronGold else Color(0xFFFCD34D)
+                ),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -326,12 +439,12 @@ fun AmavasyaMiniCalendar(
                                 text = "इस माह की अमावस्या: $amavasyaDay ${monthNamesHindi[amavasyaMonth]}",
                                 fontSize = 11.5.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF78350F)
+                                color = if (isDark) Color(0xFFFDE047) else Color(0xFF78350F)
                             )
                             Text(
                                 text = "मासिक अमावस्या बैठक एवं परस्पर सहयोग का दिन",
                                 fontSize = 10.sp,
-                                color = Color(0xFF92400E)
+                                color = if (isDark) Color(0xFFCBD5E1) else Color(0xFF92400E)
                             )
                         }
                     }
@@ -341,7 +454,7 @@ fun AmavasyaMiniCalendar(
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(
-                            text = "${AmavasyaCalculator.getHindiTithiName(targetAmavasyaMillis)}",
+                            text = AmavasyaCalculator.getHindiTithiName(targetAmavasyaMillis),
                             fontSize = 9.5.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF451A03),

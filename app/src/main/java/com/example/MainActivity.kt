@@ -225,6 +225,8 @@ fun MainScreen(viewModel: MainViewModel) {
     val showAppUpdateConsoleDialog by viewModel.showAppUpdateConsoleDialog.collectAsStateWithLifecycle()
     val updateApkUrl by viewModel.updateApkUrl.collectAsStateWithLifecycle()
     val latestVersionNote by viewModel.latestVersionNote.collectAsStateWithLifecycle()
+    val fundUpiId by viewModel.fundUpiId.collectAsStateWithLifecycle()
+    val whatsAppGroupLink by viewModel.whatsAppGroupLink.collectAsStateWithLifecycle()
     val snackbarMsg by viewModel.snackbarMessage.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -308,7 +310,7 @@ fun MainScreen(viewModel: MainViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.statusBars),
-        containerColor = BackgroundSlate,
+        containerColor = MaterialTheme.colorScheme.background,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             AppHeader(
@@ -475,6 +477,8 @@ fun MainScreen(viewModel: MainViewModel) {
                     GroupChatView(
                         messages = groupMessages,
                         isAdmin = uiState.isAdmin,
+                        whatsAppGroupLink = whatsAppGroupLink,
+                        onUpdateWhatsAppGroupLink = { viewModel.setWhatsAppGroupLink(it) },
                         onSendMessage = { name, msg ->
                             viewModel.sendGroupMessage(name, msg)
                         },
@@ -707,6 +711,8 @@ fun MainScreen(viewModel: MainViewModel) {
             isAdmin = uiState.isAdmin,
             members = uiState.members,
             pendingRequestsCount = pendingPaymentRequests.size,
+            upiId = fundUpiId,
+            onUpdateUpiId = { viewModel.setFundUpiId(it) },
             onDismiss = { viewModel.openPaymentDialog(false) },
             onUploadQrCode = { uri -> viewModel.setCustomQrCodeUri(uri) },
             onRequestVerificationClick = {
@@ -801,6 +807,14 @@ fun MainScreen(viewModel: MainViewModel) {
             isAdmin = uiState.isAdmin,
             isAppLockEnabled = isAppLockEnabled,
             isBiometricEnabled = isBiometricEnabled,
+            currentApkUrl = updateApkUrl,
+            latestVersionNote = latestVersionNote,
+            whatsAppGroupLink = whatsAppGroupLink,
+            fundUpiId = fundUpiId,
+            onUpdateWhatsAppGroupLink = { viewModel.setWhatsAppGroupLink(it) },
+            onUpdateFundUpiId = { viewModel.setFundUpiId(it) },
+            onBackupToJioCloud = { viewModel.backupToJioCloud(context) },
+            onRestoreFromLocalBackup = { viewModel.restoreFromLocalBackup() },
             onDismiss = { viewModel.openSettingsDialog(false) },
             onThemeSelect = { mode -> viewModel.setThemeMode(mode) },
             onLanguageSelect = { lang -> viewModel.setAppLanguage(lang) },
@@ -813,8 +827,6 @@ fun MainScreen(viewModel: MainViewModel) {
                 viewModel.showChangePinDialog(true)
             },
             onSendDailyThoughtNotification = { viewModel.sendDailyThoughtNotification() },
-            currentApkUrl = updateApkUrl,
-            latestVersionNote = latestVersionNote,
             onOpenAppUpdateConsole = { viewModel.openAppUpdateConsole(true) },
             onSwitchAdminRoleClick = {
                 if (uiState.isAdmin) {
@@ -1198,7 +1210,7 @@ fun BottomRoleBar(
                     color = Color(0xFF64748B)
                 )
                 Text(
-                    text = if (isAdmin) "मुख्य व्यवस्थापक (Admin Full Access)" else "दर्शक मोड (केवल देखने की अनुमति)",
+                    text = if (isAdmin) "सिस्टम प्रबंधन स्तर (Active)" else "मानक सदस्य स्तर (Active)",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     color = if (isAdmin) Color(0xFFB45309) else Color(0xFF1E293B)

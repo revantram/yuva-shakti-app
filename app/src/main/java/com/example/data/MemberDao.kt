@@ -114,5 +114,32 @@ interface MemberDao {
 
     @Delete
     suspend fun deleteLoanRequest(request: LoanRequestEntity)
+
+    @Query("SELECT * FROM members ORDER BY sortOrder ASC, id ASC")
+    suspend fun getAllMembersSnapshot(): List<MemberEntity>
+
+    @Query("SELECT * FROM expenses ORDER BY timestamp DESC")
+    suspend fun getAllExpensesSnapshot(): List<ExpenseEntity>
+
+    @Query("SELECT * FROM loan_requests ORDER BY timestamp DESC")
+    suspend fun getAllLoanRequestsSnapshot(): List<LoanRequestEntity>
+
+    @Query("SELECT * FROM group_messages ORDER BY timestamp ASC")
+    suspend fun getAllMessagesSnapshot(): List<GroupMessageEntity>
+
+    @Query("SELECT * FROM cycle_history ORDER BY dateRecorded DESC")
+    suspend fun getCycleHistorySnapshot(): List<CycleHistoryEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertExpenses(expenses: List<ExpenseEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLoanRequests(requests: List<LoanRequestEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMessages(messages: List<GroupMessageEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCycleHistories(histories: List<CycleHistoryEntity>)
 }
 

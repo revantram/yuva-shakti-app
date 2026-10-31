@@ -188,6 +188,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _customQrCodeUri = MutableStateFlow(repository.getCustomQrCodeUri())
     val customQrCodeUri: StateFlow<String> = _customQrCodeUri
 
+    private val _fundUpiId = MutableStateFlow(repository.getUpiId())
+    val fundUpiId: StateFlow<String> = _fundUpiId
+
+    private val _whatsAppGroupLink = MutableStateFlow(repository.getWhatsAppGroupLink())
+    val whatsAppGroupLink: StateFlow<String> = _whatsAppGroupLink
+
     private val _showPaymentVerificationDialog = MutableStateFlow(false)
     val showPaymentVerificationDialog: StateFlow<Boolean> = _showPaymentVerificationDialog
 
@@ -342,7 +348,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun logoutAdmin() {
         _isAdmin.value = false
-        _snackbarMessage.value = "दर्शक मोड में वापस लौटे।"
+        _snackbarMessage.value = "सामान्य सदस्य मोड में वापस लौटे।"
     }
 
     fun changeAdminPin(newPin: String) {
@@ -414,7 +420,70 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _expenseReceiptToView.value = expense
     }
 
-    fun getUpiId(): String = repository.getUpiId()
+    fun getUpiId(): String = _fundUpiId.value
+
+    fun setFundUpiId(id: String) {
+        _fundUpiId.value = id.trim()
+        repository.setUpiId(id.trim())
+        _snackbarMessage.value = "UPI आईडी / PhonePe-GPay नंबर सुरक्षित हुआ।"
+    }
+
+    fun setWhatsAppGroupLink(link: String) {
+        _whatsAppGroupLink.value = link.trim()
+        repository.setWhatsAppGroupLink(link.trim())
+        _snackbarMessage.value = "व्हाट्सएप ग्रुप लिंक अपडेट हुआ।"
+    }
+
+    fun backupToJioCloud(context: Context) {
+        viewModelScope.launch {
+            try {
+                val (file, _) = repository.createCloudBackup()
+                repository.shareBackupToJioCloud(file)
+                _snackbarMessage.value = "☁️ जियोक्लाउड बैकअप फ़ाइल तैयार की गई।"
+            } catch (e: Exception) {
+                _snackbarMessage.value = "बैकअप त्रुटि: ${e.message}"
+            }
+        }
+    }
+
+    fun restoreFromCloudBackup(jsonString: String, onComplete: (Boolean, Int) -> Unit = { _, _ -> }) {
+        viewModelScope.launch {
+            try {
+                val count = repository.restoreFromCloudBackup(jsonString)
+                _fundUpiId.value = repository.getUpiId()
+                _whatsAppGroupLink.value = repository.getWhatsAppGroupLink()
+                _amavasyaCycleName.value = repository.getAmavasyaCycleName()
+                _snackbarMessage.value = "✅ डेटा सफलतापूर्वक रीस्टोर हुआ ($count सदस्य)!"
+                onComplete(true, count)
+            } catch (e: Exception) {
+                _snackbarMessage.value = "डेटा रीस्टोर त्रुटि: ${e.message}"
+                onComplete(false, 0)
+            }
+        }
+    }
+
+    fun restoreFromLocalBackup(onComplete: (Boolean, Int) -> Unit = { _, _ -> }) {
+        viewModelScope.launch {
+            try {
+                val file = repository.getLocalBackupFile()
+                if (file != null && file.exists()) {
+                    val content = file.readText(Charsets.UTF_8)
+                    val count = repository.restoreFromCloudBackup(content)
+                    _fundUpiId.value = repository.getUpiId()
+                    _whatsAppGroupLink.value = repository.getWhatsAppGroupLink()
+                    _amavasyaCycleName.value = repository.getAmavasyaCycleName()
+                    _snackbarMessage.value = "✅ स्थानीय बैकअप से $count सदस्य पुनर्स्थापित हुए!"
+                    onComplete(true, count)
+                } else {
+                    _snackbarMessage.value = "कोई बैकअप फ़ाइल नहीं मिली।"
+                    onComplete(false, 0)
+                }
+            } catch (e: Exception) {
+                _snackbarMessage.value = "रीस्टोर त्रुटि: ${e.message}"
+                onComplete(false, 0)
+            }
+        }
+    }
 
     fun markAllNotificationsRead() {
         viewModelScope.launch {

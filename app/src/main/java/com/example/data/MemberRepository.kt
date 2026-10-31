@@ -2,10 +2,12 @@ package com.example.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.util.CloudBackupHelper
 import com.example.util.NotificationHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -42,6 +44,8 @@ class MemberRepository(
         private const val KEY_MY_ACTIVE_MEMBER_ID = "my_active_member_id"
         private const val KEY_UPDATE_APK_URL = "app_update_apk_url"
         private const val KEY_LATEST_VERSION_NOTE = "app_latest_version_note"
+        private const val KEY_WHATSAPP_GROUP_LINK = "whatsapp_group_link"
+        private const val DEFAULT_WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/invite"
     }
 
     val allMembers: Flow<List<MemberEntity>> = memberDao.getAllMembers()
@@ -358,6 +362,41 @@ class MemberRepository(
 
     fun setCustomQrCodeUri(uri: String) {
         prefs.edit().putString(KEY_CUSTOM_QR_URI, uri.trim()).apply()
+    }
+
+    fun getWhatsAppGroupLink(): String {
+        return prefs.getString(KEY_WHATSAPP_GROUP_LINK, DEFAULT_WHATSAPP_GROUP_LINK) ?: DEFAULT_WHATSAPP_GROUP_LINK
+    }
+
+    fun setWhatsAppGroupLink(link: String) {
+        prefs.edit().putString(KEY_WHATSAPP_GROUP_LINK, link.trim()).apply()
+    }
+
+    suspend fun createCloudBackup(): Pair<File, String> {
+        val settingsMap = mapOf(
+            KEY_UPI_ID to getUpiId(),
+            KEY_WHATSAPP_GROUP_LINK to getWhatsAppGroupLink(),
+            KEY_AMAVASYA_CYCLE_NAME to getAmavasyaCycleName(),
+            KEY_TARGET_AMAVASYA_MILLIS to getTargetAmavasyaMillis().toString()
+        )
+        return CloudBackupHelper.createFullBackupJson(memberDao, context, settingsMap)
+    }
+
+    suspend fun restoreFromCloudBackup(jsonString: String): Int {
+        return CloudBackupHelper.restoreFromJson(jsonString, memberDao) { settings ->
+            settings[KEY_UPI_ID]?.let { if (it.isNotBlank()) setUpiId(it) }
+            settings[KEY_WHATSAPP_GROUP_LINK]?.let { if (it.isNotBlank()) setWhatsAppGroupLink(it) }
+            settings[KEY_AMAVASYA_CYCLE_NAME]?.let { if (it.isNotBlank()) setAmavasyaCycleName(it) }
+            settings[KEY_TARGET_AMAVASYA_MILLIS]?.toLongOrNull()?.let { if (it > 0) setTargetAmavasyaMillis(it) }
+        }
+    }
+
+    fun getLocalBackupFile(): File? {
+        return CloudBackupHelper.getLocalBackupFile()
+    }
+
+    fun shareBackupToJioCloud(backupFile: File) {
+        CloudBackupHelper.shareBackupToJioCloud(context, backupFile)
     }
 
     suspend fun submitPaymentRequest(
