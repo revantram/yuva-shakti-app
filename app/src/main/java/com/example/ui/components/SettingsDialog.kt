@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import java.io.File
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
@@ -1461,9 +1462,32 @@ private fun shareApplication(context: Context) {
     val shareText = "🚩 *युवा शक्ति ग्रुप, भाटी परिवार कुचेरा* 🚩\n\n" +
             "सादर जय श्री कृष्णा / राम राम सा!\n\n" +
             "भाटी परिवार के मासिक अमावस्या फंड, पारदर्शी बहीखाता, कार्यक्रम फोटो गैलरी एवं दैनिक सुविचार से जुड़ने हेतु एप्लिकेशन डाउनलोड करें।\n\n" +
-            "📥 *ऐप डाउनलोड लिंक:*\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/yuva-shakti.apk\n\n" +
+            "📥 *ऐप डाउनलोड लिंक:*\n" +
+            "1. डायरेक्ट डाउनलोड:\nhttps://github.com/revantram/yuva-shakti-app/releases/download/latest/yuva-shakti.apk\n\n" +
+            "2. रिलीज़ वेब पेज:\nhttps://github.com/revantram/yuva-shakti-app/releases/tag/latest\n\n" +
             "📲 डिजिटल बहीखाता • पारदर्शी प्रबंधन • पारिवारिक एकता\n" +
             "- युवा शक्ति ग्रुप, भाटी परिवार कुचेरा"
+
+    try {
+        val srcFile = File(context.applicationInfo.sourceDir)
+        val cacheApk = File(context.cacheDir, "yuva-shakti.apk")
+        if (srcFile.exists()) {
+            srcFile.copyTo(cacheApk, overwrite = true)
+            val apkUri = androidx.core.content.FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                cacheApk
+            )
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "application/vnd.android.package-archive"
+                putExtra(Intent.EXTRA_STREAM, apkUri)
+                putExtra(Intent.EXTRA_TEXT, shareText)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            context.startActivity(Intent.createChooser(intent, "युवा शक्ति ग्रुप ऐप APK शेयर करें"))
+            return
+        }
+    } catch (e: Exception) {}
 
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
