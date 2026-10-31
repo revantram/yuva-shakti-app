@@ -77,6 +77,7 @@ fun AppHeader(
     onSettingsClick: () -> Unit = {},
     onUrgentBroadcastClick: () -> Unit = {},
     onOnlineMembersClick: () -> Unit = {},
+    onSirenTgadaClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -94,55 +95,77 @@ fun AppHeader(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "🚩 ",
-                            fontSize = 18.sp
-                        )
-                        Text(
-                            text = "युवा शक्ति ग्रुप",
-                            color = Color.White,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 0.5.sp
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f, fill = false)
+                ) {
+                    // Big Logo with golden ring
+                    Box(
+                        modifier = Modifier
+                            .size(54.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, SaffronGold, CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        androidx.compose.foundation.Image(
+                            painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.ic_app_foreground_1793369456038),
+                            contentDescription = "युवा शक्ति ग्रुप लोगो",
+                            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
                         )
                     }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        modifier = Modifier.padding(top = 2.dp)
-                    ) {
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column {
                         Text(
-                            text = "भाटी परिवार • मासिक अमावस्या फंड",
-                            color = Color(0xFFC7D2FE),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Medium
+                            text = "🚩 युवा शक्ति ग्रुप",
+                            color = Color.White,
+                            fontSize = 17.5.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.3.sp
                         )
-                        // Online presence chip
-                        Surface(
-                            color = Color(0xFF064E3B),
-                            shape = RoundedCornerShape(10.dp),
-                            modifier = Modifier
-                                .clickable { onOnlineMembersClick() }
-                                .testTag("chip_online_count")
+                        Text(
+                            text = "भाटी परिवार कुचेरा",
+                            color = SaffronGold,
+                            fontSize = 13.5.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            modifier = Modifier.padding(top = 2.dp)
                         ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                            Text(
+                                text = "मासिक अमावस्या फंड",
+                                color = Color(0xFFC7D2FE),
+                                fontSize = 10.5.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                            // Online presence chip
+                            Surface(
+                                color = Color(0xFF064E3B),
+                                shape = RoundedCornerShape(10.dp),
+                                modifier = Modifier
+                                    .clickable { onOnlineMembersClick() }
+                                    .testTag("chip_online_count")
                             ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(6.dp)
-                                        .background(Color(0xFF34D399), CircleShape)
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = "$onlineMemberCount ऑनलाइन",
-                                    color = Color(0xFFA7F3D0),
-                                    fontSize = 9.5.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(6.dp)
+                                            .background(Color(0xFF34D399), CircleShape)
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = "$onlineMemberCount ऑनलाइन",
+                                        color = Color(0xFFA7F3D0),
+                                        fontSize = 9.5.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
                             }
                         }
                     }
@@ -187,7 +210,27 @@ fun AppHeader(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = "🚨 अलर्ट",
+                                    text = "📢 अलर्ट",
+                                    color = Color.White,
+                                    fontSize = 10.5.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+
+                        Surface(
+                            color = Color(0xFFB91C1C),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .clickable { onSirenTgadaClick() }
+                                .testTag("btn_header_siren_tgada")
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 5.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "🚨 सायरन",
                                     color = Color.White,
                                     fontSize = 10.5.sp,
                                     fontWeight = FontWeight.Bold

@@ -15,19 +15,39 @@ import com.example.MainActivity
 
 object NotificationHelper {
     const val CHANNEL_ID = "bhati_fund_transactions_channel"
+    const val SIREN_CHANNEL_ID = "bhati_pending_siren_channel"
     private const val CHANNEL_NAME = "युवा शक्ति ग्रुप लेन-देन सूचनाएँ"
     private const val CHANNEL_DESC = "अंशदान, ऑनलाइन जमा और बहीखाता खर्च की लाइव सूचनाएँ"
 
     fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH).apply {
                 description = CHANNEL_DESC
                 enableVibration(true)
                 setShowBadge(true)
             }
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
             notificationManager?.createNotificationChannel(channel)
+
+            val sirenChannel = NotificationChannel(
+                SIREN_CHANNEL_ID,
+                "🚨 युवा शक्ति ग्रुप - बकाया अंशदान सायरन",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "बकाया अंशदान हेतु चेतावनी सायरन व तीव्र सूचनाएँ"
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 600, 200, 600, 200, 1000, 400, 1000)
+                setShowBadge(true)
+                val audioAttributes = android.media.AudioAttributes.Builder()
+                    .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(android.media.AudioAttributes.USAGE_ALARM)
+                    .build()
+                val soundUri = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM)
+                    ?: android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_NOTIFICATION)
+                setSound(soundUri, audioAttributes)
+            }
+            notificationManager?.createNotificationChannel(sirenChannel)
         }
     }
 
@@ -99,6 +119,58 @@ object NotificationHelper {
                 )
                 prefs.edit().putLong("last_notified_amavasya_millis", targetMillis).apply()
             }
+        }
+    }
+
+    /**
+     * Triggers a high-priority Siren Alarm notification for members whose monthly payment is pending.
+     */
+    fun triggerPendingSirenNotification(
+        context: Context,
+        memberName: String = "सदस्य",
+        amount: Int = 100
+    ) {
+        createNotificationChannel(context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                return
+            }
+        }
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            9999,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0)
+        )
+
+        val soundUri = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM)
+            ?: android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_NOTIFICATION)
+
+        val title = "🚨 अत्यावश्यक सायरन तगादा: अंशदान बाकी है!"
+        val message = "सादर प्रणाम $memberName जी! युवा शक्ति ग्रुप (भाटी परिवार कुचेरा) का आपका ₹$amount मासिक अमावस्या अंशदान अभी तक जमा नहीं हुआ है। कृपया तुरंत जमा कराएं।"
+
+        val notification = NotificationCompat.Builder(context, SIREN_CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_alert)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setSound(soundUri)
+            .setVibrate(longArrayOf(0, 600, 200, 600, 200, 1000, 400, 1000))
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        try {
+            NotificationManagerCompat.from(context).notify(9999, notification)
+        } catch (e: Exception) {
+            // handle exception
         }
     }
 }

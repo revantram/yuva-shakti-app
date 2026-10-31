@@ -505,7 +505,7 @@ fun SettingsDialog(
                                     )
                                     Spacer(modifier = Modifier.width(10.dp))
                                     Text(
-                                        text = if (isEnglish) "Change Admin PIN (Current: 8696)" else "एडमिन पिन बदलें (वर्तमान: 8696)",
+                                        text = if (isEnglish) "Change Admin PIN" else "एडमिन सुरक्षा पिन बदलें",
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 12.5.sp,
                                         color = Color(0xFF1E293B)

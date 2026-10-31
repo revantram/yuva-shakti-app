@@ -100,7 +100,7 @@ fun AdminPinDialog(
                     color = Color(0xFF0F172A)
                 )
                 Text(
-                    text = "एडमिन मोड सक्रिय करने हेतु पिन डालें (पिन: 8696)",
+                    text = "एडमिन मोड सक्रिय करने हेतु गुप्त 4-अंकीय पिन दर्ज करें",
                     fontSize = 11.5.sp,
                     color = Color(0xFF64748B),
                     modifier = Modifier.padding(top = 4.dp)
@@ -117,7 +117,7 @@ fun AdminPinDialog(
                             errorMessage = null
                         }
                     },
-                    placeholder = { Text("4-अंकों का पिन (उदा. 8696)") },
+                    placeholder = { Text("4-अंकों का गुप्त पिन") },
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                     singleLine = true,

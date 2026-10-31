@@ -72,7 +72,7 @@ fun MemberCard(
             .clickable { onCardClick() }
             .testTag("member_card_${member.id}")
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
+        Column(modifier = Modifier.padding(14.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -91,35 +91,35 @@ fun MemberCard(
                     Box(contentAlignment = Alignment.BottomEnd) {
                         Box(
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(48.dp)
                                 .background(avatarBg, CircleShape)
-                                .border(1.dp, if (isPaid) Color(0xFF86EFAC) else Color(0xFFFDA4AF), CircleShape),
+                                .border(1.5.dp, if (isPaid) Color(0xFF86EFAC) else Color(0xFFFDA4AF), CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = avatarLetter,
                                 color = avatarTextColor,
-                                fontSize = 16.sp,
+                                fontSize = 19.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                         if (isOnline) {
                             Box(
                                 modifier = Modifier
-                                    .size(11.dp)
+                                    .size(13.dp)
                                     .background(Color(0xFF16A34A), CircleShape)
-                                    .border(1.5.dp, Color.White, CircleShape)
+                                    .border(2.dp, Color.White, CircleShape)
                             )
                         }
                     }
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
                     Column {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = member.name,
-                                fontSize = 13.5.sp,
+                                fontSize = 16.5.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF0F172A)
                             )
@@ -131,10 +131,10 @@ fun MemberCard(
                                 ) {
                                     Text(
                                         text = member.notes,
-                                        fontSize = 9.5.sp,
+                                        fontSize = 11.sp,
                                         fontWeight = FontWeight.Medium,
                                         color = Color(0xFF475569),
-                                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                     )
                                 }
                             }
@@ -143,7 +143,7 @@ fun MemberCard(
                         // Phone and payment line
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(top = 2.dp)
+                            modifier = Modifier.padding(top = 3.dp)
                         ) {
                             val displayPhone = if (isAdmin || member.phone.length < 6) {
                                 member.phone
@@ -152,27 +152,27 @@ fun MemberCard(
                             }
                             Text(
                                 text = displayPhone,
-                                fontSize = 11.sp,
+                                fontSize = 12.5.sp,
                                 color = Color(0xFF64748B)
                             )
                             Text(
                                 text = " • ",
-                                fontSize = 11.sp,
+                                fontSize = 12.5.sp,
                                 color = Color(0xFF94A3B8)
                             )
                             if (isPaid) {
                                 val modeText = if (member.paymentMode.isNotBlank()) "${member.paymentMode} द्वारा " else ""
                                 Text(
                                     text = "${modeText}₹${member.monthlyAmount} प्राप्त",
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 13.5.sp,
+                                    fontWeight = FontWeight.Bold,
                                     color = PaidGreenDark
                                 )
                             } else {
                                 Text(
                                     text = "₹${member.monthlyAmount} बकाया",
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 13.5.sp,
+                                    fontWeight = FontWeight.Bold,
                                     color = PendingRedDark
                                 )
                             }
@@ -181,9 +181,9 @@ fun MemberCard(
                         if (isPaid && member.paidDate.isNotBlank()) {
                             Text(
                                 text = "तारीख: ${member.paidDate}",
-                                fontSize = 10.sp,
+                                fontSize = 11.5.sp,
                                 color = Color(0xFF047857),
-                                modifier = Modifier.padding(top = 1.dp)
+                                modifier = Modifier.padding(top = 2.dp)
                             )
                         }
                     }
@@ -197,21 +197,21 @@ fun MemberCard(
                     if (isAdmin) {
                         Surface(
                             color = if (isPaid) Color(0xFFFFE4E6) else PaidGreen,
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
                                 .clickable { onToggleStatus() }
                                 .border(
                                     1.dp,
                                     if (isPaid) Color(0xFFFECDD3) else PaidGreen,
-                                    RoundedCornerShape(8.dp)
+                                    RoundedCornerShape(10.dp)
                                 )
                         ) {
                             Text(
                                 text = if (isPaid) "बाकी करें" else "जमा करें",
                                 color = if (isPaid) PendingRedDark else Color.White,
-                                fontSize = 11.sp,
+                                fontSize = 12.5.sp,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp)
                             )
                         }
                     } else {
@@ -225,20 +225,20 @@ fun MemberCard(
                             )
                         ) {
                             Row(
-                                modifier = Modifier.padding(horizontal = 9.dp, vertical = 4.dp),
+                                modifier = Modifier.padding(horizontal = 11.dp, vertical = 6.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
                                     imageVector = if (isPaid) Icons.Default.Check else Icons.Default.HourglassTop,
                                     contentDescription = null,
                                     tint = if (isPaid) PaidGreenDark else PendingRedDark,
-                                    modifier = Modifier.size(12.dp)
+                                    modifier = Modifier.size(15.dp)
                                 )
-                                Spacer(modifier = Modifier.width(3.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
                                 Text(
                                     text = if (isPaid) "जमा" else "बाकी",
                                     color = if (isPaid) PaidGreenDark else PendingRedDark,
-                                    fontSize = 11.sp,
+                                    fontSize = 12.5.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                             }
@@ -248,7 +248,7 @@ fun MemberCard(
             }
 
             // Quick Actions Row (Call, WhatsApp Reminder, Edit/Delete)
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -257,30 +257,30 @@ fun MemberCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Call & WhatsApp reminders
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     if (member.phone.isNotBlank() && member.phone != "N/A") {
                         Surface(
                             color = Color.White,
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
-                                .border(1.dp, Color(0xFFCBD5E1), RoundedCornerShape(8.dp))
+                                .border(1.dp, Color(0xFFCBD5E1), RoundedCornerShape(10.dp))
                                 .clickable { onCallClick() }
                         ) {
                             Row(
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Phone,
                                     contentDescription = "Call",
                                     tint = Color(0xFF334155),
-                                    modifier = Modifier.size(12.dp)
+                                    modifier = Modifier.size(14.dp)
                                 )
-                                Spacer(modifier = Modifier.width(4.dp))
+                                Spacer(modifier = Modifier.width(5.dp))
                                 Text(
                                     text = "कॉल",
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.SemiBold,
                                     color = Color(0xFF334155)
                                 )
                             }
@@ -290,19 +290,19 @@ fun MemberCard(
                     if (!isPaid && member.phone.isNotBlank()) {
                         Surface(
                             color = Color(0xFFDCFCE7),
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
-                                .border(1.dp, Color(0xFF86EFAC), RoundedCornerShape(8.dp))
+                                .border(1.dp, Color(0xFF86EFAC), RoundedCornerShape(10.dp))
                                 .clickable { onWhatsAppReminder() }
                         ) {
                             Row(
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = "💬 ", fontSize = 11.sp)
+                                Text(text = "💬 ", fontSize = 12.sp)
                                 Text(
                                     text = "व्हाट्सएप याद दिलाएं",
-                                    fontSize = 10.5.sp,
+                                    fontSize = 11.5.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFF166534)
                                 )
@@ -313,28 +313,28 @@ fun MemberCard(
 
                 // Admin Edit & Delete buttons
                 if (isAdmin) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         IconButton(
                             onClick = onEditClick,
-                            modifier = Modifier.size(28.dp)
+                            modifier = Modifier.size(32.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit Member",
                                 tint = Color(0xFF475569),
-                                modifier = Modifier.size(16.dp)
+                                modifier = Modifier.size(18.dp)
                             )
                         }
 
                         IconButton(
                             onClick = onDeleteClick,
-                            modifier = Modifier.size(28.dp)
+                            modifier = Modifier.size(32.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.DeleteOutline,
                                 contentDescription = "Delete Member",
                                 tint = Color(0xFFDC2626),
-                                modifier = Modifier.size(16.dp)
+                                modifier = Modifier.size(18.dp)
                             )
                         }
                     }

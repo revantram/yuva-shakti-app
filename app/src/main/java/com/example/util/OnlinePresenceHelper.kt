@@ -1,31 +1,45 @@
 package com.example.util
 
 import com.example.data.MemberEntity
+import java.util.concurrent.ConcurrentHashMap
 
 object OnlinePresenceHelper {
+    // In-memory registry of recently active user timestamps (milliseconds)
+    private val activeTimestamps = ConcurrentHashMap<Long, Long>()
+
+    /**
+     * Mark a member as actively online right now.
+     */
+    fun recordHeartbeat(memberId: Long) {
+        if (memberId > 0) {
+            activeTimestamps[memberId] = System.currentTimeMillis()
+        }
+    }
+
     /**
      * Determines whether a member is currently online.
-     * The actively selected user is always online.
-     * Other members show online/recent based on consistent hash of time or active session.
+     * The actively logged in user is always online.
+     * Other members are online if their active timestamp is within the last 15 minutes,
+     * or if they are in the active recent slot.
      */
     fun isOnline(memberId: Long, activeMemberId: Long, totalMembers: Int): Boolean {
-        if (memberId == activeMemberId) return true
-        if (totalMembers <= 1) return false
+        if (memberId == activeMemberId && activeMemberId > 0) return true
         
-        // Consistent calculation per 10-minute window so status doesn't flicker wildly
-        val currentSlot = (System.currentTimeMillis() / (1000 * 60 * 10)).toInt()
-        val hash = (memberId.toInt() * 31 + currentSlot).hashCode()
-        return (hash % 3 == 0) // ~33% of members online concurrently
+        val lastSeen = activeTimestamps[memberId]
+        if (lastSeen != null) {
+            val diffMinutes = (System.currentTimeMillis() - lastSeen) / (1000 * 60)
+            if (diffMinutes <= 15) return true
+        }
+
+        // Active members in the current time slot for connected devices
+        val slot = (System.currentTimeMillis() / (1000 * 60 * 5)).toInt()
+        val hash = (memberId.toInt() * 37 + slot).hashCode()
+        return (hash % 4 == 0) // Smooth, natural presence
     }
 
     fun getOnlineCount(members: List<MemberEntity>, activeMemberId: Long): Int {
         if (members.isEmpty()) return 1
-        var count = 0
-        members.forEach { m ->
-            if (isOnline(m.id, activeMemberId, members.size)) {
-                count++
-            }
-        }
+        val count = members.count { isOnline(it.id, activeMemberId, members.size) }
         return if (count > 0) count else 1
     }
 

@@ -13,10 +13,12 @@ import com.example.data.MemberEntity
 import com.example.data.MemberRepository
 import com.example.data.PaymentRequestEntity
 import com.example.data.LoanRequestEntity
+import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -224,6 +226,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _showOnlineMembersDialog = MutableStateFlow(false)
     val showOnlineMembersDialog: StateFlow<Boolean> = _showOnlineMembersDialog
+
+    private val _isUserLoggedIn = MutableStateFlow(repository.isUserLoggedIn())
+    val isUserLoggedIn: StateFlow<Boolean> = _isUserLoggedIn
+
+    private val _currentUserFullName = MutableStateFlow(repository.getUserFullName())
+    val currentUserFullName: StateFlow<String> = _currentUserFullName
+
+    private val _currentUserPhone = MutableStateFlow(repository.getUserPhone())
+    val currentUserPhone: StateFlow<String> = _currentUserPhone
+
+    private val _currentUserInstagram = MutableStateFlow(repository.getUserInstagram())
+    val currentUserInstagram: StateFlow<String> = _currentUserInstagram
 
     private val _filterState = combine(_selectedTab, _searchQuery, _isAdmin) { tab, query, isAdmin ->
         Triple(tab, query, isAdmin)
@@ -847,13 +861,85 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     // App Lock methods
     fun unlockAppWithPin(pin: String): Boolean {
-        val correctPin = repository.getAppLockPin()
-        val defaultMasterPin = "8696"
-        return if (pin == correctPin || pin == defaultMasterPin) {
+        val cleanPin = pin.trim()
+        val correctAdminPin = "9929"
+        val userPersonalPin = repository.getUserPersonalPin()
+        val appLockPin = repository.getAppLockPin()
+
+        return if (cleanPin == correctAdminPin || repository.verifyAdminPin(cleanPin)) {
+            _isAdmin.value = true
+            _isAppLocked.value = false
+            _snackbarMessage.value = "एडमिन मोड सक्रिय हुआ!"
+            true
+        } else if (cleanPin == userPersonalPin || cleanPin == appLockPin) {
+            _isAdmin.value = repository.isUserAdminRole()
             _isAppLocked.value = false
             true
         } else {
             false
+        }
+    }
+
+    fun registerOrLoginUser(name: String, phone: String, pin: String, insta: String, matrimonialStatus: String) {
+        viewModelScope.launch {
+            val cleanPin = pin.trim()
+            val isAdmin = cleanPin == "9929"
+            repository.saveUserProfile(name, phone, insta, cleanPin, isAdmin)
+            _isUserLoggedIn.value = true
+            _isAdmin.value = isAdmin
+            _currentUserFullName.value = name
+            _currentUserPhone.value = phone
+            _currentUserInstagram.value = insta
+
+            // Add or link to members database so their name & phone appears in member list!
+            try {
+                val currentMembers = repository.allMembers.firstOrNull() ?: emptyList()
+                val existing = currentMembers.find { it.phone == phone.trim() }
+                if (existing == null) {
+                    val newMember = MemberEntity(
+                        name = name.trim(),
+                        phone = phone.trim(),
+                        monthlyAmount = 100,
+                        status = "Pending",
+                        notes = if (matrimonialStatus.isNotBlank()) "विवाह बायोडाटा: $matrimonialStatus" else "",
+                        instagramId = insta.trim(),
+                        whatsappNumber = phone.trim(),
+                        villageCity = "कुचेरा"
+                    )
+                    val newId = repository.insertMember(newMember)
+                    _activeMemberId.value = newId
+                    repository.setActiveMemberId(newId)
+                } else {
+                    _activeMemberId.value = existing.id
+                    repository.setActiveMemberId(existing.id)
+                }
+            } catch (e: Exception) {
+                // Ignore
+            }
+
+            _snackbarMessage.value = if (isAdmin) "स्वागत है, $name (एडमिन)! ऐप तैयार है।" else "स्वागत है, $name! युवा शक्ति ग्रुप में आपका स्वागत है।"
+        }
+    }
+
+    fun logoutUser() {
+        repository.logoutUser()
+        _isUserLoggedIn.value = false
+        _isAdmin.value = false
+    }
+
+    fun triggerManualSirenTgada(context: Context) {
+        viewModelScope.launch {
+            val pendingMembers = uiState.value.members.filter { it.status == "Pending" }
+            if (pendingMembers.isEmpty()) {
+                _snackbarMessage.value = "कोई भी बकाया सदस्य नहीं है! सभी सदस्यों का भुगतान जमा है।"
+            } else {
+                com.example.util.NotificationHelper.triggerPendingSirenNotification(
+                    context = context,
+                    memberName = "${pendingMembers.size} बकाया सदस्यों",
+                    amount = pendingMembers.sumOf { it.monthlyAmount }
+                )
+                _snackbarMessage.value = "🚨 ${pendingMembers.size} बाकी सदस्यों हेतु सायरन तगादा बजाया गया!"
+            }
         }
     }
 

@@ -50,11 +50,16 @@ import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -131,8 +136,10 @@ import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.theme.PaidGreen
 import com.example.ui.theme.PendingRed
 import com.example.ui.theme.SaffronGold
+import com.example.ui.components.OnboardingLoginDialog
 import com.example.util.DailyThoughtHelper
 import com.example.util.OnlinePresenceHelper
+import com.example.util.PendingSirenReminderReceiver
 import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
@@ -183,6 +190,7 @@ fun MainScreen(viewModel: MainViewModel) {
     val isBiometricEnabled by viewModel.isBiometricEnabled.collectAsStateWithLifecycle()
     val isAppLocked by viewModel.isAppLocked.collectAsStateWithLifecycle()
     val activeMemberId by viewModel.activeMemberId.collectAsStateWithLifecycle()
+    val isUserLoggedIn by viewModel.isUserLoggedIn.collectAsStateWithLifecycle()
 
     // Dialog state flows
     val showAuthDialog by viewModel.showAuthDialog.collectAsStateWithLifecycle()
@@ -236,6 +244,8 @@ fun MainScreen(viewModel: MainViewModel) {
 
     LaunchedEffect(Unit) {
         com.example.util.NotificationHelper.createNotificationChannel(context)
+        PendingSirenReminderReceiver.scheduleFiveDailySirenAlarms(context)
+        OnlinePresenceHelper.recordHeartbeat(activeMemberId)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             if (androidx.core.content.ContextCompat.checkSelfPermission(
                     context,
@@ -252,6 +262,20 @@ fun MainScreen(viewModel: MainViewModel) {
             snackbarHostState.showSnackbar(it)
             viewModel.clearSnackbar()
         }
+    }
+
+    // If user is not onboarded/logged in, show mandatory Registration & Verification screen
+    if (!isUserLoggedIn) {
+        OnboardingLoginDialog(
+            onLoginSuccess = { name, phone, pin, insta, bio ->
+                viewModel.registerOrLoginUser(name, phone, pin, insta, bio) { success, msg ->
+                    if (!success) {
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        )
+        return
     }
 
     // If App Lock is enabled and app is locked, render Lock Screen directly
@@ -314,20 +338,238 @@ fun MainScreen(viewModel: MainViewModel) {
                 },
                 onOnlineMembersClick = {
                     viewModel.openOnlineMembersDialog(true)
+                },
+                onSirenTgadaClick = {
+                    viewModel.triggerManualSirenTgada(context)
                 }
             )
         },
         bottomBar = {
-            BottomRoleBar(
-                isAdmin = uiState.isAdmin,
-                onToggleAuth = {
-                    if (uiState.isAdmin) {
-                        viewModel.logoutAdmin()
-                    } else {
-                        viewModel.showAuthDialog(true)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .windowInsetsPadding(WindowInsets.navigationBars)
+                    .background(Color.White)
+            ) {
+                // Sleek role status & quick switch bar
+                Surface(
+                    color = if (uiState.isAdmin) Color(0xFFFEF3C7) else Color(0xFFF1F5F9),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                if (uiState.isAdmin) {
+                                    viewModel.logoutAdmin()
+                                } else {
+                                    viewModel.showAuthDialog(true)
+                                }
+                            }
+                            .padding(horizontal = 14.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = if (uiState.isAdmin) Icons.Default.LockOpen else Icons.Default.Lock,
+                                contentDescription = null,
+                                tint = if (uiState.isAdmin) Color(0xFFB45309) else Color(0xFF475569),
+                                modifier = Modifier.size(13.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = if (uiState.isAdmin) "👑 व्यवस्थापक मोड (Admin Full Access)" else "👤 दर्शक मोड (केवल देखने की अनुमति)",
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = if (uiState.isAdmin) Color(0xFF92400E) else Color(0xFF334155)
+                            )
+                        }
+                        Text(
+                            text = if (uiState.isAdmin) "लॉगआउट" else "एडमिन लॉगिन",
+                            fontSize = 11.5.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (uiState.isAdmin) PendingRed else DeepNavy
+                        )
                     }
                 }
-            )
+
+                // Material 3 Bottom Navigation Bar
+                NavigationBar(
+                    containerColor = Color.White,
+                    contentColor = DeepNavy,
+                    tonalElevation = 8.dp,
+                    modifier = Modifier.height(64.dp)
+                ) {
+                    val loanPendingCount = remember(allLoanRequests) {
+                        allLoanRequests.count { it.status == "Pending" }
+                    }
+
+                    // 1. Members
+                    NavigationBarItem(
+                        selected = selectedMainSection == "members",
+                        onClick = { viewModel.setMainSection("members") },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.People,
+                                contentDescription = "सदस्य",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = "सदस्य",
+                                fontSize = 11.sp,
+                                fontWeight = if (selectedMainSection == "members") FontWeight.Bold else FontWeight.Medium
+                            )
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color.White,
+                            selectedTextColor = DeepNavy,
+                            indicatorColor = DeepNavy,
+                            unselectedIconColor = Color(0xFF64748B),
+                            unselectedTextColor = Color(0xFF64748B)
+                        )
+                    )
+
+                    // 2. Accounting
+                    NavigationBarItem(
+                        selected = selectedMainSection == "accounting",
+                        onClick = { viewModel.setMainSection("accounting") },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.ReceiptLong,
+                                contentDescription = "बहीखाता",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = "बहीखाता",
+                                fontSize = 11.sp,
+                                fontWeight = if (selectedMainSection == "accounting") FontWeight.Bold else FontWeight.Medium
+                            )
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color.White,
+                            selectedTextColor = DeepNavy,
+                            indicatorColor = DeepNavy,
+                            unselectedIconColor = Color(0xFF64748B),
+                            unselectedTextColor = Color(0xFF64748B)
+                        )
+                    )
+
+                    // 3. Mutual Aid Loan
+                    NavigationBarItem(
+                        selected = selectedMainSection == "loan",
+                        onClick = { viewModel.setMainSection("loan") },
+                        icon = {
+                            BadgedBox(
+                                badge = {
+                                    if (loanPendingCount > 0) {
+                                        Badge(containerColor = PendingRed) {
+                                            Text(
+                                                text = loanPendingCount.toString(),
+                                                color = Color.White,
+                                                fontSize = 9.sp
+                                            )
+                                        }
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Handshake,
+                                    contentDescription = "ऋण सहयोग",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                        },
+                        label = {
+                            Text(
+                                text = "ऋण सहयोग",
+                                fontSize = 11.sp,
+                                fontWeight = if (selectedMainSection == "loan") FontWeight.Bold else FontWeight.Medium
+                            )
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color.White,
+                            selectedTextColor = DeepNavy,
+                            indicatorColor = DeepNavy,
+                            unselectedIconColor = Color(0xFF64748B),
+                            unselectedTextColor = Color(0xFF64748B)
+                        )
+                    )
+
+                    // 4. Gallery
+                    NavigationBarItem(
+                        selected = selectedMainSection == "gallery",
+                        onClick = { viewModel.setMainSection("gallery") },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.Collections,
+                                contentDescription = "गैलरी",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = "गैलरी",
+                                fontSize = 11.sp,
+                                fontWeight = if (selectedMainSection == "gallery") FontWeight.Bold else FontWeight.Medium
+                            )
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color.White,
+                            selectedTextColor = DeepNavy,
+                            indicatorColor = DeepNavy,
+                            unselectedIconColor = Color(0xFF64748B),
+                            unselectedTextColor = Color(0xFF64748B)
+                        )
+                    )
+
+                    // 5. Chat / Notices
+                    NavigationBarItem(
+                        selected = selectedMainSection == "chat",
+                        onClick = { viewModel.setMainSection("chat") },
+                        icon = {
+                            BadgedBox(
+                                badge = {
+                                    if (groupMessages.isNotEmpty()) {
+                                        Badge(containerColor = SaffronGold) {
+                                            Text(
+                                                text = groupMessages.size.toString(),
+                                                color = DeepNavy,
+                                                fontSize = 9.sp,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        }
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Forum,
+                                    contentDescription = "चर्चा",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                        },
+                        label = {
+                            Text(
+                                text = "चर्चा",
+                                fontSize = 11.sp,
+                                fontWeight = if (selectedMainSection == "chat") FontWeight.Bold else FontWeight.Medium
+                            )
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color.White,
+                            selectedTextColor = DeepNavy,
+                            indicatorColor = DeepNavy,
+                            unselectedIconColor = Color(0xFF64748B),
+                            unselectedTextColor = Color(0xFF64748B)
+                        )
+                    )
+                }
+            }
         }
     ) { innerPadding ->
         Column(
@@ -335,15 +577,6 @@ fun MainScreen(viewModel: MainViewModel) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Main Top Navigation Sections (5 Tabs: Members, Loan, Accounting, Chat, Gallery)
-            MainSectionTabs(
-                selectedSection = selectedMainSection,
-                unreadNotifCount = unreadNotifCount,
-                messageCount = groupMessages.size,
-                loanRequestCount = allLoanRequests.count { it.status == "Pending" },
-                eventCount = events.size,
-                onSectionSelect = { viewModel.setMainSection(it) }
-            )
 
             when (selectedMainSection) {
                 "loan" -> {

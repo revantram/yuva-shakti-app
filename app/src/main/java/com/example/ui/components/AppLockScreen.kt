@@ -296,7 +296,7 @@ fun AppLockScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "डिफ़ॉल्ट सुरक्षा कोड: 8696",
+                    text = "सुरक्षित पारिवारिक बहीखाता • भाटी परिवार कुचेरा",
                     color = Color(0xFF94A3B8),
                     fontSize = 11.sp
                 )

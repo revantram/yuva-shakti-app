@@ -19,7 +19,13 @@ class MemberRepository(
 
     companion object {
         private const val KEY_ADMIN_PIN = "admin_pin"
-        private const val DEFAULT_PIN = "8696"
+        private const val DEFAULT_PIN = "9929"
+        private const val KEY_USER_LOGGED_IN = "user_is_logged_in"
+        private const val KEY_USER_FULL_NAME = "user_full_name"
+        private const val KEY_USER_PHONE = "user_phone"
+        private const val KEY_USER_INSTAGRAM = "user_instagram"
+        private const val KEY_USER_PERSONAL_PIN = "user_personal_pin"
+        private const val KEY_USER_IS_ADMIN = "user_is_admin"
         private const val KEY_AMAVASYA_CYCLE_NAME = "amavasya_cycle_name"
         private const val KEY_AMAVASYA_STATE = "amavasya_state" // "day_after", "advance", "regular"
         private const val KEY_TARGET_AMAVASYA_MILLIS = "target_amavasya_millis"
@@ -279,14 +285,35 @@ class MemberRepository(
         prefs.edit().putString(KEY_CONSENSUS_NOTE, note.trim()).apply()
     }
 
+    fun isUserLoggedIn(): Boolean = prefs.getBoolean(KEY_USER_LOGGED_IN, false)
+    fun getUserFullName(): String = prefs.getString(KEY_USER_FULL_NAME, "") ?: ""
+    fun getUserPhone(): String = prefs.getString(KEY_USER_PHONE, "") ?: ""
+    fun getUserInstagram(): String = prefs.getString(KEY_USER_INSTAGRAM, "") ?: ""
+    fun getUserPersonalPin(): String = prefs.getString(KEY_USER_PERSONAL_PIN, "") ?: ""
+    fun isUserAdminRole(): Boolean = prefs.getBoolean(KEY_USER_IS_ADMIN, false)
+
+    fun saveUserProfile(name: String, phone: String, insta: String, pin: String, isAdmin: Boolean) {
+        prefs.edit()
+            .putBoolean(KEY_USER_LOGGED_IN, true)
+            .putString(KEY_USER_FULL_NAME, name.trim())
+            .putString(KEY_USER_PHONE, phone.trim())
+            .putString(KEY_USER_INSTAGRAM, insta.trim())
+            .putString(KEY_USER_PERSONAL_PIN, pin.trim())
+            .putBoolean(KEY_USER_IS_ADMIN, isAdmin)
+            .apply()
+    }
+
+    fun logoutUser() {
+        prefs.edit()
+            .putBoolean(KEY_USER_LOGGED_IN, false)
+            .putBoolean(KEY_USER_IS_ADMIN, false)
+            .apply()
+    }
+
     fun verifyAdminPin(pin: String): Boolean {
         val cleanPin = pin.trim()
         val savedPin = prefs.getString(KEY_ADMIN_PIN, DEFAULT_PIN) ?: DEFAULT_PIN
-        val isMatch = cleanPin == "8696" || cleanPin == DEFAULT_PIN || cleanPin == savedPin
-        if (isMatch && savedPin != DEFAULT_PIN) {
-            prefs.edit().putString(KEY_ADMIN_PIN, DEFAULT_PIN).apply()
-        }
-        return isMatch
+        return cleanPin == DEFAULT_PIN || cleanPin == savedPin
     }
 
     fun setAdminPin(newPin: String) {
@@ -568,7 +595,7 @@ class MemberRepository(
     }
 
     fun getAppLockPin(): String {
-        return prefs.getString(KEY_APP_LOCK_PIN, "8696") ?: "8696"
+        return prefs.getString(KEY_APP_LOCK_PIN, getUserPersonalPin().ifEmpty { DEFAULT_PIN }) ?: DEFAULT_PIN
     }
 
     fun setAppLockPin(pin: String) {
