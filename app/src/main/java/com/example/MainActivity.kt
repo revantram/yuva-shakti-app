@@ -244,7 +244,7 @@ fun MainScreen(viewModel: MainViewModel) {
 
     LaunchedEffect(Unit) {
         com.example.util.NotificationHelper.createNotificationChannel(context)
-        PendingSirenReminderReceiver.scheduleFiveDailySirenAlarms(context)
+        PendingSirenReminderReceiver.scheduleAllDailyAlarms(context)
         OnlinePresenceHelper.recordHeartbeat(activeMemberId)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             if (androidx.core.content.ContextCompat.checkSelfPermission(

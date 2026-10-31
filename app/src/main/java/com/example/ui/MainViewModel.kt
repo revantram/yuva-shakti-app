@@ -793,12 +793,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun sendDailyThoughtNotification() {
         val thought = com.example.util.DailyThoughtHelper.getTodayThought()
-        com.example.util.NotificationHelper.showTransactionNotification(
+        com.example.util.NotificationHelper.sendMorningThoughtNotification(
             context = getApplication(),
-            title = "✨ आज का सुविचार • भाटी परिवार",
-            message = thought.hindi
+            thoughtText = thought.hindi
         )
-        _snackbarMessage.value = "आज का प्रेरक विचार नोटिफिकेशन में भेजा गया!"
+        _snackbarMessage.value = "आज का सुविचार नोटिफिकेशन में भेजा गया!"
     }
 
     // Loan Assistance methods

@@ -14,6 +14,15 @@ import java.util.Calendar
 
 class PendingSirenReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
+        val action = intent?.action ?: ""
+
+        // 1. Morning Daily Thought Notification (सुबह का दैनिक सुविचार)
+        if (action == "ACTION_MORNING_THOUGHT_ALARM") {
+            NotificationHelper.sendMorningThoughtNotification(context)
+            return
+        }
+
+        // 2. Pending Members Siren Alarm (बकाया अंशदान सायरन)
         val database = AppDatabase.getInstance(context)
         val prefs = context.getSharedPreferences("yuva_shakti_prefs", Context.MODE_PRIVATE)
         val userPhone = prefs.getString("user_phone", "") ?: ""
@@ -43,12 +52,76 @@ class PendingSirenReminderReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        private val ALARM_HOURS = listOf(9, 12, 15, 18, 21) // 5 times a day: 9 AM, 12 PM, 3 PM, 6 PM, 9 PM
+        private val SIREN_HOURS = listOf(9, 12, 15, 18, 21) // 5 times a day: 9 AM, 12 PM, 3 PM, 6 PM, 9 PM
+        private const val MORNING_THOUGHT_HOUR = 7 // 7:00 AM every morning
+
+        fun scheduleAllDailyAlarms(context: Context) {
+            scheduleFiveDailySirenAlarms(context)
+            scheduleDailyMorningThoughtAlarm(context)
+            checkAndSendTodayMorningThought(context)
+        }
+
+        fun scheduleDailyMorningThoughtAlarm(context: Context) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
+            val intent = Intent(context, PendingSirenReminderReceiver::class.java).apply {
+                action = "ACTION_MORNING_THOUGHT_ALARM"
+            }
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                7000,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, MORNING_THOUGHT_HOUR)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+                if (before(Calendar.getInstance())) {
+                    add(Calendar.DAY_OF_YEAR, 1)
+                }
+            }
+
+            try {
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent
+                )
+            } catch (e: Exception) {
+                try {
+                    alarmManager.setAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        pendingIntent
+                    )
+                } catch (e2: Exception) {
+                    // ignore
+                }
+            }
+        }
+
+        fun checkAndSendTodayMorningThought(context: Context) {
+            val prefs = context.getSharedPreferences("yuva_shakti_thought_prefs", Context.MODE_PRIVATE)
+            val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            val todayKey = "$currentYear-$currentDay"
+            val lastNotified = prefs.getString("last_thought_day", "")
+
+            val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            // If morning (between 6 AM and 12 PM) and not notified yet today, send notification
+            if (currentHour in 6..12 && lastNotified != todayKey) {
+                NotificationHelper.sendMorningThoughtNotification(context)
+                prefs.edit().putString("last_thought_day", todayKey).apply()
+            }
+        }
 
         fun scheduleFiveDailySirenAlarms(context: Context) {
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
 
-            ALARM_HOURS.forEachIndexed { index, hour ->
+            SIREN_HOURS.forEachIndexed { index, hour ->
                 val intent = Intent(context, PendingSirenReminderReceiver::class.java).apply {
                     action = "ACTION_PENDING_SIREN_ALARM_$hour"
                 }
@@ -77,7 +150,6 @@ class PendingSirenReminderReceiver : BroadcastReceiver() {
                         pendingIntent
                     )
                 } catch (e: Exception) {
-                    // Fallback for newer Android versions
                     try {
                         alarmManager.setAndAllowWhileIdle(
                             AlarmManager.RTC_WAKEUP,

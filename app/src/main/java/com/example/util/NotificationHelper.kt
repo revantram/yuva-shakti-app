@@ -173,4 +173,48 @@ object NotificationHelper {
             // handle exception
         }
     }
+
+    /**
+     * Sends the daily morning inspirational thought notification to all members.
+     */
+    fun sendMorningThoughtNotification(context: Context, thoughtText: String? = null) {
+        createNotificationChannel(context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                return
+            }
+        }
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            7777,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0)
+        )
+
+        val actualThought = thoughtText ?: DailyThoughtHelper.getTodayThought().hindi
+        val title = "🌅 सुप्रभात भाटी परिवार • आज का सुविचार"
+        val message = "❝ $actualThought ❞\n\n- युवा शक्ति ग्रुप, भाटी परिवार कुचेरा"
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle(title)
+            .setContentText("❝ $actualThought ❞")
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        try {
+            NotificationManagerCompat.from(context).notify(7777, notification)
+        } catch (e: Exception) {
+            // handle exception
+        }
+    }
 }
