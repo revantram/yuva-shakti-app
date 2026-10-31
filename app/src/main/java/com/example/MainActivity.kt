@@ -55,6 +55,7 @@ import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
@@ -312,6 +313,7 @@ fun MainScreen(viewModel: MainViewModel) {
         topBar = {
             AppHeader(
                 isAdmin = uiState.isAdmin,
+                totalCollected = uiState.totalCollected,
                 countdown = countdown,
                 unreadNotificationCount = unreadNotifCount,
                 onlineMemberCount = onlineCount,
@@ -354,48 +356,11 @@ fun MainScreen(viewModel: MainViewModel) {
                     .padding(bottom = 6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Sleek role status pill
-                Surface(
-                    shape = RoundedCornerShape(16.dp),
-                    color = if (uiState.isAdmin) Color(0xF2FEF3C7) else Color(0xD90F172A),
-                    border = BorderStroke(1.dp, if (uiState.isAdmin) Color(0xFFF59E0B) else Color(0x33FFFFFF)),
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 2.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .clickable {
-                            if (uiState.isAdmin) {
-                                viewModel.logoutAdmin()
-                            } else {
-                                viewModel.showAuthDialog(true)
-                            }
-                        }
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = if (uiState.isAdmin) Icons.Default.LockOpen else Icons.Default.Lock,
-                            contentDescription = null,
-                            tint = if (uiState.isAdmin) Color(0xFFB45309) else Color(0xFF94A3B8),
-                            modifier = Modifier.size(12.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = if (uiState.isAdmin) "👑 व्यवस्थापक मोड (Admin) • लॉगआउट" else "👤 दर्शक मोड (Viewer) • एडमिन लॉगिन",
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = if (uiState.isAdmin) Color(0xFF92400E) else Color(0xFFE2E8F0)
-                        )
-                    }
-                }
-
-                // Transparent Floating Glass Dock (5 items matching reference photo)
+                // Transparent Floating Glass Dock with 6 items (including Settings)
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 3.dp)
+                        .padding(horizontal = 10.dp, vertical = 2.dp)
                         .shadow(16.dp, RoundedCornerShape(32.dp)),
                     shape = RoundedCornerShape(32.dp),
                     color = Color(0xDC0F172A),
@@ -404,7 +369,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 6.dp, horizontal = 4.dp),
+                            .padding(vertical = 5.dp, horizontal = 2.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         val loanPendingCount = remember(allLoanRequests) {
@@ -415,7 +380,7 @@ fun MainScreen(viewModel: MainViewModel) {
                         FloatingNavItem(
                             title = "सदस्य",
                             icon = Icons.Default.People,
-                            isSelected = selectedMainSection == "members",
+                            isSelected = selectedMainSection == "members" && !showSettingsDialog,
                             onClick = { viewModel.setMainSection("members") }
                         )
 
@@ -423,7 +388,7 @@ fun MainScreen(viewModel: MainViewModel) {
                         FloatingNavItem(
                             title = "बहीखाता",
                             icon = Icons.Default.ReceiptLong,
-                            isSelected = selectedMainSection == "accounting",
+                            isSelected = selectedMainSection == "accounting" && !showSettingsDialog,
                             onClick = { viewModel.setMainSection("accounting") }
                         )
 
@@ -431,7 +396,7 @@ fun MainScreen(viewModel: MainViewModel) {
                         FloatingNavItem(
                             title = "ऋण सहयोग",
                             icon = Icons.Default.Handshake,
-                            isSelected = selectedMainSection == "loan",
+                            isSelected = selectedMainSection == "loan" && !showSettingsDialog,
                             badgeCount = loanPendingCount,
                             badgeColor = Color(0xFFEF4444),
                             onClick = { viewModel.setMainSection("loan") }
@@ -441,7 +406,7 @@ fun MainScreen(viewModel: MainViewModel) {
                         FloatingNavItem(
                             title = "गैलरी",
                             icon = Icons.Default.Collections,
-                            isSelected = selectedMainSection == "gallery",
+                            isSelected = selectedMainSection == "gallery" && !showSettingsDialog,
                             onClick = { viewModel.setMainSection("gallery") }
                         )
 
@@ -449,10 +414,18 @@ fun MainScreen(viewModel: MainViewModel) {
                         FloatingNavItem(
                             title = "चर्चा",
                             icon = Icons.Default.Forum,
-                            isSelected = selectedMainSection == "chat",
+                            isSelected = selectedMainSection == "chat" && !showSettingsDialog,
                             badgeCount = groupMessages.size,
                             badgeColor = Color(0xFFF59E0B),
                             onClick = { viewModel.setMainSection("chat") }
+                        )
+
+                        // 6. Settings / सेटिंग्स
+                        FloatingNavItem(
+                            title = "सेटिंग्स",
+                            icon = Icons.Default.Settings,
+                            isSelected = showSettingsDialog,
+                            onClick = { viewModel.openSettingsDialog(true) }
                         )
                     }
                 }
@@ -842,7 +815,20 @@ fun MainScreen(viewModel: MainViewModel) {
             onSendDailyThoughtNotification = { viewModel.sendDailyThoughtNotification() },
             currentApkUrl = updateApkUrl,
             latestVersionNote = latestVersionNote,
-            onOpenAppUpdateConsole = { viewModel.openAppUpdateConsole(true) }
+            onOpenAppUpdateConsole = { viewModel.openAppUpdateConsole(true) },
+            onSwitchAdminRoleClick = {
+                if (uiState.isAdmin) {
+                    viewModel.logoutAdmin()
+                } else {
+                    viewModel.showAuthDialog(true)
+                }
+            },
+            onUrgentBroadcastClick = {
+                viewModel.openUrgentBroadcastDialog(true)
+            },
+            onSirenTgadaClick = {
+                viewModel.triggerManualSirenTgada(context)
+            }
         )
     }
 

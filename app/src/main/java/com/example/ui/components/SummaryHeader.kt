@@ -68,6 +68,7 @@ import com.example.ui.theme.SaffronLight
 @Composable
 fun AppHeader(
     isAdmin: Boolean,
+    totalCollected: Int = 0,
     countdown: com.example.util.CountdownInfo,
     unreadNotificationCount: Int = 0,
     onlineMemberCount: Int = 1,
@@ -174,93 +175,52 @@ fun AppHeader(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // Quick Direct QR Code Payment Button
+                    // Circular Deposited Amount / QR Pay Circle
                     Surface(
+                        shape = CircleShape,
                         color = Color(0xFF047857),
-                        shape = RoundedCornerShape(12.dp),
+                        border = androidx.compose.foundation.BorderStroke(2.dp, SaffronGold),
+                        shadowElevation = 4.dp,
                         modifier = Modifier
+                            .size(56.dp)
                             .clickable { onPaymentClick() }
-                            .testTag("btn_header_pay")
+                            .testTag("btn_header_pay_circle")
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 7.dp, vertical = 5.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(2.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = "📷 QR पे",
+                                text = "जमा राशि",
+                                color = Color(0xFFA7F3D0),
+                                fontSize = 7.5.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = "₹${totalCollected.formatAmount()}",
                                 color = Color.White,
-                                fontSize = 10.5.sp,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Black,
+                                maxLines = 1
+                            )
+                            Text(
+                                text = "QR पे ↗",
+                                color = SaffronGold,
+                                fontSize = 7.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                     }
 
-                    // Admin Urgent Notice Broadcast Button
-                    if (isAdmin) {
-                        Surface(
-                            color = Color(0xFFDC2626),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier
-                                .clickable { onUrgentBroadcastClick() }
-                                .testTag("btn_header_urgent_broadcast")
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 5.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "📢 अलर्ट",
-                                    color = Color.White,
-                                    fontSize = 10.5.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-
-                        Surface(
-                            color = Color(0xFFB91C1C),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier
-                                .clickable { onSirenTgadaClick() }
-                                .testTag("btn_header_siren_tgada")
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 5.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "🚨 सायरन",
-                                    color = Color.White,
-                                    fontSize = 10.5.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    }
-
-                    // Settings Button
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .background(Color(0xFF312E81), CircleShape)
-                            .clickable { onSettingsClick() }
-                            .testTag("btn_header_settings"),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings",
-                            tint = Color.White,
-                            modifier = Modifier.size(16.dp)
-                        )
-                    }
-
                     // Notification Bell with Badge
                     Box(
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(34.dp)
                             .background(Color(0xFF312E81), CircleShape)
                             .clickable { onNotificationsClick() }
                             .testTag("btn_notifications_bell"),
@@ -270,7 +230,7 @@ fun AppHeader(
                             imageVector = Icons.Default.NotificationsActive,
                             contentDescription = "Notifications",
                             tint = if (unreadNotificationCount > 0) SaffronGold else Color.White,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(17.dp)
                         )
                         if (unreadNotificationCount > 0) {
                             Box(
@@ -285,36 +245,6 @@ fun AppHeader(
                                     color = Color.White,
                                     fontSize = 8.sp,
                                     fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                    }
-
-                    // Role Badge
-                    Surface(
-                        color = if (isAdmin) SaffronGold else Color(0xFF312E81),
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier
-                            .testTag("role_badge")
-                            .clickable { onAuthClick() }
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            if (isAdmin) {
-                                Text(
-                                    text = "एडमिन",
-                                    color = Color(0xFF451A03),
-                                    fontSize = 10.5.sp,
-                                    fontWeight = FontWeight.Black
-                                )
-                            } else {
-                                Text(
-                                    text = "दर्शक",
-                                    color = Color(0xFFE0E7FF),
-                                    fontSize = 10.5.sp,
-                                    fontWeight = FontWeight.SemiBold
                                 )
                             }
                         }

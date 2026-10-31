@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PhoneAndroid
@@ -122,7 +123,10 @@ fun SettingsDialog(
     onLockNowClick: () -> Unit = {},
     onChangePinClick: () -> Unit,
     onSendDailyThoughtNotification: () -> Unit,
-    onOpenAppUpdateConsole: () -> Unit = {}
+    onOpenAppUpdateConsole: () -> Unit = {},
+    onSwitchAdminRoleClick: () -> Unit = {},
+    onUrgentBroadcastClick: () -> Unit = {},
+    onSirenTgadaClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val isEnglish = currentLanguage == "en"
@@ -160,6 +164,245 @@ fun SettingsDialog(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
+                // Section 0A: Member Mode / Admin Mode Management
+                item {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isAdmin) Color(0xFFFEF3C7) else Color(0xFFF1F5F9)
+                        ),
+                        shape = RoundedCornerShape(14.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                1.2.dp,
+                                if (isAdmin) Color(0xFFF59E0B) else Color(0xFFCBD5E1),
+                                RoundedCornerShape(14.dp)
+                            )
+                    ) {
+                        Column(modifier = Modifier.padding(14.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(34.dp)
+                                            .background(
+                                                if (isAdmin) Color(0xFFF59E0B) else Color(0xFF64748B),
+                                                CircleShape
+                                            ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            imageVector = if (isAdmin) Icons.Default.LockOpen else Icons.Default.Lock,
+                                            contentDescription = null,
+                                            tint = Color.White,
+                                            modifier = Modifier.size(18.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Column {
+                                        Text(
+                                            text = if (isAdmin) "👑 व्यवस्थापक मोड (Admin Mode)" else "👤 सदस्य मोड (Member Mode)",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 13.5.sp,
+                                            color = if (isAdmin) Color(0xFF92400E) else Color(0xFF1E293B)
+                                        )
+                                        Text(
+                                            text = if (isAdmin) "पूर्ण संपादन व प्रशासनिक अधिकार सक्रिय" else "केवल देखने की अनुमति (दर्शकीय मोड)",
+                                            fontSize = 10.5.sp,
+                                            color = if (isAdmin) Color(0xFFB45309) else Color(0xFF64748B)
+                                        )
+                                    }
+                                }
+
+                                Surface(
+                                    color = if (isAdmin) PendingRed else DeepNavy,
+                                    shape = RoundedCornerShape(8.dp),
+                                    modifier = Modifier.clickable {
+                                        onDismiss()
+                                        onSwitchAdminRoleClick()
+                                    }
+                                ) {
+                                    Text(
+                                        text = if (isAdmin) "लॉगआउट" else "एडमिन लॉगिन",
+                                        color = Color.White,
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Section 0B: Alert Mode & Siren Mode Controls
+                item {
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF1F2)),
+                        shape = RoundedCornerShape(14.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.2.dp, Color(0xFFFECDD3), RoundedCornerShape(14.dp))
+                    ) {
+                        Column(modifier = Modifier.padding(14.dp)) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(34.dp)
+                                        .background(Color(0xFFDC2626), CircleShape),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.NotificationsActive,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Column {
+                                    Text(
+                                        text = "📢 अलर्ट एवं सायरन मोड नियंत्रण",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 13.5.sp,
+                                        color = Color(0xFF991B1B)
+                                    )
+                                    Text(
+                                        text = "आपातकालीन सूचना व बकाया अंशदान सायरन",
+                                        fontSize = 10.5.sp,
+                                        color = Color(0xFFB91C1C)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(10.dp))
+
+                            // 1. Alert Broadcast Button
+                            Surface(
+                                color = Color.White,
+                                shape = RoundedCornerShape(10.dp),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFEE2E2)),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        if (isAdmin) {
+                                            onDismiss()
+                                            onUrgentBroadcastClick()
+                                        } else {
+                                            Toast.makeText(context, "केवल व्यवस्थापक (Admin) ही अलर्ट भेज सकते हैं", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(10.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Text(text = "📢", fontSize = 16.sp)
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Column {
+                                            Text(
+                                                text = "आपातकालीन अलर्ट जारी करें",
+                                                fontSize = 11.5.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color(0xFF991B1B)
+                                            )
+                                            Text(
+                                                text = "सभी सदस्यों को लाल स्क्रीन व कंपन के साथ अलर्ट",
+                                                fontSize = 9.5.sp,
+                                                color = Color(0xFF64748B)
+                                            )
+                                        }
+                                    }
+                                    Surface(
+                                        color = if (isAdmin) Color(0xFFDC2626) else Color(0xFF94A3B8),
+                                        shape = RoundedCornerShape(6.dp)
+                                    ) {
+                                        Text(
+                                            text = "अलर्ट भेजें ↗",
+                                            color = Color.White,
+                                            fontSize = 10.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                        )
+                                    }
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            // 2. Siren Tgada Button
+                            Surface(
+                                color = Color.White,
+                                shape = RoundedCornerShape(10.dp),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFEE2E2)),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        if (isAdmin) {
+                                            onSirenTgadaClick()
+                                        } else {
+                                            Toast.makeText(context, "केवल व्यवस्थापक (Admin) ही सायरन बजा सकते हैं", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(10.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Text(text = "🚨", fontSize = 16.sp)
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Column {
+                                            Text(
+                                                text = "सायरन तगादा बजाएं (Police Siren)",
+                                                fontSize = 11.5.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color(0xFFB91C1C)
+                                            )
+                                            Text(
+                                                text = "जिन सदस्यों का अंशदान बाकी है उनके फोन में सायरन बजेगा",
+                                                fontSize = 9.5.sp,
+                                                color = Color(0xFF64748B)
+                                            )
+                                        }
+                                    }
+                                    Surface(
+                                        color = if (isAdmin) Color(0xFFB91C1C) else Color(0xFF94A3B8),
+                                        shape = RoundedCornerShape(6.dp)
+                                    ) {
+                                        Text(
+                                            text = "सायरन बजाएं 🔔",
+                                            color = Color.White,
+                                            fontSize = 10.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Section 1: App Updates (ऐप अपडेट)
                 item {
                     Card(
