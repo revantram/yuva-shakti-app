@@ -16,7 +16,12 @@ import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -345,225 +350,111 @@ fun MainScreen(viewModel: MainViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .windowInsetsPadding(WindowInsets.navigationBars)
-                    .background(Color.White)
+                    .background(Color.Transparent)
+                    .padding(bottom = 6.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Sleek role status & quick switch bar
+                // Sleek role status pill
                 Surface(
-                    color = if (uiState.isAdmin) Color(0xFFFEF3C7) else Color(0xFFF1F5F9),
-                    modifier = Modifier.fillMaxWidth()
+                    shape = RoundedCornerShape(16.dp),
+                    color = if (uiState.isAdmin) Color(0xF2FEF3C7) else Color(0xD90F172A),
+                    border = BorderStroke(1.dp, if (uiState.isAdmin) Color(0xFFF59E0B) else Color(0x33FFFFFF)),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 2.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .clickable {
+                            if (uiState.isAdmin) {
+                                viewModel.logoutAdmin()
+                            } else {
+                                viewModel.showAuthDialog(true)
+                            }
+                        }
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                if (uiState.isAdmin) {
-                                    viewModel.logoutAdmin()
-                                } else {
-                                    viewModel.showAuthDialog(true)
-                                }
-                            }
-                            .padding(horizontal = 14.dp, vertical = 6.dp),
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = if (uiState.isAdmin) Icons.Default.LockOpen else Icons.Default.Lock,
-                                contentDescription = null,
-                                tint = if (uiState.isAdmin) Color(0xFFB45309) else Color(0xFF475569),
-                                modifier = Modifier.size(13.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = if (uiState.isAdmin) "👑 व्यवस्थापक मोड (Admin Full Access)" else "👤 दर्शक मोड (केवल देखने की अनुमति)",
-                                fontSize = 11.5.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = if (uiState.isAdmin) Color(0xFF92400E) else Color(0xFF334155)
-                            )
-                        }
+                        Icon(
+                            imageVector = if (uiState.isAdmin) Icons.Default.LockOpen else Icons.Default.Lock,
+                            contentDescription = null,
+                            tint = if (uiState.isAdmin) Color(0xFFB45309) else Color(0xFF94A3B8),
+                            modifier = Modifier.size(12.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = if (uiState.isAdmin) "लॉगआउट" else "एडमिन लॉगिन",
-                            fontSize = 11.5.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = if (uiState.isAdmin) PendingRed else DeepNavy
+                            text = if (uiState.isAdmin) "👑 व्यवस्थापक मोड (Admin) • लॉगआउट" else "👤 दर्शक मोड (Viewer) • एडमिन लॉगिन",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = if (uiState.isAdmin) Color(0xFF92400E) else Color(0xFFE2E8F0)
                         )
                     }
                 }
 
-                // Material 3 Bottom Navigation Bar
-                NavigationBar(
-                    containerColor = Color.White,
-                    contentColor = DeepNavy,
-                    tonalElevation = 8.dp,
-                    modifier = Modifier.height(64.dp)
+                // Transparent Floating Glass Dock (5 items matching reference photo)
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 3.dp)
+                        .shadow(16.dp, RoundedCornerShape(32.dp)),
+                    shape = RoundedCornerShape(32.dp),
+                    color = Color(0xDC0F172A),
+                    border = BorderStroke(1.2.dp, Color(0x33FFFFFF))
                 ) {
-                    val loanPendingCount = remember(allLoanRequests) {
-                        allLoanRequests.count { it.status == "Pending" }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 6.dp, horizontal = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val loanPendingCount = remember(allLoanRequests) {
+                            allLoanRequests.count { it.status == "Pending" }
+                        }
+
+                        // 1. Members / सदस्य
+                        FloatingNavItem(
+                            title = "सदस्य",
+                            icon = Icons.Default.People,
+                            isSelected = selectedMainSection == "members",
+                            onClick = { viewModel.setMainSection("members") }
+                        )
+
+                        // 2. Accounting / बहीखाता
+                        FloatingNavItem(
+                            title = "बहीखाता",
+                            icon = Icons.Default.ReceiptLong,
+                            isSelected = selectedMainSection == "accounting",
+                            onClick = { viewModel.setMainSection("accounting") }
+                        )
+
+                        // 3. Mutual Aid / ऋण सहयोग
+                        FloatingNavItem(
+                            title = "ऋण सहयोग",
+                            icon = Icons.Default.Handshake,
+                            isSelected = selectedMainSection == "loan",
+                            badgeCount = loanPendingCount,
+                            badgeColor = Color(0xFFEF4444),
+                            onClick = { viewModel.setMainSection("loan") }
+                        )
+
+                        // 4. Gallery / गैलरी
+                        FloatingNavItem(
+                            title = "गैलरी",
+                            icon = Icons.Default.Collections,
+                            isSelected = selectedMainSection == "gallery",
+                            onClick = { viewModel.setMainSection("gallery") }
+                        )
+
+                        // 5. Chat / चर्चा
+                        FloatingNavItem(
+                            title = "चर्चा",
+                            icon = Icons.Default.Forum,
+                            isSelected = selectedMainSection == "chat",
+                            badgeCount = groupMessages.size,
+                            badgeColor = Color(0xFFF59E0B),
+                            onClick = { viewModel.setMainSection("chat") }
+                        )
                     }
-
-                    // 1. Members
-                    NavigationBarItem(
-                        selected = selectedMainSection == "members",
-                        onClick = { viewModel.setMainSection("members") },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Default.People,
-                                contentDescription = "सदस्य",
-                                modifier = Modifier.size(24.dp)
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = "सदस्य",
-                                fontSize = 11.sp,
-                                fontWeight = if (selectedMainSection == "members") FontWeight.Bold else FontWeight.Medium
-                            )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
-                            selectedTextColor = DeepNavy,
-                            indicatorColor = DeepNavy,
-                            unselectedIconColor = Color(0xFF64748B),
-                            unselectedTextColor = Color(0xFF64748B)
-                        )
-                    )
-
-                    // 2. Accounting
-                    NavigationBarItem(
-                        selected = selectedMainSection == "accounting",
-                        onClick = { viewModel.setMainSection("accounting") },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Default.ReceiptLong,
-                                contentDescription = "बहीखाता",
-                                modifier = Modifier.size(24.dp)
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = "बहीखाता",
-                                fontSize = 11.sp,
-                                fontWeight = if (selectedMainSection == "accounting") FontWeight.Bold else FontWeight.Medium
-                            )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
-                            selectedTextColor = DeepNavy,
-                            indicatorColor = DeepNavy,
-                            unselectedIconColor = Color(0xFF64748B),
-                            unselectedTextColor = Color(0xFF64748B)
-                        )
-                    )
-
-                    // 3. Mutual Aid Loan
-                    NavigationBarItem(
-                        selected = selectedMainSection == "loan",
-                        onClick = { viewModel.setMainSection("loan") },
-                        icon = {
-                            BadgedBox(
-                                badge = {
-                                    if (loanPendingCount > 0) {
-                                        Badge(containerColor = PendingRed) {
-                                            Text(
-                                                text = loanPendingCount.toString(),
-                                                color = Color.White,
-                                                fontSize = 9.sp
-                                            )
-                                        }
-                                    }
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Handshake,
-                                    contentDescription = "ऋण सहयोग",
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                        },
-                        label = {
-                            Text(
-                                text = "ऋण सहयोग",
-                                fontSize = 11.sp,
-                                fontWeight = if (selectedMainSection == "loan") FontWeight.Bold else FontWeight.Medium
-                            )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
-                            selectedTextColor = DeepNavy,
-                            indicatorColor = DeepNavy,
-                            unselectedIconColor = Color(0xFF64748B),
-                            unselectedTextColor = Color(0xFF64748B)
-                        )
-                    )
-
-                    // 4. Gallery
-                    NavigationBarItem(
-                        selected = selectedMainSection == "gallery",
-                        onClick = { viewModel.setMainSection("gallery") },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Default.Collections,
-                                contentDescription = "गैलरी",
-                                modifier = Modifier.size(24.dp)
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = "गैलरी",
-                                fontSize = 11.sp,
-                                fontWeight = if (selectedMainSection == "gallery") FontWeight.Bold else FontWeight.Medium
-                            )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
-                            selectedTextColor = DeepNavy,
-                            indicatorColor = DeepNavy,
-                            unselectedIconColor = Color(0xFF64748B),
-                            unselectedTextColor = Color(0xFF64748B)
-                        )
-                    )
-
-                    // 5. Chat / Notices
-                    NavigationBarItem(
-                        selected = selectedMainSection == "chat",
-                        onClick = { viewModel.setMainSection("chat") },
-                        icon = {
-                            BadgedBox(
-                                badge = {
-                                    if (groupMessages.isNotEmpty()) {
-                                        Badge(containerColor = SaffronGold) {
-                                            Text(
-                                                text = groupMessages.size.toString(),
-                                                color = DeepNavy,
-                                                fontSize = 9.sp,
-                                                fontWeight = FontWeight.Bold
-                                            )
-                                        }
-                                    }
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Forum,
-                                    contentDescription = "चर्चा",
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                        },
-                        label = {
-                            Text(
-                                text = "चर्चा",
-                                fontSize = 11.sp,
-                                fontWeight = if (selectedMainSection == "chat") FontWeight.Bold else FontWeight.Medium
-                            )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
-                            selectedTextColor = DeepNavy,
-                            indicatorColor = DeepNavy,
-                            unselectedIconColor = Color(0xFF64748B),
-                            unselectedTextColor = Color(0xFF64748B)
-                        )
-                    )
                 }
             }
         }
@@ -948,7 +839,10 @@ fun MainScreen(viewModel: MainViewModel) {
                 viewModel.openSettingsDialog(false)
                 viewModel.showChangePinDialog(true)
             },
-            onSendDailyThoughtNotification = { viewModel.sendDailyThoughtNotification() }
+            onSendDailyThoughtNotification = { viewModel.sendDailyThoughtNotification() },
+            currentApkUrl = updateApkUrl,
+            latestVersionNote = latestVersionNote,
+            onOpenAppUpdateConsole = { viewModel.openAppUpdateConsole(true) }
         )
     }
 
@@ -1460,4 +1354,73 @@ private fun shareReceipt(context: Context, notif: DepositNotificationEntity) {
                "समूह की पारदर्शिता एवं प्रगति में योगदान हेतु धन्यवाद! 🙏\n" +
                "- युवा शक्ति ग्रुप, भाटी परिवार"
     shareToWhatsApp(context, text)
+}
+
+
+@Composable
+private fun RowScope.FloatingNavItem(
+    title: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    isSelected: Boolean,
+    badgeCount: Int = 0,
+    badgeColor: Color = Color(0xFFEF4444),
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { onClick() }
+            .padding(vertical = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            modifier = Modifier.size(36.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(if (isSelected) Color(0xFF0284C7) else Color.Transparent),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = title,
+                    tint = if (isSelected) Color.White else Color(0xFFCBD5E1),
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+
+            if (badgeCount > 0) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .offset(x = 4.dp, y = (-2).dp)
+                        .clip(CircleShape)
+                        .background(badgeColor)
+                        .padding(horizontal = 4.dp, vertical = 1.dp)
+                ) {
+                    Text(
+                        text = if (badgeCount > 99) "99+" else badgeCount.toString(),
+                        color = Color.White,
+                        fontSize = 8.5.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(3.dp))
+
+        Text(
+            text = title,
+            fontSize = 10.5.sp,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+            color = if (isSelected) Color(0xFF38BDF8) else Color(0xFF94A3B8),
+            maxLines = 1
+        )
+    }
 }
