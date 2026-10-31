@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "122021296018",
+    "project_id": "yuva-shakti-group",
+    "storage_bucket": "yuva-shakti-group.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122021296018:android:a1fbd7b69b2f7b5654734b",
+        "android_client_info": {
+          "package_name": "YuvaShakti.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjBcyZZIQZSX8MMJ-FaO_uuc2EoSrFVuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122021296018:android:a1fbd7b69b2f7b5654734b",
+        "android_client_info": {
+          "package_name": "com.aistudio.yuvashakti.bhtfnd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjBcyZZIQZSX8MMJ-FaO_uuc2EoSrFVuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
