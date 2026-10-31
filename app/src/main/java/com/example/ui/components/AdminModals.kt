@@ -69,11 +69,17 @@ fun AdminPinDialog(
     onDismiss: () -> Unit,
     onVerify: (String) -> Boolean
 ) {
+    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val dialogBg = if (isDark) Color(0xFF1E293B) else Color.White
+    val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
+    val textSecondary = if (isDark) Color(0xFFCBD5E1) else Color(0xFF64748B)
+
     var pin by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        containerColor = dialogBg,
         title = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -82,13 +88,13 @@ fun AdminPinDialog(
                 Box(
                     modifier = Modifier
                         .size(48.dp)
-                        .background(Color(0xFFEEF2FF), CircleShape),
+                        .background(if (isDark) Color(0xFF312E81) else Color(0xFFEEF2FF), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Key,
                         contentDescription = null,
-                        tint = DeepNavy,
+                        tint = if (isDark) SaffronGold else DeepNavy,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -97,12 +103,12 @@ fun AdminPinDialog(
                     text = "सुरक्षा कोड दर्ज करें",
                     fontWeight = FontWeight.Bold,
                     fontSize = 17.sp,
-                    color = Color(0xFF0F172A)
+                    color = textPrimary
                 )
                 Text(
-                    text = "एडमिन मोड सक्रिय करने हेतु गुप्त 4-अंकीय पिन दर्ज करें",
+                    text = "प्रशासनिक प्रबंधन सक्रिय करने हेतु गुप्त 4-अंकीय पिन दर्ज करें",
                     fontSize = 11.5.sp,
-                    color = Color(0xFF64748B),
+                    color = textSecondary,
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
@@ -117,11 +123,18 @@ fun AdminPinDialog(
                             errorMessage = null
                         }
                     },
-                    placeholder = { Text("4-अंकों का गुप्त पिन") },
+                    placeholder = { Text("4-अंकों का गुप्त पिन", color = textSecondary) },
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
+                    colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = textPrimary,
+                        unfocusedTextColor = textPrimary,
+                        focusedBorderColor = if (isDark) SaffronGold else DeepNavy,
+                        unfocusedBorderColor = if (isDark) Color(0xFF475569) else Color(0xFFCBD5E1),
+                        cursorColor = if (isDark) SaffronGold else DeepNavy
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("admin_pin_input")
@@ -147,14 +160,18 @@ fun AdminPinDialog(
                     }
                     val valid = onVerify(pin)
                     if (!valid) {
-                        errorMessage = "गलत पिन! सही एडमिन पिन दर्ज करें।"
+                        errorMessage = "गलत पिन! सही पिन दर्ज करें।"
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = DeepNavy),
+                colors = ButtonDefaults.buttonColors(containerColor = if (isDark) SaffronGold else DeepNavy),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.testTag("btn_verify_pin")
             ) {
-                Text("सत्यापित करें", fontWeight = FontWeight.Bold)
+                Text(
+                    text = "सत्यापित करें",
+                    fontWeight = FontWeight.Bold,
+                    color = if (isDark) Color(0xFF451A03) else Color.White
+                )
             }
         },
         dismissButton = {
@@ -162,7 +179,7 @@ fun AdminPinDialog(
                 onClick = onDismiss,
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Text("रद्द करें")
+                Text("रद्द करें", color = textSecondary)
             }
         },
         shape = RoundedCornerShape(20.dp)

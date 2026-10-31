@@ -81,6 +81,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -306,13 +307,39 @@ fun MainScreen(viewModel: MainViewModel) {
         OnlinePresenceHelper.getOnlineCount(uiState.members, activeMemberId)
     }
 
-    Scaffold(
+    val isDark = isSystemInDarkTheme()
+    val appBackgroundBrush = remember(isDark) {
+        if (isDark) {
+            Brush.verticalGradient(
+                listOf(
+                    Color(0xFF090D16),
+                    Color(0xFF1E1B4B),
+                    Color(0xFF0F172A)
+                )
+            )
+        } else {
+            Brush.verticalGradient(
+                listOf(
+                    Color(0xFFF8FAFC),
+                    Color(0xFFEEF2F6),
+                    Color(0xFFE2E8F0)
+                )
+            )
+        }
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.statusBars),
-        containerColor = MaterialTheme.colorScheme.background,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
+            .background(appBackgroundBrush)
+    ) {
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.statusBars),
+            containerColor = Color.Transparent,
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            topBar = {
             AppHeader(
                 isAdmin = uiState.isAdmin,
                 totalCollected = uiState.totalCollected,
@@ -610,10 +637,12 @@ fun MainScreen(viewModel: MainViewModel) {
                                 singleLine = true,
                                 shape = RoundedCornerShape(14.dp),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedContainerColor = Color.White,
-                                    unfocusedContainerColor = Color.White,
-                                    focusedBorderColor = DeepNavy,
-                                    unfocusedBorderColor = BorderSlate
+                                    focusedContainerColor = if (isDark) Color(0xD91E293B) else Color(0xEEFFFFFF),
+                                    unfocusedContainerColor = if (isDark) Color(0xB31E293B) else Color(0xD9FFFFFF),
+                                    focusedTextColor = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A),
+                                    unfocusedTextColor = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A),
+                                    focusedBorderColor = if (isDark) SaffronGold else DeepNavy,
+                                    unfocusedBorderColor = if (isDark) Color(0xFF334155) else BorderSlate
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -813,6 +842,7 @@ fun MainScreen(viewModel: MainViewModel) {
             fundUpiId = fundUpiId,
             onUpdateWhatsAppGroupLink = { viewModel.setWhatsAppGroupLink(it) },
             onUpdateFundUpiId = { viewModel.setFundUpiId(it) },
+            onBackupToGoogleDrive = { viewModel.backupToGoogleDrive(context) },
             onBackupToJioCloud = { viewModel.backupToJioCloud(context) },
             onRestoreFromLocalBackup = { viewModel.restoreFromLocalBackup() },
             onDismiss = { viewModel.openSettingsDialog(false) },
@@ -984,6 +1014,7 @@ fun MainScreen(viewModel: MainViewModel) {
             onResetToAuto = { viewModel.resetToAutoAmavasya() }
         )
     }
+    }
 }
 
 @Composable
@@ -996,10 +1027,11 @@ fun MainSectionTabs(
     onSectionSelect: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDark = isSystemInDarkTheme()
     Surface(
-        color = Color.White,
+        color = if (isDark) Color(0xD91E293B) else Color(0xEEFFFFFF),
         shape = RoundedCornerShape(14.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, BorderSlate),
+        border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0xFF334155) else BorderSlate),
         shadowElevation = 1.dp,
         modifier = modifier
             .fillMaxWidth()
@@ -1060,8 +1092,9 @@ private fun SectionTabButton(
     modifier: Modifier = Modifier,
     badge: String? = null
 ) {
+    val isDark = isSystemInDarkTheme()
     Surface(
-        color = if (isSelected) DeepNavy else Color(0xFFF8FAFC),
+        color = if (isSelected) (if (isDark) SaffronGold else DeepNavy) else (if (isDark) Color(0x400F172A) else Color(0xFFF8FAFC)),
         shape = RoundedCornerShape(9.dp),
         modifier = modifier.clickable { onClick() }
     ) {
@@ -1074,7 +1107,7 @@ private fun SectionTabButton(
                 text = title,
                 fontSize = 11.sp,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = if (isSelected) Color.White else Color(0xFF334155),
+                color = if (isSelected) (if (isDark) Color(0xFF451A03) else Color.White) else (if (isDark) Color(0xFFCBD5E1) else Color(0xFF334155)),
                 textAlign = TextAlign.Center
             )
             if (badge != null && !isSelected) {
@@ -1105,8 +1138,9 @@ fun TabFilterRow(
     onTabSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDark = isSystemInDarkTheme()
     Surface(
-        color = Color(0xFFE2E8F0),
+        color = if (isDark) Color(0xD91E293B) else Color(0xD9E2E8F0),
         shape = RoundedCornerShape(12.dp),
         modifier = modifier.fillMaxWidth()
     ) {
@@ -1158,8 +1192,15 @@ private fun TabButton(
     activeColor: Color = DeepNavy,
     tag: String
 ) {
+    val isDark = isSystemInDarkTheme()
+    val tabTextColor = when {
+        isSelected && isDark && activeColor == DeepNavy -> SaffronGold
+        isSelected -> activeColor
+        isDark -> Color(0xFF94A3B8)
+        else -> Color(0xFF475569)
+    }
     Surface(
-        color = if (isSelected) Color.White else Color.Transparent,
+        color = if (isSelected) (if (isDark) Color(0xFF0F172A) else Color.White) else Color.Transparent,
         shape = RoundedCornerShape(10.dp),
         shadowElevation = if (isSelected) 1.dp else 0.dp,
         modifier = modifier
@@ -1175,7 +1216,7 @@ private fun TabButton(
                 text = "$title ($count)",
                 fontSize = 11.5.sp,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = if (isSelected) activeColor else Color(0xFF475569),
+                color = tabTextColor,
                 textAlign = TextAlign.Center
             )
         }

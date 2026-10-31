@@ -48,12 +48,19 @@ fun DailyThoughtCard(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+
+    val cardBgGradient = if (isDark) {
+        listOf(Color(0xCC1E1B4B), Color(0xCC0F172A))
+    } else {
+        listOf(Color(0xD9FFFDF5), Color(0xD9FEF3C7))
+    }
 
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFBEB)),
+        colors = CardDefaults.cardColors(containerColor = if (isDark) Color(0xCC1E1B4B) else Color(0xD9FFFBEB)),
         shape = RoundedCornerShape(20.dp),
-        border = androidx.compose.foundation.BorderStroke(2.dp, SaffronGold),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        border = androidx.compose.foundation.BorderStroke(1.5.dp, SaffronGold),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
         modifier = modifier
             .fillMaxWidth()
             .testTag("daily_thought_card")
@@ -61,11 +68,7 @@ fun DailyThoughtCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(Color(0xFFFFFDF5), Color(0xFFFEF3C7))
-                    )
-                )
+                .background(Brush.verticalGradient(colors = cardBgGradient))
                 .padding(16.dp)
         ) {
             // Header Row: Sunrise Icon & Morning Greeting
@@ -81,7 +84,7 @@ fun DailyThoughtCard(
                     Box(
                         modifier = Modifier
                             .size(38.dp)
-                            .background(Color(0xFFFDE68A), CircleShape)
+                            .background(if (isDark) Color(0xFF312E81) else Color(0xFFFDE68A), CircleShape)
                             .border(1.5.dp, SaffronGold, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
@@ -93,12 +96,12 @@ fun DailyThoughtCard(
                             text = if (isEnglish) "Today's Inspiration" else "🌅 आज का सुविचार • सुप्रभात",
                             fontSize = 15.5.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF78350F)
+                            color = if (isDark) Color(0xFFFDE047) else Color(0xFF78350F)
                         )
                         Text(
                             text = if (isEnglish) "Daily Motivation for Family" else "प्रेरणा, एकता व संस्कार • भाटी परिवार",
                             fontSize = 11.5.sp,
-                            color = Color(0xFF92400E),
+                            color = if (isDark) Color(0xFFFEF08A) else Color(0xFF92400E),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -106,15 +109,15 @@ fun DailyThoughtCard(
 
                 // Header Badge
                 Surface(
-                    color = Color(0xFFFEF08A),
+                    color = if (isDark) Color(0xFF334155) else Color(0xFFFEF08A),
                     shape = RoundedCornerShape(12.dp),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFF59E0B))
+                    border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) SaffronGold else Color(0xFFF59E0B))
                 ) {
                     Text(
                         text = "दैनिक विचार",
                         fontSize = 10.5.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF78350F),
+                        color = if (isDark) Color(0xFFFDE047) else Color(0xFF78350F),
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
@@ -124,9 +127,9 @@ fun DailyThoughtCard(
 
             // Main Thought Text - Large, Prominent and Clear
             Surface(
-                color = Color.White.copy(alpha = 0.85f),
+                color = if (isDark) Color(0x660F172A) else Color.White.copy(alpha = 0.85f),
                 shape = RoundedCornerShape(14.dp),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFDE68A)),
+                border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0x33FFFFFF) else Color(0xFFFDE68A)),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
@@ -134,7 +137,7 @@ fun DailyThoughtCard(
                         text = "❝ ${thought.hindi} ❞",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1E293B),
+                        color = if (isDark) Color(0xFFF8FAFC) else Color(0xFF1E293B),
                         lineHeight = 24.sp,
                         textAlign = TextAlign.Start
                     )
@@ -144,7 +147,7 @@ fun DailyThoughtCard(
                         Text(
                             text = "❝ ${thought.english} ❞",
                             fontSize = 12.sp,
-                            color = Color(0xFF64748B),
+                            color = if (isDark) Color(0xFF94A3B8) else Color(0xFF64748B),
                             lineHeight = 17.sp
                         )
                     }

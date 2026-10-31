@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,6 +25,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BrightnessAuto
 import androidx.compose.material.icons.filled.Cloud
@@ -128,7 +132,8 @@ fun SettingsDialog(
     fundUpiId: String = "",
     onUpdateWhatsAppGroupLink: (String) -> Unit = {},
     onUpdateFundUpiId: (String) -> Unit = {},
-    onBackupToJioCloud: () -> Unit = {},
+    onBackupToGoogleDrive: () -> Unit = {},
+    onBackupToJioCloud: () -> Unit = onBackupToGoogleDrive,
     onRestoreFromLocalBackup: () -> Unit = {},
     onDismiss: () -> Unit,
     onThemeSelect: (String) -> Unit,
@@ -148,7 +153,6 @@ fun SettingsDialog(
     val isDark = isSystemInDarkTheme()
     val isEnglish = currentLanguage == "en"
 
-    val dialogBg = if (isDark) Color(0xFF1E293B) else Color.White
     val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
     val textSecondary = if (isDark) Color(0xFF94A3B8) else Color(0xFF64748B)
     val dividerColor = if (isDark) Color(0xFF334155) else Color(0xFFE2E8F0)
@@ -161,42 +165,63 @@ fun SettingsDialog(
     var showEditWaInline by remember { mutableStateOf(false) }
     var editWaText by remember(whatsAppGroupLink) { mutableStateOf(whatsAppGroupLink) }
 
-    AlertDialog(
+    Dialog(
         onDismissRequest = onDismiss,
-        containerColor = dialogBg,
-        title = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth(0.96f)
+                .fillMaxHeight(0.94f)
+                .clip(RoundedCornerShape(24.dp)),
+            color = if (isDark) Color(0xF21E293B) else Color(0xF8FFFFFF),
+            border = androidx.compose.foundation.BorderStroke(1.5.dp, if (isDark) SaffronGold.copy(alpha = 0.5f) else Color(0x33000000)),
+            shadowElevation = 24.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = null,
-                        tint = if (isDark) SaffronGold else DeepNavy,
-                        modifier = Modifier.size(22.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = if (isEnglish) "App Settings" else "एप्लिकेशन सेटिंग्स",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 17.sp,
-                        color = textPrimary
-                    )
+                // Top Header Row
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = null,
+                            tint = if (isDark) SaffronGold else DeepNavy,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = if (isEnglish) "App Settings" else "एप्लिकेशन सेटिंग्स",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            color = textPrimary
+                        )
+                    }
+                    IconButton(onClick = onDismiss, modifier = Modifier.size(28.dp)) {
+                        Icon(imageVector = Icons.Default.Close, contentDescription = "Close", tint = textSecondary)
+                    }
                 }
-                IconButton(onClick = onDismiss, modifier = Modifier.size(26.dp)) {
-                    Icon(imageVector = Icons.Default.Close, contentDescription = "Close", tint = textSecondary)
-                }
-            }
-        },
-        text = {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                // Section 0A: Discrete System Security & Access Level (No Darshan/Admin Mode words)
-                item {
+
+                HorizontalDivider(color = dividerColor)
+                Spacer(modifier = Modifier.height(10.dp))
+
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    // Section 0A: Discrete System Security & Access Level (No Darshan/Admin Mode words)
+                    item {
                     Card(
                         colors = CardDefaults.cardColors(
                             containerColor = if (isAdmin) (if (isDark) Color(0xFF1E1B4B) else Color(0xFFFEF3C7)) else cardBg
@@ -273,7 +298,7 @@ fun SettingsDialog(
                     }
                 }
 
-                // Section 0B: Cloud Backup & JioCloud Integration (Zero Data Loss)
+                // Section 0B: Cloud Backup & Google Drive Integration (Zero Data Loss)
                 item {
                     Card(
                         colors = CardDefaults.cardColors(
@@ -292,7 +317,7 @@ fun SettingsDialog(
                                 Box(
                                     modifier = Modifier
                                         .size(34.dp)
-                                        .background(Color(0xFF2563EB), CircleShape),
+                                        .background(Color(0xFF1A73E8), CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Icon(
@@ -305,13 +330,13 @@ fun SettingsDialog(
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Column {
                                     Text(
-                                        text = "☁️ जियोक्लाउड (JioCloud) एवं ऑनलाइन बैकअप",
+                                        text = "📁 गूगल ड्राइव (Google Drive) एवं ऑनलाइन बैकअप",
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 13.5.sp,
                                         color = if (isDark) Color(0xFF93C5FD) else Color(0xFF1E40AF)
                                     )
                                     Text(
-                                        text = "ऐप हटाने या बदलने पर भी 100% सुरक्षित डेटा",
+                                        text = "Google Drive से जोड़कर 100% सुरक्षित डेटा",
                                         fontSize = 10.5.sp,
                                         color = if (isDark) Color(0xFFBFDBFE) else Color(0xFF3B82F6)
                                     )
@@ -321,7 +346,7 @@ fun SettingsDialog(
                             Spacer(modifier = Modifier.height(10.dp))
 
                             Text(
-                                text = "बार-बार ऐप अपडेट करने या अनइंस्टॉल करने पर भी डेटा कभी नष्ट नहीं होगा। पूरा बहीखाता, सदस्य सूची, ऋण व संदेश जियोक्लाउड में सहेजें।",
+                                text = "बार-बार ऐप अपडेट करने या अनइंस्टॉल करने पर भी डेटा कभी नष्ट नहीं होगा। पूरा बहीखाता, सदस्य सूची, ऋण व संदेश अपनी गूगल ड्राइव (Google Drive) में सहेजें व कभी भी वापस पाएं।",
                                 fontSize = 11.sp,
                                 color = if (isDark) Color(0xFFCBD5E1) else Color(0xFF334155),
                                 lineHeight = 15.sp
@@ -333,13 +358,13 @@ fun SettingsDialog(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                // Backup to JioCloud button
+                                // Backup to Google Drive button
                                 Surface(
-                                    color = Color(0xFF2563EB),
+                                    color = Color(0xFF1A73E8),
                                     shape = RoundedCornerShape(10.dp),
                                     modifier = Modifier
                                         .weight(1f)
-                                        .clickable { onBackupToJioCloud() }
+                                        .clickable { onBackupToGoogleDrive() }
                                 ) {
                                     Row(
                                         modifier = Modifier.padding(vertical = 9.dp, horizontal = 8.dp),
@@ -354,7 +379,7 @@ fun SettingsDialog(
                                         )
                                         Spacer(modifier = Modifier.width(5.dp))
                                         Text(
-                                            text = "जियोक्लाउड बैकअप",
+                                            text = "Google Drive बैकअप",
                                             fontSize = 11.sp,
                                             fontWeight = FontWeight.Bold,
                                             color = Color.White
@@ -366,7 +391,7 @@ fun SettingsDialog(
                                 Surface(
                                     color = if (isDark) Color(0xFF1E293B) else Color.White,
                                     shape = RoundedCornerShape(10.dp),
-                                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF2563EB)),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF1A73E8)),
                                     modifier = Modifier
                                         .weight(1f)
                                         .clickable { onRestoreFromLocalBackup() }
@@ -552,162 +577,164 @@ fun SettingsDialog(
                     }
                 }
 
-                // Section 0D: Alert Mode & Siren Mode Controls
-                item {
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = if (isDark) Color(0xFF450A0A) else Color(0xFFFFF1F2)
-                        ),
-                        shape = RoundedCornerShape(14.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(1.2.dp, if (isDark) PendingRed else Color(0xFFFECDD3), RoundedCornerShape(14.dp))
-                    ) {
-                        Column(modifier = Modifier.padding(14.dp)) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Box(
+                // Section 0D: Alert Mode & Siren Mode Controls (Only visible to admin)
+                if (isAdmin) {
+                    item {
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isDark) Color(0xFF450A0A) else Color(0xFFFFF1F2)
+                            ),
+                            shape = RoundedCornerShape(14.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .border(1.2.dp, if (isDark) PendingRed else Color(0xFFFECDD3), RoundedCornerShape(14.dp))
+                        ) {
+                            Column(modifier = Modifier.padding(14.dp)) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(34.dp)
+                                            .background(Color(0xFFDC2626), CircleShape),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.NotificationsActive,
+                                            contentDescription = null,
+                                            tint = Color.White,
+                                            modifier = Modifier.size(18.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Column {
+                                        Text(
+                                            text = "📢 अलर्ट एवं सायरन मोड नियंत्रण",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 13.5.sp,
+                                            color = if (isDark) Color(0xFFFCA5A5) else Color(0xFF991B1B)
+                                        )
+                                        Text(
+                                            text = "आपातकालीन सूचना व बकाया अंशदान सायरन",
+                                            fontSize = 10.5.sp,
+                                            color = if (isDark) Color(0xFFF87171) else Color(0xFFB91C1C)
+                                        )
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                // Alert Broadcast Button
+                                Surface(
+                                    color = if (isDark) Color(0xFF1E293B) else Color.White,
+                                    shape = RoundedCornerShape(10.dp),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0xFF7F1D1D) else Color(0xFFFEE2E2)),
                                     modifier = Modifier
-                                        .size(34.dp)
-                                        .background(Color(0xFFDC2626), CircleShape),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.NotificationsActive,
-                                        contentDescription = null,
-                                        tint = Color.White,
-                                        modifier = Modifier.size(18.dp)
-                                    )
-                                }
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Column {
-                                    Text(
-                                        text = "📢 अलर्ट एवं सायरन मोड नियंत्रण",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 13.5.sp,
-                                        color = if (isDark) Color(0xFFFCA5A5) else Color(0xFF991B1B)
-                                    )
-                                    Text(
-                                        text = "आपातकालीन सूचना व बकाया अंशदान सायरन",
-                                        fontSize = 10.5.sp,
-                                        color = if (isDark) Color(0xFFF87171) else Color(0xFFB91C1C)
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(10.dp))
-
-                            // Alert Broadcast Button
-                            Surface(
-                                color = if (isDark) Color(0xFF1E293B) else Color.White,
-                                shape = RoundedCornerShape(10.dp),
-                                border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0xFF7F1D1D) else Color(0xFFFEE2E2)),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        if (isAdmin) {
-                                            onDismiss()
-                                            onUrgentBroadcastClick()
-                                        } else {
-                                            Toast.makeText(context, "केवल व्यवस्थापक ही अलर्ट भेज सकते हैं", Toast.LENGTH_SHORT).show()
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            if (isAdmin) {
+                                                onDismiss()
+                                                onUrgentBroadcastClick()
+                                            } else {
+                                                Toast.makeText(context, "केवल व्यवस्थापक ही अलर्ट भेज सकते हैं", Toast.LENGTH_SHORT).show()
+                                            }
                                         }
-                                    }
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(10.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Row(
+                                        modifier = Modifier.padding(10.dp),
                                         verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier.weight(1f)
+                                        horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Text(text = "📢", fontSize = 16.sp)
-                                        Spacer(modifier = Modifier.width(8.dp))
-                                        Column {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier.weight(1f)
+                                        ) {
+                                            Text(text = "📢", fontSize = 16.sp)
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Column {
+                                                Text(
+                                                    text = "आपातकालीन अलर्ट जारी करें",
+                                                    fontSize = 11.5.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = if (isDark) Color(0xFFFCA5A5) else Color(0xFF991B1B)
+                                                )
+                                                Text(
+                                                    text = "सभी सदस्यों को लाल स्क्रीन व कंपन के साथ अलर्ट",
+                                                    fontSize = 9.5.sp,
+                                                    color = textSecondary
+                                                )
+                                            }
+                                        }
+                                        Surface(
+                                            color = if (isAdmin) Color(0xFFDC2626) else Color(0xFF94A3B8),
+                                            shape = RoundedCornerShape(6.dp)
+                                        ) {
                                             Text(
-                                                text = "आपातकालीन अलर्ट जारी करें",
-                                                fontSize = 11.5.sp,
+                                                text = "अलर्ट भेजें ↗",
+                                                color = Color.White,
+                                                fontSize = 10.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = if (isDark) Color(0xFFFCA5A5) else Color(0xFF991B1B)
-                                            )
-                                            Text(
-                                                text = "सभी सदस्यों को लाल स्क्रीन व कंपन के साथ अलर्ट",
-                                                fontSize = 9.5.sp,
-                                                color = textSecondary
+                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                                             )
                                         }
-                                    }
-                                    Surface(
-                                        color = if (isAdmin) Color(0xFFDC2626) else Color(0xFF94A3B8),
-                                        shape = RoundedCornerShape(6.dp)
-                                    ) {
-                                        Text(
-                                            text = "अलर्ट भेजें ↗",
-                                            color = Color.White,
-                                            fontSize = 10.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                                        )
                                     }
                                 }
-                            }
 
-                            Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(modifier = Modifier.height(8.dp))
 
-                            // Siren Tgada Button
-                            Surface(
-                                color = if (isDark) Color(0xFF1E293B) else Color.White,
-                                shape = RoundedCornerShape(10.dp),
-                                border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0xFF7F1D1D) else Color(0xFFFEE2E2)),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        if (isAdmin) {
-                                            onSirenTgadaClick()
-                                        } else {
-                                            Toast.makeText(context, "केवल व्यवस्थापक ही सायरन बजा सकते हैं", Toast.LENGTH_SHORT).show()
+                                // Siren Tgada Button
+                                Surface(
+                                    color = if (isDark) Color(0xFF1E293B) else Color.White,
+                                    shape = RoundedCornerShape(10.dp),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0xFF7F1D1D) else Color(0xFFFEE2E2)),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            if (isAdmin) {
+                                                onSirenTgadaClick()
+                                            } else {
+                                                Toast.makeText(context, "केवल व्यवस्थापक ही सायरन बजा सकते हैं", Toast.LENGTH_SHORT).show()
+                                            }
                                         }
-                                    }
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(10.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Row(
+                                        modifier = Modifier.padding(10.dp),
                                         verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier.weight(1f)
+                                        horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Text(text = "🚨", fontSize = 16.sp)
-                                        Spacer(modifier = Modifier.width(8.dp))
-                                        Column {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier.weight(1f)
+                                        ) {
+                                            Text(text = "🚨", fontSize = 16.sp)
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Column {
+                                                Text(
+                                                    text = "सायरन तगादा बजाएं (Police Siren)",
+                                                    fontSize = 11.5.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = if (isDark) Color(0xFFFCA5A5) else Color(0xFFB91C1C)
+                                                )
+                                                Text(
+                                                    text = "बकाया अंशदान वाले सदस्यों के फ़ोन पर सायरन बजेगा",
+                                                    fontSize = 9.5.sp,
+                                                    color = textSecondary
+                                                )
+                                            }
+                                        }
+                                        Surface(
+                                            color = if (isAdmin) Color(0xFFB91C1C) else Color(0xFF94A3B8),
+                                            shape = RoundedCornerShape(6.dp)
+                                        ) {
                                             Text(
-                                                text = "सायरन तगादा बजाएं (Police Siren)",
-                                                fontSize = 11.5.sp,
+                                                text = "सायरन बजाएं 🔔",
+                                                color = Color.White,
+                                                fontSize = 10.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = if (isDark) Color(0xFFFCA5A5) else Color(0xFFB91C1C)
-                                            )
-                                            Text(
-                                                text = "बकाया अंशदान वाले सदस्यों के फ़ोन पर सायरन बजेगा",
-                                                fontSize = 9.5.sp,
-                                                color = textSecondary
+                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                                             )
                                         }
-                                    }
-                                    Surface(
-                                        color = if (isAdmin) Color(0xFFB91C1C) else Color(0xFF94A3B8),
-                                        shape = RoundedCornerShape(6.dp)
-                                    ) {
-                                        Text(
-                                            text = "सायरन बजाएं 🔔",
-                                            color = Color.White,
-                                            fontSize = 10.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                                        )
                                     }
                                 }
                             }
@@ -1300,18 +1327,29 @@ fun SettingsDialog(
                     }
                 }
             }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Bottom Close Button
+            Surface(
+                color = if (isDark) Color(0xFF334155) else Color(0xFFE2E8F0),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onDismiss() }
+            ) {
                 Text(
-                    text = if (isEnglish) "Close" else "बंद करें",
+                    text = if (isEnglish) "Close Settings" else "सेटिंग्स बंद करें",
                     fontWeight = FontWeight.Bold,
-                    color = if (isDark) SaffronGold else DeepNavy
+                    color = textPrimary,
+                    fontSize = 13.sp,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    modifier = Modifier.padding(vertical = 12.dp)
                 )
             }
-        },
-        shape = RoundedCornerShape(20.dp)
-    )
+        }
+    }
+}
 }
 
 @Composable

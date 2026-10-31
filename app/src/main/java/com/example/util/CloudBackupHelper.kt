@@ -313,9 +313,9 @@ object CloudBackupHelper {
     }
 
     /**
-     * Direct upload/share to JioCloud app or Cloud storage
+     * Direct upload/share to Google Drive app or Cloud storage
      */
-    fun shareBackupToJioCloud(context: Context, backupFile: File) {
+    fun shareBackupToGoogleDrive(context: Context, backupFile: File) {
         try {
             val contentUri: Uri = FileProvider.getUriForFile(
                 context,
@@ -326,37 +326,41 @@ object CloudBackupHelper {
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "application/json"
                 putExtra(Intent.EXTRA_STREAM, contentUri)
-                putExtra(Intent.EXTRA_SUBJECT, "युवा शक्ति ग्रुप - जियोक्लाउड डेटा बैकअप")
+                putExtra(Intent.EXTRA_SUBJECT, "युवा शक्ति ग्रुप भाटी परिवार - Google Drive ऑनलाइन बैकअप")
                 putExtra(
                     Intent.EXTRA_TEXT,
                     "🚩 *युवा शक्ति ग्रुप भाटी परिवार कुचेरा*\n\n" +
-                    "☁️ यह एप्लिकेशन का पूर्ण ऑनलाइन बैकअप फ़ाइल है।\n" +
-                    "इसे अपने JioCloud (जियोक्लाउड) या Google Drive में सुरक्षित रखें।\n" +
-                    "ऐप अनइंस्टॉल करने या फोन बदलने पर इसे 1-क्लिक में रिस्टोर किया जा सकता है।"
+                    "📁 यह एप्लिकेशन का पूर्ण Google Drive सुरक्षित डेटा बैकअप है।\n" +
+                    "इसे अपने Google Account / Google Drive में 'Save to Drive' करके सुरक्षित रखें।\n" +
+                    "फ़ोन बदलने या नया ऐप इंस्टॉल करने पर इस फ़ाइल से पूरा बहीखाता 1-क्लिक में रिस्टोर हो जाएगा।"
                 )
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
-            // Check if JioCloud is installed directly
-            val jioCloudPackages = listOf("com.jio.cloud", "com.ril.jio.cloud")
+            // Check if Google Drive is installed directly
+            val googleDrivePackage = "com.google.android.apps.docs"
             var targeted = false
-            for (pkg in jioCloudPackages) {
-                try {
-                    context.packageManager.getPackageInfo(pkg, 0)
-                    shareIntent.setPackage(pkg)
-                    targeted = true
-                    break
-                } catch (_: Exception) {}
-            }
+            try {
+                context.packageManager.getPackageInfo(googleDrivePackage, 0)
+                shareIntent.setPackage(googleDrivePackage)
+                targeted = true
+            } catch (_: Exception) {}
 
             if (targeted) {
                 context.startActivity(shareIntent)
             } else {
-                context.startActivity(Intent.createChooser(shareIntent, "☁️ जियोक्लाउड / क्लाउड बैकअप में सुरक्षित करें"))
+                context.startActivity(Intent.createChooser(shareIntent, "📁 Google Drive में बैकअप सुरक्षित करें"))
             }
         } catch (e: Exception) {
-            Toast.makeText(context, "बैकअप शेयर त्रुटि: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Google Drive बैकअप त्रुटि: ${e.message}", Toast.LENGTH_LONG).show()
         }
+    }
+
+    /**
+     * Legacy alias for backward compatibility
+     */
+    fun shareBackupToJioCloud(context: Context, backupFile: File) {
+        shareBackupToGoogleDrive(context, backupFile)
     }
 
     /**

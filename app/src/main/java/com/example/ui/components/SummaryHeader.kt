@@ -83,7 +83,8 @@ fun AppHeader(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = DeepNavy,
+        color = Color(0xEE1E1B4B),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0x33FFFFFF)),
         shadowElevation = 8.dp,
         modifier = modifier.fillMaxWidth()
     ) {
@@ -175,16 +176,16 @@ fun AppHeader(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    // Circular Deposited Amount / QR Pay Circle
+                    // 1. Four-angled Deposit Amount Symbol (जमा राशि प्रतीक - छोटा चार कोने वाला)
                     Surface(
-                        shape = CircleShape,
-                        color = Color(0xFF047857),
-                        border = androidx.compose.foundation.BorderStroke(2.dp, SaffronGold),
+                        shape = RoundedCornerShape(10.dp),
+                        color = Color(0xD9047857),
+                        border = androidx.compose.foundation.BorderStroke(1.5.dp, SaffronGold),
                         shadowElevation = 4.dp,
                         modifier = Modifier
-                            .size(56.dp)
+                            .size(width = 54.dp, height = 46.dp)
                             .clickable { onPaymentClick() }
                             .testTag("btn_header_pay_circle")
                     ) {
@@ -204,13 +205,52 @@ fun AppHeader(
                             Text(
                                 text = "₹${totalCollected.formatAmount()}",
                                 color = Color.White,
-                                fontSize = 11.sp,
+                                fontSize = 10.5.sp,
                                 fontWeight = FontWeight.Black,
                                 maxLines = 1
                             )
                             Text(
-                                text = "QR पे ↗",
+                                text = "खाता ↗",
                                 color = SaffronGold,
+                                fontSize = 6.5.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    // 2. Four-angled PhonePe Online Payment Symbol (फ़ोनपे ऑनलाइन भुगतान - छोटा चार कोने वाला)
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = Color(0xEE5F259F),
+                        border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFC084FC)),
+                        shadowElevation = 4.dp,
+                        modifier = Modifier
+                            .size(width = 56.dp, height = 46.dp)
+                            .clickable { onPaymentClick() }
+                            .testTag("btn_header_phonepe_pay")
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(2.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = "PhonePe",
+                                color = Color.White,
+                                fontSize = 8.5.sp,
+                                fontWeight = FontWeight.Black
+                            )
+                            Text(
+                                text = "ऑनलाइन",
+                                color = Color(0xFFE9D5FF),
+                                fontSize = 7.5.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = "₹ पे ↗",
+                                color = Color(0xFFFDE047),
                                 fontSize = 7.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -433,33 +473,35 @@ fun AmavasyaBannerCard(
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
+    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+
     val (bgColor, borderColor, icon, iconColor, title, description) = when (uiState.amavasyaBannerState) {
         "day_after" -> {
             BannerConfig(
-                bg = Color(0xFFFEF3C7),
-                border = Color(0xFFFCD34D),
+                bg = if (isDark) Color(0xB3451A03) else Color(0xD9FEF3C7),
+                border = if (isDark) SaffronGold else Color(0xFFFCD34D),
                 icon = Icons.Default.Campaign,
-                iconColor = Color(0xFFB45309),
+                iconColor = if (isDark) Color(0xFFFDE047) else Color(0xFFB45309),
                 title = "अमावस्या के दूसरे दिन की रिपोर्ट (प्रतिपदा)",
                 desc = "अमावस्या चक्र संपन्न हो चुका है। नीचे दिए गए सदस्यों में से जिनका बकाया है, कृपया जल्द से जल्द अपना अंशदान पूरा करें।"
             )
         }
         "advance" -> {
             BannerConfig(
-                bg = Color(0xFFEFF6FF),
-                border = Color(0xFFBFDBFE),
+                bg = if (isDark) Color(0xB31E3A8A) else Color(0xD9EFF6FF),
+                border = if (isDark) Color(0xFF3B82F6) else Color(0xFFBFDBFE),
                 icon = Icons.Default.NotificationsActive,
-                iconColor = Color(0xFF1D4ED8),
+                iconColor = if (isDark) Color(0xFF93C5FD) else Color(0xFF1D4ED8),
                 title = "अग्रिम सूचना (अमावस्या में 3-4 दिन शेष)",
                 desc = "सभी सदस्यों से सादर अनुरोध है कि तय सहमति अनुसार अपनी मासिक सहयोग राशि समय पर जमा कराने की तैयारी रखें।"
             )
         }
         else -> {
             BannerConfig(
-                bg = Color(0xFFEEF2FF),
-                border = Color(0xFFC7D2FE),
+                bg = if (isDark) Color(0xB31E1B4B) else Color(0xD9EEF2FF),
+                border = if (isDark) Color(0xFF6366F1) else Color(0xFFC7D2FE),
                 icon = Icons.Default.Campaign,
-                iconColor = Color(0xFF4338CA),
+                iconColor = if (isDark) Color(0xFFA5B4FC) else Color(0xFF4338CA),
                 title = "मासिक अमावस्या बैठक चक्र",
                 desc = "पारदर्शी बहीखाता: केवल अधिकृत व्यवस्थापक द्वारा वेरिफाइड प्रविष्टियाँ ही यहाँ दिखाई देती हैं।"
             )
@@ -482,7 +524,7 @@ fun AmavasyaBannerCard(
                 Box(
                     modifier = Modifier
                         .size(36.dp)
-                        .background(Color.White.copy(alpha = 0.8f), CircleShape),
+                        .background(if (isDark) Color(0x33FFFFFF) else Color.White.copy(alpha = 0.8f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -503,7 +545,7 @@ fun AmavasyaBannerCard(
                     ) {
                         Text(
                             text = title,
-                            color = Color(0xFF1E293B),
+                            color = if (isDark) Color(0xFFF8FAFC) else Color(0xFF1E293B),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -532,7 +574,7 @@ fun AmavasyaBannerCard(
 
                     Text(
                         text = description,
-                        color = Color(0xFF334155),
+                        color = if (isDark) Color(0xFFCBD5E1) else Color(0xFF334155),
                         fontSize = 11.5.sp,
                         lineHeight = 16.sp,
                         modifier = Modifier.padding(top = 2.dp)
@@ -586,22 +628,28 @@ fun FundProgressCard(
     onSetTargetClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val cardContainer = if (isDark) Color(0xCC1E293B) else Color(0xEEFFFFFF)
+    val cardBorder = if (isDark) Color(0x33FFFFFF) else BorderSlate
+    val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
+    val textSecondary = if (isDark) Color(0xFF94A3B8) else Color(0xFF64748B)
+
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = cardContainer),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, BorderSlate, RoundedCornerShape(20.dp))
+            .border(1.dp, cardBorder, RoundedCornerShape(20.dp))
             .testTag("fund_progress_card")
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Consensus note banner if present
             if (uiState.consensusNote.isNotBlank()) {
                 Surface(
-                    color = Color(0xFFFEF3C7),
+                    color = if (isDark) Color(0xFF451A03) else Color(0xFFFEF3C7),
                     shape = RoundedCornerShape(10.dp),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFCD34D)),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) SaffronGold else Color(0xFFFCD34D)),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 12.dp)
@@ -616,12 +664,12 @@ fun FundProgressCard(
                                 text = "सर्वसम्मति निर्णय:",
                                 fontSize = 10.5.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF92400E)
+                                color = if (isDark) Color(0xFFFDE047) else Color(0xFF92400E)
                             )
                             Text(
                                 text = uiState.consensusNote,
                                 fontSize = 11.5.sp,
-                                color = Color(0xFF78350F)
+                                color = if (isDark) Color(0xFFFEF08A) else Color(0xFF78350F)
                             )
                         }
                     }
@@ -638,7 +686,7 @@ fun FundProgressCard(
                         text = "कुल एकत्रित राशि",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF64748B),
+                        color = textSecondary,
                         letterSpacing = 0.5.sp
                     )
                     Text(
@@ -659,7 +707,7 @@ fun FundProgressCard(
                             text = "कुल लक्ष्य",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF64748B),
+                            color = textSecondary,
                             letterSpacing = 0.5.sp
                         )
                         if (uiState.isAdmin) {
@@ -667,7 +715,7 @@ fun FundProgressCard(
                                 text = " ✎",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF4338CA)
+                                color = if (isDark) SaffronGold else Color(0xFF4338CA)
                             )
                         }
                     }
@@ -675,7 +723,7 @@ fun FundProgressCard(
                         text = if (uiState.targetAmount > 0) "₹${uiState.targetAmount.formatAmount()}" else "अनिर्धारित (सहमति अनुसार)",
                         fontSize = if (uiState.targetAmount > 0) 18.sp else 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1E293B),
+                        color = textPrimary,
                         modifier = Modifier.padding(top = 2.dp)
                     )
                 }
@@ -693,16 +741,16 @@ fun FundProgressCard(
                     text = if (uiState.targetAmount > 0) "मासिक फंड संकलन प्रगति (लक्ष्य: ₹${uiState.targetAmount})" else "मासिक फंड संकलन प्रगति",
                     fontSize = 11.5.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF475569)
+                    color = textSecondary
                 )
 
                 Surface(
-                    color = Color(0xFFEEF2FF),
+                    color = if (isDark) Color(0xFF312E81) else Color(0xFFEEF2FF),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Text(
                         text = "${uiState.progressPercent}%",
-                        color = Color(0xFF4338CA),
+                        color = if (isDark) Color(0xFFA5B4FC) else Color(0xFF4338CA),
                         fontSize = 11.5.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
@@ -723,8 +771,8 @@ fun FundProgressCard(
                     .fillMaxWidth()
                     .height(10.dp)
                     .clip(RoundedCornerShape(5.dp)),
-                color = Color(0xFF4F46E5),
-                trackColor = Color(0xFFF1F5F9)
+                color = if (isDark) SaffronGold else Color(0xFF4F46E5),
+                trackColor = if (isDark) Color(0xFF334155) else Color(0xFFF1F5F9)
             )
 
             Spacer(modifier = Modifier.height(14.dp))
@@ -737,9 +785,9 @@ fun FundProgressCard(
                 StatPill(
                     label = "कुल सदस्य",
                     value = uiState.totalMembers.toString(),
-                    textColor = Color(0xFF0F172A),
-                    bgColor = Color(0xFFF8FAFC),
-                    borderColor = Color(0xFFE2E8F0),
+                    textColor = textPrimary,
+                    bgColor = if (isDark) Color(0xFF0F172A) else Color(0xFFF8FAFC),
+                    borderColor = if (isDark) Color(0xFF334155) else Color(0xFFE2E8F0),
                     modifier = Modifier.weight(1f)
                 )
 
@@ -747,8 +795,8 @@ fun FundProgressCard(
                     label = "जमा (Paid)",
                     value = uiState.paidMembers.toString(),
                     textColor = PaidGreen,
-                    bgColor = PaidGreenLight,
-                    borderColor = Color(0xFFA7F3D0),
+                    bgColor = if (isDark) Color(0xFF064E3B) else PaidGreenLight,
+                    borderColor = if (isDark) Color(0xFF047857) else Color(0xFFA7F3D0),
                     modifier = Modifier.weight(1f)
                 )
 
@@ -756,8 +804,8 @@ fun FundProgressCard(
                     label = "बाकी (Pending)",
                     value = uiState.pendingMembers.toString(),
                     textColor = PendingRed,
-                    bgColor = PendingRedLight,
-                    borderColor = Color(0xFFFECDD3),
+                    bgColor = if (isDark) Color(0xFF450A0A) else PendingRedLight,
+                    borderColor = if (isDark) Color(0xFF991B1B) else Color(0xFFFECDD3),
                     modifier = Modifier.weight(1f)
                 )
             }

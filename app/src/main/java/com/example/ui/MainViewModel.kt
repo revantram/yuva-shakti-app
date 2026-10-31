@@ -434,16 +434,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _snackbarMessage.value = "व्हाट्सएप ग्रुप लिंक अपडेट हुआ।"
     }
 
-    fun backupToJioCloud(context: Context) {
+    fun backupToGoogleDrive(context: Context) {
         viewModelScope.launch {
             try {
                 val (file, _) = repository.createCloudBackup()
-                repository.shareBackupToJioCloud(file)
-                _snackbarMessage.value = "☁️ जियोक्लाउड बैकअप फ़ाइल तैयार की गई।"
+                repository.shareBackupToGoogleDrive(file)
+                _snackbarMessage.value = "📁 Google Drive बैकअप फ़ाइल तैयार की गई।"
             } catch (e: Exception) {
                 _snackbarMessage.value = "बैकअप त्रुटि: ${e.message}"
             }
         }
+    }
+
+    fun backupToJioCloud(context: Context) {
+        backupToGoogleDrive(context)
     }
 
     fun restoreFromCloudBackup(jsonString: String, onComplete: (Boolean, Int) -> Unit = { _, _ -> }) {

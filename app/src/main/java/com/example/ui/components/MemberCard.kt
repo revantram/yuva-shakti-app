@@ -57,10 +57,12 @@ fun MemberCard(
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
     val isPaid = member.status == "Paid"
-    val cardBg = if (isPaid) Color(0xFFF0FDF4) else Color(0xFFFFF1F2)
-    val cardBorder = if (isPaid) Color(0xFFBBF7D0) else Color(0xFFFECDD3)
-    val statusColor = if (isPaid) PaidGreen else PendingRed
+    val cardBg = if (isDark) (if (isPaid) Color(0xCC064E3B) else Color(0xCC450A0A)) else (if (isPaid) Color(0xD9F0FDF4) else Color(0xD9FFF1F2))
+    val cardBorder = if (isDark) (if (isPaid) Color(0x6610B981) else Color(0x66F43F5E)) else (if (isPaid) Color(0xFFBBF7D0) else Color(0xFFFECDD3))
+    val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
+    val textSecondary = if (isDark) Color(0xFFCBD5E1) else Color(0xFF64748B)
 
     Card(
         colors = CardDefaults.cardColors(containerColor = cardBg),
@@ -85,8 +87,8 @@ fun MemberCard(
                 ) {
                     // Avatar Initials with live presence dot
                     val avatarLetter = member.name.trim().take(1)
-                    val avatarBg = if (isPaid) PaidGreenLight else PendingRedLight
-                    val avatarTextColor = if (isPaid) PaidGreenDark else PendingRedDark
+                    val avatarBg = if (isDark) (if (isPaid) Color(0xFF047857) else Color(0xFF7F1D1D)) else (if (isPaid) PaidGreenLight else PendingRedLight)
+                    val avatarTextColor = if (isDark) (if (isPaid) Color(0xFFA7F3D0) else Color(0xFFFECDD3)) else (if (isPaid) PaidGreenDark else PendingRedDark)
 
                     Box(contentAlignment = Alignment.BottomEnd) {
                         Box(
@@ -121,11 +123,11 @@ fun MemberCard(
                                 text = member.name,
                                 fontSize = 16.5.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF0F172A)
+                                color = textPrimary
                             )
                             if (member.notes.isNotBlank()) {
                                 Surface(
-                                    color = Color(0xFFF1F5F9),
+                                    color = if (isDark) Color(0xFF1E293B) else Color(0xFFF1F5F9),
                                     shape = RoundedCornerShape(6.dp),
                                     modifier = Modifier.padding(start = 6.dp)
                                 ) {
@@ -133,7 +135,7 @@ fun MemberCard(
                                         text = member.notes,
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Medium,
-                                        color = Color(0xFF475569),
+                                        color = if (isDark) Color(0xFFCBD5E1) else Color(0xFF475569),
                                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                     )
                                 }
@@ -153,7 +155,7 @@ fun MemberCard(
                             Text(
                                 text = displayPhone,
                                 fontSize = 12.5.sp,
-                                color = Color(0xFF64748B)
+                                color = textSecondary
                             )
                             Text(
                                 text = " • ",
@@ -166,14 +168,14 @@ fun MemberCard(
                                     text = "${modeText}₹${member.monthlyAmount} प्राप्त",
                                     fontSize = 13.5.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = PaidGreenDark
+                                    color = if (isDark) Color(0xFF6EE7B7) else PaidGreenDark
                                 )
                             } else {
                                 Text(
                                     text = "₹${member.monthlyAmount} बकाया",
                                     fontSize = 13.5.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = PendingRedDark
+                                    color = if (isDark) Color(0xFFFCA5A5) else PendingRedDark
                                 )
                             }
                         }
@@ -182,7 +184,7 @@ fun MemberCard(
                             Text(
                                 text = "तारीख: ${member.paidDate}",
                                 fontSize = 11.5.sp,
-                                color = Color(0xFF047857),
+                                color = if (isDark) Color(0xFFA7F3D0) else Color(0xFF047857),
                                 modifier = Modifier.padding(top = 2.dp)
                             )
                         }

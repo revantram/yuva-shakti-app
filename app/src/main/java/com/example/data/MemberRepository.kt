@@ -395,8 +395,12 @@ class MemberRepository(
         return CloudBackupHelper.getLocalBackupFile()
     }
 
+    fun shareBackupToGoogleDrive(backupFile: File) {
+        CloudBackupHelper.shareBackupToGoogleDrive(context, backupFile)
+    }
+
     fun shareBackupToJioCloud(backupFile: File) {
-        CloudBackupHelper.shareBackupToJioCloud(context, backupFile)
+        shareBackupToGoogleDrive(backupFile)
     }
 
     suspend fun submitPaymentRequest(

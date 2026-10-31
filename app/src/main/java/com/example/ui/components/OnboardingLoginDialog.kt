@@ -78,6 +78,25 @@ fun OnboardingLoginDialog(
         "अविवाहित (युवा सदस्य)"
     )
 
+    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val cardBg = if (isDark) Color(0xFF1E293B) else Color.White
+    val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
+    val textSecondary = if (isDark) Color(0xFFCBD5E1) else Color(0xFF64748B)
+    val cardBorder = if (isDark) SaffronGold.copy(alpha = 0.5f) else Color(0xFFE2E8F0)
+    val iconTint = if (isDark) SaffronGold else DeepNavy
+
+    val inputColors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = textPrimary,
+        unfocusedTextColor = textPrimary,
+        focusedBorderColor = if (isDark) SaffronGold else DeepNavy,
+        unfocusedBorderColor = if (isDark) Color(0xFF475569) else Color(0xFFCBD5E1),
+        focusedLabelColor = if (isDark) SaffronGold else DeepNavy,
+        unfocusedLabelColor = textSecondary,
+        focusedPlaceholderColor = if (isDark) Color(0xFF64748B) else Color(0xFF94A3B8),
+        unfocusedPlaceholderColor = if (isDark) Color(0xFF64748B) else Color(0xFF94A3B8),
+        cursorColor = if (isDark) SaffronGold else DeepNavy
+    )
+
     Dialog(
         onDismissRequest = { /* Mandatory, cannot dismiss */ },
         properties = DialogProperties(
@@ -139,8 +158,9 @@ fun OnboardingLoginDialog(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    colors = CardDefaults.cardColors(containerColor = cardBg),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.2.dp, cardBorder)
                 ) {
                     Column(
                         modifier = Modifier
@@ -152,12 +172,12 @@ fun OnboardingLoginDialog(
                             text = "सदस्य प्रवेश व सत्यापन",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.5.sp,
-                            color = Color(0xFF0F172A)
+                            color = textPrimary
                         )
                         Text(
                             text = "कृपया अपना सही नाम और मोबाइल नंबर दर्ज करें ताकि आपको ग्रुप के सदस्यों की सूची में जोड़ा जा सके।",
                             fontSize = 11.5.sp,
-                            color = Color(0xFF64748B),
+                            color = textSecondary,
                             lineHeight = 16.sp
                         )
 
@@ -170,15 +190,12 @@ fun OnboardingLoginDialog(
                             },
                             label = { Text("पूरा नाम * (जैसे: रेवंतराम भाटी)") },
                             leadingIcon = {
-                                Icon(imageVector = Icons.Default.Person, contentDescription = null, tint = DeepNavy)
+                                Icon(imageVector = Icons.Default.Person, contentDescription = null, tint = iconTint)
                             },
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = DeepNavy,
-                                focusedLabelColor = DeepNavy
-                            )
+                            colors = inputColors
                         )
 
                         // 2. Mobile Number (Mandatory)
@@ -192,16 +209,13 @@ fun OnboardingLoginDialog(
                             },
                             label = { Text("मोबाइल नंबर * (10 अंक)") },
                             leadingIcon = {
-                                Icon(imageVector = Icons.Default.Phone, contentDescription = null, tint = DeepNavy)
+                                Icon(imageVector = Icons.Default.Phone, contentDescription = null, tint = iconTint)
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = DeepNavy,
-                                focusedLabelColor = DeepNavy
-                            )
+                            colors = inputColors
                         )
 
                         // 3. Security PIN (Mandatory)
@@ -216,17 +230,14 @@ fun OnboardingLoginDialog(
                             label = { Text("सुरक्षा कोड (4-अंकीय PIN) *") },
                             placeholder = { Text("अपना 4-अंकीय पिन बनाएं") },
                             leadingIcon = {
-                                Icon(imageVector = Icons.Default.Lock, contentDescription = null, tint = DeepNavy)
+                                Icon(imageVector = Icons.Default.Lock, contentDescription = null, tint = iconTint)
                             },
                             visualTransformation = PasswordVisualTransformation(),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = DeepNavy,
-                                focusedLabelColor = DeepNavy
-                            )
+                            colors = inputColors
                         )
 
                         // 4. Instagram ID (Optional)
@@ -241,10 +252,7 @@ fun OnboardingLoginDialog(
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = DeepNavy,
-                                focusedLabelColor = DeepNavy
-                            )
+                            colors = inputColors
                         )
 
                         // 5. Matrimonial Record Dropdown (विवाह रिकॉर्ड)
@@ -253,12 +261,13 @@ fun OnboardingLoginDialog(
                                 text = "विवाह रिकॉर्ड / वैवाहिक स्थिति:",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF334155)
+                                color = textPrimary
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Surface(
                                 shape = RoundedCornerShape(10.dp),
-                                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFCBD5E1)),
+                                color = if (isDark) Color(0xFF0F172A) else Color.White,
+                                border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0xFF475569) else Color(0xFFCBD5E1)),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable { showBioOptions = !showBioOptions }
@@ -268,8 +277,8 @@ fun OnboardingLoginDialog(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(text = matrimonialStatus, fontSize = 13.sp, color = Color(0xFF0F172A))
-                                    Text(text = if (showBioOptions) "▲" else "▼", fontSize = 11.sp, color = Color(0xFF64748B))
+                                    Text(text = matrimonialStatus, fontSize = 13.sp, color = textPrimary)
+                                    Text(text = if (showBioOptions) "▲" else "▼", fontSize = 11.sp, color = textSecondary)
                                 }
                             }
 
@@ -278,14 +287,14 @@ fun OnboardingLoginDialog(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(top = 4.dp)
-                                        .background(Color(0xFFF8FAFC), RoundedCornerShape(8.dp))
-                                        .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(8.dp))
+                                        .background(if (isDark) Color(0xFF0F172A) else Color(0xFFF8FAFC), RoundedCornerShape(8.dp))
+                                        .border(1.dp, if (isDark) Color(0xFF334155) else Color(0xFFE2E8F0), RoundedCornerShape(8.dp))
                                 ) {
                                     bioOptions.forEach { opt ->
                                         Text(
                                             text = opt,
                                             fontSize = 12.5.sp,
-                                            color = if (opt == matrimonialStatus) DeepNavy else Color(0xFF334155),
+                                            color = if (opt == matrimonialStatus) (if (isDark) SaffronGold else DeepNavy) else textPrimary,
                                             fontWeight = if (opt == matrimonialStatus) FontWeight.Bold else FontWeight.Normal,
                                             modifier = Modifier
                                                 .fillMaxWidth()
