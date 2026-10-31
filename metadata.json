@@ -1,0 +1,6 @@
+{
+  "name": "युवा शक्ति ग्रुप",
+  "description": "भाटी परिवार मासिक अमावस्या फंड - सदस्य अंशदान प्रबंधन एवं पारदर्शी बहीखाता",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

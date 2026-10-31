@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">युवा शक्ति ग्रुप</string>
+    <string name="subtitle">भाटी परिवार • मासिक अमावस्या फंड</string>
+    <string name="total_collected">कुल एकत्रित राशि</string>
+    <string name="target_amount">कुल लक्ष्य</string>
+    <string name="progress_rate">प्रगति दर</string>
+    <string name="total_members">कुल सदस्य</string>
+    <string name="paid_members">जमा (Paid)</string>
+    <string name="pending_members">बाकी (Pending)</string>
+    <string name="tab_all">सभी</string>
+    <string name="tab_paid">जमा</string>
+    <string name="tab_pending">बाकी</string>
+    <string name="share_whatsapp">व्हाट्सएप रिपोर्ट शेयर करें</string>
+    <string name="share_whatsapp_sub">जमा और बकाया की सूची ग्रुप में भेजें</string>
+    <string name="admin_mode">एडमिन मोड</string>
+    <string name="viewer_mode">दर्शक मोड (केवल देखने की अनुमति)</string>
+    <string name="admin_login">एडमिन लॉगिन</string>
+    <string name="admin_logout">लॉगआउट</string>
+    <string name="add_member">नया सदस्य जोड़ें</string>
+    <string name="reset_cycle">नया चक्र रीसेट करें</string>
+</resources>
