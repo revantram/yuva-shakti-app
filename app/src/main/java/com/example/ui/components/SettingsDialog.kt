@@ -65,6 +65,7 @@ import androidx.compose.ui.unit.sp
 import com.example.ui.theme.DeepNavy
 import com.example.ui.theme.PaidGreen
 import com.example.ui.theme.SaffronGold
+import com.example.ui.theme.PendingRed
 import com.example.util.ApkShareHelper
 
 /**
