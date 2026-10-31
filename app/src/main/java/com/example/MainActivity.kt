@@ -614,19 +614,22 @@ fun MainScreen(viewModel: MainViewModel) {
 
     if (showPaymentDialog) {
         OnlinePaymentDialog(
-            members = uiState.members,
-            customQrCodeUri = customQrCodeUri,
+            customQrCodeUri = customQrCodeUri ?: "",
             isAdmin = uiState.isAdmin,
-            pendingRequestCount = pendingPaymentRequests.size,
+            members = uiState.members,
+            pendingRequestsCount = pendingPaymentRequests.size,
             onDismiss = { viewModel.openPaymentDialog(false) },
-            onUploadQrCode = { uri -> viewModel.setCustomQrCode(uri) },
-            onOpenVerificationRequest = {
+            onUploadQrCode = { uri -> viewModel.setCustomQrCodeUri(uri) },
+            onRequestVerificationClick = {
                 viewModel.openPaymentDialog(false)
                 viewModel.openPaymentVerificationDialog(true)
             },
-            onViewPendingRequests = {
+            onViewPendingRequestsClick = {
                 viewModel.openPaymentDialog(false)
                 viewModel.openPendingRequestsDialog(true)
+            },
+            onSubmitDirectDeposit = { member, mode, utr ->
+                viewModel.updatePaymentWithDetails(member, "Paid", mode, "")
             }
         )
     }
@@ -635,8 +638,8 @@ fun MainScreen(viewModel: MainViewModel) {
         PaymentVerificationDialog(
             members = uiState.members,
             onDismiss = { viewModel.openPaymentVerificationDialog(false) },
-            onSubmit = { memberId, name, amt, screenshotUri, note, utr ->
-                viewModel.submitPaymentVerificationRequest(memberId, name, amt, screenshotUri, note, utr)
+            onSubmitRequest = { member, amt, screenshotUri, utr, note ->
+                viewModel.submitPaymentVerificationRequest(member, amt, screenshotUri, utr, note)
             }
         )
     }
@@ -645,9 +648,9 @@ fun MainScreen(viewModel: MainViewModel) {
         PendingPaymentRequestsDialog(
             requests = pendingPaymentRequests,
             onDismiss = { viewModel.openPendingRequestsDialog(false) },
+            onViewScreenshot = { uri -> viewModel.viewScreenshot(uri) },
             onApprove = { req -> viewModel.approvePaymentRequest(req) },
-            onReject = { req -> viewModel.rejectPaymentRequest(req) },
-            onViewScreenshot = { uri -> viewModel.viewScreenshot(uri) }
+            onReject = { req -> viewModel.rejectPaymentRequest(req) }
         )
     }
 
@@ -660,11 +663,14 @@ fun MainScreen(viewModel: MainViewModel) {
 
     if (showSetCycleTargetDialog) {
         SetCycleTargetDialog(
-            currentTarget = uiState.targetAmount,
-            currentNote = uiState.consensusNote,
+            currentCycleName = uiState.amavasyaCycleName,
+            currentTargetAmount = uiState.customTargetAmount,
+            currentConsensusNote = uiState.consensusNote,
+            totalMembersCount = uiState.totalMembers,
+            defaultCalculatedTarget = uiState.targetAmount,
             onDismiss = { viewModel.openSetCycleTargetDialog(false) },
-            onSave = { target, note, perMemberAmount, applyToAll ->
-                viewModel.saveCycleTargetAndConsensus(target, note, perMemberAmount, applyToAll)
+            onSavePlan = { target, perMember, applyToAll, note, postToChat ->
+                viewModel.setMonthlyCyclePlan(target, perMember, applyToAll, note, postToChat)
             }
         )
     }
@@ -678,10 +684,9 @@ fun MainScreen(viewModel: MainViewModel) {
         )
     }
 
-    eventPhotoToView?.let { (uri, title) ->
+    eventPhotoToView?.let { (uri, _) ->
         EventPhotoViewerDialog(
             photoUri = uri,
-            eventTitle = title,
             onDismiss = { eventPhotoToView = null }
         )
     }
@@ -689,7 +694,7 @@ fun MainScreen(viewModel: MainViewModel) {
     if (showUrgentBroadcastDialog) {
         UrgentBroadcastDialog(
             onDismiss = { viewModel.openUrgentBroadcastDialog(false) },
-            onSend = { title, msg -> viewModel.broadcastUrgentAlert(title, msg) }
+            onBroadcast = { title, msg -> viewModel.broadcastUrgentAlert(title, msg) }
         )
     }
 
