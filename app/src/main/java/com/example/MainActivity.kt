@@ -268,11 +268,7 @@ fun MainScreen(viewModel: MainViewModel) {
     if (!isUserLoggedIn) {
         OnboardingLoginDialog(
             onLoginSuccess = { name, phone, pin, insta, bio ->
-                viewModel.registerOrLoginUser(name, phone, pin, insta, bio) { success, msg ->
-                    if (!success) {
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                    }
-                }
+                viewModel.registerOrLoginUser(name, phone, pin, insta, bio)
             }
         )
         return

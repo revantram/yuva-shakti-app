@@ -908,10 +908,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     )
                     val newId = repository.insertMember(newMember)
                     _activeMemberId.value = newId
-                    repository.setActiveMemberId(newId)
+                    repository.setMyActiveMemberId(newId)
                 } else {
                     _activeMemberId.value = existing.id
-                    repository.setActiveMemberId(existing.id)
+                    repository.setMyActiveMemberId(existing.id)
                 }
             } catch (e: Exception) {
                 // Ignore
