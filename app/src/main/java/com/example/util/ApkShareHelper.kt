@@ -50,7 +50,8 @@ object ApkShareHelper {
                     Intent.EXTRA_TEXT,
                     "🚩 *युवा शक्ति ग्रुप, भाटी परिवार कुचेरा*\n\n" +
                     "सादर प्रणाम! यह भाटी परिवार की आधिकारिक एप्लिकेशन APK फ़ाइल है।\n" +
-                    "इस फ़ाइल पर टैप करके ऐप सीधे अपने फोन में इंस्टॉल करें।"
+                    "इस फ़ाइल पर टैप करके ऐप सीधे अपने फोन में इंस्टॉल करें।\n\n" +
+                    "📥 *डायरेक्ट डाउनलोड लिंक:*\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/yuva-shakti.apk"
                 )
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }

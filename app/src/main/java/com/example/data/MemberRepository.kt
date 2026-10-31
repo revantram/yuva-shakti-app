@@ -791,7 +791,7 @@ class MemberRepository(
     }
 
     fun getUpdateApkUrl(): String {
-        return prefs.getString(KEY_UPDATE_APK_URL, "https://github.com/yuva-shakti-group/releases/latest") ?: ""
+        return prefs.getString(KEY_UPDATE_APK_URL, "https://github.com/revantram/yuva-shakti-app/releases/latest/download/yuva-shakti.apk") ?: "https://github.com/revantram/yuva-shakti-app/releases/latest/download/yuva-shakti.apk"
     }
 
     fun setUpdateApkUrl(url: String) {
