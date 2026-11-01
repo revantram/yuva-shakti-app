@@ -561,7 +561,6 @@ object FirestoreSyncHelper {
         return try {
             val fs = getFirestore() ?: return null
             fs.collection(COLLECTION_REGISTRATIONS)
-                .whereEqualTo("status", "Pending")
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
                         Log.e(TAG, "Pending registrations listener error", error)
@@ -570,22 +569,25 @@ object FirestoreSyncHelper {
                     if (snapshot != null) {
                         val list = mutableListOf<RegistrationRequest>()
                         for (doc in snapshot.documents) {
-                            val req = RegistrationRequest(
-                                requestId = doc.getString("requestId") ?: doc.id,
-                                name = doc.getString("name") ?: "",
-                                phone = doc.getString("phone") ?: "",
-                                address = doc.getString("address") ?: "",
-                                memberCode = doc.getString("memberCode") ?: "",
-                                monthlyAmount = doc.getLong("monthlyAmount")?.toInt() ?: 100,
-                                instagramId = doc.getString("instagramId") ?: "",
-                                photoUri = doc.getString("photoUri") ?: "",
-                                status = doc.getString("status") ?: "Pending",
-                                timestamp = doc.getLong("timestamp") ?: 0L,
-                                deviceId = doc.getString("deviceId") ?: "",
-                                assignedMemberId = doc.getLong("assignedMemberId") ?: 0L
-                            )
-                            if (req.name.isNotBlank()) {
-                                list.add(req)
+                            val status = doc.getString("status") ?: "Pending"
+                            if (status.equals("Pending", ignoreCase = true)) {
+                                val req = RegistrationRequest(
+                                    requestId = doc.getString("requestId") ?: doc.id,
+                                    name = doc.getString("name") ?: "",
+                                    phone = doc.getString("phone") ?: "",
+                                    address = doc.getString("address") ?: "",
+                                    memberCode = doc.getString("memberCode") ?: "",
+                                    monthlyAmount = doc.getLong("monthlyAmount")?.toInt() ?: 100,
+                                    instagramId = doc.getString("instagramId") ?: "",
+                                    photoUri = doc.getString("photoUri") ?: "",
+                                    status = status,
+                                    timestamp = doc.getLong("timestamp") ?: 0L,
+                                    deviceId = doc.getString("deviceId") ?: "",
+                                    assignedMemberId = doc.getLong("assignedMemberId") ?: 0L
+                                )
+                                if (req.name.isNotBlank()) {
+                                    list.add(req)
+                                }
                             }
                         }
                         list.sortByDescending { it.timestamp }
@@ -594,6 +596,37 @@ object FirestoreSyncHelper {
                 }
         } catch (t: Throwable) {
             Log.e(TAG, "Error listening to pending registrations", t)
+            null
+        }
+    }
+
+    /**
+     * Fetches a single registration request directly by its requestId.
+     */
+    suspend fun fetchSingleRegistrationRequest(requestId: String): RegistrationRequest? {
+        if (requestId.isBlank()) return null
+        return try {
+            val fs = getFirestore() ?: return null
+            val doc = fs.collection(COLLECTION_REGISTRATIONS).document(requestId).get().awaitTask()
+            if (doc != null && doc.exists()) {
+                RegistrationRequest(
+                    requestId = doc.getString("requestId") ?: doc.id,
+                    name = doc.getString("name") ?: "",
+                    phone = doc.getString("phone") ?: "",
+                    address = doc.getString("address") ?: "",
+                    memberCode = doc.getString("memberCode") ?: "",
+                    monthlyAmount = doc.getLong("monthlyAmount")?.toInt() ?: 100,
+                    instagramId = doc.getString("instagramId") ?: "",
+                    photoUri = doc.getString("photoUri") ?: "",
+                    status = doc.getString("status") ?: "Pending",
+                    timestamp = doc.getLong("timestamp") ?: 0L,
+                    deviceId = doc.getString("deviceId") ?: "",
+                    assignedMemberId = doc.getLong("assignedMemberId") ?: 0L,
+                    rejectionReason = doc.getString("rejectionReason") ?: ""
+                )
+            } else null
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error fetching single registration", t)
             null
         }
     }
@@ -664,6 +697,7 @@ object FirestoreSyncHelper {
                 "whatsappNumber" to request.phone,
                 "villageCity" to request.address.ifBlank { "कुचेरा" },
                 "memberCode" to cleanCode,
+                "photoUri" to request.photoUri,
                 "updatedAt" to System.currentTimeMillis()
             )
 

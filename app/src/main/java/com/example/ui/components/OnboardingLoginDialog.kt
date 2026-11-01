@@ -96,7 +96,8 @@ fun OnboardingLoginDialog(
     pendingName: String = "",
     pendingCode: String = "",
     pendingStatus: RegistrationRequest? = null,
-    onCancelPendingRegistration: () -> Unit = {}
+    onCancelPendingRegistration: () -> Unit = {},
+    onCheckStatusNow: ((Boolean, String) -> Unit) -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
     var selectedTab by remember { mutableIntStateOf(0) } // 0: Login with Code, 1: Register New Member
@@ -118,6 +119,23 @@ fun OnboardingLoginDialog(
     var regErrorMessage by remember { mutableStateOf<String?>(null) }
     var isRegistering by remember { mutableStateOf(false) }
 
+    // Pending card manual check status state
+    var isCheckingStatusNow by remember { mutableStateOf(false) }
+    var checkStatusFeedback by remember { mutableStateOf<String?>(null) }
+
+    // Pre-populate unique code when switching to tab 1 if empty
+    LaunchedEffect(selectedTab) {
+        if (selectedTab == 1 && desiredCode.isBlank()) {
+            var candidate = (1001..9999).random().toString()
+            var attempts = 0
+            while (attempts < 5 && (onCheckCodeTaken(candidate) || candidate == "992942")) {
+                candidate = (1001..9999).random().toString()
+                attempts++
+            }
+            desiredCode = candidate
+        }
+    }
+
     // Photo picker launcher
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -128,10 +146,11 @@ fun OnboardingLoginDialog(
         }
     }
 
-    // Check code uniqueness whenever desiredCode changes
+    // Check code uniqueness whenever desiredCode changes (with debounce)
     LaunchedEffect(desiredCode) {
         val trimmed = desiredCode.trim()
         if (trimmed.length >= 4) {
+            kotlinx.coroutines.delay(200)
             isCheckingCode = true
             isCodeTaken = onCheckCodeTaken(trimmed)
             isCheckingCode = false
@@ -347,6 +366,43 @@ fun OnboardingLoginDialog(
                                     fontSize = 11.sp,
                                     color = DeepNavy,
                                     fontWeight = FontWeight.Medium
+                                )
+                            }
+
+                            Button(
+                                onClick = {
+                                    isCheckingStatusNow = true
+                                    checkStatusFeedback = null
+                                    onCheckStatusNow { _, msg ->
+                                        isCheckingStatusNow = false
+                                        checkStatusFeedback = msg
+                                    }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(44.dp),
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = SaffronGold),
+                                enabled = !isCheckingStatusNow
+                            ) {
+                                if (isCheckingStatusNow) {
+                                    CircularProgressIndicator(modifier = Modifier.size(16.dp), color = DeepNavy, strokeWidth = 2.dp)
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text("जांच जारी है...", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = DeepNavy)
+                                } else {
+                                    Icon(imageVector = Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(16.dp), tint = DeepNavy)
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text("🔄 अभी स्थिति जांचें (Check Status)", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = DeepNavy)
+                                }
+                            }
+                            if (checkStatusFeedback != null) {
+                                Text(
+                                    text = checkStatusFeedback ?: "",
+                                    fontSize = 11.5.sp,
+                                    color = Color(0xFF1E3A8A),
+                                    fontWeight = FontWeight.Medium,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(horizontal = 4.dp)
                                 )
                             }
                         }
@@ -804,7 +860,7 @@ fun OnboardingLoginDialog(
                                     val trimmedName = fullName.trim()
                                     val trimmedPhone = phoneNumber.trim()
                                     val trimmedAddress = addressVillage.trim()
-                                    val trimmedCode = desiredCode.trim()
+                                    var trimmedCode = desiredCode.trim()
 
                                     if (trimmedName.isEmpty()) {
                                         regErrorMessage = "कृपया अपना पूरा नाम दर्ज करें।"
@@ -819,14 +875,15 @@ fun OnboardingLoginDialog(
                                         return@Button
                                     }
                                     if (trimmedCode.length < 4) {
-                                        regErrorMessage = "कृपया कम से कम 4-अंकों का विशिष्ट सदस्य कोड चुनें।"
-                                        return@Button
+                                        trimmedCode = (1001..9999).random().toString()
+                                        desiredCode = trimmedCode
                                     }
                                     if (isCodeTaken) {
-                                        regErrorMessage = "यह कोड पहले से उपयोग में है, कृपया दूसरा कोड चुनें।"
+                                        regErrorMessage = "यह कोड पहले से उपयोग में है, कृपया दूसरा कोड चुनें या 'ऑटो कोड' बटन दबाएं।"
                                         return@Button
                                     }
 
+                                    regErrorMessage = null
                                     isRegistering = true
                                     onRegisterWithCode(
                                         trimmedName,
@@ -842,7 +899,7 @@ fun OnboardingLoginDialog(
                                         }
                                     }
                                 },
-                                enabled = !isRegistering && !isCodeTaken && desiredCode.length >= 4,
+                                enabled = !isRegistering,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(48.dp)

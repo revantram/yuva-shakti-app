@@ -645,6 +645,9 @@ fun MainScreen(viewModel: MainViewModel) {
             pendingStatus = pendingRegistrationStatus,
             onCancelPendingRegistration = {
                 viewModel.cancelPendingRegistration()
+            },
+            onCheckStatusNow = { callback ->
+                viewModel.checkPendingRegistrationStatusNow(callback)
             }
         )
         return
@@ -995,6 +998,76 @@ fun MainScreen(viewModel: MainViewModel) {
                                                     color = Color.White
                                                 )
                                             }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // 0B1. Pending Member Registrations Alert Banner (Prominent & Real-time)
+                        if (pendingRegistrations.isNotEmpty()) {
+                            item(key = "pending_registrations_banner") {
+                                Surface(
+                                    color = Color(0xFFFEF3C7),
+                                    shape = RoundedCornerShape(16.dp),
+                                    border = BorderStroke(1.5.dp, SaffronGold),
+                                    shadowElevation = 3.dp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            if (uiState.isAdmin) {
+                                                viewModel.openPendingRegistrationsDialog(true)
+                                            } else {
+                                                viewModel.showAuthDialog(true)
+                                            }
+                                        }
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(12.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier.weight(1f)
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(42.dp)
+                                                    .background(Color(0xFFFDE68A), CircleShape),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Text("🔔", fontSize = 22.sp)
+                                            }
+                                            Spacer(modifier = Modifier.width(10.dp))
+                                            Column {
+                                                Text(
+                                                    text = "🔔 नया सदस्य पंजीकरण अनुरोध!",
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 13.5.sp,
+                                                    color = Color(0xFF78350F)
+                                                )
+                                                Text(
+                                                    text = "${pendingRegistrations.size} नए सदस्य सत्यापन की प्रतीक्षा में हैं",
+                                                    fontSize = 11.sp,
+                                                    color = Color(0xFF92400E)
+                                                )
+                                            }
+                                        }
+                                        Surface(
+                                            color = SaffronGold,
+                                            shape = RoundedCornerShape(10.dp),
+                                            shadowElevation = 2.dp
+                                        ) {
+                                            Text(
+                                                text = "सत्यापित करें ➔",
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 11.5.sp,
+                                                color = DeepNavy,
+                                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp)
+                                            )
                                         }
                                     }
                                 }
