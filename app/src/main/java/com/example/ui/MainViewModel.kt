@@ -363,12 +363,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val newest = list.firstOrNull()
                     val applicantName = newest?.name ?: "नया सदस्य"
                     try {
-                        com.example.util.NotificationHelper.showNotification(
-                            getApplication(),
-                            "🔔 नया सदस्य पंजीकरण अनुरोध!",
-                            "$applicantName जी ने युवा शक्ति ग्रुप में शामिल होने हेतु पंजीकरण किया है। कृपया सत्यापित करें।"
+                        com.example.util.NotificationHelper.showTransactionNotification(
+                            context = getApplication(),
+                            title = "🔔 नया सदस्य पंजीकरण अनुरोध!",
+                            message = "$applicantName जी ने युवा शक्ति ग्रुप में शामिल होने हेतु पंजीकरण किया है। कृपया सत्यापित करें।"
                         )
-                        com.example.util.SoundHelper.playSuccessChime(getApplication())
+                        com.example.util.SoundHelper.playJaiShreeRam(getApplication())
                     } catch (e: Throwable) {
                         android.util.Log.e("MainViewModel", "Notification/chime error", e)
                     }
@@ -1404,8 +1404,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     instagramId = request.instagramId,
                     whatsappNumber = request.phone,
                     villageCity = request.address.ifBlank { "कुचेरा" },
-                    memberCode = cleanCode,
-                    photoUri = request.photoUri.ifBlank { null }
+                    memberCode = cleanCode
                 )
                 repository.insertMember(newMember)
                 repository.announceNewMemberApproved(newMember)
