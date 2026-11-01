@@ -56,8 +56,12 @@ import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -1218,7 +1222,10 @@ fun MainScreen(viewModel: MainViewModel) {
         )
     }
 
-    activeIncomingAlert?.let { (alertTitle, alertMessage) ->
+    val currentAlert = activeIncomingAlert
+    if (currentAlert != null) {
+        val alertTitle = currentAlert.first
+        val alertMessage = currentAlert.second
         AlertDialog(
             onDismissRequest = {
                 com.example.util.SoundHelper.stopSound()
