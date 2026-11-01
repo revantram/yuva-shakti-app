@@ -145,8 +145,6 @@ import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.theme.PaidGreen
 import com.example.ui.theme.PendingRed
 import com.example.ui.theme.SaffronGold
-import com.example.ui.components.OnboardingLoginDialog
-import com.example.ui.components.InstallSuccessWelcomeDialog
 import com.example.util.ApkShareHelper
 import com.example.util.DailyThoughtHelper
 import com.example.util.FestivalHelper
@@ -345,16 +343,6 @@ fun MainScreen(viewModel: MainViewModel) {
         }
     }
 
-    // If user is not onboarded/logged in, show mandatory Registration & Verification screen
-    if (!isUserLoggedIn) {
-        OnboardingLoginDialog(
-            onLoginSuccess = { name, phone, address, photoUri, insta, isAdmin ->
-                viewModel.registerOrLoginUser(name, phone, address, photoUri, insta, isAdmin)
-            }
-        )
-        return
-    }
-
     // If App Lock is enabled and app is locked, render Lock Screen directly
     if (isAppLocked) {
         AppLockScreen(
@@ -375,28 +363,12 @@ fun MainScreen(viewModel: MainViewModel) {
         return
     }
 
-    // Celebration & Welcome Greeting Dialog (shown right after registration/setup)
-    if (showWelcomeGreetingDialog) {
-        InstallSuccessWelcomeDialog(
-            fullName = currentUserFullName,
-            phoneNumber = currentUserPhone,
-            address = currentUserAddress,
-            photoUri = currentUserProfilePhotoUri,
-            isAdmin = uiState.isAdmin,
-            onEnterApp = {
-                viewModel.dismissWelcomeGreetingDialog()
-            }
-        )
-    }
-
     // Live Heartbeat Loop (every 30 seconds)
-    LaunchedEffect(activeMemberId, isUserLoggedIn) {
-        if (isUserLoggedIn) {
-            while (true) {
-                val myName = uiState.members.find { it.id == activeMemberId }?.name ?: "सदस्य"
-                FirestoreSyncHelper.recordPresence(deviceId, myName, activeMemberId)
-                delay(30000L)
-            }
+    LaunchedEffect(activeMemberId) {
+        while (true) {
+            val myName = uiState.members.find { it.id == activeMemberId }?.name ?: "सदस्य"
+            FirestoreSyncHelper.recordPresence(deviceId, myName, activeMemberId)
+            delay(30000L)
         }
     }
 
