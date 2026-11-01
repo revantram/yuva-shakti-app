@@ -1204,7 +1204,7 @@ fun MainScreen(viewModel: MainViewModel) {
     if (showAuthDialog) {
         AdminPinDialog(
             onDismiss = { viewModel.showAuthDialog(false) },
-            onVerify = { pin -> viewModel.verifyAdminPin(pin) }
+            onVerify = { phone, pin -> viewModel.verifyAdminCredentials(phone, pin) }
         )
     }
 

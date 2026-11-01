@@ -86,7 +86,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _targetAmavasyaMillis = MutableStateFlow(
         repository.getTargetAmavasyaMillis().let { saved ->
-            if (saved > 0) saved else com.example.util.AmavasyaCalculator.calculateNextAmavasyaMillis()
+            val nextAuto = com.example.util.AmavasyaCalculator.calculateNextAmavasyaMillis()
+            if (saved > 0) {
+                val cal = java.util.Calendar.getInstance().apply { timeInMillis = saved }
+                if (cal.get(java.util.Calendar.YEAR) == 2026 &&
+                    cal.get(java.util.Calendar.MONTH) == java.util.Calendar.NOVEMBER &&
+                    (cal.get(java.util.Calendar.DAY_OF_MONTH) == 9 || cal.get(java.util.Calendar.DAY_OF_MONTH) == 10)
+                ) {
+                    repository.setTargetAmavasyaMillis(nextAuto)
+                    nextAuto
+                } else {
+                    saved
+                }
+            } else {
+                nextAuto
+            }
         }
     )
     val targetAmavasyaMillis: StateFlow<Long> = _targetAmavasyaMillis
@@ -380,6 +394,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun showAuthDialog(show: Boolean) {
         _showAuthDialog.value = show
+    }
+
+    fun verifyAdminCredentials(enteredPhone: String, enteredPin: String): Boolean {
+        val cleanPhone = enteredPhone.trim().replace("\\s".toRegex(), "").replace("-", "")
+        val isAdminPhone = cleanPhone == "8696663615" || cleanPhone.endsWith("8696663615")
+        val isPinCorrect = repository.verifyAdminPin(enteredPin)
+
+        return if (isAdminPhone && isPinCorrect) {
+            repository.setAdminMode(true)
+            _isAdmin.value = true
+            _showAuthDialog.value = false
+            _snackbarMessage.value = "व्यवस्थापक (8696663615) सत्यापित! एडमिन मोड सक्रिय हुआ।"
+            true
+        } else {
+            false
+        }
     }
 
     fun verifyAdminPin(enteredPin: String): Boolean {

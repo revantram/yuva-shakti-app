@@ -286,7 +286,7 @@ fun SettingsDialog(
                                     }
                                 ) {
                                     Text(
-                                        text = if (isAdmin) "🔓 सामान्य मोड" else "🛡️ एडमिन मोड (992942)",
+                                        text = if (isAdmin) "🔓 सामान्य मोड" else "🛡️ व्यवस्थापक लॉगिन",
                                         color = Color.White,
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold,

@@ -342,7 +342,7 @@ fun AppHeader(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = if (isAdmin) "🛡️ एडमिन मोड सक्रिय (संपादन चालू)" else "🔒 सामान्य सदस्य मोड (दर्शन मात्र)",
+                            text = if (isAdmin) "🛡️ व्यवस्थापक मोड सक्रिय (संपादन चालू)" else "🔒 सदस्य मोड (केवल दर्शन)",
                             fontSize = 11.5.sp,
                             fontWeight = FontWeight.Bold,
                             color = if (isAdmin) Color(0xFF92400E) else Color(0xFF166534)
@@ -355,7 +355,7 @@ fun AppHeader(
                         modifier = Modifier.padding(start = 6.dp)
                     ) {
                         Text(
-                            text = if (isAdmin) "लॉगआउट ✖" else "🔑 एडमिन मोड (992942)",
+                            text = if (isAdmin) "लॉगआउट ✖" else "🛡️ एडमिन लॉगिन",
                             fontSize = 10.5.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,

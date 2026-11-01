@@ -68,13 +68,14 @@ import java.util.Locale
 @Composable
 fun AdminPinDialog(
     onDismiss: () -> Unit,
-    onVerify: (String) -> Boolean
+    onVerify: (String, String) -> Boolean
 ) {
     val isDark = androidx.compose.foundation.isSystemInDarkTheme()
     val dialogBg = if (isDark) Color(0xFF1E293B) else Color.White
     val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
     val textSecondary = if (isDark) Color(0xFFCBD5E1) else Color(0xFF64748B)
 
+    var phone by remember { mutableStateOf("") }
     var pin by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
@@ -101,33 +102,80 @@ fun AdminPinDialog(
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = "सुरक्षा कोड दर्ज करें",
+                    text = "मुख्य व्यवस्थापक सत्यापन",
                     fontWeight = FontWeight.Bold,
                     fontSize = 17.sp,
                     color = textPrimary
                 )
                 Text(
-                    text = "प्रशासनिक प्रबंधन सक्रिय करने हेतु एडमिन पिन दर्ज करें (पिन: 992942)",
+                    text = "प्रशासनिक प्रबंधन सक्रिय करने हेतु अधिकृत व्यवस्थापक मोबाइल व सुरक्षा पिन दर्ज करें",
                     fontSize = 11.5.sp,
                     color = textSecondary,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
         },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
+                // Admin Mobile Input
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = {
+                        if (it.length <= 13) {
+                            phone = it
+                            errorMessage = null
+                        }
+                    },
+                    label = { Text("व्यवस्थापक मोबाइल नंबर", color = textSecondary) },
+                    placeholder = { Text("10-अंकों का मोबाइल नंबर दर्ज करें", color = textSecondary) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    singleLine = true,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Phone,
+                            contentDescription = null,
+                            tint = if (isDark) SaffronGold else DeepNavy,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = textPrimary,
+                        unfocusedTextColor = textPrimary,
+                        focusedBorderColor = if (isDark) SaffronGold else DeepNavy,
+                        unfocusedBorderColor = if (isDark) Color(0xFF475569) else Color(0xFFCBD5E1),
+                        cursorColor = if (isDark) SaffronGold else DeepNavy
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("admin_phone_input")
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Admin Security PIN Input (obscured)
                 OutlinedTextField(
                     value = pin,
                     onValueChange = {
-                        if (it.length <= 8) {
+                        if (it.length <= 10) {
                             pin = it
                             errorMessage = null
                         }
                     },
-                    placeholder = { Text("एडमिन पिन (जैसे 992942)", color = textSecondary) },
+                    label = { Text("सुरक्षा पिन कोड", color = textSecondary) },
+                    placeholder = { Text("गुप्त सुरक्षा कोड दर्ज करें", color = textSecondary) },
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                     singleLine = true,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = null,
+                            tint = if (isDark) SaffronGold else DeepNavy,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    },
                     shape = RoundedCornerShape(12.dp),
                     colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
                         focusedTextColor = textPrimary,
@@ -147,7 +195,7 @@ fun AdminPinDialog(
                         color = PendingRed,
                         fontSize = 11.5.sp,
                         fontWeight = FontWeight.Medium,
-                        modifier = Modifier.padding(top = 6.dp)
+                        modifier = Modifier.padding(top = 8.dp)
                     )
                 }
             }
@@ -155,13 +203,17 @@ fun AdminPinDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    if (pin.isBlank()) {
-                        errorMessage = "कृपया पिन दर्ज करें"
+                    if (phone.isBlank()) {
+                        errorMessage = "कृपया अधिकृत व्यवस्थापक मोबाइल नंबर दर्ज करें"
                         return@Button
                     }
-                    val valid = onVerify(pin)
+                    if (pin.isBlank()) {
+                        errorMessage = "कृपया सुरक्षा पिन दर्ज करें"
+                        return@Button
+                    }
+                    val valid = onVerify(phone.trim(), pin.trim())
                     if (!valid) {
-                        errorMessage = "गलत पिन! सही पिन दर्ज करें।"
+                        errorMessage = "अमान्य मोबाइल नंबर या गलत सुरक्षा पिन! केवल पंजीकृत व्यवस्थापक (8696663615) ही एडमिन मोड खोल सकते हैं।"
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = if (isDark) SaffronGold else DeepNavy),
