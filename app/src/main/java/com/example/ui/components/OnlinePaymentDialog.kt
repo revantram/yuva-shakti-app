@@ -144,7 +144,7 @@ fun OnlinePaymentDialog(
     isAdmin: Boolean,
     members: List<MemberEntity>,
     pendingRequestsCount: Int,
-    upiId: String = "77850983600@ibl",
+    upiId: String = "7850983600@ibl",
     onUpdateUpiId: (String) -> Unit = {},
     onDismiss: () -> Unit,
     onUploadQrCode: (String) -> Unit,
@@ -158,7 +158,15 @@ fun OnlinePaymentDialog(
     val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
     val textSecondary = if (isDark) Color(0xFF94A3B8) else Color(0xFF64748B)
 
-    var currentUpiId by remember(upiId) { mutableStateOf(upiId) }
+    val safeUpi = remember(upiId) {
+        val s = upiId.trim()
+        if (s.isBlank() || s.contains("850mbhati") || s.contains("77850983600") || s.contains("777850983600") || s.count { it == '@' } != 1 || !s.contains("@")) {
+            "7850983600@ibl"
+        } else {
+            s
+        }
+    }
+    var currentUpiId by remember(safeUpi) { mutableStateOf(safeUpi) }
     var showEditUpiDialog by remember { mutableStateOf(false) }
     var newUpiInput by remember { mutableStateOf(upiId) }
 
@@ -259,7 +267,7 @@ fun OnlinePaymentDialog(
                             } else {
                                 Image(
                                     painter = painterResource(id = R.drawable.ic_phonepe_qr_official),
-                                    contentDescription = "Official PhonePe QR Code (77850983600@ibl)",
+                                    contentDescription = "Official PhonePe QR Code (7850983600@ibl)",
                                     contentScale = ContentScale.Fit,
                                     modifier = Modifier
                                         .fillMaxSize()

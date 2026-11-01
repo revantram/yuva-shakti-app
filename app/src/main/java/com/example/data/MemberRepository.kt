@@ -37,7 +37,7 @@ class MemberRepository(
         private const val KEY_AMAVASYA_STATE = "amavasya_state" // "day_after", "advance", "regular"
         private const val KEY_TARGET_AMAVASYA_MILLIS = "target_amavasya_millis"
         private const val KEY_UPI_ID = "fund_upi_id"
-        private const val DEFAULT_UPI_ID = "77850983600@ibl"
+        const val DEFAULT_UPI_ID = "7850983600@ibl"
         private const val KEY_CUSTOM_TARGET_AMOUNT = "custom_cycle_target_amount"
         private const val KEY_CONSENSUS_NOTE = "consensus_cycle_note"
         private const val KEY_CUSTOM_QR_URI = "custom_qr_code_uri"
@@ -434,13 +434,35 @@ class MemberRepository(
         prefs.edit().putLong(KEY_TARGET_AMAVASYA_MILLIS, millis).apply()
     }
 
+    fun sanitizeUpiId(raw: String?): String {
+        val clean = raw?.trim() ?: ""
+        if (clean.isBlank() ||
+            clean == "revantrambhati@upi" ||
+            clean.contains("850mbhati") ||
+            clean.contains("77850983600") ||
+            clean.contains("777850983600") ||
+            clean.count { it == '@' } != 1 ||
+            !clean.contains("@")
+        ) {
+            return DEFAULT_UPI_ID
+        }
+        return clean
+    }
+
     fun getUpiId(): String {
         val saved = prefs.getString(KEY_UPI_ID, DEFAULT_UPI_ID) ?: DEFAULT_UPI_ID
-        return if (saved == "revantrambhati@upi" || saved == "777850983600@ibl" || saved.isBlank()) DEFAULT_UPI_ID else saved
+        val clean = sanitizeUpiId(saved)
+        if (clean != saved) {
+            prefs.edit().putString(KEY_UPI_ID, clean).apply()
+            CoroutineScope(Dispatchers.IO).launch {
+                FirestoreSyncHelper.saveSettings(upiId = clean)
+            }
+        }
+        return clean
     }
 
     fun setUpiId(id: String) {
-        val clean = id.trim()
+        val clean = sanitizeUpiId(id)
         prefs.edit().putString(KEY_UPI_ID, clean).apply()
         CoroutineScope(Dispatchers.IO).launch {
             FirestoreSyncHelper.saveSettings(upiId = clean)

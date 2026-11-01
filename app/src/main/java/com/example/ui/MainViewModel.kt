@@ -187,8 +187,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
             com.example.util.FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
-                try {
-                    upiId?.let { if (it.isNotBlank()) setFundUpiId(it) }
+                    upiId?.let {
+                        if (it.isNotBlank()) {
+                            val cleanUpi = repository.sanitizeUpiId(it)
+                            setFundUpiId(cleanUpi, showSnackbar = false)
+                            if (cleanUpi != it.trim()) {
+                                viewModelScope.launch(Dispatchers.IO) {
+                                    com.example.util.FirestoreSyncHelper.saveSettings(upiId = cleanUpi)
+                                }
+                            }
+                        }
+                    }
                     waLink?.let { if (it.isNotBlank()) setWhatsAppGroupLink(it) }
                     target?.let { if (it > 0) setCustomTargetAmount(it) }
                     cycleName?.let { if (it.isNotBlank()) setAmavasyaCycleName(it) }
@@ -501,8 +510,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getUpiId(): String = _fundUpiId.value
 
     fun setFundUpiId(id: String, showSnackbar: Boolean = true) {
-        val clean = id.trim()
-        if (clean.isBlank()) return
+        val clean = repository.sanitizeUpiId(id)
         _fundUpiId.value = clean
         repository.setUpiId(clean)
         if (showSnackbar) {

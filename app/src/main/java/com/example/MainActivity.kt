@@ -307,8 +307,15 @@ fun MainScreen(viewModel: MainViewModel) {
         val settingsReg = FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
             upiId?.let {
                 val clean = it.trim()
-                val finalUpi = if (clean == "revantrambhati@upi" || clean == "777850983600@ibl" || clean.isBlank()) {
-                    "77850983600@ibl"
+                val isOldOrCorrupt = clean.isBlank() ||
+                        clean == "revantrambhati@upi" ||
+                        clean.contains("850mbhati") ||
+                        clean.contains("77850983600") ||
+                        clean.contains("777850983600") ||
+                        clean.count { c -> c == '@' } != 1 ||
+                        !clean.contains("@")
+                val finalUpi = if (isOldOrCorrupt) {
+                    "7850983600@ibl"
                 } else {
                     clean
                 }

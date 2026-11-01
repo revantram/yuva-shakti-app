@@ -535,7 +535,7 @@ fun SettingsDialog(
                                         color = textPrimary
                                     )
                                     Text(
-                                        text = fundUpiId.ifBlank { "77850983600@ibl" },
+                                        text = fundUpiId.ifBlank { "7850983600@ibl" },
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.SemiBold,
                                         color = if (isDark) SaffronGold else DeepNavy
@@ -581,7 +581,7 @@ fun SettingsDialog(
                                     value = editUpiText,
                                     onValueChange = { editUpiText = it },
                                     label = { Text("UPI ID या Google Pay / PhonePe नंबर") },
-                                    placeholder = { Text("उदा. 77850983600@ibl") },
+                                    placeholder = { Text("उदा. 7850983600@ibl") },
                                     singleLine = true,
                                     modifier = Modifier.fillMaxWidth()
                                 )
