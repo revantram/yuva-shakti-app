@@ -371,6 +371,27 @@ object FirestoreSyncHelper {
                 .set(data)
                 .awaitTask()
 
+            // 3. Dual-write to emergency_system for Web Dashboard siren compatibility
+            try {
+                val webSirenData = mapOf(
+                    "active" to true,
+                    "message" to message,
+                    "timestamp" to now
+                )
+                fs.collection("emergency_system").document("current_alert")
+                    .set(webSirenData, SetOptions.merge())
+
+                // 4. Live alert banner notification for Web Dashboard
+                val webAlertData = mapOf(
+                    "message" to "$title: $message",
+                    "timestamp" to now
+                )
+                fs.collection("live_alerts").document("latest_update")
+                    .set(webAlertData, SetOptions.merge())
+            } catch (tWeb: Throwable) {
+                Log.w(TAG, "Web siren sync non-critical warning", tWeb)
+            }
+
             Log.d(TAG, "Broadcasted emergency alert to Firestore: $title")
             true
         } catch (t: Throwable) {
@@ -472,6 +493,25 @@ object FirestoreSyncHelper {
             updateNotes?.let { data["updateNotes"] = it }
 
             docRef.set(data, SetOptions.merge()).awaitTask()
+
+            // Dual-write to app_settings/upcoming_amavasya for Web Dashboard reminder banner compatibility
+            try {
+                if (targetAmavasyaMillis != null && targetAmavasyaMillis > 0L) {
+                    val dateFormatted = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+                        .format(java.util.Date(targetAmavasyaMillis))
+                    val amavasData = mapOf(
+                        "date" to dateFormatted,
+                        "title" to (amavasyaCycleName ?: "मासिक अमावस बैठक"),
+                        "message" to "सभी सदस्य समय पर बैठक में उपस्थित हों एवं अपना योगदान जमा कराएं।",
+                        "updatedAt" to System.currentTimeMillis()
+                    )
+                    fs.collection("app_settings").document("upcoming_amavasya")
+                        .set(amavasData, SetOptions.merge())
+                }
+            } catch (tWeb: Throwable) {
+                Log.w(TAG, "Web upcoming amavasya sync warning", tWeb)
+            }
+
             Log.d(TAG, "Saved settings to Firestore successfully")
             true
         } catch (t: Throwable) {
@@ -544,6 +584,23 @@ object FirestoreSyncHelper {
             fs.collection(COLLECTION_REGISTRATIONS).document(request.requestId)
                 .set(data, SetOptions.merge())
                 .awaitTask()
+
+            // Dual write to app_users for Web Dashboard compatibility
+            try {
+                val appUserData = mapOf(
+                    "userCode" to request.memberCode,
+                    "name" to request.name,
+                    "phone" to request.phone,
+                    "status" to "pending",
+                    "role" to "member",
+                    "createdAt" to FieldValue.serverTimestamp()
+                )
+                fs.collection("app_users").document(request.memberCode.ifBlank { request.requestId })
+                    .set(appUserData, SetOptions.merge())
+            } catch (tWeb: Throwable) {
+                Log.w(TAG, "Web app_users sync warning", tWeb)
+            }
+
             Log.d(TAG, "Registration request submitted: ${request.name} (Code: ${request.memberCode})")
             true
         } catch (t: Throwable) {
@@ -718,6 +775,25 @@ object FirestoreSyncHelper {
                 )
                 .awaitTask()
 
+            // 3. Dual write to app_users and amavas_status for Web Dashboard
+            try {
+                fs.collection("app_users").document(cleanCode)
+                    .set(mapOf("status" to "approved", "role" to "member", "updatedAt" to FieldValue.serverTimestamp()), SetOptions.merge())
+                fs.collection("amavas_status").document(cleanCode)
+                    .set(
+                        mapOf(
+                            "memberCode" to cleanCode,
+                            "name" to request.name,
+                            "amount" to request.monthlyAmount,
+                            "status" to "unpaid",
+                            "createdAt" to FieldValue.serverTimestamp()
+                        ),
+                        SetOptions.merge()
+                    )
+            } catch (tWeb: Throwable) {
+                Log.w(TAG, "Web approval sync warning", tWeb)
+            }
+
             Log.d(TAG, "Successfully approved registration for ${request.name} with ID $nextId")
             nextId
         } catch (t: Throwable) {
@@ -742,6 +818,22 @@ object FirestoreSyncHelper {
                     SetOptions.merge()
                 )
                 .awaitTask()
+
+            try {
+                val userKey = requestId.removePrefix("reg_")
+                fs.collection("app_users").document(userKey)
+                    .set(
+                        mapOf(
+                            "status" to "rejected",
+                            "rejectionReason" to reason.ifBlank { "व्यवस्थापक द्वारा अस्वीकृत" },
+                            "updatedAt" to FieldValue.serverTimestamp()
+                        ),
+                        SetOptions.merge()
+                    )
+            } catch (tWeb: Throwable) {
+                Log.w(TAG, "Web reject sync warning", tWeb)
+            }
+
             true
         } catch (t: Throwable) {
             Log.e(TAG, "Error rejecting registration request", t)
@@ -757,7 +849,7 @@ object FirestoreSyncHelper {
     )
 
     /**
-     * Add a real-time contribution to Firestore "contributions" collection
+     * Add a real-time contribution to Firestore "contributions" and "amavas_contributions" collections
      */
     suspend fun addContribution(name: String, amount: Double): Boolean {
         return try {
@@ -768,6 +860,29 @@ object FirestoreSyncHelper {
                 "timestamp" to FieldValue.serverTimestamp()
             )
             fs.collection(COLLECTION_CONTRIBUTIONS).add(data).awaitTask()
+
+            // Dual write to amavas_contributions & live_alerts for Web Dashboard
+            try {
+                val webContrib = mapOf(
+                    "memberCode" to "-",
+                    "name" to name,
+                    "amount" to amount,
+                    "month" to "अमावस",
+                    "date" to java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault()).format(java.util.Date()),
+                    "createdAt" to FieldValue.serverTimestamp()
+                )
+                fs.collection("amavas_contributions").add(webContrib)
+
+                fs.collection("live_alerts").document("latest_update").set(
+                    mapOf(
+                        "message" to "$name ने ₹${amount.toInt()} जमा किए!",
+                        "timestamp" to System.currentTimeMillis()
+                    )
+                )
+            } catch (tWeb: Throwable) {
+                Log.w(TAG, "Web contrib sync warning", tWeb)
+            }
+
             Log.d(TAG, "Contribution added successfully for $name: $amount")
             true
         } catch (e: Exception) {
