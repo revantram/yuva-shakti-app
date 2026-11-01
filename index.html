@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>युवा शक्ति ग्रुप (भाटी परिवार कुचेरा) - लाइव क्लाउड बहीखाता</title>
   <link rel="icon" href="https://img.icons8.com/color/96/om.png" type="image/png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e1b4b">
   <style>
     :root {
       --primary: #1e1b4b;
@@ -52,6 +54,15 @@
     .dot { width: 9px; height: 9px; background: #10b981; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
     .dot-blue { background: #3b82f6; }
     @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.4; transform: scale(0.9); } }
+
+    /* Emergency Alert Banner */
+    #emergencyAlertBanner {
+      display: none; background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
+      border: 2px solid #fecaca; border-radius: 14px; padding: 14px 18px;
+      margin-bottom: 20px; color: white; animation: pulse 1s infinite alternate;
+    }
+    .alert-header { font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .alert-msg { font-size: 13.5px; margin-top: 6px; color: #fee2e2; }
 
     /* Quick Action Buttons Row */
     .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px; }
@@ -155,10 +166,7 @@
     .modal-card {
       background: var(--card-bg); border: 1.5px solid var(--saffron); border-radius: 20px;
       max-width: 420px; width: 100%; padding: 24px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.7);
-    }
-    .modal-close {
-      position: absolute; top: 16px; right: 16px; background: transparent;
-      border: none; color: var(--text-muted); font-size: 20px; cursor: pointer;
+      position: relative;
     }
   </style>
 </head>
@@ -181,6 +189,15 @@
       </div>
     </div>
 
+    <!-- Live Emergency Alert Banner (Appears when admin triggers siren) -->
+    <div id="emergencyAlertBanner">
+      <div class="alert-header">
+        <span id="alertBannerTitle">🚨 आपातकालीन सायरन तगादा!</span>
+        <button id="silenceAlertBtn" style="background: rgba(0,0,0,0.4); border: 1px solid #fff; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;">साउंड बंद करें 🔇</button>
+      </div>
+      <div class="alert-msg" id="alertBannerMessage">अमावस्या अंशदान तुरंत जमा कराएं।</div>
+    </div>
+
     <!-- Quick Action Bar -->
     <div class="quick-actions">
       <a class="action-btn btn-wa" href="https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh?s=cl&p=a&iam=2" target="_blank" rel="noopener">
@@ -193,7 +210,7 @@
       </button>
       <a class="action-btn btn-apk" href="https://github.com/revantram/yuva-shakti-app/releases/download/latest/yuva-shakti.apk" target="_blank">
         <span>📥</span>
-        <span>ऑफिशियल APK (v2.5) डाउनलोड</span>
+        <span>ऑफिशियल APK (v2.6) डाउनलोड</span>
       </a>
     </div>
 
@@ -221,10 +238,10 @@
     <div class="auth-strip">
       <div id="authStatusText">
         <span style="font-weight: 700; color: #cbd5e1;">👤 अपनी पहचान दर्ज करें:</span>
-        <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">अपना व्यक्तिगत सदस्य कोड या एडमिन कोड दर्ज करें</span>
+        <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">सदस्य कोड या एडमिन कोड (992942) से लॉगिन करें</span>
       </div>
       <div class="auth-input-group" id="loginFormGroup">
-        <input type="password" id="memberCodeInput" class="auth-input" placeholder="कोड (उदा. 1001)" maxlength="8">
+        <input type="password" id="memberCodeInput" class="auth-input" placeholder="कोड (उदा. 992942)" maxlength="8">
         <button id="loginBtn" class="auth-btn">लॉगिन ➔</button>
       </div>
       <div id="adminPanelArea" style="display: none;" class="admin-controls">
@@ -286,7 +303,7 @@
       </div>
 
       <div style="display: flex; gap: 8px;">
-        <a href="upi://pay?pa=7850983600@ibl&pn=Yuva%20Shakti%20Bhati%20Parivar%20Kuchera&cu=INR" class="action-btn btn-pay" style="flex: 1; text-align: center;">PhonePe / GPay खोलें</a>
+        <a id="directUpiPayLink" href="upi://pay?pa=7850983600@ibl&pn=Yuva%20Shakti%20Bhati%20Parivar%20Kuchera&cu=INR" class="action-btn btn-pay" style="flex: 1; text-align: center;">PhonePe / GPay खोलें</a>
         <button id="closePayModalBtn" class="action-btn" style="background: #334155; color: #fff;">बंद करें</button>
       </div>
     </div>
@@ -297,7 +314,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // युवा शक्ति ग्रुप - प्रामाणिक Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyDjBcyZZIQZSX8MMJ-FaO_uuc2EoSrFVuA",
       authDomain: "yuva-shakti-group.firebaseapp.com",
@@ -314,52 +330,60 @@
     let onlineMemberIds = new Set();
     let currentFilter = 'all';
     let isAdmin = false;
-    let loggedInMember = null;
+    let webAudioOscillator = null;
 
-    // Persistent Unique Device UUID (LocalStorage)
-    function getDeviceUuid() {
-      let id = localStorage.getItem("yuva_device_uuid");
-      if (!id) {
-        id = "web_uuid_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now().toString(36);
-        localStorage.setItem("yuva_device_uuid", id);
+    // --- 1. अनोखा डिवाइस पहचान कोड (Unique Device ID Token) ---
+    function getOrCreateDeviceId() {
+      let deviceId = localStorage.getItem("ys_device_token");
+      if (!deviceId) {
+        deviceId = "DEV-" + Date.now().toString(36) + "-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem("ys_device_token", deviceId);
       }
-      return id;
+      return deviceId;
     }
-    const myDeviceId = getDeviceUuid();
+    const currentDeviceId = getOrCreateDeviceId();
 
-    // 1. Send Heartbeat (Every 45 seconds & on unload)
-    async function sendHeartbeat(isOnline = true) {
+    // --- 2. लाइव उपस्थिति दिल की धड़कन (Presence Heartbeat Ping) ---
+    async function sendPresenceHeartbeat(isOnline = true) {
       try {
-        const docRef = doc(db, "presence", myDeviceId);
-        await setDoc(docRef, {
-          deviceId: myDeviceId,
-          userName: loggedInMember ? loggedInMember.name : (isAdmin ? "मुख्य व्यवस्थापक (वेब)" : "वेब सदस्य"),
-          memberId: loggedInMember ? loggedInMember.id : (isAdmin ? 1 : 0),
-          memberCode: loggedInMember ? loggedInMember.memberCode : (isAdmin ? "992942" : ""),
+        const savedMemberCode = localStorage.getItem("ys_logged_code") || "GUEST";
+        const savedMemberId = localStorage.getItem("ys_logged_id") || null;
+        const savedMemberName = localStorage.getItem("ys_logged_name") || "अज्ञात सदस्य / दर्शक";
+
+        const presenceRef = doc(db, "presence", currentDeviceId);
+        await setDoc(presenceRef, {
+          deviceId: currentDeviceId,
+          memberCode: savedMemberCode,
+          memberId: savedMemberId ? Number(savedMemberId) : null,
+          memberName: savedMemberName,
           isOnline: isOnline,
-          lastActive: Date.now()
+          lastActive: Date.now(),
+          userAgent: navigator.userAgent,
+          platform: navigator.userAgentData?.platform || navigator.platform || "Android"
         }, { merge: true });
       } catch (err) {
-        console.error("Presence error:", err);
+        console.warn("हार्टबीट पिंग भेजने में समस्या:", err);
       }
     }
 
-    sendHeartbeat(true);
-    setInterval(() => sendHeartbeat(true), 45000); // 45 seconds interval as requested
-    window.addEventListener("beforeunload", () => sendHeartbeat(false));
+    sendPresenceHeartbeat(true);
+    setInterval(() => sendPresenceHeartbeat(true), 45000);
+    window.addEventListener("beforeunload", () => sendPresenceHeartbeat(false));
 
-    // 2. Listen to Realtime Online Presence (2 minute cutoff)
+    // --- 3. लाइव उपस्थिति सुनना (Realtime Online Listener) ---
     onSnapshot(collection(db, "presence"), (snapshot) => {
-      const cutoff = Date.now() - (120 * 1000); // 2 minutes (120000 ms)
+      const cutoff = Date.now() - (90 * 1000); // 90 सेकंड कटऑफ
       onlineMemberIds.clear();
       let liveCount = 0;
 
       snapshot.forEach(docSnap => {
         const d = docSnap.data();
-        const isOnline = d.isOnline !== false;
-        if (isOnline && d.lastActive && d.lastActive >= cutoff) {
+        const active = d.isOnline !== false;
+        if (active && d.lastActive && d.lastActive >= cutoff) {
           liveCount++;
-          if (d.memberId) onlineMemberIds.add(Number(d.memberId));
+          if (d.memberId) {
+            onlineMemberIds.add(Number(d.memberId));
+          }
         }
       });
 
@@ -367,7 +391,7 @@
       renderMembers();
     });
 
-    // 2. Listen to Realtime Members Database
+    // --- 4. सदस्य सूची रीयल-टाइम श्रोता ---
     onSnapshot(collection(db, "members"), (snapshot) => {
       const list = [];
       snapshot.forEach(docSnap => {
@@ -380,6 +404,7 @@
       list.sort((a, b) => a.id - b.id);
       membersList = list;
       updateStats();
+      checkAutoLogin();
       renderMembers();
     });
 
@@ -444,10 +469,169 @@
       }).join('');
     }
 
-    // Search input handler
+    // --- 5. लॉगिन और प्रमाणीकरण प्रबंधन ---
+    function applyLoginState(name, code, admin = false) {
+      isAdmin = admin;
+      document.getElementById("loginFormGroup").style.display = 'none';
+      document.getElementById("adminPanelArea").style.display = 'flex';
+      
+      if (admin) {
+        document.getElementById("authStatusText").innerHTML = `<span style="font-weight: 800; color: #fbbf24;">🛡️ मुख्य व्यवस्थापक (Admin) लॉगिन सक्रिय!</span>`;
+      } else {
+        document.getElementById("authStatusText").innerHTML = `<span style="font-weight: 800; color: #34d399;">👋 स्वागत है, ${name}! (कोड: ${code})</span>`;
+      }
+    }
+
+    function checkAutoLogin() {
+      const savedCode = localStorage.getItem("ys_logged_code");
+      if (!savedCode) return;
+
+      if (savedCode === "992942") {
+        applyLoginState("मुख्य व्यवस्थापक", "992942", true);
+      } else {
+        const found = membersList.find(m => m.memberCode === savedCode || String(1000 + m.id) === savedCode);
+        if (found) {
+          applyLoginState(found.name, savedCode, false);
+        }
+      }
+    }
+
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      const code = document.getElementById("memberCodeInput").value.trim();
+      if (!code) {
+        alert("कृपया सदस्य कोड दर्ज करें।");
+        return;
+      }
+
+      if (code === "992942") {
+        localStorage.setItem("ys_logged_code", "992942");
+        localStorage.setItem("ys_logged_name", "मुख्य व्यवस्थापक");
+        localStorage.setItem("ys_logged_id", "1");
+        applyLoginState("मुख्य व्यवस्थापक", "992942", true);
+        sendPresenceHeartbeat(true);
+        if (window.AndroidBridge && window.AndroidBridge.showToast) {
+          window.AndroidBridge.showToast("व्यवस्थापक मोड अनलॉक हुआ");
+        }
+        alert("✅ व्यवस्थापक कोड सत्यापित! एडमिन मोड सक्रिय हुआ।");
+      } else {
+        const found = membersList.find(m => m.memberCode === code || String(1000 + m.id) === code);
+        if (found) {
+          localStorage.setItem("ys_logged_code", code);
+          localStorage.setItem("ys_logged_name", found.name);
+          localStorage.setItem("ys_logged_id", String(found.id));
+          applyLoginState(found.name, code, false);
+          sendPresenceHeartbeat(true);
+          if (window.AndroidBridge && window.AndroidBridge.showToast) {
+            window.AndroidBridge.showToast(`स्वागत है, ${found.name}`);
+          }
+          alert(`✅ स्वागत है, ${found.name}! आपकी उपस्थिति दर्ज हो गई है।`);
+        } else {
+          alert("❌ यह कोड अमान्य है। कृपया सही सदस्य कोड दर्ज करें।");
+        }
+      }
+    });
+
+    // लॉगआउट हैंडलर
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      localStorage.removeItem("ys_logged_code");
+      localStorage.removeItem("ys_logged_name");
+      localStorage.removeItem("ys_logged_id");
+      isAdmin = false;
+
+      document.getElementById("authStatusText").innerHTML = `
+        <span style="font-weight: 700; color: #cbd5e1;">👤 अपनी पहचान दर्ज करें:</span>
+        <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">सदस्य कोड या एडमिन कोड (992942) से लॉगिन करें</span>
+      `;
+      document.getElementById("loginFormGroup").style.display = 'flex';
+      document.getElementById("adminPanelArea").style.display = 'none';
+      document.getElementById("memberCodeInput").value = '';
+
+      sendPresenceHeartbeat(true);
+      alert("लॉगआउट सफल हुआ।");
+    });
+
+    // --- 6. एडमिन सायरन ब्रॉडकास्ट ---
+    document.getElementById("broadcastSirenBtn").addEventListener("click", async () => {
+      if (!isAdmin) return;
+      if (confirm("क्या आप समस्त मोबाइलों में आपातकालीन सायरन तगादा बजाना चाहते हैं?")) {
+        try {
+          await setDoc(doc(db, "emergency_alerts", "current_live_alert"), {
+            alertId: "alert_" + Date.now(),
+            title: "🚨 अमावस्या फंड बकाया सायरन तगादा!",
+            message: "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा): अमावस्या अंशदान तुरंत जमा कराएं।",
+            sender: "मुख्य व्यवस्थापक",
+            isSiren: true,
+            timestamp: Date.now()
+          });
+          if (window.AndroidBridge && window.AndroidBridge.showToast) {
+            window.AndroidBridge.showToast("सायरन प्रेषित किया गया");
+          }
+          alert("✅ समस्त मोबाइलों पर सायरन सफलतापूर्वक प्रेषित किया गया!");
+        } catch(e) {
+          alert("त्रुटि: " + e.message);
+        }
+      }
+    });
+
+    // --- 7. आपातकालीन सायरन श्रोता (Listen to live emergency alert) ---
+    function playSirenSound() {
+      if (window.AndroidBridge && window.AndroidBridge.playSiren) {
+        window.AndroidBridge.playSiren();
+        return;
+      }
+      try {
+        if (webAudioOscillator) return;
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sawtooth";
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        let time = ctx.currentTime;
+        for (let i = 0; i < 15; i++) {
+          osc.frequency.setValueAtTime(500, time);
+          osc.frequency.linearRampToValueAtTime(1000, time + 0.4);
+          osc.frequency.linearRampToValueAtTime(500, time + 0.8);
+          time += 0.8;
+        }
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        webAudioOscillator = osc;
+        setTimeout(() => stopSirenSound(), 15000);
+      } catch (e) {
+        console.warn("Audio error:", e);
+      }
+    }
+
+    function stopSirenSound() {
+      if (window.AndroidBridge && window.AndroidBridge.stopSound) {
+        window.AndroidBridge.stopSound();
+      }
+      if (webAudioOscillator) {
+        try { webAudioOscillator.stop(); } catch(e) {}
+        webAudioOscillator = null;
+      }
+      document.getElementById("emergencyAlertBanner").style.display = "none";
+    }
+
+    document.getElementById("silenceAlertBtn").addEventListener("click", stopSirenSound);
+
+    let lastHandledAlertTime = Date.now() - 60000;
+    onSnapshot(doc(db, "emergency_alerts", "current_live_alert"), (snap) => {
+      if (!snap.exists()) return;
+      const alertData = snap.data();
+      if (alertData.isSiren && alertData.timestamp && alertData.timestamp > lastHandledAlertTime) {
+        lastHandledAlertTime = alertData.timestamp;
+        document.getElementById("alertBannerTitle").innerText = alertData.title || "🚨 आपातकालीन सायरन तगादा!";
+        document.getElementById("alertBannerMessage").innerText = alertData.message || "अमावस्या अंशदान तुरंत जमा कराएं।";
+        document.getElementById("emergencyAlertBanner").style.display = "block";
+        playSirenSound();
+      }
+    });
+
+    // सर्च व फिल्टर लिसनर्स
     document.getElementById("searchInput").addEventListener("input", renderMembers);
 
-    // Tab filter handler
     document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -457,67 +641,20 @@
       });
     });
 
-    // Login with Code handler
-    document.getElementById("loginBtn").addEventListener("click", () => {
-      const code = document.getElementById("memberCodeInput").value.trim();
-      if (code === "992942") {
-        isAdmin = true;
-        loggedInMember = { id: 1, name: "रेवंत राम जी (व्यवस्थापक)", memberCode: "992942" };
-        document.getElementById("authStatusText").innerHTML = `<span style="font-weight: 800; color: #fbbf24;">🛡️ मुख्य व्यवस्थापक (Admin) लॉगिन सक्रिय!</span>`;
-        document.getElementById("loginFormGroup").style.display = 'none';
-        document.getElementById("adminPanelArea").style.display = 'flex';
-        sendHeartbeat(true);
-        alert("✅ व्यवस्थापक कोड सत्यापित! एडमिन मोड अनलॉक हुआ।");
-      } else {
-        const found = membersList.find(m => m.memberCode === code || String(1000 + m.id) === code);
-        if (found) {
-          loggedInMember = found;
-          document.getElementById("authStatusText").innerHTML = `<span style="font-weight: 800; color: #34d399;">👋 स्वागत है, ${found.name}! (कोड: ${code})</span>`;
-          document.getElementById("loginFormGroup").style.display = 'none';
-          document.getElementById("adminPanelArea").style.display = 'flex';
-          sendHeartbeat(true);
-        } else {
-          alert("❌ यह कोड अमान्य है। कृपया सही सदस्य कोड दर्ज करें।");
-        }
-      }
-    });
-
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      isAdmin = false;
-      loggedInMember = null;
-      document.getElementById("authStatusText").innerHTML = `<span style="font-weight: 700; color: #cbd5e1;">👤 अपनी पहचान दर्ज करें:</span>`;
-      document.getElementById("loginFormGroup").style.display = 'flex';
-      document.getElementById("adminPanelArea").style.display = 'none';
-      document.getElementById("memberCodeInput").value = '';
-      sendHeartbeat(true);
-    });
-
-    // Admin Siren Broadcast
-    document.getElementById("broadcastSirenBtn").addEventListener("click", async () => {
-      if (!isAdmin) return;
-      if (confirm("क्या आप समस्त मोबाइलों में आपातकालीन सायरन तगादा बजाना चाहते हैं?")) {
-        try {
-          await setDoc(doc(db, "emergency_alerts", "current_live_alert"), {
-            alertId: "alert_" + Date.now(),
-            title: "🚨 अमावस्या फंड बकाया सायरन तगादा!",
-            message: "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा): अमावस्या अंशदान जमा कराएं।",
-            sender: "मुख्य व्यवस्थापक (वेब)",
-            isSiren: true,
-            timestamp: Date.now()
-          });
-          alert("✅ समस्त मोबाइलों पर सायरन सफलतापूर्वक प्रेषित किया गया!");
-        } catch(e) {
-          alert("त्रुटि: " + e.message);
-        }
-      }
-    });
-
-    // Pay Modal Handlers
+    // मोडल विंडो हैंडलर
     const payModal = document.getElementById("payModal");
-    document.getElementById("openPayModalBtn").addEventListener("click", () => { payModal.style.display = 'flex'; });
-    document.getElementById("closePayModalBtn").addEventListener("click", () => { payModal.style.display = 'none'; });
-    payModal.addEventListener("click", (e) => { if (e.target === payModal) payModal.style.display = 'none'; });
+    document.getElementById("openPayModalBtn").addEventListener("click", () => { payModal.style.display = "flex"; });
+    document.getElementById("closePayModalBtn").addEventListener("click", () => { payModal.style.display = "none"; });
+    window.addEventListener("click", (e) => { if (e.target === payModal) payModal.style.display = "none"; });
+
+    // Direct UPI link handler
+    document.getElementById("directUpiPayLink").addEventListener("click", (e) => {
+      const upiUrl = "upi://pay?pa=7850983600@ibl&pn=Yuva%20Shakti%20Bhati%20Parivar%20Kuchera&cu=INR";
+      if (window.AndroidBridge && window.AndroidBridge.openUpi) {
+        e.preventDefault();
+        window.AndroidBridge.openUpi(upiUrl);
+      }
+    });
   </script>
 </body>
 </html>

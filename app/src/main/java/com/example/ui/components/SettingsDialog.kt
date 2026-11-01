@@ -812,7 +812,7 @@ fun SettingsDialog(
                                             color = if (isDark) Color(0xFFA7F3D0) else Color(0xFF166534)
                                         )
                                         Text(
-                                            text = "वर्तमान संस्करण: v2.5.0 (कुचेरा)",
+                                            text = "वर्तमान संस्करण: v2.6.0 (कुचेरा - लाइव वेब बहीखाता)",
                                             fontSize = 11.sp,
                                             color = if (isDark) Color(0xFF6EE7B7) else Color(0xFF15803D)
                                         )
@@ -877,7 +877,7 @@ fun SettingsDialog(
                                         if (!currentApkUrl.isNullOrBlank()) {
                                             Toast.makeText(context, "🌟 नया अपडेट उपलब्ध है! ऊपर दिए गए बटन से डाउनलोड करें।", Toast.LENGTH_LONG).show()
                                         } else {
-                                            Toast.makeText(context, "✅ आप पहले से ही नवीनतम संस्करण (v2.5.0) का उपयोग कर रहे हैं।", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "✅ आप पहले से ही नवीनतम संस्करण (v2.6.0) का उपयोग कर रहे हैं।", Toast.LENGTH_SHORT).show()
                                         }
                                     }
                             ) {
