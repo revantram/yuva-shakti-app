@@ -70,35 +70,37 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: "Yuva Shakti App v2.8 (Latest Release)"
+          name: "Yuva Shakti App v3.0 (Latest Release)"
           body: |
-            🚩 **युवा शक्ति ग्रुप (कुचेरा) - नवीनतम देशी ऐप संस्करण (v2.8)** 🚩
+            🚩 **युवा शक्ति ग्रुप (कुचेरा) - नया संस्करण (v3.0)** 🚩
 
-            - 📱 विशुद्ध नेटिव एंड्रॉइड इंटरफ़ेस (लाइव वेब टैब हटाया गया)
-            - ⚡ Firebase Firestore रीयल-टाइम कंट्रीब्यूशन और सदस्य ऑटो-सिंक
-            - 🔑 सदस्य कोड व एडमिन कोड (992942 / 8696) से सुरक्षित ऑटो-लॉगिन
-            - 🚨 आपातकालीन सायरन तगादा ब्रॉडकास्ट व लाउड साउंड अलर्ट
+            - ✨ नया iOS लिक्विड ग्लासमोर्फिज्म इंटरफ़ेस एवं फ्लोटिंग बॉटम डॉक
+            - 🟢 लाइव एक्टिव मेंबर्स काउंटर (Firebase Realtime Database)
+            - 🧾 डिजिटल रसीद एवं 6-माह का इतिहास + WhatsApp 1-क्लिक शेयरिंग
+            - 🔔 2 दिन पहले ऑटोमैटिक WhatsApp अमावस्या रिमाइंडर
+            - 🤝 सहायता ऋण आवेदन व लाइव वोटिंग
+            - 🖼️ फ़ोटो गैलरी व इमेज लाइटबॉक्स
             - 💳 PhonePe / Google Pay / UPI डायरेक्ट पेमेंट व QR कोड
-            - 📄 पासबुक एवं संपूर्ण बैलेंस शीट PDF डाउनलोड
           files: app/build/outputs/apk/debug/yuva-shakti.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish to GitHub Releases (v2.8)
+      - name: Publish to GitHub Releases (v3.0)
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v2.8
-          name: "Yuva Shakti App v2.8 (Official Release)"
+          tag_name: v3.0
+          name: "Yuva Shakti App v3.0 (Official Release)"
           body: |
-            🚩 **युवा शक्ति ग्रुप (कुचेरा) - आधिकारिक v2.8 रिलीज़** 🚩
+            🚩 **युवा शक्ति ग्रुप (कुचेरा) - आधिकारिक v3.0 रिलीज़** 🚩
 
-            - 📱 विशुद्ध नेटिव एंड्रॉइड इंटरफ़ेस
-            - ⚡ Firebase Firestore रीयल-टाइम कंट्रीब्यूशन और सदस्य ऑटो-सिंक
-            - 🔑 सदस्य कोड व एडमिन कोड (992942 / 8696) से सुरक्षित ऑटो-लॉगिन
-            - 🚨 आपातकालीन सायरन तगादा ब्रॉडकास्ट व साउंड अलर्ट
-            - 💳 PhonePe / Google Pay / UPI डायरेक्ट पेमेंट
-            - 📄 पासबुक एवं संपूर्ण बैलेंस शीट PDF डाउनलोड
+            - ✨ नया iOS लिक्विड ग्लासमोर्फिज्म इंटरफ़ेस एवं फ्लोटिंग बॉटम डॉक
+            - 🟢 लाइव एक्टिव मेंबर्स काउंटर (Firebase Realtime Database)
+            - 🧾 डिजिटल रसीद एवं 6-माह का इतिहास + WhatsApp 1-क्लिक शेयरिंग
+            - 🔔 2 दिन पहले ऑटोमैटिक WhatsApp अमावस्या रिमाइंडर
+            - 🤝 सहायता ऋण आवेदन व लाइव वोटिंग
+            - 🖼️ फ़ोटो गैलरी व इमेज लाइटबॉक्स
+            - 💳 PhonePe / Google Pay / UPI डायरेक्ट पेमेंट व QR कोड
           files: app/build/outputs/apk/debug/yuva-shakti.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
