@@ -362,6 +362,9 @@ class MemberRepository(
     fun getUserInstagram(): String = prefs.getString(KEY_USER_INSTAGRAM, "") ?: ""
     fun getUserPersonalPin(): String = prefs.getString(KEY_USER_PERSONAL_PIN, "") ?: ""
     fun isUserAdminRole(): Boolean = prefs.getBoolean(KEY_USER_IS_ADMIN, false)
+    fun setAdminMode(isAdmin: Boolean) {
+        prefs.edit().putBoolean(KEY_USER_IS_ADMIN, isAdmin).apply()
+    }
     fun getUserAddress(): String = prefs.getString(KEY_USER_ADDRESS, "कुचेरा") ?: "कुचेरा"
     fun getUserProfilePhotoUri(): String = prefs.getString(KEY_USER_PROFILE_PHOTO_URI, "") ?: ""
 

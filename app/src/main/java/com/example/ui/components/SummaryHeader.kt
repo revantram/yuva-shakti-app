@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.PendingActions
 import androidx.compose.material.icons.filled.PersonAdd
@@ -309,6 +310,60 @@ fun AppHeader(
                 isAdmin = isAdmin,
                 onDateSettingsClick = onDateSettingsClick
             )
+
+            // Persistent Admin Mode Status & Activation Banner
+            Spacer(modifier = Modifier.height(8.dp))
+            Surface(
+                color = if (isAdmin) Color(0xFFFEF3C7) else Color(0xFFF0FDF4),
+                shape = RoundedCornerShape(10.dp),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    if (isAdmin) SaffronGold else Color(0xFF86EFAC)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onAuthClick() }
+                    .testTag("banner_header_admin_toggle")
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f, fill = false)
+                    ) {
+                        Icon(
+                            imageVector = if (isAdmin) Icons.Default.LockOpen else Icons.Default.Lock,
+                            contentDescription = null,
+                            tint = if (isAdmin) Color(0xFFB45309) else Color(0xFF15803D),
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = if (isAdmin) "🛡️ एडमिन मोड सक्रिय (संपादन चालू)" else "🔒 सामान्य सदस्य मोड (दर्शन मात्र)",
+                            fontSize = 11.5.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (isAdmin) Color(0xFF92400E) else Color(0xFF166534)
+                        )
+                    }
+
+                    Surface(
+                        color = if (isAdmin) PendingRed else DeepNavy,
+                        shape = RoundedCornerShape(6.dp),
+                        modifier = Modifier.padding(start = 6.dp)
+                    ) {
+                        Text(
+                            text = if (isAdmin) "लॉगआउट ✖" else "🔑 एडमिन मोड (992942)",
+                            fontSize = 10.5.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }

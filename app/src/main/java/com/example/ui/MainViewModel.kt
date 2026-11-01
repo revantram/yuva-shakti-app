@@ -385,14 +385,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun verifyAdminPin(enteredPin: String): Boolean {
         val success = repository.verifyAdminPin(enteredPin)
         if (success) {
+            repository.setAdminMode(true)
             _isAdmin.value = true
             _showAuthDialog.value = false
-            _snackbarMessage.value = "एडमिन मोड सक्रिय हुआ!"
+            _snackbarMessage.value = "एडमिन मोड सक्रिय हुआ! सभी संपादन चालू हैं।"
         }
         return success
     }
 
     fun logoutAdmin() {
+        repository.setAdminMode(false)
         _isAdmin.value = false
         _snackbarMessage.value = "सामान्य सदस्य मोड में वापस लौटे।"
     }
@@ -999,6 +1001,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val appLockPin = repository.getAppLockPin()
 
         return if (cleanPin == correctAdminPin || repository.verifyAdminPin(cleanPin)) {
+            repository.setAdminMode(true)
             _isAdmin.value = true
             _isAppLocked.value = false
             _snackbarMessage.value = "एडमिन मोड सक्रिय हुआ!"
@@ -1081,6 +1084,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun logoutUser() {
         repository.logoutUser()
+        repository.setAdminMode(false)
         _isUserLoggedIn.value = false
         _isAdmin.value = false
     }

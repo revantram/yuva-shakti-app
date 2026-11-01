@@ -1114,7 +1114,12 @@ fun MainScreen(viewModel: MainViewModel) {
             onSendDailyThoughtNotification = { viewModel.sendDailyThoughtNotification() },
             onOpenAppUpdateConsole = { viewModel.openAppUpdateConsole(true) },
             onSwitchAdminRoleClick = {
-                viewModel.logoutUser()
+                viewModel.openSettingsDialog(false)
+                if (uiState.isAdmin) {
+                    viewModel.logoutAdmin()
+                } else {
+                    viewModel.showAuthDialog(true)
+                }
             },
             onUrgentBroadcastClick = {
                 viewModel.openUrgentBroadcastDialog(true)
