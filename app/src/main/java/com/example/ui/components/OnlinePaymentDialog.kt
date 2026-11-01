@@ -11,10 +11,13 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.res.painterResource
+import com.example.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -141,7 +144,7 @@ fun OnlinePaymentDialog(
     isAdmin: Boolean,
     members: List<MemberEntity>,
     pendingRequestsCount: Int,
-    upiId: String = "revantrambhati@upi",
+    upiId: String = "777850983600@ibl",
     onUpdateUpiId: (String) -> Unit = {},
     onDismiss: () -> Unit,
     onUploadQrCode: (String) -> Unit,
@@ -254,12 +257,14 @@ fun OnlinePaymentDialog(
                                         .padding(6.dp)
                                 )
                             } else {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    UpiQrVisualPattern(upiId = currentUpiId)
-                                }
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_phonepe_qr_official),
+                                    contentDescription = "Official PhonePe QR Code (777850983600@ibl)",
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(4.dp)
+                                )
                             }
                         }
 

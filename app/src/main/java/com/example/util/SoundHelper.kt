@@ -48,4 +48,15 @@ object SoundHelper {
             }
         }.start()
     }
+
+    /**
+     * Stops and releases any currently playing sound.
+     */
+    fun stopSound() {
+        try {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+        } catch (_: Throwable) {}
+        mediaPlayer = null
+    }
 }

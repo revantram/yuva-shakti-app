@@ -1,5 +1,6 @@
 package com.example.util
 
+import android.content.Context
 import android.util.Log
 import com.example.data.MemberEntity
 import com.google.android.gms.tasks.Task
@@ -14,6 +15,7 @@ object FirestoreSyncHelper {
     private const val COLLECTION_MEMBERS = "members"
     private const val COLLECTION_PRESENCE = "presence"
     private const val COLLECTION_SETTINGS = "settings"
+    private const val COLLECTION_EMERGENCY_ALERTS = "emergency_alerts"
     private const val DOC_GENERAL = "general"
 
     val isConfigured: Boolean = true
@@ -238,9 +240,11 @@ object FirestoreSyncHelper {
 
     /**
      * Listens to live online presence in Firestore.
-     * Members who sent heartbeat in the last 2.5 minutes are considered online.
+     * All devices that sent a heartbeat within the last 3 minutes are counted online in real-time.
      */
-    fun listenToOnlinePresence(onUpdate: (count: Int, activeUsers: List<String>) -> Unit): ListenerRegistration? {
+    fun listenToOnlinePresence(
+        onUpdate: (count: Int, onlineMemberIds: Set<Long>, activeUsers: List<String>) -> Unit
+    ): ListenerRegistration? {
         return try {
             val fs = getFirestore() ?: return null
             fs.collection(COLLECTION_PRESENCE)
@@ -250,23 +254,104 @@ object FirestoreSyncHelper {
                         return@addSnapshotListener
                     }
                     if (snapshot != null) {
-                        val cutoff = System.currentTimeMillis() - (150 * 1000L) // 2.5 minutes
+                        val cutoff = System.currentTimeMillis() - (180 * 1000L) // 3 minutes
                         val activeUsers = mutableListOf<String>()
+                        val onlineMemberIds = mutableSetOf<Long>()
+                        var liveDeviceCount = 0
+
                         for (doc in snapshot.documents) {
                             val lastActive = doc.getLong("lastActive") ?: 0L
                             if (lastActive >= cutoff) {
-                                val name = doc.getString("userName") ?: "सदस्य"
-                                if (name.isNotBlank() && !activeUsers.contains(name)) {
+                                liveDeviceCount++
+                                val mId = doc.getLong("memberId") ?: 0L
+                                if (mId > 0L) {
+                                    onlineMemberIds.add(mId)
+                                }
+                                val name = doc.getString("userName") ?: ""
+                                if (name.isNotBlank()) {
                                     activeUsers.add(name)
                                 }
                             }
                         }
-                        val onlineCount = if (activeUsers.size > 0) activeUsers.size else 1
-                        onUpdate(onlineCount, activeUsers)
+                        val onlineCount = maxOf(1, liveDeviceCount)
+                        onUpdate(onlineCount, onlineMemberIds, activeUsers)
                     }
                 }
         } catch (t: Throwable) {
             Log.e(TAG, "Error listening to presence", t)
+            null
+        }
+    }
+
+    /**
+     * Broadcasts an emergency siren alert or urgent notice to all installed devices in real time.
+     */
+    suspend fun broadcastEmergencyAlert(
+        title: String,
+        message: String,
+        adminName: String = "मुख्य व्यवस्थापक",
+        isSiren: Boolean = true
+    ): Boolean {
+        return try {
+            val fs = getFirestore() ?: return false
+            val docRef = fs.collection(COLLECTION_EMERGENCY_ALERTS).document()
+            val data = mapOf(
+                "id" to docRef.id,
+                "title" to title,
+                "message" to message,
+                "sender" to adminName,
+                "isSiren" to isSiren,
+                "timestamp" to System.currentTimeMillis()
+            )
+            docRef.set(data).awaitTask()
+            Log.d(TAG, "Broadcasted emergency alert to Firestore: $title")
+            true
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error broadcasting emergency alert", t)
+            false
+        }
+    }
+
+    /**
+     * Realtime listener on all devices for emergency alerts & siren alarms.
+     * When triggered, rings the siren alarm and shows alert notification immediately.
+     */
+    fun listenToEmergencyAlerts(
+        context: Context,
+        onAlertReceived: (title: String, message: String, isSiren: Boolean) -> Unit
+    ): ListenerRegistration? {
+        return try {
+            val fs = getFirestore() ?: return null
+            val prefs = context.getSharedPreferences("yuva_shakti_alert_prefs", Context.MODE_PRIVATE)
+            val appStartTime = System.currentTimeMillis()
+            var lastHandledTime = prefs.getLong("last_handled_alert_time", appStartTime - 10000L)
+
+            fs.collection(COLLECTION_EMERGENCY_ALERTS)
+                .whereGreaterThan("timestamp", lastHandledTime)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        Log.e(TAG, "Emergency alert listener error", error)
+                        return@addSnapshotListener
+                    }
+                    if (snapshot != null) {
+                        for (change in snapshot.documentChanges) {
+                            if (change.type == com.google.firebase.firestore.DocumentChange.Type.ADDED) {
+                                val doc = change.document
+                                val timestamp = doc.getLong("timestamp") ?: 0L
+                                if (timestamp > lastHandledTime) {
+                                    lastHandledTime = timestamp
+                                    prefs.edit().putLong("last_handled_alert_time", timestamp).apply()
+                                    val title = doc.getString("title") ?: "🚨 आवश्यक सूचना"
+                                    val message = doc.getString("message") ?: ""
+                                    val isSiren = doc.getBoolean("isSiren") ?: true
+                                    onAlertReceived(title, message, isSiren)
+                                }
+                            }
+                        }
+                    }
+                }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error setting up emergency alert listener", t)
             null
         }
     }

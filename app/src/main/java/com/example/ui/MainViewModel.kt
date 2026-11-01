@@ -921,8 +921,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val adminName = if (_isAdmin.value) "रेवंत राम जी (व्यवस्थापक)" else "मुख्य व्यवस्थापक"
             repository.broadcastUrgentAlert(title, message, adminName)
+            com.example.util.FirestoreSyncHelper.broadcastEmergencyAlert(
+                title = title,
+                message = message,
+                adminName = adminName,
+                isSiren = true
+            )
             _showUrgentBroadcastDialog.value = false
-            _snackbarMessage.value = "🚨 आवश्यक सूचना सभी सदस्यों को अलर्ट के साथ प्रसारित की गई!"
+            _snackbarMessage.value = "🚨 आवश्यक सूचना सभी सदस्यों के मोबाइल पर सायरन के साथ प्रसारित की गई!"
         }
     }
 
@@ -1122,16 +1128,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun triggerManualSirenTgada(context: Context) {
         viewModelScope.launch {
             val pendingMembers = uiState.value.members.filter { it.status == "Pending" }
-            if (pendingMembers.isEmpty()) {
-                _snackbarMessage.value = "कोई भी बकाया सदस्य नहीं है! सभी सदस्यों का भुगतान जमा है।"
+            val adminName = if (_isAdmin.value) "रेवंत राम जी (व्यवस्थापक)" else "मुख्य व्यवस्थापक"
+            val title = "🚨 अमावस्या फंड बकाया सायरन तगादा!"
+            val msg = if (pendingMembers.isNotEmpty()) {
+                "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा): ${pendingMembers.size} सदस्यों का मासिक अंशदान बाकी है। कृपया तुरंत जमा कराएं।"
             } else {
-                com.example.util.NotificationHelper.triggerPendingSirenNotification(
-                    context = context,
-                    memberName = "${pendingMembers.size} बकाया सदस्यों",
-                    amount = pendingMembers.sumOf { it.monthlyAmount }
-                )
-                _snackbarMessage.value = "🚨 ${pendingMembers.size} बाकी सदस्यों हेतु सायरन तगादा बजाया गया!"
+                "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा): आगामी अमावस्या फंड अंशदान हेतु सायरन तगादा।"
             }
+
+            // Local sound & notification
+            com.example.util.SoundHelper.playJaiShreeRam(context)
+            com.example.util.NotificationHelper.triggerPendingSirenNotification(
+                context = context,
+                memberName = if (pendingMembers.isNotEmpty()) "${pendingMembers.size} बकाया सदस्यों" else "सभी सदस्यों",
+                amount = if (pendingMembers.isNotEmpty()) pendingMembers.sumOf { it.monthlyAmount } else 100
+            )
+
+            // Realtime Broadcast across ALL installed phones via Firestore!
+            com.example.util.FirestoreSyncHelper.broadcastEmergencyAlert(
+                title = title,
+                message = msg,
+                adminName = adminName,
+                isSiren = true
+            )
+
+            _snackbarMessage.value = "🚨 सभी सदस्यों के मोबाइल पर सायरन अलार्म तगादा बजाया गया!"
         }
     }
 

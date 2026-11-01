@@ -110,6 +110,29 @@ fun OnlineMembersDialog(
                     }
                 }
 
+                val activeDeviceNames = remember { OnlinePresenceHelper.getActiveDeviceNames() }
+                if (activeDeviceNames.isNotEmpty()) {
+                    Surface(
+                        color = Color(0xFFEFF6FF),
+                        shape = RoundedCornerShape(10.dp),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFBFDBFE)),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = "📶 ", fontSize = 12.sp)
+                            Text(
+                                text = "लाइव उपकरण: ${activeDeviceNames.distinct().joinToString(", ")}",
+                                fontSize = 10.5.sp,
+                                color = Color(0xFF1E40AF),
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()

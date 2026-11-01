@@ -51,7 +51,10 @@ import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SystemUpdate
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -277,20 +280,22 @@ fun SettingsDialog(
                                     }
                                 }
 
-                                Surface(
-                                    color = if (isAdmin) PendingRed else DeepNavy,
-                                    shape = RoundedCornerShape(8.dp),
-                                    modifier = Modifier.clickable {
+                                Button(
+                                    onClick = {
                                         onDismiss()
                                         onSwitchAdminRoleClick()
-                                    }
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = if (isAdmin) PendingRed else DeepNavy
+                                    ),
+                                    shape = RoundedCornerShape(8.dp),
+                                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
                                 ) {
                                     Text(
                                         text = if (isAdmin) "🔓 सामान्य मोड" else "🛡️ व्यवस्थापक लॉगिन",
                                         color = Color.White,
                                         fontSize = 11.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                                        fontWeight = FontWeight.Bold
                                     )
                                 }
                             }

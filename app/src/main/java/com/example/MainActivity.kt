@@ -291,12 +291,14 @@ fun MainScreen(viewModel: MainViewModel) {
 
     var firestoreOnlineCount by remember { mutableIntStateOf(1) }
     var firestoreActiveUsers by remember { mutableStateOf<List<String>>(emptyList()) }
+    var activeIncomingAlert by remember { mutableStateOf<Pair<String, String>?>(null) }
 
-    // Realtime Firestore presence and settings listeners
+    // Realtime Firestore presence, settings, and emergency siren listeners
     DisposableEffect(Unit) {
-        val presenceReg = FirestoreSyncHelper.listenToOnlinePresence { count, users ->
+        val presenceReg = FirestoreSyncHelper.listenToOnlinePresence { count, memberIds, users ->
             firestoreOnlineCount = count
             firestoreActiveUsers = users
+            OnlinePresenceHelper.updateOnlinePresence(count, memberIds, users)
         }
         val settingsReg = FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
             upiId?.let { if (it.isNotBlank()) viewModel.setFundUpiId(it) }
@@ -305,9 +307,21 @@ fun MainScreen(viewModel: MainViewModel) {
             cycleName?.let { if (it.isNotBlank()) viewModel.setAmavasyaCycleName(it) }
             amavasyaMillis?.let { if (it > 0) viewModel.setTargetAmavasyaMillis(it) }
         }
+        val alertReg = FirestoreSyncHelper.listenToEmergencyAlerts(context) { title, msg, isSiren ->
+            if (isSiren) {
+                com.example.util.SoundHelper.playJaiShreeRam(context)
+                com.example.util.NotificationHelper.triggerPendingSirenNotification(
+                    context = context,
+                    memberName = "सभी सदस्य",
+                    amount = 100
+                )
+            }
+            activeIncomingAlert = Pair(title, msg)
+        }
         onDispose {
             presenceReg?.remove()
             settingsReg?.remove()
+            alertReg?.remove()
         }
     }
 
@@ -430,44 +444,8 @@ fun MainScreen(viewModel: MainViewModel) {
                 .windowInsetsPadding(WindowInsets.statusBars),
             containerColor = Color.Transparent,
             snackbarHost = { SnackbarHost(snackbarHostState) },
-            topBar = {
-            AppHeader(
-                isAdmin = uiState.isAdmin,
-                totalCollected = uiState.totalCollected,
-                countdown = countdown,
-                unreadNotificationCount = unreadNotifCount,
-                onlineMemberCount = onlineCount,
-                onAuthClick = {
-                    if (uiState.isAdmin) {
-                        viewModel.logoutAdmin()
-                    } else {
-                        viewModel.showAuthDialog(true)
-                    }
-                },
-                onDateSettingsClick = {
-                    viewModel.showDatePickerDialog(true)
-                },
-                onNotificationsClick = {
-                    viewModel.openNotificationsDialog(true)
-                },
-                onPaymentClick = {
-                    viewModel.openPaymentDialog(true)
-                },
-                onSettingsClick = {
-                    viewModel.openSettingsDialog(true)
-                },
-                onUrgentBroadcastClick = {
-                    viewModel.openUrgentBroadcastDialog(true)
-                },
-                onOnlineMembersClick = {
-                    viewModel.openOnlineMembersDialog(true)
-                },
-                onSirenTgadaClick = {
-                    viewModel.triggerManualSirenTgada(context)
-                }
-            )
-        },
-        bottomBar = {
+            topBar = {},
+            bottomBar = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -623,6 +601,45 @@ fun MainScreen(viewModel: MainViewModel) {
                         contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
+                        // 0. App Header with Countdown & Admin Toggle (Scrolls naturally with content!)
+                        item(key = "app_header") {
+                            AppHeader(
+                                isAdmin = uiState.isAdmin,
+                                totalCollected = uiState.totalCollected,
+                                countdown = countdown,
+                                unreadNotificationCount = unreadNotifCount,
+                                onlineMemberCount = onlineCount,
+                                onAuthClick = {
+                                    if (uiState.isAdmin) {
+                                        viewModel.logoutAdmin()
+                                    } else {
+                                        viewModel.showAuthDialog(true)
+                                    }
+                                },
+                                onDateSettingsClick = {
+                                    viewModel.showDatePickerDialog(true)
+                                },
+                                onNotificationsClick = {
+                                    viewModel.openNotificationsDialog(true)
+                                },
+                                onPaymentClick = {
+                                    viewModel.openPaymentDialog(true)
+                                },
+                                onSettingsClick = {
+                                    viewModel.openSettingsDialog(true)
+                                },
+                                onUrgentBroadcastClick = {
+                                    viewModel.openUrgentBroadcastDialog(true)
+                                },
+                                onOnlineMembersClick = {
+                                    viewModel.openOnlineMembersDialog(true)
+                                },
+                                onSirenTgadaClick = {
+                                    viewModel.triggerManualSirenTgada(context)
+                                }
+                            )
+                        }
+
                         // 0A. Morning Hindu Festival Greeting Banner (if today has festival)
                         val todayFest = FestivalHelper.getTodayFestival(targetAmavasyaMillis)
                         if (todayFest != null) {
@@ -1198,6 +1215,59 @@ fun MainScreen(viewModel: MainViewModel) {
         SlipViewerDialog(
             expense = expense,
             onDismiss = { viewModel.viewExpenseReceipt(null) }
+        )
+    }
+
+    activeIncomingAlert?.let { (alertTitle, alertMessage) ->
+        AlertDialog(
+            onDismissRequest = {
+                com.example.util.SoundHelper.stopSound()
+                activeIncomingAlert = null
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Warning,
+                    contentDescription = null,
+                    tint = PendingRed,
+                    modifier = Modifier.size(36.dp)
+                )
+            },
+            title = {
+                Text(
+                    text = alertTitle,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 17.sp,
+                    color = PendingRed
+                )
+            },
+            text = {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = alertMessage,
+                        fontSize = 14.sp,
+                        color = Color(0xFF1E293B),
+                        lineHeight = 20.sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "🔊 सायरन अलार्म बज रहा है। बंद करने हेतु नीचे बटन दबाएं।",
+                        fontSize = 11.5.sp,
+                        color = Color(0xFF64748B)
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        com.example.util.SoundHelper.stopSound()
+                        activeIncomingAlert = null
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = PendingRed),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Text("अलार्म बंद करें (ठीक है)", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            }
         )
     }
 

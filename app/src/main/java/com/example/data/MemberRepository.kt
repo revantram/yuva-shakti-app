@@ -37,7 +37,7 @@ class MemberRepository(
         private const val KEY_AMAVASYA_STATE = "amavasya_state" // "day_after", "advance", "regular"
         private const val KEY_TARGET_AMAVASYA_MILLIS = "target_amavasya_millis"
         private const val KEY_UPI_ID = "fund_upi_id"
-        private const val DEFAULT_UPI_ID = "revantrambhati@upi"
+        private const val DEFAULT_UPI_ID = "777850983600@ibl"
         private const val KEY_CUSTOM_TARGET_AMOUNT = "custom_cycle_target_amount"
         private const val KEY_CONSENSUS_NOTE = "consensus_cycle_note"
         private const val KEY_CUSTOM_QR_URI = "custom_qr_code_uri"
@@ -50,7 +50,7 @@ class MemberRepository(
         private const val KEY_UPDATE_APK_URL = "app_update_apk_url"
         private const val KEY_LATEST_VERSION_NOTE = "app_latest_version_note"
         private const val KEY_WHATSAPP_GROUP_LINK = "whatsapp_group_link"
-        private const val DEFAULT_WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/invite"
+        private const val DEFAULT_WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh?s=cl&p=a&iam=2"
     }
 
     val allMembers: Flow<List<MemberEntity>> = memberDao.getAllMembers()
@@ -435,7 +435,8 @@ class MemberRepository(
     }
 
     fun getUpiId(): String {
-        return prefs.getString(KEY_UPI_ID, DEFAULT_UPI_ID) ?: DEFAULT_UPI_ID
+        val saved = prefs.getString(KEY_UPI_ID, DEFAULT_UPI_ID) ?: DEFAULT_UPI_ID
+        return if (saved == "revantrambhati@upi" || saved.isBlank()) DEFAULT_UPI_ID else saved
     }
 
     fun setUpiId(id: String) {
@@ -455,7 +456,8 @@ class MemberRepository(
     }
 
     fun getWhatsAppGroupLink(): String {
-        return prefs.getString(KEY_WHATSAPP_GROUP_LINK, DEFAULT_WHATSAPP_GROUP_LINK) ?: DEFAULT_WHATSAPP_GROUP_LINK
+        val saved = prefs.getString(KEY_WHATSAPP_GROUP_LINK, DEFAULT_WHATSAPP_GROUP_LINK) ?: DEFAULT_WHATSAPP_GROUP_LINK
+        return if (saved == "https://chat.whatsapp.com/invite" || saved.isBlank()) DEFAULT_WHATSAPP_GROUP_LINK else saved
     }
 
     fun setWhatsAppGroupLink(link: String) {

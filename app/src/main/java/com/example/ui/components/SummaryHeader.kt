@@ -33,6 +33,9 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -297,7 +300,29 @@ fun AppHeader(
                                     fontWeight = FontWeight.Bold
                                 )
                             }
-                        }
+                    // Admin Quick Lock / Shield Icon Button in Top Row
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .background(
+                                if (isAdmin) Color(0xFFFEF3C7) else Color(0xFFF1F5F9),
+                                CircleShape
+                            )
+                            .border(
+                                1.dp,
+                                if (isAdmin) SaffronGold else Color(0xFFCBD5E1),
+                                CircleShape
+                            )
+                            .clickable { onAuthClick() }
+                            .testTag("btn_header_top_admin_lock"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = if (isAdmin) Icons.Default.LockOpen else Icons.Default.Lock,
+                            contentDescription = "Admin Mode",
+                            tint = if (isAdmin) Color(0xFFB45309) else Color(0xFF334155),
+                            modifier = Modifier.size(19.dp)
+                        )
                     }
                 }
             }
@@ -313,20 +338,24 @@ fun AppHeader(
 
             // Persistent Admin Mode Status & Activation Banner
             Spacer(modifier = Modifier.height(8.dp))
-            Surface(
-                color = if (isAdmin) Color(0xFFFEF3C7) else Color(0xFFF0FDF4),
-                shape = RoundedCornerShape(10.dp),
+            Card(
+                onClick = onAuthClick,
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isAdmin) Color(0xFFFEF3C7) else Color(0xFFF0FDF4)
+                ),
+                shape = RoundedCornerShape(12.dp),
                 border = androidx.compose.foundation.BorderStroke(
                     1.dp,
                     if (isAdmin) SaffronGold else Color(0xFF86EFAC)
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onAuthClick() }
                     .testTag("banner_header_admin_toggle")
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -338,28 +367,40 @@ fun AppHeader(
                             imageVector = if (isAdmin) Icons.Default.LockOpen else Icons.Default.Lock,
                             contentDescription = null,
                             tint = if (isAdmin) Color(0xFFB45309) else Color(0xFF15803D),
-                            modifier = Modifier.size(15.dp)
+                            modifier = Modifier.size(17.dp)
                         )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = if (isAdmin) "🛡️ व्यवस्थापक मोड सक्रिय (संपादन चालू)" else "🔒 सदस्य मोड (केवल दर्शन)",
-                            fontSize = 11.5.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = if (isAdmin) Color(0xFF92400E) else Color(0xFF166534)
-                        )
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Column {
+                            Text(
+                                text = if (isAdmin) "🛡️ व्यवस्थापक मोड सक्रिय (संपादन चालू)" else "🔒 सदस्य मोड (केवल दर्शन)",
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = if (isAdmin) Color(0xFF92400E) else Color(0xFF166534)
+                            )
+                            Text(
+                                text = if (isAdmin) "सभी सुविधाएं सक्रिय हैं • लॉगआउट करने के लिए टैप करें" else "सदस्य व खर्च संपादन हेतु व्यवस्थापक लॉगिन करें",
+                                fontSize = 9.5.sp,
+                                color = if (isAdmin) Color(0xFFB45309) else Color(0xFF4B5563)
+                            )
+                        }
                     }
 
-                    Surface(
-                        color = if (isAdmin) PendingRed else DeepNavy,
-                        shape = RoundedCornerShape(6.dp),
-                        modifier = Modifier.padding(start = 6.dp)
+                    Button(
+                        onClick = onAuthClick,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (isAdmin) PendingRed else DeepNavy
+                        ),
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                        modifier = Modifier
+                            .padding(start = 6.dp)
+                            .testTag("btn_admin_toggle_action")
                     ) {
                         Text(
                             text = if (isAdmin) "लॉगआउट ✖" else "🛡️ एडमिन लॉगिन",
-                            fontSize = 10.5.sp,
+                            fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            color = Color.White
                         )
                     }
                 }

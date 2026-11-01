@@ -4,49 +4,61 @@ import com.example.data.MemberEntity
 import java.util.concurrent.ConcurrentHashMap
 
 object OnlinePresenceHelper {
-    // In-memory registry of recently active user timestamps (milliseconds)
-    private val activeTimestamps = ConcurrentHashMap<Long, Long>()
+    // In-memory registry of online member IDs synced via Firestore
+    private val activeMemberIds = ConcurrentHashMap.newKeySet<Long>()
+    private val activeDeviceNames = java.util.concurrent.CopyOnWriteArrayList<String>()
+    @Volatile private var firestoreLiveCount: Int = 1
+
+    // Local heartbeat timestamps (fallback)
+    private val localHeartbeats = ConcurrentHashMap<Long, Long>()
 
     /**
-     * Mark a member as actively online right now.
+     * Called whenever Firestore presence listener updates.
+     */
+    fun updateOnlinePresence(count: Int, memberIds: Set<Long>, deviceNames: List<String>) {
+        firestoreLiveCount = maxOf(1, count)
+        activeMemberIds.clear()
+        activeMemberIds.addAll(memberIds)
+        activeDeviceNames.clear()
+        activeDeviceNames.addAll(deviceNames)
+    }
+
+    /**
+     * Mark a member as actively online right now locally.
      */
     fun recordHeartbeat(memberId: Long) {
         if (memberId > 0) {
-            activeTimestamps[memberId] = System.currentTimeMillis()
+            localHeartbeats[memberId] = System.currentTimeMillis()
+            activeMemberIds.add(memberId)
         }
     }
 
     /**
-     * Determines whether a member is currently online.
-     * The actively logged in user is always online.
-     * Other members are online if their active timestamp is within the last 15 minutes,
-     * or if they are in the active recent slot.
+     * Determines whether a member is currently online across all devices.
      */
     fun isOnline(memberId: Long, activeMemberId: Long, totalMembers: Int): Boolean {
-        if (memberId == activeMemberId && activeMemberId > 0) return true
-        
-        val lastSeen = activeTimestamps[memberId]
+        if (memberId == activeMemberId && activeMemberId > 0L) return true
+        if (activeMemberIds.contains(memberId)) return true
+
+        val lastSeen = localHeartbeats[memberId]
         if (lastSeen != null) {
             val diffMinutes = (System.currentTimeMillis() - lastSeen) / (1000 * 60)
-            if (diffMinutes <= 15) return true
+            if (diffMinutes <= 5) return true
         }
-
-        // Active members in the current time slot for connected devices
-        val slot = (System.currentTimeMillis() / (1000 * 60 * 5)).toInt()
-        val hash = (memberId.toInt() * 37 + slot).hashCode()
-        return (hash % 4 == 0) // Smooth, natural presence
+        return false
     }
 
     fun getOnlineCount(members: List<MemberEntity>, activeMemberId: Long): Int {
-        if (members.isEmpty()) return 1
-        val count = members.count { isOnline(it.id, activeMemberId, members.size) }
-        return if (count > 0) count else 1
+        val countFromMembers = members.count { isOnline(it.id, activeMemberId, members.size) }
+        return maxOf(countFromMembers, firestoreLiveCount, if (activeMemberId > 0) 1 else 1)
     }
 
     fun getOnlineMembers(members: List<MemberEntity>, activeMemberId: Long): List<MemberEntity> {
         val list = members.filter { isOnline(it.id, activeMemberId, members.size) }
         return if (list.isNotEmpty()) list else members.take(1)
     }
+
+    fun getActiveDeviceNames(): List<String> = activeDeviceNames.toList()
 
     fun getStatusLabel(memberId: Long, activeMemberId: Long, totalMembers: Int): String {
         return if (isOnline(memberId, activeMemberId, totalMembers)) {
