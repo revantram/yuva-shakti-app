@@ -22,27 +22,30 @@ object SoundHelper {
      * Plays the Jai Shree Ram ringtone cleanly using MediaPlayer.
      */
     fun playJaiShreeRam(context: Context) {
-        try {
+        val appContext = context.applicationContext
+        Thread {
             try {
-                mediaPlayer?.stop()
-                mediaPlayer?.release()
-            } catch (_: Throwable) {}
-            mediaPlayer = null
-
-            val player = MediaPlayer.create(context.applicationContext, R.raw.jai_shree_ram) ?: return
-            player.setOnCompletionListener { mp ->
                 try {
-                    mp.release()
+                    mediaPlayer?.stop()
+                    mediaPlayer?.release()
                 } catch (_: Throwable) {}
-                if (mediaPlayer == mp) {
-                    mediaPlayer = null
+                mediaPlayer = null
+
+                val player = MediaPlayer.create(appContext, R.raw.jai_shree_ram) ?: return@Thread
+                player.setOnCompletionListener { mp ->
+                    try {
+                        mp.release()
+                    } catch (_: Throwable) {}
+                    if (mediaPlayer == mp) {
+                        mediaPlayer = null
+                    }
                 }
+                player.start()
+                mediaPlayer = player
+                Log.d(TAG, "Jai Shree Ram ringtone played successfully")
+            } catch (e: Throwable) {
+                Log.e(TAG, "Error playing Jai Shree Ram sound", e)
             }
-            player.start()
-            mediaPlayer = player
-            Log.d(TAG, "Jai Shree Ram ringtone played successfully")
-        } catch (e: Throwable) {
-            Log.e(TAG, "Error playing Jai Shree Ram sound", e)
-        }
+        }.start()
     }
 }

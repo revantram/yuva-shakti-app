@@ -153,7 +153,6 @@ import com.example.util.FestivalHelper
 import com.example.util.FirestoreSyncHelper
 import com.example.util.NotificationHelper
 import com.example.util.OnlinePresenceHelper
-import com.example.util.PendingSirenReminderReceiver
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -311,7 +310,6 @@ fun MainScreen(viewModel: MainViewModel) {
             }
 
             com.example.util.NotificationHelper.createNotificationChannel(context)
-            PendingSirenReminderReceiver.scheduleAllDailyAlarms(context)
             OnlinePresenceHelper.recordHeartbeat(activeMemberId)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
                 if (androidx.core.content.ContextCompat.checkSelfPermission(
