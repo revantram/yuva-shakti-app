@@ -37,12 +37,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.MemberEntity
+import com.example.ui.theme.DeepNavy
 import com.example.ui.theme.PaidGreen
 import com.example.ui.theme.PaidGreenDark
 import com.example.ui.theme.PaidGreenLight
 import com.example.ui.theme.PendingRed
 import com.example.ui.theme.PendingRedDark
 import com.example.ui.theme.PendingRedLight
+import com.example.ui.theme.SaffronGold
 
 @Composable
 fun MemberCard(

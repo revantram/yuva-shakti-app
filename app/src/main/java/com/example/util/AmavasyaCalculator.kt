@@ -198,14 +198,14 @@ object AmavasyaCalculator {
 }
 
 data class CountdownInfo(
-    val targetMillis: Long,
-    val formattedDate: String,
-    val hindiTithiName: String,
-    val days: Long,
-    val hours: Long,
-    val minutes: Long,
-    val seconds: Long,
-    val isToday: Boolean,
-    val isPast: Boolean,
-    val isCustomDate: Boolean
+    val targetMillis: Long = 0L,
+    val formattedDate: String = "",
+    val hindiTithiName: String = "",
+    val days: Long = 0L,
+    val hours: Long = 0L,
+    val minutes: Long = 0L,
+    val seconds: Long = 0L,
+    val isToday: Boolean = false,
+    val isPast: Boolean = false,
+    val isCustomDate: Boolean = false
 )
