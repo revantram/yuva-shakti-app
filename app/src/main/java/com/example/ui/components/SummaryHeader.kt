@@ -111,12 +111,19 @@ fun AppHeader(
                             .background(Color.White),
                         contentAlignment = Alignment.Center
                     ) {
-                        androidx.compose.foundation.Image(
-                            painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.ic_app_foreground_1793369456038),
-                            contentDescription = "युवा शक्ति ग्रुप लोगो",
-                            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
+                        val headerLogoPainter = runCatching {
+                            androidx.compose.ui.res.painterResource(id = com.example.R.drawable.ic_app_foreground_1793369456038)
+                        }.getOrNull()
+                        if (headerLogoPainter != null) {
+                            androidx.compose.foundation.Image(
+                                painter = headerLogoPainter,
+                                contentDescription = "युवा शक्ति ग्रुप लोगो",
+                                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        } else {
+                            Text(text = "🚩", fontSize = 28.sp)
+                        }
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {

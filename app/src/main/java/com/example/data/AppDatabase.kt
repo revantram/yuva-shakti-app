@@ -32,12 +32,26 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "yuva_shakti_bhati_fund.db"
-                ).fallbackToDestructiveMigration().build().also {
-                    INSTANCE = it
+                INSTANCE ?: try {
+                    Room.databaseBuilder(
+                        context.applicationContext,
+                        AppDatabase::class.java,
+                        "yuva_shakti_bhati_fund.db"
+                    ).fallbackToDestructiveMigration().build().also {
+                        INSTANCE = it
+                    }
+                } catch (t: Throwable) {
+                    android.util.Log.e("AppDatabase", "Database build failed, resetting database file", t)
+                    try {
+                        context.applicationContext.deleteDatabase("yuva_shakti_bhati_fund.db")
+                    } catch (_: Throwable) {}
+                    Room.databaseBuilder(
+                        context.applicationContext,
+                        AppDatabase::class.java,
+                        "yuva_shakti_bhati_fund.db"
+                    ).fallbackToDestructiveMigration().build().also {
+                        INSTANCE = it
+                    }
                 }
             }
         }

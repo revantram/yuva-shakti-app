@@ -164,24 +164,37 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        try {
+            enableEdgeToEdge()
+        } catch (t: Throwable) {
+            android.util.Log.e("MainActivity", "enableEdgeToEdge error", t)
+        }
 
-        setContent {
-            val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
-            val currentHour = remember { Calendar.getInstance().get(Calendar.HOUR_OF_DAY) }
-            val systemInDark = isSystemInDarkTheme()
+        try {
+            setContent {
+                val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
+                val currentHour = remember { Calendar.getInstance().get(Calendar.HOUR_OF_DAY) }
+                val systemInDark = isSystemInDarkTheme()
 
-            // Auto-schedule: Morning (6:00 to 18:59) is Light, Night (19:00 to 5:59) is Dark
-            val isDark = when (themeMode) {
-                "dark" -> true
-                "light" -> false
-                "auto_time" -> currentHour < 6 || currentHour >= 19
-                else -> false // Default is Light iOS theme as requested
+                // Auto-schedule: Morning (6:00 to 18:59) is Light, Night (19:00 to 5:59) is Dark
+                val isDark = when (themeMode) {
+                    "dark" -> true
+                    "light" -> false
+                    "auto_time" -> currentHour < 6 || currentHour >= 19
+                    else -> false // Default is Light iOS theme as requested
+                }
+
+                MyApplicationTheme(darkTheme = isDark) {
+                    MainScreen(viewModel = viewModel)
+                }
             }
-
-            MyApplicationTheme(darkTheme = isDark) {
-                MainScreen(viewModel = viewModel)
-            }
+        } catch (t: Throwable) {
+            android.util.Log.e("MainActivity", "setContent fatal error", t)
+            try {
+                val sw = java.io.StringWriter()
+                t.printStackTrace(java.io.PrintWriter(sw))
+                java.io.File("/sdcard/Download/yuva_shakti_crash.txt").writeText("onCreate error:\n$sw")
+            } catch (_: Throwable) {}
         }
     }
 }

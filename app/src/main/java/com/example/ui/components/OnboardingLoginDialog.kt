@@ -140,12 +140,19 @@ fun OnboardingLoginDialog(
                         .background(Color.White),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_app_foreground_1793369456038),
-                        contentDescription = "युवा शक्ति ग्रुप लोगो",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    val logoPainter = runCatching {
+                        painterResource(id = R.drawable.ic_app_foreground_1793369456038)
+                    }.getOrNull()
+                    if (logoPainter != null) {
+                        Image(
+                            painter = logoPainter,
+                            contentDescription = "युवा शक्ति ग्रुप लोगो",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Text(text = "🚩", fontSize = 36.sp)
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
