@@ -193,7 +193,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             val cleanUpi = repository.sanitizeUpiId(it)
                             setFundUpiId(cleanUpi, showSnackbar = false)
                             if (cleanUpi != it.trim()) {
-                                viewModelScope.launch(Dispatchers.IO) {
+                                viewModelScope.launch {
                                     com.example.util.FirestoreSyncHelper.saveSettings(upiId = cleanUpi)
                                 }
                             }
