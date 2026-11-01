@@ -710,6 +710,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _snackbarMessage.value = "स्वचालित खगोलीय अमावस्या तिथि सेट की गई।"
     }
 
+    fun setTargetAmavasyaMillis(millis: Long) {
+        setCustomAmavasyaDate(millis)
+    }
+
+    fun setCustomTargetAmount(amount: Int) {
+        _customTargetAmount.value = amount
+        repository.setCustomTargetAmount(amount)
+    }
+
     fun openPaymentVerificationDialog(show: Boolean) {
         _showPaymentVerificationDialog.value = show
     }
