@@ -20,40 +20,44 @@ object NotificationHelper {
     private const val CHANNEL_DESC = "अंशदान, ऑनलाइन जमा और बहीखाता खर्च की लाइव सूचनाएँ"
 
     fun createNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
-            val soundUri = SoundHelper.getJaiShreeRamSoundUri(context)
-            val audioAttributes = android.media.AudioAttributes.Builder()
-                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
-                .build()
-
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH).apply {
-                description = CHANNEL_DESC
-                enableVibration(true)
-                setShowBadge(true)
-                setSound(soundUri, audioAttributes)
-            }
-            notificationManager?.createNotificationChannel(channel)
-
-            val sirenChannel = NotificationChannel(
-                SIREN_CHANNEL_ID,
-                "🚨 युवा शक्ति ग्रुप - बकाया अंशदान सायरन",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "बकाया अंशदान हेतु चेतावनी सायरन व तीव्र सूचनाएँ"
-                enableVibration(true)
-                vibrationPattern = longArrayOf(0, 600, 200, 600, 200, 1000, 400, 1000)
-                setShowBadge(true)
-                val sirenAttributes = android.media.AudioAttributes.Builder()
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+                val defaultSoundUri = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_NOTIFICATION)
+                val audioAttributes = android.media.AudioAttributes.Builder()
                     .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(android.media.AudioAttributes.USAGE_ALARM)
+                    .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
                     .build()
-                val sirenSoundUri = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM)
-                    ?: soundUri
-                setSound(sirenSoundUri, sirenAttributes)
+
+                val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH).apply {
+                    description = CHANNEL_DESC
+                    enableVibration(true)
+                    setShowBadge(true)
+                    setSound(defaultSoundUri, audioAttributes)
+                }
+                notificationManager?.createNotificationChannel(channel)
+
+                val sirenChannel = NotificationChannel(
+                    SIREN_CHANNEL_ID,
+                    "🚨 युवा शक्ति ग्रुप - बकाया अंशदान सायरन",
+                    NotificationManager.IMPORTANCE_HIGH
+                ).apply {
+                    description = "बकाया अंशदान हेतु चेतावनी सायरन व तीव्र सूचनाएँ"
+                    enableVibration(true)
+                    vibrationPattern = longArrayOf(0, 600, 200, 600, 200, 1000, 400, 1000)
+                    setShowBadge(true)
+                    val sirenAttributes = android.media.AudioAttributes.Builder()
+                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(android.media.AudioAttributes.USAGE_ALARM)
+                        .build()
+                    val sirenSoundUri = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM)
+                        ?: defaultSoundUri
+                    setSound(sirenSoundUri, sirenAttributes)
+                }
+                notificationManager?.createNotificationChannel(sirenChannel)
             }
-            notificationManager?.createNotificationChannel(sirenChannel)
+        } catch (t: Throwable) {
+            android.util.Log.e("NotificationHelper", "Failed to create notification channels", t)
         }
     }
 

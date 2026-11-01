@@ -56,9 +56,13 @@ class PendingSirenReminderReceiver : BroadcastReceiver() {
         private const val MORNING_THOUGHT_HOUR = 7 // 7:00 AM every morning
 
         fun scheduleAllDailyAlarms(context: Context) {
-            scheduleFiveDailySirenAlarms(context)
-            scheduleDailyMorningThoughtAlarm(context)
-            checkAndSendTodayMorningThought(context)
+            try {
+                scheduleFiveDailySirenAlarms(context)
+                scheduleDailyMorningThoughtAlarm(context)
+                checkAndSendTodayMorningThought(context)
+            } catch (t: Throwable) {
+                android.util.Log.e("PendingSirenReminder", "Error scheduling daily alarms", t)
+            }
         }
 
         fun scheduleDailyMorningThoughtAlarm(context: Context) {
@@ -104,17 +108,21 @@ class PendingSirenReminderReceiver : BroadcastReceiver() {
         }
 
         fun checkAndSendTodayMorningThought(context: Context) {
-            val prefs = context.getSharedPreferences("yuva_shakti_thought_prefs", Context.MODE_PRIVATE)
-            val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-            val todayKey = "$currentYear-$currentDay"
-            val lastNotified = prefs.getString("last_thought_day", "")
+            try {
+                val prefs = context.getSharedPreferences("yuva_shakti_thought_prefs", Context.MODE_PRIVATE)
+                val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+                val todayKey = "$currentYear-$currentDay"
+                val lastNotified = prefs.getString("last_thought_day", "")
 
-            val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-            // If morning (between 6 AM and 12 PM) and not notified yet today, send notification
-            if (currentHour in 6..12 && lastNotified != todayKey) {
-                NotificationHelper.sendMorningThoughtNotification(context)
-                prefs.edit().putString("last_thought_day", todayKey).apply()
+                val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+                // If morning (between 6 AM and 12 PM) and not notified yet today, send notification
+                if (currentHour in 6..12 && lastNotified != todayKey) {
+                    NotificationHelper.sendMorningThoughtNotification(context)
+                    prefs.edit().putString("last_thought_day", todayKey).apply()
+                }
+            } catch (t: Throwable) {
+                android.util.Log.e("PendingSirenReminder", "Error sending today morning thought", t)
             }
         }
 

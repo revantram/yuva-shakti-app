@@ -302,24 +302,28 @@ fun MainScreen(viewModel: MainViewModel) {
     }
 
     LaunchedEffect(Unit) {
-        val soundPrefs = context.getSharedPreferences("yuva_shakti_sound_prefs", Context.MODE_PRIVATE)
-        val hasPlayedFirstLaunch = soundPrefs.getBoolean("has_played_welcome_sound", false)
-        if (!hasPlayedFirstLaunch) {
-            com.example.util.SoundHelper.playJaiShreeRam(context)
-            soundPrefs.edit().putBoolean("has_played_welcome_sound", true).apply()
-        }
-
-        com.example.util.NotificationHelper.createNotificationChannel(context)
-        PendingSirenReminderReceiver.scheduleAllDailyAlarms(context)
-        OnlinePresenceHelper.recordHeartbeat(activeMemberId)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            if (androidx.core.content.ContextCompat.checkSelfPermission(
-                    context,
-                    android.Manifest.permission.POST_NOTIFICATIONS
-                ) != android.content.pm.PackageManager.PERMISSION_GRANTED
-            ) {
-                notifPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        try {
+            val soundPrefs = context.getSharedPreferences("yuva_shakti_sound_prefs", Context.MODE_PRIVATE)
+            val hasPlayedFirstLaunch = soundPrefs.getBoolean("has_played_welcome_sound", false)
+            if (!hasPlayedFirstLaunch) {
+                com.example.util.SoundHelper.playJaiShreeRam(context)
+                soundPrefs.edit().putBoolean("has_played_welcome_sound", true).apply()
             }
+
+            com.example.util.NotificationHelper.createNotificationChannel(context)
+            PendingSirenReminderReceiver.scheduleAllDailyAlarms(context)
+            OnlinePresenceHelper.recordHeartbeat(activeMemberId)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                if (androidx.core.content.ContextCompat.checkSelfPermission(
+                        context,
+                        android.Manifest.permission.POST_NOTIFICATIONS
+                    ) != android.content.pm.PackageManager.PERMISSION_GRANTED
+                ) {
+                    notifPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        } catch (t: Throwable) {
+            android.util.Log.e("MainActivity", "Error in startup LaunchedEffect", t)
         }
     }
 

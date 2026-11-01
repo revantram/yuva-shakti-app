@@ -32,21 +32,13 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "yuva_shakti_bhati_fund.db"
-                ).fallbackToDestructiveMigration().addCallback(object : RoomDatabase.Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val dao = getInstance(context).memberDao()
-                            seedInitialMembers(dao)
-                        }
-                    }
-                }).build()
-                INSTANCE = instance
-                instance
+                ).fallbackToDestructiveMigration().build().also {
+                    INSTANCE = it
+                }
             }
         }
 
