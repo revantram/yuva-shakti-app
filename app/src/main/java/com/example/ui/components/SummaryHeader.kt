@@ -97,6 +97,7 @@ fun AppHeader(
                 .fillMaxWidth()
                 .padding(horizontal = 14.dp, vertical = 10.dp)
         ) {
+            // ── ROW 1: Branding (Logo + Group Name + Subtitle + Live Chip) & Top Actions (Bell + Admin) ──
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -104,12 +105,12 @@ fun AppHeader(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.weight(1f, fill = false)
+                    modifier = Modifier.weight(1f)
                 ) {
-                    // Big Logo with golden ring
+                    // Logo with golden ring
                     Box(
                         modifier = Modifier
-                            .size(54.dp)
+                            .size(46.dp)
                             .clip(CircleShape)
                             .border(2.dp, SaffronGold, CircleShape)
                             .background(Color.White),
@@ -126,59 +127,57 @@ fun AppHeader(
                                 modifier = Modifier.fillMaxSize()
                             )
                         } else {
-                            Text(text = "🚩", fontSize = 28.sp)
+                            Text(text = "🚩", fontSize = 24.sp)
                         }
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column {
+                    Spacer(modifier = Modifier.width(9.dp))
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = "🚩 युवा शक्ति ग्रुप",
                             color = Color(0xFF1C1C1E),
-                            fontSize = 17.5.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            letterSpacing = 0.3.sp
-                        )
-                        Text(
-                            text = "भाटी परिवार कुचेरा",
-                            color = SaffronGold,
-                            fontSize = 13.5.sp,
-                            fontWeight = FontWeight.Bold
+                            letterSpacing = 0.2.sp,
+                            maxLines = 1
                         )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp),
-                            modifier = Modifier.padding(top = 2.dp)
+                            modifier = Modifier.padding(top = 1.dp)
                         ) {
                             Text(
-                                text = "मासिक अमावस्या फंड",
-                                color = Color(0xFF64748B),
-                                fontSize = 10.5.sp,
-                                fontWeight = FontWeight.Medium
+                                text = "भाटी परिवार कुचेरा",
+                                color = SaffronGold,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1
                             )
-                            // Online presence chip
+                            // Live online presence chip (compact pill)
                             Surface(
                                 color = Color(0xFFE8F9ED),
-                                shape = RoundedCornerShape(10.dp),
-                                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF34C759)),
+                                shape = RoundedCornerShape(12.dp),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF22C55E)),
                                 modifier = Modifier
                                     .clickable { onOnlineMembersClick() }
                                     .testTag("chip_online_count")
                             ) {
                                 Row(
-                                    modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp),
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Box(
                                         modifier = Modifier
-                                            .size(7.dp)
-                                            .background(Color(0xFF34C759), CircleShape)
+                                            .size(6.dp)
+                                            .background(Color(0xFF22C55E), CircleShape)
                                     )
-                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Spacer(modifier = Modifier.width(3.dp))
                                     Text(
                                         text = "$onlineMemberCount ऑनलाइन",
                                         color = Color(0xFF166534),
                                         fontSize = 10.sp,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                        softWrap = false
                                     )
                                 }
                             }
@@ -186,93 +185,17 @@ fun AppHeader(
                     }
                 }
 
+                Spacer(modifier = Modifier.width(6.dp))
+
+                // Right Utility Icons: Notification Bell & Admin Lock
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // 1. Four-angled Deposit Amount Symbol (जमा राशि प्रतीक - चार कोने वाला)
-                    Surface(
-                        shape = RoundedCornerShape(10.dp),
-                        color = Color(0xFFE8F9ED),
-                        border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF10B981)),
-                        shadowElevation = 2.dp,
-                        modifier = Modifier
-                            .size(width = 68.dp, height = 48.dp)
-                            .clickable { onPaymentClick() }
-                            .testTag("btn_header_pay_circle")
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(2.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = "जमा राशि",
-                                color = Color(0xFF166534),
-                                fontSize = 8.5.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "₹${totalCollected.formatAmount()}",
-                                color = Color(0xFF065F46),
-                                fontSize = 11.5.sp,
-                                fontWeight = FontWeight.Black,
-                                maxLines = 1
-                            )
-                            Text(
-                                text = "खाता ↗",
-                                color = Color(0xFF047857),
-                                fontSize = 8.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-
-                    // 2. Four-angled PhonePe Online Payment Symbol (फ़ोनपे ऑनलाइन भुगतान - चार कोने वाला)
-                    Surface(
-                        shape = RoundedCornerShape(10.dp),
-                        color = Color(0xFFF3E8FF),
-                        border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF8B5CF6)),
-                        shadowElevation = 2.dp,
-                        modifier = Modifier
-                            .size(width = 70.dp, height = 48.dp)
-                            .clickable { onPaymentClick() }
-                            .testTag("btn_header_phonepe_pay")
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(2.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = "PhonePe",
-                                color = Color(0xFF581C87),
-                                fontSize = 9.sp,
-                                fontWeight = FontWeight.Black
-                            )
-                            Text(
-                                text = "ऑनलाइन",
-                                color = Color(0xFF6B21A8),
-                                fontSize = 8.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "₹ पे करें ↗",
-                                color = Color(0xFF7E22CE),
-                                fontSize = 8.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-
                     // Notification Bell with Badge
                     Box(
                         modifier = Modifier
-                            .size(36.dp)
+                            .size(38.dp)
                             .background(Color(0xFFF1F5F9), CircleShape)
                             .border(1.dp, Color(0xFFCBD5E1), CircleShape)
                             .clickable { onNotificationsClick() }
@@ -306,7 +229,7 @@ fun AppHeader(
                     // Admin Quick Lock / Shield Icon Button in Top Row
                     Box(
                         modifier = Modifier
-                            .size(36.dp)
+                            .size(38.dp)
                             .background(
                                 if (isAdmin) Color(0xFFFEF3C7) else Color(0xFFF1F5F9),
                                 CircleShape
@@ -325,6 +248,117 @@ fun AppHeader(
                             contentDescription = "Admin Mode",
                             tint = if (isAdmin) Color(0xFFB45309) else Color(0xFF334155),
                             modifier = Modifier.size(19.dp)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // ── ROW 2: Primary Financial Action Cards (50% / 50% Balanced Grid) ──
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Card 1: कुल जमा राशि (Deposit Box)
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = Color(0xFFF0FDF4),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF86EFAC)),
+                    shadowElevation = 1.dp,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { onPaymentClick() }
+                        .testTag("btn_header_pay_circle")
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 9.dp, vertical = 7.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .background(Color(0xFFDCFCE7), CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = "💰", fontSize = 15.sp)
+                        }
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "कुल जमा फंड",
+                                color = Color(0xFF166534),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Medium,
+                                maxLines = 1
+                            )
+                            Text(
+                                text = "₹${totalCollected.formatAmount()}",
+                                color = Color(0xFF047857),
+                                fontSize = 13.5.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                maxLines = 1
+                            )
+                        }
+                        Text(
+                            text = "खाता ↗",
+                            color = Color(0xFF15803D),
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                // Card 2: PhonePe ऑनलाइन भुगतान (UPI Online Payment)
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = Color(0xFFFAF5FF),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFD8B4FE)),
+                    shadowElevation = 1.dp,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { onPaymentClick() }
+                        .testTag("btn_header_phonepe_pay")
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 9.dp, vertical = 7.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .background(Color(0xFFF3E8FF), CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = "📱", fontSize = 15.sp)
+                        }
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "PhonePe पे",
+                                color = Color(0xFF581C87),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Medium,
+                                maxLines = 1
+                            )
+                            Text(
+                                text = "सीधा भुगतान",
+                                color = Color(0xFF6B21A8),
+                                fontSize = 12.5.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                maxLines = 1
+                            )
+                        }
+                        Text(
+                            text = "पे ↗",
+                            color = Color(0xFF7E22CE),
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
