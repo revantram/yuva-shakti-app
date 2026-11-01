@@ -8,7 +8,8 @@ const firebaseConfig = {
   storageBucket: "yuva-shakti-group-ac131.firebasestorage.app",
   messagingSenderId: "8889452055",
   appId: "1:8889452055:web:dae314c019eef1c525be52",
-  measurementId: "G-NNE5T6MTM8"
+  measurementId: "G-NNE5T6MTM8",
+  databaseURL: "https://yuva-shakti-group-ac131-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 
 // Firebase शुरू करें
@@ -458,6 +459,51 @@ function initApp() {
   listenRealtimeData();
   listenLoanRequests();
   listenGallery();
+  trackActivePresence(); // <-- Real-time live count shuru karein
+}
+
+// ==========================================
+// Real-Time Active Users Counter System
+// ==========================================
+function trackActivePresence() {
+  if (typeof firebase === 'undefined' || !firebase.database) return;
+  const rtdb = firebase.database();
+  
+  // Har user ke browser ke liye ek unique session ID
+  let sessionId = localStorage.getItem('app_session_id');
+  if (!sessionId) {
+    sessionId = 'user_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('app_session_id', sessionId);
+  }
+
+  const userStatusRef = rtdb.ref('/online_status/' + sessionId);
+  const connectedRef = rtdb.ref('.info/connected');
+
+  // Firebase connection monitor karna
+  connectedRef.on('value', (snapshot) => {
+    if (snapshot.val() === false) {
+      return;
+    }
+
+    // App band hone par server se record hatana
+    userStatusRef.onDisconnect().remove().then(() => {
+      // Online hone par record set karna
+      userStatusRef.set({
+        online: true,
+        lastSeen: firebase.database.ServerValue.TIMESTAMP
+      });
+    }).catch(err => console.warn("Presence disconnect error:", err));
+  });
+
+  // Sabhi online members ki ginti live sunna
+  const allOnlineRef = rtdb.ref('/online_status');
+  allOnlineRef.on('value', (snapshot) => {
+    const count = snapshot.numChildren() || 1;
+    const countEl = document.getElementById('liveMembersCount');
+    if (countEl) {
+      countEl.innerText = count;
+    }
+  });
 }
 
 // ==========================================
