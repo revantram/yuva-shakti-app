@@ -19,6 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
@@ -93,13 +96,13 @@ fun MemberProfileDialog(
             ) {
                 // Large Avatar
                 if (profilePhotoUri.isNotBlank()) {
-                    coil.compose.AsyncImage(
+                    AsyncImage(
                         model = profilePhotoUri,
                         contentDescription = "प्रोफ़ाइल फोटो",
-                        contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(72.dp)
-                            .androidx.compose.ui.draw.clip(CircleShape)
+                            .clip(CircleShape)
                             .border(2.dp, if (isPaid) PaidGreen else SaffronGold, CircleShape)
                     )
                 } else {
