@@ -28,31 +28,39 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -60,44 +68,68 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.example.R
 import com.example.ui.theme.DeepNavy
+import com.example.ui.theme.PaidGreen
 import com.example.ui.theme.PendingRed
 import com.example.ui.theme.SaffronGold
+import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingLoginDialog(
-    onLoginSuccess: (
+    onLoginWithCode: (code: String, onResult: (Boolean, String) -> Unit) -> Unit,
+    onRegisterWithCode: (
         name: String,
         phone: String,
         address: String,
+        memberCode: String,
         photoUri: String,
         insta: String,
-        isAdmin: Boolean
-    ) -> Unit
+        onResult: (Boolean, String) -> Unit
+    ) -> Unit,
+    onCheckCodeTaken: suspend (String) -> Boolean
 ) {
-    // Mode choice: "member" or "admin"
-    var selectedRole by remember { mutableStateOf("member") }
-    var adminCodeInput by remember { mutableStateOf("") }
-    var wrongAdminAttempts by remember { mutableIntStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
+    var selectedTab by remember { mutableIntStateOf(0) } // 0: Login with Code, 1: Register New Member
 
+    // Login tab state
+    var memberCodeInput by remember { mutableStateOf("") }
+    var loginErrorMessage by remember { mutableStateOf<String?>(null) }
+    var isLoggingIn by remember { mutableStateOf(false) }
+
+    // Registration tab state
     var fullName by remember { mutableStateOf("") }
     var phoneNumber by remember { mutableStateOf("") }
-    var addressVillage by remember { mutableStateOf("") }
+    var addressVillage by remember { mutableStateOf("कुचेरा") }
+    var desiredCode by remember { mutableStateOf("") }
+    var isCodeTaken by remember { mutableStateOf(false) }
+    var isCheckingCode by remember { mutableStateOf(false) }
     var instagramId by remember { mutableStateOf("") }
     var selectedPhotoUri by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    var alertNotice by remember { mutableStateOf<String?>(null) }
+    var regErrorMessage by remember { mutableStateOf<String?>(null) }
+    var isRegistering by remember { mutableStateOf(false) }
 
+    // Photo picker launcher
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         if (uri != null) {
             selectedPhotoUri = uri.toString()
-            errorMessage = null
+            regErrorMessage = null
+        }
+    }
+
+    // Check code uniqueness whenever desiredCode changes
+    LaunchedEffect(desiredCode) {
+        val trimmed = desiredCode.trim()
+        if (trimmed.length >= 4) {
+            isCheckingCode = true
+            isCodeTaken = onCheckCodeTaken(trimmed)
+            isCheckingCode = false
+        } else {
+            isCodeTaken = false
+            isCheckingCode = false
         }
     }
 
@@ -123,462 +155,551 @@ fun OnboardingLoginDialog(
         modifier = Modifier.fillMaxSize(),
         color = DeepNavy
     ) {
-            Column(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Official Logo with Golden Ring
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 18.dp, vertical = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .size(76.dp)
+                    .clip(CircleShape)
+                    .border(3.dp, SaffronGold, CircleShape)
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
             ) {
-                // Official Logo with Golden Ring
-                Box(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
-                        .border(3.dp, SaffronGold, CircleShape)
-                        .background(Color.White),
-                    contentAlignment = Alignment.Center
-                ) {
-                    val logoPainter = runCatching {
-                        painterResource(id = R.drawable.ic_app_foreground_1793369456038)
-                    }.getOrNull()
-                    if (logoPainter != null) {
-                        Image(
-                            painter = logoPainter,
-                            contentDescription = "युवा शक्ति ग्रुप लोगो",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    } else {
-                        Text(text = "🚩", fontSize = 36.sp)
-                    }
+                val logoPainter = runCatching {
+                    painterResource(id = R.drawable.ic_app_foreground_1793369456038)
+                }.getOrNull()
+                if (logoPainter != null) {
+                    Image(
+                        painter = logoPainter,
+                        contentDescription = "युवा शक्ति ग्रुप लोगो",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    Text(text = "🚩", fontSize = 34.sp)
                 }
+            }
 
-                Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-                // Official Branding Title
-                Text(
-                    text = "🚩 युवा शक्ति ग्रुप, भाटी परिवार कुचेरा",
-                    fontSize = 19.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = "मासिक अमावस्या अंशदान एवं डिजिटल पारदर्शी बहीखाता",
-                    fontSize = 12.sp,
-                    color = Color(0xFFC7D2FE),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 2.dp)
-                )
+            // Branding Header
+            Text(
+                text = "🚩 युवा शक्ति ग्रुप, भाटी परिवार कुचेरा",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "सदस्य पहचान एवं डिजिटल पारदर्शी बहीखाता",
+                fontSize = 11.5.sp,
+                color = Color(0xFFC7D2FE),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 2.dp)
+            )
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
-                // Main Form Card
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = cardBg),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                    border = BorderStroke(1.2.dp, cardBorder)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(18.dp),
-                        verticalArrangement = Arrangement.spacedBy(13.dp)
+            // Main Auth Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = cardBg),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                border = BorderStroke(1.2.dp, cardBorder)
+            ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    // Top Tabs
+                    TabRow(
+                        selectedTabIndex = selectedTab,
+                        containerColor = Color(0xFFF1F5F9),
+                        contentColor = DeepNavy
                     ) {
-                        Text(
-                            text = "प्रवेश व पंजीकरण (Login & Registration)",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                            color = textPrimary
-                        )
-
-                        // 1. Role Selection: Admin Mode vs Member Mode
-                        Column {
-                            Text(
-                                text = "आप किस रूप में ऐप शुरू करना चाहते हैं? *",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = textPrimary
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                // Member Mode Card
-                                Surface(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .clickable {
-                                            selectedRole = "member"
-                                            errorMessage = null
-                                        },
-                                    shape = RoundedCornerShape(12.dp),
-                                    color = if (selectedRole == "member") Color(0xFFEFF6FF) else Color(0xFFF8FAFC),
-                                    border = BorderStroke(
-                                        if (selectedRole == "member") 1.8.dp else 1.dp,
-                                        if (selectedRole == "member") Color(0xFF2563EB) else Color(0xFFE2E8F0)
+                        Tab(
+                            selected = selectedTab == 0,
+                            onClick = {
+                                selectedTab = 0
+                                loginErrorMessage = null
+                            },
+                            text = {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(imageVector = Icons.Default.Key, contentDescription = null, modifier = Modifier.size(15.dp), tint = if (selectedTab == 0) DeepNavy else textSecondary)
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = "🔑 कोड से लॉगिन",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 12.5.sp
                                     )
-                                ) {
-                                    Column(
-                                        modifier = Modifier.padding(10.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(text = "👤", fontSize = 22.sp)
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text(
-                                            text = "सदस्य मोड",
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 13.sp,
-                                            color = if (selectedRole == "member") Color(0xFF1E40AF) else Color(0xFF475569)
-                                        )
-                                        Text(
-                                            text = "(पारदर्शी दर्शक)",
-                                            fontSize = 9.5.sp,
-                                            color = if (selectedRole == "member") Color(0xFF3B82F6) else Color(0xFF94A3B8)
-                                        )
-                                    }
                                 }
-
-                                // Admin Mode Card
-                                Surface(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .clickable {
-                                            if (wrongAdminAttempts >= 3) {
-                                                errorMessage = "⚠️ 3 बार गलत कोड दर्ज हुआ। सुरक्षा कारणों से एडमिन मोड ब्लॉक है, कृपया सदस्य मोड में जारी रखें।"
-                                            } else {
-                                                selectedRole = "admin"
-                                                errorMessage = null
-                                            }
-                                        },
-                                    shape = RoundedCornerShape(12.dp),
-                                    color = if (selectedRole == "admin") Color(0xFFFFFBEB) else Color(0xFFF8FAFC),
-                                    border = BorderStroke(
-                                        if (selectedRole == "admin") 1.8.dp else 1.dp,
-                                        if (selectedRole == "admin") SaffronGold else Color(0xFFE2E8F0)
+                            }
+                        )
+                        Tab(
+                            selected = selectedTab == 1,
+                            onClick = {
+                                selectedTab = 1
+                                regErrorMessage = null
+                            },
+                            text = {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(imageVector = Icons.Default.Person, contentDescription = null, modifier = Modifier.size(15.dp), tint = if (selectedTab == 1) DeepNavy else textSecondary)
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = "📝 नया पंजीकरण",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 12.5.sp
                                     )
-                                ) {
-                                    Column(
-                                        modifier = Modifier.padding(10.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(text = "🛡️", fontSize = 22.sp)
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text(
-                                            text = "एडमिन मोड",
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 13.sp,
-                                            color = if (selectedRole == "admin") Color(0xFF92400E) else Color(0xFF475569)
-                                        )
-                                        Text(
-                                            text = "(व्यवस्थापक)",
-                                            fontSize = 9.5.sp,
-                                            color = if (selectedRole == "admin") Color(0xFFB45309) else Color(0xFF94A3B8)
-                                        )
+                                }
+                            }
+                        )
+                    }
+
+                    // TAB 0: Direct Login via Member Code or Admin Code
+                    if (selectedTab == 0) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(18.dp),
+                            verticalArrangement = Arrangement.spacedBy(14.dp)
+                        ) {
+                            Surface(
+                                color = Color(0xFFEFF6FF),
+                                shape = RoundedCornerShape(12.dp),
+                                border = BorderStroke(1.dp, Color(0xFFBFDBFE)),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Column(modifier = Modifier.padding(12.dp)) {
+                                    Text(
+                                        text = "🔐 व्यक्तिगत सदस्य / एडमिन कोड द्वारा प्रवेश",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 12.5.sp,
+                                        color = Color(0xFF1E40AF)
+                                    )
+                                    Text(
+                                        text = "प्रत्येक सदस्य का एक विशिष्ट कोड है जिससे उनकी ऑनलाइन पहचान होती है। व्यवस्थापक (Admin) अपना आधिकारिक कोड (992942) दर्ज करें।",
+                                        fontSize = 11.sp,
+                                        color = Color(0xFF1D4ED8),
+                                        modifier = Modifier.padding(top = 3.dp)
+                                    )
+                                }
+                            }
+
+                            OutlinedTextField(
+                                value = memberCodeInput,
+                                onValueChange = {
+                                    if (it.length <= 8) {
+                                        memberCodeInput = it.trim()
+                                        loginErrorMessage = null
                                     }
+                                },
+                                label = { Text("सदस्य कोड / एडमिन कोड दर्ज करें *") },
+                                placeholder = { Text("उदा. 1001 या 992942") },
+                                leadingIcon = {
+                                    Icon(imageVector = Icons.Default.Security, contentDescription = null, tint = SaffronGold)
+                                },
+                                singleLine = true,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .testTag("input_login_member_code"),
+                                colors = inputColors
+                            )
+
+                            if (loginErrorMessage != null) {
+                                Text(
+                                    text = loginErrorMessage ?: "",
+                                    color = PendingRed,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+
+                            Button(
+                                onClick = {
+                                    val code = memberCodeInput.trim()
+                                    if (code.isBlank()) {
+                                        loginErrorMessage = "कृपया अपना सदस्य कोड दर्ज करें।"
+                                        return@Button
+                                    }
+                                    isLoggingIn = true
+                                    onLoginWithCode(code) { success, msg ->
+                                        isLoggingIn = false
+                                        if (!success) {
+                                            loginErrorMessage = msg
+                                        }
+                                    }
+                                },
+                                enabled = !isLoggingIn,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp)
+                                    .testTag("btn_submit_code_login"),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = SaffronGold)
+                            ) {
+                                if (isLoggingIn) {
+                                    CircularProgressIndicator(modifier = Modifier.size(20.dp), color = DeepNavy, strokeWidth = 2.dp)
+                                } else {
+                                    Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = DeepNavy)
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = "कोड सत्यापित करें व प्रवेश करें ➔",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = DeepNavy
+                                    )
+                                }
+                            }
+
+                            // Switch to registration tip
+                            Surface(
+                                color = Color(0xFFF8FAFC),
+                                shape = RoundedCornerShape(10.dp),
+                                border = BorderStroke(1.dp, Color(0xFFE2E8F0)),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        selectedTab = 1
+                                        regErrorMessage = null
+                                    }
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(10.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(text = "💡 ", fontSize = 13.sp)
+                                    Text(
+                                        text = "यदि आप पहली बार जुड़े हैं तो यहाँ क्लिक करके अपना नया सदस्य कोड बनाएं व पंजीकरण करें।",
+                                        fontSize = 11.sp,
+                                        color = Color(0xFF475569)
+                                    )
                                 }
                             }
                         }
+                    } else {
+                        // TAB 1: New Member Registration with Unique Code
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(18.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Text(
+                                text = "📝 नया सदस्य खाता बनाएं",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 15.sp,
+                                color = textPrimary
+                            )
 
-                        // If Admin Mode selected, prompt for Secret Admin Code
-                        if (selectedRole == "admin") {
-                            Surface(
-                                color = Color(0xFFFFFBEB),
+                            // Profile Photo Picker
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(72.dp)
+                                        .clip(CircleShape)
+                                        .border(2.5.dp, if (selectedPhotoUri.isNotBlank()) SaffronGold else Color(0xFFCBD5E1), CircleShape)
+                                        .background(Color(0xFFF1F5F9))
+                                        .clickable { photoPickerLauncher.launch("image/*") },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    if (selectedPhotoUri.isNotBlank()) {
+                                        AsyncImage(
+                                            model = selectedPhotoUri,
+                                            contentDescription = "प्रोफ़ाइल फोटो",
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier.fillMaxSize()
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .size(22.dp)
+                                                .align(Alignment.BottomEnd)
+                                                .background(SaffronGold, CircleShape)
+                                                .border(1.dp, Color.White, CircleShape),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Edit,
+                                                contentDescription = "बदलें",
+                                                tint = DeepNavy,
+                                                modifier = Modifier.size(12.dp)
+                                            )
+                                        }
+                                    } else {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            verticalArrangement = Arrangement.Center
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.CameraAlt,
+                                                contentDescription = "फोटो अपलोड",
+                                                tint = Color(0xFF64748B),
+                                                modifier = Modifier.size(24.dp)
+                                            )
+                                            Text(
+                                                text = "फोटो चुनें",
+                                                fontSize = 9.sp,
+                                                color = Color(0xFF64748B),
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Full Name
+                            OutlinedTextField(
+                                value = fullName,
+                                onValueChange = {
+                                    fullName = it
+                                    regErrorMessage = null
+                                },
+                                label = { Text("पूरा नाम * (उदा. रेवंतराम भाटी)") },
+                                leadingIcon = {
+                                    Icon(imageVector = Icons.Default.Person, contentDescription = null, tint = iconTint)
+                                },
+                                singleLine = true,
                                 shape = RoundedCornerShape(12.dp),
-                                border = BorderStroke(1.dp, Color(0xFFFDE68A)),
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = inputColors
+                            )
+
+                            // Phone Number
+                            OutlinedTextField(
+                                value = phoneNumber,
+                                onValueChange = {
+                                    if (it.length <= 10 && it.all { ch -> ch.isDigit() }) {
+                                        phoneNumber = it
+                                        regErrorMessage = null
+                                    }
+                                },
+                                label = { Text("मोबाइल नंबर * (10 अंक)") },
+                                placeholder = { Text("8696663615") },
+                                leadingIcon = {
+                                    Icon(imageVector = Icons.Default.Phone, contentDescription = null, tint = iconTint)
+                                },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                                singleLine = true,
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = inputColors
+                            )
+
+                            // Village / City
+                            OutlinedTextField(
+                                value = addressVillage,
+                                onValueChange = {
+                                    addressVillage = it
+                                    regErrorMessage = null
+                                },
+                                label = { Text("गाँव / शहर का नाम * (उदा. कुचेरा)") },
+                                leadingIcon = {
+                                    Icon(imageVector = Icons.Default.LocationOn, contentDescription = null, tint = iconTint)
+                                },
+                                singleLine = true,
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = inputColors
+                            )
+
+                            // UNIQUE MEMBER CODE INPUT SECTION
+                            Surface(
+                                color = if (isCodeTaken) Color(0xFFFEF2F2) else if (desiredCode.length >= 4) Color(0xFFF0FDF4) else Color(0xFFFFFBEB),
+                                shape = RoundedCornerShape(12.dp),
+                                border = BorderStroke(
+                                    1.dp,
+                                    if (isCodeTaken) PendingRed else if (desiredCode.length >= 4) PaidGreen else Color(0xFFFDE68A)
+                                ),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Column(modifier = Modifier.padding(10.dp)) {
-                                    Text(
-                                        text = "🔐 एडमिन सत्यापन कोड दर्ज करें (प्रयास: $wrongAdminAttempts/3)",
-                                        fontSize = 11.5.sp,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = Color(0xFF92400E)
-                                    )
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = "🔑 अपना विशिष्ट सदस्य कोड चुनें * (4-6 अंक)",
+                                            fontSize = 11.5.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = if (isCodeTaken) PendingRed else DeepNavy
+                                        )
+                                        // Auto-generate code button
+                                        Surface(
+                                            color = Color(0xFFE2E8F0),
+                                            shape = RoundedCornerShape(6.dp),
+                                            modifier = Modifier.clickable {
+                                                coroutineScope.launch {
+                                                    var candidate = (1001..9999).random().toString()
+                                                    while (onCheckCodeTaken(candidate) || candidate == "992942") {
+                                                        candidate = (1001..9999).random().toString()
+                                                    }
+                                                    desiredCode = candidate
+                                                    regErrorMessage = null
+                                                }
+                                            }
+                                        ) {
+                                            Row(
+                                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(imageVector = Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(11.dp), tint = DeepNavy)
+                                                Spacer(modifier = Modifier.width(3.dp))
+                                                Text(text = "ऑटो कोड", fontSize = 9.5.sp, fontWeight = FontWeight.Bold, color = DeepNavy)
+                                            }
+                                        }
+                                    }
+
                                     Spacer(modifier = Modifier.height(6.dp))
+
                                     OutlinedTextField(
-                                        value = adminCodeInput,
+                                        value = desiredCode,
                                         onValueChange = {
-                                            if (it.length <= 6) {
-                                                adminCodeInput = it
-                                                errorMessage = null
+                                            if (it.length <= 6 && it.all { ch -> ch.isDigit() }) {
+                                                desiredCode = it
+                                                regErrorMessage = null
                                             }
                                         },
-                                        label = { Text("एडमिन कोड * (6 अंक)") },
-                                        placeholder = { Text("992942") },
+                                        placeholder = { Text("उदा. 1025 या 5588") },
                                         leadingIcon = {
-                                            Icon(imageVector = Icons.Default.Lock, contentDescription = null, tint = SaffronGold)
+                                            Icon(imageVector = Icons.Default.Key, contentDescription = null, tint = DeepNavy)
                                         },
-                                        visualTransformation = PasswordVisualTransformation(),
-                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                                         singleLine = true,
+                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                                         shape = RoundedCornerShape(10.dp),
                                         modifier = Modifier.fillMaxWidth(),
                                         colors = inputColors
                                     )
-                                }
-                            }
-                        }
 
-                        // 2. Profile Photo Upload Section
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "प्रोफ़ाइल फ़ोटो जोड़ें (वैकल्पिक / बिना फोटो भी जारी रख सकते हैं):",
-                                fontSize = 11.5.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = textSecondary
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-
-                            Box(
-                                modifier = Modifier
-                                    .size(76.dp)
-                                    .clip(CircleShape)
-                                    .border(2.5.dp, if (selectedPhotoUri.isNotBlank()) SaffronGold else Color(0xFFCBD5E1), CircleShape)
-                                    .background(Color(0xFFF1F5F9))
-                                    .clickable { photoPickerLauncher.launch("image/*") },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                if (selectedPhotoUri.isNotBlank()) {
-                                    AsyncImage(
-                                        model = selectedPhotoUri,
-                                        contentDescription = "प्रोफ़ाइल फोटो",
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier.fillMaxSize()
-                                    )
-                                    Box(
-                                        modifier = Modifier
-                                            .size(24.dp)
-                                            .align(Alignment.BottomEnd)
-                                            .background(SaffronGold, CircleShape)
-                                            .border(1.dp, Color.White, CircleShape),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Edit,
-                                            contentDescription = "बदलें",
-                                            tint = DeepNavy,
-                                            modifier = Modifier.size(13.dp)
-                                        )
-                                    }
-                                } else {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.Center
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.CameraAlt,
-                                            contentDescription = "फोटो अपलोड",
-                                            tint = Color(0xFF64748B),
-                                            modifier = Modifier.size(26.dp)
-                                        )
+                                    if (isCheckingCode) {
                                         Text(
-                                            text = "फोटो चुनें 📸",
-                                            fontSize = 9.sp,
-                                            color = Color(0xFF64748B),
-                                            fontWeight = FontWeight.Bold
+                                            text = "⏳ कोड उपलब्धता जांची जा रही है...",
+                                            fontSize = 11.sp,
+                                            color = Color(0xFF2563EB),
+                                            modifier = Modifier.padding(top = 4.dp)
+                                        )
+                                    } else if (isCodeTaken) {
+                                        Text(
+                                            text = "⚠️ यह कोड '$desiredCode' पहले से किसी सदस्य द्वारा उपयोग में है! कृपया दूसरा कोड चुनें।",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = PendingRed,
+                                            modifier = Modifier.padding(top = 4.dp)
+                                        )
+                                    } else if (desiredCode.length >= 4) {
+                                        Text(
+                                            text = "✅ यह कोड उपलब्ध है! यह आपका व्यक्तिगत लॉगिन कोड रहेगा।",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color(0xFF15803D),
+                                            modifier = Modifier.padding(top = 4.dp)
                                         )
                                     }
                                 }
                             }
-                        }
 
-                        // 3. Full Name (Mandatory)
-                        OutlinedTextField(
-                            value = fullName,
-                            onValueChange = {
-                                fullName = it
-                                errorMessage = null
-                            },
-                            label = { Text("पूरा नाम * (उदा. रेवंतराम भाटी)") },
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Default.Person, contentDescription = null, tint = iconTint)
-                            },
-                            singleLine = true,
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = inputColors
-                        )
+                            // Instagram ID
+                            OutlinedTextField(
+                                value = instagramId,
+                                onValueChange = { instagramId = it },
+                                label = { Text("इंस्टाग्राम आईडी (वैकल्पिक)") },
+                                placeholder = { Text("उदा. bhati_kuchera") },
+                                leadingIcon = {
+                                    Icon(imageVector = Icons.Default.CameraAlt, contentDescription = null, tint = Color(0xFFE1306C))
+                                },
+                                singleLine = true,
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = inputColors
+                            )
 
-                        // 4. Mobile Number (Mandatory)
-                        OutlinedTextField(
-                            value = phoneNumber,
-                            onValueChange = {
-                                if (it.length <= 10 && it.all { ch -> ch.isDigit() }) {
-                                    phoneNumber = it
-                                    errorMessage = null
-                                }
-                            },
-                            label = { Text("मोबाइल नंबर * (10 अंक)") },
-                            placeholder = { Text("8696663615") },
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Default.Phone, contentDescription = null, tint = iconTint)
-                            },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                            singleLine = true,
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = inputColors
-                        )
-                        Text(
-                            text = "ℹ️ यह मोबाइल नंबर आपके बहीखाता खाते व अंशदान से लिंक रहेगा।",
-                            fontSize = 10.sp,
-                            color = Color(0xFF64748B),
-                            modifier = Modifier.padding(start = 4.dp, top = (-6).dp)
-                        )
-
-                        // 5. Village / City / Address (Mandatory)
-                        OutlinedTextField(
-                            value = addressVillage,
-                            onValueChange = {
-                                addressVillage = it
-                                errorMessage = null
-                            },
-                            label = { Text("पता / गाँव या शहर * (उदा. कुचेरा)") },
-                            placeholder = { Text("गाँव का नाम") },
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Default.LocationOn, contentDescription = null, tint = iconTint)
-                            },
-                            singleLine = true,
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = inputColors
-                        )
-
-                        // 6. Instagram ID (Optional)
-                        OutlinedTextField(
-                            value = instagramId,
-                            onValueChange = { instagramId = it },
-                            label = { Text("इंस्टाग्राम आईडी (वैकल्पिक)") },
-                            placeholder = { Text("उदा. Revant__") },
-                            leadingIcon = {
-                                Icon(imageVector = Icons.Default.CameraAlt, contentDescription = null, tint = Color(0xFFE1306C))
-                            },
-                            singleLine = true,
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = inputColors
-                        )
-
-                        // Notice / Error
-                        if (alertNotice != null) {
-                            Surface(
-                                color = Color(0xFFEFF6FF),
-                                shape = RoundedCornerShape(8.dp),
-                                border = BorderStroke(1.dp, Color(0xFFBFDBFE)),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
+                            if (regErrorMessage != null) {
                                 Text(
-                                    text = alertNotice ?: "",
-                                    color = Color(0xFF1D4ED8),
+                                    text = "⚠️ $regErrorMessage",
+                                    color = PendingRed,
                                     fontSize = 11.5.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(8.dp)
+                                    fontWeight = FontWeight.Bold
                                 )
                             }
-                        }
 
-                        if (errorMessage != null) {
-                            Text(
-                                text = "⚠️ $errorMessage",
-                                color = PendingRed,
-                                fontSize = 11.5.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                            // Register Button
+                            Button(
+                                onClick = {
+                                    val trimmedName = fullName.trim()
+                                    val trimmedPhone = phoneNumber.trim()
+                                    val trimmedAddress = addressVillage.trim()
+                                    val trimmedCode = desiredCode.trim()
 
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        // Submit Button
-                        Button(
-                            onClick = {
-                                val trimmedName = fullName.trim()
-                                val trimmedPhone = phoneNumber.trim()
-                                val trimmedAddress = addressVillage.trim()
-
-                                if (trimmedName.isEmpty()) {
-                                    errorMessage = "कृपया अपना पूरा नाम दर्ज करें।"
-                                    return@Button
-                                }
-                                if (trimmedPhone.length < 10) {
-                                    errorMessage = "कृपया 10-अंकों का वैध मोबाइल नंबर दर्ज करें।"
-                                    return@Button
-                                }
-                                if (trimmedAddress.isEmpty()) {
-                                    errorMessage = "कृपया अपना पता या गाँव दर्ज करें (उदा. कुचेरा)।"
-                                    return@Button
-                                }
-
-                                if (selectedRole == "admin") {
-                                    val code = adminCodeInput.trim()
-                                    if (code != "992942") {
-                                        val newWrong = wrongAdminAttempts + 1
-                                        wrongAdminAttempts = newWrong
-                                        if (newWrong >= 3) {
-                                            selectedRole = "member"
-                                            alertNotice = "⚠️ 3 बार गलत कोड दर्ज किया गया। सुरक्षा कारणों से आपको सदस्य मोड (Member Mode) में लॉगिन किया गया है।"
-                                            errorMessage = null
-                                            onLoginSuccess(
-                                                trimmedName,
-                                                trimmedPhone,
-                                                trimmedAddress,
-                                                selectedPhotoUri,
-                                                instagramId.trim(),
-                                                false
-                                            )
-                                        } else {
-                                            errorMessage = "❌ गलत एडमिन कोड! प्रयास ($newWrong/3)। 3 बार गलत होने पर सदस्य मोड में लॉगिन हो जाएगा।"
-                                        }
+                                    if (trimmedName.isEmpty()) {
+                                        regErrorMessage = "कृपया अपना पूरा नाम दर्ज करें।"
                                         return@Button
-                                    } else {
-                                        // Admin success
-                                        onLoginSuccess(
-                                            trimmedName,
-                                            trimmedPhone,
-                                            trimmedAddress,
-                                            selectedPhotoUri,
-                                            instagramId.trim(),
-                                            true
-                                        )
                                     }
-                                } else {
-                                    // Member mode success
-                                    onLoginSuccess(
+                                    if (trimmedPhone.length < 10) {
+                                        regErrorMessage = "कृपया 10-अंकों का वैध मोबाइल नंबर दर्ज करें।"
+                                        return@Button
+                                    }
+                                    if (trimmedAddress.isEmpty()) {
+                                        regErrorMessage = "कृपया गाँव / शहर का नाम दर्ज करें।"
+                                        return@Button
+                                    }
+                                    if (trimmedCode.length < 4) {
+                                        regErrorMessage = "कृपया कम से कम 4-अंकों का विशिष्ट सदस्य कोड चुनें।"
+                                        return@Button
+                                    }
+                                    if (isCodeTaken) {
+                                        regErrorMessage = "यह कोड पहले से उपयोग में है, कृपया दूसरा कोड चुनें।"
+                                        return@Button
+                                    }
+
+                                    isRegistering = true
+                                    onRegisterWithCode(
                                         trimmedName,
                                         trimmedPhone,
                                         trimmedAddress,
+                                        trimmedCode,
                                         selectedPhotoUri,
-                                        instagramId.trim(),
-                                        false
+                                        instagramId.trim()
+                                    ) { success, msg ->
+                                        isRegistering = false
+                                        if (!success) {
+                                            regErrorMessage = msg
+                                        }
+                                    }
+                                },
+                                enabled = !isRegistering && !isCodeTaken && desiredCode.length >= 4,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp)
+                                    .testTag("btn_submit_registration"),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = SaffronGold)
+                            ) {
+                                if (isRegistering) {
+                                    CircularProgressIndicator(modifier = Modifier.size(20.dp), color = DeepNavy, strokeWidth = 2.dp)
+                                } else {
+                                    Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = DeepNavy)
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = "पंजीकरण करें एवं ऐप शुरू करें ➔",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = DeepNavy
                                     )
                                 }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = SaffronGold)
-                        ) {
-                            Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = DeepNavy)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "सत्यापित करें एवं ऐप शुरू करें ➔",
-                                fontSize = 14.5.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = DeepNavy
-                            )
+                            }
                         }
                     }
                 }
             }
         }
     }
+}

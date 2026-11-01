@@ -7,6 +7,7 @@ object OnlinePresenceHelper {
     // In-memory registry of online member IDs synced via Firestore
     private val activeMemberIds = ConcurrentHashMap.newKeySet<Long>()
     private val activeDeviceNames = java.util.concurrent.CopyOnWriteArrayList<String>()
+    private val activeUserDetails = java.util.concurrent.CopyOnWriteArrayList<FirestoreSyncHelper.OnlineUserDetail>()
     @Volatile private var firestoreLiveCount: Int = 1
 
     // Local heartbeat timestamps (fallback)
@@ -15,13 +16,22 @@ object OnlinePresenceHelper {
     /**
      * Called whenever Firestore presence listener updates.
      */
-    fun updateOnlinePresence(count: Int, memberIds: Set<Long>, deviceNames: List<String>) {
+    fun updateOnlinePresence(
+        count: Int,
+        memberIds: Set<Long>,
+        deviceNames: List<String>,
+        userDetails: List<FirestoreSyncHelper.OnlineUserDetail> = emptyList()
+    ) {
         firestoreLiveCount = maxOf(1, count)
         activeMemberIds.clear()
         activeMemberIds.addAll(memberIds)
         activeDeviceNames.clear()
         activeDeviceNames.addAll(deviceNames)
+        activeUserDetails.clear()
+        activeUserDetails.addAll(userDetails)
     }
+
+    fun getOnlineUserDetails(): List<FirestoreSyncHelper.OnlineUserDetail> = activeUserDetails.toList()
 
     /**
      * Mark a member as actively online right now locally.

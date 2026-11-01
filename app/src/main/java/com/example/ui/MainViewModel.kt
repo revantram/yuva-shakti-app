@@ -311,6 +311,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _currentUserPhone = MutableStateFlow(repository.getUserPhone())
     val currentUserPhone: StateFlow<String> = _currentUserPhone
 
+    private val _currentUserMemberCode = MutableStateFlow(repository.getUserMemberCode())
+    val currentUserMemberCode: StateFlow<String> = _currentUserMemberCode
+
     private val _currentUserInstagram = MutableStateFlow(repository.getUserInstagram())
     val currentUserInstagram: StateFlow<String> = _currentUserInstagram
 
@@ -1086,6 +1089,129 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    suspend fun isCodeTaken(code: String, excludeMemberId: Long = 0L): Boolean {
+        return repository.isMemberCodeTaken(code, excludeMemberId)
+    }
+
+    fun loginWithCode(code: String, onResult: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            val cleanCode = code.trim()
+            if (cleanCode == "992942") {
+                // Official Admin Login
+                val adminName = "रेवंत राम जी (व्यवस्थापक)"
+                val adminPhone = "8696663615"
+                repository.saveUserProfile(
+                    name = adminName,
+                    phone = adminPhone,
+                    address = "कुचेरा",
+                    photoUri = repository.getUserProfilePhotoUri(),
+                    insta = "",
+                    pin = "992942",
+                    isAdmin = true,
+                    memberCode = "992942"
+                )
+                repository.setAdminMode(true)
+                _isUserLoggedIn.value = true
+                _isAdmin.value = true
+                _currentUserFullName.value = adminName
+                _currentUserPhone.value = adminPhone
+                _currentUserMemberCode.value = "992942"
+                _activeMemberId.value = 1L
+                repository.setMyActiveMemberId(1L)
+                _showWelcomeGreetingDialog.value = true
+                _snackbarMessage.value = "🛡️ मुख्य व्यवस्थापक (एडमिन) कोड सत्यापित! संपूर्ण नियंत्रण अनलॉक।"
+                onResult(true, "✅ व्यवस्थापक लॉगिन सफल!")
+                return@launch
+            }
+
+            // Member Login via Unique Member Code
+            val member = repository.findMemberByCode(cleanCode)
+            if (member != null) {
+                val isAdmin = (member.phone == "8696663615" || cleanCode == "992942")
+                val codeToSave = if (cleanCode.isNotBlank()) cleanCode else (1000 + member.id).toString()
+                repository.saveUserProfile(
+                    name = member.name,
+                    phone = member.phone,
+                    address = member.villageCity,
+                    photoUri = repository.getUserProfilePhotoUri(),
+                    insta = member.instagramId,
+                    pin = if (isAdmin) "992942" else "",
+                    isAdmin = isAdmin,
+                    memberCode = codeToSave
+                )
+                repository.setAdminMode(isAdmin)
+                _isUserLoggedIn.value = true
+                _isAdmin.value = isAdmin
+                _currentUserFullName.value = member.name
+                _currentUserPhone.value = member.phone
+                _currentUserMemberCode.value = codeToSave
+                _currentUserAddress.value = member.villageCity
+                _currentUserInstagram.value = member.instagramId
+                _activeMemberId.value = member.id
+                repository.setMyActiveMemberId(member.id)
+                _showWelcomeGreetingDialog.value = true
+                _snackbarMessage.value = "👋 स्वागत है, ${member.name}! (सदस्य कोड: $codeToSave)"
+                onResult(true, "✅ स्वागत है, ${member.name} जी!")
+            } else {
+                onResult(false, "❌ यह सदस्य कोड सिस्टम में दर्ज नहीं है। कृपया सही कोड दर्ज करें या नया पंजीकरण करें।")
+            }
+        }
+    }
+
+    fun registerNewMemberWithCode(
+        name: String,
+        phone: String,
+        address: String,
+        memberCode: String,
+        photoUri: String,
+        insta: String,
+        onResult: (Boolean, String) -> Unit
+    ) {
+        viewModelScope.launch {
+            val cleanCode = memberCode.trim()
+            val cleanPhone = phone.trim()
+            if (repository.isMemberCodeTaken(cleanCode)) {
+                onResult(false, "⚠️ यह सदस्य कोड '$cleanCode' पहले से किसी अन्य सदस्य द्वारा उपयोग में है! कृपया दूसरा कोड चुनें।")
+                return@launch
+            }
+            val isAdmin = (cleanCode == "992942" || cleanPhone == "8696663615")
+            val newMember = MemberEntity(
+                name = name.trim(),
+                phone = cleanPhone,
+                monthlyAmount = 100,
+                status = "Pending",
+                notes = if (isAdmin) "मुख्य व्यवस्थापक" else "परिवार सदस्य",
+                instagramId = insta.trim(),
+                whatsappNumber = cleanPhone,
+                villageCity = address.trim().ifBlank { "कुचेरा" },
+                memberCode = cleanCode
+            )
+            val newId = repository.insertMember(newMember)
+            repository.saveUserProfile(
+                name = name.trim(),
+                phone = cleanPhone,
+                address = address.trim(),
+                photoUri = photoUri.trim(),
+                insta = insta.trim(),
+                pin = if (isAdmin) "992942" else "",
+                isAdmin = isAdmin,
+                memberCode = cleanCode
+            )
+            _isUserLoggedIn.value = true
+            _isAdmin.value = isAdmin
+            _currentUserFullName.value = name.trim()
+            _currentUserPhone.value = cleanPhone
+            _currentUserMemberCode.value = cleanCode
+            _currentUserAddress.value = address.trim()
+            _currentUserInstagram.value = insta.trim()
+            _activeMemberId.value = newId
+            repository.setMyActiveMemberId(newId)
+            _showWelcomeGreetingDialog.value = true
+            _snackbarMessage.value = "✅ नया पंजीकरण सफल! सदस्य कोड: $cleanCode"
+            onResult(true, "✅ पंजीकरण सफल!")
+        }
+    }
+
     fun registerOrLoginUser(
         name: String,
         phone: String,
@@ -1095,27 +1221,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         isAdmin: Boolean
     ) {
         viewModelScope.launch {
+            val cleanPhone = phone.trim()
+            val fallbackCode = if (isAdmin || cleanPhone == "8696663615") "992942" else ""
             repository.saveUserProfile(
                 name = name,
-                phone = phone,
+                phone = cleanPhone,
                 address = address,
                 photoUri = photoUri,
                 insta = insta,
                 pin = if (isAdmin) "992942" else "",
-                isAdmin = isAdmin
+                isAdmin = isAdmin,
+                memberCode = fallbackCode
             )
             _isUserLoggedIn.value = true
             _isAdmin.value = isAdmin
             _currentUserFullName.value = name
-            _currentUserPhone.value = phone
+            _currentUserPhone.value = cleanPhone
             _currentUserAddress.value = address
             _currentUserProfilePhotoUri.value = photoUri
             _currentUserInstagram.value = insta
+            if (fallbackCode.isNotBlank()) {
+                _currentUserMemberCode.value = fallbackCode
+            }
 
-            // Link or add to members database so their name & phone appears in member list!
+            // Link or add to members database
             try {
                 val currentMembers = repository.allMembers.firstOrNull() ?: emptyList()
-                val cleanPhone = phone.trim()
                 val existing = currentMembers.find {
                     it.phone.trim().takeLast(10) == cleanPhone.takeLast(10)
                 }
@@ -1128,19 +1259,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         notes = if (isAdmin) "मुख्य व्यवस्थापक" else "परिवार सदस्य",
                         instagramId = insta.trim(),
                         whatsappNumber = cleanPhone,
-                        villageCity = address.trim().ifBlank { "कुचेरा" }
+                        villageCity = address.trim().ifBlank { "कुचेरा" },
+                        memberCode = fallbackCode
                     )
                     val newId = repository.insertMember(newMember)
                     _activeMemberId.value = newId
                     repository.setMyActiveMemberId(newId)
+                    if (fallbackCode.isBlank()) {
+                        val genCode = (1000 + newId).toString()
+                        _currentUserMemberCode.value = genCode
+                        repository.setUserMemberCode(genCode)
+                    }
                 } else {
                     _activeMemberId.value = existing.id
                     repository.setMyActiveMemberId(existing.id)
+                    val existingCode = if (existing.memberCode.isNotBlank()) existing.memberCode else (1000 + existing.id).toString()
+                    _currentUserMemberCode.value = existingCode
+                    repository.setUserMemberCode(existingCode)
                     val updated = existing.copy(
                         name = name.trim().ifBlank { existing.name },
                         villageCity = address.trim().ifBlank { existing.villageCity },
                         instagramId = insta.trim().ifBlank { existing.instagramId },
-                        notes = if (isAdmin) "मुख्य व्यवस्थापक" else existing.notes.ifBlank { "परिवार सदस्य" }
+                        notes = if (isAdmin) "मुख्य व्यवस्थापक" else existing.notes.ifBlank { "परिवार सदस्य" },
+                        memberCode = existingCode
                     )
                     repository.updateMember(updated)
                 }
@@ -1153,11 +1294,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun changeAppLockPin(newPin: String) {
+        val clean = newPin.trim()
+        repository.setAppLockPin(clean)
+        _snackbarMessage.value = "✅ नया ऐप लॉक पिन ($clean) सुरक्षित हो गया है!"
+    }
+
+    fun updateUserProfilePhoto(photoUri: String) {
+        repository.setUserProfilePhotoUri(photoUri)
+        _currentUserProfilePhotoUri.value = photoUri
+        _snackbarMessage.value = "✅ आपकी प्रोफ़ाइल फोटो सुरक्षित हो गई!"
+    }
+
     fun logoutUser() {
         repository.logoutUser()
         repository.setAdminMode(false)
         _isUserLoggedIn.value = false
         _isAdmin.value = false
+        _currentUserMemberCode.value = ""
     }
 
     fun triggerManualSirenTgada(context: Context) {

@@ -150,7 +150,11 @@ fun SettingsDialog(
     onOpenAppUpdateConsole: () -> Unit = {},
     onSwitchAdminRoleClick: () -> Unit = {},
     onUrgentBroadcastClick: () -> Unit = {},
-    onSirenTgadaClick: () -> Unit = {}
+    onSirenTgadaClick: () -> Unit = {},
+    userFullName: String = "",
+    userPhone: String = "",
+    userMemberCode: String = "",
+    onLogoutUser: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val isDark = isSystemInDarkTheme()
@@ -223,6 +227,74 @@ fun SettingsDialog(
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
+                    // Profile & Member Code Badge
+                    item {
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (isDark) Color(0xFF1E293B) else Color(0xFFEFF6FF)
+                            ),
+                            shape = RoundedCornerShape(14.dp),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0xFF334155) else Color(0xFFBFDBFE)),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(38.dp)
+                                            .background(SaffronGold, CircleShape),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(text = "👤", fontSize = 18.sp)
+                                    }
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Column {
+                                        Text(
+                                            text = userFullName.ifBlank { "परिवार सदस्य" },
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 13.5.sp,
+                                            color = textPrimary
+                                        )
+                                        val displayCode = if (isAdmin) "992942 (व्यवस्थापक)" else userMemberCode.ifBlank { "-" }
+                                        Text(
+                                            text = "🔑 कोड: $displayCode • 📱 ${userPhone.ifBlank { "-" }}",
+                                            fontSize = 11.sp,
+                                            color = if (isDark) SaffronGold else Color(0xFF1E40AF),
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
+                                }
+
+                                Surface(
+                                    color = Color(0xFFFEF2F2),
+                                    shape = RoundedCornerShape(8.dp),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFFECDD3)),
+                                    modifier = Modifier.clickable {
+                                        onDismiss()
+                                        onLogoutUser()
+                                    }
+                                ) {
+                                    Text(
+                                        text = "लॉगआउट ➔",
+                                        fontSize = 10.5.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = PendingRed,
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+
                     // Section 0A: Discrete System Security & Access Level (No Darshan/Admin Mode words)
                     item {
                     Card(

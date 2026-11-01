@@ -67,13 +67,15 @@ import com.example.ui.theme.PaidGreenLight
 import com.example.ui.theme.PendingRed
 import com.example.ui.theme.PendingRedLight
 import com.example.ui.theme.SaffronGold
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.theme.SaffronLight
 
 @Composable
 fun AppHeader(
     isAdmin: Boolean,
     totalCollected: Int = 0,
-    countdown: com.example.util.CountdownInfo,
+    countdown: com.example.util.CountdownInfo? = null,
+    countdownFlow: kotlinx.coroutines.flow.StateFlow<com.example.util.CountdownInfo>? = null,
     unreadNotificationCount: Int = 0,
     onlineMemberCount: Int = 1,
     onAuthClick: () -> Unit,
@@ -86,6 +88,11 @@ fun AppHeader(
     onSirenTgadaClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val activeCountdown = if (countdownFlow != null) {
+        countdownFlow.collectAsStateWithLifecycle().value
+    } else {
+        countdown ?: com.example.util.CountdownInfo()
+    }
     Surface(
         color = Color(0xF8FFFFFF),
         border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE5E5EA)),
@@ -361,7 +368,7 @@ fun AppHeader(
 
             // Amavasya Countdown Timer
             HeaderCountdownBanner(
-                countdown = countdown,
+                countdown = activeCountdown,
                 isAdmin = isAdmin,
                 onDateSettingsClick = onDateSettingsClick
             )

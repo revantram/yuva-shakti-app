@@ -48,6 +48,7 @@ object FirestoreSyncHelper {
             val batch = fs.batch()
             for (member in members) {
                 val docRef = fs.collection(COLLECTION_MEMBERS).document(member.id.toString())
+                val cleanCode = if (member.id == 1L || member.phone == "8696663615") "992942" else if (member.memberCode.isNotBlank()) member.memberCode else (1000 + member.id).toString()
                 val data = mapOf(
                     "id" to member.id,
                     "name" to member.name,
@@ -62,6 +63,7 @@ object FirestoreSyncHelper {
                     "facebookId" to member.facebookId,
                     "whatsappNumber" to member.whatsappNumber,
                     "villageCity" to member.villageCity,
+                    "memberCode" to cleanCode,
                     "updatedAt" to System.currentTimeMillis()
                 )
                 batch.set(docRef, data, SetOptions.merge())
@@ -79,6 +81,7 @@ object FirestoreSyncHelper {
         return try {
             val fs = getFirestore() ?: return false
             val docRef = fs.collection(COLLECTION_MEMBERS).document(member.id.toString())
+            val cleanCode = if (member.id == 1L || member.phone == "8696663615") "992942" else if (member.memberCode.isNotBlank()) member.memberCode else (1000 + member.id).toString()
             val data = mapOf(
                 "id" to member.id,
                 "name" to member.name,
@@ -93,6 +96,7 @@ object FirestoreSyncHelper {
                 "facebookId" to member.facebookId,
                 "whatsappNumber" to member.whatsappNumber,
                 "villageCity" to member.villageCity,
+                "memberCode" to cleanCode,
                 "updatedAt" to System.currentTimeMillis()
             )
             docRef.set(data, SetOptions.merge()).awaitTask()
@@ -133,6 +137,7 @@ object FirestoreSyncHelper {
                 val facebookId = doc.getString("facebookId") ?: ""
                 val whatsappNumber = doc.getString("whatsappNumber") ?: (doc.getLong("whatsappNumber")?.toString() ?: "")
                 val villageCity = doc.getString("villageCity") ?: ""
+                val memberCode = doc.getString("memberCode") ?: (if (id == 1L || phone == "8696663615") "992942" else (1000 + id).toString())
 
                 if (name.isNotBlank()) {
                     list.add(
@@ -149,7 +154,8 @@ object FirestoreSyncHelper {
                             instagramId = instagramId,
                             facebookId = facebookId,
                             whatsappNumber = whatsappNumber,
-                            villageCity = villageCity
+                            villageCity = villageCity,
+                            memberCode = memberCode
                         )
                     )
                 }
@@ -186,6 +192,7 @@ object FirestoreSyncHelper {
                             val facebookId = doc.getString("facebookId") ?: ""
                             val whatsappNumber = doc.getString("whatsappNumber") ?: (doc.getLong("whatsappNumber")?.toString() ?: "")
                             val villageCity = doc.getString("villageCity") ?: ""
+                            val memberCode = doc.getString("memberCode") ?: (if (id == 1L || phone == "8696663615") "992942" else (1000 + id).toString())
 
                             if (name.isNotBlank()) {
                                 list.add(
@@ -202,7 +209,8 @@ object FirestoreSyncHelper {
                                         instagramId = instagramId,
                                         facebookId = facebookId,
                                         whatsappNumber = whatsappNumber,
-                                        villageCity = villageCity
+                                        villageCity = villageCity,
+                                        memberCode = memberCode
                                     )
                                 )
                             }
@@ -218,10 +226,17 @@ object FirestoreSyncHelper {
         }
     }
 
+    data class OnlineUserDetail(
+        val memberId: Long = 0L,
+        val userName: String = "",
+        val memberCode: String = "",
+        val lastActive: Long = 0L
+    )
+
     /**
      * Heartbeat Presence: Records that a device/member is actively using the app.
      */
-    fun recordPresence(deviceId: String, userName: String, memberId: Long = 0L) {
+    fun recordPresence(deviceId: String, userName: String, memberId: Long = 0L, memberCode: String = "") {
         if (deviceId.isBlank()) return
         try {
             val fs = getFirestore() ?: return
@@ -230,6 +245,7 @@ object FirestoreSyncHelper {
                 "deviceId" to deviceId,
                 "userName" to userName.ifBlank { "परिवार सदस्य" },
                 "memberId" to memberId,
+                "memberCode" to memberCode,
                 "lastActive" to System.currentTimeMillis()
             )
             docRef.set(data, SetOptions.merge())
@@ -243,7 +259,7 @@ object FirestoreSyncHelper {
      * All devices that sent a heartbeat within the last 3 minutes are counted online in real-time.
      */
     fun listenToOnlinePresence(
-        onUpdate: (count: Int, onlineMemberIds: Set<Long>, activeUsers: List<String>) -> Unit
+        onUpdate: (count: Int, onlineMemberIds: Set<Long>, activeUsers: List<String>, activeUserDetails: List<OnlineUserDetail>) -> Unit
     ): ListenerRegistration? {
         return try {
             val fs = getFirestore() ?: return null
@@ -257,6 +273,7 @@ object FirestoreSyncHelper {
                         val cutoff = System.currentTimeMillis() - (180 * 1000L) // 3 minutes
                         val activeUsers = mutableListOf<String>()
                         val onlineMemberIds = mutableSetOf<Long>()
+                        val userDetails = mutableListOf<OnlineUserDetail>()
                         var liveDeviceCount = 0
 
                         for (doc in snapshot.documents) {
@@ -268,13 +285,15 @@ object FirestoreSyncHelper {
                                     onlineMemberIds.add(mId)
                                 }
                                 val name = doc.getString("userName") ?: ""
+                                val code = doc.getString("memberCode") ?: (if (mId > 0L) (1000 + mId).toString() else "")
                                 if (name.isNotBlank()) {
                                     activeUsers.add(name)
+                                    userDetails.add(OnlineUserDetail(mId, name, code, lastActive))
                                 }
                             }
                         }
                         val onlineCount = maxOf(1, liveDeviceCount)
-                        onUpdate(onlineCount, onlineMemberIds, activeUsers)
+                        onUpdate(onlineCount, onlineMemberIds, activeUsers, userDetails)
                     }
                 }
         } catch (t: Throwable) {

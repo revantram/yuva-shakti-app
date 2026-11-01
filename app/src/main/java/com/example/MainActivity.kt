@@ -130,6 +130,7 @@ import com.example.ui.components.LoanAssistanceView
 import com.example.ui.components.MemberCard
 import com.example.ui.components.MemberProfileDialog
 import com.example.ui.components.NotificationsDialog
+import com.example.ui.components.OnboardingLoginDialog
 import com.example.ui.components.OnlineMembersDialog
 import com.example.ui.components.OnlinePaymentDialog
 import com.example.ui.components.PaymentModeSelectionDialog
@@ -205,7 +206,7 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(viewModel: MainViewModel) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val countdown by viewModel.countdownInfo.collectAsStateWithLifecycle()
+    val currentUserMemberCode by viewModel.currentUserMemberCode.collectAsStateWithLifecycle()
     val targetAmavasyaMillis by viewModel.targetAmavasyaMillis.collectAsStateWithLifecycle()
     val selectedMainSection by viewModel.selectedMainSection.collectAsStateWithLifecycle()
     val expenses by viewModel.expenses.collectAsStateWithLifecycle()
@@ -313,10 +314,10 @@ fun MainScreen(viewModel: MainViewModel) {
 
     // Realtime Firestore presence, settings, and emergency siren listeners
     DisposableEffect(Unit) {
-        val presenceReg = FirestoreSyncHelper.listenToOnlinePresence { count, memberIds, users ->
+        val presenceReg = FirestoreSyncHelper.listenToOnlinePresence { count, memberIds, users, userDetails ->
             firestoreOnlineCount = count
             firestoreActiveUsers = users
-            OnlinePresenceHelper.updateOnlinePresence(count, memberIds, users)
+            OnlinePresenceHelper.updateOnlinePresence(count, memberIds, users, userDetails)
         }
         val settingsReg = FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
             upiId?.let {
@@ -420,11 +421,29 @@ fun MainScreen(viewModel: MainViewModel) {
         return
     }
 
+    // If user is not logged in, show Onboarding / Member Code Login Screen
+    if (!isUserLoggedIn) {
+        OnboardingLoginDialog(
+            onLoginWithCode = { code, onResult ->
+                viewModel.loginWithCode(code, onResult)
+            },
+            onRegisterWithCode = { name, phone, address, code, photo, insta, onResult ->
+                viewModel.registerNewMemberWithCode(name, phone, address, code, photo, insta, onResult)
+            },
+            onCheckCodeTaken = { code ->
+                viewModel.isCodeTaken(code)
+            }
+        )
+        return
+    }
+
     // Live Heartbeat Loop (every 30 seconds)
-    LaunchedEffect(activeMemberId) {
+    LaunchedEffect(activeMemberId, currentUserMemberCode) {
         while (true) {
-            val myName = uiState.members.find { it.id == activeMemberId }?.name ?: "सदस्य"
-            FirestoreSyncHelper.recordPresence(deviceId, myName, activeMemberId)
+            val myMember = uiState.members.find { it.id == activeMemberId }
+            val myName = myMember?.name ?: currentUserFullName.ifBlank { "सदस्य" }
+            val codeToSend = if (activeMemberId == 1L || currentUserPhone == "8696663615") "992942" else currentUserMemberCode.ifBlank { myMember?.memberCode ?: "" }
+            FirestoreSyncHelper.recordPresence(deviceId, myName, activeMemberId, codeToSend)
             delay(30000L)
         }
     }
@@ -649,7 +668,7 @@ fun MainScreen(viewModel: MainViewModel) {
                             AppHeader(
                                 isAdmin = uiState.isAdmin,
                                 totalCollected = uiState.totalCollected,
-                                countdown = countdown,
+                                countdownFlow = viewModel.countdownInfo,
                                 unreadNotificationCount = unreadNotifCount,
                                 onlineMemberCount = onlineCount,
                                 onAuthClick = {
@@ -985,13 +1004,15 @@ fun MainScreen(viewModel: MainViewModel) {
                         } else {
                             items(
                                 items = uiState.filteredMembers,
-                                key = { member -> "${member.id}_${member.phone}" }
+                                key = { it.id },
+                                contentType = { "member_card" }
                             ) { member ->
                                 val isOnline = OnlinePresenceHelper.isOnline(member.id, activeMemberId, uiState.members.size)
                                 MemberCard(
                                     member = member,
                                     isAdmin = uiState.isAdmin,
                                     isOnline = isOnline,
+                                    isDark = isDark,
                                     onCardClick = {
                                         viewModel.openMemberProfile(member)
                                     },
@@ -1186,6 +1207,12 @@ fun MainScreen(viewModel: MainViewModel) {
             },
             onSirenTgadaClick = {
                 viewModel.triggerManualSirenTgada(context)
+            },
+            userFullName = currentUserFullName,
+            userPhone = currentUserPhone,
+            userMemberCode = currentUserMemberCode,
+            onLogoutUser = {
+                viewModel.logoutUser()
             }
         )
     }
@@ -1469,7 +1496,12 @@ fun MainScreen(viewModel: MainViewModel) {
     if (showChangePinDialog) {
         ChangePinDialog(
             onDismiss = { viewModel.showChangePinDialog(false) },
-            onChangePin = { newPin -> viewModel.changeAdminPin(newPin) }
+            onChangePin = { newPin ->
+                viewModel.changeAppLockPin(newPin)
+                if (uiState.isAdmin) {
+                    viewModel.changeAdminPin(newPin)
+                }
+            }
         )
     }
 
@@ -1486,7 +1518,7 @@ fun MainScreen(viewModel: MainViewModel) {
 
     if (showDatePickerDialog) {
         AmavasyaDatePickerDialog(
-            currentCountdown = countdown,
+            currentCountdown = viewModel.countdownInfo.value,
             onDismiss = { viewModel.showDatePickerDialog(false) },
             onSetCustomDate = { millis -> viewModel.setCustomAmavasyaDate(millis) },
             onResetToAuto = { viewModel.resetToAutoAmavasya() }

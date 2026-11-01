@@ -214,11 +214,21 @@ fun OnlineMembersDialog(
                                             }
                                         }
 
-                                        Text(
-                                            text = if (isOnline) "🟢 सक्रिय (Online Now)" else "⚪ अंतिम बार सक्रिय",
-                                            fontSize = 10.5.sp,
-                                            color = if (isOnline) Color(0xFF15803D) else Color(0xFF64748B)
-                                        )
+                                        val codeText = if (m.id == 1L || m.phone == "8696663615") "🛡️ एडमिन (992942)" else "🔑 कोड: ${m.memberCode.ifBlank { (1000 + m.id).toString() }}"
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Text(
+                                                text = if (isOnline) "🟢 ऑनलाइन" else "⚪ ऑफ़लाइन",
+                                                fontSize = 10.5.sp,
+                                                fontWeight = FontWeight.SemiBold,
+                                                color = if (isOnline) Color(0xFF15803D) else Color(0xFF64748B)
+                                            )
+                                            Text(
+                                                text = " • $codeText",
+                                                fontSize = 10.5.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                color = Color(0xFF1E40AF)
+                                            )
+                                        }
                                     }
                                 }
 

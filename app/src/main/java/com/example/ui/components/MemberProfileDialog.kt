@@ -171,7 +171,23 @@ fun MemberProfileDialog(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                val cleanCode = if (member.id == 1L || member.phone == "8696663615") "992942" else member.memberCode.ifBlank { (1000 + member.id).toString() }
+                Surface(
+                    color = Color(0xFFEFF6FF),
+                    shape = RoundedCornerShape(8.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFBFDBFE)),
+                    modifier = Modifier.padding(top = 6.dp)
+                ) {
+                    Text(
+                        text = "🔑 सदस्य कोड: $cleanCode",
+                        fontSize = 11.5.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1E40AF),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
 
                 // Payment Status Card
                 Surface(

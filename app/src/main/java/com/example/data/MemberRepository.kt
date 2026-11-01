@@ -31,6 +31,7 @@ class MemberRepository(
         private const val KEY_USER_INSTAGRAM = "user_instagram"
         private const val KEY_USER_PERSONAL_PIN = "user_personal_pin"
         private const val KEY_USER_IS_ADMIN = "user_is_admin"
+        private const val KEY_USER_MEMBER_CODE = "user_member_code"
         private const val KEY_USER_ADDRESS = "user_address"
         private const val KEY_USER_PROFILE_PHOTO_URI = "user_profile_photo_uri"
         private const val KEY_AMAVASYA_CYCLE_NAME = "amavasya_cycle_name"
@@ -359,6 +360,10 @@ class MemberRepository(
     fun isUserLoggedIn(): Boolean = prefs.getBoolean(KEY_USER_LOGGED_IN, false)
     fun getUserFullName(): String = prefs.getString(KEY_USER_FULL_NAME, "") ?: ""
     fun getUserPhone(): String = prefs.getString(KEY_USER_PHONE, "") ?: ""
+    fun getUserMemberCode(): String = prefs.getString(KEY_USER_MEMBER_CODE, "") ?: ""
+    fun setUserMemberCode(code: String) {
+        prefs.edit().putString(KEY_USER_MEMBER_CODE, code.trim()).apply()
+    }
     fun getUserInstagram(): String = prefs.getString(KEY_USER_INSTAGRAM, "") ?: ""
     fun getUserPersonalPin(): String = prefs.getString(KEY_USER_PERSONAL_PIN, "") ?: ""
     fun isUserAdminRole(): Boolean = prefs.getBoolean(KEY_USER_IS_ADMIN, false)
@@ -379,7 +384,8 @@ class MemberRepository(
         photoUri: String,
         insta: String,
         pin: String,
-        isAdmin: Boolean
+        isAdmin: Boolean,
+        memberCode: String = ""
     ) {
         prefs.edit()
             .putBoolean(KEY_USER_LOGGED_IN, true)
@@ -390,7 +396,27 @@ class MemberRepository(
             .putString(KEY_USER_INSTAGRAM, insta.trim())
             .putString(KEY_USER_PERSONAL_PIN, pin.trim())
             .putBoolean(KEY_USER_IS_ADMIN, isAdmin)
+            .putString(KEY_USER_MEMBER_CODE, memberCode.trim())
             .apply()
+    }
+
+    suspend fun isMemberCodeTaken(code: String, excludeMemberId: Long = 0L): Boolean = withContext(Dispatchers.IO) {
+        val cleanCode = code.trim()
+        if (cleanCode.isBlank()) return@withContext false
+        if (cleanCode == "992942") return@withContext true
+        val members = memberDao.getAllMembersList()
+        members.any { m ->
+            m.id != excludeMemberId && (m.memberCode.equals(cleanCode, ignoreCase = true) || (1000 + m.id).toString() == cleanCode)
+        }
+    }
+
+    suspend fun findMemberByCode(code: String): MemberEntity? = withContext(Dispatchers.IO) {
+        val cleanCode = code.trim()
+        if (cleanCode.isBlank()) return@withContext null
+        val members = memberDao.getAllMembersList()
+        members.find { m ->
+            m.memberCode.equals(cleanCode, ignoreCase = true) || (1000 + m.id).toString() == cleanCode
+        }
     }
 
     fun logoutUser() {
@@ -905,7 +931,7 @@ class MemberRepository(
     }
 
     fun getUpdateApkUrl(): String {
-        return prefs.getString(KEY_UPDATE_APK_URL, "https://github.com/revantram/yuva-shakti-app/releases/latest/download/yuva-shakti.apk") ?: "https://github.com/revantram/yuva-shakti-app/releases/latest/download/yuva-shakti.apk"
+        return prefs.getString(KEY_UPDATE_APK_URL, "https://github.com/revantram/yuva-shakti-app/releases/download/latest/yuva-shakti.apk") ?: "https://github.com/revantram/yuva-shakti-app/releases/download/latest/yuva-shakti.apk"
     }
 
     fun setUpdateApkUrl(url: String) {

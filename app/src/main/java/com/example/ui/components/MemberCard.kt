@@ -49,6 +49,7 @@ fun MemberCard(
     member: MemberEntity,
     isAdmin: Boolean,
     isOnline: Boolean = false,
+    isDark: Boolean = false,
     onCardClick: () -> Unit,
     onToggleStatus: () -> Unit,
     onCallClick: () -> Unit,
@@ -57,7 +58,6 @@ fun MemberCard(
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
     val isPaid = member.status == "Paid"
     val cardBg = if (isDark) (if (isPaid) Color(0xCC064E3B) else Color(0xCC450A0A)) else (if (isPaid) Color(0xD9F0FDF4) else Color(0xD9FFF1F2))
     val cardBorder = if (isDark) (if (isPaid) Color(0x6610B981) else Color(0x66F43F5E)) else (if (isPaid) Color(0xFFBBF7D0) else Color(0xFFFECDD3))
@@ -152,15 +152,17 @@ fun MemberCard(
                             } else {
                                 member.phone.take(5) + "•••••"
                             }
+                            val cleanCode = if (member.id == 1L || member.phone == "8696663615") "992942" else member.memberCode.ifBlank { (1000 + member.id).toString() }
                             Text(
                                 text = displayPhone,
-                                fontSize = 12.5.sp,
+                                fontSize = 12.sp,
                                 color = textSecondary
                             )
                             Text(
-                                text = " • ",
-                                fontSize = 12.5.sp,
-                                color = Color(0xFF94A3B8)
+                                text = " • 🔑 $cleanCode • ",
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = if (isDark) SaffronGold else DeepNavy
                             )
                             if (isPaid) {
                                 val modeText = if (member.paymentMode.isNotBlank()) "${member.paymentMode} द्वारा " else ""

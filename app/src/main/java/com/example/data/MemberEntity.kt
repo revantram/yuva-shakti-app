@@ -18,7 +18,8 @@ data class MemberEntity(
     val instagramId: String = "",
     val facebookId: String = "",
     val whatsappNumber: String = "",
-    val villageCity: String = ""
+    val villageCity: String = "",
+    val memberCode: String = ""
 )
 
 @Entity(tableName = "cycle_history")
