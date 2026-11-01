@@ -226,6 +226,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 kotlinx.coroutines.delay(1000L)
             }
         }
+        // Continuous 5-minute periodic auto-refresh loop from Firebase Firestore
+        viewModelScope.launch {
+            while (true) {
+                kotlinx.coroutines.delay(5 * 60 * 1000L) // 5 minutes
+                try {
+                    android.util.Log.d("MainViewModel", "Continuous 5-minute auto-refresh from Firestore")
+                    repository.syncWithFirestore()
+                } catch (t: Throwable) {
+                    android.util.Log.e("MainViewModel", "Periodic sync error", t)
+                }
+            }
+        }
     }
 
     val allPaymentRequests: StateFlow<List<PaymentRequestEntity>> = repository.allPaymentRequests.stateIn(
@@ -532,16 +544,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun syncWithFirestore() {
+        refreshAllDataFromFirebase(isSilent = false)
+    }
+
+    fun refreshAllDataFromFirebase(isSilent: Boolean = false) {
         viewModelScope.launch {
             try {
                 val ok = repository.syncWithFirestore()
-                if (ok) {
-                    _snackbarMessage.value = "🔥 Firebase Firestore से डेटा सफलतापूर्वक सिंक हुआ!"
-                } else {
-                    _snackbarMessage.value = "⚠️ Firestore सिंक नहीं हो सका, कृपया इंटरनेट चेक करें।"
+                if (!isSilent) {
+                    if (ok) {
+                        _snackbarMessage.value = "🔥 Firebase Firestore से डेटा ताज़ा (Refresh) हुआ!"
+                    } else {
+                        _snackbarMessage.value = "⚠️ Firestore सिंक नहीं हो सका, कृपया इंटरनेट चेक करें।"
+                    }
                 }
             } catch (e: Exception) {
-                _snackbarMessage.value = "त्रुटि: ${e.message}"
+                if (!isSilent) {
+                    _snackbarMessage.value = "त्रुटि: ${e.message}"
+                }
             }
         }
     }
@@ -933,12 +953,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun broadcastUrgentAlert(title: String, message: String) {
         viewModelScope.launch {
             val adminName = if (_isAdmin.value) "रेवंत राम जी (व्यवस्थापक)" else "मुख्य व्यवस्थापक"
+            val pendingMembers = uiState.value.members.filter { it.status == "Pending" }
             repository.broadcastUrgentAlert(title, message, adminName)
             com.example.util.FirestoreSyncHelper.broadcastEmergencyAlert(
                 title = title,
                 message = message,
                 adminName = adminName,
-                isSiren = true
+                isSiren = true,
+                pendingMembers = pendingMembers
             )
             _showUrgentBroadcastDialog.value = false
             _snackbarMessage.value = "🚨 आवश्यक सूचना सभी सदस्यों के मोबाइल पर सायरन के साथ प्रसारित की गई!"
@@ -1143,18 +1165,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val pendingMembers = uiState.value.members.filter { it.status == "Pending" }
             val adminName = if (_isAdmin.value) "रेवंत राम जी (व्यवस्थापक)" else "मुख्य व्यवस्थापक"
             val title = "🚨 अमावस्या फंड बकाया सायरन तगादा!"
+            val totalPendingAmt = if (pendingMembers.isNotEmpty()) pendingMembers.sumOf { it.monthlyAmount } else 100
             val msg = if (pendingMembers.isNotEmpty()) {
-                "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा): ${pendingMembers.size} सदस्यों का मासिक अंशदान बाकी है। कृपया तुरंत जमा कराएं।"
+                "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा): ${pendingMembers.size} सदस्यों का कुल ₹$totalPendingAmt मासिक अंशदान बाकी है। कृपया तुरंत PhonePe से जमा कराएं।"
             } else {
                 "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा): आगामी अमावस्या फंड अंशदान हेतु सायरन तगादा।"
             }
 
-            // Local sound & notification
-            com.example.util.SoundHelper.playJaiShreeRam(context)
+            // Local siren audio & notification
+            com.example.util.SoundHelper.playSirenAlarm(context)
             com.example.util.NotificationHelper.triggerPendingSirenNotification(
                 context = context,
+                title = title,
+                message = msg,
                 memberName = if (pendingMembers.isNotEmpty()) "${pendingMembers.size} बकाया सदस्यों" else "सभी सदस्यों",
-                amount = if (pendingMembers.isNotEmpty()) pendingMembers.sumOf { it.monthlyAmount } else 100
+                amount = totalPendingAmt
             )
 
             // Realtime Broadcast across ALL installed phones via Firestore!
@@ -1162,10 +1187,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 title = title,
                 message = msg,
                 adminName = adminName,
-                isSiren = true
+                isSiren = true,
+                pendingMembers = pendingMembers
             )
 
-            _snackbarMessage.value = "🚨 सभी सदस्यों के मोबाइल पर सायरन अलार्म तगादा बजाया गया!"
+            _snackbarMessage.value = "🚨 सभी सदस्यों के मोबाइल पर सायरन अलार्म व बकाया तगादा भेजा गया!"
         }
     }
 

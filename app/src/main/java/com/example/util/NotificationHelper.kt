@@ -183,10 +183,12 @@ object NotificationHelper {
     }
 
     /**
-     * Triggers a high-priority Siren Alarm notification for members whose monthly payment is pending.
+     * Triggers a high-priority Siren Alarm notification for members whose monthly payment is pending or emergency broadcast.
      */
     fun triggerPendingSirenNotification(
         context: Context,
+        title: String? = null,
+        message: String? = null,
         memberName: String = "सदस्य",
         amount: Int = 100
     ) {
@@ -211,20 +213,21 @@ object NotificationHelper {
         val soundUri = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM)
             ?: android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_NOTIFICATION)
 
-        val title = "🚨 अत्यावश्यक सायरन तगादा: अंशदान बाकी है!"
-        val message = "सादर प्रणाम $memberName जी! युवा शक्ति ग्रुप (भाटी परिवार कुचेरा) का आपका ₹$amount मासिक अमावस्या अंशदान अभी तक जमा नहीं हुआ है। कृपया तुरंत जमा कराएं।"
+        val actualTitle = title ?: "🚨 अत्यावश्यक सायरन तगादा: अंशदान बाकी है!"
+        val actualMessage = message ?: "सादर प्रणाम $memberName जी! युवा शक्ति ग्रुप (भाटी परिवार कुचेरा) का आपका ₹$amount मासिक अमावस्या अंशदान अभी तक जमा नहीं हुआ है। कृपया तुरंत जमा कराएं।"
 
         val notification = NotificationCompat.Builder(context, SIREN_CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_alert)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+            .setContentTitle(actualTitle)
+            .setContentText(actualMessage)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(actualMessage))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setSound(soundUri)
             .setVibrate(longArrayOf(0, 600, 200, 600, 200, 1000, 400, 1000))
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
+            .setFullScreenIntent(pendingIntent, true)
             .build()
 
         try {

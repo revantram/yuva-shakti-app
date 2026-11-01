@@ -283,6 +283,18 @@ object FirestoreSyncHelper {
         }
     }
 
+    data class EmergencyAlertData(
+        val alertId: String = "",
+        val title: String = "",
+        val message: String = "",
+        val sender: String = "",
+        val isSiren: Boolean = true,
+        val timestamp: Long = 0L,
+        val pendingCount: Int = 0,
+        val totalPendingAmount: Int = 0,
+        val pendingMemberNames: List<String> = emptyList()
+    )
+
     /**
      * Broadcasts an emergency siren alert or urgent notice to all installed devices in real time.
      */
@@ -290,20 +302,39 @@ object FirestoreSyncHelper {
         title: String,
         message: String,
         adminName: String = "मुख्य व्यवस्थापक",
-        isSiren: Boolean = true
+        isSiren: Boolean = true,
+        pendingMembers: List<MemberEntity> = emptyList()
     ): Boolean {
         return try {
             val fs = getFirestore() ?: return false
-            val docRef = fs.collection(COLLECTION_EMERGENCY_ALERTS).document()
+            val alertId = java.util.UUID.randomUUID().toString()
+            val now = System.currentTimeMillis()
+            val pendingCount = pendingMembers.size
+            val totalPendingAmount = pendingMembers.sumOf { it.monthlyAmount }
+            val pendingNames = pendingMembers.map { "${it.name} (₹${it.monthlyAmount})" }
+
             val data = mapOf(
-                "id" to docRef.id,
+                "alertId" to alertId,
                 "title" to title,
                 "message" to message,
                 "sender" to adminName,
                 "isSiren" to isSiren,
-                "timestamp" to System.currentTimeMillis()
+                "timestamp" to now,
+                "pendingCount" to pendingCount,
+                "totalPendingAmount" to totalPendingAmount,
+                "pendingMemberNames" to pendingNames
             )
-            docRef.set(data).awaitTask()
+
+            // 1. Direct document for instantaneous 1-to-all snapshot push on all connected devices
+            fs.collection(COLLECTION_EMERGENCY_ALERTS).document("current_live_alert")
+                .set(data)
+                .awaitTask()
+
+            // 2. Also log to history collection
+            fs.collection(COLLECTION_EMERGENCY_ALERTS).document(alertId)
+                .set(data)
+                .awaitTask()
+
             Log.d(TAG, "Broadcasted emergency alert to Firestore: $title")
             true
         } catch (t: Throwable) {
@@ -318,35 +349,48 @@ object FirestoreSyncHelper {
      */
     fun listenToEmergencyAlerts(
         context: Context,
-        onAlertReceived: (title: String, message: String, isSiren: Boolean) -> Unit
+        onAlertReceived: (EmergencyAlertData) -> Unit
     ): ListenerRegistration? {
         return try {
             val fs = getFirestore() ?: return null
             val prefs = context.getSharedPreferences("yuva_shakti_alert_prefs", Context.MODE_PRIVATE)
-            val appStartTime = System.currentTimeMillis()
-            var lastHandledTime = prefs.getLong("last_handled_alert_time", appStartTime - 10000L)
 
-            fs.collection(COLLECTION_EMERGENCY_ALERTS)
-                .whereGreaterThan("timestamp", lastHandledTime)
+            fs.collection(COLLECTION_EMERGENCY_ALERTS).document("current_live_alert")
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
                         Log.e(TAG, "Emergency alert listener error", error)
                         return@addSnapshotListener
                     }
-                    if (snapshot != null) {
-                        for (change in snapshot.documentChanges) {
-                            if (change.type == com.google.firebase.firestore.DocumentChange.Type.ADDED) {
-                                val doc = change.document
-                                val timestamp = doc.getLong("timestamp") ?: 0L
-                                if (timestamp > lastHandledTime) {
-                                    lastHandledTime = timestamp
-                                    prefs.edit().putLong("last_handled_alert_time", timestamp).apply()
-                                    val title = doc.getString("title") ?: "🚨 आवश्यक सूचना"
-                                    val message = doc.getString("message") ?: ""
-                                    val isSiren = doc.getBoolean("isSiren") ?: true
-                                    onAlertReceived(title, message, isSiren)
-                                }
-                            }
+                    if (snapshot != null && snapshot.exists()) {
+                        val alertId = snapshot.getString("alertId") ?: ""
+                        val timestamp = snapshot.getLong("timestamp") ?: 0L
+                        val lastSeenId = prefs.getString("last_handled_alert_id", "") ?: ""
+
+                        // Only fire if it's a new alert AND issued within the last 15 minutes
+                        val isFresh = (System.currentTimeMillis() - timestamp) < (15 * 60 * 1000L)
+                        if (alertId.isNotBlank() && alertId != lastSeenId && isFresh) {
+                            prefs.edit().putString("last_handled_alert_id", alertId).apply()
+                            val title = snapshot.getString("title") ?: "🚨 आवश्यक सूचना"
+                            val message = snapshot.getString("message") ?: ""
+                            val sender = snapshot.getString("sender") ?: "मुख्य व्यवस्थापक"
+                            val isSiren = snapshot.getBoolean("isSiren") ?: true
+                            val pendingCount = snapshot.getLong("pendingCount")?.toInt() ?: 0
+                            val totalPendingAmount = snapshot.getLong("totalPendingAmount")?.toInt() ?: 0
+                            @Suppress("UNCHECKED_CAST")
+                            val pendingMemberNames = (snapshot.get("pendingMemberNames") as? List<String>) ?: emptyList()
+
+                            val alertData = EmergencyAlertData(
+                                alertId = alertId,
+                                title = title,
+                                message = message,
+                                sender = sender,
+                                isSiren = isSiren,
+                                timestamp = timestamp,
+                                pendingCount = pendingCount,
+                                totalPendingAmount = totalPendingAmount,
+                                pendingMemberNames = pendingMemberNames
+                            )
+                            onAlertReceived(alertData)
                         }
                     }
                 }
