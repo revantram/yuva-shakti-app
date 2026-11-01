@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.data.MemberEntity
 import com.example.data.RegistrationRequest
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
@@ -14,6 +15,7 @@ import kotlin.coroutines.resume
 object FirestoreSyncHelper {
     private const val TAG = "FirestoreSync"
     private const val COLLECTION_MEMBERS = "members"
+    private const val COLLECTION_CONTRIBUTIONS = "contributions"
     private const val COLLECTION_PRESENCE = "presence"
     private const val COLLECTION_SETTINGS = "settings"
     private const val COLLECTION_EMERGENCY_ALERTS = "emergency_alerts"
@@ -710,6 +712,65 @@ object FirestoreSyncHelper {
         } catch (t: Throwable) {
             Log.e(TAG, "Error rejecting registration request", t)
             false
+        }
+    }
+
+    data class ContributionData(
+        val id: String = "",
+        val name: String = "",
+        val amount: Double = 0.0,
+        val timestamp: Long = 0L
+    )
+
+    /**
+     * Add a real-time contribution to Firestore "contributions" collection
+     */
+    suspend fun addContribution(name: String, amount: Double): Boolean {
+        return try {
+            val fs = getFirestore() ?: return false
+            val data = mapOf(
+                "name" to name,
+                "amount" to amount,
+                "timestamp" to FieldValue.serverTimestamp()
+            )
+            fs.collection(COLLECTION_CONTRIBUTIONS).add(data).awaitTask()
+            Log.d(TAG, "Contribution added successfully for $name: $amount")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error adding contribution to Firestore", e)
+            false
+        }
+    }
+
+    /**
+     * Listen to real-time contributions from Firestore
+     */
+    fun listenToContributions(onUpdate: (List<ContributionData>, Double) -> Unit): ListenerRegistration? {
+        val fs = getFirestore() ?: return null
+        return try {
+            fs.collection(COLLECTION_CONTRIBUTIONS)
+                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        Log.e(TAG, "Error listening to contributions", error)
+                        return@addSnapshotListener
+                    }
+                    if (snapshot != null) {
+                        var total = 0.0
+                        val list = mutableListOf<ContributionData>()
+                        for (doc in snapshot.documents) {
+                            val name = doc.getString("name") ?: ""
+                            val amount = doc.getDouble("amount") ?: (doc.getLong("amount")?.toDouble() ?: 0.0)
+                            val ts = doc.getTimestamp("timestamp")?.toDate()?.time ?: (doc.getLong("timestamp") ?: 0L)
+                            total += amount
+                            list.add(ContributionData(id = doc.id, name = name, amount = amount, timestamp = ts))
+                        }
+                        onUpdate(list, total)
+                    }
+                }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Failed to attach contributions listener", t)
+            null
         }
     }
 }

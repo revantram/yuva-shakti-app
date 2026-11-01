@@ -251,6 +251,27 @@
       </div>
     </div>
 
+    <!-- Real-time Contributions Live Sync Card -->
+    <div class="table-card" style="margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <div>
+          <h3 style="font-size: 15px; color: var(--saffron); font-weight: 800;">⚡ रीयल-टाइम कंट्रीब्यूशन सिंक (Firebase Live)</h3>
+          <p style="font-size: 11.5px; color: var(--text-muted);">सभी डिवाइसों में तुरंत लाइव अपडेट होने वाली राशियां</p>
+        </div>
+        <div id="total-amount" style="font-size: 14px; font-weight: 800; color: #10b981; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); padding: 5px 12px; border-radius: 999px;">
+          कुल राशि: ₹0
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+        <input type="text" id="contribNameInput" class="auth-input" placeholder="सदस्य का नाम" style="flex: 1; min-width: 140px;">
+        <input type="number" id="contribAmountInput" class="auth-input" placeholder="राशि (₹)" style="width: 110px;">
+        <button id="addContribBtn" class="auth-btn" style="background: #10b981; color: #022c22; font-weight: 700;">+ जमा दर्ज करें</button>
+      </div>
+      <ul id="contributions-list" style="list-style: none; display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; padding: 4px;">
+        <li style="color: var(--text-muted); font-size: 12px;">🔄 कंट्रीब्यूशन डेटा लोड हो रहा है...</li>
+      </ul>
+    </div>
+
     <!-- Members Table View -->
     <div class="table-card">
       <div class="table-top">
@@ -326,8 +347,19 @@
   <!-- Firebase v10.8.0 Modular SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { 
+      getFirestore, 
+      collection, 
+      onSnapshot, 
+      doc, 
+      setDoc, 
+      addDoc, 
+      serverTimestamp, 
+      query, 
+      orderBy 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+    // 1. अपनी Firebase Console से ली गई config डिटेल्स यहाँ डालें
     const firebaseConfig = {
       apiKey: "AIzaSyDjBcyZZIQZSX8MMJ-FaO_uuc2EoSrFVuA",
       authDomain: "yuva-shakti-group.firebaseapp.com",
@@ -337,8 +369,68 @@
       appId: "1:122021296018:android:a1fbd7b69b2f7b5654734b"
     };
 
+    // Firebase और Firestore को इनिशियलाइज़ करें
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+
+    // 2. नया कंट्रीब्यूशन / राशि जमा करने का फ़ंक्शन
+    async function addContribution(memberName, amount) {
+      try {
+        await addDoc(collection(db, "contributions"), {
+          name: memberName,
+          amount: Number(amount),
+          timestamp: serverTimestamp()
+        });
+        console.log("डेटा सफलतापूर्वक सेव हो गया!");
+      } catch (error) {
+        console.error("डेटा सेव करने में त्रुटि: ", error);
+      }
+    }
+
+    // 3. रियल-टाइम लिसनर (जिससे दोनों मोबाइलों में डेटा तुरंत दिखेगा)
+    const q = query(collection(db, "contributions"), orderBy("timestamp", "desc"));
+
+    onSnapshot(q, (snapshot) => {
+      let totalAmount = 0;
+      const listElement = document.getElementById("contributions-list");
+      const totalElement = document.getElementById("total-amount");
+
+      if (listElement) listElement.innerHTML = "";
+
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        totalAmount += Number(data.amount) || 0;
+
+        // लिस्ट में नाम और राशि जोड़ना
+        if (listElement) {
+          const item = document.createElement("li");
+          item.style.cssText = "display: flex; justify-content: space-between; background: #0b0f19; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--card-border); font-size: 13px;";
+          item.innerHTML = `<span style="font-weight: 600; color: #f8fafc;">${data.name || 'सदस्य'}</span><span style="font-weight: 800; color: #10b981;">₹${data.amount}</span>`;
+          listElement.appendChild(item);
+        }
+      });
+
+      // कुल राशि अपडेट करना
+      if (totalElement) {
+        totalElement.textContent = `कुल राशि: ₹${totalAmount.toLocaleString('en-IN')}`;
+      }
+    });
+
+    // window ऑब्जेक्ट पर फ़ंक्शन उपलब्ध कराना ताकि HTML बटन से कॉल हो सके
+    window.addContribution = addContribution;
+
+    // + जमा दर्ज करें बटन श्रोता
+    document.getElementById("addContribBtn")?.addEventListener("click", () => {
+      const name = document.getElementById("contribNameInput").value.trim();
+      const amount = document.getElementById("contribAmountInput").value.trim();
+      if (!name || !amount) {
+        alert("कृपया सदस्य का नाम और राशि दर्ज करें।");
+        return;
+      }
+      addContribution(name, amount);
+      document.getElementById("contribNameInput").value = "";
+      document.getElementById("contribAmountInput").value = "";
+    });
 
     let membersList = [];
     let onlineMemberIds = new Set();

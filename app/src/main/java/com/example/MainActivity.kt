@@ -47,7 +47,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Collections
 import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.filled.Handshake
@@ -144,7 +143,6 @@ import com.example.ui.components.SetCycleTargetDialog
 import com.example.ui.components.SettingsDialog
 import com.example.ui.components.SlipViewerDialog
 import com.example.ui.components.UrgentBroadcastDialog
-import com.example.ui.components.WebDashboardView
 import com.example.ui.components.WhatsAppShareCard
 import com.example.ui.theme.BackgroundSlate
 import com.example.ui.theme.BorderSlate
@@ -740,14 +738,6 @@ fun MainScreen(viewModel: MainViewModel) {
                             allLoanRequests.count { it.status == "Pending" }
                         }
 
-                        // 0. Live Web Cloud Ledger / लाइव वेब
-                        FloatingNavItem(
-                            title = "लाइव वेब",
-                            icon = Icons.Default.Cloud,
-                            isSelected = selectedMainSection == "web" && !showSettingsDialog,
-                            onClick = { viewModel.setMainSection("web") }
-                        )
-
                         // 1. Members / सदस्य
                         FloatingNavItem(
                             title = "सदस्य",
@@ -811,13 +801,6 @@ fun MainScreen(viewModel: MainViewModel) {
         ) {
 
             when (selectedMainSection) {
-                "web" -> {
-                    WebDashboardView(
-                        modifier = Modifier.fillMaxSize(),
-                        onNavigateBack = { viewModel.setMainSection("members") }
-                    )
-                }
-
                 "loan" -> {
                     // Mutual Aid Fund Loan / Assistance Section with voting
                     LoanAssistanceView(

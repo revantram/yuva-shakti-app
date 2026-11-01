@@ -230,6 +230,7 @@ class MemberRepository(
         )
         memberDao.updateMember(updated)
         FirestoreSyncHelper.saveSingleMember(updated)
+        FirestoreSyncHelper.addContribution(member.name, member.monthlyAmount.toDouble())
 
         // 1. Insert into online deposit notifications
         val notification = DepositNotificationEntity(

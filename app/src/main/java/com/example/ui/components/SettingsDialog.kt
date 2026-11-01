@@ -812,7 +812,7 @@ fun SettingsDialog(
                                             color = if (isDark) Color(0xFFA7F3D0) else Color(0xFF166534)
                                         )
                                         Text(
-                                            text = "वर्तमान संस्करण: v2.6.0 (कुचेरा - लाइव वेब बहीखाता)",
+                                            text = "वर्तमान संस्करण: v2.7.0 (कुचेरा - शुद्ध देशी लाइव क्लाउड बहीखाता)",
                                             fontSize = 11.sp,
                                             color = if (isDark) Color(0xFF6EE7B7) else Color(0xFF15803D)
                                         )

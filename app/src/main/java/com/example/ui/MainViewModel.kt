@@ -57,8 +57,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _customTargetAmount = MutableStateFlow(repository.getCustomTargetAmount())
     private val _consensusNote = MutableStateFlow(repository.getConsensusNote())
 
-    // Main section navigation: "web", "members", "accounting", "loan", "gallery", "chat"
-    private val _selectedMainSection = MutableStateFlow("web")
+    // Main section navigation: "members", "accounting", "loan", "gallery", "chat"
+    private val _selectedMainSection = MutableStateFlow("members")
     val selectedMainSection: StateFlow<String> = _selectedMainSection
 
     // Dialog state flows
