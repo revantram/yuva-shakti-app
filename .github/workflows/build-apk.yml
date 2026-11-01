@@ -37,7 +37,13 @@ jobs:
             cp .env.example .env
           fi
           if [ ! -f debug.keystore ]; then
-            keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+            echo "Generating permanent keystore..."
+            keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=YuvaShakti,OU=Kuchera,O=BhatiParivar,L=Kuchera,ST=Rajasthan,C=IN"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -f debug.keystore
+            git commit -m "chore: persist permanent signing keystore" || true
+            git push origin HEAD:main || true
           fi
 
       - name: Setup Gradle 9.3.1
