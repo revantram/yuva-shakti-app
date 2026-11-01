@@ -187,6 +187,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
             com.example.util.FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
+                try {
                     upiId?.let {
                         if (it.isNotBlank()) {
                             val cleanUpi = repository.sanitizeUpiId(it)
