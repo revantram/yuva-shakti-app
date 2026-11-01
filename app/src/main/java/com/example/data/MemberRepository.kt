@@ -5,8 +5,10 @@ import android.content.SharedPreferences
 import com.example.util.CloudBackupHelper
 import com.example.util.FirestoreSyncHelper
 import com.example.util.NotificationHelper
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.SimpleDateFormat
@@ -112,21 +114,23 @@ class MemberRepository(
 
     suspend fun syncWithFirestore(): Boolean = withContext(Dispatchers.IO) {
         try {
-            val localMembers = memberDao.getAllMembersList()
-            if (localMembers.isNotEmpty()) {
-                FirestoreSyncHelper.uploadMembersToFirestore(localMembers)
+            val cloudMembers = FirestoreSyncHelper.fetchMembersFromFirestore()
+            if (cloudMembers.isNotEmpty()) {
+                memberDao.syncFromCloud(cloudMembers)
             } else {
-                val cloudMembers = FirestoreSyncHelper.fetchMembersFromFirestore()
-                if (cloudMembers.isNotEmpty()) {
-                    for (m in cloudMembers) {
-                        memberDao.insertMember(m)
-                    }
+                val localMembers = memberDao.getAllMembersList()
+                if (localMembers.isNotEmpty()) {
+                    FirestoreSyncHelper.uploadMembersToFirestore(localMembers)
                 }
             }
             true
         } catch (e: Exception) {
             false
         }
+    }
+
+    suspend fun syncMembersFromCloud(cloudMembers: List<MemberEntity>) = withContext(Dispatchers.IO) {
+        memberDao.syncFromCloud(cloudMembers)
     }
 
     suspend fun insertExpense(
@@ -189,6 +193,7 @@ class MemberRepository(
             paymentMode = mode
         )
         memberDao.updateMember(updated)
+        FirestoreSyncHelper.saveSingleMember(updated)
 
         // 1. Insert into online deposit notifications
         val notification = DepositNotificationEntity(
@@ -247,6 +252,7 @@ class MemberRepository(
                 paymentMode = ""
             )
             memberDao.updateMember(updated)
+            FirestoreSyncHelper.saveSingleMember(updated)
         }
     }
 
@@ -262,6 +268,8 @@ class MemberRepository(
         )
         memberDao.insertCycleHistory(history)
         memberDao.resetAllToPending()
+        val resetList = memberDao.getAllMembersList()
+        FirestoreSyncHelper.uploadMembersToFirestore(resetList)
 
         // Announcement in chat
         val resetMsg = GroupMessageEntity(
@@ -377,7 +385,11 @@ class MemberRepository(
     }
 
     fun setUpiId(id: String) {
-        prefs.edit().putString(KEY_UPI_ID, id.trim()).apply()
+        val clean = id.trim()
+        prefs.edit().putString(KEY_UPI_ID, clean).apply()
+        CoroutineScope(Dispatchers.IO).launch {
+            FirestoreSyncHelper.saveSettings(upiId = clean)
+        }
     }
 
     fun getCustomQrCodeUri(): String {
@@ -393,7 +405,11 @@ class MemberRepository(
     }
 
     fun setWhatsAppGroupLink(link: String) {
-        prefs.edit().putString(KEY_WHATSAPP_GROUP_LINK, link.trim()).apply()
+        val clean = link.trim()
+        prefs.edit().putString(KEY_WHATSAPP_GROUP_LINK, clean).apply()
+        CoroutineScope(Dispatchers.IO).launch {
+            FirestoreSyncHelper.saveSettings(whatsAppGroupLink = clean)
+        }
     }
 
     suspend fun createCloudBackup(): Pair<File, String> {
@@ -417,14 +433,6 @@ class MemberRepository(
 
     fun getLocalBackupFile(): File? {
         return CloudBackupHelper.getLocalBackupFile()
-    }
-
-    fun shareBackupToGoogleDrive(backupFile: File) {
-        CloudBackupHelper.shareBackupToGoogleDrive(context, backupFile)
-    }
-
-    fun shareBackupToJioCloud(backupFile: File) {
-        shareBackupToGoogleDrive(backupFile)
     }
 
     suspend fun submitPaymentRequest(

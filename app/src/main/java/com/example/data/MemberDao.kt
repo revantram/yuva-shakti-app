@@ -16,6 +16,20 @@ interface MemberDao {
     @Query("SELECT * FROM members ORDER BY sortOrder ASC, id ASC")
     suspend fun getAllMembersList(): List<MemberEntity>
 
+    @androidx.room.Transaction
+    suspend fun syncFromCloud(cloudMembers: List<MemberEntity>) {
+        if (cloudMembers.isNotEmpty()) {
+            val cloudIds = cloudMembers.map { it.id }.toSet()
+            val localMembers = getAllMembersList()
+            for (local in localMembers) {
+                if (!cloudIds.contains(local.id)) {
+                    deleteMemberById(local.id)
+                }
+            }
+            insertMembers(cloudMembers)
+        }
+    }
+
     @Query("SELECT COUNT(*) FROM members")
     suspend fun getMemberCount(): Int
 

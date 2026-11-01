@@ -133,8 +133,6 @@ fun SettingsDialog(
     fundUpiId: String = "",
     onUpdateWhatsAppGroupLink: (String) -> Unit = {},
     onUpdateFundUpiId: (String) -> Unit = {},
-    onBackupToGoogleDrive: () -> Unit = {},
-    onBackupToJioCloud: () -> Unit = onBackupToGoogleDrive,
     onRestoreFromLocalBackup: () -> Unit = {},
     onSyncFirestore: () -> Unit = {},
     onDismiss: () -> Unit,
@@ -300,130 +298,7 @@ fun SettingsDialog(
                     }
                 }
 
-                // Section 0B: Cloud Backup & Google Drive Integration (Zero Data Loss)
-                item {
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = if (isDark) Color(0xFF0F172A) else Color(0xFFEFF6FF)
-                        ),
-                        shape = RoundedCornerShape(14.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(1.2.dp, if (isDark) Color(0xFF1D4ED8) else Color(0xFFBFDBFE), RoundedCornerShape(14.dp))
-                    ) {
-                        Column(modifier = Modifier.padding(14.dp)) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(34.dp)
-                                        .background(Color(0xFF1A73E8), CircleShape),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Cloud,
-                                        contentDescription = null,
-                                        tint = Color.White,
-                                        modifier = Modifier.size(18.dp)
-                                    )
-                                }
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Column {
-                                    Text(
-                                        text = "📁 गूगल ड्राइव (Google Drive) एवं ऑनलाइन बैकअप",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 13.5.sp,
-                                        color = if (isDark) Color(0xFF93C5FD) else Color(0xFF1E40AF)
-                                    )
-                                    Text(
-                                        text = "Google Drive से जोड़कर 100% सुरक्षित डेटा",
-                                        fontSize = 10.5.sp,
-                                        color = if (isDark) Color(0xFFBFDBFE) else Color(0xFF3B82F6)
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(10.dp))
-
-                            Text(
-                                text = "बार-बार ऐप अपडेट करने या अनइंस्टॉल करने पर भी डेटा कभी नष्ट नहीं होगा। पूरा बहीखाता, सदस्य सूची, ऋण व संदेश अपनी गूगल ड्राइव (Google Drive) में सहेजें व कभी भी वापस पाएं।",
-                                fontSize = 11.sp,
-                                color = if (isDark) Color(0xFFCBD5E1) else Color(0xFF334155),
-                                lineHeight = 15.sp
-                            )
-
-                            Spacer(modifier = Modifier.height(10.dp))
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                // Backup to Google Drive button
-                                Surface(
-                                    color = Color(0xFF1A73E8),
-                                    shape = RoundedCornerShape(10.dp),
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .clickable { onBackupToGoogleDrive() }
-                                ) {
-                                    Row(
-                                        modifier = Modifier.padding(vertical = 9.dp, horizontal = 8.dp),
-                                        horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.CloudUpload,
-                                            contentDescription = null,
-                                            tint = Color.White,
-                                            modifier = Modifier.size(15.dp)
-                                        )
-                                        Spacer(modifier = Modifier.width(5.dp))
-                                        Text(
-                                            text = "Google Drive बैकअप",
-                                            fontSize = 11.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color.White
-                                        )
-                                    }
-                                }
-
-                                // Restore from local/cloud button
-                                Surface(
-                                    color = if (isDark) Color(0xFF1E293B) else Color.White,
-                                    shape = RoundedCornerShape(10.dp),
-                                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF1A73E8)),
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .clickable { onRestoreFromLocalBackup() }
-                                ) {
-                                    Row(
-                                        modifier = Modifier.padding(vertical = 9.dp, horizontal = 8.dp),
-                                        horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.CloudDownload,
-                                            contentDescription = null,
-                                            tint = Color(0xFF2563EB),
-                                            modifier = Modifier.size(15.dp)
-                                        )
-                                        Spacer(modifier = Modifier.width(5.dp))
-                                        Text(
-                                            text = "डेटा रीस्टोर करें",
-                                            fontSize = 11.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = if (isDark) Color(0xFF93C5FD) else Color(0xFF2563EB)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Section 0B2: Firebase Firestore Live Database
+                // Section 0B: Firebase Firestore Realtime Cloud Database (Zero Data Loss)
                 item {
                     Card(
                         colors = CardDefaults.cardColors(
@@ -441,7 +316,7 @@ fun SettingsDialog(
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .size(34.dp)
+                                        .size(36.dp)
                                         .background(Color(0xFFF59E0B), CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -449,13 +324,13 @@ fun SettingsDialog(
                                         imageVector = Icons.Default.Cloud,
                                         contentDescription = null,
                                         tint = Color(0xFF451A03),
-                                        modifier = Modifier.size(18.dp)
+                                        modifier = Modifier.size(20.dp)
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(10.dp))
-                                Column {
+                                Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = "🔥 फ़ायरबेस लाइव डेटाबेस (Firestore)",
+                                        text = "🔥 फ़ायरबेस लाइव क्लाउड (Firestore)",
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 13.5.sp,
                                         color = if (isDark) Color(0xFFFDE68A) else Color(0xFF92400E)
@@ -466,44 +341,91 @@ fun SettingsDialog(
                                         color = if (isDark) Color(0xFFFEF3C7) else Color(0xFFB45309)
                                     )
                                 }
+                                Surface(
+                                    color = Color(0xFFE8F9ED),
+                                    shape = RoundedCornerShape(8.dp),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF34C759))
+                                ) {
+                                    Text(
+                                        text = "🟢 ऑनलाइन सक्रिय",
+                                        fontSize = 9.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF166534),
+                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                    )
+                                }
                             }
 
                             Spacer(modifier = Modifier.height(10.dp))
 
                             Text(
-                                text = "आपका बहीखाता सीधे गूगल फ़ायरबेस फ़ायरस्टोर (Cloud Firestore) से जुड़ा है। ऐप अपडेट या अनइंस्टॉल करने पर भी डेटा पूरी तरह सुरक्षित रहेगा।",
+                                text = "पूरा बहीखाता सीधे गूगल फ़ायरबेस क्लाउड डेटाबेस से जुड़ा है। किसी भी सदस्य को जोड़ने, हटाने या भुगतान स्थिति बदलने पर सभी सदस्यों के मोबाइल में तुरंत रीयल-टाइम अपडेट होता है। ऐप अपडेट या अनइंस्टॉल करने पर भी डेटा पूरी तरह सुरक्षित रहता है।",
                                 fontSize = 11.sp,
                                 color = if (isDark) Color(0xFFCBD5E1) else Color(0xFF334155),
                                 lineHeight = 15.sp
                             )
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(12.dp))
 
-                            Surface(
-                                color = Color(0xFFF59E0B),
-                                shape = RoundedCornerShape(10.dp),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { onSyncFirestore() }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Row(
-                                    modifier = Modifier.padding(vertical = 10.dp),
-                                    horizontalArrangement = Arrangement.Center,
-                                    verticalAlignment = Alignment.CenterVertically
+                                Surface(
+                                    color = Color(0xFFF59E0B),
+                                    shape = RoundedCornerShape(10.dp),
+                                    modifier = Modifier
+                                        .weight(1.3f)
+                                        .clickable { onSyncFirestore() }
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.Default.CloudUpload,
-                                        contentDescription = null,
-                                        tint = Color(0xFF451A03),
-                                        modifier = Modifier.size(16.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Text(
-                                        text = "🔥 लाइव क्लाउड सिंक करें (Sync Now)",
-                                        fontSize = 11.5.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF451A03)
-                                    )
+                                    Row(
+                                        modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
+                                        horizontalArrangement = Arrangement.Center,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.CloudUpload,
+                                            contentDescription = null,
+                                            tint = Color(0xFF451A03),
+                                            modifier = Modifier.size(16.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(6.dp))
+                                        Text(
+                                            text = "तुरंत सिंक करें (Sync)",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color(0xFF451A03)
+                                        )
+                                    }
+                                }
+
+                                Surface(
+                                    color = if (isDark) Color(0xFF1E293B) else Color.White,
+                                    shape = RoundedCornerShape(10.dp),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFCBD5E1)),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .clickable { onRestoreFromLocalBackup() }
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(vertical = 10.dp, horizontal = 6.dp),
+                                        horizontalArrangement = Arrangement.Center,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.CloudDownload,
+                                            contentDescription = null,
+                                            tint = Color(0xFF475569),
+                                            modifier = Modifier.size(15.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(
+                                            text = "ऑफ़लाइन रीस्टोर",
+                                            fontSize = 10.5.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = if (isDark) Color(0xFFCBD5E1) else Color(0xFF475569)
+                                        )
+                                    }
                                 }
                             }
                         }

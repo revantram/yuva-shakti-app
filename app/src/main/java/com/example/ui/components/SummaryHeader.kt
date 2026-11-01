@@ -83,9 +83,9 @@ fun AppHeader(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = Color(0xEE1E1B4B),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0x33FFFFFF)),
-        shadowElevation = 8.dp,
+        color = Color(0xF8FFFFFF),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE5E5EA)),
+        shadowElevation = 3.dp,
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
@@ -122,7 +122,7 @@ fun AppHeader(
                     Column {
                         Text(
                             text = "🚩 युवा शक्ति ग्रुप",
-                            color = Color.White,
+                            color = Color(0xFF1C1C1E),
                             fontSize = 17.5.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.3.sp
@@ -140,32 +140,33 @@ fun AppHeader(
                         ) {
                             Text(
                                 text = "मासिक अमावस्या फंड",
-                                color = Color(0xFFC7D2FE),
+                                color = Color(0xFF64748B),
                                 fontSize = 10.5.sp,
                                 fontWeight = FontWeight.Medium
                             )
                             // Online presence chip
                             Surface(
-                                color = Color(0xFF064E3B),
+                                color = Color(0xFFE8F9ED),
                                 shape = RoundedCornerShape(10.dp),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF34C759)),
                                 modifier = Modifier
                                     .clickable { onOnlineMembersClick() }
                                     .testTag("chip_online_count")
                             ) {
                                 Row(
-                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                    modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Box(
                                         modifier = Modifier
-                                            .size(6.dp)
-                                            .background(Color(0xFF34D399), CircleShape)
+                                            .size(7.dp)
+                                            .background(Color(0xFF34C759), CircleShape)
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
                                     Text(
                                         text = "$onlineMemberCount ऑनलाइन",
-                                        color = Color(0xFFA7F3D0),
-                                        fontSize = 9.5.sp,
+                                        color = Color(0xFF166534),
+                                        fontSize = 10.sp,
                                         fontWeight = FontWeight.Bold
                                     )
                                 }
@@ -178,14 +179,14 @@ fun AppHeader(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    // 1. Four-angled Deposit Amount Symbol (जमा राशि प्रतीक - छोटा चार कोने वाला)
+                    // 1. Four-angled Deposit Amount Symbol (जमा राशि प्रतीक - चार कोने वाला)
                     Surface(
                         shape = RoundedCornerShape(10.dp),
-                        color = Color(0xD9047857),
-                        border = androidx.compose.foundation.BorderStroke(1.5.dp, SaffronGold),
-                        shadowElevation = 4.dp,
+                        color = Color(0xFFE8F9ED),
+                        border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF10B981)),
+                        shadowElevation = 2.dp,
                         modifier = Modifier
-                            .size(width = 54.dp, height = 46.dp)
+                            .size(width = 68.dp, height = 48.dp)
                             .clickable { onPaymentClick() }
                             .testTag("btn_header_pay_circle")
                     ) {
@@ -198,34 +199,34 @@ fun AppHeader(
                         ) {
                             Text(
                                 text = "जमा राशि",
-                                color = Color(0xFFA7F3D0),
-                                fontSize = 7.5.sp,
-                                fontWeight = FontWeight.Medium
+                                color = Color(0xFF166534),
+                                fontSize = 8.5.sp,
+                                fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = "₹${totalCollected.formatAmount()}",
-                                color = Color.White,
-                                fontSize = 10.5.sp,
+                                color = Color(0xFF065F46),
+                                fontSize = 11.5.sp,
                                 fontWeight = FontWeight.Black,
                                 maxLines = 1
                             )
                             Text(
                                 text = "खाता ↗",
-                                color = SaffronGold,
-                                fontSize = 6.5.sp,
+                                color = Color(0xFF047857),
+                                fontSize = 8.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                     }
 
-                    // 2. Four-angled PhonePe Online Payment Symbol (फ़ोनपे ऑनलाइन भुगतान - छोटा चार कोने वाला)
+                    // 2. Four-angled PhonePe Online Payment Symbol (फ़ोनपे ऑनलाइन भुगतान - चार कोने वाला)
                     Surface(
                         shape = RoundedCornerShape(10.dp),
-                        color = Color(0xEE5F259F),
-                        border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFC084FC)),
-                        shadowElevation = 4.dp,
+                        color = Color(0xFFF3E8FF),
+                        border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFF8B5CF6)),
+                        shadowElevation = 2.dp,
                         modifier = Modifier
-                            .size(width = 56.dp, height = 46.dp)
+                            .size(width = 70.dp, height = 48.dp)
                             .clickable { onPaymentClick() }
                             .testTag("btn_header_phonepe_pay")
                     ) {
@@ -238,20 +239,20 @@ fun AppHeader(
                         ) {
                             Text(
                                 text = "PhonePe",
-                                color = Color.White,
-                                fontSize = 8.5.sp,
+                                color = Color(0xFF581C87),
+                                fontSize = 9.sp,
                                 fontWeight = FontWeight.Black
                             )
                             Text(
                                 text = "ऑनलाइन",
-                                color = Color(0xFFE9D5FF),
-                                fontSize = 7.5.sp,
-                                fontWeight = FontWeight.SemiBold
+                                color = Color(0xFF6B21A8),
+                                fontSize = 8.sp,
+                                fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = "₹ पे ↗",
-                                color = Color(0xFFFDE047),
-                                fontSize = 7.sp,
+                                text = "₹ पे करें ↗",
+                                color = Color(0xFF7E22CE),
+                                fontSize = 8.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -260,8 +261,9 @@ fun AppHeader(
                     // Notification Bell with Badge
                     Box(
                         modifier = Modifier
-                            .size(34.dp)
-                            .background(Color(0xFF312E81), CircleShape)
+                            .size(36.dp)
+                            .background(Color(0xFFF1F5F9), CircleShape)
+                            .border(1.dp, Color(0xFFCBD5E1), CircleShape)
                             .clickable { onNotificationsClick() }
                             .testTag("btn_notifications_bell"),
                         contentAlignment = Alignment.Center
@@ -269,8 +271,8 @@ fun AppHeader(
                         Icon(
                             imageVector = Icons.Default.NotificationsActive,
                             contentDescription = "Notifications",
-                            tint = if (unreadNotificationCount > 0) SaffronGold else Color.White,
-                            modifier = Modifier.size(17.dp)
+                            tint = if (unreadNotificationCount > 0) SaffronGold else Color(0xFF334155),
+                            modifier = Modifier.size(19.dp)
                         )
                         if (unreadNotificationCount > 0) {
                             Box(
@@ -312,9 +314,10 @@ fun HeaderCountdownBanner(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = Color(0xFF1E293B),
+        color = Color(0xFFF8FAFC),
         shape = RoundedCornerShape(14.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF334155)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE2E8F0)),
+        shadowElevation = 1.dp,
         modifier = modifier
             .fillMaxWidth()
             .testTag("header_countdown_banner")
@@ -334,18 +337,18 @@ fun HeaderCountdownBanner(
                         text = "अगली अमावस्या: ",
                         fontSize = 11.5.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFDE68A)
+                        color = Color(0xFFB45309)
                     )
                     Text(
                         text = countdown.formattedDate,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White
+                        color = Color(0xFF1E293B)
                     )
                 }
 
                 Surface(
-                    color = Color(0xFF312E81),
+                    color = Color(0xFFEEF2FF),
                     shape = RoundedCornerShape(6.dp),
                     modifier = Modifier.padding(start = 6.dp)
                 ) {
@@ -353,7 +356,7 @@ fun HeaderCountdownBanner(
                         text = countdown.hindiTithiName,
                         fontSize = 9.5.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFA5B4FC),
+                        color = Color(0xFF4338CA),
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }
@@ -403,9 +406,9 @@ fun HeaderCountdownBanner(
                 }
 
                 val statusColor = when {
-                    countdown.isToday -> Color(0xFF34D399)
-                    countdown.days in 1..3 -> Color(0xFFFBBF24)
-                    else -> Color(0xFF94A3B8)
+                    countdown.isToday -> Color(0xFF059669)
+                    countdown.days in 1..3 -> Color(0xFFD97706)
+                    else -> Color(0xFF64748B)
                 }
 
                 Text(
@@ -420,7 +423,7 @@ fun HeaderCountdownBanner(
                         text = "तिथि बदलें ✎",
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFDE68A),
+                        color = Color(0xFF2563EB),
                         modifier = Modifier
                             .clickable { onDateSettingsClick() }
                             .padding(2.dp)
@@ -438,9 +441,10 @@ private fun CountdownTimeBlock(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = Color(0xFF0F172A),
+        color = Color.White,
         shape = RoundedCornerShape(8.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF334155)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE2E8F0)),
+        shadowElevation = 1.dp,
         modifier = modifier
     ) {
         Column(
@@ -451,14 +455,14 @@ private fun CountdownTimeBlock(
                 text = value,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Black,
-                color = Color(0xFF38BDF8),
+                color = Color(0xFF0284C7),
                 letterSpacing = 0.5.sp
             )
             Text(
                 text = unit,
                 fontSize = 9.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color(0xFF94A3B8)
+                color = Color(0xFF64748B)
             )
         }
     }

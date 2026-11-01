@@ -103,6 +103,52 @@ object NotificationHelper {
     }
 
     /**
+     * Triggers a morning festival greeting notification for Hindu festivals.
+     */
+    fun showFestivalGreetingNotification(
+        context: Context,
+        festivalName: String,
+        wishes: String,
+        notificationId: Int = 1008
+    ) {
+        createNotificationChannel(context)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                return
+            }
+        }
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            notificationId,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0)
+        )
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle("🎉 $festivalName की शुभकामनाएं!")
+            .setContentText(wishes)
+            .setStyle(NotificationCompat.BigTextStyle().bigText("🚩 युवा शक्ति ग्रुप, भाटी परिवार कुचेरा:\n$wishes"))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        try {
+            NotificationManagerCompat.from(context).notify(notificationId, notification)
+        } catch (e: SecurityException) {
+        } catch (e: Exception) {
+        }
+    }
+
+    /**
      * Automatically triggers a local reminder notification 2 days before the Amavasya fund due date.
      */
     fun checkAndSendAmavasyaTwoDayReminder(context: Context, remainingDays: Long, targetMillis: Long) {

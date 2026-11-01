@@ -74,8 +74,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -144,10 +146,18 @@ import com.example.ui.theme.PaidGreen
 import com.example.ui.theme.PendingRed
 import com.example.ui.theme.SaffronGold
 import com.example.ui.components.OnboardingLoginDialog
+import com.example.util.ApkShareHelper
 import com.example.util.DailyThoughtHelper
+import com.example.util.FestivalHelper
+import com.example.util.FirestoreSyncHelper
+import com.example.util.NotificationHelper
 import com.example.util.OnlinePresenceHelper
 import com.example.util.PendingSirenReminderReceiver
+import kotlinx.coroutines.delay
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
@@ -166,7 +176,7 @@ class MainActivity : ComponentActivity() {
                 "dark" -> true
                 "light" -> false
                 "auto_time" -> currentHour < 6 || currentHour >= 19
-                else -> systemInDark
+                else -> false // Default is Light iOS theme as requested
             }
 
             MyApplicationTheme(darkTheme = isDark) {
@@ -303,26 +313,96 @@ fun MainScreen(viewModel: MainViewModel) {
         return
     }
 
-    val onlineCount = remember(uiState.members, activeMemberId) {
-        OnlinePresenceHelper.getOnlineCount(uiState.members, activeMemberId)
+    val deviceId = remember {
+        try {
+            android.provider.Settings.Secure.getString(
+                context.contentResolver,
+                android.provider.Settings.Secure.ANDROID_ID
+            ) ?: "device_${System.currentTimeMillis()}"
+        } catch (_: Exception) {
+            "device_${System.currentTimeMillis()}"
+        }
     }
 
-    val isDark = isSystemInDarkTheme()
+    var firestoreOnlineCount by remember { mutableIntStateOf(1) }
+    var firestoreActiveUsers by remember { mutableStateOf<List<String>>(emptyList()) }
+
+    // Realtime Firestore listeners
+    DisposableEffect(Unit) {
+        val memberReg = FirestoreSyncHelper.listenToMembersRealtime { cloudMembers ->
+            viewModel.syncMembersFromCloud(cloudMembers)
+        }
+        val presenceReg = FirestoreSyncHelper.listenToOnlinePresence { count, users ->
+            firestoreOnlineCount = count
+            firestoreActiveUsers = users
+        }
+        val settingsReg = FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
+            upiId?.let { if (it.isNotBlank()) viewModel.setFundUpiId(it) }
+            waLink?.let { if (it.isNotBlank()) viewModel.setWhatsAppGroupLink(it) }
+            target?.let { if (it > 0) viewModel.setCustomTargetAmount(it) }
+            cycleName?.let { if (it.isNotBlank()) viewModel.setAmavasyaCycleName(it) }
+            amavasyaMillis?.let { if (it > 0) viewModel.setTargetAmavasyaMillis(it) }
+        }
+        onDispose {
+            memberReg?.remove()
+            presenceReg?.remove()
+            settingsReg?.remove()
+        }
+    }
+
+    // Live Heartbeat Loop (every 30 seconds)
+    LaunchedEffect(activeMemberId, isUserLoggedIn) {
+        if (isUserLoggedIn) {
+            while (true) {
+                val myName = uiState.members.find { it.id == activeMemberId }?.name ?: "सदस्य"
+                FirestoreSyncHelper.recordPresence(deviceId, myName, activeMemberId)
+                delay(30000L)
+            }
+        }
+    }
+
+    // Morning Hindu Festival Notification & Greetings
+    LaunchedEffect(targetAmavasyaMillis) {
+        val todayFest = FestivalHelper.getTodayFestival(targetAmavasyaMillis)
+        if (todayFest != null) {
+            val todayStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            val festPrefs = context.getSharedPreferences("yuva_shakti_fest_prefs", Context.MODE_PRIVATE)
+            val lastGreeted = festPrefs.getString("last_fest_greeted_date", "")
+            if (lastGreeted != todayStr) {
+                festPrefs.edit().putString("last_fest_greeted_date", todayStr).apply()
+                NotificationHelper.showFestivalGreetingNotification(
+                    context = context,
+                    festivalName = todayFest.name,
+                    wishes = FestivalHelper.getFestivalGreeting(todayFest)
+                )
+            }
+        }
+    }
+
+    val onlineCount = remember(uiState.members, activeMemberId, firestoreOnlineCount) {
+        maxOf(firestoreOnlineCount, OnlinePresenceHelper.getOnlineCount(uiState.members, activeMemberId))
+    }
+
+    val isDark = when (themeMode) {
+        "dark" -> true
+        "light" -> false
+        else -> false // Apple iOS Light Mode by default
+    }
     val appBackgroundBrush = remember(isDark) {
         if (isDark) {
             Brush.verticalGradient(
                 listOf(
-                    Color(0xFF090D16),
-                    Color(0xFF1E1B4B),
+                    Color(0xFF0F172A),
+                    Color(0xFF1E293B),
                     Color(0xFF0F172A)
                 )
             )
         } else {
             Brush.verticalGradient(
                 listOf(
-                    Color(0xFFF8FAFC),
-                    Color(0xFFEEF2F6),
-                    Color(0xFFE2E8F0)
+                    Color(0xFFF2F2F7),
+                    Color(0xFFFFFFFF),
+                    Color(0xFFF2F2F7)
                 )
             )
         }
@@ -385,15 +465,15 @@ fun MainScreen(viewModel: MainViewModel) {
                     .padding(bottom = 6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Transparent Floating Glass Dock with 6 items (including Settings)
+                // Frosted Apple iOS Style Dock
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 10.dp, vertical = 2.dp)
-                        .shadow(16.dp, RoundedCornerShape(32.dp)),
+                        .shadow(12.dp, RoundedCornerShape(32.dp)),
                     shape = RoundedCornerShape(32.dp),
-                    color = Color(0xDC0F172A),
-                    border = BorderStroke(1.2.dp, Color(0x33FFFFFF))
+                    color = if (isDark) Color(0xDC0F172A) else Color(0xF2FFFFFF),
+                    border = BorderStroke(1.dp, if (isDark) Color(0x33FFFFFF) else Color(0xFFE5E5EA))
                 ) {
                     Row(
                         modifier = Modifier
@@ -532,6 +612,171 @@ fun MainScreen(viewModel: MainViewModel) {
                         contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
+                        // 0A. Morning Hindu Festival Greeting Banner (if today has festival)
+                        val todayFest = FestivalHelper.getTodayFestival(targetAmavasyaMillis)
+                        if (todayFest != null) {
+                            item {
+                                Surface(
+                                    color = Color(0xFFFFFBEB),
+                                    shape = RoundedCornerShape(16.dp),
+                                    border = BorderStroke(1.2.dp, Color(0xFFFDE68A)),
+                                    shadowElevation = 2.dp,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Column(modifier = Modifier.padding(14.dp)) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                                Text(text = todayFest.icon, fontSize = 24.sp)
+                                                Spacer(modifier = Modifier.width(8.dp))
+                                                Column {
+                                                    Text(
+                                                        text = todayFest.name,
+                                                        fontWeight = FontWeight.Bold,
+                                                        fontSize = 15.sp,
+                                                        color = Color(0xFF92400E)
+                                                    )
+                                                    Text(
+                                                        text = todayFest.tithi,
+                                                        fontSize = 11.sp,
+                                                        color = Color(0xFFB45309),
+                                                        fontWeight = FontWeight.Medium
+                                                    )
+                                                }
+                                            }
+                                            Surface(
+                                                color = Color(0xFFFEF3C7),
+                                                shape = RoundedCornerShape(8.dp),
+                                                border = BorderStroke(1.dp, Color(0xFFF59E0B))
+                                            ) {
+                                                Text(
+                                                    text = todayFest.category,
+                                                    fontSize = 9.5.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = Color(0xFFB45309),
+                                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                                )
+                                            }
+                                        }
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Text(
+                                            text = FestivalHelper.getFestivalGreeting(todayFest),
+                                            fontSize = 12.sp,
+                                            color = Color(0xFF78350F),
+                                            lineHeight = 17.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.height(10.dp))
+
+                                        Surface(
+                                            color = Color(0xFFD97706),
+                                            shape = RoundedCornerShape(10.dp),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .clickable {
+                                                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                                        type = "text/plain"
+                                                        putExtra(
+                                                            Intent.EXTRA_TEXT,
+                                                            "🚩 *युवा शक्ति ग्रुप, भाटी परिवार कुचेरा*\n\n" +
+                                                            FestivalHelper.getFestivalGreeting(todayFest)
+                                                        )
+                                                    }
+                                                    context.startActivity(Intent.createChooser(shareIntent, "शुभकामनाएं साझा करें"))
+                                                }
+                                        ) {
+                                            Row(
+                                                modifier = Modifier.padding(vertical = 8.dp),
+                                                horizontalArrangement = Arrangement.Center,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Text(text = "🚩 ", fontSize = 13.sp)
+                                                Text(
+                                                    text = "परिवार में शुभकामनाएं साझा करें (Share Wishes)",
+                                                    fontSize = 11.5.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = Color.White
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // 0B. In-App Direct Update Card
+                        item {
+                            Surface(
+                                color = Color(0xFFEFF6FF),
+                                shape = RoundedCornerShape(16.dp),
+                                border = BorderStroke(1.2.dp, Color(0xFFBFDBFE)),
+                                shadowElevation = 2.dp,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(42.dp)
+                                                .background(Color(0xFF2563EB), CircleShape),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Collections,
+                                                contentDescription = null,
+                                                tint = Color.White,
+                                                modifier = Modifier.size(22.dp)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.width(10.dp))
+                                        Column {
+                                            Text(
+                                                text = "🚀 नया ऐप वर्शन (Official APK)",
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 13.sp,
+                                                color = Color(0xFF1E40AF)
+                                            )
+                                            Text(
+                                                text = "रीयल-टाइम ऑनलाइन सिंक व नए फीचर्स",
+                                                fontSize = 10.5.sp,
+                                                color = Color(0xFF3B82F6)
+                                            )
+                                        }
+                                    }
+                                    Surface(
+                                        color = Color(0xFF2563EB),
+                                        shape = RoundedCornerShape(10.dp),
+                                        shadowElevation = 2.dp,
+                                        modifier = Modifier.clickable {
+                                            ApkShareHelper.openDirectDownload(context, updateApkUrl)
+                                        }
+                                    ) {
+                                        Text(
+                                            text = "सीधे अपडेट करें ↗",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White,
+                                            modifier = Modifier.padding(horizontal = 9.dp, vertical = 7.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
                         // 1. Daily Inspirational Thought (दैनिक सुविचार) - Rotates Daily
                         item {
                             DailyThoughtCard(
@@ -842,8 +1087,6 @@ fun MainScreen(viewModel: MainViewModel) {
             fundUpiId = fundUpiId,
             onUpdateWhatsAppGroupLink = { viewModel.setWhatsAppGroupLink(it) },
             onUpdateFundUpiId = { viewModel.setFundUpiId(it) },
-            onBackupToGoogleDrive = { viewModel.backupToGoogleDrive(context) },
-            onBackupToJioCloud = { viewModel.backupToJioCloud(context) },
             onRestoreFromLocalBackup = { viewModel.restoreFromLocalBackup() },
             onSyncFirestore = { viewModel.syncWithFirestore() },
             onDismiss = { viewModel.openSettingsDialog(false) },
@@ -1423,13 +1666,13 @@ private fun RowScope.FloatingNavItem(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
-                    .background(if (isSelected) Color(0xFF0284C7) else Color.Transparent),
+                    .background(if (isSelected) Color(0xFFE5F1FF) else Color.Transparent),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = title,
-                    tint = if (isSelected) Color.White else Color(0xFFCBD5E1),
+                    tint = if (isSelected) Color(0xFF007AFF) else Color(0xFF8E8E93),
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -1459,7 +1702,7 @@ private fun RowScope.FloatingNavItem(
             text = title,
             fontSize = 10.5.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-            color = if (isSelected) Color(0xFF38BDF8) else Color(0xFF94A3B8),
+            color = if (isSelected) Color(0xFF007AFF) else Color(0xFF8E8E93),
             maxLines = 1
         )
     }

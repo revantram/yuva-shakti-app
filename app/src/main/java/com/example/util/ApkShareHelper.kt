@@ -61,4 +61,21 @@ object ApkShareHelper {
             Toast.makeText(context, "APK शेयर करने में त्रुटि: ${e.localizedMessage ?: e.message}", Toast.LENGTH_LONG).show()
         }
     }
+
+    /**
+     * Direct one-tap download and update from official GitHub Releases.
+     */
+    fun openDirectDownload(
+        context: Context,
+        url: String = "https://github.com/revantram/yuva-shakti-app/releases/latest/download/yuva-shakti.apk"
+    ) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(context, "डाउनलोड शुरू करने में त्रुटि: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
 }

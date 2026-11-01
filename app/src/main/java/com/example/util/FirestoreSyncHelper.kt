@@ -12,6 +12,9 @@ import kotlin.coroutines.resume
 object FirestoreSyncHelper {
     private const val TAG = "FirestoreSync"
     private const val COLLECTION_MEMBERS = "members"
+    private const val COLLECTION_PRESENCE = "presence"
+    private const val COLLECTION_SETTINGS = "settings"
+    private const val DOC_GENERAL = "general"
 
     val isConfigured: Boolean = true
 
@@ -152,7 +155,7 @@ object FirestoreSyncHelper {
             firestore.collection(COLLECTION_MEMBERS)
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
-                        Log.e(TAG, "Realtime listener error", error)
+                        Log.e(TAG, "Realtime member listener error", error)
                         return@addSnapshotListener
                     }
                     if (snapshot != null) {
@@ -199,6 +202,135 @@ object FirestoreSyncHelper {
                 }
         } catch (e: Exception) {
             Log.e(TAG, "Error setting up realtime listener", e)
+            null
+        }
+    }
+
+    /**
+     * Heartbeat Presence: Records that a device/member is actively using the app.
+     */
+    fun recordPresence(deviceId: String, userName: String, memberId: Long = 0L) {
+        if (deviceId.isBlank()) return
+        try {
+            val docRef = firestore.collection(COLLECTION_PRESENCE).document(deviceId)
+            val data = mapOf(
+                "deviceId" to deviceId,
+                "userName" to userName.ifBlank { "परिवार सदस्य" },
+                "memberId" to memberId,
+                "lastActive" to System.currentTimeMillis()
+            )
+            docRef.set(data, SetOptions.merge())
+        } catch (e: Exception) {
+            Log.e(TAG, "Error recording presence", e)
+        }
+    }
+
+    /**
+     * Listens to live online presence in Firestore.
+     * Members who sent heartbeat in the last 2.5 minutes are considered online.
+     */
+    fun listenToOnlinePresence(onUpdate: (count: Int, activeUsers: List<String>) -> Unit): ListenerRegistration? {
+        return try {
+            firestore.collection(COLLECTION_PRESENCE)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        Log.e(TAG, "Presence listener error", error)
+                        return@addSnapshotListener
+                    }
+                    if (snapshot != null) {
+                        val cutoff = System.currentTimeMillis() - (150 * 1000L) // 2.5 minutes
+                        val activeUsers = mutableListOf<String>()
+                        for (doc in snapshot.documents) {
+                            val lastActive = doc.getLong("lastActive") ?: 0L
+                            if (lastActive >= cutoff) {
+                                val name = doc.getString("userName") ?: "सदस्य"
+                                if (name.isNotBlank() && !activeUsers.contains(name)) {
+                                    activeUsers.add(name)
+                                }
+                            }
+                        }
+                        val onlineCount = if (activeUsers.size > 0) activeUsers.size else 1
+                        onUpdate(onlineCount, activeUsers)
+                    }
+                }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error listening to presence", e)
+            null
+        }
+    }
+
+    /**
+     * Persists general settings online (UPI ID, WhatsApp link, Target Amount, Cycle Name).
+     */
+    suspend fun saveSettings(
+        upiId: String? = null,
+        whatsAppGroupLink: String? = null,
+        amavasyaTarget: Int? = null,
+        amavasyaCycleName: String? = null,
+        targetAmavasyaMillis: Long? = null,
+        latestApkUrl: String? = null,
+        latestVersion: String? = null,
+        updateNotes: String? = null
+    ): Boolean {
+        return try {
+            val docRef = firestore.collection(COLLECTION_SETTINGS).document(DOC_GENERAL)
+            val data = mutableMapOf<String, Any>(
+                "updatedAt" to System.currentTimeMillis()
+            )
+            upiId?.let { data["fundUpiId"] = it }
+            whatsAppGroupLink?.let { data["whatsAppGroupLink"] = it }
+            amavasyaTarget?.let { data["amavasyaTarget"] = it }
+            amavasyaCycleName?.let { data["amavasyaCycleName"] = it }
+            targetAmavasyaMillis?.let { data["targetAmavasyaMillis"] = it }
+            latestApkUrl?.let { data["latestApkUrl"] = it }
+            latestVersion?.let { data["latestVersion"] = it }
+            updateNotes?.let { data["updateNotes"] = it }
+
+            docRef.set(data, SetOptions.merge()).awaitTask()
+            Log.d(TAG, "Saved settings to Firestore successfully")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error saving settings to Firestore", e)
+            false
+        }
+    }
+
+    /**
+     * Realtime listener for online settings so all members get instant updates without reinstalling.
+     */
+    fun listenToSettings(
+        onSettings: (
+            upiId: String?,
+            whatsAppGroupLink: String?,
+            amavasyaTarget: Int?,
+            amavasyaCycleName: String?,
+            targetAmavasyaMillis: Long?,
+            latestApkUrl: String?,
+            latestVersion: String?,
+            updateNotes: String?
+        ) -> Unit
+    ): ListenerRegistration? {
+        return try {
+            firestore.collection(COLLECTION_SETTINGS).document(DOC_GENERAL)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        Log.e(TAG, "Settings listener error", error)
+                        return@addSnapshotListener
+                    }
+                    if (snapshot != null && snapshot.exists()) {
+                        val upiId = snapshot.getString("fundUpiId")
+                        val waLink = snapshot.getString("whatsAppGroupLink")
+                        val target = snapshot.getLong("amavasyaTarget")?.toInt()
+                        val cycleName = snapshot.getString("amavasyaCycleName")
+                        val amavasyaMillis = snapshot.getLong("targetAmavasyaMillis")
+                        val apkUrl = snapshot.getString("latestApkUrl")
+                        val version = snapshot.getString("latestVersion")
+                        val notes = snapshot.getString("updateNotes")
+                        onSettings(upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes)
+                    }
+                }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error setting up settings listener", e)
             null
         }
     }

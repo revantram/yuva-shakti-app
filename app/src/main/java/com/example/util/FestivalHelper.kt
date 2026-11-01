@@ -136,4 +136,59 @@ object FestivalHelper {
         "08-15" to FestivalInfo("", "स्वतंत्रता दिवस", "राष्ट्रीय पर्व", "15 अगस्त", "भारत का स्वतंत्रता दिवस। राष्ट्र की अखंडता व स्वाधीनता का राष्ट्रीय गौरव पर्व।", "🇮🇳"),
         "10-02" to FestivalInfo("", "गांधी जयंती व शास्त्री जयंती", "राष्ट्रीय पर्व", "2 अक्टूबर", "राष्ट्रपिता महात्मा गांधी व सादगी की मिसाल लाल बहादुर शास्त्री जी की पावन जयंती।", "🕊️")
     )
+
+    /**
+     * Checks if today is any festival or religious event.
+     */
+    fun getTodayFestival(targetAmavasyaMillis: Long): FestivalInfo? {
+        val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
+        val day = cal.get(Calendar.DAY_OF_MONTH)
+        return if (hasSpecialEvent(year, month, day, targetAmavasyaMillis)) {
+            getFestivalInfo(year, month, day, targetAmavasyaMillis)
+        } else {
+            null
+        }
+    }
+
+    /**
+     * True if festival is of major cultural importance (Diwali, Holi, Navratri, etc.)
+     */
+    fun isMajorFestival(info: FestivalInfo): Boolean {
+        return info.category.contains("महापर्व") ||
+               info.category.contains("मुख्य त्योहार") ||
+               info.name.contains("दीपावली") ||
+               info.name.contains("होली") ||
+               info.name.contains("दशहरा") ||
+               info.name.contains("नवरात्रि") ||
+               info.name.contains("शिवरात्रि") ||
+               info.name.contains("छठ") ||
+               info.name.contains("धनतेरस") ||
+               info.name.contains("अमावस्या")
+    }
+
+    /**
+     * Heartfelt morning festival greeting wishes message.
+     */
+    fun getFestivalGreeting(info: FestivalInfo): String {
+        return when {
+            info.name.contains("दीपावली") ->
+                "🚩 युवा शक्ति ग्रुप, भाटी परिवार कुचेरा की ओर से दीपों के महापर्व दीपावली की हार्दिक शुभकामनाएं! माता महालक्ष्मी व भगवान श्री गणेश जी की कृपा से आपका जीवन सुख, शांति, समृद्धि और उत्तम स्वास्थ्य से परिपूर्ण रहे।"
+            info.name.contains("होली") ->
+                "🎨 रंगों के पावन महापर्व होली की हार्दिक शुभकामनाएं! भाटी परिवार के सभी सदस्यों के जीवन में आपसी प्रेम, सौहार्द और खुशियों के अनंत रंग बरसें।"
+            info.name.contains("दशहरा") || info.name.contains("विजयादशमी") ->
+                "🏹 विजयादशमी (दशहरा) महापर्व की हार्दिक बधाई! बुराई पर अच्छाई और असत्य पर सत्य की विजय का यह पावन पर्व आप सभी के जीवन में नई ऊर्जा और सफलता लाए।"
+            info.name.contains("नवरात्रि") ->
+                "🔱 शारदीय नवरात्रि के पावन पर्व की मंगलकामनाएं! मां दुर्गा की असीम कृपा पूरे भाटी परिवार पर बनी रहे।"
+            info.name.contains("धनतेरस") ->
+                "🪙 पावन धनतेरस पर्व की बहुत-बहुत बधाई! भगवान धन्वंतरि व कुबेर देव आपको आरोग्य, धन और वैभव प्रदान करें।"
+            info.name.contains("शिवरात्रि") ->
+                "🔱 महाशिवरात्रि महापर्व की हार्दिक शुभकामनाएं! देवाधिदेव महादेव व माता पार्वती की कृपा से समस्त कष्टों का निवारण हो।"
+            info.name.contains("अमावस्या") ->
+                "🌑 मासिक अमावस्या बैठक व अंशदान का पावन दिवस। भाटी परिवार की एकता और प्रगति हेतु परस्पर सहयोग का संकल्प।"
+            else ->
+                "✨ आज ${info.name} का पावन पर्व है! युवा शक्ति ग्रुप, भाटी परिवार कुचेरा की ओर से मंगलमय शुभकामनाएं। आपका दिन शुभ और सुखमय हो।"
+        }
+    }
 }
