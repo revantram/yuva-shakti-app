@@ -136,6 +136,7 @@ import com.example.ui.components.OnlineMembersDialog
 import com.example.ui.components.OnlinePaymentDialog
 import com.example.ui.components.PaymentModeSelectionDialog
 import com.example.ui.components.PaymentVerificationDialog
+import com.example.ui.components.PendingMemberRegistrationsDialog
 import com.example.ui.components.PendingPaymentRequestsDialog
 import com.example.ui.components.ResetCycleConfirmDialog
 import com.example.ui.components.ScreenshotViewerDialog
@@ -240,6 +241,12 @@ fun MainScreen(viewModel: MainViewModel) {
     val showSetCycleTargetDialog by viewModel.showSetCycleTargetDialog.collectAsStateWithLifecycle()
     val showPaymentVerificationDialog by viewModel.showPaymentVerificationDialog.collectAsStateWithLifecycle()
     val showPendingRequestsDialog by viewModel.showPendingRequestsDialog.collectAsStateWithLifecycle()
+    val pendingRegistrations by viewModel.pendingRegistrations.collectAsStateWithLifecycle()
+    val showPendingRegistrationsDialog by viewModel.showPendingRegistrationsDialog.collectAsStateWithLifecycle()
+    val pendingRegistrationRequestId by viewModel.pendingRegistrationRequestId.collectAsStateWithLifecycle()
+    val pendingRegistrationName by viewModel.pendingRegistrationName.collectAsStateWithLifecycle()
+    val pendingRegistrationCode by viewModel.pendingRegistrationCode.collectAsStateWithLifecycle()
+    val pendingRegistrationStatus by viewModel.pendingRegistrationStatus.collectAsStateWithLifecycle()
     val screenshotToView by viewModel.screenshotToView.collectAsStateWithLifecycle()
     val selectedMemberForProfile by viewModel.selectedMemberForProfile.collectAsStateWithLifecycle()
     val showAddExpenseDialog by viewModel.showAddExpenseDialog.collectAsStateWithLifecycle()
@@ -633,6 +640,13 @@ fun MainScreen(viewModel: MainViewModel) {
             },
             onCheckCodeTaken = { code ->
                 viewModel.isCodeTaken(code)
+            },
+            pendingRequestId = pendingRegistrationRequestId,
+            pendingName = pendingRegistrationName,
+            pendingCode = pendingRegistrationCode,
+            pendingStatus = pendingRegistrationStatus,
+            onCancelPendingRegistration = {
+                viewModel.cancelPendingRegistration()
             }
         )
         return
@@ -1130,9 +1144,11 @@ fun MainScreen(viewModel: MainViewModel) {
                             item {
                                 AdminControlBar(
                                     pendingPaymentRequestCount = pendingPaymentRequests.size,
+                                    pendingRegistrationCount = pendingRegistrations.size,
                                     onAddMember = { viewModel.openAddMemberDialog() },
                                     onSetCycleTarget = { viewModel.openSetCycleTargetDialog(true) },
                                     onViewPaymentRequests = { viewModel.openPendingRequestsDialog(true) },
+                                    onViewRegistrationRequests = { viewModel.openPendingRegistrationsDialog(true) },
                                     onUrgentBroadcast = { viewModel.openUrgentBroadcastDialog(true) },
                                     onResetCycle = { viewModel.showResetCycleDialog(true) },
                                     onViewHistory = { viewModel.showHistoryDialog(true) },
@@ -1317,6 +1333,15 @@ fun MainScreen(viewModel: MainViewModel) {
             onViewScreenshot = { uri -> viewModel.viewScreenshot(uri) },
             onApprove = { req -> viewModel.approvePaymentRequest(req) },
             onReject = { req -> viewModel.rejectPaymentRequest(req) }
+        )
+    }
+
+    if (showPendingRegistrationsDialog) {
+        PendingMemberRegistrationsDialog(
+            requests = pendingRegistrations,
+            onDismiss = { viewModel.openPendingRegistrationsDialog(false) },
+            onApprove = { req -> viewModel.approveRegistration(req) },
+            onReject = { req, reason -> viewModel.rejectRegistration(req, reason) }
         )
     }
 

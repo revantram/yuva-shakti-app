@@ -455,6 +455,34 @@ class MemberRepository(
             .apply()
     }
 
+    fun savePendingRegistrationRequestId(reqId: String, code: String, name: String) {
+        prefs.edit()
+            .putString("pending_reg_request_id", reqId)
+            .putString("pending_reg_code", code)
+            .putString("pending_reg_name", name)
+            .apply()
+    }
+
+    fun getPendingRegistrationRequestId(): String {
+        return prefs.getString("pending_reg_request_id", "") ?: ""
+    }
+
+    fun getPendingRegistrationCode(): String {
+        return prefs.getString("pending_reg_code", "") ?: ""
+    }
+
+    fun getPendingRegistrationName(): String {
+        return prefs.getString("pending_reg_name", "") ?: ""
+    }
+
+    fun clearPendingRegistration() {
+        prefs.edit()
+            .remove("pending_reg_request_id")
+            .remove("pending_reg_code")
+            .remove("pending_reg_name")
+            .apply()
+    }
+
     fun verifyAdminPin(pin: String): Boolean {
         val cleanPin = pin.trim()
         val savedPin = prefs.getString(KEY_ADMIN_PIN, DEFAULT_PIN) ?: DEFAULT_PIN
@@ -1004,6 +1032,35 @@ class MemberRepository(
             context = context,
             title = "🚀 नया युवा शक्ति ऐप अपडेट ($version)",
             message = notes
+        )
+    }
+
+    suspend fun announceNewMemberApproved(member: MemberEntity) = withContext(Dispatchers.IO) {
+        val todayStr = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+        val notif = DepositNotificationEntity(
+            memberId = member.id,
+            memberName = member.name,
+            amount = member.monthlyAmount,
+            paymentMode = "सत्यापन",
+            paymentDate = todayStr,
+            timestamp = System.currentTimeMillis(),
+            message = "🎉 नए सदस्य ${member.name} जी (कोड: ${member.memberCode}, ${member.villageCity}) को व्यवस्थापक द्वारा सत्यापित कर जोड़ा गया।"
+        )
+        memberDao.insertNotification(notif)
+
+        val chatAlert = GroupMessageEntity(
+            senderName = "मुख्य व्यवस्थापक",
+            senderRole = "सत्यापन",
+            message = "🚩 *नया सदस्य सत्यापन संपन्न*\nयुवा शक्ति परिवार में ${member.name} जी (सदस्य कोड: ${member.memberCode}, गाँव: ${member.villageCity}) को सत्यापित कर सक्रिय सदस्य के रूप में जोड़ दिया गया है। हार्दिक स्वागत है! 🙏",
+            timestamp = System.currentTimeMillis(),
+            isSystemAlert = true
+        )
+        memberDao.insertMessage(chatAlert)
+
+        NotificationHelper.showTransactionNotification(
+            context = context,
+            title = "🎉 नया सदस्य जुड़ा: ${member.name}",
+            message = "सदस्य कोड: ${member.memberCode} (${member.villageCity}) को ग्रुप में जोड़ा गया।"
         )
     }
 

@@ -3,6 +3,7 @@ package com.example.util
 import android.content.Context
 import android.util.Log
 import com.example.data.MemberEntity
+import com.example.data.RegistrationRequest
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -16,6 +17,7 @@ object FirestoreSyncHelper {
     private const val COLLECTION_PRESENCE = "presence"
     private const val COLLECTION_SETTINGS = "settings"
     private const val COLLECTION_EMERGENCY_ALERTS = "emergency_alerts"
+    private const val COLLECTION_REGISTRATIONS = "pending_registrations"
     private const val DOC_GENERAL = "general"
 
     val isConfigured: Boolean = true
@@ -514,6 +516,200 @@ object FirestoreSyncHelper {
         } catch (t: Throwable) {
             Log.e(TAG, "Error setting up settings listener", t)
             null
+        }
+    }
+
+    /**
+     * Submits a new member registration request directly to Firebase Firestore pending_registrations.
+     */
+    suspend fun submitRegistrationRequest(request: RegistrationRequest): Boolean {
+        return try {
+            val fs = getFirestore() ?: return false
+            val data = mapOf(
+                "requestId" to request.requestId,
+                "name" to request.name,
+                "phone" to request.phone,
+                "address" to request.address,
+                "memberCode" to request.memberCode,
+                "monthlyAmount" to request.monthlyAmount,
+                "instagramId" to request.instagramId,
+                "photoUri" to request.photoUri,
+                "status" to "Pending",
+                "timestamp" to request.timestamp,
+                "deviceId" to request.deviceId,
+                "assignedMemberId" to 0L
+            )
+            fs.collection(COLLECTION_REGISTRATIONS).document(request.requestId)
+                .set(data, SetOptions.merge())
+                .awaitTask()
+            Log.d(TAG, "Registration request submitted: ${request.name} (Code: ${request.memberCode})")
+            true
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error submitting registration request", t)
+            false
+        }
+    }
+
+    /**
+     * Listens to pending registration requests in real time for Admin verification.
+     */
+    fun listenToPendingRegistrations(
+        onUpdate: (List<RegistrationRequest>) -> Unit
+    ): ListenerRegistration? {
+        return try {
+            val fs = getFirestore() ?: return null
+            fs.collection(COLLECTION_REGISTRATIONS)
+                .whereEqualTo("status", "Pending")
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        Log.e(TAG, "Pending registrations listener error", error)
+                        return@addSnapshotListener
+                    }
+                    if (snapshot != null) {
+                        val list = mutableListOf<RegistrationRequest>()
+                        for (doc in snapshot.documents) {
+                            val req = RegistrationRequest(
+                                requestId = doc.getString("requestId") ?: doc.id,
+                                name = doc.getString("name") ?: "",
+                                phone = doc.getString("phone") ?: "",
+                                address = doc.getString("address") ?: "",
+                                memberCode = doc.getString("memberCode") ?: "",
+                                monthlyAmount = doc.getLong("monthlyAmount")?.toInt() ?: 100,
+                                instagramId = doc.getString("instagramId") ?: "",
+                                photoUri = doc.getString("photoUri") ?: "",
+                                status = doc.getString("status") ?: "Pending",
+                                timestamp = doc.getLong("timestamp") ?: 0L,
+                                deviceId = doc.getString("deviceId") ?: "",
+                                assignedMemberId = doc.getLong("assignedMemberId") ?: 0L
+                            )
+                            if (req.name.isNotBlank()) {
+                                list.add(req)
+                            }
+                        }
+                        list.sortByDescending { it.timestamp }
+                        onUpdate(list)
+                    }
+                }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error listening to pending registrations", t)
+            null
+        }
+    }
+
+    /**
+     * Listens to a specific registration request for the applicant's device to notify them when verified.
+     */
+    fun listenToRegistrationStatus(
+        requestId: String,
+        onStatusUpdate: (RegistrationRequest) -> Unit
+    ): ListenerRegistration? {
+        if (requestId.isBlank()) return null
+        return try {
+            val fs = getFirestore() ?: return null
+            fs.collection(COLLECTION_REGISTRATIONS).document(requestId)
+                .addSnapshotListener { doc, error ->
+                    if (error != null || doc == null || !doc.exists()) return@addSnapshotListener
+                    val req = RegistrationRequest(
+                        requestId = doc.getString("requestId") ?: doc.id,
+                        name = doc.getString("name") ?: "",
+                        phone = doc.getString("phone") ?: "",
+                        address = doc.getString("address") ?: "",
+                        memberCode = doc.getString("memberCode") ?: "",
+                        monthlyAmount = doc.getLong("monthlyAmount")?.toInt() ?: 100,
+                        instagramId = doc.getString("instagramId") ?: "",
+                        photoUri = doc.getString("photoUri") ?: "",
+                        status = doc.getString("status") ?: "Pending",
+                        timestamp = doc.getLong("timestamp") ?: 0L,
+                        deviceId = doc.getString("deviceId") ?: "",
+                        assignedMemberId = doc.getLong("assignedMemberId") ?: 0L,
+                        rejectionReason = doc.getString("rejectionReason") ?: ""
+                    )
+                    onStatusUpdate(req)
+                }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error listening to single registration status", t)
+            null
+        }
+    }
+
+    /**
+     * Admin approves a registration:
+     * - Finds the next global member ID
+     * - Saves member into Firestore 'members' collection
+     * - Updates registration status to 'Approved'
+     */
+    suspend fun approveRegistrationRequest(
+        request: RegistrationRequest,
+        currentMembers: List<MemberEntity>
+    ): Long {
+        return try {
+            val fs = getFirestore() ?: return 0L
+            val nextId = (currentMembers.maxOfOrNull { it.id } ?: 0L) + 1L
+            val cleanCode = if (request.memberCode.isNotBlank()) request.memberCode else (1000 + nextId).toString()
+
+            val memberData = mapOf(
+                "id" to nextId,
+                "name" to request.name,
+                "phone" to request.phone,
+                "monthlyAmount" to request.monthlyAmount,
+                "status" to "Pending",
+                "paidDate" to "",
+                "paymentMode" to "UPI",
+                "notes" to "ऑनलाइन सत्यापित सदस्य",
+                "sortOrder" to nextId.toInt(),
+                "instagramId" to request.instagramId,
+                "facebookId" to "",
+                "whatsappNumber" to request.phone,
+                "villageCity" to request.address.ifBlank { "कुचेरा" },
+                "memberCode" to cleanCode,
+                "updatedAt" to System.currentTimeMillis()
+            )
+
+            // 1. Add to members collection
+            fs.collection(COLLECTION_MEMBERS).document(nextId.toString())
+                .set(memberData, SetOptions.merge())
+                .awaitTask()
+
+            // 2. Mark registration as Approved
+            fs.collection(COLLECTION_REGISTRATIONS).document(request.requestId)
+                .set(
+                    mapOf(
+                        "status" to "Approved",
+                        "assignedMemberId" to nextId,
+                        "approvedAt" to System.currentTimeMillis()
+                    ),
+                    SetOptions.merge()
+                )
+                .awaitTask()
+
+            Log.d(TAG, "Successfully approved registration for ${request.name} with ID $nextId")
+            nextId
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error approving registration request", t)
+            0L
+        }
+    }
+
+    /**
+     * Admin rejects a registration request.
+     */
+    suspend fun rejectRegistrationRequest(requestId: String, reason: String = ""): Boolean {
+        return try {
+            val fs = getFirestore() ?: return false
+            fs.collection(COLLECTION_REGISTRATIONS).document(requestId)
+                .set(
+                    mapOf(
+                        "status" to "Rejected",
+                        "rejectionReason" to reason.ifBlank { "व्यवस्थापक द्वारा अस्वीकृत" },
+                        "rejectedAt" to System.currentTimeMillis()
+                    ),
+                    SetOptions.merge()
+                )
+                .awaitTask()
+            true
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error rejecting registration request", t)
+            false
         }
     }
 }

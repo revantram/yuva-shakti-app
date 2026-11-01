@@ -994,9 +994,11 @@ fun WhatsAppShareCard(
 @Composable
 fun AdminControlBar(
     pendingPaymentRequestCount: Int = 0,
+    pendingRegistrationCount: Int = 0,
     onAddMember: () -> Unit,
     onSetCycleTarget: () -> Unit = {},
     onViewPaymentRequests: () -> Unit = {},
+    onViewRegistrationRequests: () -> Unit = {},
     onUrgentBroadcast: () -> Unit = {},
     onResetCycle: () -> Unit,
     onViewHistory: () -> Unit,
@@ -1070,7 +1072,7 @@ fun AdminControlBar(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Action Row: Cycle Target & Payment Requests
+            // Action Row 1: Cycle Target & Payment Requests
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -1092,7 +1094,7 @@ fun AdminControlBar(
                     ) {
                         Text(text = "🎯 ", fontSize = 12.sp)
                         Text(
-                            text = "लक्ष्य व अंशदान तय करें",
+                            text = "लक्ष्य तय करें",
                             fontSize = 10.5.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF92400E)
@@ -1128,35 +1130,67 @@ fun AdminControlBar(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Add Member Button
-            Surface(
-                color = Color(0xFF4338CA),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("btn_add_member")
-                    .clickable { onAddMember() }
+            // Action Row 2: Member Registration Verification & Add Member
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Row(
+                // Member Registration Verification Requests with badge
+                Surface(
+                    color = if (pendingRegistrationCount > 0) Color(0xFFFEF2F2) else Color(0xFFF1F5F9),
+                    shape = RoundedCornerShape(8.dp),
+                    border = androidx.compose.foundation.BorderStroke(
+                        1.dp,
+                        if (pendingRegistrationCount > 0) PendingRed else Color(0xFFCBD5E1)
+                    ),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 9.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                        .weight(1f)
+                        .clickable { onViewRegistrationRequests() }
+                        .testTag("btn_admin_view_registration_requests")
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.PersonAdd,
-                        contentDescription = "Add member",
-                        tint = Color.White,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "नया सदस्य जोड़ें",
-                        color = Color.White,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(
+                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 6.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "📝 ", fontSize = 12.sp)
+                        Text(
+                            text = "सदस्य सत्यापन" + if (pendingRegistrationCount > 0) " ($pendingRegistrationCount)" else "",
+                            fontSize = 10.5.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (pendingRegistrationCount > 0) PendingRed else DeepNavy
+                        )
+                    }
+                }
+
+                // Add Member Button
+                Surface(
+                    color = Color(0xFF4338CA),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag("btn_add_member")
+                        .clickable { onAddMember() }
+                ) {
+                    Row(
+                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 6.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PersonAdd,
+                            contentDescription = "Add member",
+                            tint = Color.White,
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "नया सदस्य जोड़ें",
+                            color = Color.White,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }

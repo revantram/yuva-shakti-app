@@ -238,13 +238,14 @@
     <div class="auth-strip">
       <div id="authStatusText">
         <span style="font-weight: 700; color: #cbd5e1;">👤 अपनी पहचान दर्ज करें:</span>
-        <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">सदस्य कोड या एडमिन कोड (992942) से लॉगिन करें</span>
+        <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">अपना व्यक्तिगत सदस्य / एडमिन कोड दर्ज करें</span>
       </div>
       <div class="auth-input-group" id="loginFormGroup">
-        <input type="password" id="memberCodeInput" class="auth-input" placeholder="कोड (उदा. 992942)" maxlength="8">
+        <input type="password" id="memberCodeInput" class="auth-input" placeholder="व्यक्तिगत कोड दर्ज करें" maxlength="8">
         <button id="loginBtn" class="auth-btn">लॉगिन ➔</button>
       </div>
       <div id="adminPanelArea" style="display: none;" class="admin-controls">
+        <button id="viewRegistrationsBtn" class="admin-btn" style="background: #eab308; color: #1e293b;">📝 सदस्य सत्यापन (<span id="regPendingCount">0</span>)</button>
         <button id="broadcastSirenBtn" class="admin-btn">🚨 सायरन तगादा बजाएं</button>
         <button id="logoutBtn" class="auth-btn" style="background: #334155; color: #fff;">लॉगआउट ✖</button>
       </div>
@@ -305,6 +306,19 @@
       <div style="display: flex; gap: 8px;">
         <a id="directUpiPayLink" href="upi://pay?pa=7850983600@ibl&pn=Yuva%20Shakti%20Bhati%20Parivar%20Kuchera&cu=INR" class="action-btn btn-pay" style="flex: 1; text-align: center;">PhonePe / GPay खोलें</a>
         <button id="closePayModalBtn" class="action-btn" style="background: #334155; color: #fff;">बंद करें</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending Registrations Verification Modal -->
+  <div class="modal-overlay" id="registrationsModal">
+    <div class="modal-card" style="max-width: 520px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="font-size: 17px; color: var(--saffron); margin: 0;">📝 नए सदस्य सत्यापन अनुरोध</h2>
+        <button id="closeRegModalBtn" class="action-btn" style="background: transparent; color: #cbd5e1; font-size: 16px; padding: 4px 8px;">✖</button>
+      </div>
+      <div id="pendingRegistrationsContainer" style="max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+        <!-- Injected via JavaScript -->
       </div>
     </div>
   </div>
@@ -540,7 +554,7 @@
 
       document.getElementById("authStatusText").innerHTML = `
         <span style="font-weight: 700; color: #cbd5e1;">👤 अपनी पहचान दर्ज करें:</span>
-        <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">सदस्य कोड या एडमिन कोड (992942) से लॉगिन करें</span>
+        <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">अपना व्यक्तिगत सदस्य / एडमिन कोड दर्ज करें</span>
       `;
       document.getElementById("loginFormGroup").style.display = 'flex';
       document.getElementById("adminPanelArea").style.display = 'none';
@@ -641,11 +655,116 @@
       });
     });
 
+    // --- 7. नए सदस्य पंजीकरण अनुरोध (Pending Registrations) रीयल-टाइम श्रोता ---
+    let pendingRegistrationsList = [];
+    onSnapshot(collection(db, "pending_registrations"), (snapshot) => {
+      const list = [];
+      snapshot.forEach(docSnap => {
+        const d = docSnap.data();
+        if (d.status === "Pending") {
+          list.push({ ...d, requestId: d.requestId || docSnap.id });
+        }
+      });
+      pendingRegistrationsList = list;
+      const regBadge = document.getElementById("regPendingCount");
+      if (regBadge) regBadge.innerText = list.length;
+      renderPendingRegistrations();
+    });
+
+    function renderPendingRegistrations() {
+      const container = document.getElementById("pendingRegistrationsContainer");
+      if (!container) return;
+      if (pendingRegistrationsList.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 24px 10px; color: var(--text-muted); font-size: 13px;">
+            ✅ कोई नया सत्यापन अनुरोध लंबित नहीं है।<br>सभी सदस्य रिकॉर्ड अद्यतन हैं।
+          </div>
+        `;
+        return;
+      }
+      container.innerHTML = pendingRegistrationsList.map(req => `
+        <div style="background: #111827; border: 1px solid #374151; border-radius: 10px; padding: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="font-weight: 700; font-size: 14px; color: #f8fafc;">${req.name || 'अज्ञात'}</div>
+            <span style="background: #fef3c7; color: #92400e; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px;">कोड: ${req.memberCode || '—'}</span>
+          </div>
+          <div style="font-size: 11.5px; color: #94a3b8; margin-bottom: 8px;">
+            📍 गाँव: ${req.address || 'कुचेरा'} | 📞 ${req.phone || '—'}
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="approveRegistrationOnWeb('${req.requestId}')" class="action-btn" style="background: var(--paid-green); color: #fff; font-size: 11.5px; padding: 6px 12px; flex: 1;">✅ सत्यापित करें</button>
+            <button onclick="rejectRegistrationOnWeb('${req.requestId}')" class="action-btn" style="background: var(--pending-red); color: #fff; font-size: 11.5px; padding: 6px 12px;">❌ अस्वीकार</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.approveRegistrationOnWeb = async (reqId) => {
+      const req = pendingRegistrationsList.find(r => r.requestId === reqId);
+      if (!req) return;
+      if (!confirm(`क्या आप ${req.name} (कोड: ${req.memberCode}) को सत्यापित कर सदस्य सूची में जोड़ना चाहते हैं?`)) return;
+
+      const maxId = membersList.reduce((max, m) => Math.max(max, m.id || 0), 0);
+      const nextId = maxId + 1;
+      const cleanCode = req.memberCode || String(1000 + nextId);
+
+      await setDoc(doc(db, "members", String(nextId)), {
+        id: nextId,
+        name: req.name,
+        phone: req.phone,
+        monthlyAmount: req.monthlyAmount || 100,
+        status: "Pending",
+        paidDate: "",
+        paymentMode: "UPI",
+        notes: "ऑनलाइन सत्यापित सदस्य",
+        sortOrder: nextId,
+        instagramId: req.instagramId || "",
+        facebookId: "",
+        whatsappNumber: req.phone,
+        villageCity: req.address || "कुचेरा",
+        memberCode: cleanCode,
+        updatedAt: Date.now()
+      }, { merge: true });
+
+      await setDoc(doc(db, "pending_registrations", reqId), {
+        status: "Approved",
+        assignedMemberId: nextId,
+        approvedAt: Date.now()
+      }, { merge: true });
+
+      alert(`✅ ${req.name} जी को सफलतापूर्वक सत्यापित कर सदस्य संख्या ${nextId} पर जोड़ दिया गया!`);
+    };
+
+    window.rejectRegistrationOnWeb = async (reqId) => {
+      const reason = prompt("अस्वीकार करने का कारण दर्ज करें:", "व्यवस्थापक द्वारा अस्वीकृत");
+      if (reason === null) return;
+      await setDoc(doc(db, "pending_registrations", reqId), {
+        status: "Rejected",
+        rejectionReason: reason,
+        rejectedAt: Date.now()
+      }, { merge: true });
+      alert("अनुरोध अस्वीकार कर दिया गया।");
+    };
+
     // मोडल विंडो हैंडलर
     const payModal = document.getElementById("payModal");
+    const regModal = document.getElementById("registrationsModal");
+
     document.getElementById("openPayModalBtn").addEventListener("click", () => { payModal.style.display = "flex"; });
     document.getElementById("closePayModalBtn").addEventListener("click", () => { payModal.style.display = "none"; });
-    window.addEventListener("click", (e) => { if (e.target === payModal) payModal.style.display = "none"; });
+
+    document.getElementById("viewRegistrationsBtn")?.addEventListener("click", () => {
+      regModal.style.display = 'flex';
+      renderPendingRegistrations();
+    });
+    document.getElementById("closeRegModalBtn")?.addEventListener("click", () => {
+      regModal.style.display = 'none';
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === payModal) payModal.style.display = "none";
+      if (e.target === regModal) regModal.style.display = "none";
+    });
 
     // Direct UPI link handler
     document.getElementById("directUpiPayLink").addEventListener("click", (e) => {

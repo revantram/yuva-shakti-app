@@ -13,6 +13,9 @@ import com.example.data.MemberEntity
 import com.example.data.MemberRepository
 import com.example.data.PaymentRequestEntity
 import com.example.data.LoanRequestEntity
+import com.example.data.RegistrationRequest
+import com.example.util.FirestoreSyncHelper
+import com.example.util.InstallationHelper
 import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -238,6 +241,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         }
+
+        // Listen to Pending Member Registrations in Realtime (for Admin verification)
+        try {
+            FirestoreSyncHelper.listenToPendingRegistrations { list ->
+                _pendingRegistrations.value = list
+            }
+        } catch (t: Throwable) {
+            android.util.Log.e("MainViewModel", "Pending registrations listener init error", t)
+        }
+
+        // If this device has a pending registration awaiting Admin verification, attach status listener
+        val savedPendingReqId = repository.getPendingRegistrationRequestId()
+        if (savedPendingReqId.isNotBlank() && !_isUserLoggedIn.value) {
+            attachRegistrationStatusListener(savedPendingReqId)
+        }
     }
 
     val allPaymentRequests: StateFlow<List<PaymentRequestEntity>> = repository.allPaymentRequests.stateIn(
@@ -301,6 +319,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _showOnlineMembersDialog = MutableStateFlow(false)
     val showOnlineMembersDialog: StateFlow<Boolean> = _showOnlineMembersDialog
+
+    private val _pendingRegistrations = MutableStateFlow<List<RegistrationRequest>>(emptyList())
+    val pendingRegistrations: StateFlow<List<RegistrationRequest>> = _pendingRegistrations
+
+    private val _showPendingRegistrationsDialog = MutableStateFlow(false)
+    val showPendingRegistrationsDialog: StateFlow<Boolean> = _showPendingRegistrationsDialog
+
+    fun openPendingRegistrationsDialog(show: Boolean) {
+        _showPendingRegistrationsDialog.value = show
+    }
+
+    private val _pendingRegistrationRequestId = MutableStateFlow(repository.getPendingRegistrationRequestId())
+    val pendingRegistrationRequestId: StateFlow<String> = _pendingRegistrationRequestId
+
+    private val _pendingRegistrationCode = MutableStateFlow(repository.getPendingRegistrationCode())
+    val pendingRegistrationCode: StateFlow<String> = _pendingRegistrationCode
+
+    private val _pendingRegistrationName = MutableStateFlow(repository.getPendingRegistrationName())
+    val pendingRegistrationName: StateFlow<String> = _pendingRegistrationName
+
+    private val _pendingRegistrationStatus = MutableStateFlow<RegistrationRequest?>(null)
+    val pendingRegistrationStatus: StateFlow<RegistrationRequest?> = _pendingRegistrationStatus
 
     private val _isUserLoggedIn = MutableStateFlow(repository.isUserLoggedIn())
     val isUserLoggedIn: StateFlow<Boolean> = _isUserLoggedIn
@@ -1158,7 +1198,44 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun registerNewMemberWithCode(
+    fun attachRegistrationStatusListener(reqId: String) {
+        if (reqId.isBlank()) return
+        FirestoreSyncHelper.listenToRegistrationStatus(reqId) { req ->
+            _pendingRegistrationStatus.value = req
+            if (req.status == "Approved") {
+                viewModelScope.launch {
+                    val finalCode = if (req.memberCode.isNotBlank()) req.memberCode else (1000 + req.assignedMemberId).toString()
+                    repository.saveUserProfile(
+                        name = req.name,
+                        phone = req.phone,
+                        address = req.address,
+                        photoUri = req.photoUri,
+                        insta = req.instagramId,
+                        pin = "",
+                        isAdmin = false,
+                        memberCode = finalCode
+                    )
+                    repository.clearPendingRegistration()
+                    _pendingRegistrationRequestId.value = ""
+                    _pendingRegistrationCode.value = ""
+                    _pendingRegistrationName.value = ""
+                    _isUserLoggedIn.value = true
+                    _isAdmin.value = false
+                    _currentUserFullName.value = req.name
+                    _currentUserPhone.value = req.phone
+                    _currentUserMemberCode.value = finalCode
+                    _currentUserAddress.value = req.address
+                    _activeMemberId.value = req.assignedMemberId
+                    repository.setMyActiveMemberId(req.assignedMemberId)
+                    _showWelcomeGreetingDialog.value = true
+                    _snackbarMessage.value = "🎉 बधाई हो! व्यवस्थापक ने आपका पंजीकरण सत्यापित कर दिया है। युवा शक्ति ग्रुप में आपका स्वागत है!"
+                    repository.syncWithFirestore()
+                }
+            }
+        }
+    }
+
+    fun submitMemberRegistrationRequest(
         name: String,
         phone: String,
         address: String,
@@ -1170,45 +1247,173 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val cleanCode = memberCode.trim()
             val cleanPhone = phone.trim()
+            val cleanName = name.trim()
+            val cleanAddress = address.trim()
+
+            if (cleanName.isBlank()) {
+                onResult(false, "कृपया अपना पूरा नाम दर्ज करें।")
+                return@launch
+            }
+            if (cleanPhone.length < 10) {
+                onResult(false, "कृपया 10 अंकों का मान्य मोबाइल नंबर दर्ज करें।")
+                return@launch
+            }
+            if (cleanAddress.isBlank()) {
+                onResult(false, "कृपया गाँव / शहर का नाम दर्ज करें।")
+                return@launch
+            }
+            if (cleanCode.length < 4) {
+                onResult(false, "कृपया कम से कम 4-अंकों का सदस्य कोड दर्ज करें।")
+                return@launch
+            }
+
             if (repository.isMemberCodeTaken(cleanCode)) {
                 onResult(false, "⚠️ यह सदस्य कोड '$cleanCode' पहले से किसी अन्य सदस्य द्वारा उपयोग में है! कृपया दूसरा कोड चुनें।")
                 return@launch
             }
-            val isAdmin = (cleanCode == "992942" || cleanPhone == "8696663615")
-            val newMember = MemberEntity(
-                name = name.trim(),
+
+            val reqId = "reg_" + System.currentTimeMillis() + "_" + (100..999).random()
+            val deviceId = InstallationHelper.getDeviceUuid(getApplication())
+
+            val req = RegistrationRequest(
+                requestId = reqId,
+                name = cleanName,
                 phone = cleanPhone,
+                address = cleanAddress.ifBlank { "कुचेरा" },
+                memberCode = cleanCode,
                 monthlyAmount = 100,
-                status = "Pending",
-                notes = if (isAdmin) "मुख्य व्यवस्थापक" else "परिवार सदस्य",
                 instagramId = insta.trim(),
-                whatsappNumber = cleanPhone,
-                villageCity = address.trim().ifBlank { "कुचेरा" },
-                memberCode = cleanCode
-            )
-            val newId = repository.insertMember(newMember)
-            repository.saveUserProfile(
-                name = name.trim(),
-                phone = cleanPhone,
-                address = address.trim(),
                 photoUri = photoUri.trim(),
-                insta = insta.trim(),
-                pin = if (isAdmin) "992942" else "",
-                isAdmin = isAdmin,
-                memberCode = cleanCode
+                status = "Pending",
+                timestamp = System.currentTimeMillis(),
+                deviceId = deviceId
             )
-            _isUserLoggedIn.value = true
-            _isAdmin.value = isAdmin
-            _currentUserFullName.value = name.trim()
-            _currentUserPhone.value = cleanPhone
-            _currentUserMemberCode.value = cleanCode
-            _currentUserAddress.value = address.trim()
-            _currentUserInstagram.value = insta.trim()
-            _activeMemberId.value = newId
-            repository.setMyActiveMemberId(newId)
-            _showWelcomeGreetingDialog.value = true
-            _snackbarMessage.value = "✅ नया पंजीकरण सफल! सदस्य कोड: $cleanCode"
-            onResult(true, "✅ पंजीकरण सफल!")
+
+            val ok = FirestoreSyncHelper.submitRegistrationRequest(req)
+            if (ok) {
+                repository.savePendingRegistrationRequestId(reqId, cleanCode, cleanName)
+                _pendingRegistrationRequestId.value = reqId
+                _pendingRegistrationCode.value = cleanCode
+                _pendingRegistrationName.value = cleanName
+                _pendingRegistrationStatus.value = req
+
+                attachRegistrationStatusListener(reqId)
+                onResult(true, "✅ पंजीकरण अनुरोध व्यवस्थापक (Admin) को सत्यापन हेतु भेजा गया!")
+            } else {
+                onResult(false, "❌ ऑनलाइन पंजीकरण भेजने में त्रुटि हुई। कृपया इंटरनेट जांचें व पुनः प्रयास करें।")
+            }
+        }
+    }
+
+    fun cancelPendingRegistration() {
+        repository.clearPendingRegistration()
+        _pendingRegistrationRequestId.value = ""
+        _pendingRegistrationCode.value = ""
+        _pendingRegistrationName.value = ""
+        _pendingRegistrationStatus.value = null
+    }
+
+    fun approveRegistration(request: RegistrationRequest) {
+        viewModelScope.launch {
+            val currentMembers = repository.allMembers.firstOrNull() ?: emptyList()
+            val newId = FirestoreSyncHelper.approveRegistrationRequest(request, currentMembers)
+            if (newId > 0L) {
+                val cleanCode = if (request.memberCode.isNotBlank()) request.memberCode else (1000 + newId).toString()
+                val newMember = MemberEntity(
+                    id = newId,
+                    name = request.name,
+                    phone = request.phone,
+                    monthlyAmount = request.monthlyAmount,
+                    status = "Pending",
+                    paidDate = "",
+                    paymentMode = "UPI",
+                    notes = "ऑनलाइन सत्यापित सदस्य",
+                    sortOrder = newId.toInt(),
+                    instagramId = request.instagramId,
+                    whatsappNumber = request.phone,
+                    villageCity = request.address.ifBlank { "कुचेरा" },
+                    memberCode = cleanCode
+                )
+                repository.insertMember(newMember)
+                repository.announceNewMemberApproved(newMember)
+                _snackbarMessage.value = "✅ ${request.name} जी को सत्यापित कर सदस्य सूची में जोड़ा गया!"
+                repository.syncWithFirestore()
+            } else {
+                _snackbarMessage.value = "❌ सत्यापन में त्रुटि हुई, कृपया पुनः प्रयास करें।"
+            }
+        }
+    }
+
+    fun rejectRegistration(request: RegistrationRequest, reason: String = "") {
+        viewModelScope.launch {
+            val ok = FirestoreSyncHelper.rejectRegistrationRequest(request.requestId, reason)
+            if (ok) {
+                _snackbarMessage.value = "ℹ️ ${request.name} का अनुरोध निरस्त कर दिया गया।"
+            } else {
+                _snackbarMessage.value = "❌ अस्वीकार करने में त्रुटि हुई।"
+            }
+        }
+    }
+
+    fun registerNewMemberWithCode(
+        name: String,
+        phone: String,
+        address: String,
+        memberCode: String,
+        photoUri: String,
+        insta: String,
+        onResult: (Boolean, String) -> Unit
+    ) {
+        val cleanCode = memberCode.trim()
+        val cleanPhone = phone.trim()
+        val isAdmin = (cleanCode == "992942" || cleanPhone == "8696663615")
+        if (isAdmin) {
+            viewModelScope.launch {
+                val newMember = MemberEntity(
+                    name = name.trim(),
+                    phone = cleanPhone,
+                    monthlyAmount = 100,
+                    status = "Pending",
+                    notes = "मुख्य व्यवस्थापक",
+                    instagramId = insta.trim(),
+                    whatsappNumber = cleanPhone,
+                    villageCity = address.trim().ifBlank { "कुचेरा" },
+                    memberCode = cleanCode
+                )
+                val newId = repository.insertMember(newMember)
+                repository.saveUserProfile(
+                    name = name.trim(),
+                    phone = cleanPhone,
+                    address = address.trim(),
+                    photoUri = photoUri.trim(),
+                    insta = insta.trim(),
+                    pin = "992942",
+                    isAdmin = true,
+                    memberCode = cleanCode
+                )
+                _isUserLoggedIn.value = true
+                _isAdmin.value = true
+                _currentUserFullName.value = name.trim()
+                _currentUserPhone.value = cleanPhone
+                _currentUserMemberCode.value = cleanCode
+                _currentUserAddress.value = address.trim()
+                _currentUserInstagram.value = insta.trim()
+                _activeMemberId.value = newId
+                repository.setMyActiveMemberId(newId)
+                _showWelcomeGreetingDialog.value = true
+                _snackbarMessage.value = "✅ व्यवस्थापक पंजीकरण सफल!"
+                onResult(true, "✅ पंजीकरण सफल!")
+            }
+        } else {
+            submitMemberRegistrationRequest(
+                name = name,
+                phone = phone,
+                address = address,
+                memberCode = memberCode,
+                photoUri = photoUri,
+                insta = insta,
+                onResult = onResult
+            )
         }
     }
 

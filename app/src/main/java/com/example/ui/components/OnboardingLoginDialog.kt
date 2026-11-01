@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -41,6 +42,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -69,6 +71,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.data.RegistrationRequest
 import com.example.R
 import com.example.ui.theme.DeepNavy
 import com.example.ui.theme.PaidGreen
@@ -88,7 +91,12 @@ fun OnboardingLoginDialog(
         insta: String,
         onResult: (Boolean, String) -> Unit
     ) -> Unit,
-    onCheckCodeTaken: suspend (String) -> Boolean
+    onCheckCodeTaken: suspend (String) -> Boolean,
+    pendingRequestId: String = "",
+    pendingName: String = "",
+    pendingCode: String = "",
+    pendingStatus: RegistrationRequest? = null,
+    onCancelPendingRegistration: () -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
     var selectedTab by remember { mutableIntStateOf(0) } // 0: Login with Code, 1: Register New Member
@@ -207,17 +215,176 @@ fun OnboardingLoginDialog(
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            // Main Auth Card
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = cardBg),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                border = BorderStroke(1.2.dp, cardBorder)
-            ) {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    // Top Tabs
-                    TabRow(
+            if (pendingRequestId.isNotBlank()) {
+                // Pending Admin Approval State Card
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = cardBg),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                    border = BorderStroke(1.2.dp, cardBorder)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(64.dp)
+                                .background(Color(0xFFFEF3C7), CircleShape)
+                                .border(2.dp, SaffronGold, CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(text = "⏳", fontSize = 28.sp)
+                        }
+
+                        Text(
+                            text = "सत्यापन अनुरोध प्रतीक्षारत",
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = textPrimary,
+                            textAlign = TextAlign.Center
+                        )
+
+                        val isRejected = pendingStatus?.status == "Rejected"
+
+                        Surface(
+                            color = if (isRejected) Color(0xFFFEF2F2) else Color(0xFFEFF6FF),
+                            shape = RoundedCornerShape(12.dp),
+                            border = BorderStroke(1.dp, if (isRejected) PendingRed else Color(0xFFBFDBFE)),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(14.dp)) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "आवेदक का नाम:",
+                                        fontSize = 12.sp,
+                                        color = textSecondary
+                                    )
+                                    Text(
+                                        text = pendingName.ifBlank { pendingStatus?.name ?: "" },
+                                        fontSize = 12.5.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = textPrimary
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "चयनित सदस्य कोड:",
+                                        fontSize = 12.sp,
+                                        color = textSecondary
+                                    )
+                                    Text(
+                                        text = pendingCode.ifBlank { pendingStatus?.memberCode ?: "" },
+                                        fontSize = 12.5.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF1D4ED8)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "वर्तमान स्थिति:",
+                                        fontSize = 12.sp,
+                                        color = textSecondary
+                                    )
+                                    Text(
+                                        text = if (isRejected) "❌ अस्वीकृत" else "⏳ व्यवस्थापक समीक्षा जारी",
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = if (isRejected) PendingRed else Color(0xFFD97706)
+                                    )
+                                }
+                                if (isRejected && (pendingStatus?.rejectionReason?.isNotBlank() == true)) {
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    Text(
+                                        text = "कारण: ${pendingStatus.rejectionReason}",
+                                        fontSize = 11.5.sp,
+                                        color = PendingRed,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
+                            }
+                        }
+
+                        Text(
+                            text = if (isRejected)
+                                "आपका पंजीकरण व्यवस्थापक द्वारा अस्वीकृत किया गया है। आप विवरण सुधारकर पुनः पंजीकरण अनुरोध भेज सकते हैं।"
+                            else
+                                "जैसे ही मुख्य व्यवस्थापक (Admin) आपके अनुरोध को सत्यापित कर स्वीकृत करेंगे, आपका ऐप स्वतः खुल जाएगा और आप युवा शक्ति परिवार के सक्रिय सदस्य बन जाएंगे।",
+                            fontSize = 11.5.sp,
+                            color = textSecondary,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 16.sp
+                        )
+
+                        if (!isRejected) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(16.dp),
+                                    strokeWidth = 2.dp,
+                                    color = DeepNavy
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "रियल-टाइम क्लाउड कनेक्शन सक्रिय है...",
+                                    fontSize = 11.sp,
+                                    color = DeepNavy,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                        }
+
+                        OutlinedButton(
+                            onClick = onCancelPendingRegistration,
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(10.dp),
+                            border = BorderStroke(1.dp, Color(0xFFCBD5E1))
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                                modifier = Modifier.size(14.dp),
+                                tint = Color(0xFF475569)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = if (isRejected) "पुनः नया पंजीकरण करें" else "अनुरोध वापस लें / दूसरा कोड चुनें",
+                                fontSize = 12.sp,
+                                color = Color(0xFF475569),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            } else {
+                // Main Auth Card
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = cardBg),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                    border = BorderStroke(1.2.dp, cardBorder)
+                ) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        // Top Tabs
+                        TabRow(
                         selectedTabIndex = selectedTab,
                         containerColor = Color(0xFFF1F5F9),
                         contentColor = DeepNavy
@@ -689,7 +856,7 @@ fun OnboardingLoginDialog(
                                     Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = DeepNavy)
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                                        text = "पंजीकरण करें एवं ऐप शुरू करें ➔",
+                                        text = "पंजीकरण अनुरोध भेजें ➔",
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = DeepNavy
@@ -702,4 +869,5 @@ fun OnboardingLoginDialog(
             }
         }
     }
+}
 }
