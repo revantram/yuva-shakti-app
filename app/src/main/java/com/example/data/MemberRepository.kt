@@ -137,7 +137,7 @@ class MemberRepository(
         try {
             val cloudMembers = FirestoreSyncHelper.fetchMembersFromFirestore()
             if (cloudMembers.isNotEmpty()) {
-                memberDao.syncFromCloud(cloudMembers)
+                syncMembersFromCloud(cloudMembers)
             } else {
                 val localMembers = memberDao.getAllMembersList()
                 if (localMembers.isNotEmpty()) {

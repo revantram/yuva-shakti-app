@@ -1336,6 +1336,8 @@ fun SettingsDialog(
                             )
                         }
                     }
+                }
+
                 // Section 7: Developer Option (डेवलपर जानकारी - Revant ram bhati)
                 item {
                     Card(
@@ -1536,7 +1538,6 @@ fun SettingsDialog(
             }
         }
     }
-}
 }
 }
 
