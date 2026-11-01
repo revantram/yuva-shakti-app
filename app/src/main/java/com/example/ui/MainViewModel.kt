@@ -170,94 +170,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _showDatePickerDialog = MutableStateFlow(false)
     val showDatePickerDialog: StateFlow<Boolean> = _showDatePickerDialog
 
-    init {
-        viewModelScope.launch {
-            try {
-                repository.ensureInitialized()
-            } catch (t: Throwable) {
-                android.util.Log.e("MainViewModel", "ensureInitialized error", t)
-            }
-        }
-        // Continuous realtime listeners running in ViewModel lifecycle
-        try {
-            com.example.util.FirestoreSyncHelper.listenToMembersRealtime { cloudMembers ->
-                viewModelScope.launch {
-                    try {
-                        repository.syncMembersFromCloud(cloudMembers)
-                    } catch (t: Throwable) {
-                        android.util.Log.e("MainViewModel", "syncMembersFromCloud error", t)
-                    }
-                }
-            }
-            com.example.util.FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
-                try {
-                    upiId?.let {
-                        if (it.isNotBlank()) {
-                            val cleanUpi = repository.sanitizeUpiId(it)
-                            setFundUpiId(cleanUpi, showSnackbar = false)
-                            if (cleanUpi != it.trim()) {
-                                viewModelScope.launch {
-                                    com.example.util.FirestoreSyncHelper.saveSettings(upiId = cleanUpi)
-                                }
-                            }
-                        }
-                    }
-                    waLink?.let { if (it.isNotBlank()) setWhatsAppGroupLink(it) }
-                    target?.let { if (it > 0) setCustomTargetAmount(it) }
-                    cycleName?.let { if (it.isNotBlank()) setAmavasyaCycleName(it) }
-                    amavasyaMillis?.let { if (it > 0) setTargetAmavasyaMillis(it) }
-                } catch (t: Throwable) {
-                    android.util.Log.e("MainViewModel", "listenToSettings error", t)
-                }
-            }
-        } catch (t: Throwable) {
-            android.util.Log.e("MainViewModel", "Firestore listener init error", t)
-        }
-        viewModelScope.launch {
-            while (true) {
-                try {
-                    val target = _targetAmavasyaMillis.value
-                    val isCustom = repository.getTargetAmavasyaMillis() > 0
-                    _countdownInfo.value = com.example.util.AmavasyaCalculator.computeCountdown(
-                        targetMillis = target,
-                        currentMillis = System.currentTimeMillis(),
-                        isCustom = isCustom
-                    )
-                } catch (t: Throwable) {
-                    // ignore
-                }
-                kotlinx.coroutines.delay(1000L)
-            }
-        }
-        // Continuous 5-minute periodic auto-refresh loop from Firebase Firestore
-        viewModelScope.launch {
-            while (true) {
-                kotlinx.coroutines.delay(5 * 60 * 1000L) // 5 minutes
-                try {
-                    android.util.Log.d("MainViewModel", "Continuous 5-minute auto-refresh from Firestore")
-                    repository.syncWithFirestore()
-                } catch (t: Throwable) {
-                    android.util.Log.e("MainViewModel", "Periodic sync error", t)
-                }
-            }
-        }
-
-        // Listen to Pending Member Registrations in Realtime (for Admin verification)
-        try {
-            FirestoreSyncHelper.listenToPendingRegistrations { list ->
-                _pendingRegistrations.value = list
-            }
-        } catch (t: Throwable) {
-            android.util.Log.e("MainViewModel", "Pending registrations listener init error", t)
-        }
-
-        // If this device has a pending registration awaiting Admin verification, attach status listener
-        val savedPendingReqId = repository.getPendingRegistrationRequestId()
-        if (savedPendingReqId.isNotBlank() && !_isUserLoggedIn.value) {
-            attachRegistrationStatusListener(savedPendingReqId)
-        }
-    }
-
     val allPaymentRequests: StateFlow<List<PaymentRequestEntity>> = repository.allPaymentRequests.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -368,6 +280,94 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun dismissWelcomeGreetingDialog() {
         _showWelcomeGreetingDialog.value = false
+    }
+
+    init {
+        viewModelScope.launch {
+            try {
+                repository.ensureInitialized()
+            } catch (t: Throwable) {
+                android.util.Log.e("MainViewModel", "ensureInitialized error", t)
+            }
+        }
+        // Continuous realtime listeners running in ViewModel lifecycle
+        try {
+            com.example.util.FirestoreSyncHelper.listenToMembersRealtime { cloudMembers ->
+                viewModelScope.launch {
+                    try {
+                        repository.syncMembersFromCloud(cloudMembers)
+                    } catch (t: Throwable) {
+                        android.util.Log.e("MainViewModel", "syncMembersFromCloud error", t)
+                    }
+                }
+            }
+            com.example.util.FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
+                try {
+                    upiId?.let {
+                        if (it.isNotBlank()) {
+                            val cleanUpi = repository.sanitizeUpiId(it)
+                            setFundUpiId(cleanUpi, showSnackbar = false)
+                            if (cleanUpi != it.trim()) {
+                                viewModelScope.launch {
+                                    com.example.util.FirestoreSyncHelper.saveSettings(upiId = cleanUpi)
+                                }
+                            }
+                        }
+                    }
+                    waLink?.let { if (it.isNotBlank()) setWhatsAppGroupLink(it) }
+                    target?.let { if (it > 0) setCustomTargetAmount(it) }
+                    cycleName?.let { if (it.isNotBlank()) setAmavasyaCycleName(it) }
+                    amavasyaMillis?.let { if (it > 0) setTargetAmavasyaMillis(it) }
+                } catch (t: Throwable) {
+                    android.util.Log.e("MainViewModel", "listenToSettings error", t)
+                }
+            }
+        } catch (t: Throwable) {
+            android.util.Log.e("MainViewModel", "Firestore listener init error", t)
+        }
+        viewModelScope.launch {
+            while (true) {
+                try {
+                    val target = _targetAmavasyaMillis.value
+                    val isCustom = repository.getTargetAmavasyaMillis() > 0
+                    _countdownInfo.value = com.example.util.AmavasyaCalculator.computeCountdown(
+                        targetMillis = target,
+                        currentMillis = System.currentTimeMillis(),
+                        isCustom = isCustom
+                    )
+                } catch (t: Throwable) {
+                    // ignore
+                }
+                kotlinx.coroutines.delay(1000L)
+            }
+        }
+        // Continuous 5-minute periodic auto-refresh loop from Firebase Firestore
+        viewModelScope.launch {
+            while (true) {
+                kotlinx.coroutines.delay(5 * 60 * 1000L) // 5 minutes
+                try {
+                    android.util.Log.d("MainViewModel", "Continuous 5-minute auto-refresh from Firestore")
+                    repository.syncWithFirestore()
+                } catch (t: Throwable) {
+                    android.util.Log.e("MainViewModel", "Periodic sync error", t)
+                }
+            }
+        }
+
+        // Listen to Pending Member Registrations in Realtime (for Admin verification)
+        try {
+            FirestoreSyncHelper.listenToPendingRegistrations { list ->
+                _pendingRegistrations.value = list
+            }
+        } catch (t: Throwable) {
+            android.util.Log.e("MainViewModel", "Pending registrations listener init error", t)
+        }
+
+        // If this device has a pending registration awaiting Admin verification, attach status listener
+        val savedPendingReqId = repository.getPendingRegistrationRequestId()
+        if (savedPendingReqId.isNotBlank() && !repository.isUserLoggedIn()) {
+            attachRegistrationStatusListener(savedPendingReqId)
+        }
     }
 
     private val _filterState = combine(_selectedTab, _searchQuery, _isAdmin) { tab, query, isAdmin ->
