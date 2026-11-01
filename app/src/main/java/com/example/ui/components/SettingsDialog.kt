@@ -267,13 +267,13 @@ fun SettingsDialog(
                                     Spacer(modifier = Modifier.width(10.dp))
                                     Column {
                                         Text(
-                                            text = if (isAdmin) "🛡️ सिस्टम प्रबंधन नियंत्रण सक्रिय" else "👤 सामान्य सदस्य एक्सेस स्तर",
+                                            text = if (isAdmin) "🛡️ व्यवस्थापक मोड सक्रिय (संपादन चालू)" else "🔒 सदस्य मोड (केवल दर्शन)",
                                             fontWeight = FontWeight.Bold,
                                             fontSize = 13.5.sp,
                                             color = if (isAdmin) (if (isDark) Color(0xFFFDE047) else Color(0xFF92400E)) else textPrimary
                                         )
                                         Text(
-                                            text = if (isAdmin) "सभी संपादन व प्रशासनिक सुविधाएं सक्रिय हैं" else "पारदर्शी बहीखाता व सामान्य सुविधाएं सक्रिय हैं",
+                                            text = if (isAdmin) "सभी सुविधाएं सक्रिय हैं • लॉगआउट करने के लिए यहाँ दबाएं" else "सदस्य व खर्च संपादन हेतु व्यवस्थापक लॉगिन करें",
                                             fontSize = 10.5.sp,
                                             color = if (isAdmin) (if (isDark) Color(0xFFFEF08A) else Color(0xFFB45309)) else textSecondary
                                         )
@@ -292,7 +292,7 @@ fun SettingsDialog(
                                     contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
                                 ) {
                                     Text(
-                                        text = if (isAdmin) "🔓 सामान्य मोड" else "🛡️ व्यवस्थापक लॉगिन",
+                                        text = if (isAdmin) "लॉगआउट ✖" else "🛡️ व्यवस्थापक लॉगिन",
                                         color = Color.White,
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold
