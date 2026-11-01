@@ -278,7 +278,7 @@ fun SettingsDialog(
                                 }
 
                                 Surface(
-                                    color = if (isAdmin) PendingRed else (if (isDark) SaffronGold else DeepNavy),
+                                    color = if (isAdmin) PendingRed else DeepNavy,
                                     shape = RoundedCornerShape(8.dp),
                                     modifier = Modifier.clickable {
                                         onDismiss()
@@ -286,8 +286,8 @@ fun SettingsDialog(
                                     }
                                 ) {
                                     Text(
-                                        text = if (isAdmin) "एक्सेस बंद करें" else "सुरक्षा पिन दर्ज करें",
-                                        color = if (isAdmin) Color.White else (if (isDark) Color(0xFF451A03) else Color.White),
+                                        text = "🔄 मोड बदलें / पुनः लॉगिन",
+                                        color = Color.White,
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold,
                                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)

@@ -48,7 +48,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _selectedTab = MutableStateFlow("all")
     private val _searchQuery = MutableStateFlow("")
-    private val _isAdmin = MutableStateFlow(false)
+    private val _isAdmin = MutableStateFlow(repository.isUserAdminRole())
     private val _amavasyaCycleName = MutableStateFlow(repository.getAmavasyaCycleName())
     private val _amavasyaBannerState = MutableStateFlow(repository.getAmavasyaBannerState())
     private val _customTargetAmount = MutableStateFlow(repository.getCustomTargetAmount())
@@ -157,6 +157,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             repository.ensureInitialized()
         }
+        // Continuous realtime listeners running in ViewModel lifecycle
+        com.example.util.FirestoreSyncHelper.listenToMembersRealtime { cloudMembers ->
+            viewModelScope.launch {
+                repository.syncMembersFromCloud(cloudMembers)
+            }
+        }
+        com.example.util.FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
+            upiId?.let { if (it.isNotBlank()) setFundUpiId(it) }
+            waLink?.let { if (it.isNotBlank()) setWhatsAppGroupLink(it) }
+            target?.let { if (it > 0) setCustomTargetAmount(it) }
+            cycleName?.let { if (it.isNotBlank()) setAmavasyaCycleName(it) }
+            amavasyaMillis?.let { if (it > 0) setTargetAmavasyaMillis(it) }
+        }
         viewModelScope.launch {
             while (true) {
                 val target = _targetAmavasyaMillis.value
@@ -244,6 +257,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _currentUserInstagram = MutableStateFlow(repository.getUserInstagram())
     val currentUserInstagram: StateFlow<String> = _currentUserInstagram
+
+    private val _currentUserAddress = MutableStateFlow(repository.getUserAddress())
+    val currentUserAddress: StateFlow<String> = _currentUserAddress
+
+    private val _currentUserProfilePhotoUri = MutableStateFlow(repository.getUserProfilePhotoUri())
+    val currentUserProfilePhotoUri: StateFlow<String> = _currentUserProfilePhotoUri
+
+    private val _showWelcomeGreetingDialog = MutableStateFlow(false)
+    val showWelcomeGreetingDialog: StateFlow<Boolean> = _showWelcomeGreetingDialog
+
+    fun dismissWelcomeGreetingDialog() {
+        _showWelcomeGreetingDialog.value = false
+    }
 
     private val _filterState = combine(_selectedTab, _searchQuery, _isAdmin) { tab, query, isAdmin ->
         Triple(tab, query, isAdmin)
@@ -948,7 +974,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // App Lock methods
     fun unlockAppWithPin(pin: String): Boolean {
         val cleanPin = pin.trim()
-        val correctAdminPin = "9929"
+        val correctAdminPin = "992942"
         val userPersonalPin = repository.getUserPersonalPin()
         val appLockPin = repository.getAppLockPin()
 
@@ -966,31 +992,49 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun registerOrLoginUser(name: String, phone: String, pin: String, insta: String, matrimonialStatus: String) {
+    fun registerOrLoginUser(
+        name: String,
+        phone: String,
+        address: String,
+        photoUri: String,
+        insta: String,
+        isAdmin: Boolean
+    ) {
         viewModelScope.launch {
-            val cleanPin = pin.trim()
-            val isAdmin = cleanPin == "9929"
-            repository.saveUserProfile(name, phone, insta, cleanPin, isAdmin)
+            repository.saveUserProfile(
+                name = name,
+                phone = phone,
+                address = address,
+                photoUri = photoUri,
+                insta = insta,
+                pin = if (isAdmin) "992942" else "",
+                isAdmin = isAdmin
+            )
             _isUserLoggedIn.value = true
             _isAdmin.value = isAdmin
             _currentUserFullName.value = name
             _currentUserPhone.value = phone
+            _currentUserAddress.value = address
+            _currentUserProfilePhotoUri.value = photoUri
             _currentUserInstagram.value = insta
 
-            // Add or link to members database so their name & phone appears in member list!
+            // Link or add to members database so their name & phone appears in member list!
             try {
                 val currentMembers = repository.allMembers.firstOrNull() ?: emptyList()
-                val existing = currentMembers.find { it.phone == phone.trim() }
+                val cleanPhone = phone.trim()
+                val existing = currentMembers.find {
+                    it.phone.trim().takeLast(10) == cleanPhone.takeLast(10)
+                }
                 if (existing == null) {
                     val newMember = MemberEntity(
                         name = name.trim(),
-                        phone = phone.trim(),
+                        phone = cleanPhone,
                         monthlyAmount = 100,
                         status = "Pending",
-                        notes = if (matrimonialStatus.isNotBlank()) "विवाह बायोडाटा: $matrimonialStatus" else "",
+                        notes = if (isAdmin) "मुख्य व्यवस्थापक" else "परिवार सदस्य",
                         instagramId = insta.trim(),
-                        whatsappNumber = phone.trim(),
-                        villageCity = "कुचेरा"
+                        whatsappNumber = cleanPhone,
+                        villageCity = address.trim().ifBlank { "कुचेरा" }
                     )
                     val newId = repository.insertMember(newMember)
                     _activeMemberId.value = newId
@@ -998,11 +1042,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     _activeMemberId.value = existing.id
                     repository.setMyActiveMemberId(existing.id)
+                    val updated = existing.copy(
+                        name = name.trim().ifBlank { existing.name },
+                        villageCity = address.trim().ifBlank { existing.villageCity },
+                        instagramId = insta.trim().ifBlank { existing.instagramId },
+                        notes = if (isAdmin) "मुख्य व्यवस्थापक" else existing.notes.ifBlank { "परिवार सदस्य" }
+                    )
+                    repository.updateMember(updated)
                 }
             } catch (e: Exception) {
-                // Ignore
+                android.util.Log.e("MainViewModel", "Error linking member during login", e)
             }
 
+            _showWelcomeGreetingDialog.value = true
             _snackbarMessage.value = if (isAdmin) "स्वागत है, $name (एडमिन)! ऐप तैयार है।" else "स्वागत है, $name! युवा शक्ति ग्रुप में आपका स्वागत है।"
         }
     }

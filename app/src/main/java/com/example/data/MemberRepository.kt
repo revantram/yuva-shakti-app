@@ -24,13 +24,15 @@ class MemberRepository(
 
     companion object {
         private const val KEY_ADMIN_PIN = "admin_pin"
-        private const val DEFAULT_PIN = "9929"
+        private const val DEFAULT_PIN = "992942"
         private const val KEY_USER_LOGGED_IN = "user_is_logged_in"
         private const val KEY_USER_FULL_NAME = "user_full_name"
         private const val KEY_USER_PHONE = "user_phone"
         private const val KEY_USER_INSTAGRAM = "user_instagram"
         private const val KEY_USER_PERSONAL_PIN = "user_personal_pin"
         private const val KEY_USER_IS_ADMIN = "user_is_admin"
+        private const val KEY_USER_ADDRESS = "user_address"
+        private const val KEY_USER_PROFILE_PHOTO_URI = "user_profile_photo_uri"
         private const val KEY_AMAVASYA_CYCLE_NAME = "amavasya_cycle_name"
         private const val KEY_AMAVASYA_STATE = "amavasya_state" // "day_after", "advance", "regular"
         private const val KEY_TARGET_AMAVASYA_MILLIS = "target_amavasya_millis"
@@ -61,11 +63,26 @@ class MemberRepository(
     val allLoanRequests: Flow<List<LoanRequestEntity>> = memberDao.getAllLoanRequests()
 
     suspend fun ensureInitialized() = withContext(Dispatchers.IO) {
+        try {
+            // 1. Immediately fetch latest cloud members from Firestore!
+            val cloudMembers = FirestoreSyncHelper.fetchMembersFromFirestore()
+            if (cloudMembers.isNotEmpty()) {
+                memberDao.syncFromCloud(cloudMembers)
+                android.util.Log.d("MemberRepository", "Successfully synced ${cloudMembers.size} members from Firestore cloud.")
+                return@withContext
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("MemberRepository", "Error syncing cloud members on startup", e)
+        }
+
+        // 2. Only seed if both local and cloud are completely empty
         val count = memberDao.getMemberCount()
-        if (count == 0 || count > 1) {
-            // Re-seed with strictly only Revat Ram Bhati per user request
-            memberDao.deleteAllMembers()
+        if (count == 0) {
             AppDatabase.seedInitialMembers(memberDao)
+            val localMembers = memberDao.getAllMembersList()
+            if (localMembers.isNotEmpty()) {
+                FirestoreSyncHelper.uploadMembersToFirestore(localMembers)
+            }
         }
     }
 
@@ -327,12 +344,28 @@ class MemberRepository(
     fun getUserInstagram(): String = prefs.getString(KEY_USER_INSTAGRAM, "") ?: ""
     fun getUserPersonalPin(): String = prefs.getString(KEY_USER_PERSONAL_PIN, "") ?: ""
     fun isUserAdminRole(): Boolean = prefs.getBoolean(KEY_USER_IS_ADMIN, false)
+    fun getUserAddress(): String = prefs.getString(KEY_USER_ADDRESS, "कुचेरा") ?: "कुचेरा"
+    fun getUserProfilePhotoUri(): String = prefs.getString(KEY_USER_PROFILE_PHOTO_URI, "") ?: ""
 
-    fun saveUserProfile(name: String, phone: String, insta: String, pin: String, isAdmin: Boolean) {
+    fun setUserProfilePhotoUri(uri: String) {
+        prefs.edit().putString(KEY_USER_PROFILE_PHOTO_URI, uri.trim()).apply()
+    }
+
+    fun saveUserProfile(
+        name: String,
+        phone: String,
+        address: String,
+        photoUri: String,
+        insta: String,
+        pin: String,
+        isAdmin: Boolean
+    ) {
         prefs.edit()
             .putBoolean(KEY_USER_LOGGED_IN, true)
             .putString(KEY_USER_FULL_NAME, name.trim())
             .putString(KEY_USER_PHONE, phone.trim())
+            .putString(KEY_USER_ADDRESS, address.trim())
+            .putString(KEY_USER_PROFILE_PHOTO_URI, photoUri.trim())
             .putString(KEY_USER_INSTAGRAM, insta.trim())
             .putString(KEY_USER_PERSONAL_PIN, pin.trim())
             .putBoolean(KEY_USER_IS_ADMIN, isAdmin)
@@ -349,7 +382,7 @@ class MemberRepository(
     fun verifyAdminPin(pin: String): Boolean {
         val cleanPin = pin.trim()
         val savedPin = prefs.getString(KEY_ADMIN_PIN, DEFAULT_PIN) ?: DEFAULT_PIN
-        return cleanPin == DEFAULT_PIN || cleanPin == savedPin
+        return cleanPin == "992942" || cleanPin == DEFAULT_PIN || cleanPin == savedPin
     }
 
     fun setAdminPin(newPin: String) {

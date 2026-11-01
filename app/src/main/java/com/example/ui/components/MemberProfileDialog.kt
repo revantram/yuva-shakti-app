@@ -60,6 +60,7 @@ import com.example.ui.theme.SaffronGold
 fun MemberProfileDialog(
     member: MemberEntity,
     isAdmin: Boolean,
+    profilePhotoUri: String = "",
     onDismiss: () -> Unit,
     onEditClick: () -> Unit
 ) {
@@ -91,23 +92,35 @@ fun MemberProfileDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Large Avatar
-                val avatarLetter = member.name.trim().take(1)
-                val avatarBg = if (isPaid) PaidGreenLight else Color(0xFFEEF2FF)
-                val avatarTextColor = if (isPaid) PaidGreenDark else DeepNavy
-
-                Box(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .background(avatarBg, CircleShape)
-                        .border(2.dp, if (isPaid) PaidGreen else Color(0xFF818CF8), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = avatarLetter,
-                        color = avatarTextColor,
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Bold
+                if (profilePhotoUri.isNotBlank()) {
+                    coil.compose.AsyncImage(
+                        model = profilePhotoUri,
+                        contentDescription = "प्रोफ़ाइल फोटो",
+                        contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                        modifier = Modifier
+                            .size(72.dp)
+                            .androidx.compose.ui.draw.clip(CircleShape)
+                            .border(2.dp, if (isPaid) PaidGreen else SaffronGold, CircleShape)
                     )
+                } else {
+                    val avatarLetter = member.name.trim().take(1)
+                    val avatarBg = if (isPaid) PaidGreenLight else Color(0xFFEEF2FF)
+                    val avatarTextColor = if (isPaid) PaidGreenDark else DeepNavy
+
+                    Box(
+                        modifier = Modifier
+                            .size(64.dp)
+                            .background(avatarBg, CircleShape)
+                            .border(2.dp, if (isPaid) PaidGreen else Color(0xFF818CF8), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = avatarLetter,
+                            color = avatarTextColor,
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))

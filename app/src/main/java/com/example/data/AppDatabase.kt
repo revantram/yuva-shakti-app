@@ -51,22 +51,22 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         suspend fun seedInitialMembers(dao: MemberDao) {
-            // Only Revat Ram Bhati as requested by the user
+            // Revat Ram Bhati verified details from Firestore
             val initialList = listOf(
                 MemberEntity(
                     id = 1,
-                    name = "रेवंत राम जी भाटी",
-                    phone = "9876543210",
+                    name = "रेवंतराम भाटी",
+                    phone = "8696663615",
                     monthlyAmount = 0,
                     status = "Pending",
                     paidDate = "2026-10-28",
                     paymentMode = "UPI",
                     notes = "मुख्य व्यवस्थापक",
                     sortOrder = 1,
-                    instagramId = "revant_bhati",
-                    facebookId = "revant.bhati.1",
-                    whatsappNumber = "9876543210",
-                    villageCity = "भाटीवास"
+                    instagramId = "Revant__",
+                    facebookId = "",
+                    whatsappNumber = "8696663615",
+                    villageCity = "कुचेरा"
                 )
             )
             dao.insertMembers(initialList)

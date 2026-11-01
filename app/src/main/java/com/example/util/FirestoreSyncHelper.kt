@@ -109,18 +109,18 @@ object FirestoreSyncHelper {
             val snapshot = firestore.collection(COLLECTION_MEMBERS).get().awaitTask()
             val list = mutableListOf<MemberEntity>()
             for (doc in snapshot.documents) {
-                val id = doc.getLong("id") ?: doc.id.toLongOrNull() ?: 0L
+                val id = doc.getLong("id") ?: doc.id.toLongOrNull() ?: (doc.getString("id")?.toLongOrNull() ?: 0L)
                 val name = doc.getString("name") ?: ""
-                val phone = doc.getString("phone") ?: ""
-                val monthlyAmount = doc.getLong("monthlyAmount")?.toInt() ?: 0
+                val phone = doc.getString("phone") ?: (doc.getLong("phone")?.toString() ?: "")
+                val monthlyAmount = doc.getLong("monthlyAmount")?.toInt() ?: (doc.getString("monthlyAmount")?.toIntOrNull() ?: 0)
                 val status = doc.getString("status") ?: "Pending"
                 val paidDate = doc.getString("paidDate") ?: ""
                 val paymentMode = doc.getString("paymentMode") ?: ""
                 val notes = doc.getString("notes") ?: ""
-                val sortOrder = doc.getLong("sortOrder")?.toInt() ?: 0
+                val sortOrder = doc.getLong("sortOrder")?.toInt() ?: (doc.getString("sortOrder")?.toIntOrNull() ?: 0)
                 val instagramId = doc.getString("instagramId") ?: ""
                 val facebookId = doc.getString("facebookId") ?: ""
-                val whatsappNumber = doc.getString("whatsappNumber") ?: ""
+                val whatsappNumber = doc.getString("whatsappNumber") ?: (doc.getLong("whatsappNumber")?.toString() ?: "")
                 val villageCity = doc.getString("villageCity") ?: ""
 
                 if (name.isNotBlank()) {
@@ -161,18 +161,18 @@ object FirestoreSyncHelper {
                     if (snapshot != null) {
                         val list = mutableListOf<MemberEntity>()
                         for (doc in snapshot.documents) {
-                            val id = doc.getLong("id") ?: doc.id.toLongOrNull() ?: 0L
+                            val id = doc.getLong("id") ?: doc.id.toLongOrNull() ?: (doc.getString("id")?.toLongOrNull() ?: 0L)
                             val name = doc.getString("name") ?: ""
-                            val phone = doc.getString("phone") ?: ""
-                            val monthlyAmount = doc.getLong("monthlyAmount")?.toInt() ?: 0
+                            val phone = doc.getString("phone") ?: (doc.getLong("phone")?.toString() ?: "")
+                            val monthlyAmount = doc.getLong("monthlyAmount")?.toInt() ?: (doc.getString("monthlyAmount")?.toIntOrNull() ?: 0)
                             val status = doc.getString("status") ?: "Pending"
                             val paidDate = doc.getString("paidDate") ?: ""
                             val paymentMode = doc.getString("paymentMode") ?: ""
                             val notes = doc.getString("notes") ?: ""
-                            val sortOrder = doc.getLong("sortOrder")?.toInt() ?: 0
+                            val sortOrder = doc.getLong("sortOrder")?.toInt() ?: (doc.getString("sortOrder")?.toIntOrNull() ?: 0)
                             val instagramId = doc.getString("instagramId") ?: ""
                             val facebookId = doc.getString("facebookId") ?: ""
-                            val whatsappNumber = doc.getString("whatsappNumber") ?: ""
+                            val whatsappNumber = doc.getString("whatsappNumber") ?: (doc.getLong("whatsappNumber")?.toString() ?: "")
                             val villageCity = doc.getString("villageCity") ?: ""
 
                             if (name.isNotBlank()) {

@@ -1,5 +1,9 @@
 package com.example.ui.components
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,12 +25,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,13 +44,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -56,45 +62,61 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import coil.compose.AsyncImage
 import com.example.R
 import com.example.ui.theme.DeepNavy
+import com.example.ui.theme.PendingRed
 import com.example.ui.theme.SaffronGold
 
 @Composable
 fun OnboardingLoginDialog(
-    onLoginSuccess: (name: String, phone: String, pin: String, insta: String, matrimonialStatus: String) -> Unit
+    onLoginSuccess: (
+        name: String,
+        phone: String,
+        address: String,
+        photoUri: String,
+        insta: String,
+        isAdmin: Boolean
+    ) -> Unit
 ) {
+    // Mode choice: "member" or "admin"
+    var selectedRole by remember { mutableStateOf("member") }
+    var adminCodeInput by remember { mutableStateOf("") }
+    var wrongAdminAttempts by remember { mutableIntStateOf(0) }
+
     var fullName by remember { mutableStateOf("") }
     var phoneNumber by remember { mutableStateOf("") }
-    var securityPin by remember { mutableStateOf("") }
+    var addressVillage by remember { mutableStateOf("") }
     var instagramId by remember { mutableStateOf("") }
-    var matrimonialStatus by remember { mutableStateOf("अविवाहित (बायोडाटा उपलब्ध)") }
-    var showBioOptions by remember { mutableStateOf(false) }
+    var selectedPhotoUri by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var alertNotice by remember { mutableStateOf<String?>(null) }
 
-    val bioOptions = listOf(
-        "अविवाहित (बायोडाटा उपलब्ध)",
-        "विवाहित",
-        "अविवाहित (युवा सदस्य)"
-    )
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            selectedPhotoUri = uri.toString()
+            errorMessage = null
+        }
+    }
 
-    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
-    val cardBg = if (isDark) Color(0xFF1E293B) else Color.White
-    val textPrimary = if (isDark) Color(0xFFF8FAFC) else Color(0xFF0F172A)
-    val textSecondary = if (isDark) Color(0xFFCBD5E1) else Color(0xFF64748B)
-    val cardBorder = if (isDark) SaffronGold.copy(alpha = 0.5f) else Color(0xFFE2E8F0)
-    val iconTint = if (isDark) SaffronGold else DeepNavy
+    val cardBg = Color.White
+    val textPrimary = Color(0xFF0F172A)
+    val textSecondary = Color(0xFF64748B)
+    val cardBorder = Color(0xFFE2E8F0)
+    val iconTint = DeepNavy
 
     val inputColors = OutlinedTextFieldDefaults.colors(
         focusedTextColor = textPrimary,
         unfocusedTextColor = textPrimary,
-        focusedBorderColor = if (isDark) SaffronGold else DeepNavy,
-        unfocusedBorderColor = if (isDark) Color(0xFF475569) else Color(0xFFCBD5E1),
-        focusedLabelColor = if (isDark) SaffronGold else DeepNavy,
+        focusedBorderColor = DeepNavy,
+        unfocusedBorderColor = Color(0xFFCBD5E1),
+        focusedLabelColor = DeepNavy,
         unfocusedLabelColor = textSecondary,
-        focusedPlaceholderColor = if (isDark) Color(0xFF64748B) else Color(0xFF94A3B8),
-        unfocusedPlaceholderColor = if (isDark) Color(0xFF64748B) else Color(0xFF94A3B8),
-        cursorColor = if (isDark) SaffronGold else DeepNavy
+        focusedPlaceholderColor = Color(0xFF94A3B8),
+        unfocusedPlaceholderColor = Color(0xFF94A3B8),
+        cursorColor = DeepNavy
     )
 
     Dialog(
@@ -113,14 +135,14 @@ fun OnboardingLoginDialog(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(20.dp),
+                    .padding(horizontal = 18.dp, vertical = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Big Official Logo with Golden Ring
+                // Official Logo with Golden Ring
                 Box(
                     modifier = Modifier
-                        .size(90.dp)
+                        .size(80.dp)
                         .clip(CircleShape)
                         .border(3.dp, SaffronGold, CircleShape)
                         .background(Color.White),
@@ -134,61 +156,251 @@ fun OnboardingLoginDialog(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 // Official Branding Title
                 Text(
-                    text = "🚩 युवा शक्ति ग्रुप भाटी परिवार कुचेरा",
-                    fontSize = 20.sp,
+                    text = "🚩 युवा शक्ति ग्रुप, भाटी परिवार कुचेरा",
+                    fontSize = 19.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "मासिक अमावस्या अंशदान, विवाह रिकॉर्ड एवं बहीखाता",
+                    text = "मासिक अमावस्या अंशदान एवं डिजिटल पारदर्शी बहीखाता",
                     fontSize = 12.sp,
                     color = Color(0xFFC7D2FE),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 2.dp)
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                // Login & Registration Card
+                // Main Form Card
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = cardBg),
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                    border = androidx.compose.foundation.BorderStroke(1.2.dp, cardBorder)
+                    border = BorderStroke(1.2.dp, cardBorder)
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(20.dp),
-                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                            .padding(18.dp),
+                        verticalArrangement = Arrangement.spacedBy(13.dp)
                     ) {
                         Text(
-                            text = "सदस्य प्रवेश व सत्यापन",
+                            text = "प्रवेश व पंजीकरण (Login & Registration)",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 16.5.sp,
+                            fontSize = 16.sp,
                             color = textPrimary
                         )
-                        Text(
-                            text = "कृपया अपना सही नाम और मोबाइल नंबर दर्ज करें ताकि आपको ग्रुप के सदस्यों की सूची में जोड़ा जा सके।",
-                            fontSize = 11.5.sp,
-                            color = textSecondary,
-                            lineHeight = 16.sp
-                        )
 
-                        // 1. Full Name (Mandatory)
+                        // 1. Role Selection: Admin Mode vs Member Mode
+                        Column {
+                            Text(
+                                text = "आप किस रूप में ऐप शुरू करना चाहते हैं? *",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = textPrimary
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                // Member Mode Card
+                                Surface(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .clickable {
+                                            selectedRole = "member"
+                                            errorMessage = null
+                                        },
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = if (selectedRole == "member") Color(0xFFEFF6FF) else Color(0xFFF8FAFC),
+                                    border = BorderStroke(
+                                        if (selectedRole == "member") 1.8.dp else 1.dp,
+                                        if (selectedRole == "member") Color(0xFF2563EB) else Color(0xFFE2E8F0)
+                                    )
+                                ) {
+                                    Column(
+                                        modifier = Modifier.padding(10.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(text = "👤", fontSize = 22.sp)
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            text = "सदस्य मोड",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 13.sp,
+                                            color = if (selectedRole == "member") Color(0xFF1E40AF) else Color(0xFF475569)
+                                        )
+                                        Text(
+                                            text = "(पारदर्शी दर्शक)",
+                                            fontSize = 9.5.sp,
+                                            color = if (selectedRole == "member") Color(0xFF3B82F6) else Color(0xFF94A3B8)
+                                        )
+                                    }
+                                }
+
+                                // Admin Mode Card
+                                Surface(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .clickable {
+                                            if (wrongAdminAttempts >= 3) {
+                                                errorMessage = "⚠️ 3 बार गलत कोड दर्ज हुआ। सुरक्षा कारणों से एडमिन मोड ब्लॉक है, कृपया सदस्य मोड में जारी रखें।"
+                                            } else {
+                                                selectedRole = "admin"
+                                                errorMessage = null
+                                            }
+                                        },
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = if (selectedRole == "admin") Color(0xFFFFFBEB) else Color(0xFFF8FAFC),
+                                    border = BorderStroke(
+                                        if (selectedRole == "admin") 1.8.dp else 1.dp,
+                                        if (selectedRole == "admin") SaffronGold else Color(0xFFE2E8F0)
+                                    )
+                                ) {
+                                    Column(
+                                        modifier = Modifier.padding(10.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(text = "🛡️", fontSize = 22.sp)
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            text = "एडमिन मोड",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 13.sp,
+                                            color = if (selectedRole == "admin") Color(0xFF92400E) else Color(0xFF475569)
+                                        )
+                                        Text(
+                                            text = "(व्यवस्थापक)",
+                                            fontSize = 9.5.sp,
+                                            color = if (selectedRole == "admin") Color(0xFFB45309) else Color(0xFF94A3B8)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        // If Admin Mode selected, prompt for Secret Admin Code
+                        if (selectedRole == "admin") {
+                            Surface(
+                                color = Color(0xFFFFFBEB),
+                                shape = RoundedCornerShape(12.dp),
+                                border = BorderStroke(1.dp, Color(0xFFFDE68A)),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Column(modifier = Modifier.padding(10.dp)) {
+                                    Text(
+                                        text = "🔐 एडमिन सत्यापन कोड दर्ज करें (प्रयास: $wrongAdminAttempts/3)",
+                                        fontSize = 11.5.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Color(0xFF92400E)
+                                    )
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    OutlinedTextField(
+                                        value = adminCodeInput,
+                                        onValueChange = {
+                                            if (it.length <= 6) {
+                                                adminCodeInput = it
+                                                errorMessage = null
+                                            }
+                                        },
+                                        label = { Text("एडमिन कोड * (6 अंक)") },
+                                        placeholder = { Text("992942") },
+                                        leadingIcon = {
+                                            Icon(imageVector = Icons.Default.Lock, contentDescription = null, tint = SaffronGold)
+                                        },
+                                        visualTransformation = PasswordVisualTransformation(),
+                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                                        singleLine = true,
+                                        shape = RoundedCornerShape(10.dp),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        colors = inputColors
+                                    )
+                                }
+                            }
+                        }
+
+                        // 2. Profile Photo Upload Section
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "प्रोफ़ाइल फ़ोटो जोड़ें (वैकल्पिक / प्रोफाइल में दिखेगी):",
+                                fontSize = 11.5.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = textSecondary
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            Box(
+                                modifier = Modifier
+                                    .size(76.dp)
+                                    .clip(CircleShape)
+                                    .border(2.5.dp, if (selectedPhotoUri.isNotBlank()) SaffronGold else Color(0xFFCBD5E1), CircleShape)
+                                    .background(Color(0xFFF1F5F9))
+                                    .clickable { photoPickerLauncher.launch("image/*") },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (selectedPhotoUri.isNotBlank()) {
+                                    AsyncImage(
+                                        model = selectedPhotoUri,
+                                        contentDescription = "प्रोफ़ाइल फोटो",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .size(24.dp)
+                                            .align(Alignment.BottomEnd)
+                                            .background(SaffronGold, CircleShape)
+                                            .border(1.dp, Color.White, CircleShape),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Edit,
+                                            contentDescription = "बदलें",
+                                            tint = DeepNavy,
+                                            modifier = Modifier.size(13.dp)
+                                        )
+                                    }
+                                } else {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.Center
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.CameraAlt,
+                                            contentDescription = "फोटो अपलोड",
+                                            tint = Color(0xFF64748B),
+                                            modifier = Modifier.size(26.dp)
+                                        )
+                                        Text(
+                                            text = "फोटो चुनें 📸",
+                                            fontSize = 9.sp,
+                                            color = Color(0xFF64748B),
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        // 3. Full Name (Mandatory)
                         OutlinedTextField(
                             value = fullName,
                             onValueChange = {
                                 fullName = it
                                 errorMessage = null
                             },
-                            label = { Text("पूरा नाम * (जैसे: रेवंतराम भाटी)") },
+                            label = { Text("पूरा नाम * (उदा. रेवंतराम भाटी)") },
                             leadingIcon = {
                                 Icon(imageVector = Icons.Default.Person, contentDescription = null, tint = iconTint)
                             },
@@ -198,7 +410,7 @@ fun OnboardingLoginDialog(
                             colors = inputColors
                         )
 
-                        // 2. Mobile Number (Mandatory)
+                        // 4. Mobile Number (Mandatory)
                         OutlinedTextField(
                             value = phoneNumber,
                             onValueChange = {
@@ -208,6 +420,7 @@ fun OnboardingLoginDialog(
                                 }
                             },
                             label = { Text("मोबाइल नंबर * (10 अंक)") },
+                            placeholder = { Text("8696663615") },
                             leadingIcon = {
                                 Icon(imageVector = Icons.Default.Phone, contentDescription = null, tint = iconTint)
                             },
@@ -217,35 +430,37 @@ fun OnboardingLoginDialog(
                             modifier = Modifier.fillMaxWidth(),
                             colors = inputColors
                         )
+                        Text(
+                            text = "ℹ️ यह मोबाइल नंबर आपके बहीखाता खाते व अंशदान से लिंक रहेगा।",
+                            fontSize = 10.sp,
+                            color = Color(0xFF64748B),
+                            modifier = Modifier.padding(start = 4.dp, top = (-6).dp)
+                        )
 
-                        // 3. Security PIN (Mandatory)
+                        // 5. Village / City / Address (Mandatory)
                         OutlinedTextField(
-                            value = securityPin,
+                            value = addressVillage,
                             onValueChange = {
-                                if (it.length <= 4 && it.all { ch -> ch.isDigit() }) {
-                                    securityPin = it
-                                    errorMessage = null
-                                }
+                                addressVillage = it
+                                errorMessage = null
                             },
-                            label = { Text("सुरक्षा कोड (4-अंकीय PIN) *") },
-                            placeholder = { Text("अपना 4-अंकीय पिन बनाएं") },
+                            label = { Text("पता / गाँव या शहर * (उदा. कुचेरा)") },
+                            placeholder = { Text("गाँव का नाम") },
                             leadingIcon = {
-                                Icon(imageVector = Icons.Default.Lock, contentDescription = null, tint = iconTint)
+                                Icon(imageVector = Icons.Default.LocationOn, contentDescription = null, tint = iconTint)
                             },
-                            visualTransformation = PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                             singleLine = true,
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth(),
                             colors = inputColors
                         )
 
-                        // 4. Instagram ID (Optional)
+                        // 6. Instagram ID (Optional)
                         OutlinedTextField(
                             value = instagramId,
                             onValueChange = { instagramId = it },
                             label = { Text("इंस्टाग्राम आईडी (वैकल्पिक)") },
-                            placeholder = { Text("@username (यदि हो)") },
+                            placeholder = { Text("उदा. Revant__") },
                             leadingIcon = {
                                 Icon(imageVector = Icons.Default.CameraAlt, contentDescription = null, tint = Color(0xFFE1306C))
                             },
@@ -255,77 +470,41 @@ fun OnboardingLoginDialog(
                             colors = inputColors
                         )
 
-                        // 5. Matrimonial Record Dropdown (विवाह रिकॉर्ड)
-                        Column {
-                            Text(
-                                text = "विवाह रिकॉर्ड / वैवाहिक स्थिति:",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = textPrimary
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
+                        // Notice / Error
+                        if (alertNotice != null) {
                             Surface(
-                                shape = RoundedCornerShape(10.dp),
-                                color = if (isDark) Color(0xFF0F172A) else Color.White,
-                                border = androidx.compose.foundation.BorderStroke(1.dp, if (isDark) Color(0xFF475569) else Color(0xFFCBD5E1)),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { showBioOptions = !showBioOptions }
+                                color = Color(0xFFEFF6FF),
+                                shape = RoundedCornerShape(8.dp),
+                                border = BorderStroke(1.dp, Color(0xFFBFDBFE)),
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                Row(
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(text = matrimonialStatus, fontSize = 13.sp, color = textPrimary)
-                                    Text(text = if (showBioOptions) "▲" else "▼", fontSize = 11.sp, color = textSecondary)
-                                }
-                            }
-
-                            if (showBioOptions) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(top = 4.dp)
-                                        .background(if (isDark) Color(0xFF0F172A) else Color(0xFFF8FAFC), RoundedCornerShape(8.dp))
-                                        .border(1.dp, if (isDark) Color(0xFF334155) else Color(0xFFE2E8F0), RoundedCornerShape(8.dp))
-                                ) {
-                                    bioOptions.forEach { opt ->
-                                        Text(
-                                            text = opt,
-                                            fontSize = 12.5.sp,
-                                            color = if (opt == matrimonialStatus) (if (isDark) SaffronGold else DeepNavy) else textPrimary,
-                                            fontWeight = if (opt == matrimonialStatus) FontWeight.Bold else FontWeight.Normal,
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .clickable {
-                                                    matrimonialStatus = opt
-                                                    showBioOptions = false
-                                                }
-                                                .padding(horizontal = 12.dp, vertical = 8.dp)
-                                        )
-                                    }
-                                }
+                                Text(
+                                    text = alertNotice ?: "",
+                                    color = Color(0xFF1D4ED8),
+                                    fontSize = 11.5.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.padding(8.dp)
+                                )
                             }
                         }
 
                         if (errorMessage != null) {
                             Text(
                                 text = "⚠️ $errorMessage",
-                                color = Color(0xFFDC2626),
-                                fontSize = 12.sp,
+                                color = PendingRed,
+                                fontSize = 11.5.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
 
                         // Submit Button
                         Button(
                             onClick = {
                                 val trimmedName = fullName.trim()
                                 val trimmedPhone = phoneNumber.trim()
-                                val trimmedPin = securityPin.trim()
+                                val trimmedAddress = addressVillage.trim()
 
                                 if (trimmedName.isEmpty()) {
                                     errorMessage = "कृपया अपना पूरा नाम दर्ज करें।"
@@ -335,18 +514,54 @@ fun OnboardingLoginDialog(
                                     errorMessage = "कृपया 10-अंकों का वैध मोबाइल नंबर दर्ज करें।"
                                     return@Button
                                 }
-                                if (trimmedPin.length < 4) {
-                                    errorMessage = "कृपया 4-अंकीय सुरक्षा पिन दर्ज करें।"
+                                if (trimmedAddress.isEmpty()) {
+                                    errorMessage = "कृपया अपना पता या गाँव दर्ज करें (उदा. कुचेरा)।"
                                     return@Button
                                 }
 
-                                onLoginSuccess(
-                                    trimmedName,
-                                    trimmedPhone,
-                                    trimmedPin,
-                                    instagramId.trim(),
-                                    matrimonialStatus
-                                )
+                                if (selectedRole == "admin") {
+                                    val code = adminCodeInput.trim()
+                                    if (code != "992942") {
+                                        val newWrong = wrongAdminAttempts + 1
+                                        wrongAdminAttempts = newWrong
+                                        if (newWrong >= 3) {
+                                            selectedRole = "member"
+                                            alertNotice = "⚠️ 3 बार गलत कोड दर्ज किया गया। सुरक्षा कारणों से आपको सदस्य मोड (Member Mode) में लॉगिन किया गया है।"
+                                            errorMessage = null
+                                            onLoginSuccess(
+                                                trimmedName,
+                                                trimmedPhone,
+                                                trimmedAddress,
+                                                selectedPhotoUri,
+                                                instagramId.trim(),
+                                                false
+                                            )
+                                        } else {
+                                            errorMessage = "❌ गलत एडमिन कोड! प्रयास ($newWrong/3)। 3 बार गलत होने पर सदस्य मोड में लॉगिन हो जाएगा।"
+                                        }
+                                        return@Button
+                                    } else {
+                                        // Admin success
+                                        onLoginSuccess(
+                                            trimmedName,
+                                            trimmedPhone,
+                                            trimmedAddress,
+                                            selectedPhotoUri,
+                                            instagramId.trim(),
+                                            true
+                                        )
+                                    }
+                                } else {
+                                    // Member mode success
+                                    onLoginSuccess(
+                                        trimmedName,
+                                        trimmedPhone,
+                                        trimmedAddress,
+                                        selectedPhotoUri,
+                                        instagramId.trim(),
+                                        false
+                                    )
+                                }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -357,8 +572,8 @@ fun OnboardingLoginDialog(
                             Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = DeepNavy)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "सत्यापित करें एवं ऐप शुरू करें",
-                                fontSize = 15.sp,
+                                text = "सत्यापित करें एवं ऐप शुरू करें ➔",
+                                fontSize = 14.5.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = DeepNavy
                             )

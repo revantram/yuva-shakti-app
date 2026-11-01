@@ -146,6 +146,7 @@ import com.example.ui.theme.PaidGreen
 import com.example.ui.theme.PendingRed
 import com.example.ui.theme.SaffronGold
 import com.example.ui.components.OnboardingLoginDialog
+import com.example.ui.components.InstallSuccessWelcomeDialog
 import com.example.util.ApkShareHelper
 import com.example.util.DailyThoughtHelper
 import com.example.util.FestivalHelper
@@ -240,6 +241,12 @@ fun MainScreen(viewModel: MainViewModel) {
     val whatsAppGroupLink by viewModel.whatsAppGroupLink.collectAsStateWithLifecycle()
     val snackbarMsg by viewModel.snackbarMessage.collectAsStateWithLifecycle()
 
+    val showWelcomeGreetingDialog by viewModel.showWelcomeGreetingDialog.collectAsStateWithLifecycle()
+    val currentUserFullName by viewModel.currentUserFullName.collectAsStateWithLifecycle()
+    val currentUserPhone by viewModel.currentUserPhone.collectAsStateWithLifecycle()
+    val currentUserAddress by viewModel.currentUserAddress.collectAsStateWithLifecycle()
+    val currentUserProfilePhotoUri by viewModel.currentUserProfilePhotoUri.collectAsStateWithLifecycle()
+
     val snackbarHostState = remember { SnackbarHostState() }
     var memberForPaymentDetails by remember { mutableStateOf<MemberEntity?>(null) }
     var showEditCycleNameDialog by remember { mutableStateOf(false) }
@@ -260,6 +267,43 @@ fun MainScreen(viewModel: MainViewModel) {
     val notifPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { _ -> }
+
+    val deviceId = remember {
+        try {
+            android.provider.Settings.Secure.getString(
+                context.contentResolver,
+                android.provider.Settings.Secure.ANDROID_ID
+            ) ?: "device_${System.currentTimeMillis()}"
+        } catch (_: Exception) {
+            "device_${System.currentTimeMillis()}"
+        }
+    }
+
+    var firestoreOnlineCount by remember { mutableIntStateOf(1) }
+    var firestoreActiveUsers by remember { mutableStateOf<List<String>>(emptyList()) }
+
+    // Realtime Firestore listeners - Active continuously
+    DisposableEffect(Unit) {
+        val memberReg = FirestoreSyncHelper.listenToMembersRealtime { cloudMembers ->
+            viewModel.syncMembersFromCloud(cloudMembers)
+        }
+        val presenceReg = FirestoreSyncHelper.listenToOnlinePresence { count, users ->
+            firestoreOnlineCount = count
+            firestoreActiveUsers = users
+        }
+        val settingsReg = FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
+            upiId?.let { if (it.isNotBlank()) viewModel.setFundUpiId(it) }
+            waLink?.let { if (it.isNotBlank()) viewModel.setWhatsAppGroupLink(it) }
+            target?.let { if (it > 0) viewModel.setCustomTargetAmount(it) }
+            cycleName?.let { if (it.isNotBlank()) viewModel.setAmavasyaCycleName(it) }
+            amavasyaMillis?.let { if (it > 0) viewModel.setTargetAmavasyaMillis(it) }
+        }
+        onDispose {
+            memberReg?.remove()
+            presenceReg?.remove()
+            settingsReg?.remove()
+        }
+    }
 
     LaunchedEffect(Unit) {
         com.example.util.NotificationHelper.createNotificationChannel(context)
@@ -286,8 +330,8 @@ fun MainScreen(viewModel: MainViewModel) {
     // If user is not onboarded/logged in, show mandatory Registration & Verification screen
     if (!isUserLoggedIn) {
         OnboardingLoginDialog(
-            onLoginSuccess = { name, phone, pin, insta, bio ->
-                viewModel.registerOrLoginUser(name, phone, pin, insta, bio)
+            onLoginSuccess = { name, phone, address, photoUri, insta, isAdmin ->
+                viewModel.registerOrLoginUser(name, phone, address, photoUri, insta, isAdmin)
             }
         )
         return
@@ -313,41 +357,18 @@ fun MainScreen(viewModel: MainViewModel) {
         return
     }
 
-    val deviceId = remember {
-        try {
-            android.provider.Settings.Secure.getString(
-                context.contentResolver,
-                android.provider.Settings.Secure.ANDROID_ID
-            ) ?: "device_${System.currentTimeMillis()}"
-        } catch (_: Exception) {
-            "device_${System.currentTimeMillis()}"
-        }
-    }
-
-    var firestoreOnlineCount by remember { mutableIntStateOf(1) }
-    var firestoreActiveUsers by remember { mutableStateOf<List<String>>(emptyList()) }
-
-    // Realtime Firestore listeners
-    DisposableEffect(Unit) {
-        val memberReg = FirestoreSyncHelper.listenToMembersRealtime { cloudMembers ->
-            viewModel.syncMembersFromCloud(cloudMembers)
-        }
-        val presenceReg = FirestoreSyncHelper.listenToOnlinePresence { count, users ->
-            firestoreOnlineCount = count
-            firestoreActiveUsers = users
-        }
-        val settingsReg = FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
-            upiId?.let { if (it.isNotBlank()) viewModel.setFundUpiId(it) }
-            waLink?.let { if (it.isNotBlank()) viewModel.setWhatsAppGroupLink(it) }
-            target?.let { if (it > 0) viewModel.setCustomTargetAmount(it) }
-            cycleName?.let { if (it.isNotBlank()) viewModel.setAmavasyaCycleName(it) }
-            amavasyaMillis?.let { if (it > 0) viewModel.setTargetAmavasyaMillis(it) }
-        }
-        onDispose {
-            memberReg?.remove()
-            presenceReg?.remove()
-            settingsReg?.remove()
-        }
+    // Celebration & Welcome Greeting Dialog (shown right after registration/setup)
+    if (showWelcomeGreetingDialog) {
+        InstallSuccessWelcomeDialog(
+            fullName = currentUserFullName,
+            phoneNumber = currentUserPhone,
+            address = currentUserAddress,
+            photoUri = currentUserProfilePhotoUri,
+            isAdmin = uiState.isAdmin,
+            onEnterApp = {
+                viewModel.dismissWelcomeGreetingDialog()
+            }
+        )
     }
 
     // Live Heartbeat Loop (every 30 seconds)
@@ -1103,11 +1124,7 @@ fun MainScreen(viewModel: MainViewModel) {
             onSendDailyThoughtNotification = { viewModel.sendDailyThoughtNotification() },
             onOpenAppUpdateConsole = { viewModel.openAppUpdateConsole(true) },
             onSwitchAdminRoleClick = {
-                if (uiState.isAdmin) {
-                    viewModel.logoutAdmin()
-                } else {
-                    viewModel.showAuthDialog(true)
-                }
+                viewModel.logoutUser()
             },
             onUrgentBroadcastClick = {
                 viewModel.openUrgentBroadcastDialog(true)
@@ -1163,6 +1180,7 @@ fun MainScreen(viewModel: MainViewModel) {
         MemberProfileDialog(
             member = member,
             isAdmin = uiState.isAdmin,
+            profilePhotoUri = if (member.id == activeMemberId) currentUserProfilePhotoUri else "",
             onDismiss = { viewModel.openMemberProfile(null) },
             onEditClick = {
                 val m = member
