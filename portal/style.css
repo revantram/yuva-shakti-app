@@ -1,0 +1,1018 @@
+/* --- बेसिक रिसेट एवं कलर वैरिएबल्स --- */
+:root {
+  --bg-color: #f4f6f9;
+  --card-bg: #ffffff;
+  --text-main: #212529;
+  --text-muted: #6c757d;
+  --primary-color: #ff6f00; /* पारंपरिक गहरा केसरिया */
+  --primary-hover: #e65100;
+  --secondary-color: #2c3e50;
+  --border-color: #e0e0e0;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --danger-color: #d32f2f;
+  --success-color: #388e3c;
+  --amavasya-marker: #212121;
+}
+
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --text-main: #f5f5f5;
+  --text-muted: #a0a0a0;
+  --primary-color: #ff9800;
+  --primary-hover: #f57c00;
+  --secondary-color: #37474f;
+  --border-color: #2d2d2d;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --amavasya-marker: #90caf9;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 480px; /* मोबाइल स्क्रीन लेआउट */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 16px;
+}
+
+/* --- ऐप लॉक स्क्रीन --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.lock-card {
+  background: var(--card-bg);
+  padding: 24px;
+  border-radius: 16px;
+  text-align: center;
+  width: 85%;
+  max-width: 320px;
+  box-shadow: var(--shadow);
+}
+
+.lock-icon {
+  font-size: 40px;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+}
+
+.lock-card input {
+  width: 100%;
+  font-size: 24px;
+  letter-spacing: 8px;
+  text-align: center;
+  padding: 10px;
+  margin: 16px 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-color);
+  color: var(--text-main);
+}
+
+.error-msg {
+  color: var(--danger-color);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* --- हेडर --- */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.badge {
+  font-size: 11px;
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+/* --- दैनिक सुविचार बैनर --- */
+.quote-card {
+  background: var(--card-bg);
+  padding: 12px 16px;
+  border-left: 4px solid var(--primary-color);
+  border-radius: 8px;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-muted);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --- कुल जमा राशि कार्ड --- */
+.summary-card {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  color: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.card-info span {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.card-info h3 {
+  font-size: 24px;
+  margin-top: 4px;
+}
+
+/* --- पॉपअप मोडल --- */
+.modal-hidden {
+  display: none;
+}
+
+.modal-hidden.active {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 500;
+  align-items: flex-end;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: 16px 16px 0 0;
+  padding: 20px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.filter-btn {
+  flex: 1;
+  padding: 6px;
+  font-size: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+  color: var(--text-main);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+}
+
+/* --- लाइव काउंटडाउन --- */
+.countdown-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.countdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--primary-color);
+}
+
+.timer-display {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 8px;
+}
+
+.time-box {
+  background: var(--bg-color);
+  padding: 8px;
+  border-radius: 8px;
+  min-width: 55px;
+}
+
+.time-box span {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.time-box small {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.target-date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* --- टैब नेविगेशन --- */
+.nav-tabs {
+  display: flex;
+  background: var(--card-bg);
+  padding: 4px;
+  border-radius: 10px;
+  gap: 4px;
+  box-shadow: var(--shadow);
+}
+
+.tab-link {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 8px 4px;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tab-link.active {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+/* --- टैब पैनल्स --- */
+.tab-pane {
+  display: none;
+  background: var(--card-bg);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+.section-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.primary-btn {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.secondary-btn {
+  background: var(--secondary-color);
+  color: #fff;
+}
+
+.balance-card {
+  background: var(--bg-color);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* --- कैलेंडर ग्रिड व सिंबल्स --- */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+}
+
+.cal-day-name {
+  font-weight: 600;
+  font-size: 11px;
+  padding: 4px 0;
+  color: var(--text-muted);
+}
+
+.cal-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border-radius: 6px;
+  background: var(--bg-color);
+  position: relative;
+  cursor: pointer;
+}
+
+.cal-cell.today {
+  border: 1px solid var(--primary-color);
+}
+
+/* सामान्य त्योहार: छोटा लाल डॉट */
+.marker-festival::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  width: 4px;
+  height: 4px;
+  background-color: var(--danger-color);
+  border-radius: 50%;
+}
+
+/* अमावस्या: विशेष डार्क/ब्लू मून सिंबल */
+.marker-amavasya {
+  background-color: rgba(255, 111, 0, 0.15) !important;
+  font-weight: bold;
+}
+
+.marker-amavasya::after {
+  content: '●';
+  position: absolute;
+  bottom: 0px;
+  font-size: 9px;
+  color: var(--amavasya-marker);
+}
+
+.info-box {
+  margin-top: 12px;
+  padding: 10px;
+  background: var(--bg-color);
+  border-radius: 6px;
+  font-size: 12px;
+  min-height: 40px;
+}
+
+/* --- सेटिंग्स एवं टॉगल --- */
+.settings-group {
+  margin-bottom: 16px;
+}
+
+.settings-group h4 {
+  margin-bottom: 8px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 4px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+/* --- डेवलपर फुटर --- */
+.developer-footer {
+  margin-top: auto;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 16px 0 8px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* ==========================================================================
+   अनुपूरक घटक शैलियां (डेटा लिस्ट, ट्रांजैक्शन, ऋण, गैलरी व एडमिन नियंत्रण)
+   ========================================================================== */
+
+/* एडमिन ओनली नियंत्रण */
+.admin-only {
+  display: none !important;
+}
+
+body.is-admin .admin-only {
+  display: inline-flex !important;
+}
+
+body.is-admin div.admin-only,
+body.is-admin section.admin-only {
+  display: block !important;
+}
+
+/* सदस्य सूची (जमा विवरण मोडल अंदर) */
+.data-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.data-item {
+  background: var(--bg-color);
+  padding: 10px 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  border: 1px solid var(--border-color);
+}
+
+.data-item strong {
+  color: var(--text-main);
+  display: block;
+}
+
+.data-item small {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.status-badge-paid {
+  color: var(--success-color);
+  background: rgba(56, 142, 60, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.status-badge-unpaid {
+  color: var(--danger-color);
+  background: rgba(211, 47, 47, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+/* खर्च व लेन-देन सूची */
+.transaction-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.transaction-card {
+  background: var(--bg-color);
+  padding: 10px 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border-color);
+}
+
+.tx-details strong {
+  font-size: 13px;
+  display: block;
+}
+
+.tx-details small {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.tx-amount-neg {
+  color: var(--danger-color);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.tx-del-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  margin-left: 8px;
+  font-size: 13px;
+}
+
+.tx-del-btn:hover {
+  color: var(--danger-color);
+}
+
+/* सहायता ऋण सूची */
+.loan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.loan-card {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+}
+
+.loan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.loan-amount {
+  font-weight: bold;
+  color: var(--primary-color);
+  font-size: 15px;
+}
+
+.loan-purpose {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  background: var(--card-bg);
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+.loan-vote-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 6px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.vote-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--text-main);
+}
+
+.vote-btn:hover {
+  border-color: var(--primary-color);
+}
+
+/* गैलरी ग्रिड */
+.gallery-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.gallery-item {
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  position: relative;
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 10px;
+  padding: 4px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* मोडल फॉर्म इनपुट्स */
+.form-input {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-color);
+  color: var(--text-main);
+  margin-bottom: 8px;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+}
+
+.form-group {
+  margin-bottom: 8px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+}
+
+/* मोडल शेक एनीमेशन */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.shake {
+  animation: shake 0.3s ease-in-out;
+}
+
+/* --- गैलरी ग्रिड और कार्ड स्टाइलिंग --- */
+.gallery-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.gallery-card {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow);
+}
+
+.gallery-card img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  background-color: #e0e0e0;
+}
+
+.gallery-card-body {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gallery-card-body strong {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gallery-card-body p {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.download-link-btn {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--primary-color);
+  color: #fff;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* WhatsApp Alert Button Styling */
+.whatsapp-alert-btn {
+  width: 100%;
+  background-color: #25d366;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.whatsapp-alert-btn:hover {
+  background-color: #1ebe5d;
+}
+
+.whatsapp-alert-btn:active {
+  transform: scale(0.98);
+}
+
+/* --- Digital Receipt Card Styling --- */
+.receipt-card {
+  background: linear-gradient(135deg, #1b5e20, #2e7d32);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.35);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.receipt-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  opacity: 0.95;
+  margin-bottom: 8px;
+}
+
+.receipt-header i {
+  font-size: 14px;
+}
+
+.receipt-body h3 {
+  font-size: 26px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.receipt-body p {
+  font-size: 13px;
+  margin: 4px 0;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
+  padding-bottom: 3px;
+}
+
+.badge-success {
+  background: #4caf50;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.receipt-group {
+  display: block;
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
+.whatsapp-receipt-btn {
+  width: 100%;
+  background: #25d366;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* History Timeline List */
+.history-list {
+  list-style: none;
+  padding: 0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--bg-color);
+  margin-bottom: 6px;
+  font-size: 12px;
+  border: 1px solid var(--border-color);
+}
+
+/* ==========================================
+   iOS Liquid Glassmorphism & Translucent Theme
+   ========================================== */
+:root {
+  --ios-bg: #0f172a;
+  --ios-card-glass: rgba(255, 255, 255, 0.08);
+  --ios-border-glass: rgba(255, 255, 255, 0.16);
+  --ios-text: #f8fafc;
+  --ios-text-sub: rgba(248, 250, 252, 0.7);
+  --ios-accent: #0a84ff; /* iOS Electric Blue */
+  --ios-blur: blur(25px) saturate(190%);
+}
+
+[data-theme="light"] {
+  --ios-bg: #e2e8f0;
+  --ios-card-glass: rgba(255, 255, 255, 0.45);
+  --ios-border-glass: rgba(255, 255, 255, 0.65);
+  --ios-text: #0f172a;
+  --ios-text-sub: rgba(15, 23, 42, 0.7);
+  --ios-accent: #007aff;
+  --ios-blur: blur(30px) saturate(200%);
+}
+
+/* Background Dynamic Aura */
+body {
+  background-color: var(--ios-bg);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(10, 132, 255, 0.28) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(255, 69, 58, 0.22) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(48, 209, 88, 0.12) 0px, transparent 50%);
+  background-attachment: fixed;
+  background-size: cover;
+  color: var(--ios-text);
+  min-height: 100vh;
+  padding-bottom: 90px; /* Bottom bar ke liye space */
+}
+
+/* Common Translucent Liquid Card */
+.summary-card,
+.countdown-card,
+.quote-card,
+.tab-pane,
+.modal-content,
+.lock-card,
+.gallery-card {
+  background: var(--ios-card-glass) !important;
+  backdrop-filter: var(--ios-blur) !important;
+  -webkit-backdrop-filter: var(--ios-blur) !important;
+  border: 1px solid var(--ios-border-glass) !important;
+  box-shadow: 0 12px 35px 0 rgba(0, 0, 0, 0.2) !important;
+  border-radius: 20px !important;
+}
+
+/* ==========================================
+   iOS Floating Liquid Bottom Bar
+   ========================================== */
+.ios-bottom-bar-wrapper {
+  position: fixed;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.ios-liquid-dock {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 35px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(28px) saturate(210%);
+  -webkit-backdrop-filter: blur(28px) saturate(210%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  position: relative;
+}
+
+.ios-dock-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--ios-text-sub);
+  width: 52px;
+  height: 48px;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 500;
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  z-index: 2;
+}
+
+.ios-dock-btn i {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+/* Active State with Liquid Glow Effect */
+.ios-dock-btn.active {
+  color: #ffffff;
+  background: var(--ios-accent);
+  box-shadow: 0 6px 18px rgba(10, 132, 255, 0.45);
+}
+
+.ios-dock-btn.active i {
+  transform: translateY(-1px) scale(1.1);
+}
+
+.ios-dock-btn:active {
+  transform: scale(0.92);
+}
+
