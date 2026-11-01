@@ -282,7 +282,7 @@ fun OnboardingLoginDialog(
                                         color = Color(0xFF1E40AF)
                                     )
                                     Text(
-                                        text = "प्रत्येक सदस्य का एक विशिष्ट कोड है जिससे उनकी ऑनलाइन पहचान होती है। व्यवस्थापक (Admin) अपना आधिकारिक कोड (992942) दर्ज करें।",
+                                        text = "प्रत्येक सदस्य का एक विशिष्ट कोड है जिससे उनकी ऑनलाइन पहचान होती है। कृपया अपना व्यक्तिगत सदस्य कोड दर्ज करें।",
                                         fontSize = 11.sp,
                                         color = Color(0xFF1D4ED8),
                                         modifier = Modifier.padding(top = 3.dp)
@@ -298,8 +298,8 @@ fun OnboardingLoginDialog(
                                         loginErrorMessage = null
                                     }
                                 },
-                                label = { Text("सदस्य कोड / एडमिन कोड दर्ज करें *") },
-                                placeholder = { Text("उदा. 1001 या 992942") },
+                                label = { Text("अपना व्यक्तिगत सदस्य कोड दर्ज करें *") },
+                                placeholder = { Text("उदा. 1001 या आपका कोड") },
                                 leadingIcon = {
                                     Icon(imageVector = Icons.Default.Security, contentDescription = null, tint = SaffronGold)
                                 },

@@ -284,26 +284,45 @@ fun MainScreen(viewModel: MainViewModel) {
     ) { _ -> }
 
     val deviceId = remember {
-        try {
-            android.provider.Settings.Secure.getString(
-                context.contentResolver,
-                android.provider.Settings.Secure.ANDROID_ID
-            ) ?: "device_${System.currentTimeMillis()}"
-        } catch (_: Exception) {
-            "device_${System.currentTimeMillis()}"
-        }
+        com.example.util.InstallationHelper.getDeviceUuid(context)
+    }
+    val deviceModel = remember {
+        com.example.util.InstallationHelper.getDeviceInfo()
     }
 
     var firestoreOnlineCount by remember { mutableIntStateOf(1) }
     var firestoreActiveUsers by remember { mutableStateOf<List<String>>(emptyList()) }
     var activeIncomingAlert by remember { mutableStateOf<FirestoreSyncHelper.EmergencyAlertData?>(null) }
 
-    // Auto-refresh from Firebase on every app resume / screen unlock
+    // Auto-refresh from Firebase and update online presence on app resume / background
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
+    DisposableEffect(lifecycleOwner, activeMemberId, currentUserFullName, isUserLoggedIn) {
         val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
             if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
                 viewModel.refreshAllDataFromFirebase(isSilent = true)
+                val myMember = uiState.members.find { it.id == activeMemberId }
+                val myName = if (isUserLoggedIn) (myMember?.name ?: currentUserFullName.ifBlank { "परिवार सदस्य" }) else "नया सदस्य (ऐप सक्रिय)"
+                val codeToSend = if (activeMemberId == 1L || currentUserPhone == "8696663615") "992942" else currentUserMemberCode.ifBlank { myMember?.memberCode ?: "" }
+                FirestoreSyncHelper.recordPresence(
+                    deviceId = deviceId,
+                    userName = myName,
+                    memberId = if (isUserLoggedIn) activeMemberId else 0L,
+                    memberCode = codeToSend,
+                    isOnline = true,
+                    deviceModel = deviceModel
+                )
+            } else if (event == androidx.lifecycle.Lifecycle.Event.ON_STOP || event == androidx.lifecycle.Lifecycle.Event.ON_PAUSE) {
+                val myMember = uiState.members.find { it.id == activeMemberId }
+                val myName = if (isUserLoggedIn) (myMember?.name ?: currentUserFullName.ifBlank { "परिवार सदस्य" }) else "परिवार सदस्य"
+                val codeToSend = if (activeMemberId == 1L || currentUserPhone == "8696663615") "992942" else currentUserMemberCode.ifBlank { myMember?.memberCode ?: "" }
+                FirestoreSyncHelper.recordPresence(
+                    deviceId = deviceId,
+                    userName = myName,
+                    memberId = if (isUserLoggedIn) activeMemberId else 0L,
+                    memberCode = codeToSend,
+                    isOnline = false,
+                    deviceModel = deviceModel
+                )
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -401,6 +420,186 @@ fun MainScreen(viewModel: MainViewModel) {
         }
     }
 
+    // 0. Live Persistent Heartbeat Loop (every 45 seconds as requested)
+    LaunchedEffect(activeMemberId, currentUserMemberCode, isUserLoggedIn) {
+        while (true) {
+            val myMember = uiState.members.find { it.id == activeMemberId }
+            val myName = if (isUserLoggedIn) (myMember?.name ?: currentUserFullName.ifBlank { "परिवार सदस्य" }) else "नया सदस्य (ऐप सक्रिय)"
+            val codeToSend = if (activeMemberId == 1L || currentUserPhone == "8696663615") "992942" else currentUserMemberCode.ifBlank { myMember?.memberCode ?: "" }
+            FirestoreSyncHelper.recordPresence(
+                deviceId = deviceId,
+                userName = myName,
+                memberId = if (isUserLoggedIn) activeMemberId else 0L,
+                memberCode = codeToSend,
+                isOnline = true,
+                deviceModel = deviceModel
+            )
+            delay(45000L) // Har 45 second mein update bhejna
+        }
+    }
+
+    // 1. High-Priority Emergency Siren Alert Dialog (Appears immediately over any screen including Lock / Login)
+    val currentAlert = activeIncomingAlert
+    if (currentAlert != null) {
+        val alertTitle = currentAlert.title
+        val alertMessage = currentAlert.message
+        val myMember = uiState.members.find { it.id == activeMemberId }
+            ?: uiState.members.find { currentUserPhone.isNotBlank() && it.phone.takeLast(10) == currentUserPhone.takeLast(10) }
+        val isMyDuePending = myMember != null && myMember.status == "Pending"
+        val myDueAmount = myMember?.monthlyAmount ?: 100
+
+        AlertDialog(
+            onDismissRequest = {
+                com.example.util.SoundHelper.stopSound()
+                activeIncomingAlert = null
+            },
+            icon = {
+                Box(
+                    modifier = Modifier
+                        .size(54.dp)
+                        .background(Color(0xFFFEE2E2), CircleShape)
+                        .border(2.dp, PendingRed, CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "🚨", fontSize = 28.sp)
+                }
+            },
+            title = {
+                Text(
+                    text = alertTitle,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 17.sp,
+                    color = PendingRed,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = alertMessage,
+                        fontSize = 13.5.sp,
+                        color = Color(0xFF1E293B),
+                        lineHeight = 19.sp
+                    )
+
+                    // 1. Personalized Warning Card if this member has pending dues!
+                    if (isMyDuePending) {
+                        Surface(
+                            color = Color(0xFFFEF2F2),
+                            shape = RoundedCornerShape(12.dp),
+                            border = BorderStroke(1.2.dp, Color(0xFFFCA5A5)),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(10.dp)) {
+                                Text(
+                                    text = "⚠️ प्रिय ${myMember?.name} जी! आपका ₹$myDueAmount अंशदान अभी बकाया है।",
+                                    color = Color(0xFF991B1B),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 12.5.sp
+                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Button(
+                                    onClick = {
+                                        com.example.util.SoundHelper.stopSound()
+                                        activeIncomingAlert = null
+                                        val upiUri = Uri.parse("upi://pay?pa=$fundUpiId&pn=${Uri.encode("Yuva Shakti Bhati Parivar")}&am=$myDueAmount&cu=INR&tn=${Uri.encode("Amavasya Fund - ${myMember?.name}")}")
+                                        val intent = Intent(Intent.ACTION_VIEW, upiUri).apply {
+                                            setPackage("com.phonepe.app")
+                                        }
+                                        try {
+                                            context.startActivity(intent)
+                                        } catch (_: Exception) {
+                                            val chooser = Intent(Intent.ACTION_VIEW, upiUri)
+                                            context.startActivity(Intent.createChooser(chooser, "PhonePe या UPI से भुगतान करें"))
+                                        }
+                                    },
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5F259F)),
+                                    shape = RoundedCornerShape(8.dp),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("📱 PhonePe से ₹$myDueAmount तुरंत जमा करें", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                }
+                            }
+                        }
+                    }
+
+                    // 2. Pending dues summary card & WhatsApp broadcast button
+                    if (currentAlert.pendingCount > 0) {
+                        Surface(
+                            color = Color(0xFFFFFBEB),
+                            shape = RoundedCornerShape(10.dp),
+                            border = BorderStroke(1.dp, Color(0xFFFDE68A)),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(8.dp)) {
+                                Text(
+                                    text = "👥 कुल बकाया सदस्य: ${currentAlert.pendingCount} | कुल बकाया: ₹${currentAlert.totalPendingAmount}",
+                                    fontSize = 11.5.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF92400E)
+                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Button(
+                                    onClick = {
+                                        val pendingMsg = buildString {
+                                            append("🚨 *युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)* 🚨\n")
+                                            append("*अत्यावश्यक सायरन तगादा - बकाया अंशदान*\n\n")
+                                            append("${currentAlert.message}\n\n")
+                                            if (currentAlert.pendingMemberNames.isNotEmpty()) {
+                                                append("⏳ *बकाया सदस्यों की सूची:*\n")
+                                                currentAlert.pendingMemberNames.forEachIndexed { i, name ->
+                                                    append("${i + 1}. $name\n")
+                                                }
+                                                append("\n💰 *कुल बकाया राशि:* ₹${currentAlert.totalPendingAmount}\n")
+                                            }
+                                            append("📲 *PhonePe / UPI आईडी:* $fundUpiId\n")
+                                            append("समिति की पारदर्शिता एवं आगामी बैठक व्यवस्था हेतु तुरंत अपना अंशदान जमा कराएं। 🙏")
+                                        }
+                                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                            type = "text/plain"
+                                            putExtra(Intent.EXTRA_TEXT, pendingMsg)
+                                        }
+                                        context.startActivity(Intent.createChooser(shareIntent, "व्हाट्सएप पर तगादा भेजें"))
+                                    },
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25D366)),
+                                    shape = RoundedCornerShape(8.dp),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("💬 व्हाट्सएप पर बकाया तगादा भेजें", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.5.sp)
+                                }
+                            }
+                        }
+                    }
+
+                    Text(
+                        text = "🔊 सायरन अलार्म बज रहा है। बंद करने हेतु नीचे बटन दबाएं।",
+                        fontSize = 11.sp,
+                        color = Color(0xFF64748B),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        com.example.util.SoundHelper.stopSound()
+                        activeIncomingAlert = null
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = PendingRed),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("🚨 सायरन बंद करें (ठीक है)", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            }
+        )
+    }
+
     // If App Lock is enabled and app is locked, render Lock Screen directly
     if (isAppLocked) {
         AppLockScreen(
@@ -435,17 +634,6 @@ fun MainScreen(viewModel: MainViewModel) {
             }
         )
         return
-    }
-
-    // Live Heartbeat Loop (every 30 seconds)
-    LaunchedEffect(activeMemberId, currentUserMemberCode) {
-        while (true) {
-            val myMember = uiState.members.find { it.id == activeMemberId }
-            val myName = myMember?.name ?: currentUserFullName.ifBlank { "सदस्य" }
-            val codeToSend = if (activeMemberId == 1L || currentUserPhone == "8696663615") "992942" else currentUserMemberCode.ifBlank { myMember?.memberCode ?: "" }
-            FirestoreSyncHelper.recordPresence(deviceId, myName, activeMemberId, codeToSend)
-            delay(30000L)
-        }
     }
 
     // Morning Hindu Festival Notification & Greetings
@@ -1288,166 +1476,7 @@ fun MainScreen(viewModel: MainViewModel) {
         )
     }
 
-    val currentAlert = activeIncomingAlert
-    if (currentAlert != null) {
-        val alertTitle = currentAlert.title
-        val alertMessage = currentAlert.message
-        val myMember = uiState.members.find { it.id == activeMemberId }
-            ?: uiState.members.find { currentUserPhone.isNotBlank() && it.phone.takeLast(10) == currentUserPhone.takeLast(10) }
-        val isMyDuePending = myMember != null && myMember.status == "Pending"
-        val myDueAmount = myMember?.monthlyAmount ?: 100
 
-        AlertDialog(
-            onDismissRequest = {
-                com.example.util.SoundHelper.stopSound()
-                activeIncomingAlert = null
-            },
-            icon = {
-                Box(
-                    modifier = Modifier
-                        .size(54.dp)
-                        .background(Color(0xFFFEE2E2), CircleShape)
-                        .border(2.dp, PendingRed, CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "🚨", fontSize = 28.sp)
-                }
-            },
-            title = {
-                Text(
-                    text = alertTitle,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 17.sp,
-                    color = PendingRed,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            },
-            text = {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Text(
-                        text = alertMessage,
-                        fontSize = 13.5.sp,
-                        color = Color(0xFF1E293B),
-                        lineHeight = 19.sp
-                    )
-
-                    // 1. Personalized Warning Card if this member has pending dues!
-                    if (isMyDuePending) {
-                        Surface(
-                            color = Color(0xFFFEF2F2),
-                            shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(1.2.dp, Color(0xFFFCA5A5)),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Column(modifier = Modifier.padding(10.dp)) {
-                                Text(
-                                    text = "⚠️ प्रिय ${myMember?.name} जी! आपका ₹$myDueAmount अंशदान अभी बकाया है।",
-                                    color = Color(0xFF991B1B),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 12.5.sp
-                                )
-                                Spacer(modifier = Modifier.height(6.dp))
-                                Button(
-                                    onClick = {
-                                        com.example.util.SoundHelper.stopSound()
-                                        activeIncomingAlert = null
-                                        val upiUri = Uri.parse("upi://pay?pa=$fundUpiId&pn=${Uri.encode("Yuva Shakti Bhati Parivar")}&am=$myDueAmount&cu=INR&tn=${Uri.encode("Amavasya Fund - ${myMember?.name}")}")
-                                        val intent = Intent(Intent.ACTION_VIEW, upiUri).apply {
-                                            setPackage("com.phonepe.app")
-                                        }
-                                        try {
-                                            context.startActivity(intent)
-                                        } catch (_: Exception) {
-                                            val chooser = Intent(Intent.ACTION_VIEW, upiUri)
-                                            context.startActivity(Intent.createChooser(chooser, "PhonePe या UPI से भुगतान करें"))
-                                        }
-                                    },
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5F259F)),
-                                    shape = RoundedCornerShape(8.dp),
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Text("📱 PhonePe से ₹$myDueAmount तुरंत जमा करें", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
-                                }
-                            }
-                        }
-                    }
-
-                    // 2. Pending dues summary card & WhatsApp broadcast button
-                    if (currentAlert.pendingCount > 0) {
-                        Surface(
-                            color = Color(0xFFFFFBEB),
-                            shape = RoundedCornerShape(10.dp),
-                            border = BorderStroke(1.dp, Color(0xFFFDE68A)),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Column(modifier = Modifier.padding(8.dp)) {
-                                Text(
-                                    text = "👥 कुल बकाया सदस्य: ${currentAlert.pendingCount} | कुल बकाया: ₹${currentAlert.totalPendingAmount}",
-                                    fontSize = 11.5.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(0xFF92400E)
-                                )
-                                Spacer(modifier = Modifier.height(6.dp))
-                                Button(
-                                    onClick = {
-                                        val pendingMsg = buildString {
-                                            append("🚨 *युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)* 🚨\n")
-                                            append("*अत्यावश्यक सायरन तगादा - बकाया अंशदान*\n\n")
-                                            append("${currentAlert.message}\n\n")
-                                            if (currentAlert.pendingMemberNames.isNotEmpty()) {
-                                                append("⏳ *बकाया सदस्यों की सूची:*\n")
-                                                currentAlert.pendingMemberNames.forEachIndexed { i, name ->
-                                                    append("${i + 1}. $name\n")
-                                                }
-                                                append("\n💰 *कुल बकाया राशि:* ₹${currentAlert.totalPendingAmount}\n")
-                                            }
-                                            append("📲 *PhonePe / UPI आईडी:* $fundUpiId\n")
-                                            append("समिति की पारदर्शिता एवं आगामी बैठक व्यवस्था हेतु तुरंत अपना अंशदान जमा कराएं। 🙏")
-                                        }
-                                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                            type = "text/plain"
-                                            putExtra(Intent.EXTRA_TEXT, pendingMsg)
-                                        }
-                                        context.startActivity(Intent.createChooser(shareIntent, "व्हाट्सएप पर तगादा भेजें"))
-                                    },
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25D366)),
-                                    shape = RoundedCornerShape(8.dp),
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Text("💬 व्हाट्सएप पर बकाया तगादा भेजें", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.5.sp)
-                                }
-                            }
-                        }
-                    }
-
-                    Text(
-                        text = "🔊 सायरन अलार्म बज रहा है। बंद करने हेतु नीचे बटन दबाएं।",
-                        fontSize = 11.sp,
-                        color = Color(0xFF64748B),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        com.example.util.SoundHelper.stopSound()
-                        activeIncomingAlert = null
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = PendingRed),
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("🚨 सायरन बंद करें (ठीक है)", color = Color.White, fontWeight = FontWeight.Bold)
-                }
-            }
-        )
-    }
 
     if (showAuthDialog) {
         AdminPinDialog(

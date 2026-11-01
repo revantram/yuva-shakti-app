@@ -236,18 +236,29 @@ object FirestoreSyncHelper {
     /**
      * Heartbeat Presence: Records that a device/member is actively using the app.
      */
-    fun recordPresence(deviceId: String, userName: String, memberId: Long = 0L, memberCode: String = "") {
+    fun recordPresence(
+        deviceId: String,
+        userName: String,
+        memberId: Long = 0L,
+        memberCode: String = "",
+        isOnline: Boolean = true,
+        deviceModel: String = ""
+    ) {
         if (deviceId.isBlank()) return
         try {
             val fs = getFirestore() ?: return
             val docRef = fs.collection(COLLECTION_PRESENCE).document(deviceId)
-            val data = mapOf(
+            val data = mutableMapOf<String, Any>(
                 "deviceId" to deviceId,
                 "userName" to userName.ifBlank { "परिवार सदस्य" },
                 "memberId" to memberId,
                 "memberCode" to memberCode,
+                "isOnline" to isOnline,
                 "lastActive" to System.currentTimeMillis()
             )
+            if (deviceModel.isNotBlank()) {
+                data["deviceModel"] = deviceModel
+            }
             docRef.set(data, SetOptions.merge())
         } catch (t: Throwable) {
             Log.e(TAG, "Error recording presence", t)
@@ -256,7 +267,8 @@ object FirestoreSyncHelper {
 
     /**
      * Listens to live online presence in Firestore.
-     * All devices that sent a heartbeat within the last 3 minutes are counted online in real-time.
+     * All devices that sent a heartbeat within the last 2 minutes (120,000 ms) and isOnline == true
+     * are counted live online in real-time.
      */
     fun listenToOnlinePresence(
         onUpdate: (count: Int, onlineMemberIds: Set<Long>, activeUsers: List<String>, activeUserDetails: List<OnlineUserDetail>) -> Unit
@@ -270,7 +282,7 @@ object FirestoreSyncHelper {
                         return@addSnapshotListener
                     }
                     if (snapshot != null) {
-                        val cutoff = System.currentTimeMillis() - (180 * 1000L) // 3 minutes
+                        val cutoff = System.currentTimeMillis() - (120 * 1000L) // 2 minutes (120000 ms)
                         val activeUsers = mutableListOf<String>()
                         val onlineMemberIds = mutableSetOf<Long>()
                         val userDetails = mutableListOf<OnlineUserDetail>()
@@ -278,7 +290,8 @@ object FirestoreSyncHelper {
 
                         for (doc in snapshot.documents) {
                             val lastActive = doc.getLong("lastActive") ?: 0L
-                            if (lastActive >= cutoff) {
+                            val isOnlineDoc = doc.getBoolean("isOnline") ?: true
+                            if (isOnlineDoc && lastActive >= cutoff) {
                                 liveDeviceCount++
                                 val mId = doc.getLong("memberId") ?: 0L
                                 if (mId > 0L) {
@@ -326,7 +339,7 @@ object FirestoreSyncHelper {
     ): Boolean {
         return try {
             val fs = getFirestore() ?: return false
-            val alertId = java.util.UUID.randomUUID().toString()
+            val alertId = "alert_" + System.currentTimeMillis() + "_" + java.util.UUID.randomUUID().toString().take(8)
             val now = System.currentTimeMillis()
             val pendingCount = pendingMembers.size
             val totalPendingAmount = pendingMembers.sumOf { it.monthlyAmount }
@@ -385,8 +398,15 @@ object FirestoreSyncHelper {
                         val timestamp = snapshot.getLong("timestamp") ?: 0L
                         val lastSeenId = prefs.getString("last_handled_alert_id", "") ?: ""
 
-                        // Only fire if it's a new alert AND issued within the last 15 minutes
-                        val isFresh = (System.currentTimeMillis() - timestamp) < (15 * 60 * 1000L)
+                        val isFirstAppLaunch = !prefs.contains("last_handled_alert_id")
+                        if (isFirstAppLaunch) {
+                            // On fresh install, register current alert as already handled so it doesn't ring retroactively
+                            prefs.edit().putString("last_handled_alert_id", alertId).apply()
+                            return@addSnapshotListener
+                        }
+
+                        // Robust check: valid alert ID, not previously handled, and within last 60 minutes
+                        val isFresh = Math.abs(System.currentTimeMillis() - timestamp) < (60 * 60 * 1000L)
                         if (alertId.isNotBlank() && alertId != lastSeenId && isFresh) {
                             prefs.edit().putString("last_handled_alert_id", alertId).apply()
                             val title = snapshot.getString("title") ?: "🚨 आवश्यक सूचना"

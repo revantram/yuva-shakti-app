@@ -404,19 +404,48 @@ class MemberRepository(
         val cleanCode = code.trim()
         if (cleanCode.isBlank()) return@withContext false
         if (cleanCode == "992942") return@withContext true
-        val members = memberDao.getAllMembersList()
-        members.any { m ->
+        var members = memberDao.getAllMembersList()
+        val localTaken = members.any { m ->
             m.id != excludeMemberId && (m.memberCode.equals(cleanCode, ignoreCase = true) || (1000 + m.id).toString() == cleanCode)
+        }
+        if (localTaken) return@withContext true
+
+        // Fallback: Query Firestore cloud database to ensure uniqueness across all phones
+        try {
+            val cloudMembers = com.example.util.FirestoreSyncHelper.fetchMembersFromFirestore()
+            return@withContext cloudMembers.any { m ->
+                m.id != excludeMemberId && (m.memberCode.equals(cleanCode, ignoreCase = true) || (1000 + m.id).toString() == cleanCode)
+            }
+        } catch (_: Throwable) {
+            false
         }
     }
 
     suspend fun findMemberByCode(code: String): MemberEntity? = withContext(Dispatchers.IO) {
         val cleanCode = code.trim()
         if (cleanCode.isBlank()) return@withContext null
-        val members = memberDao.getAllMembersList()
-        members.find { m ->
+        var members = memberDao.getAllMembersList()
+        var match = members.find { m ->
             m.memberCode.equals(cleanCode, ignoreCase = true) || (1000 + m.id).toString() == cleanCode
         }
+        if (match != null) return@withContext match
+
+        // If newly installed on second mobile, fetch live members directly from Firestore
+        try {
+            val cloudMembers = com.example.util.FirestoreSyncHelper.fetchMembersFromFirestore()
+            if (cloudMembers.isNotEmpty()) {
+                syncMembersFromCloud(cloudMembers)
+                members = memberDao.getAllMembersList()
+                match = members.find { m ->
+                    m.memberCode.equals(cleanCode, ignoreCase = true) || (1000 + m.id).toString() == cleanCode
+                } ?: cloudMembers.find { m ->
+                    m.memberCode.equals(cleanCode, ignoreCase = true) || (1000 + m.id).toString() == cleanCode
+                }
+            }
+        } catch (t: Throwable) {
+            android.util.Log.e("MemberRepository", "Error syncing cloud members in findMemberByCode", t)
+        }
+        return@withContext match
     }
 
     fun logoutUser() {
