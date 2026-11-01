@@ -500,10 +500,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getUpiId(): String = _fundUpiId.value
 
-    fun setFundUpiId(id: String) {
-        _fundUpiId.value = id.trim()
-        repository.setUpiId(id.trim())
-        _snackbarMessage.value = "UPI आईडी / PhonePe-GPay नंबर सुरक्षित हुआ।"
+    fun setFundUpiId(id: String, showSnackbar: Boolean = true) {
+        val clean = id.trim()
+        if (clean.isBlank()) return
+        _fundUpiId.value = clean
+        repository.setUpiId(clean)
+        if (showSnackbar) {
+            _snackbarMessage.value = "UPI आईडी / PhonePe नंबर अपडेट हुआ: $clean"
+        }
     }
 
     fun setWhatsAppGroupLink(link: String) {

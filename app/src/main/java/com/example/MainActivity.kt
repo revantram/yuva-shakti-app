@@ -305,8 +305,24 @@ fun MainScreen(viewModel: MainViewModel) {
             OnlinePresenceHelper.updateOnlinePresence(count, memberIds, users)
         }
         val settingsReg = FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
-            upiId?.let { if (it.isNotBlank()) viewModel.setFundUpiId(it) }
-            waLink?.let { if (it.isNotBlank()) viewModel.setWhatsAppGroupLink(it) }
+            upiId?.let {
+                val clean = it.trim()
+                val finalUpi = if (clean == "revantrambhati@upi" || clean == "777850983600@ibl" || clean.isBlank()) {
+                    "77850983600@ibl"
+                } else {
+                    clean
+                }
+                viewModel.setFundUpiId(finalUpi, showSnackbar = false)
+            }
+            waLink?.let {
+                val clean = it.trim()
+                val finalWa = if (clean == "https://chat.whatsapp.com/invite" || clean.isBlank()) {
+                    "https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh?s=cl&p=a&iam=2"
+                } else {
+                    clean
+                }
+                viewModel.setWhatsAppGroupLink(finalWa)
+            }
             target?.let { if (it > 0) viewModel.setCustomTargetAmount(it) }
             cycleName?.let { if (it.isNotBlank()) viewModel.setAmavasyaCycleName(it) }
             amavasyaMillis?.let { if (it > 0) viewModel.setTargetAmavasyaMillis(it) }

@@ -144,7 +144,7 @@ fun OnlinePaymentDialog(
     isAdmin: Boolean,
     members: List<MemberEntity>,
     pendingRequestsCount: Int,
-    upiId: String = "777850983600@ibl",
+    upiId: String = "77850983600@ibl",
     onUpdateUpiId: (String) -> Unit = {},
     onDismiss: () -> Unit,
     onUploadQrCode: (String) -> Unit,
@@ -259,7 +259,7 @@ fun OnlinePaymentDialog(
                             } else {
                                 Image(
                                     painter = painterResource(id = R.drawable.ic_phonepe_qr_official),
-                                    contentDescription = "Official PhonePe QR Code (777850983600@ibl)",
+                                    contentDescription = "Official PhonePe QR Code (77850983600@ibl)",
                                     contentScale = ContentScale.Fit,
                                     modifier = Modifier
                                         .fillMaxSize()
@@ -374,16 +374,30 @@ fun OnlinePaymentDialog(
 
                                 if (isAdmin) {
                                     Spacer(modifier = Modifier.width(6.dp))
-                                    IconButton(
-                                        onClick = { showEditUpiDialog = !showEditUpiDialog },
-                                        modifier = Modifier.size(28.dp)
+                                    Surface(
+                                        color = if (showEditUpiDialog) PendingRed else Color(0xFFFEF3C7),
+                                        shape = RoundedCornerShape(8.dp),
+                                        border = androidx.compose.foundation.BorderStroke(1.dp, SaffronGold),
+                                        modifier = Modifier.clickable { showEditUpiDialog = !showEditUpiDialog }
                                     ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Edit,
-                                            contentDescription = "Edit UPI ID",
-                                            tint = SaffronGold,
-                                            modifier = Modifier.size(15.dp)
-                                        )
+                                        Row(
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Edit,
+                                                contentDescription = "Edit UPI",
+                                                tint = if (showEditUpiDialog) Color.White else Color(0xFF92400E),
+                                                modifier = Modifier.size(13.dp)
+                                            )
+                                            Spacer(modifier = Modifier.width(3.dp))
+                                            Text(
+                                                text = if (showEditUpiDialog) "रद्द ✖" else "बदलें ✎",
+                                                fontSize = 11.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = if (showEditUpiDialog) Color.White else Color(0xFF92400E)
+                                            )
+                                        }
                                     }
                                 }
                             }

@@ -548,7 +548,7 @@ fun PaymentModeSelectionDialog(
                             color = Color(0xFFEEF2FF),
                             shape = RoundedCornerShape(6.dp),
                             modifier = Modifier.clickable {
-                                upiRefOrLink = "upi://pay?pa=revantrambhati@upi&am=${member.monthlyAmount}&tn=AmavasyaFund"
+                                upiRefOrLink = "upi://pay?pa=77850983600@ibl&am=${member.monthlyAmount}&tn=AmavasyaFund"
                             }
                         ) {
                             Text(

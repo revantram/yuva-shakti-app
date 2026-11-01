@@ -37,7 +37,7 @@ class MemberRepository(
         private const val KEY_AMAVASYA_STATE = "amavasya_state" // "day_after", "advance", "regular"
         private const val KEY_TARGET_AMAVASYA_MILLIS = "target_amavasya_millis"
         private const val KEY_UPI_ID = "fund_upi_id"
-        private const val DEFAULT_UPI_ID = "777850983600@ibl"
+        private const val DEFAULT_UPI_ID = "77850983600@ibl"
         private const val KEY_CUSTOM_TARGET_AMOUNT = "custom_cycle_target_amount"
         private const val KEY_CONSENSUS_NOTE = "consensus_cycle_note"
         private const val KEY_CUSTOM_QR_URI = "custom_qr_code_uri"
@@ -436,7 +436,7 @@ class MemberRepository(
 
     fun getUpiId(): String {
         val saved = prefs.getString(KEY_UPI_ID, DEFAULT_UPI_ID) ?: DEFAULT_UPI_ID
-        return if (saved == "revantrambhati@upi" || saved.isBlank()) DEFAULT_UPI_ID else saved
+        return if (saved == "revantrambhati@upi" || saved == "777850983600@ibl" || saved.isBlank()) DEFAULT_UPI_ID else saved
     }
 
     fun setUpiId(id: String) {

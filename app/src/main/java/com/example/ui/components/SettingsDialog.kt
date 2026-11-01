@@ -535,21 +535,41 @@ fun SettingsDialog(
                                         color = textPrimary
                                     )
                                     Text(
-                                        text = fundUpiId.ifBlank { "revantrambhati@upi" },
-                                        fontSize = 10.5.sp,
-                                        color = textSecondary
+                                        text = fundUpiId.ifBlank { "77850983600@ibl" },
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = if (isDark) SaffronGold else DeepNavy
                                     )
                                 }
-                                if (isAdmin) {
-                                    IconButton(
-                                        onClick = { showEditUpiInline = !showEditUpiInline },
-                                        modifier = Modifier.size(28.dp)
+                                Surface(
+                                    color = if (showEditUpiInline) PendingRed else Color(0xFFFEF3C7),
+                                    shape = RoundedCornerShape(8.dp),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, SaffronGold),
+                                    modifier = Modifier.clickable {
+                                        if (isAdmin) {
+                                            showEditUpiInline = !showEditUpiInline
+                                        } else {
+                                            Toast.makeText(context, "UPI ID बदलने के लिए व्यवस्थापक लॉगिन आवश्यक है", Toast.LENGTH_SHORT).show()
+                                            onSwitchAdminRoleClick()
+                                        }
+                                    }
+                                ) {
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Icon(
-                                            imageVector = Icons.Default.Edit,
+                                            imageVector = if (isAdmin) Icons.Default.Edit else Icons.Default.Lock,
                                             contentDescription = "Edit UPI ID",
-                                            tint = if (isDark) SaffronGold else DeepNavy,
-                                            modifier = Modifier.size(16.dp)
+                                            tint = if (showEditUpiInline) Color.White else Color(0xFF92400E),
+                                            modifier = Modifier.size(13.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(3.dp))
+                                        Text(
+                                            text = if (showEditUpiInline) "रद्द ✖" else "बदलें ✎",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = if (showEditUpiInline) Color.White else Color(0xFF92400E)
                                         )
                                     }
                                 }
@@ -561,7 +581,7 @@ fun SettingsDialog(
                                     value = editUpiText,
                                     onValueChange = { editUpiText = it },
                                     label = { Text("UPI ID या Google Pay / PhonePe नंबर") },
-                                    placeholder = { Text("उदा. 9929xxxxxx@ybl या name@upi") },
+                                    placeholder = { Text("उदा. 77850983600@ibl") },
                                     singleLine = true,
                                     modifier = Modifier.fillMaxWidth()
                                 )
@@ -575,7 +595,7 @@ fun SettingsDialog(
                                             if (editUpiText.isNotBlank()) {
                                                 onUpdateFundUpiId(editUpiText.trim())
                                                 showEditUpiInline = false
-                                                Toast.makeText(context, "UPI ID सुरक्षित हो गई!", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(context, "UPI ID सुरक्षित हो गई: ${editUpiText.trim()}", Toast.LENGTH_SHORT).show()
                                             }
                                         }
                                 ) {
