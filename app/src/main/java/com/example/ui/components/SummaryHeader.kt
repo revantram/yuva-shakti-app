@@ -300,6 +300,9 @@ fun AppHeader(
                                     fontWeight = FontWeight.Bold
                                 )
                             }
+                        }
+                    }
+
                     // Admin Quick Lock / Shield Icon Button in Top Row
                     Box(
                         modifier = Modifier
