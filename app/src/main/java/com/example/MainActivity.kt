@@ -282,11 +282,8 @@ fun MainScreen(viewModel: MainViewModel) {
     var firestoreOnlineCount by remember { mutableIntStateOf(1) }
     var firestoreActiveUsers by remember { mutableStateOf<List<String>>(emptyList()) }
 
-    // Realtime Firestore listeners - Active continuously
+    // Realtime Firestore presence and settings listeners
     DisposableEffect(Unit) {
-        val memberReg = FirestoreSyncHelper.listenToMembersRealtime { cloudMembers ->
-            viewModel.syncMembersFromCloud(cloudMembers)
-        }
         val presenceReg = FirestoreSyncHelper.listenToOnlinePresence { count, users ->
             firestoreOnlineCount = count
             firestoreActiveUsers = users
@@ -299,13 +296,19 @@ fun MainScreen(viewModel: MainViewModel) {
             amavasyaMillis?.let { if (it > 0) viewModel.setTargetAmavasyaMillis(it) }
         }
         onDispose {
-            memberReg?.remove()
             presenceReg?.remove()
             settingsReg?.remove()
         }
     }
 
     LaunchedEffect(Unit) {
+        val soundPrefs = context.getSharedPreferences("yuva_shakti_sound_prefs", Context.MODE_PRIVATE)
+        val hasPlayedFirstLaunch = soundPrefs.getBoolean("has_played_welcome_sound", false)
+        if (!hasPlayedFirstLaunch) {
+            com.example.util.SoundHelper.playJaiShreeRam(context)
+            soundPrefs.edit().putBoolean("has_played_welcome_sound", true).apply()
+        }
+
         com.example.util.NotificationHelper.createNotificationChannel(context)
         PendingSirenReminderReceiver.scheduleAllDailyAlarms(context)
         OnlinePresenceHelper.recordHeartbeat(activeMemberId)
@@ -935,7 +938,7 @@ fun MainScreen(viewModel: MainViewModel) {
                         } else {
                             items(
                                 items = uiState.filteredMembers,
-                                key = { it.id }
+                                key = { member -> "${member.id}_${member.phone}" }
                             ) { member ->
                                 val isOnline = OnlinePresenceHelper.isOnline(member.id, activeMemberId, uiState.members.size)
                                 MemberCard(

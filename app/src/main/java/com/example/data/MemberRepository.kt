@@ -67,22 +67,26 @@ class MemberRepository(
             // 1. Immediately fetch latest cloud members from Firestore!
             val cloudMembers = FirestoreSyncHelper.fetchMembersFromFirestore()
             if (cloudMembers.isNotEmpty()) {
-                memberDao.syncFromCloud(cloudMembers)
+                syncMembersFromCloud(cloudMembers)
                 android.util.Log.d("MemberRepository", "Successfully synced ${cloudMembers.size} members from Firestore cloud.")
                 return@withContext
             }
-        } catch (e: Exception) {
-            android.util.Log.e("MemberRepository", "Error syncing cloud members on startup", e)
+        } catch (t: Throwable) {
+            android.util.Log.e("MemberRepository", "Error syncing cloud members on startup", t)
         }
 
         // 2. Only seed if both local and cloud are completely empty
-        val count = memberDao.getMemberCount()
-        if (count == 0) {
-            AppDatabase.seedInitialMembers(memberDao)
-            val localMembers = memberDao.getAllMembersList()
-            if (localMembers.isNotEmpty()) {
-                FirestoreSyncHelper.uploadMembersToFirestore(localMembers)
+        try {
+            val count = memberDao.getMemberCount()
+            if (count == 0) {
+                AppDatabase.seedInitialMembers(memberDao)
+                val localMembers = memberDao.getAllMembersList()
+                if (localMembers.isNotEmpty()) {
+                    FirestoreSyncHelper.uploadMembersToFirestore(localMembers)
+                }
             }
+        } catch (t: Throwable) {
+            android.util.Log.e("MemberRepository", "Error seeding members", t)
         }
     }
 
@@ -147,7 +151,21 @@ class MemberRepository(
     }
 
     suspend fun syncMembersFromCloud(cloudMembers: List<MemberEntity>) = withContext(Dispatchers.IO) {
-        memberDao.syncFromCloud(cloudMembers)
+        try {
+            val valid = cloudMembers.filter { it.id > 0 && it.name.isNotBlank() }
+            if (valid.isNotEmpty()) {
+                val cloudIds = valid.map { it.id }.toSet()
+                val localMembers = memberDao.getAllMembersList()
+                for (local in localMembers) {
+                    if (!cloudIds.contains(local.id)) {
+                        memberDao.deleteMemberById(local.id)
+                    }
+                }
+                memberDao.insertMembers(valid)
+            }
+        } catch (t: Throwable) {
+            android.util.Log.e("MemberRepository", "Error syncing members from cloud", t)
+        }
     }
 
     suspend fun insertExpense(

@@ -1336,10 +1336,186 @@ fun SettingsDialog(
                             )
                         }
                     }
+                // Section 7: Developer Option (डेवलपर जानकारी - Revant ram bhati)
+                item {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isDark) Color(0xFF1E1B4B) else Color(0xFFF5F3FF)
+                        ),
+                        shape = RoundedCornerShape(16.dp),
+                        border = androidx.compose.foundation.BorderStroke(
+                            1.5.dp,
+                            if (isDark) SaffronGold else Color(0xFFDDD6FE)
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(42.dp)
+                                        .background(if (isDark) SaffronGold else DeepNavy, CircleShape),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.PhoneAndroid,
+                                        contentDescription = null,
+                                        tint = if (isDark) DeepNavy else Color.White,
+                                        modifier = Modifier.size(22.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Column {
+                                    Text(
+                                        text = if (isEnglish) "👨‍💻 Developer Information" else "💻 डेवलपर जानकारी (Developer Option)",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = if (isDark) Color(0xFFFEF3C7) else DeepNavy
+                                    )
+                                    Text(
+                                        text = if (isEnglish) "App Creator & Technical Support" else "एप्लिकेशन निर्माता एवं तकनीकी सहयोग",
+                                        fontSize = 11.sp,
+                                        color = textSecondary
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            // Developer Info Details Card
+                            Surface(
+                                color = if (isDark) Color(0xFF0F172A) else Color.White,
+                                shape = RoundedCornerShape(12.dp),
+                                border = androidx.compose.foundation.BorderStroke(
+                                    1.dp,
+                                    if (isDark) Color(0xFF334155) else Color(0xFFE2E8F0)
+                                ),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    // 1. Name
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Text(text = "👤 ", fontSize = 14.sp)
+                                        Text(
+                                            text = if (isEnglish) "Name: " else "नाम: ",
+                                            fontSize = 12.sp,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = textSecondary
+                                        )
+                                        Text(
+                                            text = "Revant ram bhati (रेवंतराम भाटी)",
+                                            fontSize = 12.5.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = textPrimary
+                                        )
+                                    }
+
+                                    // 2. Mobile
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Text(text = "📞 ", fontSize = 14.sp)
+                                            Text(
+                                                text = if (isEnglish) "Mobile: " else "मोबाइल: ",
+                                                fontSize = 12.sp,
+                                                fontWeight = FontWeight.SemiBold,
+                                                color = textSecondary
+                                            )
+                                            Text(
+                                                text = "8696663615",
+                                                fontSize = 12.5.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = textPrimary
+                                            )
+                                        }
+
+                                        Surface(
+                                            color = Color(0xFF16A34A),
+                                            shape = RoundedCornerShape(6.dp),
+                                            modifier = Modifier.clickable {
+                                                try {
+                                                    val callIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:8696663615"))
+                                                    context.startActivity(callIntent)
+                                                } catch (_: Exception) {}
+                                            }
+                                        ) {
+                                            Text(
+                                                text = "कॉल करें 📞",
+                                                color = Color.White,
+                                                fontSize = 10.5.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                                            )
+                                        }
+                                    }
+
+                                    // 3. Email
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier.weight(1f)
+                                        ) {
+                                            Text(text = "✉️ ", fontSize = 14.sp)
+                                            Text(
+                                                text = if (isEnglish) "Email: " else "ईमेल: ",
+                                                fontSize = 12.sp,
+                                                fontWeight = FontWeight.SemiBold,
+                                                color = textSecondary
+                                            )
+                                            Text(
+                                                text = "revantrambhati@gmail.com",
+                                                fontSize = 11.5.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                color = textPrimary,
+                                                maxLines = 1
+                                            )
+                                        }
+
+                                        Surface(
+                                            color = Color(0xFF2563EB),
+                                            shape = RoundedCornerShape(6.dp),
+                                            modifier = Modifier.clickable {
+                                                try {
+                                                    val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:revantrambhati@gmail.com"))
+                                                    context.startActivity(emailIntent)
+                                                } catch (_: Exception) {}
+                                            }
+                                        ) {
+                                            Text(
+                                                text = "ईमेल ✉️",
+                                                color = Color.White,
+                                                fontSize = 10.5.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
-
-            Spacer(modifier = Modifier.height(10.dp))
 
             // Bottom Close Button
             Surface(
@@ -1360,6 +1536,7 @@ fun SettingsDialog(
             }
         }
     }
+}
 }
 }
 

@@ -155,30 +155,50 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         viewModelScope.launch {
-            repository.ensureInitialized()
-        }
-        // Continuous realtime listeners running in ViewModel lifecycle
-        com.example.util.FirestoreSyncHelper.listenToMembersRealtime { cloudMembers ->
-            viewModelScope.launch {
-                repository.syncMembersFromCloud(cloudMembers)
+            try {
+                repository.ensureInitialized()
+            } catch (t: Throwable) {
+                android.util.Log.e("MainViewModel", "ensureInitialized error", t)
             }
         }
-        com.example.util.FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
-            upiId?.let { if (it.isNotBlank()) setFundUpiId(it) }
-            waLink?.let { if (it.isNotBlank()) setWhatsAppGroupLink(it) }
-            target?.let { if (it > 0) setCustomTargetAmount(it) }
-            cycleName?.let { if (it.isNotBlank()) setAmavasyaCycleName(it) }
-            amavasyaMillis?.let { if (it > 0) setTargetAmavasyaMillis(it) }
+        // Continuous realtime listeners running in ViewModel lifecycle
+        try {
+            com.example.util.FirestoreSyncHelper.listenToMembersRealtime { cloudMembers ->
+                viewModelScope.launch {
+                    try {
+                        repository.syncMembersFromCloud(cloudMembers)
+                    } catch (t: Throwable) {
+                        android.util.Log.e("MainViewModel", "syncMembersFromCloud error", t)
+                    }
+                }
+            }
+            com.example.util.FirestoreSyncHelper.listenToSettings { upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes ->
+                try {
+                    upiId?.let { if (it.isNotBlank()) setFundUpiId(it) }
+                    waLink?.let { if (it.isNotBlank()) setWhatsAppGroupLink(it) }
+                    target?.let { if (it > 0) setCustomTargetAmount(it) }
+                    cycleName?.let { if (it.isNotBlank()) setAmavasyaCycleName(it) }
+                    amavasyaMillis?.let { if (it > 0) setTargetAmavasyaMillis(it) }
+                } catch (t: Throwable) {
+                    android.util.Log.e("MainViewModel", "listenToSettings error", t)
+                }
+            }
+        } catch (t: Throwable) {
+            android.util.Log.e("MainViewModel", "Firestore listener init error", t)
         }
         viewModelScope.launch {
             while (true) {
-                val target = _targetAmavasyaMillis.value
-                val isCustom = repository.getTargetAmavasyaMillis() > 0
-                _countdownInfo.value = com.example.util.AmavasyaCalculator.computeCountdown(
-                    targetMillis = target,
-                    currentMillis = System.currentTimeMillis(),
-                    isCustom = isCustom
-                )
+                try {
+                    val target = _targetAmavasyaMillis.value
+                    val isCustom = repository.getTargetAmavasyaMillis() > 0
+                    _countdownInfo.value = com.example.util.AmavasyaCalculator.computeCountdown(
+                        targetMillis = target,
+                        currentMillis = System.currentTimeMillis(),
+                        isCustom = isCustom
+                    )
+                } catch (t: Throwable) {
+                    // ignore
+                }
                 kotlinx.coroutines.delay(1000L)
             }
         }

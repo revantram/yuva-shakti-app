@@ -53,6 +53,11 @@ fun InstallSuccessWelcomeDialog(
     isAdmin: Boolean,
     onEnterApp: () -> Unit
 ) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        com.example.util.SoundHelper.playJaiShreeRam(context)
+    }
+
     Dialog(
         onDismissRequest = onEnterApp,
         properties = DialogProperties(

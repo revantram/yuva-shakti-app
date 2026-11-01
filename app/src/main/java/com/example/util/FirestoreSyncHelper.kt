@@ -18,8 +18,13 @@ object FirestoreSyncHelper {
 
     val isConfigured: Boolean = true
 
-    private val firestore: FirebaseFirestore by lazy {
-        FirebaseFirestore.getInstance()
+    private fun getFirestore(): FirebaseFirestore? {
+        return try {
+            FirebaseFirestore.getInstance()
+        } catch (t: Throwable) {
+            Log.e(TAG, "FirebaseFirestore instance unavailable", t)
+            null
+        }
     }
 
     private suspend fun <T> Task<T>.awaitTask(): T =
@@ -37,9 +42,10 @@ object FirestoreSyncHelper {
 
     suspend fun uploadMembersToFirestore(members: List<MemberEntity>): Boolean {
         return try {
-            val batch = firestore.batch()
+            val fs = getFirestore() ?: return false
+            val batch = fs.batch()
             for (member in members) {
-                val docRef = firestore.collection(COLLECTION_MEMBERS).document(member.id.toString())
+                val docRef = fs.collection(COLLECTION_MEMBERS).document(member.id.toString())
                 val data = mapOf(
                     "id" to member.id,
                     "name" to member.name,
@@ -69,7 +75,8 @@ object FirestoreSyncHelper {
 
     suspend fun saveSingleMember(member: MemberEntity): Boolean {
         return try {
-            val docRef = firestore.collection(COLLECTION_MEMBERS).document(member.id.toString())
+            val fs = getFirestore() ?: return false
+            val docRef = fs.collection(COLLECTION_MEMBERS).document(member.id.toString())
             val data = mapOf(
                 "id" to member.id,
                 "name" to member.name,
@@ -96,7 +103,8 @@ object FirestoreSyncHelper {
 
     suspend fun deleteMember(memberId: Long): Boolean {
         return try {
-            firestore.collection(COLLECTION_MEMBERS).document(memberId.toString()).delete().awaitTask()
+            val fs = getFirestore() ?: return false
+            fs.collection(COLLECTION_MEMBERS).document(memberId.toString()).delete().awaitTask()
             true
         } catch (e: Exception) {
             Log.e(TAG, "Error deleting member $memberId from Firestore", e)
@@ -106,7 +114,8 @@ object FirestoreSyncHelper {
 
     suspend fun fetchMembersFromFirestore(): List<MemberEntity> {
         return try {
-            val snapshot = firestore.collection(COLLECTION_MEMBERS).get().awaitTask()
+            val fs = getFirestore() ?: return emptyList()
+            val snapshot = fs.collection(COLLECTION_MEMBERS).get().awaitTask()
             val list = mutableListOf<MemberEntity>()
             for (doc in snapshot.documents) {
                 val id = doc.getLong("id") ?: doc.id.toLongOrNull() ?: (doc.getString("id")?.toLongOrNull() ?: 0L)
@@ -152,7 +161,8 @@ object FirestoreSyncHelper {
 
     fun listenToMembersRealtime(onMembersUpdated: (List<MemberEntity>) -> Unit): ListenerRegistration? {
         return try {
-            firestore.collection(COLLECTION_MEMBERS)
+            val fs = getFirestore() ?: return null
+            fs.collection(COLLECTION_MEMBERS)
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
                         Log.e(TAG, "Realtime member listener error", error)
@@ -200,8 +210,8 @@ object FirestoreSyncHelper {
                         }
                     }
                 }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error setting up realtime listener", e)
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error setting up realtime listener", t)
             null
         }
     }
@@ -212,7 +222,8 @@ object FirestoreSyncHelper {
     fun recordPresence(deviceId: String, userName: String, memberId: Long = 0L) {
         if (deviceId.isBlank()) return
         try {
-            val docRef = firestore.collection(COLLECTION_PRESENCE).document(deviceId)
+            val fs = getFirestore() ?: return
+            val docRef = fs.collection(COLLECTION_PRESENCE).document(deviceId)
             val data = mapOf(
                 "deviceId" to deviceId,
                 "userName" to userName.ifBlank { "परिवार सदस्य" },
@@ -220,8 +231,8 @@ object FirestoreSyncHelper {
                 "lastActive" to System.currentTimeMillis()
             )
             docRef.set(data, SetOptions.merge())
-        } catch (e: Exception) {
-            Log.e(TAG, "Error recording presence", e)
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error recording presence", t)
         }
     }
 
@@ -231,7 +242,8 @@ object FirestoreSyncHelper {
      */
     fun listenToOnlinePresence(onUpdate: (count: Int, activeUsers: List<String>) -> Unit): ListenerRegistration? {
         return try {
-            firestore.collection(COLLECTION_PRESENCE)
+            val fs = getFirestore() ?: return null
+            fs.collection(COLLECTION_PRESENCE)
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
                         Log.e(TAG, "Presence listener error", error)
@@ -253,8 +265,8 @@ object FirestoreSyncHelper {
                         onUpdate(onlineCount, activeUsers)
                     }
                 }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error listening to presence", e)
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error listening to presence", t)
             null
         }
     }
@@ -273,7 +285,8 @@ object FirestoreSyncHelper {
         updateNotes: String? = null
     ): Boolean {
         return try {
-            val docRef = firestore.collection(COLLECTION_SETTINGS).document(DOC_GENERAL)
+            val fs = getFirestore() ?: return false
+            val docRef = fs.collection(COLLECTION_SETTINGS).document(DOC_GENERAL)
             val data = mutableMapOf<String, Any>(
                 "updatedAt" to System.currentTimeMillis()
             )
@@ -289,8 +302,8 @@ object FirestoreSyncHelper {
             docRef.set(data, SetOptions.merge()).awaitTask()
             Log.d(TAG, "Saved settings to Firestore successfully")
             true
-        } catch (e: Exception) {
-            Log.e(TAG, "Error saving settings to Firestore", e)
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error saving settings to Firestore", t)
             false
         }
     }
@@ -311,7 +324,8 @@ object FirestoreSyncHelper {
         ) -> Unit
     ): ListenerRegistration? {
         return try {
-            firestore.collection(COLLECTION_SETTINGS).document(DOC_GENERAL)
+            val fs = getFirestore() ?: return null
+            fs.collection(COLLECTION_SETTINGS).document(DOC_GENERAL)
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
                         Log.e(TAG, "Settings listener error", error)
@@ -329,8 +343,8 @@ object FirestoreSyncHelper {
                         onSettings(upiId, waLink, target, cycleName, amavasyaMillis, apkUrl, version, notes)
                     }
                 }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error setting up settings listener", e)
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error setting up settings listener", t)
             null
         }
     }

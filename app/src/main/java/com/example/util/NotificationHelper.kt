@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import com.example.MainActivity
 
 object NotificationHelper {
-    const val CHANNEL_ID = "bhati_fund_transactions_channel"
+    const val CHANNEL_ID = "bhati_fund_transactions_v2_channel"
     const val SIREN_CHANNEL_ID = "bhati_pending_siren_channel"
     private const val CHANNEL_NAME = "युवा शक्ति ग्रुप लेन-देन सूचनाएँ"
     private const val CHANNEL_DESC = "अंशदान, ऑनलाइन जमा और बहीखाता खर्च की लाइव सूचनाएँ"
@@ -22,11 +22,17 @@ object NotificationHelper {
     fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+            val soundUri = SoundHelper.getJaiShreeRamSoundUri(context)
+            val audioAttributes = android.media.AudioAttributes.Builder()
+                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
+                .build()
 
             val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH).apply {
                 description = CHANNEL_DESC
                 enableVibration(true)
                 setShowBadge(true)
+                setSound(soundUri, audioAttributes)
             }
             notificationManager?.createNotificationChannel(channel)
 
@@ -39,13 +45,13 @@ object NotificationHelper {
                 enableVibration(true)
                 vibrationPattern = longArrayOf(0, 600, 200, 600, 200, 1000, 400, 1000)
                 setShowBadge(true)
-                val audioAttributes = android.media.AudioAttributes.Builder()
+                val sirenAttributes = android.media.AudioAttributes.Builder()
                     .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(android.media.AudioAttributes.USAGE_ALARM)
                     .build()
-                val soundUri = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM)
-                    ?: android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_NOTIFICATION)
-                setSound(soundUri, audioAttributes)
+                val sirenSoundUri = android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM)
+                    ?: soundUri
+                setSound(sirenSoundUri, sirenAttributes)
             }
             notificationManager?.createNotificationChannel(sirenChannel)
         }
@@ -82,22 +88,24 @@ object NotificationHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0)
         )
 
+        val soundUri = SoundHelper.getJaiShreeRamSoundUri(context)
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(title)
             .setContentText(message)
             .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setSound(soundUri)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
 
         try {
             NotificationManagerCompat.from(context).notify(notificationId, notification)
+            SoundHelper.playJaiShreeRam(context)
         } catch (e: SecurityException) {
             // Permission revoked or not granted
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             // Catch potential bad state
         }
     }
@@ -130,21 +138,23 @@ object NotificationHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0)
         )
 
+        val soundUri = SoundHelper.getJaiShreeRamSoundUri(context)
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle("🎉 $festivalName की शुभकामनाएं!")
             .setContentText(wishes)
             .setStyle(NotificationCompat.BigTextStyle().bigText("🚩 युवा शक्ति ग्रुप, भाटी परिवार कुचेरा:\n$wishes"))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setSound(soundUri)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
 
         try {
             NotificationManagerCompat.from(context).notify(notificationId, notification)
+            SoundHelper.playJaiShreeRam(context)
         } catch (e: SecurityException) {
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
         }
     }
 
@@ -215,7 +225,7 @@ object NotificationHelper {
 
         try {
             NotificationManagerCompat.from(context).notify(9999, notification)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             // handle exception
         }
     }
@@ -246,20 +256,22 @@ object NotificationHelper {
         val title = "🌅 सुप्रभात भाटी परिवार • आज का सुविचार"
         val message = "❝ $actualThought ❞\n\n- युवा शक्ति ग्रुप, भाटी परिवार कुचेरा"
 
+        val soundUri = SoundHelper.getJaiShreeRamSoundUri(context)
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(title)
             .setContentText("❝ $actualThought ❞")
             .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setSound(soundUri)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
 
         try {
             NotificationManagerCompat.from(context).notify(7777, notification)
-        } catch (e: Exception) {
+            SoundHelper.playJaiShreeRam(context)
+        } catch (e: Throwable) {
             // handle exception
         }
     }

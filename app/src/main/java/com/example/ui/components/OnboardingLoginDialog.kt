@@ -119,18 +119,10 @@ fun OnboardingLoginDialog(
         cursorColor = DeepNavy
     )
 
-    Dialog(
-        onDismissRequest = { /* Mandatory, cannot dismiss */ },
-        properties = DialogProperties(
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false
-        )
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = DeepNavy
     ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = DeepNavy
-        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -333,7 +325,7 @@ fun OnboardingLoginDialog(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "प्रोफ़ाइल फ़ोटो जोड़ें (वैकल्पिक / प्रोफाइल में दिखेगी):",
+                                text = "प्रोफ़ाइल फ़ोटो जोड़ें (वैकल्पिक / बिना फोटो भी जारी रख सकते हैं):",
                                 fontSize = 11.5.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = textSecondary
@@ -583,4 +575,3 @@ fun OnboardingLoginDialog(
             }
         }
     }
-}
