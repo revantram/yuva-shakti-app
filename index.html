@@ -1064,50 +1064,50 @@
       <button onclick="toggleAdminPrompt()" style="background:rgba(255,255,255,0.25); border:none; color:white; padding:2px 8px; border-radius:4px; font-size:10px; cursor:pointer;">लॉगआउट करें</button>
     </div>
 
-    <!-- 🌙 1. Amavasya Live Countdown Card (Shown across app) -->
-    <div class="amavasya-card" id="amavasyaHeroCard">
-      <div class="amavasya-header">
-        <div class="amavasya-title">
-          <i class="fa-solid fa-moon"></i>
-          <h2 id="nextAmavasyaName">आगामी अमावस्या</h2>
-        </div>
-        <span class="amavasya-badge" id="nextAmavasyaDate">
-          <i class="fa-solid fa-calendar-day"></i> गणना हो रही है...
-        </span>
-      </div>
-
-      <!-- Live Ticking Countdown -->
-      <div class="countdown-grid">
-        <div class="countdown-box">
-          <div class="countdown-val" id="cdDays">00</div>
-          <div class="countdown-lbl">दिन</div>
-        </div>
-        <div class="countdown-box">
-          <div class="countdown-val" id="cdHours">00</div>
-          <div class="countdown-lbl">घंटे</div>
-        </div>
-        <div class="countdown-box">
-          <div class="countdown-val" id="cdMins">00</div>
-          <div class="countdown-lbl">मिनट</div>
-        </div>
-        <div class="countdown-box">
-          <div class="countdown-val" id="cdSecs">00</div>
-          <div class="countdown-lbl">सेकंड</div>
-        </div>
-      </div>
-
-      <div class="amavasya-footer">
-        <div class="amavasya-subtext" id="amavasyaTithiDesc">
-          <i class="fa-solid fa-om" style="color:#fbbf24;"></i> सत्संग व अंशदान दिवस
-        </div>
-        <button class="btn-quick-contrib" onclick="quickFillAmavasya()">
-          <i class="fa-solid fa-hand-holding-dollar"></i> अंशदान जोड़ें
-        </button>
-      </div>
-    </div>
-
     <!-- 1. सदस्य डायरेक्टरी टैब -->
     <div id="viewMembers" class="section-view active-view">
+      
+      <!-- 🌙 Amavasya Live Countdown Card (Shown only on main tab) -->
+      <div class="amavasya-card" id="amavasyaHeroCard">
+        <div class="amavasya-header">
+          <div class="amavasya-title">
+            <i class="fa-solid fa-moon"></i>
+            <h2 id="nextAmavasyaName">आगामी अमावस्या</h2>
+          </div>
+          <span class="amavasya-badge" id="nextAmavasyaDate">
+            <i class="fa-solid fa-calendar-day"></i> गणना हो रही है...
+          </span>
+        </div>
+
+        <!-- Live Ticking Countdown -->
+        <div class="countdown-grid">
+          <div class="countdown-box">
+            <div class="countdown-val" id="cdDays">00</div>
+            <div class="countdown-lbl">दिन</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-val" id="cdHours">00</div>
+            <div class="countdown-lbl">घंटे</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-val" id="cdMins">00</div>
+            <div class="countdown-lbl">मिनट</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-val" id="cdSecs">00</div>
+            <div class="countdown-lbl">सेकंड</div>
+          </div>
+        </div>
+
+        <div class="amavasya-footer">
+          <div class="amavasya-subtext" id="amavasyaTithiDesc">
+            <i class="fa-solid fa-om" style="color:#fbbf24;"></i> सत्संग व अंशदान दिवस
+          </div>
+          <button class="btn-quick-contrib" onclick="quickFillAmavasya()">
+            <i class="fa-solid fa-hand-holding-dollar"></i> अंशदान जोड़ें
+          </button>
+        </div>
+      </div>
       
       <!-- Search & Counts -->
       <div class="search-box">
@@ -1429,7 +1429,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.1.1";
+    const APP_VERSION = "4.1.2";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
