@@ -22,6 +22,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import android.util.Base64;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -56,6 +57,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void shareAppApk() {
             shareApplicationApk();
+        }
+
+        @JavascriptInterface
+        public void shareImage(String base64Data, String caption) {
+            shareGeneratedImage(base64Data, caption);
         }
 
         @JavascriptInterface
@@ -374,6 +380,66 @@ public class MainActivity extends Activity {
                     } catch (Exception ex) {
                         Toast.makeText(MainActivity.this, "शेयर करने में असमर्थ: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
                     }
+                }
+            }
+        });
+    }
+
+    public void shareGeneratedImage(final String base64Data, final String caption) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String cleanBase64 = base64Data;
+                    if (cleanBase64.contains(",")) {
+                        cleanBase64 = cleanBase64.substring(cleanBase64.indexOf(",") + 1);
+                    }
+                    byte[] imageBytes = Base64.decode(cleanBase64, Base64.DEFAULT);
+
+                    File picturesDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "YuvaShakti");
+                    if (!picturesDir.exists()) {
+                        picturesDir.mkdirs();
+                    }
+                    File imageFile = new File(picturesDir, "suvichar_" + System.currentTimeMillis() + ".jpg");
+                    FileOutputStream fos = new FileOutputStream(imageFile);
+                    fos.write(imageBytes);
+                    fos.flush();
+                    fos.close();
+
+                    MediaScannerConnection.scanFile(MainActivity.this, new String[]{imageFile.getAbsolutePath()}, new String[]{"image/jpeg"}, null);
+
+                    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                    StrictMode.setVmPolicy(builder.build());
+
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("image/jpeg");
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageFile));
+                    if (caption != null && !caption.isEmpty()) {
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, caption);
+                    }
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    boolean whatsappFound = false;
+                    for (String pkg : new String[]{"com.whatsapp", "com.whatsapp.w4b"}) {
+                        try {
+                            getPackageManager().getPackageInfo(pkg, 0);
+                            shareIntent.setPackage(pkg);
+                            whatsappFound = true;
+                            break;
+                        } catch (Exception ignored) {}
+                    }
+                    if (!whatsappFound) {
+                        shareIntent.setPackage(null);
+                    }
+
+                    try {
+                        startActivity(shareIntent);
+                    } catch (Exception ex) {
+                        shareIntent.setPackage(null);
+                        startActivity(Intent.createChooser(shareIntent, "सुविचार फोटो शेयर करें"));
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "फोटो शेयर करने में त्रुटि: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

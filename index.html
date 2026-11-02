@@ -1856,7 +1856,7 @@
         <div style="font-size:11px; color:#fef08a; font-weight:700; margin-top:1px; letter-spacing:0.2px;" id="appSubTitleText" data-i18n="app_subtitle">भाटी परिवार कुचेरा</div>
       </div>
     </div>
-    <div class="header-actions">
+    <div class="header-actions" id="mainHeaderActions">
       <!-- Direct APK Share via WhatsApp -->
       <button class="auth-btn" onclick="shareAppDirectly()" style="background:#ea580c; border-color:#f97316;" title="APK व्हाट्सएप पर शेयर करें">
         <i class="fa-solid fa-share-nodes"></i>
@@ -2306,7 +2306,7 @@
             </div>
             <span data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span>
           </span>
-          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.2.8</span>
+          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.2.9</span>
         </div>
         <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between;">
@@ -2319,7 +2319,7 @@
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.2.8 (नवीनतम रिलीज)</strong>
+            <strong style="color:var(--text-main);">v4.2.9 (नवीनतम रिलीज)</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>क्लाउड डेटाबेस:</span>
@@ -2873,7 +2873,7 @@
 
       <div style="display:flex; flex-direction:column; gap:8px;">
         <button onclick="shareDailySuvichar()" class="btn-primary" style="background:linear-gradient(135deg, #25d366, #16a34a); border:none; padding:11px; border-radius:14px; font-size:13px; font-weight:700; box-shadow:0 6px 16px rgba(37, 211, 102, 0.35); display:flex; align-items:center; justify-content:center; gap:8px;">
-          <i class="fa-brands fa-whatsapp" style="font-size:17px;"></i> व्हाट्सएप पर शेयर करें
+          <i class="fa-brands fa-whatsapp" style="font-size:17px;"></i> <i class="fa-solid fa-image"></i> फोटो के रूप में व्हाट्सएप पर शेयर करें
         </button>
         <button onclick="closeDailySuvicharModal()" style="background:rgba(255, 255, 255, 0.9); border:1px solid #e2e8f0; color:#475569; padding:10px; border-radius:14px; font-size:12px; font-weight:700; cursor:pointer;">
           शुभ दिन • आगे बढ़ें
@@ -3095,7 +3095,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.2.8";
+    const APP_VERSION = "4.2.9";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4262,10 +4262,288 @@
       if (modal) modal.style.display = "none";
     }
 
+    // 🌟 Suvichar Image Card Generator (Canvas based Photo Generation)
+    function generateSuvicharCardDataUrl(item) {
+      const width = 1080;
+      const height = 1350;
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+
+      // 1. Background Gradient - Rich warm golden / saffron devotional theme
+      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+      bgGrad.addColorStop(0, "#fffbf2");
+      bgGrad.addColorStop(0.35, "#fef3c7");
+      bgGrad.addColorStop(0.75, "#fed7aa");
+      bgGrad.addColorStop(1, "#fdba74");
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Subtle Background Watermark Circles
+      ctx.save();
+      ctx.fillStyle = "rgba(245, 158, 11, 0.06)";
+      ctx.beginPath();
+      ctx.arc(120, 160, 240, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(width - 100, height - 160, 300, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 2. Ornate Double Golden Borders
+      // Outer border
+      ctx.strokeStyle = "#d97706";
+      ctx.lineWidth = 6;
+      canvasRoundRect(ctx, 36, 36, width - 72, height - 72, 32, false, true);
+
+      // Inner border
+      ctx.strokeStyle = "#f59e0b";
+      ctx.lineWidth = 2;
+      canvasRoundRect(ctx, 48, 48, width - 96, height - 96, 24, false, true);
+
+      // Corner Accents (Small golden diamonds)
+      drawCornerDiamonds(ctx, 48, 48, width - 96, height - 96);
+
+      // 3. Top Group Branding Pill
+      const pillWidth = 740;
+      const pillHeight = 64;
+      const pillX = (width - pillWidth) / 2;
+      const pillY = 90;
+
+      ctx.save();
+      ctx.shadowColor = "rgba(234, 88, 12, 0.35)";
+      ctx.shadowBlur = 16;
+      ctx.shadowOffsetY = 6;
+      const pillGrad = ctx.createLinearGradient(pillX, pillY, pillX + pillWidth, pillY + pillHeight);
+      pillGrad.addColorStop(0, "#ea580c");
+      pillGrad.addColorStop(1, "#c2410c");
+      ctx.fillStyle = pillGrad;
+      canvasRoundRect(ctx, pillX, pillY, pillWidth, pillHeight, 32, true, false);
+      ctx.restore();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 30px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("🚩 युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) 🚩", width / 2, pillY + pillHeight / 2);
+
+      // Date Sub-Pill
+      const todayDateStr = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      ctx.fillStyle = "#9a3412";
+      ctx.font = "600 24px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.fillText(`☀️ ${todayDateStr} | वि. संवत 2083`, width / 2, pillY + pillHeight + 36);
+
+      // 4. Center Circular Icon with Quote Mark
+      const iconY = 280;
+      ctx.save();
+      ctx.shadowColor = "rgba(245, 158, 11, 0.45)";
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 8;
+      const iconGrad = ctx.createLinearGradient(width / 2 - 50, iconY - 50, width / 2 + 50, iconY + 50);
+      iconGrad.addColorStop(0, "#f59e0b");
+      iconGrad.addColorStop(1, "#d97706");
+      ctx.fillStyle = iconGrad;
+      ctx.beginPath();
+      ctx.arc(width / 2, iconY, 54, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // White Quote mark inside circle
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 64px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("❝", width / 2, iconY + 6);
+
+      // Title below circle
+      ctx.fillStyle = "#b45309";
+      ctx.font = "800 36px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.fillText("✨ आज का प्रेरक सुविचार ✨", width / 2, iconY + 95);
+
+      // 5. White Translucent Main Quote Card
+      const cardX = 90;
+      const cardY = 430;
+      const cardW = width - 180;
+      const cardH = 650;
+
+      ctx.save();
+      ctx.shadowColor = "rgba(180, 83, 9, 0.18)";
+      ctx.shadowBlur = 28;
+      ctx.shadowOffsetY = 12;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.94)";
+      canvasRoundRect(ctx, cardX, cardY, cardW, cardH, 32, true, false);
+      ctx.restore();
+
+      // Card border
+      ctx.strokeStyle = "#fde68a";
+      ctx.lineWidth = 3;
+      canvasRoundRect(ctx, cardX, cardY, cardW, cardH, 32, false, true);
+
+      // Render Quote Text wrapped nicely
+      const quoteText = `“${item.quote}”`;
+      let quoteFontSize = 42;
+      if (quoteText.length > 140) quoteFontSize = 36;
+      if (quoteText.length > 220) quoteFontSize = 32;
+
+      ctx.fillStyle = "#0f172a";
+      ctx.font = `600 ${quoteFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+
+      const maxTextWidth = cardW - 120;
+      const lineHeight = Math.round(quoteFontSize * 1.55);
+      const startY = cardY + 70;
+      const lastY = drawWrappedText(ctx, quoteText, width / 2, startY, maxTextWidth, lineHeight);
+
+      // Divider line inside quote card
+      const divY = Math.max(lastY + 35, cardY + cardH - 140);
+      ctx.strokeStyle = "#fed7aa";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8, 6]);
+      ctx.beginPath();
+      ctx.moveTo(cardX + 80, divY);
+      ctx.lineTo(cardX + cardW - 80, divY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Author / Source
+      ctx.fillStyle = "#ea580c";
+      ctx.font = "bold 32px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(`🪶 ${item.author || "युवा शक्ति विचार वाटिका"}`, width / 2, divY + 50);
+
+      // 6. Bottom Devotional Banner & Group Tag
+      const footerY = cardY + cardH + 50;
+      ctx.fillStyle = "#9a3412";
+      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("🪔 धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन 🪔", width / 2, footerY);
+
+      ctx.fillStyle = "#7c2d12";
+      ctx.font = "600 22px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.fillText("युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) | सप्रेम भेंट", width / 2, footerY + 40);
+
+      return canvas.toDataURL("image/jpeg", 0.95);
+    }
+
+    function canvasRoundRect(ctx, x, y, width, height, radius, fill, stroke) {
+      if (typeof radius === 'number') {
+        radius = { tl: radius, tr: radius, br: radius, bl: radius };
+      }
+      ctx.beginPath();
+      ctx.moveTo(x + radius.tl, y);
+      ctx.lineTo(x + width - radius.tr, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+      ctx.lineTo(x + width, y + height - radius.br);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+      ctx.lineTo(x + radius.bl, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+      ctx.lineTo(x, y + radius.tl);
+      ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+      ctx.closePath();
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+    }
+
+    function drawCornerDiamonds(ctx, x, y, w, h) {
+      ctx.save();
+      ctx.fillStyle = "#d97706";
+      const corners = [
+        { cx: x + 8, cy: y + 8 },
+        { cx: x + w - 8, cy: y + 8 },
+        { cx: x + 8, cy: y + h - 8 },
+        { cx: x + w - 8, cy: y + h - 8 }
+      ];
+      corners.forEach(c => {
+        ctx.beginPath();
+        ctx.moveTo(c.cx, c.cy - 7);
+        ctx.lineTo(c.cx + 7, c.cy);
+        ctx.lineTo(c.cx, c.cy + 7);
+        ctx.lineTo(c.cx - 7, c.cy);
+        ctx.closePath();
+        ctx.fill();
+      });
+      ctx.restore();
+    }
+
+    function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(/\s+/);
+      let line = '';
+      let currentY = y;
+
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + (line ? ' ' : '') + words[n];
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+          ctx.fillText(line, x, currentY);
+          line = words[n];
+          currentY += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      if (line) {
+        ctx.fillText(line, x, currentY);
+        currentY += lineHeight;
+      }
+      return currentY;
+    }
+
     function shareDailySuvichar() {
       const item = DAILY_SUVICHAR_LIST[currentSuvicharIndex >= 0 ? currentSuvicharIndex : (new Date().getDate() - 1) % DAILY_SUVICHAR_LIST.length];
-      const text = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author}*\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📱 आपसी एकता, मासिक अंशदान एवं पारिवारिक सहयोग`;
-      shareCustomText(text, "आज का सुविचार");
+      showToast("सुविचार फोटो तैयार की जा रही है...", "info");
+
+      try {
+        const dataUrl = generateSuvicharCardDataUrl(item);
+        const caption = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author}*\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📲 परिवार ऐप डाउनलोड करें:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+
+        if (window.AndroidApp && typeof window.AndroidApp.shareImage === 'function') {
+          window.AndroidApp.shareImage(dataUrl, caption);
+          return;
+        }
+
+        // Web Share API fallback
+        if (navigator.share && navigator.canShare) {
+          fetch(dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+              const file = new File([blob], `suvichar_${Date.now()}.jpg`, { type: 'image/jpeg' });
+              if (navigator.canShare({ files: [file] })) {
+                navigator.share({
+                  files: [file],
+                  text: caption
+                }).catch(() => {});
+              } else {
+                fallbackDownloadAndShareImage(dataUrl, caption);
+              }
+            })
+            .catch(() => fallbackDownloadAndShareImage(dataUrl, caption));
+          return;
+        }
+
+        fallbackDownloadAndShareImage(dataUrl, caption);
+      } catch (e) {
+        console.error("Suvichar photo share error:", e);
+        const text = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author}*\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*`;
+        shareCustomText(text, "आज का सुविचार");
+      }
+    }
+
+    function fallbackDownloadAndShareImage(dataUrl, caption) {
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `Yuva_Shakti_Suvichar_${new Date().toISOString().slice(0, 10)}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("सुविचार फोटो डाउनलोड हो गई है! अब व्हाट्सएप पर भेजें।", "success");
+      setTimeout(() => {
+        openWhatsAppUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(caption)}`);
+      }, 800);
     }
 
     function checkDailySuvicharOnAppOpen() {
@@ -4359,6 +4637,13 @@
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
       }
+
+      // Show top toggle actions only on first page ('members'), hide on all other pages
+      const headerActions = document.getElementById('mainHeaderActions');
+      if (headerActions) {
+        headerActions.style.display = (tabName === 'members') ? 'flex' : 'none';
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
