@@ -61,58 +61,61 @@
       line-height: 1.5;
     }
 
-    /* Header */
+    /* Header - iOS Liquid Glass */
     header {
-      background: linear-gradient(135deg, rgba(30, 58, 138, 0.94) 0%, rgba(0, 122, 255, 0.9) 100%);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      color: white;
-      padding: 12px 16px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.90) 0%, rgba(240, 246, 255, 0.82) 50%, rgba(255, 255, 255, 0.88) 100%);
+      backdrop-filter: blur(32px) saturate(210%);
+      -webkit-backdrop-filter: blur(32px) saturate(210%);
+      color: var(--text-main);
+      padding: 10px 14px;
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.95);
+      outline: 1px solid rgba(37, 99, 235, 0.15);
+      box-shadow: 0 10px 30px -4px rgba(15, 23, 42, 0.10),
+                  0 4px 14px rgba(37, 99, 235, 0.08),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.9);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .header-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     .header-logo {
-      width: 40px;
-      height: 40px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #1e3a8a, #0284c7);
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 18px;
+      backdrop-filter: blur(6px);
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
     }
 
-    .header-text h1 {
-      font-size: 16px;
-      font-weight: 700;
+    .header-center-info {
+      text-align: center;
+      flex: 1;
+      padding: 0 6px;
+    }
+
+    .header-center-info h1 {
+      font-size: 16.5px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin: 0;
       letter-spacing: -0.2px;
+      color: #1e3a8a;
     }
 
-    .header-status-badge {
-      font-size: 11px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255, 255, 255, 0.18);
-      padding: 1px 8px;
-      border-radius: 12px;
-      margin-top: 2px;
-      font-weight: 500;
+    .header-center-info .header-subtitle {
+      font-size: 11.5px;
+      color: #ea580c;
+      font-weight: 800;
+      margin-top: 1px;
+      letter-spacing: 0.3px;
     }
 
     .header-actions {
@@ -211,15 +214,20 @@
       white-space: nowrap;
     }
 
-    /* 🌙 Amavasya Live Countdown Card */
+    /* 🌙 Amavasya Live Countdown Card - Slim iOS Liquid Glass */
     .amavasya-card {
-      background: var(--night-gradient);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.90) 0%, rgba(15, 23, 42, 0.95) 55%, rgba(30, 27, 75, 0.92) 100%);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
       color: white;
-      border-radius: var(--radius);
-      padding: 16px 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.35),
+                  0 4px 10px rgba(99, 102, 241, 0.15),
+                  inset 0 1px 1.5px rgba(255, 255, 255, 0.3);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      outline: 1px solid rgba(99, 102, 241, 0.25);
       position: relative;
       overflow: hidden;
     }
@@ -227,11 +235,11 @@
     .amavasya-card::before {
       content: '';
       position: absolute;
-      top: -30px;
-      right: -30px;
-      width: 120px;
-      height: 120px;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0) 70%);
+      top: -25px;
+      right: -25px;
+      width: 90px;
+      height: 90px;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.22) 0%, rgba(251, 191, 36, 0) 70%);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -240,34 +248,35 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 6px;
     }
 
     .amavasya-title {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .amavasya-title i {
       color: #fbbf24;
-      font-size: 18px;
+      font-size: 15px;
     }
 
     .amavasya-title h2 {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 800;
       letter-spacing: -0.2px;
+      color: #f8fafc;
     }
 
     .amavasya-badge {
-      background: rgba(251, 191, 36, 0.18);
+      background: rgba(251, 191, 36, 0.15);
       color: #fef08a;
       border: 1px solid rgba(251, 191, 36, 0.35);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 12px;
+      padding: 2px 7px;
+      border-radius: 10px;
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -276,62 +285,66 @@
     .countdown-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin: 12px 0 14px 0;
+      gap: 6px;
+      margin: 6px 0 8px 0;
     }
 
     .countdown-box {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 10px;
-      padding: 10px 4px;
+      padding: 6px 2px;
       text-align: center;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
     .countdown-val {
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 800;
-      color: #fbbf24;
-      font-family: 'Inter', monospace;
+      color: #fef08a;
+      font-family: 'Inter', -apple-system, monospace;
       line-height: 1.1;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     }
 
     .countdown-lbl {
-      font-size: 10px;
+      font-size: 9px;
       color: #cbd5e1;
-      font-weight: 600;
-      margin-top: 3px;
+      font-weight: 700;
+      margin-top: 2px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
 
     .amavasya-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      font-size: 12px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 11px;
     }
 
     .amavasya-subtext {
-      color: #94a3b8;
-      font-size: 11px;
+      color: #cbd5e1;
+      font-size: 10px;
     }
 
     .btn-quick-contrib {
-      background: #fbbf24;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
       color: #78350f;
       border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 8px;
+      font-size: 10.5px;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      box-shadow: 0 2px 5px rgba(245, 158, 11, 0.3);
       transition: transform 0.15s;
     }
 
@@ -340,19 +353,19 @@
     }
 
     .btn-quick-phonepe {
-      background: linear-gradient(135deg, #5f259f 0%, #7b3eb8 100%);
+      background: linear-gradient(135deg, #7c3aed 0%, #5f259f 100%);
       color: white;
       border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 8px;
+      font-size: 10.5px;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      box-shadow: 0 2px 5px rgba(95, 37, 159, 0.3);
       transition: transform 0.15s;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .btn-quick-phonepe:active {
@@ -1148,7 +1161,16 @@
       --border-color: #1e293b;
     }
     body.dark-theme header {
-      background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.88) 100%);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.20);
+      outline: 1px solid rgba(59, 130, 246, 0.35);
+      color: white;
+    }
+    body.dark-theme .header-center-info h1 {
+      color: #f8fafc !important;
+    }
+    body.dark-theme .header-center-info .header-subtitle {
+      color: #fbbf24 !important;
     }
     body.dark-theme .nav-bar {
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.94) 0%, rgba(15, 23, 42, 0.88) 100%);
@@ -1883,31 +1905,21 @@
   <!-- Toast Notification Container -->
   <div id="toastContainer"></div>
 
-  <!-- Header -->
+  <!-- Header - iOS Liquid Glass Centered -->
   <header>
-    <div class="header-info">
-      <div class="header-logo" style="overflow:hidden; padding:2px; background:rgba(255,255,255,0.12);">
-        <img src="ic_launcher.png" alt="युवा शक्ति ग्रुप" style="width:100%; height:100%; border-radius:8px; object-fit:cover;" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
-        <i class="fa-solid fa-people-roof" style="display:none;"></i>
-      </div>
-      <div class="header-text">
-        <h1 style="font-size:16px; font-weight:800; line-height:1.2; margin:0; letter-spacing:-0.2px;" id="appTitleText" data-i18n="app_title">युवा शक्ति ग्रुप</h1>
-        <div style="font-size:11px; color:#fef08a; font-weight:700; margin-top:1px; letter-spacing:0.2px;" id="appSubTitleText" data-i18n="app_subtitle">भाटी परिवार कुचेरा</div>
+    <div style="width:40px; display:flex; align-items:center;">
+      <div class="header-logo" style="overflow:hidden; padding:2px;">
+        <img src="ic_launcher.png" alt="युवा शक्ति ग्रुप" style="width:100%; height:100%; border-radius:9px; object-fit:cover;" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
+        <i class="fa-solid fa-people-roof" style="display:none; color:white; font-size:16px;"></i>
       </div>
     </div>
-    <div class="header-actions" id="mainHeaderActions">
-      <!-- Direct APK Share via WhatsApp -->
-      <button class="auth-btn" onclick="shareAppDirectly()" style="background:#ea580c; border-color:#f97316;" title="APK व्हाट्सएप पर शेयर करें">
-        <i class="fa-solid fa-share-nodes"></i>
-        <span data-i18n="btn_share">शेयर</span>
-      </button>
-      <!-- Official WhatsApp Group Link Button -->
-      <a href="https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh" target="_blank" class="auth-btn" style="background:#16a34a; border-color:#22c55e; text-decoration:none;" title="आधिकारिक व्हाट्सएप ग्रुप से जुड़ें">
-        <i class="fa-brands fa-whatsapp"></i>
-        <span data-i18n="btn_group">ग्रुप</span>
-      </a>
+    <div class="header-center-info">
+      <h1 id="appTitleText" data-i18n="app_title">युवा शक्ति ग्रुप</h1>
+      <div class="header-subtitle" id="appSubTitleText" data-i18n="app_subtitle">भाटी परिवार कुचेरा</div>
+    </div>
+    <div class="header-actions" id="mainHeaderActions" style="min-width:40px; display:flex; justify-content:flex-end;">
       <!-- Member Login Button (hidden when logged in) -->
-      <button class="auth-btn" id="loginBtn" onclick="openLoginModal()">
+      <button class="auth-btn" id="loginBtn" onclick="openLoginModal()" style="border-radius:10px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; border:none; padding:5px 8px; font-weight:700; font-size:10.5px; box-shadow:0 2px 6px rgba(37,99,235,0.28);">
         <i class="fa-solid fa-right-to-bracket"></i>
         <span data-i18n="btn_login">लॉगिन</span>
       </button>
@@ -2042,18 +2054,80 @@
             <i class="fa-solid fa-arrow-trend-down" style="font-size:13px;"></i>
             <span>कुल खर्च</span>
           </div>
-          <div id="totalExpenseAmount" style="font-size:23px; font-weight:900; color:#b91c1c; letter-spacing:-0.5px;">₹0</div>
+          <div id="totalExpenseAmount" style="font-size:22px; font-weight:900; color:#b91c1c; letter-spacing:-0.5px;">₹0</div>
           <div style="font-size:10px; color:#ef4444; margin-top:3px; font-weight:600;">सामग्री व व्यवस्था व्यय</div>
         </div>
 
-        <!-- Side 2: बाकी बचे पैसे -->
-        <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(5, 150, 105, 0.05) 100%); border:1px solid rgba(16, 185, 129, 0.3); border-radius:18px; padding:14px 10px; text-align:center; box-shadow:0 4px 16px rgba(16,185,129,0.08);">
+        <!-- Side 2: बाकी बचे पैसे (पूर्व शेष संपादन योग्य) -->
+        <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(5, 150, 105, 0.05) 100%); border:1px solid rgba(16, 185, 129, 0.3); border-radius:18px; padding:14px 10px; text-align:center; box-shadow:0 4px 16px rgba(16,185,129,0.08); position:relative;">
           <div style="font-size:12px; font-weight:700; color:#059669; display:flex; align-items:center; justify-content:center; gap:5px; margin-bottom:6px;">
             <i class="fa-solid fa-vault" style="font-size:13px;"></i>
             <span>बाकी बचे पैसे</span>
+            <button id="btnEditOpeningBalance" onclick="promptEditOpeningBalance()" style="display:none; background:rgba(5,150,105,0.18); border:none; border-radius:50%; width:20px; height:20px; color:#047857; font-size:10px; cursor:pointer;" title="पूर्व शेष राशि बदलें (Admin)">
+              <i class="fa-solid fa-pen"></i>
+            </button>
           </div>
-          <div id="remainingBalanceAmount" style="font-size:23px; font-weight:900; color:#047857; letter-spacing:-0.5px;">₹0</div>
-          <div id="expenseFundSub" style="font-size:10px; color:#059669; margin-top:3px; font-weight:600;">कुल जमा: ₹0</div>
+          <div id="remainingBalanceAmount" style="font-size:22px; font-weight:900; color:#047857; letter-spacing:-0.5px;">₹0</div>
+          <div id="expenseFundSub" style="font-size:9.5px; color:#059669; margin-top:3px; font-weight:600;">पूर्व शेष: ₹0 | कुल जमा: ₹0</div>
+        </div>
+      </div>
+
+      <!-- 🚩 गणेश विसर्जन का खर्च Collapsible Bar -->
+      <div class="card ios-glass-card" id="ganeshVisarjanCard" style="margin-bottom:12px; border-radius:16px; border:1.5px solid rgba(245, 158, 11, 0.45); background:linear-gradient(135deg, rgba(254, 243, 199, 0.65) 0%, rgba(255, 251, 235, 0.45) 100%); padding:0; overflow:hidden;">
+        <div onclick="toggleGaneshVisarjanSection()" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding:11px 14px;">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <div style="width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg, #f59e0b, #d97706); display:flex; align-items:center; justify-content:center; color:white; font-size:16px; box-shadow:0 3px 8px rgba(245,158,11,0.3); flex-shrink:0;">
+              <i class="fa-solid fa-om"></i>
+            </div>
+            <div>
+              <div style="font-weight:800; font-size:13.5px; color:#78350f; display:flex; align-items:center; gap:5px;">
+                <span>गणेश विसर्जन का खर्च</span>
+                <span style="font-size:9.5px; background:#fde68a; color:#92400e; padding:1px 6px; border-radius:10px; font-weight:700;">विशेष आयोजन</span>
+              </div>
+              <div style="font-size:10.5px; color:#b45309; margin-top:1px;">क्लिक करके विसर्जन व्यवस्था व्यय विवरण देखें</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="ios-value-badge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a; font-weight:800; font-size:12px;" id="ganeshTotalBadge">₹0</span>
+            <i class="fa-solid fa-chevron-down" id="ganeshChevron" style="color:#d97706; transition:transform 0.25s; font-size:13px;"></i>
+          </div>
+        </div>
+
+        <!-- Collapsible Ganesh Details -->
+        <div id="ganeshVisarjanDetails" style="display:none; padding:12px 14px 14px; border-top:1px dashed #fcd34d; background:rgba(255, 255, 255, 0.75);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+            <span style="font-size:11.5px; font-weight:700; color:#78350f;">
+              <i class="fa-solid fa-list-check"></i> विसर्जन खर्च सूची (<span id="ganeshItemCount">0 मद</span>)
+            </span>
+            <button id="btnAddGaneshExpenseBtn" onclick="openExpenseModal('ganesh')" class="btn-main" style="display:none; background:#d97706; padding:6px 12px; font-size:11px; width:auto; border-radius:10px; font-weight:700;">
+              <i class="fa-solid fa-plus"></i> विसर्जन खर्च जोड़ें
+            </button>
+          </div>
+
+          <div class="table-container" style="border-radius:10px; border:1px solid #fde68a; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:11.5px; background:white;">
+              <thead>
+                <tr style="background:#fef3c7; border-bottom:1.5px solid #fde68a;">
+                  <th style="padding:7px 5px; text-align:center; width:24px;">#</th>
+                  <th style="padding:7px 6px; white-space:nowrap;">दिनांक</th>
+                  <th style="padding:7px 8px;">सामग्री विवरण</th>
+                  <th style="padding:7px 6px; text-align:right; white-space:nowrap;">खर्च (₹)</th>
+                  <th style="padding:7px 6px; white-space:nowrap;">खर्चकर्ता</th>
+                  <th id="thGaneshAction" style="padding:7px 6px; text-align:center; display:none;">एक्शन</th>
+                </tr>
+              </thead>
+              <tbody id="ganeshExpensesTableBody">
+                <tr><td colspan="6" style="text-align:center; padding:14px; color:#94a3b8;">विवरण लोड हो रहा है...</td></tr>
+              </tbody>
+              <tfoot style="background:#fffbeb; font-weight:700; border-top:1.5px solid #fde68a;">
+                <tr>
+                  <td colspan="3" style="padding:8px 6px; text-align:right; color:#78350f;">गणेश विसर्जन कुल योग:</td>
+                  <td id="ganeshTotalFooter" style="padding:8px 6px; text-align:right; color:#b45309; font-weight:900;">₹0</td>
+                  <td colspan="2"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -2303,7 +2377,7 @@
             </div>
             <span data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span>
           </span>
-          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.3.0</span>
+          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.3.1</span>
         </div>
         <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between;">
@@ -2316,7 +2390,7 @@
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.3.0 (नवीनतम रिलीज)</strong>
+            <strong style="color:var(--text-main);">v4.3.1 (नवीनतम रिलीज)</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>क्लाउड डेटाबेस:</span>
@@ -2328,7 +2402,31 @@
         </button>
       </div>
 
-      <!-- 2. सामान्य प्राथमिकताएं (भाषा एवं थीम मोडल पॉपअप) -->
+      <!-- 2. ऐप शेयर एवं व्हाट्सएप कम्युनिटी (Moved from Header) -->
+      <div class="card ios-glass-card" style="border:1.5px solid rgba(22, 163, 74, 0.3); background:linear-gradient(135deg, rgba(22, 163, 74, 0.08) 0%, rgba(34, 197, 94, 0.02) 100%);">
+        <div class="card-title">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <div class="ios-icon-tile ios-icon-green" style="width:28px; height:28px; font-size:13px; border-radius:8px;">
+              <i class="fa-solid fa-share-nodes"></i>
+            </div>
+            <span>ऐप शेयर एवं व्हाट्सएप कम्युनिटी</span>
+          </span>
+          <span class="ios-value-badge ios-value-green">शेयर व ग्रुप</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+          परिवारजनों को युवा शक्ति ग्रुप ऐप भेजें अथवा आधिकारिक व्हाट्सएप ग्रुप से जुड़ें।
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <button class="btn-main" onclick="shareAppDirectly()" style="background:#ea580c; border-radius:14px; font-size:12px; padding:11px; font-weight:700; box-shadow:0 3px 10px rgba(234,88,12,0.25);">
+            <i class="fa-solid fa-share-nodes"></i> <span>ऐप शेयर करें</span>
+          </button>
+          <a href="https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh" target="_blank" class="btn-main" style="background:#16a34a; border-radius:14px; font-size:12px; padding:11px; font-weight:700; text-decoration:none; box-shadow:0 3px 10px rgba(22,163,74,0.25);">
+            <i class="fa-brands fa-whatsapp"></i> <span>व्हाट्सएप ग्रुप</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. सामान्य प्राथमिकताएं (भाषा एवं थीम मोडल पॉपअप) -->
       <div class="card">
         <div class="card-title">
           <span style="display:flex; align-items:center; gap:8px;">
@@ -2782,8 +2880,24 @@
       <div style="font-size:12px; color:#64748b; font-weight:600; margin-bottom:12px;">🚩 भाटी परिवार • कुचेरा</div>
 
       <!-- Payment Status Card -->
-      <div id="profileModalPaymentBanner" style="border-radius:10px; padding:10px 12px; margin-bottom:14px; text-align:left; border:1px solid #cbd5e1;">
+      <div id="profileModalPaymentBanner" style="border-radius:10px; padding:10px 12px; margin-bottom:12px; text-align:left; border:1px solid #cbd5e1;">
         <!-- Filled dynamically -->
+      </div>
+
+      <!-- Total Lifetime Contribution Stat Card -->
+      <div class="ios-glass-card" id="profileModalLifetimeCard" style="background:linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(30, 58, 138, 0.03) 100%); border:1.5px solid rgba(37, 99, 235, 0.22); border-radius:14px; padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="text-align:left;">
+          <div style="font-size:11px; font-weight:700; color:#1e40af; display:flex; align-items:center; gap:5px;">
+            <i class="fa-solid fa-coins" style="color:#2563eb;"></i> <span>कुल जमा राशि (अब तक)</span>
+          </div>
+          <div id="profileModalLifetimeContribVal" style="font-size:19px; font-weight:900; color:#1e3a8a; margin-top:2px;">₹0</div>
+          <div style="font-size:9.5px; color:#64748b;" id="profileModalLifetimeSub">अक्टूबर अमावस्या सहित कुल योगदान</div>
+        </div>
+        <div id="adminLifetimeContribControl" style="display:none;">
+          <button type="button" onclick="openPastMonthContribModal(currentProfileModalMemberId)" class="btn-tool" style="font-size:11px; padding:6px 10px; border-radius:10px; border-color:#93c5fd; color:#1d4ed8; font-weight:700;">
+            <i class="fa-solid fa-calendar-plus"></i> पिछला बकाया जोड़ें
+          </button>
+        </div>
       </div>
 
       <!-- Quick Action Buttons: Call, WhatsApp, Instagram -->
@@ -3019,6 +3133,14 @@
         </select>
       </div>
 
+      <!-- Ganesh Visarjan Expense Tag Checkbox -->
+      <div class="form-group" style="margin-bottom:12px; background:#fffbeb; padding:9px 12px; border-radius:12px; border:1.5px solid #fde68a;">
+        <label style="font-weight:700; font-size:12.5px; margin-bottom:0; display:flex; align-items:center; gap:8px; cursor:pointer; color:#78350f;">
+          <input type="checkbox" id="expenseIsGanesh" style="width:18px; height:18px; accent-color:#d97706; cursor:pointer;">
+          <span>🚩 यह खर्च <strong>'गणेश विसर्जन'</strong> का है</span>
+        </label>
+      </div>
+
       <div style="display:flex; gap:10px; margin-top:16px;">
         <button class="btn-main" onclick="saveExpenseRecord()" style="background:#dc2626; flex:1; border-radius:12px;">
           <i class="fa-solid fa-floppy-disk"></i> <span id="expenseSaveBtnText">खर्च सहेजें</span>
@@ -3091,10 +3213,155 @@
     </div>
   </div>
 
+  <!-- 📩 Payment Request Modal (सदस्य द्वारा भुगतान सत्यापन अनुरोध) -->
+  <div id="paymentRequestModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this) closePaymentRequestModal()">
+    <div class="modal-content ios-glass-card" style="max-width:420px; width:92%; max-height:90vh; overflow-y:auto; border-radius:24px; padding:20px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        <div style="font-weight:800; font-size:16px; color:#16a34a; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>भुगतान सत्यापन अनुरोध</span>
+        </div>
+        <button onclick="closePaymentRequestModal()" style="background:rgba(0,0,0,0.05); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; color:var(--text-color); display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:10px 12px; font-size:11.5px; color:#166534; margin-bottom:14px; line-height:1.5;">
+        <strong>नमस्ते!</strong> यदि आपने PhonePe अथवा किसी अन्य माध्यम से अंशदान जमा कर दिया है और ऐप में अभी तक 'बाकी' दिख रहा है, तो आप यहां से संचालक जी को सत्यापन हेतु अनुरोध भेज सकते हैं।
+      </div>
+
+      <input type="hidden" id="payReqMemberId" value="">
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">सदस्य का नाम</label>
+        <input type="text" id="payReqMemberName" readonly style="background:#f1f5f9; font-weight:700;">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">मोबाइल नंबर</label>
+        <input type="text" id="payReqMemberPhone" readonly style="background:#f1f5f9;">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">जमा की गई राशि (₹)</label>
+        <input type="number" id="payReqAmount" value="100" style="font-size:16px; font-weight:700; color:#16a34a;">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">भुगतान दिनांक</label>
+        <div style="display:flex; gap:6px;">
+          <input type="date" id="payReqDate" style="flex:1;">
+          <button type="button" onclick="setTodayDate('payReqDate')" style="padding:0 12px; background:#e2e8f0; border:none; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer;">आज</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:14px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">टिप्पणी / संदर्भ (Note)</label>
+        <input type="text" id="payReqNote" placeholder="उदा. PhonePe से 100 भेजे हैं...">
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-main" onclick="submitPaymentRequestWhatsApp()" style="background:#16a34a; border-radius:14px; padding:12px; font-size:13px; font-weight:700; box-shadow:0 4px 14px rgba(22,163,74,0.3);">
+          <i class="fa-brands fa-whatsapp" style="font-size:17px;"></i> <span>व्हाट्सएप पर संचालक जी को भेजें</span>
+        </button>
+        <button class="btn-main" onclick="submitPaymentRequestInApp()" style="background:#2563eb; border-radius:14px; padding:11px; font-size:12px; font-weight:700;">
+          <i class="fa-solid fa-cloud-arrow-up"></i> <span>ऐप में अनुरोध सबमिट करें</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔔 Admin Pending Payment Requests Modal -->
+  <div id="pendingRequestsModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this) closePendingRequestsModal()">
+    <div class="modal-content ios-glass-card" style="max-width:460px; width:94%; max-height:90vh; overflow-y:auto; border-radius:24px; padding:20px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        <div style="font-weight:800; font-size:16px; color:#d97706; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-bell"></i>
+          <span>लंबित भुगतान सत्यापन अनुरोध</span>
+        </div>
+        <button onclick="closePendingRequestsModal()" style="background:rgba(0,0,0,0.05); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; color:var(--text-color); display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="pendingRequestsContainer" style="display:flex; flex-direction:column; gap:10px;">
+        <div style="text-align:center; padding:20px; color:#64748b; font-size:12px;">
+          अनुरोध लोड हो रहे हैं...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📅 Admin Past Month / October Amavasya Contribution Modal -->
+  <div id="pastMonthContribModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this) closePastMonthContribModal()">
+    <div class="modal-content ios-glass-card" style="max-width:440px; width:92%; max-height:90vh; overflow-y:auto; border-radius:24px; padding:20px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        <div style="font-weight:800; font-size:16px; color:#1d4ed8; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>अक्टूबर / पूर्व माह का अंशदान दर्ज करें</span>
+        </div>
+        <button onclick="closePastMonthContribModal()" style="background:rgba(0,0,0,0.05); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; color:var(--text-color); display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="pastContribMemberId" value="">
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">सदस्य का नाम</label>
+        <input type="text" id="pastContribMemberName" readonly style="background:#f1f5f9; font-weight:700;">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">माह / अवसर चुनें</label>
+        <select id="pastContribEventSelect" onchange="handlePastContribEventChange()" style="width:100%; padding:10px; font-size:13px; font-weight:600; border-radius:12px; border:1px solid #cbd5e1;">
+          <option value="अक्टूबर 2026 अमावस्या अंशदान">🌙 अक्टूबर 2026 अमावस्या अंशदान</option>
+          <option value="सितंबर 2026 अमावस्या अंशदान">🌙 सितंबर 2026 अमावस्या अंशदान</option>
+          <option value="अगस्त 2026 अमावस्या अंशदान">🌙 अगस्त 2026 अमावस्या अंशदान</option>
+          <option value="पूर्व बकाया अंशदान">📜 पूर्व बकाया अंशदान</option>
+          <option value="विशेष सहयोग अंशदान">✨ विशेष सहयोग अंशदान</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">जमा राशि (₹)</label>
+        <input type="number" id="pastContribAmount" value="100" style="font-size:16px; font-weight:700; color:#1d4ed8;">
+        <div class="chips-group" style="margin-top:6px;">
+          <button type="button" class="chip-btn" onclick="document.getElementById('pastContribAmount').value=100">₹100</button>
+          <button type="button" class="chip-btn" onclick="document.getElementById('pastContribAmount').value=200">₹200</button>
+          <button type="button" class="chip-btn" onclick="document.getElementById('pastContribAmount').value=500">₹500</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">माध्यम</label>
+        <select id="pastContribMethod">
+          <option value="PhonePe / UPI">PhonePe / UPI</option>
+          <option value="नकद">नकद (Cash)</option>
+          <option value="बैंक ट्रांसफर">बैंक ट्रांसफर</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom:14px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">दिनांक (Past Date)</label>
+        <input type="date" id="pastContribDate" value="2026-10-31">
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn-main" onclick="savePastMonthContributionRecord()" style="background:#1d4ed8; flex:1; border-radius:12px;">
+          <i class="fa-solid fa-floppy-disk"></i> <span>जमा में सुरक्षित करें</span>
+        </button>
+        <button type="button" onclick="closePastMonthContribModal()" style="flex:0.6; background:rgba(0,0,0,0.06); border:none; border-radius:12px; font-weight:600; cursor:pointer; color:var(--text-color);">
+          रद्द करें
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.3.0";
+    const APP_VERSION = "4.3.1";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4309,17 +4576,17 @@
       if (modal) modal.style.display = "none";
     }
 
-    // 🌟 Suvichar Image Card Generator (Canvas based Photo Generation)
+    // 🌟 Suvichar Image Card Generator (Compact & Aesthetic 720x720 Photo Card)
     function generateSuvicharCardDataUrl(item) {
-      const width = 1080;
-      const height = 1350;
+      const width = 720;
+      const height = 720;
       const canvas = document.createElement("canvas");
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext("2d");
       if (!ctx) return null;
 
-      // 1. Background Gradient - Rich warm golden / saffron devotional theme
+      // 1. Warm saffron & golden devotional background gradient
       const bgGrad = ctx.createLinearGradient(0, 0, width, height);
       bgGrad.addColorStop(0, "#fffbf2");
       bgGrad.addColorStop(0.35, "#fef3c7");
@@ -4330,149 +4597,125 @@
 
       // Subtle Background Watermark Circles
       ctx.save();
-      ctx.fillStyle = "rgba(245, 158, 11, 0.06)";
+      ctx.fillStyle = "rgba(245, 158, 11, 0.07)";
       ctx.beginPath();
-      ctx.arc(120, 160, 240, 0, Math.PI * 2);
+      ctx.arc(80, 100, 150, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(width - 100, height - 160, 300, 0, Math.PI * 2);
+      ctx.arc(width - 60, height - 80, 180, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
 
-      // 2. Ornate Double Golden Borders
-      // Outer border
+      // 2. Ornate Golden Borders
       ctx.strokeStyle = "#d97706";
-      ctx.lineWidth = 6;
-      canvasRoundRect(ctx, 36, 36, width - 72, height - 72, 32, false, true);
+      ctx.lineWidth = 4;
+      canvasRoundRect(ctx, 22, 22, width - 44, height - 44, 22, false, true);
 
-      // Inner border
       ctx.strokeStyle = "#f59e0b";
-      ctx.lineWidth = 2;
-      canvasRoundRect(ctx, 48, 48, width - 96, height - 96, 24, false, true);
+      ctx.lineWidth = 1.5;
+      canvasRoundRect(ctx, 30, 30, width - 60, height - 60, 16, false, true);
 
-      // Corner Accents (Small golden diamonds)
-      drawCornerDiamonds(ctx, 48, 48, width - 96, height - 96);
+      drawCornerDiamonds(ctx, 30, 30, width - 60, height - 60);
 
       // 3. Top Group Branding Pill
-      const pillWidth = 740;
-      const pillHeight = 64;
+      const pillWidth = 520;
+      const pillHeight = 44;
       const pillX = (width - pillWidth) / 2;
-      const pillY = 90;
+      const pillY = 46;
 
       ctx.save();
-      ctx.shadowColor = "rgba(234, 88, 12, 0.35)";
-      ctx.shadowBlur = 16;
-      ctx.shadowOffsetY = 6;
+      ctx.shadowColor = "rgba(234, 88, 12, 0.3)";
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetY = 4;
       const pillGrad = ctx.createLinearGradient(pillX, pillY, pillX + pillWidth, pillY + pillHeight);
       pillGrad.addColorStop(0, "#ea580c");
       pillGrad.addColorStop(1, "#c2410c");
       ctx.fillStyle = pillGrad;
-      canvasRoundRect(ctx, pillX, pillY, pillWidth, pillHeight, 32, true, false);
+      canvasRoundRect(ctx, pillX, pillY, pillWidth, pillHeight, 22, true, false);
       ctx.restore();
 
       ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 30px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.font = "bold 20px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("🚩 युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) 🚩", width / 2, pillY + pillHeight / 2);
 
-      // Date Sub-Pill
+      // Date Sub-title
       const todayDateStr = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
       ctx.fillStyle = "#9a3412";
-      ctx.font = "600 24px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      ctx.fillText(`☀️ ${todayDateStr} | वि. संवत 2083`, width / 2, pillY + pillHeight + 36);
+      ctx.font = "600 15px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.fillText(`☀️ ${todayDateStr} | आज का प्रेरक विचार`, width / 2, pillY + pillHeight + 20);
 
-      // 4. Center Circular Icon with Quote Mark
-      const iconY = 280;
+      // 4. Center Quote Card
+      const cardX = 48;
+      const cardY = 136;
+      const cardW = width - 96;
+      const cardH = 468;
+
       ctx.save();
-      ctx.shadowColor = "rgba(245, 158, 11, 0.45)";
-      ctx.shadowBlur = 24;
+      ctx.shadowColor = "rgba(180, 83, 9, 0.16)";
+      ctx.shadowBlur = 20;
       ctx.shadowOffsetY = 8;
-      const iconGrad = ctx.createLinearGradient(width / 2 - 50, iconY - 50, width / 2 + 50, iconY + 50);
-      iconGrad.addColorStop(0, "#f59e0b");
-      iconGrad.addColorStop(1, "#d97706");
-      ctx.fillStyle = iconGrad;
-      ctx.beginPath();
-      ctx.arc(width / 2, iconY, 54, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+      canvasRoundRect(ctx, cardX, cardY, cardW, cardH, 22, true, false);
       ctx.restore();
 
-      // White Quote mark inside circle
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 64px sans-serif";
+      ctx.strokeStyle = "#fde68a";
+      ctx.lineWidth = 2;
+      canvasRoundRect(ctx, cardX, cardY, cardW, cardH, 22, false, true);
+
+      // Quote symbol inside
+      ctx.fillStyle = "#d97706";
+      ctx.font = "bold 44px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("❝", width / 2, iconY + 6);
+      ctx.fillText("❝", width / 2, cardY + 36);
 
-      // Title below circle
-      ctx.fillStyle = "#b45309";
-      ctx.font = "800 36px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      ctx.fillText("✨ आज का प्रेरक सुविचार ✨", width / 2, iconY + 95);
-
-      // 5. White Translucent Main Quote Card
-      const cardX = 90;
-      const cardY = 430;
-      const cardW = width - 180;
-      const cardH = 650;
-
-      ctx.save();
-      ctx.shadowColor = "rgba(180, 83, 9, 0.18)";
-      ctx.shadowBlur = 28;
-      ctx.shadowOffsetY = 12;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.94)";
-      canvasRoundRect(ctx, cardX, cardY, cardW, cardH, 32, true, false);
-      ctx.restore();
-
-      // Card border
-      ctx.strokeStyle = "#fde68a";
-      ctx.lineWidth = 3;
-      canvasRoundRect(ctx, cardX, cardY, cardW, cardH, 32, false, true);
-
-      // Render Quote Text wrapped nicely
+      // Render Quote Text
       const quoteText = `“${item.quote}”`;
-      let quoteFontSize = 42;
-      if (quoteText.length > 140) quoteFontSize = 36;
-      if (quoteText.length > 220) quoteFontSize = 32;
+      let quoteFontSize = 26;
+      if (quoteText.length > 120) quoteFontSize = 23;
+      if (quoteText.length > 200) quoteFontSize = 20;
 
       ctx.fillStyle = "#0f172a";
       ctx.font = `600 ${quoteFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
 
-      const maxTextWidth = cardW - 120;
+      const maxTextWidth = cardW - 70;
       const lineHeight = Math.round(quoteFontSize * 1.55);
       const startY = cardY + 70;
       const lastY = drawWrappedText(ctx, quoteText, width / 2, startY, maxTextWidth, lineHeight);
 
-      // Divider line inside quote card
-      const divY = Math.max(lastY + 35, cardY + cardH - 140);
+      // Divider line
+      const divY = Math.max(lastY + 24, cardY + cardH - 100);
       ctx.strokeStyle = "#fed7aa";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([8, 6]);
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([6, 5]);
       ctx.beginPath();
-      ctx.moveTo(cardX + 80, divY);
-      ctx.lineTo(cardX + cardW - 80, divY);
+      ctx.moveTo(cardX + 50, divY);
+      ctx.lineTo(cardX + cardW - 50, divY);
       ctx.stroke();
       ctx.setLineDash([]);
 
       // Author / Source
       ctx.fillStyle = "#ea580c";
-      ctx.font = "bold 32px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.font = "bold 22px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(`🪶 ${item.author || "युवा शक्ति विचार वाटिका"}`, width / 2, divY + 50);
+      ctx.fillText(`🪶 ${item.author || "युवा शक्ति विचार वाटिका"}`, width / 2, divY + 38);
 
-      // 6. Bottom Devotional Banner & Group Tag
-      const footerY = cardY + cardH + 50;
+      // 5. Bottom Devotional Banner
+      const footerY = cardY + cardH + 32;
       ctx.fillStyle = "#9a3412";
-      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.font = "bold 16px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("🪔 धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन 🪔", width / 2, footerY);
 
       ctx.fillStyle = "#7c2d12";
-      ctx.font = "600 22px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      ctx.fillText("युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) | सप्रेम भेंट", width / 2, footerY + 40);
+      ctx.font = "600 13.5px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.fillText("युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) | सप्रेम भेंट", width / 2, footerY + 24);
 
       return canvas.toDataURL("image/jpeg", 0.95);
     }
@@ -4546,7 +4789,7 @@
 
       try {
         const dataUrl = generateSuvicharCardDataUrl(item);
-        const caption = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author}*\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📲 परिवार ऐप डाउनलोड करें:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+        const caption = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author || "युवा शक्ति विचार वाटिका"}*\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*`;
 
         if (window.AndroidApp && typeof window.AndroidApp.shareImage === 'function') {
           window.AndroidApp.shareImage(dataUrl, caption);
@@ -4841,8 +5084,8 @@
           firstChar;
 
         const statusBadgeHtml = payStatus.isPaid ?
-          `<span class="badge-status-paid"><i class="fa-solid fa-circle-check"></i> ${currentLang === 'en' ? 'Paid' : 'जमा'}</span>` :
-          `<span class="badge-status-unpaid"><i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'en' ? 'Due' : 'बाकी'}</span>`;
+          `<span class="badge-status-paid" ${isAdmin ? `onclick="event.stopPropagation(); quickToggleMemberPayment('${m.id}')" title="क्लिक करके स्थिति बदलें (संचालक)" style="cursor:pointer;"` : ''}><i class="fa-solid fa-circle-check"></i> ${currentLang === 'en' ? 'Paid' : 'जमा'}${isAdmin ? ' <i class="fa-solid fa-pen" style="font-size:8.5px; margin-left:2px;"></i>' : ''}</span>` :
+          `<span class="badge-status-unpaid" ${isAdmin ? `onclick="event.stopPropagation(); quickToggleMemberPayment('${m.id}')" title="क्लिक करके स्थिति बदलें (संचालक)" style="cursor:pointer;"` : ''}><i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'en' ? 'Due' : 'बाकी'}${isAdmin ? ' <i class="fa-solid fa-pen" style="font-size:8.5px; margin-left:2px;"></i>' : ''}</span>`;
 
         card.innerHTML = `
           <div class="member-info">
@@ -4900,6 +5143,17 @@
       }
 
       const payStatus = getMemberPaymentStatus(m);
+
+      // Populate Lifetime Contribution Card
+      const lifetimeValEl = document.getElementById("profileModalLifetimeContribVal");
+      if (lifetimeValEl) {
+        lifetimeValEl.innerText = "₹" + (payStatus.total || 0).toLocaleString('en-IN');
+      }
+      const adminLifetimeBox = document.getElementById("adminLifetimeContribControl");
+      if (adminLifetimeBox) {
+        adminLifetimeBox.style.display = isAdmin ? "block" : "none";
+      }
+
       const banner = document.getElementById("profileModalPaymentBanner");
       if (payStatus.isPaid) {
         banner.style.background = "#ecfdf5";
@@ -4914,7 +5168,14 @@
                 ${currentLang === 'en' ? 'Last Paid: ₹' : 'अंतिम जमा: ₹'}${Number(payStatus.lastPayment.amount || 0).toLocaleString('en-IN')} (${formatDisplayDate(payStatus.lastPayment.date)})
               </div>
             </div>
-            <span class="badge-status-paid" style="font-size:12px; padding:3px 9px;">${currentLang === 'en' ? 'Paid' : 'जमा'}</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="badge-status-paid" style="font-size:12px; padding:3px 9px;">${currentLang === 'en' ? 'Paid' : 'जमा'}</span>
+              ${isAdmin ? `
+                <button onclick="quickToggleMemberPayment('${m.id}')" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; padding:4px 8px; border-radius:8px; font-weight:700; font-size:10.5px; cursor:pointer;" title="स्थिति बाकी करें">
+                  <i class="fa-solid fa-arrows-rotate"></i> बाकी करें
+                </button>
+              ` : ''}
+            </div>
           </div>
         `;
       } else {
@@ -4930,13 +5191,26 @@
                 ${currentLang === 'en' ? 'Monthly Amavasya satsang & group contribution pending' : 'अमावस्या सत्संग व ग्रुप सेवा अंशदान अपेक्षित'}
               </div>
             </div>
-            ${(isSelf || isAdmin) ? `
-              <button onclick="closeMemberProfileModal(); openPhonePeModal('अंशदान - ' + '${m.name}')" style="background:#dc2626; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer;">
-                ${currentLang === 'en' ? 'Pay Now' : 'जमा करें'}
-              </button>
-            ` : `
-              <span class="badge-status-unpaid" style="font-size:11px; padding:3px 8px;">${currentLang === 'en' ? 'Due' : 'बाकी'}</span>
-            `}
+            <div style="display:flex; align-items:center; gap:6px;">
+              ${isAdmin ? `
+                <button onclick="quickToggleMemberPayment('${m.id}')" style="background:#dcfce7; border:1px solid #86efac; color:#166534; padding:4px 8px; border-radius:8px; font-weight:700; font-size:10.5px; cursor:pointer;" title="1-क्लिक में जमा करें">
+                  <i class="fa-solid fa-check"></i> जमा करें
+                </button>
+              ` : `
+                <span class="badge-status-unpaid" style="font-size:11px; padding:3px 8px;">${currentLang === 'en' ? 'Due' : 'बाकी'}</span>
+              `}
+              ${(isSelf || !isAdmin) ? `
+                <button onclick="closeMemberProfileModal(); openPhonePeModal('अंशदान - ' + '${m.name}')" style="background:#dc2626; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer;">
+                  ${currentLang === 'en' ? 'Pay Now' : 'Pay Now'}
+                </button>
+              ` : ''}
+            </div>
+          </div>
+          <!-- Payment Verification Request Button for Member -->
+          <div style="margin-top:10px; padding-top:8px; border-top:1px dashed #fca5a5;">
+            <button onclick="openPaymentRequestModal('${m.id}')" class="btn-main" style="background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:8px 12px; border-radius:10px; font-weight:700; font-size:11.5px; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 8px rgba(22,163,74,0.3);">
+              <i class="fa-solid fa-paper-plane"></i> <span>भुगतान सत्यापन अनुरोध (मैंने जमा कर दिया है)</span>
+            </button>
           </div>
         `;
       }
@@ -5339,7 +5613,8 @@
         if (t.type === "contribution") totalIn += amt;
         else if (t.type === "expense") totalOut += amt;
       });
-      const net = totalIn - totalOut;
+      const openingBal = getOpeningBalance();
+      const net = (openingBal + totalIn) - totalOut;
 
       if (totalExpenseEl) totalExpenseEl.innerText = "₹" + totalOut.toLocaleString('en-IN');
       if (remainingBalanceEl) {
@@ -5347,7 +5622,61 @@
         remainingBalanceEl.style.color = net >= 0 ? '#047857' : '#dc2626';
       }
       if (expenseFundSub) {
-        expenseFundSub.innerText = `कुल जमा: ₹${totalIn.toLocaleString('en-IN')}`;
+        expenseFundSub.innerText = openingBal > 0 ?
+          `पूर्व शेष: ₹${openingBal.toLocaleString('en-IN')} | कुल जमा: ₹${totalIn.toLocaleString('en-IN')}` :
+          `कुल जमा: ₹${totalIn.toLocaleString('en-IN')}`;
+      }
+
+      const btnEditOpen = document.getElementById("btnEditOpeningBalance");
+      if (btnEditOpen) btnEditOpen.style.display = isAdmin ? "inline-flex" : "none";
+
+      // Render Ganesh Visarjan Sub-Table & Badges
+      const ganeshExpenses = transactions.filter(t => 
+        t.type === "expense" && 
+        (t.isGaneshVisarjan || t.category === "ganesh_visarjan" || (t.description || '').includes("गणेश विसर्जन") || (t.description || '').includes("गणेशोत्सव"))
+      );
+      const ganeshTotal = ganeshExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+
+      const ganeshTotalBadge = document.getElementById("ganeshTotalBadge");
+      const ganeshTotalFooter = document.getElementById("ganeshTotalFooter");
+      const ganeshItemCount = document.getElementById("ganeshItemCount");
+      const btnAddGanesh = document.getElementById("btnAddGaneshExpenseBtn");
+      const thGaneshAction = document.getElementById("thGaneshAction");
+      const ganeshTbody = document.getElementById("ganeshExpensesTableBody");
+
+      if (ganeshTotalBadge) ganeshTotalBadge.innerText = "₹" + ganeshTotal.toLocaleString('en-IN');
+      if (ganeshTotalFooter) ganeshTotalFooter.innerText = "₹" + ganeshTotal.toLocaleString('en-IN');
+      if (ganeshItemCount) ganeshItemCount.innerText = `${ganeshExpenses.length} मद`;
+      if (btnAddGanesh) btnAddGanesh.style.display = isAdmin ? "inline-flex" : "none";
+      if (thGaneshAction) thGaneshAction.style.display = isAdmin ? "table-cell" : "none";
+
+      if (ganeshTbody) {
+        if (ganeshExpenses.length === 0) {
+          ganeshTbody.innerHTML = `<tr><td colspan="${isAdmin ? 6 : 5}" style="text-align:center; padding:12px; color:#94a3b8;">गणेश विसर्जन का कोई अलग खर्च दर्ज नहीं है।</td></tr>`;
+        } else {
+          ganeshExpenses.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+          ganeshTbody.innerHTML = "";
+          ganeshExpenses.forEach((exp, idx) => {
+            const amt = Number(exp.amount) || 0;
+            const tr = document.createElement("tr");
+            tr.style.borderBottom = "1px solid #fde68a";
+            tr.innerHTML = `
+              <td style="padding:6px 4px; text-align:center; color:#92400e; font-size:11px;">${idx + 1}</td>
+              <td style="padding:6px; white-space:nowrap; font-size:11px;">${formatDisplayDate(exp.date)}</td>
+              <td style="padding:6px 8px; font-weight:700; color:#78350f;">${escapeHtml(exp.description || '')}</td>
+              <td style="padding:6px; text-align:right; font-weight:800; color:#b45309; white-space:nowrap;">₹${amt.toLocaleString('en-IN')}</td>
+              <td style="padding:6px; font-size:11px; color:#92400e; white-space:nowrap;">${escapeHtml(exp.spentBy || 'व्यवस्थापक')}</td>
+              ${isAdmin ? `
+                <td style="padding:6px; text-align:center; white-space:nowrap;">
+                  <button onclick="promptDeleteExpense('${exp.id}')" style="background:#fee2e2; border:none; color:#dc2626; padding:3px 7px; border-radius:4px; cursor:pointer; font-size:10px;">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </td>
+              ` : ''}
+            `;
+            ganeshTbody.appendChild(tr);
+          });
+        }
       }
 
       // Update legacy elements if present
@@ -5415,12 +5744,14 @@
         const safeSpentBy = escapeHtml(exp.spentBy || (currentLang === 'en' ? 'Admin' : 'व्यवस्थापक'));
         const safeMethod = escapeHtml(exp.payMethod || (currentLang === 'en' ? 'Cash' : 'नकद'));
         const displayDate = formatDisplayDate(exp.date);
+        const isGaneshItem = exp.isGaneshVisarjan || exp.category === "ganesh_visarjan" || safeDesc.includes("गणेश");
 
         tr.innerHTML = `
           <td style="padding:9px 6px; text-align:center; color:var(--text-muted); font-size:11px;">${idx + 1}</td>
           <td style="padding:9px 8px; white-space:nowrap; font-size:11px; color:var(--text-color);">${displayDate}</td>
           <td style="padding:9px 8px; font-size:12px; color:var(--text-color);">
             <strong style="color:var(--text-color);">${safeDesc}</strong>
+            ${isGaneshItem ? `<span style="font-size:9px; background:#fef3c7; color:#92400e; border:1px solid #fde68a; padding:1px 5px; border-radius:6px; margin-left:4px; font-weight:700;">गणेशोत्सव</span>` : ''}
           </td>
           <td style="padding:9px 8px; text-align:right; white-space:nowrap; font-weight:800; color:#dc2626; font-size:13px;">
             ₹${amt.toLocaleString('en-IN')}
@@ -5450,7 +5781,371 @@
       if (totalFooter) totalFooter.innerText = "₹" + filteredSum.toLocaleString('en-IN');
     }
 
-    function openExpenseModal(editId = null) {
+    function toggleGaneshVisarjanSection() {
+      const details = document.getElementById("ganeshVisarjanDetails");
+      const chevron = document.getElementById("ganeshChevron");
+      if (!details) return;
+      const isHidden = (details.style.display === "none" || !details.style.display);
+      details.style.display = isHidden ? "block" : "none";
+      if (chevron) {
+        chevron.style.transform = isHidden ? "rotate(180deg)" : "rotate(0deg)";
+      }
+    }
+
+    function getOpeningBalance() {
+      return Number(localStorage.getItem("initial_opening_balance")) || 0;
+    }
+
+    async function promptEditOpeningBalance() {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
+        return;
+      }
+      const current = getOpeningBalance();
+      const input = prompt("ग्रुप के पास पहले से बचे हुए पैसे (प्रारंभिक शेष राशि) दर्ज करें (उदा. 5000):", current);
+      if (input === null) return;
+      const num = Number(input);
+      if (isNaN(num) || num < 0) {
+        showToast("कृपया वैध राशि दर्ज करें।", "warning");
+        return;
+      }
+      localStorage.setItem("initial_opening_balance", num);
+      try {
+        await db.collection("settings").doc("finance").set({ openingBalance: num, updatedAt: new Date() }, { merge: true });
+        showToast(`प्रारंभिक शेष राशि ₹${num.toLocaleString('en-IN')} सुरक्षित हुई!`, "success");
+      } catch (e) {
+        showToast(`प्रारंभिक शेष ₹${num.toLocaleString('en-IN')} स्थानीय रूप से सेट हुआ।`, "info");
+      }
+      renderExpensesSpreadsheet();
+    }
+
+    // Firestore listener for opening balance in settings/finance
+    try {
+      db.collection("settings").doc("finance").onSnapshot(doc => {
+        if (doc && doc.exists) {
+          const data = doc.data();
+          if (typeof data.openingBalance === "number") {
+            localStorage.setItem("initial_opening_balance", data.openingBalance);
+            renderExpensesSpreadsheet();
+          }
+        }
+      }, err => console.log("Finance listener notice:", err));
+    } catch (e) {}
+
+    // Quick 1-click toggle between "बाकी" and "जमा" for Admin
+    async function quickToggleMemberPayment(memberId) {
+      if (!isAdmin) {
+        showToast("अंशदान स्थिति बदलने का अधिकार केवल संचालक के पास है।", "warning");
+        return;
+      }
+      const m = membersList.find(x => x.id === memberId);
+      if (!m) return;
+      const payStatus = getMemberPaymentStatus(m);
+
+      if (payStatus.isPaid) {
+        showConfirmDialog(
+          "स्थिति 'बाकी' में बदलें",
+          `क्या आप वाकई सदस्य "${m.name}" की स्थिति को 'बाकी' (Due) में बदलना चाहते हैं?`,
+          async () => {
+            try {
+              if (payStatus.lastPayment && payStatus.lastPayment.id) {
+                await db.collection("ledger").doc(payStatus.lastPayment.id).delete();
+                showToast(`"${m.name}" की स्थिति 'बाकी' में बदल दी गई।`, "info");
+              } else {
+                showToast("हालिया भुगतान रिकॉर्ड नहीं मिला।", "warning");
+              }
+              if (document.getElementById("memberProfileModal").style.display !== "none") {
+                openMemberProfileModal(memberId);
+              }
+            } catch (err) {
+              showToast("त्रुटि: " + err.message, "error");
+            }
+          }
+        );
+      } else {
+        showConfirmDialog(
+          "स्थिति 'जमा' में बदलें",
+          `क्या सदस्य "${m.name}" का इस माह का ₹100 अंशदान 'जमा' (Paid) दर्ज करना चाहते हैं?`,
+          async () => {
+            try {
+              const todayStr = new Date().toISOString().slice(0, 10);
+              await db.collection("ledger").add({
+                type: "contribution",
+                description: `मासिक अंशदान - ${m.name} (${m.phone || ''})`,
+                amount: 100,
+                payMethod: "नकद",
+                date: todayStr,
+                createdAt: new Date()
+              });
+              showToast(`"${m.name}" का ₹100 अंशदान 'जमा' दर्ज हुआ!`, "success");
+              if (document.getElementById("memberProfileModal").style.display !== "none") {
+                openMemberProfileModal(memberId);
+              }
+            } catch (err) {
+              showToast("त्रुटि: " + err.message, "error");
+            }
+          }
+        );
+      }
+    }
+
+    // Payment Verification Request System
+    function openPaymentRequestModal(memberId = null) {
+      const targetId = memberId || currentProfileModalMemberId;
+      const m = membersList.find(x => x.id === targetId) || 
+                membersList.find(x => x.phone && x.phone.endsWith(loggedInMemberPhone)) ||
+                { name: "सदस्य", phone: loggedInMemberPhone || "" };
+
+      document.getElementById("payReqMemberId").value = m.id || "";
+      document.getElementById("payReqMemberName").value = m.name || "";
+      document.getElementById("payReqMemberPhone").value = m.phone || "";
+      document.getElementById("payReqAmount").value = "100";
+      setTodayDate('payReqDate');
+      document.getElementById("payReqNote").value = "PhonePe द्वारा अंशदान जमा";
+
+      closeMemberProfileModal();
+      document.getElementById("paymentRequestModal").style.display = "flex";
+    }
+
+    function closePaymentRequestModal() {
+      document.getElementById("paymentRequestModal").style.display = "none";
+    }
+
+    function submitPaymentRequestWhatsApp() {
+      const name = document.getElementById("payReqMemberName").value;
+      const phone = document.getElementById("payReqMemberPhone").value;
+      const amount = document.getElementById("payReqAmount").value || "100";
+      const date = document.getElementById("payReqDate").value;
+      const note = document.getElementById("payReqNote").value.trim();
+
+      let text = `🚩 *युवा शक्ति ग्रुप - भुगतान सत्यापन अनुरोध* 🚩\n\n`;
+      text += `नमस्ते संचालक जी (रेवंतराम जी),\n`;
+      text += `मैंने ग्रुप का अंशदान जमा कर दिया है, कृपया ऐप में 'जमा' दर्ज करें:\n\n`;
+      text += `👤 *सदस्य:* ${name}\n`;
+      text += `📱 *मोबाइल:* ${phone}\n`;
+      text += `💰 *राशि:* ₹${amount}\n`;
+      text += `📅 *दिनांक:* ${formatDisplayDate(date)}\n`;
+      if (note) text += `📝 *टिप्पणी:* ${note}\n`;
+      text += `\nधन्यवाद!`;
+
+      openWhatsAppUrl(`https://wa.me/918696663615?text=${encodeURIComponent(text)}`);
+      submitPaymentRequestInApp(true);
+    }
+
+    async function submitPaymentRequestInApp(isSilent = false) {
+      const memberId = document.getElementById("payReqMemberId").value;
+      const name = document.getElementById("payReqMemberName").value;
+      const phone = document.getElementById("payReqMemberPhone").value;
+      const amount = Number(document.getElementById("payReqAmount").value) || 100;
+      const date = document.getElementById("payReqDate").value;
+      const note = document.getElementById("payReqNote").value.trim();
+
+      try {
+        await db.collection("payment_requests").add({
+          memberId,
+          name,
+          phone,
+          amount,
+          date,
+          note,
+          status: "pending",
+          createdAt: new Date()
+        });
+        closePaymentRequestModal();
+        if (!isSilent) {
+          showToast("भुगतान सत्यापन अनुरोध संचालक जी को भेज दिया गया!", "success");
+        }
+      } catch (err) {
+        if (!isSilent) showToast("त्रुटि: " + err.message, "error");
+      }
+    }
+
+    // Admin Pending Requests Modal & Workflow
+    let pendingPaymentRequests = [];
+    try {
+      db.collection("payment_requests").onSnapshot(snapshot => {
+        pendingPaymentRequests = [];
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          if (data.status === "pending") {
+            pendingPaymentRequests.push({ id: docSnap.id, ...data });
+          }
+        });
+        updatePendingRequestsBadge();
+      }, err => console.log("Payment requests notice:", err));
+    } catch (e) {}
+
+    function updatePendingRequestsBadge() {
+      const count = pendingPaymentRequests.length;
+      const badge = document.getElementById("pendingReqBadge");
+      const btn = document.getElementById("btnPendingRequests");
+      if (badge) badge.innerText = count;
+      if (btn) btn.style.display = (isAdmin && count > 0) ? "inline-flex" : "none";
+    }
+
+    function openPendingRequestsModal() {
+      if (!isAdmin) return;
+      const modal = document.getElementById("pendingRequestsModal");
+      const container = document.getElementById("pendingRequestsContainer");
+      if (!container) return;
+
+      if (pendingPaymentRequests.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:24px; color:#64748b; font-size:13px;">
+            <i class="fa-solid fa-circle-check" style="font-size:26px; color:#10b981; margin-bottom:8px; display:block;"></i>
+            <div>कोई लंबित भुगतान सत्यापन अनुरोध नहीं है।</div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = "";
+        pendingPaymentRequests.forEach(req => {
+          const card = document.createElement("div");
+          card.className = "ios-glass-card";
+          card.style.padding = "12px";
+          card.style.borderRadius = "14px";
+          card.style.border = "1px solid #cbd5e1";
+          card.style.background = "#ffffff";
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+              <div>
+                <strong style="font-size:14px; color:#1e293b;">${escapeHtml(req.name)}</strong>
+                <div style="font-size:11px; color:#64748b;">📱 ${escapeHtml(req.phone || '')} • 📅 ${formatDisplayDate(req.date)}</div>
+              </div>
+              <span style="font-size:14px; font-weight:800; color:#16a34a; background:#f0fdf4; border:1px solid #bbf7d0; padding:2px 8px; border-radius:8px;">
+                ₹${Number(req.amount || 100).toLocaleString('en-IN')}
+              </span>
+            </div>
+            ${req.note ? `<div style="font-size:11px; color:#475569; background:#f8fafc; padding:5px 8px; border-radius:6px; margin-bottom:8px;">📝 ${escapeHtml(req.note)}</div>` : ''}
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button onclick="approvePaymentRequest('${req.id}', '${escapeHtml(req.name)}', '${escapeHtml(req.phone)}', ${req.amount || 100}, '${req.date}')" class="btn-main" style="background:#16a34a; padding:7px 12px; font-size:11.5px; border-radius:8px; flex:1; font-weight:700;">
+                <i class="fa-solid fa-circle-check"></i> स्वीकार करें व जमा में जोड़ें
+              </button>
+              <button onclick="dismissPaymentRequest('${req.id}')" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#64748b; padding:7px 10px; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">
+                ✕ निरस्त
+              </button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closePendingRequestsModal() {
+      const modal = document.getElementById("pendingRequestsModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    async function approvePaymentRequest(reqId, name, phone, amount, date) {
+      if (!isAdmin) return;
+      try {
+        await db.collection("ledger").add({
+          type: "contribution",
+          description: `मासिक अंशदान - ${name} (${phone})`,
+          amount: Number(amount) || 100,
+          payMethod: "PhonePe / UPI",
+          date: date || new Date().toISOString().slice(0, 10),
+          createdAt: new Date()
+        });
+        await db.collection("payment_requests").doc(reqId).update({
+          status: "approved",
+          approvedAt: new Date()
+        });
+        showToast(`"${name}" का भुगतान स्वीकृत व जमा में दर्ज हुआ!`, "success");
+        openPendingRequestsModal();
+      } catch (err) {
+        showToast("त्रुटि: " + err.message, "error");
+      }
+    }
+
+    async function dismissPaymentRequest(reqId) {
+      if (!isAdmin) return;
+      try {
+        await db.collection("payment_requests").doc(reqId).update({
+          status: "dismissed",
+          dismissedAt: new Date()
+        });
+        showToast("अनुरोध निरस्त कर दिया गया।", "info");
+        openPendingRequestsModal();
+      } catch (err) {
+        showToast("त्रुटि: " + err.message, "error");
+      }
+    }
+
+    // Past Month / October Amavasya Contribution Workflow
+    function openPastMonthContribModal(memberId) {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल संचालक के लिए है।", "warning");
+        return;
+      }
+      const m = membersList.find(x => x.id === memberId);
+      if (!m) return;
+
+      document.getElementById("pastContribMemberId").value = m.id;
+      document.getElementById("pastContribMemberName").value = m.name;
+      document.getElementById("pastContribEventSelect").value = "अक्टूबर 2026 अमावस्या अंशदान";
+      document.getElementById("pastContribAmount").value = "100";
+      document.getElementById("pastContribDate").value = "2026-10-31";
+      document.getElementById("pastContribMethod").value = "PhonePe / UPI";
+
+      document.getElementById("pastMonthContribModal").style.display = "flex";
+    }
+
+    function closePastMonthContribModal() {
+      document.getElementById("pastMonthContribModal").style.display = "none";
+    }
+
+    function handlePastContribEventChange() {
+      const ev = document.getElementById("pastContribEventSelect").value;
+      const dateInput = document.getElementById("pastContribDate");
+      if (!dateInput) return;
+      if (ev.includes("अक्टूबर 2026")) dateInput.value = "2026-10-31";
+      else if (ev.includes("सितंबर 2026")) dateInput.value = "2026-09-30";
+      else if (ev.includes("अगस्त 2026")) dateInput.value = "2026-08-31";
+    }
+
+    async function savePastMonthContributionRecord() {
+      if (!isAdmin) return;
+      const memberId = document.getElementById("pastContribMemberId").value;
+      const m = membersList.find(x => x.id === memberId);
+      if (!m) return;
+
+      const eventName = document.getElementById("pastContribEventSelect").value;
+      const amount = Number(document.getElementById("pastContribAmount").value) || 100;
+      const payMethod = document.getElementById("pastContribMethod").value;
+      const date = document.getElementById("pastContribDate").value;
+
+      if (!amount || amount <= 0) {
+        showToast("कृपया वैध राशि दर्ज करें।", "warning");
+        return;
+      }
+      if (!date) {
+        showToast("कृपया दिनांक चुनें।", "warning");
+        return;
+      }
+
+      try {
+        await db.collection("ledger").add({
+          type: "contribution",
+          description: `${eventName} - ${m.name} (${m.phone || ''})`,
+          amount: amount,
+          payMethod: payMethod,
+          date: date,
+          createdAt: new Date()
+        });
+
+        closePastMonthContribModal();
+        showToast(`"${m.name}" का ${eventName} (₹${amount}) सफलतापूर्वक दर्ज हुआ!`, "success");
+        if (document.getElementById("memberProfileModal").style.display !== "none") {
+          openMemberProfileModal(memberId);
+        }
+      } catch (err) {
+        showToast("त्रुटि: " + err.message, "error");
+      }
+    }
+
+    function openExpenseModal(editIdOrPreset = null) {
       if (!isAdmin) {
         showToast("यह सुविधा केवल व्यवस्थापक (Admin) के लिए है।", "warning");
         return;
@@ -5464,9 +6159,10 @@
       const amountInput = document.getElementById("expenseAmount");
       const spentByInput = document.getElementById("expenseSpentBy");
       const payMethodInput = document.getElementById("expensePayMethod");
+      const ganeshCheck = document.getElementById("expenseIsGanesh");
 
-      if (editId) {
-        const item = transactions.find(t => t.id === editId);
+      if (editIdOrPreset && editIdOrPreset !== "ganesh") {
+        const item = transactions.find(t => t.id === editIdOrPreset);
         if (item) {
           editInput.value = item.id;
           dateInput.value = item.date || new Date().toISOString().slice(0, 10);
@@ -5474,6 +6170,7 @@
           amountInput.value = item.amount || "";
           spentByInput.value = item.spentBy || "";
           payMethodInput.value = item.payMethod || "नकद";
+          if (ganeshCheck) ganeshCheck.checked = !!(item.isGaneshVisarjan || item.category === "ganesh_visarjan");
           if (modalTitle) modalTitle.innerText = "खर्च विवरण संपादित करें (Edit Expense)";
           if (saveBtnText) saveBtnText.innerText = "बदलाव सहेजें";
         }
@@ -5482,9 +6179,10 @@
         setTodayDate('expenseDate');
         descInput.value = "";
         amountInput.value = "";
-        spentByInput.value = (loggedInMemberPhone ? (membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone))?.name || "") : "");
+        spentByInput.value = (loggedInMemberPhone ? (membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone))?.name || "") : "रेवंतराम भाटी");
         payMethodInput.value = "नकद";
-        if (modalTitle) modalTitle.innerText = "नया खर्च / सामग्री जोड़ें";
+        if (ganeshCheck) ganeshCheck.checked = (editIdOrPreset === "ganesh");
+        if (modalTitle) modalTitle.innerText = (editIdOrPreset === "ganesh") ? "🚩 गणेश विसर्जन खर्च जोड़ें" : "नया खर्च / सामग्री जोड़ें";
         if (saveBtnText) saveBtnText.innerText = "खर्च सहेजें";
       }
 
@@ -5514,8 +6212,9 @@
       const date = document.getElementById("expenseDate")?.value;
       const desc = document.getElementById("expenseDesc")?.value.trim();
       const amount = Number(document.getElementById("expenseAmount")?.value);
-      const spentBy = document.getElementById("expenseSpentBy")?.value.trim() || "व्यवस्थापक";
+      const spentBy = document.getElementById("expenseSpentBy")?.value.trim() || "रेवंतराम भाटी";
       const payMethod = document.getElementById("expensePayMethod")?.value || "नकद";
+      const isGanesh = document.getElementById("expenseIsGanesh")?.checked || false;
 
       if (!date) {
         showToast("कृपया दिनांक चुनें।", "warning");
@@ -5538,6 +6237,8 @@
           spentBy: spentBy,
           payMethod: payMethod,
           date: date,
+          isGaneshVisarjan: isGanesh,
+          category: isGanesh ? "ganesh_visarjan" : "general",
           updatedAt: new Date()
         };
 
@@ -5547,7 +6248,7 @@
         } else {
           payload.createdAt = new Date();
           await db.collection("ledger").add(payload);
-          showToast("नया खर्च स्प्रेडशीट में जोड़ दिया गया!", "success");
+          showToast(isGanesh ? "गणेश विसर्जन खर्च स्प्रेडशीट में जुड़ गया!" : "नया खर्च स्प्रेडशीट में जोड़ दिया गया!", "success");
         }
         closeExpenseModal();
       } catch (err) {
