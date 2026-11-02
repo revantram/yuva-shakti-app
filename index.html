@@ -1448,25 +1448,79 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
-    /* Hindu Calendar Grid Styles */
+    /* Hindu Calendar Auspicious Gradient Background & Grid Styles */
+    #hinduCalendarCard {
+      background: linear-gradient(155deg, #ffffff 0%, #fffdf5 25%, #fef3c7 65%, #fff7ed 100%);
+      border: 1.5px solid rgba(245, 158, 11, 0.35);
+      border-radius: 20px;
+      padding: 14px 12px;
+      margin-bottom: 14px;
+      box-shadow: 0 12px 30px -4px rgba(217, 119, 6, 0.14),
+                  0 4px 12px rgba(0, 0, 0, 0.04),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
+    #hinduCalendarCard::before {
+      content: "";
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    #hinduCalendarCard::after {
+      content: "";
+      position: absolute;
+      bottom: -40px;
+      left: -40px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(234, 88, 12, 0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    body.dark-mode #hinduCalendarCard {
+      background: linear-gradient(155deg, #1e1b4b 0%, #0f172a 40%, #1e293b 80%, #31104b 100%);
+      border: 1.5px solid rgba(245, 158, 11, 0.3);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.5);
+    }
+    body.dark-mode #hinduCalendarCard::before {
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+    }
+
     .calendar-nav-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed rgba(245, 158, 11, 0.25);
     }
     .cal-nav-btn {
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(245, 158, 11, 0.3);
+      color: #7c2d12;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.12);
+      transition: all 0.15s;
+    }
+    body.dark-mode .cal-nav-btn {
+      background: rgba(30, 41, 59, 0.85);
+      color: #fef08a;
+      border-color: rgba(245, 158, 11, 0.35);
     }
     .cal-nav-btn:active {
       transform: scale(0.92);
@@ -1475,29 +1529,42 @@
       text-align: center;
     }
     .calendar-month-title h3 {
-      font-size: 16px;
+      font-size: 16.5px;
       font-weight: 800;
-      color: var(--text-main);
+      color: #1e3a8a;
       line-height: 1.2;
+      letter-spacing: -0.2px;
+    }
+    body.dark-mode .calendar-month-title h3 {
+      color: #93c5fd;
     }
     .cal-hindu-tithi-sub {
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 11.5px;
+      font-weight: 700;
       color: #ea580c;
       margin-top: 2px;
+      letter-spacing: 0.2px;
+    }
+    body.dark-mode .cal-hindu-tithi-sub {
+      color: #f59e0b;
     }
     .btn-today-pill {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 1px solid #93c5fd;
       color: #1d4ed8;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 5px;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15);
+      transition: all 0.15s;
+    }
+    .btn-today-pill:active {
+      transform: scale(0.94);
     }
     .calendar-weekdays-grid {
       display: grid;
@@ -1505,15 +1572,26 @@
       gap: 4px;
       text-align: center;
       margin-bottom: 6px;
+      background: rgba(245, 158, 11, 0.14);
+      border-radius: 12px;
+      padding: 4px 2px;
+      border: 1px solid rgba(245, 158, 11, 0.22);
+    }
+    body.dark-mode .calendar-weekdays-grid {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.2);
     }
     .cal-weekday {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      padding: 4px 0;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #78350f;
+      padding: 3px 0;
+    }
+    body.dark-mode .cal-weekday {
+      color: #fed7aa;
     }
     .cal-weekday.sun {
-      color: #dc2626;
+      color: #dc2626 !important;
     }
     .calendar-days-grid {
       display: grid;
@@ -1521,10 +1599,12 @@
       gap: 4px;
     }
     .calendar-day {
-      min-height: 50px;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
+      min-height: 52px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(245, 158, 11, 0.18);
+      border-radius: 10px;
       padding: 3px 2px;
       display: flex;
       flex-direction: column;
@@ -1532,34 +1612,48 @@
       justify-content: flex-start;
       cursor: pointer;
       position: relative;
-      transition: all 0.15s;
+      transition: all 0.15s ease-in-out;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+    body.dark-mode .calendar-day {
+      background: rgba(30, 41, 59, 0.88);
+      border-color: rgba(255, 255, 255, 0.08);
     }
     .calendar-day.empty {
-      background: transparent;
-      border-color: transparent;
+      background: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
       cursor: default;
     }
     .calendar-day:not(.empty):active {
-      transform: scale(0.94);
+      transform: scale(0.93);
     }
     .calendar-day.today {
-      border: 2px solid #2563eb;
-      background: rgba(37, 99, 235, 0.06);
+      border: 2px solid #2563eb !important;
+      background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.9) 100%) !important;
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.28) !important;
+    }
+    body.dark-mode .calendar-day.today {
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(37, 99, 235, 0.3) 100%) !important;
     }
     .calendar-day.selected {
-      background: #1e3a8a !important;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
       color: white !important;
       border-color: #1e3a8a !important;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35) !important;
     }
     .calendar-day.selected .cal-day-num {
       color: white !important;
+    }
+    .calendar-day.selected .cal-tithi-name {
+      color: #fed7aa !important;
     }
     .calendar-day.selected .cal-badge-mini {
       color: #fef08a !important;
     }
     .cal-day-num {
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 12.5px;
+      font-weight: 800;
       color: var(--text-main);
       line-height: 1.2;
     }
@@ -1571,7 +1665,7 @@
       align-items: center;
       justify-content: center;
       gap: 2px;
-      margin-top: 2px;
+      margin-top: 1px;
       font-size: 10px;
       line-height: 1;
     }
@@ -1586,12 +1680,41 @@
       padding: 0 1px;
     }
     .calendar-day.has-amavasya {
-      border-color: #93c5fd;
-      background: #f0f9ff;
+      border-color: #60a5fa !important;
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+    }
+    body.dark-mode .calendar-day.has-amavasya {
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(30, 27, 75, 0.4) 100%) !important;
     }
     .calendar-day.has-festival {
-      border-color: #fed7aa;
-      background: #fff7ed;
+      border-color: #fb923c !important;
+      background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%) !important;
+    }
+    body.dark-mode .calendar-day.has-festival {
+      background: linear-gradient(135deg, rgba(124, 45, 18, 0.3) 0%, rgba(154, 52, 18, 0.25) 100%) !important;
+    }
+    .calendar-day.has-birthday {
+      border: 1.5px solid #f59e0b !important;
+      background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%) !important;
+      box-shadow: 0 2px 7px rgba(245, 158, 11, 0.25) !important;
+    }
+    body.dark-mode .calendar-day.has-birthday {
+      border: 1.5px solid #d97706 !important;
+      background: linear-gradient(145deg, rgba(120, 53, 15, 0.4) 0%, rgba(180, 83, 9, 0.3) 100%) !important;
+    }
+    .cal-bday-cake-float {
+      position: absolute;
+      top: 1px;
+      right: 2px;
+      font-size: 12px;
+      line-height: 1;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+      animation: cakeFloatBounce 2.4s ease-in-out infinite;
+      z-index: 2;
+    }
+    @keyframes cakeFloatBounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-2px) scale(1.15); }
     }
     .cal-tithi-name {
       font-size: 8px;
@@ -1603,6 +1726,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 100%;
+    }
+    body.dark-mode .cal-tithi-name {
+      color: #fb923c;
     }
     .calendar-day.selected .cal-tithi-name {
       color: #fef08a !important;
@@ -2369,36 +2495,57 @@
     <div id="viewSettings" class="section-view">
       
       <!-- 1. ऐप विवरण एवं डेवलपर जानकारी (सबसे ऊपर) -->
-      <div class="card" id="developerInfoCard">
+      <div class="card ios-glass-card" id="developerInfoCard" style="border:1.5px solid rgba(37, 99, 235, 0.25); background:linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(239, 246, 255, 0.90) 100%); box-shadow:0 8px 24px -4px rgba(37,99,235,0.12);">
         <div class="card-title">
           <span style="display:flex; align-items:center; gap:8px;">
-            <div class="ios-icon-tile ios-icon-indigo" style="width:28px; height:28px; font-size:13px; border-radius:8px;">
+            <div class="ios-icon-tile ios-icon-indigo" style="width:30px; height:30px; font-size:14px; border-radius:9px; background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white;">
               <i class="fa-solid fa-code"></i>
             </div>
-            <span data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span>
+            <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span>
           </span>
-          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.3.1</span>
+          <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
+            APK v4.3.2
+          </span>
         </div>
-        <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
-          <div style="display:flex; justify-content:space-between;">
+        <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एप्लिकेशन नाम:</span>
-            <strong style="color:var(--text-main);">युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)</strong>
+            <strong style="color:var(--text-main); font-weight:700;">युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)</strong>
           </div>
-          <div style="display:flex; justify-content:space-between;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>मुख्य डेवलपर व संचालक:</span>
-            <strong style="color:var(--text-main);">रेवंतराम भाटी</strong>
+            <strong style="color:#1e3a8a; font-weight:800;">रेवंतराम भाटी</strong>
           </div>
-          <div style="display:flex; justify-content:space-between;">
-            <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.3.1 (नवीनतम रिलीज)</strong>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
+            <span>डेवलपर ईमेल (Gmail):</span>
+            <a href="mailto:revantrambhati@gmail.com" style="color:#2563eb; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+              <i class="fa-solid fa-envelope"></i> revantrambhati@gmail.com
+            </a>
           </div>
-          <div style="display:flex; justify-content:space-between;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
+            <span>डेवलपर मोबाइल नंबर:</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <a href="tel:+918696663615" style="color:#16a34a; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-solid fa-phone"></i> +91 8696663615
+              </a>
+              <a href="https://wa.me/918696663615" target="_blank" style="color:#16a34a; font-size:14px; text-decoration:none;" title="व्हाट्सएप पर संपर्क करें">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
+            <span>एपीके संस्करण (APK Version):</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
+              v4.3.2 (बिल्ड कोड: 18)
+            </span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
-            <span style="color:#10b981; font-weight:700;">🟢 Firebase Firestore कनेक्टेड</span>
+            <span style="color:#10b981; font-weight:700; font-size:12px;">🟢 Firebase Firestore कनेक्टेड</span>
           </div>
         </div>
-        <button class="btn-tool" onclick="checkForAppUpdates(false)" style="margin-top:12px; width:100%; font-weight:700; border-radius:14px;">
-          <i class="fa-solid fa-arrows-rotate"></i> अपडेट की जांच करें
+        <button class="btn-main" onclick="checkForAppUpdates(false)" style="margin-top:14px; width:100%; font-weight:800; border-radius:14px; background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color:white; padding:12px; font-size:13px; box-shadow:0 4px 14px rgba(37,99,235,0.25); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-solid fa-arrows-rotate"></i> <span>अपडेट की जांच करें (Check for Updates)</span>
         </button>
       </div>
 
@@ -3361,7 +3508,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.3.1";
+    const APP_VERSION = "4.3.2";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4050,13 +4197,26 @@
 
     // 8. Auto-Update Checker (GitHub Releases API)
     async function checkForAppUpdates(silent = true) {
+      if (!silent) {
+        showToast("🔄 नवीनतम अपडेट की जांच हो रही है...", "info");
+      }
       try {
         const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
           headers: { 'Accept': 'application/vnd.github.v3+json' }
         });
 
         if (!response.ok) {
-          if (!silent) showToast("अपडेट सर्वर से संपर्क नहीं हो सका।", "warning");
+          if (!silent) {
+            showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड 18)`;
+            document.getElementById("updateModalNotes").innerHTML = `
+              नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड 18)<br>
+              नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
+            `;
+            latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
+            document.getElementById("updateModal").style.display = "flex";
+          }
           return;
         }
 
@@ -4075,21 +4235,42 @@
         // Compare versions
         if (isVersionGreater(latestTag, currentClean)) {
           // Show Update Banner and Modal
-          document.getElementById("updateBanner").style.display = "flex";
-          document.getElementById("updateBannerTitle").innerText = `नया अपडेट उपलब्ध है: v${latestTag}`;
-          document.getElementById("updateBannerSub").innerText = `वर्तमान: v${APP_VERSION} → नया: v${latestTag}`;
+          const banner = document.getElementById("updateBanner");
+          if (banner) {
+            banner.style.display = "flex";
+            document.getElementById("updateBannerTitle").innerText = `नया अपडेट उपलब्ध है: v${latestTag}`;
+            document.getElementById("updateBannerSub").innerText = `वर्तमान: v${APP_VERSION} → नया: v${latestTag}`;
+          }
 
           document.getElementById("updateModalVersion").innerText = `नया संस्करण: v${latestTag} (उपलब्ध)`;
           document.getElementById("updateModalNotes").innerText = release.body || "नए फीचर्स और सुधार शामिल हैं।";
           document.getElementById("updateModal").style.display = "flex";
         } else {
-          document.getElementById("updateBanner").style.display = "none";
+          const banner = document.getElementById("updateBanner");
+          if (banner) banner.style.display = "none";
           if (!silent) {
-            showToast(`आपका ऐप पहले से ही नवीनतम संस्करण (v${APP_VERSION}) पर है!`, "success");
+            document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
+            document.getElementById("updateModalNotes").innerHTML = `
+              बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 18)<br>
+              <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
+              यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'अभी अपडेट करें' बटन पर क्लिक कर सकते हैं।
+            `;
+            latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
+            document.getElementById("updateModal").style.display = "flex";
           }
         }
       } catch (err) {
-        if (!silent) showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
+        if (!silent) {
+          showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION}`;
+          document.getElementById("updateModalNotes").innerHTML = `
+            अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
+            आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
+          `;
+          latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
+          document.getElementById("updateModal").style.display = "flex";
+        }
       }
     }
 
@@ -6819,8 +7000,36 @@
         const festival = HINDU_FESTIVALS.find(f => f.date === dateStr);
         const amavasya = AMAVASYA_LIST.find(a => a.date === dateStr);
         const nationalDay = GREGORIAN_DAYS.find(g => g.date === `${monthStr}-${dayStr}`);
-        const bdays = membersList.filter(m => m.dob && m.dob.endsWith(`-${monthStr}-${dayStr}`));
-        const annivs = membersList.filter(m => m.anniversary && m.anniversary.endsWith(`-${monthStr}-${dayStr}`));
+        const bdays = membersList.filter(m => {
+          if (!m.dob) return false;
+          const clean = m.dob.trim().replace(/\//g, '-');
+          const parts = clean.split('-');
+          if (parts.length === 3) {
+            return parts[1].padStart(2, '0') === monthStr && parts[2].padStart(2, '0') === dayStr;
+          } else if (parts.length === 2) {
+            return parts[0].padStart(2, '0') === monthStr && parts[1].padStart(2, '0') === dayStr;
+          }
+          return clean.endsWith(`-${monthStr}-${dayStr}`);
+        });
+
+        const annivs = membersList.filter(m => {
+          if (!m.anniversary) return false;
+          const clean = m.anniversary.trim().replace(/\//g, '-');
+          const parts = clean.split('-');
+          if (parts.length === 3) {
+            return parts[1].padStart(2, '0') === monthStr && parts[2].padStart(2, '0') === dayStr;
+          } else if (parts.length === 2) {
+            return parts[0].padStart(2, '0') === monthStr && parts[1].padStart(2, '0') === dayStr;
+          }
+          return clean.endsWith(`-${monthStr}-${dayStr}`);
+        });
+
+        let birthdayCakeHtml = "";
+        if (bdays.length > 0) {
+          cell.classList.add("has-birthday");
+          const bdayNames = bdays.map(b => b.name).join(', ');
+          birthdayCakeHtml = `<div class="cal-bday-cake-float" title="🎂 जन्मदिन: ${bdayNames}">🎂</div>`;
+        }
 
         let dotsHtml = "";
         let badgeText = "";
@@ -6838,6 +7047,10 @@
             dotsHtml = `<span>${sym}</span>`;
             badgeText = nationalDay.name.split('(')[0].trim().slice(0, 5);
             badgeColor = isTiranga ? "#15803d" : "#0284c7";
+          } else if (bdays.length > 0) {
+            dotsHtml = `<span>🎂</span>`;
+            badgeText = bdays[0].name.slice(0, 5);
+            badgeColor = "#d97706";
           }
         } else if (calendarFilter === 'amavasya') {
           if (amavasya) {
@@ -6849,18 +7062,19 @@
         } else if (calendarFilter === 'birthdays') {
           if (bdays.length > 0) {
             dotsHtml = `<span>🎂</span>`;
-            badgeText = bdays[0].name.slice(0, 5);
+            badgeText = bdays.map(b => b.name.slice(0, 5)).join(', ');
             badgeColor = "#d97706";
           }
         } else if (calendarFilter === 'anniversaries') {
           if (annivs.length > 0) {
             dotsHtml = `<span>💍</span>`;
-            badgeText = annivs[0].name.slice(0, 5);
+            badgeText = annivs.map(a => a.name.slice(0, 5)).join(', ');
             badgeColor = "#db2777";
           }
         }
 
         cell.innerHTML = `
+          ${birthdayCakeHtml}
           <span class="cal-day-num">${d}</span>
           <span class="cal-tithi-name">${tithiInfo.short}</span>
           ${dotsHtml ? `<div class="cal-day-dots">${dotsHtml}</div>` : ''}
@@ -6925,8 +7139,28 @@
       const monthStr = String(m + 1).padStart(2, '0');
       const dayStr = String(d).padStart(2, '0');
       const nationalDay = GREGORIAN_DAYS.find(g => g.date === `${monthStr}-${dayStr}`);
-      const bdays = membersList.filter(mem => mem.dob && mem.dob.endsWith(`-${monthStr}-${dayStr}`));
-      const annivs = membersList.filter(mem => mem.anniversary && mem.anniversary.endsWith(`-${monthStr}-${dayStr}`));
+      const bdays = membersList.filter(mem => {
+        if (!mem.dob) return false;
+        const clean = mem.dob.trim().replace(/\//g, '-');
+        const parts = clean.split('-');
+        if (parts.length === 3) {
+          return parts[1].padStart(2, '0') === monthStr && parts[2].padStart(2, '0') === dayStr;
+        } else if (parts.length === 2) {
+          return parts[0].padStart(2, '0') === monthStr && parts[1].padStart(2, '0') === dayStr;
+        }
+        return clean.endsWith(`-${monthStr}-${dayStr}`);
+      });
+      const annivs = membersList.filter(mem => {
+        if (!mem.anniversary) return false;
+        const clean = mem.anniversary.trim().replace(/\//g, '-');
+        const parts = clean.split('-');
+        if (parts.length === 3) {
+          return parts[1].padStart(2, '0') === monthStr && parts[2].padStart(2, '0') === dayStr;
+        } else if (parts.length === 2) {
+          return parts[0].padStart(2, '0') === monthStr && parts[1].padStart(2, '0') === dayStr;
+        }
+        return clean.endsWith(`-${monthStr}-${dayStr}`);
+      });
 
       let eventsHtml = "";
 
