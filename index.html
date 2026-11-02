@@ -2172,7 +2172,7 @@
             </div>
             <span data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span>
           </span>
-          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.2.5</span>
+          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.2.6</span>
         </div>
         <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between;">
@@ -2185,7 +2185,7 @@
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.2.5 (नवीनतम रिलीज)</strong>
+            <strong style="color:var(--text-main);">v4.2.6 (नवीनतम रिलीज)</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>क्लाउड डेटाबेस:</span>
@@ -2673,7 +2673,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.2.5";
+    const APP_VERSION = "4.2.6";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -2726,12 +2726,28 @@
       { name: "शारदीय नवरात्रि प्रारंभ", date: "2026-10-10", tithi: "आश्विन शुक्ल प्रतिपदा", type: "festival", wish: "शारदीय नवरात्रि की हार्दिक शुभकामनाएं! मां भगवती आप पर सदैव अपनी कृपा दृष्टि बनाए रखें।" },
       { name: "दुर्गा अष्टमी व महानवमी", date: "2026-10-18", tithi: "आश्विन शुक्ल अष्टमी/नवमी", type: "festival", wish: "दुर्गा अष्टमी एवं महानवमी की मंगलकामनाएं! मां दुर्गा आपको शक्ति और विजय प्रदान करें।" },
       { name: "विजयादशमी (दशहरा)", date: "2026-10-19", tithi: "आश्विन शुक्ल दशमी", type: "festival", wish: "बुराई पर अच्छाई और असत्य पर सत्य की विजय के महापर्व विजयादशमी (दशहरा) की हार्दिक शुभकामनाएं!" },
-      { name: "करवा चौथ", date: "2026-10-29", tithi: "कार्तिक कृष्ण चतुर्थी", type: "festival", wish: "करवा चौथ के पावन पर्व की मंगलकामनाएं! आपका दांपत्य जीवन सदैव प्रेम और खुशियों से महकता रहे।" },
-      { name: "धनतेरस (धनत्रयोदशी)", date: "2026-11-06", tithi: "कार्तिक कृष्ण त्रयोदशी", type: "festival", wish: "धनतेरस की हार्दिक बधाई! भगवान धन्वंतरि और मां लक्ष्मी आपके घर में धन, वैभव और आरोग्य का वास करें।" },
-      { name: "नरक चतुर्दशी (रूप चौदस)", date: "2026-11-08", tithi: "कार्तिक कृष्ण चतुर्दशी", type: "festival", wish: "रूप चौदस व नरक चतुर्दशी की मंगलकामनाएं! आपके जीवन का हर अंधकार दूर हो।" },
-      { name: "दीपावली (महालक्ष्मी पूजन)", date: "2026-11-09", tithi: "कार्तिक कृष्ण अमावस्या", type: "festival", wish: "प्रकाश के महापर्व दीपावली की हार्दिक शुभकामनाएं! मां महालक्ष्मी आपके जीवन को सुख-समृद्धि और आरोग्य से आलोकित करें।" },
-      { name: "गोवर्धन पूजा / अन्नकूट", date: "2026-11-10", tithi: "कार्तिक शुक्ल प्रतिपदा", type: "festival", wish: "गोवर्धन पूजा एवं अन्नकूट महोत्सव की शुभकामनाएं! भगवान श्री कृष्ण आप पर कृपा बनाए रखें।" },
-      { name: "भाई दूज (यम द्वितीया)", date: "2026-11-11", tithi: "कार्तिक शुक्ल द्वितीया", type: "festival", wish: "भाई-बहन के अटूट प्रेम और विश्वास के पावन पर्व भाई दूज की हार्दिक मंगलकामनाएं!" },
+      { name: "धनतेरस (धनत्रयोदशी)", date: "2026-11-06", tithi: "कार्तिक कृष्ण त्रयोदशी", type: "festival", shortBadge: "धनतेरस", wish: "धनतेरस की हार्दिक बधाई! भगवान धन्वंतरि और मां लक्ष्मी आपके घर में धन, वैभव और आरोग्य का वास करें।" },
+      { name: "नरक चतुर्दशी (रूप चौदस)", date: "2026-11-07", tithi: "कार्तिक कृष्ण चतुर्दशी", type: "festival", shortBadge: "रूप चौदस", wish: "रूप चौदस व नरक चतुर्दशी (छोटी दीपावली) की मंगलकामनाएं! आपके जीवन का हर अंधकार दूर हो।" },
+      { 
+        name: "दीपावली (महालक्ष्मी पूजन)", 
+        date: "2026-11-08", 
+        tithi: "कार्तिक कृष्ण अमावस्या (प्रदोष काल)", 
+        type: "festival", 
+        shortBadge: "दीपावली",
+        wish: "प्रकाश के महापर्व दीपावली की हार्दिक शुभकामनाएं! मां महालक्ष्मी आपके जीवन को सुख-समृद्धि और आरोग्य से आलोकित करें। शुभ दीपावली!",
+        panchangNote: "दीपावली का महापर्व और माँ लक्ष्मी का पूजन कार्तिक अमावस्या की रात (प्रदोष काल एवं निशीथ काल) में किया जाता है। 8 नवंबर की शाम और रात्रि को अमावस्या तिथि रहेगी (प्रारंभ 11:28 AM), इसलिए इसी दिन मुख्य दीपावली मनाई जाएगी।"
+      },
+      { 
+        name: "कार्तिक (सोमवती) अमावस्या", 
+        date: "2026-11-09", 
+        tithi: "कार्तिक अमावस्या (उदयातिथि - सोमवती)", 
+        type: "festival", 
+        shortBadge: "सोमवती",
+        wish: "कार्तिक सोमवती अमावस्या एवं स्नान-दान पर्व की हार्दिक शुभकामनाएं! पवित्र स्नान, दान व सत्संग से पुण्य लाभ अर्जित करें।",
+        panchangNote: "उदयातिथि के अनुसार स्नान, दान और श्राद्ध-तर्पण के कार्य 9 नवंबर (सोमवार) की सुबह किए जाएंगे (अमावस्या समाप्त 12:32 PM)। सोमवार को अमावस्या पड़ने से यह 'सोमवती अमावस्या' का अत्यंत पावन योग है।"
+      },
+      { name: "गोवर्धन पूजा / अन्नकूट", date: "2026-11-10", tithi: "कार्तिक शुक्ल प्रतिपदा", type: "festival", shortBadge: "गोवर्धन", wish: "गोवर्धन पूजा एवं अन्नकूट महोत्सव की शुभकामनाएं! भगवान श्री कृष्ण आप पर कृपा बनाए रखें।" },
+      { name: "भाई दूज (यम द्वितीया)", date: "2026-11-11", tithi: "कार्तिक शुक्ल द्वितीया", type: "festival", shortBadge: "भाई दूज", wish: "भाई-बहन के अटूट प्रेम और विश्वास के पावन पर्व भाई दूज की हार्दिक मंगलकामनाएं!" },
       { name: "छठ पूजा (सूर्य षष्ठी)", date: "2026-11-15", tithi: "कार्तिक शुक्ल षष्ठी", type: "festival", wish: "महापर्व छठ पूजा की हार्दिक बधाई! भगवान भास्कर एवं छठी मैया की कृपा से आपकी हर मनोकामना पूर्ण हो।" },
       { name: "देवउठनी एकादशी / तुलसी विवाह", date: "2026-11-20", tithi: "कार्तिक शुक्ल एकादशी", type: "festival", wish: "देवउठनी एकादशी एवं तुलसी विवाह की मंगलकामनाएं! आपके घर में सभी मांगलिक कार्य सिद्ध हों।" },
       { name: "कार्तिक पूर्णिमा (देव दीपावली)", date: "2026-11-24", tithi: "कार्तिक पूर्णिमा", type: "festival", wish: "देव दीपावली एवं कार्तिक पूर्णिमा की हार्दिक बधाई! आपके जीवन में शांति और दिव्यता का प्रकाश फैले।" },
@@ -2762,7 +2778,8 @@
       { name: "श्रावण (हरियाली) अमावस्या", date: "2026-07-13", desc: "हरियाली अमावस्या - पौधारोपण व शिव आराधना" },
       { name: "भाद्रपद (पिठोरी) अमावस्या", date: "2026-08-12", desc: "पिठोरी अमावस्या - संतान सुख व समृद्धि दिवस" },
       { name: "आश्विन (सर्वपितृ मोक्ष) अमावस्या", date: "2026-09-10", desc: "सर्वपितृ मोक्ष अमावस्या - पितृ विसर्जन" },
-      { name: "कार्तिक (दीपावली) अमावस्या", date: "2026-11-09", desc: "दीपावली महापर्व - महालक्ष्मी पूजन अमावस्या" },
+      { name: "कार्तिक (दीपावली) अमावस्या", date: "2026-11-08", desc: "दीपावली महापर्व - महालक्ष्मी पूजन (अमावस्या प्रारंभ 11:28 AM, रात भर व्यापिनी)" },
+      { name: "कार्तिक (सोमवती) अमावस्या", date: "2026-11-09", desc: "स्नान-दान एवं पितृ तर्पण अमावस्या (उदयातिथि - समाप्त दोपहर 12:32 बजे तक)" },
       { name: "मार्गशीर्ष अमावस्या", date: "2026-12-08", desc: "मार्गशीर्ष अमावस्या - श्री कृष्ण आराधना" },
       // 2027
       { name: "पौष अमावस्या 2027", date: "2027-01-07", desc: "पौष अमावस्या - सूर्य व पितृ शांति" },
@@ -4581,6 +4598,25 @@
     ];
 
     function getHinduTithiInfo(dateStr) {
+      if (dateStr === "2026-11-06") {
+        return { full: "कार्तिक कृष्ण त्रयोदशी (धनतेरस)", short: "त्रयोदशी" };
+      }
+      if (dateStr === "2026-11-07") {
+        return { full: "कार्तिक कृष्ण चतुर्दशी (नरक चतुर्दशी / रूप चौदस)", short: "चतुर्दशी" };
+      }
+      if (dateStr === "2026-11-08") {
+        return { full: "कार्तिक कृष्ण अमावस्या (प्रारंभ 11:28 AM, महालक्ष्मी पूजन)", short: "अमावस्या" };
+      }
+      if (dateStr === "2026-11-09") {
+        return { full: "कार्तिक अमावस्या (उदयातिथि - समाप्त 12:32 PM, सोमवती स्नान-दान)", short: "अमावस्या" };
+      }
+      if (dateStr === "2026-11-10") {
+        return { full: "कार्तिक शुक्ल प्रतिपदा (गोवर्धन पूजा / अन्नकूट)", short: "प्रतिपदा" };
+      }
+      if (dateStr === "2026-11-11") {
+        return { full: "कार्तिक शुक्ल द्वितीया (भाई दूज)", short: "द्वितीया" };
+      }
+
       const festival = HINDU_FESTIVALS.find(f => f.date === dateStr);
       if (festival && festival.tithi) {
         let short = festival.tithi;
@@ -4691,18 +4727,18 @@
         let badgeText = "";
         let badgeColor = "#ea580c";
 
-        if (amavasya) {
-          cell.classList.add("has-amavasya");
-          dotsHtml += `<span>🌑</span>`;
-          badgeText = currentLang === 'en' ? "Amavasya" : "अमावस्या";
-          badgeColor = "#1d4ed8";
-        }
         if (festival) {
           cell.classList.add("has-festival");
           dotsHtml += `<span>🚩</span>`;
+          badgeText = festival.shortBadge || festival.name.split('/')[0].split('(')[0].trim().slice(0, 6);
+          badgeColor = "#ea580c";
+        }
+        if (amavasya) {
+          cell.classList.add("has-amavasya");
+          dotsHtml += `<span>🌑</span>`;
           if (!badgeText) {
-            badgeText = festival.name.split('/')[0].split('(')[0].trim().slice(0, 5);
-            badgeColor = "#ea580c";
+            badgeText = currentLang === 'en' ? "Amavasya" : "अमावस्या";
+            badgeColor = "#1d4ed8";
           }
         }
         if (nationalDay && !badgeText) {
@@ -4817,6 +4853,11 @@
             <div style="font-size:11px; color:#ea580c; margin-top:2px;">
               तिथि: ${festival.tithi}
             </div>
+            ${festival.panchangNote ? `
+              <div style="font-size:11.5px; color:#1e3a8a; background:#eff6ff; border-left:3px solid #3b82f6; padding:8px 10px; border-radius:8px; margin-top:8px; line-height:1.5;">
+                <i class="fa-solid fa-circle-info" style="color:#2563eb;"></i> <strong>पंचांग निर्णय:</strong> ${festival.panchangNote}
+              </div>
+            ` : ''}
             ${festival.wish ? `
               <div style="font-size:11px; color:#78350f; font-style:italic; margin-top:4px; background:rgba(255,255,255,0.7); padding:6px; border-radius:6px;">
                 "${festival.wish}"
