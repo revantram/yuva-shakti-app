@@ -1992,144 +1992,171 @@
       </div>
     </div>
 
-    <!-- 2. अमावस्या बही-खाता टैब -->
+    <!-- 2. खर्च एवं स्प्रेडशीट टैब -->
     <div id="viewLedger" class="section-view">
       
-      <!-- Metrics Grid -->
-      <div class="ledger-grid">
-        <div class="ledger-box green">
-          <div class="ledger-label"><i class="fa-solid fa-hand-holding-dollar"></i> <span data-i18n="total_income">कुल जमा</span></div>
-          <div class="ledger-val" id="totalCollected">₹0</div>
+      <!-- Top Dual Balance Cards: Side 1: कुल खर्च | Side 2: बाकी बचे पैसे -->
+      <div class="expense-hero-container" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+        <!-- Side 1: कुल खर्च -->
+        <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.05) 100%); border:1px solid rgba(239, 68, 68, 0.28); border-radius:18px; padding:14px 10px; text-align:center; box-shadow:0 4px 16px rgba(239,68,68,0.08);">
+          <div style="font-size:12px; font-weight:700; color:#dc2626; display:flex; align-items:center; justify-content:center; gap:5px; margin-bottom:6px;">
+            <i class="fa-solid fa-arrow-trend-down" style="font-size:13px;"></i>
+            <span>कुल खर्च</span>
+          </div>
+          <div id="totalExpenseAmount" style="font-size:23px; font-weight:900; color:#b91c1c; letter-spacing:-0.5px;">₹0</div>
+          <div style="font-size:10px; color:#ef4444; margin-top:3px; font-weight:600;">सामग्री व व्यवस्था व्यय</div>
         </div>
-        <div class="ledger-box red">
-          <div class="ledger-label"><i class="fa-solid fa-money-bill-wave"></i> <span data-i18n="total_expense">कुल खर्च</span></div>
-          <div class="ledger-val" id="totalExpense">₹0</div>
-        </div>
-        <div class="ledger-box blue">
-          <div class="ledger-label"><i class="fa-solid fa-vault"></i> <span data-i18n="net_balance">उपलब्ध शेष</span></div>
-          <div class="ledger-val" id="netBalance">₹0</div>
+
+        <!-- Side 2: बाकी बचे पैसे -->
+        <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(5, 150, 105, 0.05) 100%); border:1px solid rgba(16, 185, 129, 0.3); border-radius:18px; padding:14px 10px; text-align:center; box-shadow:0 4px 16px rgba(16,185,129,0.08);">
+          <div style="font-size:12px; font-weight:700; color:#059669; display:flex; align-items:center; justify-content:center; gap:5px; margin-bottom:6px;">
+            <i class="fa-solid fa-vault" style="font-size:13px;"></i>
+            <span>बाकी बचे पैसे</span>
+          </div>
+          <div id="remainingBalanceAmount" style="font-size:23px; font-weight:900; color:#047857; letter-spacing:-0.5px;">₹0</div>
+          <div id="expenseFundSub" style="font-size:10px; color:#059669; margin-top:3px; font-weight:600;">कुल जमा: ₹0</div>
         </div>
       </div>
 
-      <!-- PhonePe / UPI Quick Pay Card in Ledger -->
-      <div style="background:linear-gradient(135deg, #5f259f 0%, #3b1464 100%); color:white; border-radius:var(--radius); padding:12px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm);">
+      <!-- Hidden Metrics & Inputs for backward compatibility -->
+      <div style="display:none;" id="ledgerFormCard">
+        <span id="totalCollected">₹0</span>
+        <span id="totalExpense">₹0</span>
+        <span id="netBalance">₹0</span>
+        <select id="transType"><option value="contribution">अंशदान</option><option value="expense">खर्च</option></select>
+        <input type="text" id="transDesc">
+        <input type="number" id="transAmount">
+        <select id="transPayMethod"><option value="नकद">नकद</option><option value="PhonePe / GPay / UPI">PhonePe / GPay / UPI</option></select>
+        <input type="date" id="transDate">
+        <div id="transSelfLockNotice"></div>
+      </div>
+
+      <!-- PhonePe / UPI Quick Deposit Card -->
+      <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(95, 37, 159, 0.12) 0%, rgba(59, 20, 100, 0.05) 100%); border:1px solid rgba(95, 37, 159, 0.22); border-radius:16px; padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
         <div>
-          <div style="font-weight:700; font-size:13px; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-qrcode" style="color:#fbbf24; font-size:16px;"></i>
-            <span data-i18n="online_contrib">PhonePe / UPI से ऑनलाइन अंशदान</span>
+          <div style="font-weight:700; font-size:12px; display:flex; align-items:center; gap:6px; color:var(--text-color);">
+            <i class="fa-solid fa-qrcode" style="color:#7c3aed; font-size:15px;"></i>
+            <span>अमावस्या अंशदान (₹100)</span>
           </div>
-          <div style="font-size:11px; opacity:0.85; margin-top:2px;">
-            UPI ID: <span id="ledgerUpiDisplay">7850983600@ibl</span>
+          <div style="font-size:10px; color:var(--text-muted); margin-top:1px;">
+            UPI: <span id="ledgerUpiDisplay">7850983600@ibl</span>
           </div>
         </div>
-        <button onclick="openPhonePeModal('अमावस्या अंशदान')" style="background:#fbbf24; color:#5f259f; border:none; padding:8px 12px; border-radius:8px; font-weight:700; font-size:12px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">
-          <i class="fa-solid fa-mobile-screen-button"></i> <span data-i18n="open_phonepe">PhonePe खोलें</span>
+        <button onclick="openPhonePeModal('अमावस्या अंशदान', 100)" style="background:#5f259f; color:white; border:none; padding:7px 12px; border-radius:10px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 6px rgba(95,37,159,0.3);">
+          <i class="fa-solid fa-mobile-screen-button"></i> <span>PhonePe ₹100</span>
         </button>
       </div>
 
-      <!-- Quick Action Tools for Ledger -->
-      <div class="ledger-actions-bar">
-        <button class="btn-tool" onclick="shareLedgerSummaryToWA()">
+      <!-- Admin Add Expense Controls (Only visible if isAdmin) -->
+      <div id="expenseAdminControls" style="display:none; margin-bottom:12px;">
+        <div style="display:flex; gap:8px;">
+          <button class="btn-main" onclick="openExpenseModal()" style="background:#dc2626; flex:1; border-radius:14px; padding:12px; font-weight:700; font-size:13px; box-shadow:0 4px 14px rgba(220,38,38,0.25);">
+            <i class="fa-solid fa-plus"></i> नया खर्च / सामग्री जोड़ें
+          </button>
+          <button class="btn-main" onclick="openAdminContributionModal()" style="background:#059669; flex:0.9; border-radius:14px; padding:12px; font-weight:700; font-size:12px; box-shadow:0 4px 14px rgba(5,150,105,0.25);">
+            <i class="fa-solid fa-hand-holding-dollar"></i> अंशदान दर्ज करें
+          </button>
+        </div>
+      </div>
+
+      <!-- Member Read-Only Notice (Visible when !isAdmin) -->
+      <div id="expenseReadOnlyNotice" class="ios-glass-card" style="display:flex; align-items:center; gap:10px; padding:10px 12px; margin-bottom:12px; background:rgba(37, 99, 235, 0.08); border:1px solid rgba(37, 99, 235, 0.2); border-radius:14px; font-size:11px; color:var(--text-color);">
+        <i class="fa-solid fa-shield-halved" style="color:#2563eb; font-size:16px; flex-shrink:0;"></i>
+        <div><strong>व्यवस्थापक नियंत्रण:</strong> केवल व्यवस्थापक (Admin) खर्च व सामग्री जोड़/बदल सकते हैं। सदस्य सभी खर्चों की तालिका व शेष राशि देख सकते हैं।</div>
+      </div>
+
+      <!-- Quick Action Tools (Share WA, PDF, CSV) -->
+      <div class="ledger-actions-bar" style="margin-bottom:12px;">
+        <button class="btn-tool" onclick="shareExpensesToWA()">
           <i class="fa-brands fa-whatsapp" style="color:#16a34a; font-size:14px;"></i>
-          <span data-i18n="share_on_group">ग्रुप पर शेयर करें</span>
+          <span>व्हाट्सएप शेयर</span>
         </button>
-        <button class="btn-tool" onclick="exportLedgerToPDF()">
+        <button class="btn-tool" onclick="exportExpensesToPDF()">
           <i class="fa-solid fa-file-pdf" style="color:#ef4444; font-size:14px;"></i>
-          <span data-i18n="pdf_report">PDF रिपोर्ट</span>
+          <span>PDF रिपोर्ट</span>
+        </button>
+        <button class="btn-tool" onclick="exportExpensesToCSV()">
+          <i class="fa-solid fa-file-excel" style="color:#059669; font-size:14px;"></i>
+          <span>CSV स्प्रेडशीट</span>
         </button>
       </div>
 
-      <!-- Add Transaction Card -->
-      <div class="card" id="ledgerFormCard">
-        <div class="card-title">
-          <span><i class="fa-solid fa-file-invoice-dollar" style="color:#2563eb;"></i> <span data-i18n="add_transaction_title">नया लेनदेन दर्ज करें</span></span>
-          <span class="badge" id="ledgerFormBadge" data-i18n="ledger_badge">अमावस्या बही-खाता</span>
-        </div>
-        
-        <div class="form-group">
-          <label data-i18n="field_type">प्रकार</label>
-          <select id="transType" onchange="handleTransTypeChange()">
-            <option value="contribution" data-i18n="contrib_opt">अमावस्या अंशदान (जमा)</option>
-            <option value="expense" data-i18n="expense_opt">ग्रुप व्यय (खर्च)</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label id="transDescLabel" data-i18n="field_name">सदस्य का नाम</label>
-          <input type="text" id="transDesc" list="memberSuggestions" placeholder="सदस्य का नाम या खर्च विवरण लिखें" data-i18n-ph="trans_desc_ph">
-          <datalist id="memberSuggestions"></datalist>
-          <div id="transSelfLockNotice" style="display:none; font-size:11px; margin-top:4px; color:#2563eb; font-weight:600;"></div>
-        </div>
-
-        <div class="form-group">
-          <label data-i18n="field_amount">राशि (₹)</label>
-          <input type="number" id="transAmount" placeholder="उदा. 500">
-          <div class="chips-group">
-            <button type="button" class="chip-btn" onclick="setQuickAmount(200)">+ ₹200</button>
-            <button type="button" class="chip-btn" onclick="setQuickAmount(500)">+ ₹500</button>
-            <button type="button" class="chip-btn" onclick="setQuickAmount(1000)">+ ₹1000</button>
-            <button type="button" class="chip-btn" onclick="setQuickAmount(2100)">+ ₹2100</button>
+      <!-- 📊 Dedicated Expenses Spreadsheet Table Card -->
+      <div class="card ios-glass-card" style="padding:14px; border-radius:18px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="font-weight:800; font-size:14px; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-table" style="color:#dc2626;"></i>
+              <span>खर्च स्प्रेडशीट (सामग्री व्यय)</span>
+            </div>
+            <div style="font-size:11px; color:var(--text-muted);" id="expenseCountText">लोड हो रहा है...</div>
+          </div>
+          <div>
+            <input type="text" id="expenseSearchInput" oninput="renderExpensesSpreadsheet()" placeholder="सामग्री या नाम खोजें..." style="padding:6px 10px; font-size:11px; border-radius:10px; border:1px solid var(--border-color); background:var(--input-bg); color:var(--text-color); width:130px;">
           </div>
         </div>
 
-        <div class="form-group">
-          <label data-i18n="field_method">भुगतान का माध्यम</label>
-          <select id="transPayMethod">
-            <option value="नकद">नकद (Cash)</option>
-            <option value="PhonePe / GPay / UPI">PhonePe / GPay / UPI</option>
-            <option value="बैंक ट्रांसफर">बैंक ट्रांसफर</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label data-i18n="field_date">तारीख / अमावस्या तिथि</label>
-          <div style="display:flex; gap:6px;">
-            <input type="date" id="transDate">
-            <button type="button" onclick="setTodayDate('transDate')" style="padding:0 12px; background:#e2e8f0; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;" data-i18n="btn_today">आज</button>
-          </div>
-        </div>
-
-        <button class="btn-main" onclick="saveTransaction()">
-          <i class="fa-solid fa-check"></i> <span data-i18n="btn_save_ledger">बही-खाते में जोड़ें</span>
-        </button>
-      </div>
-
-      <!-- Ledger Table Card -->
-      <div class="card">
-        <div class="print-only-header">
-          <h2 style="font-size:20px; font-weight:800; margin-bottom:4px; color:#1e3a8a;">युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)</h2>
-          <div style="font-size:14px; font-weight:600; color:#334155;">आधिकारिक बही-खाता एवं आय-व्यय रिपोर्ट</div>
-          <div style="font-size:12px; color:#64748b; margin-top:4px;" id="printDateStr">रिपोर्ट दिनांक</div>
-        </div>
-        <div class="card-title">
-          <span><i class="fa-solid fa-list-check"></i> <span data-i18n="ledger_list_title">लेनदेन विवरण</span></span>
-          <div style="display:flex; gap:4px;">
-            <select id="ledgerFilterType" onchange="renderLedgerTable()" style="padding:4px 8px; font-size:11px; width:auto; border-radius:6px;">
-              <option value="all" data-i18n="filter_all_records">सभी रिकॉर्ड</option>
-              <option value="contribution" data-i18n="filter_income_only">केवल जमा</option>
-              <option value="expense" data-i18n="filter_expense_only">केवल खर्च</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="table-container">
-          <table>
+        <div class="table-container" style="border-radius:12px; border:1px solid var(--border-color); overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:12px;">
             <thead>
-              <tr>
-                <th data-i18n="th_desc">विवरण/सदस्य</th>
-                <th data-i18n="th_date">तारीख</th>
-                <th data-i18n="th_amount">राशि</th>
-                <th data-i18n="th_method">माध्यम</th>
-                <th data-i18n="th_type">प्रकार</th>
-                <th id="thLedgerAction" style="display:none; text-align:center;" data-i18n="th_delete">हटाएं</th>
+              <tr style="background:rgba(220, 38, 38, 0.08); border-bottom:2px solid rgba(220, 38, 38, 0.2);">
+                <th style="padding:10px 6px; text-align:center; width:28px;">#</th>
+                <th style="padding:10px 8px; white-space:nowrap;">दिनांक</th>
+                <th style="padding:10px 8px;">सामग्री / विवरण</th>
+                <th style="padding:10px 8px; text-align:right; white-space:nowrap;">खर्च (₹)</th>
+                <th style="padding:10px 8px; white-space:nowrap;">खर्चकर्ता</th>
+                <th style="padding:10px 6px; white-space:nowrap;">माध्यम</th>
+                <th id="thExpenseAction" style="padding:10px 8px; text-align:center; white-space:nowrap; display:none;">एक्शन</th>
               </tr>
             </thead>
-            <tbody id="ledgerTableBody">
-              <tr><td colspan="5" style="text-align:center; color:#64748b; padding:16px;">कोई लेनदेन दर्ज नहीं है।</td></tr>
+            <tbody id="expensesTableBody">
+              <tr><td colspan="7" style="text-align:center; padding:18px; color:var(--text-muted);">खर्च लोड हो रहा है...</td></tr>
             </tbody>
+            <tfoot id="expensesTableFoot" style="background:rgba(0,0,0,0.03); font-weight:700; border-top:2px solid var(--border-color);">
+              <tr>
+                <td colspan="3" style="padding:10px 8px; text-align:right;">कुल खर्च योग:</td>
+                <td id="expensesTotalFooter" style="padding:10px 8px; text-align:right; color:#dc2626; font-size:13px; font-weight:800;">₹0</td>
+                <td colspan="3"></td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
+
+      <!-- Collapsible Section for All Transactions & Income Records -->
+      <details class="card ios-glass-card" style="border-radius:16px; padding:12px 14px; margin-bottom:14px;">
+        <summary style="font-weight:700; font-size:12px; color:var(--text-color); cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+          <span><i class="fa-solid fa-clock-rotate-left" style="color:#2563eb; margin-right:6px;"></i> समस्त लेनदेन व जमा इतिहास (All Records)</span>
+          <i class="fa-solid fa-chevron-down" style="font-size:11px; color:var(--text-muted);"></i>
+        </summary>
+        <div style="margin-top:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:11px; color:var(--text-muted);">फ़िल्टर:</span>
+            <select id="ledgerFilterType" onchange="renderLedgerTable()" style="padding:4px 8px; font-size:11px; border-radius:6px; border:1px solid var(--border-color); background:var(--input-bg); color:var(--text-color);">
+              <option value="all">सभी रिकॉर्ड</option>
+              <option value="contribution">केवल जमा</option>
+              <option value="expense">केवल खर्च</option>
+            </select>
+          </div>
+          <div class="table-container" style="border-radius:10px; border:1px solid var(--border-color); overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:11px;">
+              <thead>
+                <tr style="background:rgba(0,0,0,0.04);">
+                  <th style="padding:8px 6px;">विवरण/सदस्य</th>
+                  <th style="padding:8px 6px;">तारीख</th>
+                  <th style="padding:8px 6px; text-align:right;">राशि</th>
+                  <th style="padding:8px 6px;">माध्यम</th>
+                  <th style="padding:8px 6px;">प्रकार</th>
+                  <th id="thLedgerAction" style="display:none; text-align:center; padding:8px 6px;">हटाएं</th>
+                </tr>
+              </thead>
+              <tbody id="ledgerTableBody">
+                <tr><td colspan="5" style="text-align:center; color:#64748b; padding:12px;">कोई लेनदेन दर्ज नहीं है।</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
     </div>
 
     <!-- 3. हिंदू कैलेंडर व उत्सव टैब -->
@@ -2279,7 +2306,7 @@
             </div>
             <span data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span>
           </span>
-          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.2.7</span>
+          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.2.8</span>
         </div>
         <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between;">
@@ -2292,7 +2319,7 @@
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.2.7 (नवीनतम रिलीज)</strong>
+            <strong style="color:var(--text-main);">v4.2.8 (नवीनतम रिलीज)</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>क्लाउड डेटाबेस:</span>
@@ -2472,9 +2499,9 @@
       <i class="fa-solid fa-users"></i>
       <span data-i18n="nav_members">सदस्य</span>
     </button>
-    <button class="nav-item" onclick="switchTab('ledger', this)">
-      <i class="fa-solid fa-book-bookmark"></i>
-      <span data-i18n="nav_ledger">बही-खाता</span>
+    <button class="nav-item" onclick="switchTab('expenses', this)" id="navExpensesBtn">
+      <i class="fa-solid fa-receipt"></i>
+      <span data-i18n="nav_expenses">खर्च</span>
     </button>
     <button class="nav-item" onclick="switchTab('calendar', this)">
       <i class="fa-solid fa-calendar-check"></i>
@@ -2668,7 +2695,7 @@
           <img id="phonepeQrImg" src="" alt="UPI QR Code" style="width:180px; height:180px; display:block; margin:0 auto; object-fit:contain;">
         </div>
         <div style="font-size:14px; font-weight:800; color:#5f259f; margin-top:6px;" id="phonepeQrAmountTag">
-          राशि: ₹500
+          राशि: ₹100
         </div>
       </div>
 
@@ -2686,12 +2713,11 @@
       <!-- Amount Selector -->
       <div class="form-group" style="margin-bottom:10px;">
         <label style="font-size:12px; font-weight:700;">अंशदान राशि (₹)</label>
-        <input type="number" id="phonepePayAmount" value="500" min="1" step="50" oninput="handlePhonePeAmountChange()" style="font-size:16px; font-weight:700; text-align:center;">
+        <input type="number" id="phonepePayAmount" value="100" min="1" step="50" oninput="handlePhonePeAmountChange()" style="font-size:16px; font-weight:700; text-align:center;">
         <div class="chips-group" style="justify-content:center; margin-top:6px;">
+          <button type="button" class="chip-btn" onclick="setPhonePeAmount(100)">₹100</button>
           <button type="button" class="chip-btn" onclick="setPhonePeAmount(200)">₹200</button>
           <button type="button" class="chip-btn" onclick="setPhonePeAmount(500)">₹500</button>
-          <button type="button" class="chip-btn" onclick="setPhonePeAmount(1000)">₹1000</button>
-          <button type="button" class="chip-btn" onclick="setPhonePeAmount(2100)">₹2100</button>
         </div>
       </div>
 
@@ -2933,10 +2959,143 @@
     </div>
   </div>
 
+  <!-- 💰 Expense Add / Edit Modal -->
+  <div id="expenseModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this) closeExpenseModal()">
+    <div class="modal-content ios-glass-card" style="max-width:440px; width:92%; max-height:90vh; overflow-y:auto; border-radius:24px; padding:20px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        <div style="font-weight:800; font-size:16px; color:#dc2626; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-receipt"></i>
+          <span id="expenseModalTitle">नया खर्च / सामग्री जोड़ें</span>
+        </div>
+        <button onclick="closeExpenseModal()" style="background:rgba(0,0,0,0.05); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; color:var(--text-color); display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="editExpenseId" value="">
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">दिनांक (Date)</label>
+        <div style="display:flex; gap:6px;">
+          <input type="date" id="expenseDate" style="flex:1;">
+          <button type="button" onclick="setTodayDate('expenseDate')" style="padding:0 12px; background:#e2e8f0; border:none; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer;">आज</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">सामग्री / वस्तु विवरण (Item Name / Purpose)</label>
+        <input type="text" id="expenseDesc" placeholder="उदा. माइक साउंड किराया, टेंट, प्रसाद सामग्री...">
+        
+        <!-- Quick Suggestions for common expenses -->
+        <div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:6px;">
+          <button type="button" class="chip-btn" onclick="setQuickExpenseItem('प्रसाद / पूजन सामग्री')">भोग/प्रसाद</button>
+          <button type="button" class="chip-btn" onclick="setQuickExpenseItem('माइक साउंड सिस्टम')">माइक साउंड</button>
+          <button type="button" class="chip-btn" onclick="setQuickExpenseItem('टेंट / जाजम व्यवस्था')">टेंट/जाजम</button>
+          <button type="button" class="chip-btn" onclick="setQuickExpenseItem('बैनर व फ्लेक्स छपाई')">बैनर छपाई</button>
+          <button type="button" class="chip-btn" onclick="setQuickExpenseItem('चाय-नाश्ता व्यवस्था')">चाय-नाश्ता</button>
+          <button type="button" class="chip-btn" onclick="setQuickExpenseItem('बिजली / डेकोरेशन')">डेकोरेशन</button>
+          <button type="button" class="chip-btn" onclick="setQuickExpenseItem('अन्य सामग्री')">अन्य सामग्री</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">खर्च राशि (₹ Amount)</label>
+        <input type="number" id="expenseAmount" placeholder="उदा. 500" style="font-size:16px; font-weight:700; color:#dc2626;">
+        <div class="chips-group" style="margin-top:6px;">
+          <button type="button" class="chip-btn" onclick="document.getElementById('expenseAmount').value=100">₹100</button>
+          <button type="button" class="chip-btn" onclick="document.getElementById('expenseAmount').value=200">₹200</button>
+          <button type="button" class="chip-btn" onclick="document.getElementById('expenseAmount').value=500">₹500</button>
+          <button type="button" class="chip-btn" onclick="document.getElementById('expenseAmount').value=1000">₹1000</button>
+          <button type="button" class="chip-btn" onclick="document.getElementById('expenseAmount').value=2000">₹2000</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">खर्चकर्ता / किसके द्वारा सामग्री लाई गई (Spent By)</label>
+        <input type="text" id="expenseSpentBy" list="memberSuggestions" placeholder="नाम लिखें या चुनें...">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">भुगतान का माध्यम (Payment Mode)</label>
+        <select id="expensePayMethod">
+          <option value="नकद">नकद (Cash)</option>
+          <option value="PhonePe / UPI">PhonePe / GPay / UPI</option>
+          <option value="बैंक ट्रांसफर">बैंक ट्रांसफर (Bank Transfer)</option>
+          <option value="उधार / बिल बकाया">उधार / बिल बकाया</option>
+        </select>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="btn-main" onclick="saveExpenseRecord()" style="background:#dc2626; flex:1; border-radius:12px;">
+          <i class="fa-solid fa-floppy-disk"></i> <span id="expenseSaveBtnText">खर्च सहेजें</span>
+        </button>
+        <button type="button" onclick="closeExpenseModal()" style="flex:0.6; background:rgba(0,0,0,0.06); border:none; border-radius:12px; font-weight:600; cursor:pointer; color:var(--text-color);">
+          रद्द करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📥 Admin Add Contribution Modal -->
+  <div id="adminContributionModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this) closeAdminContributionModal()">
+    <div class="modal-content ios-glass-card" style="max-width:440px; width:92%; max-height:90vh; overflow-y:auto; border-radius:24px; padding:20px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        <div style="font-weight:800; font-size:16px; color:#059669; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+          <span>सदस्य अंशदान (जमा) दर्ज करें</span>
+        </div>
+        <button onclick="closeAdminContributionModal()" style="background:rgba(0,0,0,0.05); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; color:var(--text-color); display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">सदस्य का नाम</label>
+        <input type="text" id="adminContribDesc" list="memberSuggestions" placeholder="सदस्य का नाम चुनें...">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">अंशदान राशि (₹)</label>
+        <input type="number" id="adminContribAmount" value="100" placeholder="100" style="font-size:16px; font-weight:700; color:#059669;">
+        <div class="chips-group" style="margin-top:6px;">
+          <button type="button" class="chip-btn" onclick="document.getElementById('adminContribAmount').value=100">₹100</button>
+          <button type="button" class="chip-btn" onclick="document.getElementById('adminContribAmount').value=200">₹200</button>
+          <button type="button" class="chip-btn" onclick="document.getElementById('adminContribAmount').value=500">₹500</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">माध्यम</label>
+        <select id="adminContribMethod">
+          <option value="PhonePe / UPI">PhonePe / UPI</option>
+          <option value="नकद">नकद (Cash)</option>
+          <option value="बैंक ट्रांसफर">बैंक ट्रांसफर</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">दिनांक</label>
+        <div style="display:flex; gap:6px;">
+          <input type="date" id="adminContribDate">
+          <button type="button" onclick="setTodayDate('adminContribDate')" style="padding:0 12px; background:#e2e8f0; border:none; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer;">आज</button>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="btn-main" onclick="saveAdminContributionRecord()" style="background:#059669; flex:1; border-radius:12px;">
+          <i class="fa-solid fa-check"></i> जमा दर्ज करें
+        </button>
+        <button type="button" onclick="closeAdminContributionModal()" style="flex:0.6; background:rgba(0,0,0,0.06); border:none; border-radius:12px; font-weight:600; cursor:pointer; color:var(--text-color);">
+          रद्द करें
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.2.7";
+    const APP_VERSION = "4.2.8";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -2959,7 +3118,10 @@
     let loggedInMemberPhone = localStorage.getItem("loggedInMemberPhone") || null;
     let isAdmin = localStorage.getItem("isAdminSession") === "true";
     let currentLang = localStorage.getItem("appLang") || "hi";
-    const DEFAULT_ADMIN_PIN = "1234";
+    const DEFAULT_ADMIN_PIN = "9929";
+    if (localStorage.getItem("customAdminPin") === "1234") {
+      localStorage.setItem("customAdminPin", "9929");
+    }
     let membersList = [];
     let transactions = [];
     let confirmCallback = null;
@@ -3207,7 +3369,8 @@
         lang_title: "भाषा (Language)",
         lang_desc: "एप्लिकेशन की भाषा चुनें / Choose application language:",
         nav_members: "सदस्य",
-        nav_ledger: "बही-खाता",
+        nav_expenses: "खर्च",
+        nav_ledger: "खर्च",
         nav_calendar: "पंचांग",
         nav_add_member: "नया सदस्य",
         nav_settings: "सेटिंग्स",
@@ -3303,7 +3466,8 @@
         lang_title: "Language (भाषा)",
         lang_desc: "Choose application language / एप्लिकेशन की भाषा चुनें:",
         nav_members: "Members",
-        nav_ledger: "Ledger",
+        nav_expenses: "Expenses",
+        nav_ledger: "Expenses",
         nav_calendar: "Calendar",
         nav_add_member: "New Member",
         nav_settings: "Settings",
@@ -3791,6 +3955,7 @@
 
       updateSettingsUI();
       renderMembers();
+      renderExpensesSpreadsheet();
       renderLedgerTable();
       handleTransTypeChange();
     }
@@ -4172,9 +4337,10 @@
       if (tabName === 'members') {
         document.getElementById('viewMembers').classList.add('active-view');
         if (navButtons[0]) navButtons[0].classList.add('active');
-      } else if (tabName === 'ledger') {
+      } else if (tabName === 'ledger' || tabName === 'expenses') {
         document.getElementById('viewLedger').classList.add('active-view');
         if (navButtons[1]) navButtons[1].classList.add('active');
+        renderExpensesSpreadsheet();
         renderLedgerTable();
       } else if (tabName === 'calendar') {
         document.getElementById('viewCalendar').classList.add('active-view');
@@ -4254,6 +4420,7 @@
       netEl.innerText = "₹" + net.toLocaleString('en-IN');
       netEl.style.color = net >= 0 ? '#1d4ed8' : '#b91c1c';
 
+      renderExpensesSpreadsheet();
       renderLedgerTable();
     }, (error) => {
       console.error("Ledger snapshot error:", error);
@@ -4357,7 +4524,6 @@
                 ${isSelf ? `<span class="self-badge">${currentLang === 'en' ? 'You' : 'आप'}</span>` : ''}
               </div>
               <div class="member-subtext">
-                <span class="member-tag">${currentLang === 'en' ? 'Bhati Parivar' : 'भाटी परिवार'}</span>
                 <span>📱 ${m.phone}</span>
               </div>
             </div>
@@ -4763,7 +4929,435 @@
       );
     }
 
-    // 15. Ledger Handlers
+    // 15. Expenses Spreadsheet & Ledger Handlers
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function renderExpensesSpreadsheet() {
+      const tbody = document.getElementById("expensesTableBody");
+      const searchInput = document.getElementById("expenseSearchInput");
+      const searchTerm = (searchInput ? searchInput.value : "").trim().toLowerCase();
+      const countText = document.getElementById("expenseCountText");
+      const totalExpenseEl = document.getElementById("totalExpenseAmount");
+      const remainingBalanceEl = document.getElementById("remainingBalanceAmount");
+      const expenseFundSub = document.getElementById("expenseFundSub");
+      const adminControls = document.getElementById("expenseAdminControls");
+      const readOnlyNotice = document.getElementById("expenseReadOnlyNotice");
+      const thAction = document.getElementById("thExpenseAction");
+      const totalFooter = document.getElementById("expensesTotalFooter");
+
+      // Calculate totals
+      let totalIn = 0;
+      let totalOut = 0;
+      transactions.forEach(t => {
+        const amt = Number(t.amount) || 0;
+        if (t.type === "contribution") totalIn += amt;
+        else if (t.type === "expense") totalOut += amt;
+      });
+      const net = totalIn - totalOut;
+
+      if (totalExpenseEl) totalExpenseEl.innerText = "₹" + totalOut.toLocaleString('en-IN');
+      if (remainingBalanceEl) {
+        remainingBalanceEl.innerText = "₹" + net.toLocaleString('en-IN');
+        remainingBalanceEl.style.color = net >= 0 ? '#047857' : '#dc2626';
+      }
+      if (expenseFundSub) {
+        expenseFundSub.innerText = `कुल जमा: ₹${totalIn.toLocaleString('en-IN')}`;
+      }
+
+      // Update legacy elements if present
+      const legIn = document.getElementById("totalCollected");
+      const legOut = document.getElementById("totalExpense");
+      const legNet = document.getElementById("netBalance");
+      if (legIn) legIn.innerText = "₹" + totalIn.toLocaleString('en-IN');
+      if (legOut) legOut.innerText = "₹" + totalOut.toLocaleString('en-IN');
+      if (legNet) {
+        legNet.innerText = "₹" + net.toLocaleString('en-IN');
+        legNet.style.color = net >= 0 ? '#1d4ed8' : '#b91c1c';
+      }
+
+      // Admin vs Read-only toggle
+      if (adminControls) adminControls.style.display = isAdmin ? "block" : "none";
+      if (readOnlyNotice) readOnlyNotice.style.display = isAdmin ? "none" : "flex";
+      if (thAction) thAction.style.display = isAdmin ? "table-cell" : "none";
+
+      if (!tbody) return;
+
+      // Filter expenses
+      let expenses = transactions.filter(t => t.type === "expense");
+
+      if (searchTerm) {
+        expenses = expenses.filter(t => {
+          const desc = (t.description || "").toLowerCase();
+          const spent = (t.spentBy || "").toLowerCase();
+          const method = (t.payMethod || "").toLowerCase();
+          const date = (t.date || "").toLowerCase();
+          return desc.includes(searchTerm) || spent.includes(searchTerm) || method.includes(searchTerm) || date.includes(searchTerm);
+        });
+      }
+
+      // Sort by date descending (newest first)
+      expenses.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+      if (countText) {
+        countText.innerText = `कुल सामग्री मद: ${expenses.length}`;
+      }
+
+      let filteredSum = 0;
+      tbody.innerHTML = "";
+
+      if (expenses.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="${isAdmin ? 7 : 6}" style="text-align:center; padding:24px 12px; color:var(--text-muted);">
+              <i class="fa-solid fa-receipt" style="font-size:24px; color:#94a3b8; margin-bottom:8px; display:block;"></i>
+              <div>${searchTerm ? "कोई मिलान वाला खर्च नहीं मिला।" : "अभी तक कोई खर्च दर्ज नहीं किया गया है।"}</div>
+              ${isAdmin ? `<button onclick="openExpenseModal()" class="btn-main" style="margin:10px auto 0; padding:6px 14px; font-size:11px; width:auto; background:#dc2626;"><i class="fa-solid fa-plus"></i> पहला खर्च जोड़ें</button>` : ''}
+            </td>
+          </tr>
+        `;
+        if (totalFooter) totalFooter.innerText = "₹0";
+        return;
+      }
+
+      expenses.forEach((exp, idx) => {
+        const amt = Number(exp.amount) || 0;
+        filteredSum += amt;
+        const tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid var(--border-color)";
+
+        const safeDesc = escapeHtml(exp.description || "");
+        const safeSpentBy = escapeHtml(exp.spentBy || (currentLang === 'en' ? 'Admin' : 'व्यवस्थापक'));
+        const safeMethod = escapeHtml(exp.payMethod || (currentLang === 'en' ? 'Cash' : 'नकद'));
+        const displayDate = formatDisplayDate(exp.date);
+
+        tr.innerHTML = `
+          <td style="padding:9px 6px; text-align:center; color:var(--text-muted); font-size:11px;">${idx + 1}</td>
+          <td style="padding:9px 8px; white-space:nowrap; font-size:11px; color:var(--text-color);">${displayDate}</td>
+          <td style="padding:9px 8px; font-size:12px; color:var(--text-color);">
+            <strong style="color:var(--text-color);">${safeDesc}</strong>
+          </td>
+          <td style="padding:9px 8px; text-align:right; white-space:nowrap; font-weight:800; color:#dc2626; font-size:13px;">
+            ₹${amt.toLocaleString('en-IN')}
+          </td>
+          <td style="padding:9px 8px; white-space:nowrap; font-size:11px; color:var(--text-muted);">
+            <span style="background:rgba(0,0,0,0.04); padding:2px 6px; border-radius:6px;">${safeSpentBy}</span>
+          </td>
+          <td style="padding:9px 6px; white-space:nowrap; font-size:11px;">
+            <span style="background:rgba(37,99,235,0.08); color:#2563eb; padding:2px 6px; border-radius:6px; font-weight:600;">${safeMethod}</span>
+          </td>
+          ${isAdmin ? `
+            <td style="padding:9px 6px; text-align:center; white-space:nowrap;">
+              <div style="display:inline-flex; gap:4px;">
+                <button onclick="openExpenseModal('${exp.id}')" title="संपादित करें" style="background:rgba(37,99,235,0.1); border:none; color:#2563eb; padding:5px 8px; border-radius:6px; cursor:pointer; font-size:11px;">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button onclick="promptDeleteExpense('${exp.id}')" title="हटाएं" style="background:rgba(220,38,38,0.1); border:none; color:#dc2626; padding:5px 8px; border-radius:6px; cursor:pointer; font-size:11px;">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          ` : ''}
+        `;
+        tbody.appendChild(tr);
+      });
+
+      if (totalFooter) totalFooter.innerText = "₹" + filteredSum.toLocaleString('en-IN');
+    }
+
+    function openExpenseModal(editId = null) {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल व्यवस्थापक (Admin) के लिए है।", "warning");
+        return;
+      }
+      const modal = document.getElementById("expenseModal");
+      const modalTitle = document.getElementById("expenseModalTitle");
+      const saveBtnText = document.getElementById("expenseSaveBtnText");
+      const editInput = document.getElementById("editExpenseId");
+      const dateInput = document.getElementById("expenseDate");
+      const descInput = document.getElementById("expenseDesc");
+      const amountInput = document.getElementById("expenseAmount");
+      const spentByInput = document.getElementById("expenseSpentBy");
+      const payMethodInput = document.getElementById("expensePayMethod");
+
+      if (editId) {
+        const item = transactions.find(t => t.id === editId);
+        if (item) {
+          editInput.value = item.id;
+          dateInput.value = item.date || new Date().toISOString().slice(0, 10);
+          descInput.value = item.description || "";
+          amountInput.value = item.amount || "";
+          spentByInput.value = item.spentBy || "";
+          payMethodInput.value = item.payMethod || "नकद";
+          if (modalTitle) modalTitle.innerText = "खर्च विवरण संपादित करें (Edit Expense)";
+          if (saveBtnText) saveBtnText.innerText = "बदलाव सहेजें";
+        }
+      } else {
+        editInput.value = "";
+        setTodayDate('expenseDate');
+        descInput.value = "";
+        amountInput.value = "";
+        spentByInput.value = (loggedInMemberPhone ? (membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone))?.name || "") : "");
+        payMethodInput.value = "नकद";
+        if (modalTitle) modalTitle.innerText = "नया खर्च / सामग्री जोड़ें";
+        if (saveBtnText) saveBtnText.innerText = "खर्च सहेजें";
+      }
+
+      if (modal) modal.style.display = "flex";
+      setTimeout(() => descInput && descInput.focus(), 150);
+    }
+
+    function closeExpenseModal() {
+      const modal = document.getElementById("expenseModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function setQuickExpenseItem(name) {
+      const descInput = document.getElementById("expenseDesc");
+      if (descInput) {
+        descInput.value = name;
+        descInput.focus();
+      }
+    }
+
+    async function saveExpenseRecord() {
+      if (!isAdmin) {
+        showToast("केवल व्यवस्थापक ही खर्च जोड़ सकते हैं।", "error");
+        return;
+      }
+      const editId = document.getElementById("editExpenseId")?.value;
+      const date = document.getElementById("expenseDate")?.value;
+      const desc = document.getElementById("expenseDesc")?.value.trim();
+      const amount = Number(document.getElementById("expenseAmount")?.value);
+      const spentBy = document.getElementById("expenseSpentBy")?.value.trim() || "व्यवस्थापक";
+      const payMethod = document.getElementById("expensePayMethod")?.value || "नकद";
+
+      if (!date) {
+        showToast("कृपया दिनांक चुनें।", "warning");
+        return;
+      }
+      if (!desc) {
+        showToast("कृपया सामग्री या खर्च का विवरण लिखें।", "warning");
+        return;
+      }
+      if (!amount || amount <= 0) {
+        showToast("कृपया वैध खर्च राशि दर्ज करें।", "warning");
+        return;
+      }
+
+      try {
+        const payload = {
+          type: "expense",
+          description: desc,
+          amount: amount,
+          spentBy: spentBy,
+          payMethod: payMethod,
+          date: date,
+          updatedAt: new Date()
+        };
+
+        if (editId) {
+          await db.collection("ledger").doc(editId).update(payload);
+          showToast("खर्च सफलतापूर्वक अपडेट किया गया!", "success");
+        } else {
+          payload.createdAt = new Date();
+          await db.collection("ledger").add(payload);
+          showToast("नया खर्च स्प्रेडशीट में जोड़ दिया गया!", "success");
+        }
+        closeExpenseModal();
+      } catch (err) {
+        showToast("त्रुटि: " + err.message, "error");
+      }
+    }
+
+    function promptDeleteExpense(id) {
+      if (!isAdmin) {
+        showToast("यह अधिकार केवल व्यवस्थापक के पास है।", "error");
+        return;
+      }
+      showConfirmDialog(
+        "खर्च हटाएं",
+        "क्या आप वाकई इस सामग्री खर्च को स्प्रेडशीट से हटाना चाहते हैं?",
+        async () => {
+          try {
+            await db.collection("ledger").doc(id).delete();
+            showToast("खर्च स्प्रेडशीट से हटा दिया गया।", "info");
+          } catch (e) {
+            showToast("त्रुटि: " + e.message, "error");
+          }
+        }
+      );
+    }
+
+    // Admin Add Contribution Modal
+    function openAdminContributionModal() {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल व्यवस्थापक (Admin) के लिए है।", "warning");
+        return;
+      }
+      const modal = document.getElementById("adminContributionModal");
+      setTodayDate('adminContribDate');
+      const desc = document.getElementById("adminContribDesc");
+      if (desc) desc.value = "";
+      const amt = document.getElementById("adminContribAmount");
+      if (amt) amt.value = "100";
+      if (modal) modal.style.display = "flex";
+      setTimeout(() => desc && desc.focus(), 150);
+    }
+
+    function closeAdminContributionModal() {
+      const modal = document.getElementById("adminContributionModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    async function saveAdminContributionRecord() {
+      if (!isAdmin) {
+        showToast("केवल व्यवस्थापक ही जमा दर्ज कर सकते हैं।", "error");
+        return;
+      }
+      const desc = document.getElementById("adminContribDesc")?.value.trim();
+      const amount = Number(document.getElementById("adminContribAmount")?.value);
+      const method = document.getElementById("adminContribMethod")?.value || "PhonePe / UPI";
+      const date = document.getElementById("adminContribDate")?.value;
+
+      if (!desc) {
+        showToast("कृपया सदस्य का नाम लिखें।", "warning");
+        return;
+      }
+      if (!amount || amount <= 0) {
+        showToast("कृपया वैध राशि दर्ज करें।", "warning");
+        return;
+      }
+      if (!date) {
+        showToast("कृपया तारीख चुनें।", "warning");
+        return;
+      }
+
+      try {
+        await db.collection("ledger").add({
+          type: "contribution",
+          description: desc,
+          amount: amount,
+          payMethod: method,
+          date: date,
+          createdAt: new Date()
+        });
+        showToast("अंशदान जमा सफलतापूर्वक दर्ज हुआ!", "success");
+        closeAdminContributionModal();
+      } catch (err) {
+        showToast("त्रुटि: " + err.message, "error");
+      }
+    }
+
+    function exportExpensesToCSV() {
+      const expenses = transactions.filter(t => t.type === 'expense');
+      if (!expenses.length) {
+        showToast("एक्सपोर्ट के लिए कोई खर्च दर्ज नहीं है।", "warning");
+        return;
+      }
+      expenses.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+      let csv = "क्र.,दिनांक,सामग्री / वस्तु विवरण,खर्च राशि (रु),खर्चकर्ता,भुगतान माध्यम\n";
+      let total = 0;
+      expenses.forEach((e, i) => {
+        const amt = Number(e.amount) || 0;
+        total += amt;
+        const safeDesc = `"${(e.description || '').replace(/"/g, '""')}"`;
+        const safeSpent = `"${(e.spentBy || 'व्यवस्थापक').replace(/"/g, '""')}"`;
+        csv += `${i + 1},${e.date || ''},${safeDesc},${amt},${safeSpent},${e.payMethod || 'नकद'}\n`;
+      });
+      csv += `\n,कुल खर्च योग,,${total},,\n`;
+
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Yuva_Shakti_Kharch_Spreadsheet_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("खर्च स्प्रेडशीट CSV सफलतापूर्वक डाउनलोड हो गई!", "success");
+    }
+
+    function exportExpensesToPDF() {
+      const expenses = transactions.filter(t => t.type === 'expense');
+      if (!expenses.length) {
+        showToast("एक्सपोर्ट के लिए कोई खर्च उपलब्ध नहीं है।", "warning");
+        return;
+      }
+
+      let totalIn = transactions.filter(t => t.type === 'contribution').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let totalOut = expenses.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let net = totalIn - totalOut;
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      const summaryData = {
+        lang: currentLang,
+        totalIn: totalIn,
+        totalOut: totalOut,
+        net: net,
+        count: expenses.length,
+        date: todayStr
+      };
+
+      const cleanExpenses = expenses.map(t => ({
+        description: t.description || '',
+        date: t.date || '',
+        payMethod: t.payMethod || 'नकद',
+        type: 'expense',
+        amount: Number(t.amount) || 0
+      }));
+
+      if (window.AndroidApp && typeof window.AndroidApp.saveLedgerPdf === 'function') {
+        showToast("खर्च PDF रिपोर्ट डाउनलोड फोल्डर में सेव की जा रही है...", "info");
+        window.AndroidApp.saveLedgerPdf(JSON.stringify(summaryData), JSON.stringify(cleanExpenses));
+        return;
+      }
+      if (window.AndroidApp && typeof window.AndroidApp.printLedgerPdf === 'function') {
+        window.AndroidApp.printLedgerPdf();
+        return;
+      }
+      window.print();
+    }
+
+    function shareExpensesToWA() {
+      let totalIn = transactions.filter(t => t.type === 'contribution').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let totalOut = transactions.filter(t => t.type === 'expense').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let net = totalIn - totalOut;
+
+      const recentExpenses = transactions
+        .filter(t => t.type === 'expense')
+        .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+        .slice(0, 5);
+
+      let text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n`;
+      text += `📊 *सामग्री खर्च एवं कोष विवरण:*\n`;
+      text += `💸 *कुल खर्च:* ₹${totalOut.toLocaleString('en-IN')}\n`;
+      text += `💰 *बाकी बचे पैसे:* ₹${net.toLocaleString('en-IN')}\n`;
+      text += `📥 *कुल जमा राशि:* ₹${totalIn.toLocaleString('en-IN')}\n\n`;
+
+      if (recentExpenses.length > 0) {
+        text += `🛒 *हालिया सामग्री खर्च:*\n`;
+        recentExpenses.forEach((e, i) => {
+          text += `${i + 1}. ${e.description} - ₹${Number(e.amount).toLocaleString('en-IN')} (${formatDisplayDate(e.date)})\n`;
+        });
+        text += `\n`;
+      }
+
+      text += `📅 *दिनांक:* ${new Date().toLocaleDateString('hi-IN')}\n`;
+      text += `📲 *व्हाट्सएप ग्रुप:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh\n\n`;
+      text += `_सप्रेम - युवा शक्ति ग्रुप_`;
+
+      openWhatsAppUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
+    }
+
     async function saveTransaction() {
       const type = document.getElementById("transType").value;
       let desc = document.getElementById("transDesc").value.trim();
@@ -4781,7 +5375,6 @@
           showToast(currentLang === 'en' ? "Only Admin can record group expenses." : "ग्रुप खर्च केवल व्यवस्थापक (Admin) दर्ज कर सकते हैं।", "error");
           return;
         }
-        // Force member's own name so non-admins cannot deposit under another member's name
         const self = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
         const selfName = self ? self.name : loggedInMemberPhone;
         desc = selfName;
@@ -4830,6 +5423,7 @@
         thAction.style.display = "none";
       }
 
+      if (!tbody) return;
       tbody.innerHTML = "";
 
       let filtered = transactions;
@@ -4852,10 +5446,10 @@
         const typeBadgeText = isIncome ? (currentLang === 'en' ? 'Deposit' : 'जमा') : (currentLang === 'en' ? 'Expense' : 'खर्च');
 
         tr.innerHTML = `
-          <td><strong>${t.description}</strong></td>
+          <td><strong>${escapeHtml(t.description || '')}</strong></td>
           <td style="white-space:nowrap;">${formatDisplayDate(t.date)}</td>
           <td style="color:${isIncome ? '#047857' : '#b91c1c'}; font-weight:700; white-space:nowrap;">₹${Number(t.amount || 0).toLocaleString('en-IN')}</td>
-          <td><span style="font-size:10px; background:#f1f5f9; padding:2px 6px; border-radius:4px; color:#475569;">${t.payMethod || defaultMethod}</span></td>
+          <td><span style="font-size:10px; background:#f1f5f9; padding:2px 6px; border-radius:4px; color:#475569;">${escapeHtml(t.payMethod || defaultMethod)}</span></td>
           <td>
             <span style="background:${isIncome ? '#ecfdf5' : '#fef2f2'}; color:${isIncome ? '#047857' : '#b91c1c'}; padding:2px 6px; border-radius:4px; font-weight:700; font-size:10px;">
               ${typeBadgeText}
@@ -4889,52 +5483,7 @@
     }
 
     function exportLedgerToPDF() {
-      if (!transactions.length) {
-        showToast(currentLang === 'en' ? "No transactions available to export." : "एक्सपोर्ट के लिए कोई लेनदेन उपलब्ध नहीं है।", "warning");
-        return;
-      }
-
-      const todayStr = new Date().toISOString().split('T')[0];
-      let totalIn = transactions.filter(t => t.type === 'contribution').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      let totalOut = transactions.filter(t => t.type === 'expense').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      let net = totalIn - totalOut;
-
-      const summaryData = {
-        lang: currentLang,
-        totalIn: totalIn,
-        totalOut: totalOut,
-        net: net,
-        count: transactions.length,
-        date: todayStr
-      };
-
-      const cleanTransactions = transactions.map(t => ({
-        description: t.description || '',
-        date: t.date || '',
-        payMethod: t.payMethod || (currentLang === 'en' ? 'Cash' : 'नकद'),
-        type: t.type || 'contribution',
-        amount: Number(t.amount) || 0
-      }));
-
-      // 1. Primary: Save directly to Android Storage (/sdcard/Download)
-      if (window.AndroidApp && typeof window.AndroidApp.saveLedgerPdf === 'function') {
-        showToast(currentLang === 'en' ? "Saving PDF to Downloads folder..." : "बही-खाता PDF डाउनलोड फोल्डर में सेव की जा रही है...", "info");
-        window.AndroidApp.saveLedgerPdf(JSON.stringify(summaryData), JSON.stringify(cleanTransactions));
-        return;
-      }
-
-      // 2. Android PrintManager fallback
-      if (window.AndroidApp && typeof window.AndroidApp.printLedgerPdf === 'function') {
-        window.AndroidApp.printLedgerPdf();
-        return;
-      }
-
-      // 3. Web Print fallback
-      const pDate = document.getElementById("printDateStr");
-      if (pDate) {
-        pDate.innerText = (currentLang === 'en' ? "Report Date: " : "रिपोर्ट दिनांक: ") + todayStr;
-      }
-      window.print();
+      exportExpensesToPDF();
     }
 
     function shareAppDirectly() {
@@ -4948,44 +5497,11 @@
     }
 
     function exportLedgerToCSV() {
-      if (!transactions.length) {
-        showToast("एक्सपोर्ट के लिए कोई लेनदेन उपलब्ध नहीं है।", "warning");
-        return;
-      }
-
-      let csv = "प्रकार,विवरण/सदस्य,राशि,भुगतान माध्यम,तारीख\n";
-      transactions.forEach(t => {
-        const typeStr = t.type === 'contribution' ? 'अंशदान (जमा)' : 'खर्च (व्यय)';
-        const safeDesc = `"${(t.description || '').replace(/"/g, '""')}"`;
-        csv += `${typeStr},${safeDesc},${t.amount || 0},${t.payMethod || 'नकद'},${t.date || ''}\n`;
-      });
-
-      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `Yuva_Shakti_BahiKhata_${new Date().toISOString().slice(0, 10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      showToast("लेज़र रिपोर्ट सफलतापूर्वक डाउनलोड हो गई!", "success");
+      exportExpensesToCSV();
     }
 
     function shareLedgerSummaryToWA() {
-      let totalIn = transactions.filter(t => t.type === 'contribution').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      let totalOut = transactions.filter(t => t.type === 'expense').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      let net = totalIn - totalOut;
-
-      let text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n`;
-      text += `💰 *कुल जमा (अंशदान):* ₹${totalIn.toLocaleString('en-IN')}\n`;
-      text += `💸 *कुल खर्च:* ₹${totalOut.toLocaleString('en-IN')}\n`;
-      text += `⚖️ *उपलब्ध शेष राशि:* ₹${net.toLocaleString('en-IN')}\n\n`;
-      text += `👥 *पंजीकृत सदस्य:* ${membersList.length}\n`;
-      text += `📅 *दिनांक:* ${new Date().toLocaleDateString('hi-IN')}\n`;
-      text += `📲 *व्हाट्सएप ग्रुप लिंक:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh\n\n`;
-      text += `_सप्रेम - युवा शक्ति ग्रुप (भाटी परिवार)_`;
-
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+      shareExpensesToWA();
     }
 
     // 16. Calendar, Festivals & Celebrations
@@ -5873,12 +6389,12 @@
     let currentUpiName = localStorage.getItem('group_upi_name') || "Yuva Shakti Bhati Parivar";
 
     function getUpiPayUrl(amount, note) {
-      const amt = (amount && amount > 0) ? amount.toString() : "500";
+      const amt = (amount && amount > 0) ? amount.toString() : "100";
       const nt = note || "अमावस्या अंशदान";
       return `upi://pay?pa=${encodeURIComponent(currentUpiId)}&pn=${encodeURIComponent(currentUpiName)}&am=${encodeURIComponent(amt)}&cu=INR&tn=${encodeURIComponent(nt)}`;
     }
 
-    function openPhonePeModal(defaultNote = "अमावस्या अंशदान", defaultAmount = 500) {
+    function openPhonePeModal(defaultNote = "अमावस्या अंशदान", defaultAmount = 100) {
       if (defaultNote === "अमावस्या अंशदान" && loggedInMemberPhone) {
         const self = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
         if (self) {
@@ -5958,7 +6474,7 @@
     }
 
     function sharePaymentProofOnWA() {
-      const amount = document.getElementById("phonepePayAmount").value || "500";
+      const amount = document.getElementById("phonepePayAmount").value || "100";
       const note = document.getElementById("phonepePayNote").value || "अमावस्या अंशदान";
       const today = new Date().toLocaleDateString('hi-IN');
       const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\nमैंने *₹${amount}* का अंशदान PhonePe / UPI द्वारा जमा कर दिया है।\n\n📅 *तारीख:* ${today}\n📝 *विवरण:* ${note}\n📲 *UPI ID:* ${currentUpiId}\n🔗 *व्हाट्सएप ग्रुप:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh\n\nकृपया इसे ग्रुप के बही-खाते में दर्ज करें। 🙏`;
@@ -5966,7 +6482,7 @@
     }
 
     function recordInLedgerFromPhonePe() {
-      const amount = document.getElementById("phonepePayAmount").value || "500";
+      const amount = document.getElementById("phonepePayAmount").value || "100";
       const note = document.getElementById("phonepePayNote").value || "अमावस्या अंशदान";
       closePhonePeModal();
       switchTab('ledger');
