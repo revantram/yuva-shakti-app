@@ -136,8 +136,8 @@ public class MainActivity extends Activity {
                     }
                 }
 
-                // Handle WhatsApp links
-                if (url.contains("wa.me") || url.contains("api.whatsapp.com") || url.contains("whatsapp://")) {
+                // Handle WhatsApp links & group invites
+                if (url.contains("chat.whatsapp.com") || url.contains("wa.me") || url.contains("api.whatsapp.com") || url.contains("whatsapp://")) {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         startActivity(intent);

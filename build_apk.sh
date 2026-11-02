@@ -4,8 +4,13 @@ set -e
 PROJECT_DIR="/data/user/0/com.termux/files/home/.gemini/antigravity-cli/scratch/yuva-shakti-app"
 BUILD_DIR="/data/user/0/com.termux/files/home/.gemini/antigravity-cli/scratch/yuva-shakti-apk-build"
 
-echo "==> 🔄 Updating assets..."
+echo "==> 🔄 Updating assets & sources..."
+mkdir -p "${BUILD_DIR}/assets"
 cp "${PROJECT_DIR}/index.html" "${BUILD_DIR}/assets/index.html"
+cp "${PROJECT_DIR}/ic_launcher.png" "${BUILD_DIR}/assets/ic_launcher.png" 2>/dev/null || true
+cp "${PROJECT_DIR}/android/AndroidManifest.xml" "${BUILD_DIR}/AndroidManifest.xml"
+cp "${PROJECT_DIR}/android/src/com/yuvashaktigroup/app/MainActivity.java" "${BUILD_DIR}/src/com/yuvashaktigroup/app/MainActivity.java"
+cp -r "${PROJECT_DIR}/android/res/"* "${BUILD_DIR}/res/"
 
 echo "==> 📦 Compiling resources with AAPT2..."
 cd "${BUILD_DIR}"
