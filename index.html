@@ -2191,7 +2191,7 @@
     <div class="header-center-info" style="flex:1; text-align:center;">
       <h1 id="appTitleText" data-i18n="app_title" style="text-align:center; margin:0; font-size:15px; font-weight:800; color:#ffffff; letter-spacing:-0.2px;">युवा शक्ति ग्रुप</h1>
       <div class="header-subtitle" id="appSubTitleText" data-i18n="app_subtitle" style="text-align:center; margin-top:0px; font-size:10.5px; font-weight:700; color:#fbbf24;">भाटी परिवार • कुचेरा</div>
-      <div id="headerUserGreeting" style="font-size:10px; font-weight:700; color:#38bdf8; margin-top:1px; letter-spacing:0.2px;">(अतिथि)</div>
+      <div id="headerUserGreeting" onclick="openMemberSelectModal()" style="font-size:10.5px; font-weight:800; color:#38bdf8; margin-top:1px; letter-spacing:0.2px; cursor:pointer;" title="टैप करके अपनी सदस्य पहचान चुनें">(अतिथि)</div>
     </div>
     <div class="header-actions" id="mainHeaderActions" style="display:flex; align-items:center; gap:6px; justify-content:flex-end;">
       <!-- 🔔 Notification Center Bell Button -->
@@ -2720,7 +2720,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v4.4.0
+            APK v4.4.1
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -2748,7 +2748,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.4.0 (बिल्ड कोड: 26)
+              v4.4.1 (बिल्ड कोड: 27)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -3088,6 +3088,10 @@
       </div>
       <p style="font-size:12px; color:#64748b; margin-bottom:14px;">अपने 10-अंकों के मोबाइल नंबर और पिन/कोड से लॉगिन करें। संचालक महोदय अपने नंबर व कोड (992942) से सीधे संचालक मोड में लॉगिन होंगे।</p>
       
+      <button type="button" onclick="closeLoginModal(); openMemberSelectModal();" style="width:100%; margin-top:10px; margin-bottom:12px; background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; padding:9px 12px; border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+        <i class="fa-solid fa-list-check"></i> <span>सदस्य सूची से 1-क्लिक में नाम चुनें (सरल)</span>
+      </button>
+
       <div class="form-group">
         <label>रजिस्टर्ड 10 अंकों का मोबाइल नंबर</label>
         <input type="tel" id="loginUserPhone" placeholder="उदा. 8696663615" maxlength="10">
@@ -3100,6 +3104,39 @@
       <button class="btn-main" onclick="processMemberLogin()" style="margin-top:14px;">
         <i class="fa-solid fa-right-to-bracket"></i> लॉगिन करें
       </button>
+    </div>
+  </div>
+
+  <!-- 🟢 Member Select / 1-Tap Identity Modal -->
+  <div class="modal-overlay" id="memberSelectModal" style="display:none; align-items:center; justify-content:center; z-index:9999;">
+    <div class="modal-content ios-glass-card" style="max-width:440px; width:92%; max-height:85vh; display:flex; flex-direction:column; padding:18px 16px; border-radius:24px; background:linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 249, 255, 0.94) 100%); border:1.5px solid rgba(16, 185, 129, 0.25); box-shadow:0 20px 48px -10px rgba(0,0,0,0.2);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-size:15px; box-shadow:0 3px 8px rgba(16,185,129,0.3);">
+            <i class="fa-solid fa-user-check"></i>
+          </div>
+          <div>
+            <h3 style="font-size:15.5px; font-weight:800; color:#0f172a; margin:0;">सदस्य पहचान चुनें</h3>
+            <div style="font-size:11px; color:#64748b;">ग्रुप में लाइव ऑनलाइन दिखने हेतु अपना नाम चुनें</div>
+          </div>
+        </div>
+        <button onclick="closeMemberSelectModal()" style="border:none; background:none; font-size:18px; color:#64748b; cursor:pointer; padding:4px;">✕</button>
+      </div>
+
+      <div class="search-box" style="margin-bottom:10px; background:rgba(255,255,255,0.9); border:1px solid #cbd5e1; border-radius:12px; padding:6px 10px; display:flex; align-items:center;">
+        <i class="fa-solid fa-magnifying-glass" style="color:#64748b; margin-right:8px; font-size:13px;"></i>
+        <input type="text" id="memberSelectSearchInput" placeholder="सूची में अपना नाम खोजें..." oninput="filterMemberSelectList()" style="border:none; outline:none; width:88%; font-size:13px; background:transparent;">
+      </div>
+
+      <div id="memberSelectListContainer" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:6px; max-height:360px; padding-right:2px;">
+        <!-- Filled dynamically with member tiles -->
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button onclick="closeMemberSelectModal()" class="btn-main" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; flex:1; padding:10px; font-size:12.5px; border-radius:12px;">
+          बाद में (अतिथि रहें)
+        </button>
+      </div>
     </div>
   </div>
 
@@ -3248,7 +3285,8 @@
       <h3 style="font-size:18px; font-weight:800; color:var(--text-main); margin-bottom:2px;" id="profileModalName">सदस्य का नाम</h3>
       <div style="font-size:12px; color:#64748b; font-weight:600; margin-bottom:4px;">🚩 भाटी परिवार • कुचेरा</div>
       <div id="profileModalOnlineStatus" style="margin-bottom:6px;"></div>
-      <div id="profileModalRoleTag" style="margin-bottom:14px; min-height:22px;"></div>
+      <div id="profileModalRoleTag" style="margin-bottom:8px; min-height:22px;"></div>
+      <div id="profileModalClaimBox" style="margin-bottom:12px;"></div>
 
       <!-- Quick Action Buttons: Call, WhatsApp, Instagram -->
       <div class="action-grid" style="margin-bottom:14px;" id="profileModalActions">
@@ -4066,7 +4104,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.4.0";
+    const APP_VERSION = "4.4.1";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4090,11 +4128,13 @@
     const SANCHALAK_CODE = "992942";
     let loggedInMemberPhone = localStorage.getItem("loggedInMemberPhone") || null;
     let isAdmin = false;
-    // केवल रेवंतराम भाटी (8696663615) के वैध सत्र में ही संचालक/व्यवस्थापक मोड सक्रिय रहेगा
-    if (loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE) && localStorage.getItem("isAdminSession") === "true") {
+    // संचालक (रेवंतराम भाटी - 8696663615) के वैध सत्र में ही संचालक मोड सक्रिय रहेगा
+    if (localStorage.getItem("isAdminSession") === "true") {
       isAdmin = true;
-    } else {
-      localStorage.removeItem("isAdminSession");
+      loggedInMemberPhone = SANCHALAK_PHONE;
+      localStorage.setItem("loggedInMemberPhone", SANCHALAK_PHONE);
+    } else if (loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE)) {
+      isAdmin = false;
     }
     let currentLang = localStorage.getItem("appLang") || "hi";
     let membersList = [];
@@ -4771,10 +4811,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 26)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 27)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 26)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 27)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -4830,7 +4870,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 26)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 27)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'अभी अपडेट करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -4971,10 +5011,11 @@
         if (statusText) statusText.innerText = "";
       }
 
-      // Update header user greeting (in bracket) under header subtitle: (रेवंतराम भाटी) or (अतिथि)
+      // Update header user greeting (in bracket) under header subtitle: (रेवंतराम भाटी) or (अतिथि • पहचान चुनें)
       const headerUserGreeting = document.getElementById("headerUserGreeting");
       if (headerUserGreeting) {
-        headerUserGreeting.innerText = currentUserName ? `(${currentUserName})` : `(अतिथि)`;
+        headerUserGreeting.innerText = currentUserName ? `(${currentUserName})` : `(अतिथि • पहचान चुनें)`;
+        headerUserGreeting.title = currentUserName ? `पहचान: ${currentUserName} (टैप करके बदलें)` : `टैप करके अपनी सदस्य पहचान चुनें`;
       }
 
       // Remove / hide adminNotice orange strip completely as requested
@@ -6002,8 +6043,9 @@
       }
       if (!presence) return false;
 
-      // Online if isOnline is true AND activity recorded within the last 75 seconds
-      const isRecent = presence.lastActiveMs ? ((Date.now() - presence.lastActiveMs) < 75000) : true;
+      // Online if isOnline is true AND activity recorded within the last 2 minutes (120,000 ms)
+      const diff = presence.lastActiveMs ? Math.abs(Date.now() - Number(presence.lastActiveMs)) : 0;
+      const isRecent = diff < 120000;
       return Boolean(presence.isOnline && isRecent);
     }
 
@@ -6033,42 +6075,183 @@
       if (!m) return;
       const isOnline = isMemberOnline(m);
       const statusEl = document.getElementById("profileModalOnlineStatus");
-      const avatarBox = document.getElementById("profileModalAvatar");
+      const photoWrapper = document.querySelector(".profile-photo-wrapper");
 
       if (statusEl) {
         if (isOnline) {
           statusEl.innerHTML = `
-            <div style="display:inline-flex; align-items:center; gap:5px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35); padding:3px 10px; border-radius:12px; font-size:11px; font-weight:700; color:#047857;">
-              <span class="online-dot-mini"></span>
-              <span>अभी ऑनलाइन हैं (सक्रिय)</span>
+            <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(16,185,129,0.14); border:1.5px solid rgba(16,185,129,0.4); padding:4px 12px; border-radius:14px; font-size:11.5px; font-weight:800; color:#047857; box-shadow:0 2px 8px rgba(16,185,129,0.15);">
+              <span class="online-dot-mini" style="width:7px; height:7px;"></span>
+              <span>🟢 अभी ऑनलाइन हैं (सक्रिय)</span>
             </div>
           `;
         } else {
           statusEl.innerHTML = `
-            <div style="display:inline-flex; align-items:center; gap:5px; background:rgba(148,163,184,0.1); border:1px solid rgba(148,163,184,0.25); padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; color:#64748b;">
-              <i class="fa-solid fa-moon" style="font-size:10px;"></i>
-              <span>ऑफलाइन</span>
+            <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(148,163,184,0.12); border:1px solid rgba(148,163,184,0.3); padding:4px 12px; border-radius:14px; font-size:11.5px; font-weight:700; color:#64748b;">
+              <i class="fa-solid fa-moon" style="font-size:11px;"></i>
+              <span>🌙 ऑफलाइन</span>
             </div>
           `;
         }
       }
 
-      if (avatarBox) {
-        const existingDot = avatarBox.querySelector('.online-indicator');
+      if (photoWrapper) {
+        let dot = photoWrapper.querySelector('.profile-online-badge-dot');
         if (isOnline) {
-          if (!existingDot) {
-            const dot = document.createElement("span");
-            dot.className = "online-indicator";
-            dot.style.width = "18px";
-            dot.style.height = "18px";
+          if (!dot) {
+            dot = document.createElement("span");
+            dot.className = "online-indicator profile-online-badge-dot";
+            dot.style.width = "20px";
+            dot.style.height = "20px";
             dot.style.bottom = "2px";
-            dot.style.right = "2px";
-            dot.title = "अभी ऑनलाइन हैं";
-            avatarBox.appendChild(dot);
+            dot.style.right = "6px";
+            dot.style.border = "3px solid #ffffff";
+            dot.style.zIndex = "10";
+            dot.title = "अभी ऑनलाइन हैं (सक्रिय)";
+            photoWrapper.appendChild(dot);
           }
         } else {
-          if (existingDot) existingDot.remove();
+          if (dot) dot.remove();
         }
+      }
+    }
+
+    // 🟢 1-Tap Member Selection & Identity
+    function openMemberSelectModal() {
+      const modal = document.getElementById("memberSelectModal");
+      if (!modal) return;
+      const searchInp = document.getElementById("memberSelectSearchInput");
+      if (searchInp) searchInp.value = "";
+      renderMemberSelectList();
+      modal.style.display = "flex";
+    }
+
+    function closeMemberSelectModal() {
+      const modal = document.getElementById("memberSelectModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function filterMemberSelectList() {
+      const term = (document.getElementById("memberSelectSearchInput")?.value || "").trim().toLowerCase();
+      renderMemberSelectList(term);
+    }
+
+    function renderMemberSelectList(term = "") {
+      const container = document.getElementById("memberSelectListContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      let list = [...membersList];
+      list.sort((a, b) => {
+        const rankA = getMemberRoleRank(a);
+        const rankB = getMemberRoleRank(b);
+        if (rankA !== rankB) return rankA - rankB;
+        return (a.name || '').localeCompare(b.name || '', 'hi');
+      });
+
+      if (term) {
+        list = list.filter(m => (m.name && m.name.toLowerCase().includes(term)) || (m.phone && m.phone.includes(term)));
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:18px; color:#64748b; font-size:12.5px;">कोई सदस्य नहीं मिला।</div>`;
+        return;
+      }
+
+      list.forEach(m => {
+        const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
+        const isSanchalak = (m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम"));
+        const firstChar = (m.name || 'U').trim().charAt(0);
+        const isOnline = isMemberOnline(m);
+        const avatarHtml = m.photoUrl ?
+          `<img src="${m.photoUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` :
+          `<span style="font-weight:800; color:#1e3a8a; font-size:14px;">${firstChar}</span>`;
+
+        const row = document.createElement("div");
+        row.style.cssText = `
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 8px 12px;
+          border-radius: 14px;
+          background: ${isSelf ? 'linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(2, 132, 199, 0.08))' : 'rgba(255, 255, 255, 0.92)'};
+          border: 1.5px solid ${isSelf ? '#60a5fa' : 'rgba(226, 232, 240, 0.9)'};
+          cursor: pointer;
+          transition: transform 0.1s, background 0.15s;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        `;
+        row.onclick = () => selectMemberAsSelf(m);
+
+        row.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="position:relative; width:38px; height:38px; border-radius:50%; background:#e0f2fe; display:flex; align-items:center; justify-content:center; overflow:visible; flex-shrink:0; border:1px solid #bfdbfe;">
+              <div style="width:100%; height:100%; border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+                ${avatarHtml}
+              </div>
+              ${isOnline ? '<span class="online-indicator" style="width:10px; height:10px; bottom:0; right:0;" title="ऑनलाइन"></span>' : ''}
+            </div>
+            <div>
+              <div style="font-weight:800; font-size:13.5px; color:#0f172a; display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
+                <span>${m.name}</span>
+                ${isOnline ? '<span style="font-size:9.5px; background:rgba(16,185,129,0.15); color:#047857; padding:1px 5px; border-radius:6px; font-weight:800;"><span class="online-dot-mini" style="width:5px; height:5px;"></span> लाइव</span>' : ''}
+                ${isSanchalak ? '<span style="font-size:9.5px; background:#fef3c7; color:#92400e; padding:1px 5px; border-radius:6px; font-weight:800;">संचालक</span>' : ''}
+                ${isSelf ? '<span style="font-size:9.5px; background:#dbeafe; color:#1d4ed8; padding:1px 5px; border-radius:6px; font-weight:800;">वर्तमान आईडी</span>' : ''}
+              </div>
+              <div style="font-size:11px; color:#64748b;">📱 +91 ${m.phone || 'नंबर दर्ज नहीं'}</div>
+            </div>
+          </div>
+          <div style="font-size:11.5px; font-weight:700; color:${isSelf ? '#16a34a' : '#2563eb'}; display:flex; align-items:center; gap:4px;">
+            ${isSelf ? '<i class="fa-solid fa-circle-check"></i> चुना हुआ' : '<i class="fa-solid fa-arrow-right"></i> चुनें'}
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    async function selectMemberAsSelf(member) {
+      if (!member) return;
+      const isSanchalak = (member.phone && member.phone.endsWith(SANCHALAK_PHONE)) || (member.name && member.name.includes("रेवंतराम"));
+
+      if (isSanchalak) {
+        closeMemberSelectModal();
+        closeMemberProfileModal();
+        openLoginModal();
+        showToast("संचालक मोड हेतु कृपया संचालक कोड (992942) दर्ज करें।", "info");
+        const phoneInput = document.getElementById("loginUserPhone");
+        if (phoneInput) phoneInput.value = SANCHALAK_PHONE;
+        const pinInput = document.getElementById("loginUserPin");
+        if (pinInput) pinInput.focus();
+        return;
+      }
+
+      const cleanPhone = (member.phone || '').replace(/\D/g, '').slice(-10);
+      if (!cleanPhone) {
+        showToast("इस सदस्य का मोबाइल नंबर दर्ज नहीं है!", "error");
+        return;
+      }
+
+      localStorage.setItem("loggedInMemberPhone", cleanPhone);
+      localStorage.removeItem("isAdminSession");
+      loggedInMemberPhone = cleanPhone;
+      isAdmin = false;
+
+      closeMemberSelectModal();
+      closeMemberProfileModal();
+      showToast(`नमस्ते ${member.name}! आपकी सदस्य पहचान सेट हो गई है।`, "success");
+      updateAuthUI();
+      if (typeof sendPresenceHeartbeat === "function") {
+        sendPresenceHeartbeat(true);
+      }
+    }
+
+    function checkFirstTimeMemberPrompt() {
+      if (!loggedInMemberPhone && !sessionStorage.getItem("member_select_prompted")) {
+        sessionStorage.setItem("member_select_prompted", "true");
+        setTimeout(() => {
+          if (!loggedInMemberPhone && typeof openMemberSelectModal === "function") {
+            openMemberSelectModal();
+          }
+        }, 1200);
       }
     }
 
@@ -6454,6 +6637,21 @@
         roleTagEl.innerHTML = tagHtml;
       }
 
+      const claimBox = document.getElementById("profileModalClaimBox");
+      if (claimBox) {
+        if (!isSelf) {
+          claimBox.style.display = "block";
+          claimBox.innerHTML = `
+            <button type="button" onclick="selectMemberAsSelf(membersList.find(x => x.id === '${m.id}'))" class="btn-main" style="width:100%; font-size:12px; font-weight:800; padding:8px 12px; border-radius:12px; background:linear-gradient(135deg, rgba(37,99,235,0.1), rgba(2,132,199,0.06)); border:1.5px dashed #60a5fa; color:#1d4ed8; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px;">
+              <i class="fa-solid fa-user-check"></i> क्या यह आप हैं? अपनी सदस्य पहचान बनाएं
+            </button>
+          `;
+        } else {
+          claimBox.style.display = "none";
+          claimBox.innerHTML = "";
+        }
+      }
+
       const avatarBox = document.getElementById("profileModalAvatar");
       if (m.photoUrl) {
         avatarBox.innerHTML = `<img src="${m.photoUrl}" alt="${m.name}">`;
@@ -6603,6 +6801,11 @@
     function closeMemberProfileModal() {
       document.getElementById("memberProfileModal").style.display = "none";
       currentProfileModalMemberId = null;
+      const photoWrapper = document.querySelector(".profile-photo-wrapper");
+      if (photoWrapper) {
+        const dot = photoWrapper.querySelector('.profile-online-badge-dot');
+        if (dot) dot.remove();
+      }
     }
 
     let isProfilePinVisible = true;
@@ -10179,6 +10382,9 @@
       checkAmavasyaEveAlert();
       checkScheduledDueReminders();
       checkForAppUpdates(true);
+      if (typeof checkFirstTimeMemberPrompt === "function") {
+        checkFirstTimeMemberPrompt();
+      }
     }, 1500);
 
     // Periodic check every 60 seconds for scheduled 8:00 AM / 8:00 PM alerts while app is running
