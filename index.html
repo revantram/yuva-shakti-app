@@ -2,1406 +2,1891 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>युवा शक्ति ग्रुप (भाटी परिवार कुचेरा) - लाइव क्लाउड बहीखाता</title>
-  <link rel="icon" href="https://img.icons8.com/color/96/om.png" type="image/png">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1e1b4b">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>युवा शक्ति ग्रुप - परिवार प्रबंधन</title>
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  
+  <!-- Google Fonts: Inter & Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- jsPDF aur AutoTable Library (CDN se) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <!-- Firebase Classic Compatibility Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
   <style>
     :root {
-      --primary: #1e1b4b;
-      --primary-light: #312e81;
-      --saffron: #f59e0b;
-      --saffron-dark: #d97706;
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
       --success: #10b981;
+      --success-bg: #ecfdf5;
       --danger: #ef4444;
-      --bg: #0b0f19;
-      --card-bg: #151d30;
-      --card-border: #23314f;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --danger-bg: #fef2f2;
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
+      --info: #0284c7;
+      --info-bg: #f0f9ff;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      --radius: 12px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; }
-    body { background-color: var(--bg); color: var(--text-main); padding: 14px; min-height: 100vh; }
-    .container { max-width: 1050px; margin: 0 auto; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans Devanagari', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    /* Top Branding Header */
-    .header {
-      background: linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);
-      border: 1.5px solid var(--saffron);
-      border-radius: 20px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      margin-bottom: 16px;
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding-bottom: 90px;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    header {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 14px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-logo {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .header-text h1 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .header-status-badge {
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.18);
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .auth-btn {
+      background: rgba(255, 255, 255, 0.18);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .auth-btn:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .auth-btn.active-admin {
+      background: #dc2626;
+      border-color: #ef4444;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    /* Container */
+    .container {
+      max-width: 650px;
+      margin: 14px auto;
+      padding: 0 12px;
+    }
+
+    /* Admin Banner */
+    .admin-banner {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 8px;
+    }
+
+    .card-title .badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: var(--info-bg);
+      color: var(--info);
+      font-weight: 600;
+    }
+
+    /* Search Bar */
+    .search-box {
       position: relative;
-    }
-    .header h1 { font-size: 22px; color: var(--saffron); font-weight: 800; margin-bottom: 6px; }
-    .header p { font-size: 13px; color: #cbd5e1; }
-    
-    .badge-bar { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-    .status-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(16, 185, 129, 0.15); color: #34d399;
-      padding: 5px 14px; border-radius: 999px; font-size: 11.5px; font-weight: 600;
-      border: 1px solid rgba(16, 185, 129, 0.4);
-    }
-    .status-badge-online {
-      background: rgba(59, 130, 246, 0.15); color: #60a5fa;
-      border: 1px solid rgba(59, 130, 246, 0.4);
-    }
-    .dot { width: 9px; height: 9px; background: #10b981; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
-    .dot-blue { background: #3b82f6; }
-    @keyframes pulse { 0% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.4; transform: scale(0.9); } }
-
-    /* Live Notification Banner Animation */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-12px); }
-      to { opacity: 1; transform: translateY(0); }
+      margin-bottom: 12px;
     }
 
-    /* Flashing Siren Modal Animation */
-    @keyframes flashBlink {
-      0% { background: rgba(220, 53, 69, 0.95); }
-      100% { background: rgba(139, 0, 0, 0.98); }
+    .search-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
     }
 
-    /* Admin Only Elements (Hidden by default, shown when verified) */
-    .admin-only {
+    .search-input {
+      width: 100%;
+      padding: 10px 12px 10px 36px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 13px;
+      background: white;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    /* Member Card */
+    .member-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .member-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .member-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .member-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 1px solid #bfdbfe;
+    }
+
+    .member-details h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .member-tag {
+      font-size: 10px;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .self-badge {
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .member-subtext {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .member-dates {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #f1f5f9;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .date-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Actions Grid */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-act {
+      padding: 8px 4px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-act:active {
+      opacity: 0.85;
+    }
+
+    .act-call { background: #2563eb; }
+    .act-wa { background: #16a34a; }
+    .act-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+
+    /* Admin Member Buttons */
+    .member-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-icon {
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-edit { background: #eff6ff; color: #2563eb; }
+    .btn-delete { background: #fef2f2; color: #dc2626; }
+
+    /* Ledger Summary Grid */
+    .ledger-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .ledger-box {
+      background: white;
+      border-radius: var(--radius);
+      padding: 12px 6px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .ledger-box.green {
+      border-color: #a7f3d0;
+      background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%);
+    }
+
+    .ledger-box.red {
+      border-color: #fecaca;
+      background: linear-gradient(180deg, #fef2f2 0%, #ffffff 100%);
+    }
+
+    .ledger-box.blue {
+      border-color: #bfdbfe;
+      background: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
+    }
+
+    .ledger-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .ledger-val {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .green .ledger-val { color: #047857; }
+    .red .ledger-val { color: #b91c1c; }
+    .blue .ledger-val { color: #1d4ed8; }
+
+    /* Ledger Action Bar */
+    .ledger-actions-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn-tool {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      background: white;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .btn-tool:hover {
+      background: #f8fafc;
+    }
+
+    /* Fast Preset Chips */
+    .chips-group {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chip-btn {
+      padding: 4px 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      background: #f8fafc;
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+    }
+
+    .chip-btn:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13px;
+      background: #ffffff;
+      color: var(--text-main);
+      transition: all 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .btn-main {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      width: 100%;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-main:active {
+      opacity: 0.9;
+    }
+
+    .btn-sub {
+      background: #64748b;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      width: 100%;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
       display: none;
     }
 
-    /* Quick Action Buttons Row */
-    .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 16px; }
-    .action-btn {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 11px 14px; border-radius: 12px; font-weight: 700; font-size: 12.5px;
-      text-decoration: none; cursor: pointer; border: none; transition: transform 0.15s, opacity 0.15s;
-    }
-    .action-btn:hover { transform: translateY(-2px); opacity: 0.95; }
-    .btn-wa { background: #25D366; color: #064e3b; }
-    .btn-pay { background: linear-gradient(135deg, #f59e0b, #d97706); color: #451a03; }
-    .btn-apk { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #ffffff; }
-    .btn-join { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: #ffffff; }
-
-    /* Card Styling */
-    .table-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 16px; padding: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); margin-bottom: 18px;
+    /* Tables */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
     }
 
-    /* Login & Identity Strip */
-    .auth-strip {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 14px 18px; margin-bottom: 18px;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
-    }
-    .auth-input-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .auth-input {
-      padding: 9px 12px; background: #0b0f19; border: 1px solid var(--card-border);
-      border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; width: 140px;
-    }
-    .auth-input:focus { border-color: var(--saffron); outline: none; }
-    .auth-btn {
-      padding: 9px 16px; background: var(--saffron); color: #451a03; border: none;
-      border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
-    }
-    .admin-controls { display: flex; gap: 8px; flex-wrap: wrap; }
-    .admin-btn {
-      padding: 8px 13px; background: #dc2626; color: white; border: none;
-      border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      background: white;
     }
 
-    /* Table styling */
-    .table-responsive { overflow-x: auto; border-radius: 10px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td {
+      padding: 10px 10px;
+      text-align: left;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
     th {
-      background: #0b0f19; color: var(--text-muted); text-align: left;
-      padding: 12px 14px; font-weight: 700; font-size: 11.5px; text-transform: uppercase;
-      border-bottom: 1px solid var(--card-border);
-    }
-    td { padding: 12px 14px; border-bottom: 1px solid var(--card-border); vertical-align: middle; }
-    tr:hover { background: rgba(255, 255, 255, 0.02); }
-
-    .code-badge {
-      display: inline-block; padding: 3px 8px; border-radius: 6px;
-      font-size: 11.5px; font-weight: 700; background: rgba(245, 158, 11, 0.15);
-      color: var(--saffron); border: 1px solid rgba(245, 158, 11, 0.4);
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
-    /* Modals */
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Event Cards (Calendar) */
+    .event-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border: 1px solid transparent;
+    }
+
+    .event-bday {
+      background: #fffbeb;
+      border-color: #fde68a;
+    }
+
+    .event-anni {
+      background: #fdf2f8;
+      border-color: #fbcfe8;
+    }
+
+    .event-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .event-info strong {
+      font-size: 13px;
+      color: #1e293b;
+    }
+
+    .event-info span {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .event-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .days-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .days-today {
+      background: #dc2626;
+      color: white;
+      animation: pulse 1.5s infinite;
+    }
+
+    .days-upcoming {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .btn-wish {
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+    }
+
+    /* Bottom Navigation Bar */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      border-top: 1px solid var(--border-color);
+      z-index: 100;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+      padding: 4px 0 6px 0;
+    }
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 6px 2px;
+      font-size: 11px;
+      color: #64748b;
+      cursor: pointer;
+      border: none;
+      background: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: color 0.15s;
+    }
+
+    .nav-item i {
+      font-size: 18px;
+      transition: transform 0.15s;
+    }
+
+    .nav-item.active {
+      color: #2563eb;
+      font-weight: 700;
+    }
+
+    .nav-item.active i {
+      transform: scale(1.15);
+    }
+
+    /* Tab views */
+    .section-view {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .section-view.active-view {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Toast Notification */
+    #toastContainer {
+      position: fixed;
+      top: 65px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      width: 90%;
+      max-width: 400px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: #1e293b;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: slideDown 0.25s ease-out;
+      pointer-events: auto;
+    }
+
+    .toast.success { background: #065f46; }
+    .toast.error { background: #991b1b; }
+    .toast.warning { background: #92400e; }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
-      display: none; align-items: center; justify-content: center; z-index: 10000; padding: 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
     }
-    .modal-card {
-      background: var(--card-bg); border: 1.5px solid var(--saffron); border-radius: 20px;
-      max-width: 480px; width: 100%; padding: 22px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.7);
-      position: relative; max-height: 90vh; overflow-y: auto;
+
+    .modal-content {
+      background: white;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow-lg);
+      padding: 18px;
+      animation: zoomIn 0.2s ease-out;
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
-  <!-- =======================================================
-       LIVE NOTIFICATION BANNER (Har Mobile ki screen ke upar)
-       ======================================================= -->
-  <div id="live-notification-banner" style="display: none; position: fixed; top: 15px; left: 5%; width: 90%; background: #28a745; color: white; padding: 14px 18px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.5); z-index: 99999; text-align: center; font-size: 15px; font-weight: bold; animation: fadeIn 0.4s; border: 1.5px solid #a7f3d0;">
-    🔔 <span id="notification-text">सूचना यहाँ दिखेगी...</span>
-  </div>
+  <!-- Toast Notification Container -->
+  <div id="toastContainer"></div>
 
-  <!-- Notification Beep Sound -->
-  <audio id="notification-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-
-  <!-- =======================================================
-       FULLSCREEN SIREN POPUP (Sabhi Phones Par Aayega)
-       ======================================================= -->
-  <div id="siren-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(220, 53, 69, 0.95); z-index: 999999; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 24px; box-sizing: border-box; animation: flashBlink 0.8s infinite alternate;">
-    <div style="font-size: 72px;">🚨</div>
-    <h1 style="font-size: 28px; margin: 12px 0; text-transform: uppercase; letter-spacing: 2px;">इमरजेंसी अलर्ट / सायरन</h1>
-    <p id="siren-modal-msg" style="font-size: 18px; font-weight: bold; margin: 15px 0 25px; max-width: 520px; line-height: 1.5; background: rgba(0,0,0,0.35); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3);">
-      महत्वपूर्ण सूचना यहाँ दिखेगी...
-    </p>
-    <button onclick="stopSirenModal()" style="padding: 12px 36px; font-size: 17px; font-weight: bold; background: white; color: #dc3545; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.4);">
-      🚨 सायरन बंद करें (OK)
-    </button>
-  </div>
-
-  <!-- Loud Emergency Siren Sound File -->
-  <audio id="siren-audio" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto" loop></audio>
+  <!-- Header -->
+  <header>
+    <div class="header-info">
+      <div class="header-logo">
+        <i class="fa-solid fa-people-roof"></i>
+      </div>
+      <div class="header-text">
+        <h1>युवा शक्ति ग्रुप</h1>
+        <div class="header-status-badge" id="userStatusBadge">
+          <i class="fa-solid fa-circle-user"></i>
+          <span id="userStatusText">अतिथि मोड</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="auth-btn" id="loginBtn" onclick="openLoginModal()">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <span>लॉगिन</span>
+      </button>
+      <button class="auth-btn" id="adminToggleBtn" onclick="toggleAdminPrompt()">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span id="adminBtnText">एडमिन</span>
+      </button>
+    </div>
+  </header>
 
   <div class="container">
 
-    <!-- Top Branding Header -->
-    <div class="header">
-      <h1>🚩 युवा शक्ति ग्रुप, भाटी परिवार कुचेरा 🚩</h1>
-      <p>मासिक अमावस्या अंशदान एवं डिजिटल पारदर्शी बहीखाता (Google Firebase Realtime Sync)</p>
+    <!-- Admin Active Notice -->
+    <div id="adminNotice" class="admin-banner" style="display:none;">
+      <span><i class="fa-solid fa-shield-cat"></i> व्यवस्थापक मोड सक्रिय (Admin Mode)</span>
+      <button onclick="toggleAdminPrompt()" style="background:rgba(255,255,255,0.25); border:none; color:white; padding:2px 8px; border-radius:4px; font-size:10px; cursor:pointer;">लॉगआउट करें</button>
+    </div>
+
+    <!-- 1. सदस्य डायरेक्टरी टैब -->
+    <div id="viewMembers" class="section-view active-view">
       
-      <!-- Tithi badlein link (Admin Only) -->
-      <div style="margin-top: 6px;">
-        <span id="headerAmavasDateText" style="color: #cbd5e1; font-size: 12px;">अगली अमावस्या: निर्धारित तिथि</span>
-        <a href="javascript:void(0)" onclick="openChangeDateModal()" class="admin-only" style="color: #38bdf8; font-weight: bold; font-size: 12px; margin-left: 8px; text-decoration: underline;">
-          तिथि बदलें ✎
-        </a>
+      <!-- Search & Counts -->
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="memberSearchInput" class="search-input" placeholder="सदस्य नाम या मोबाइल नंबर से खोजें..." oninput="handleMemberSearch()">
       </div>
 
-      <div class="badge-bar">
-        <div class="status-badge">
-          <span class="dot"></span>
-          <span>क्लाउड डेटाबेस: yuva-shakti-group • लाइव कनेक्टेड</span>
-        </div>
-        <div class="status-badge status-badge-online" id="onlineBadge">
-          <span class="dot dot-blue"></span>
-          <span id="liveOnlineCountText">1 सदस्य ऑनलाइन</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- =======================================================
-         AUTOMATIC 2-DAY REMINDER BANNER (Sabhi Phones Par Live)
-         ======================================================= -->
-    <div id="amavasya-reminder-banner" style="display: none; margin: 0 auto 18px; max-width: 100%; background: #fff3cd; border: 2px solid #ffeeba; border-left: 8px solid #ff9800; border-radius: 12px; padding: 14px 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.2); font-family: sans-serif; position: relative; color: #333;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-        <span id="reminder-days-badge" style="background: #ff5722; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">
-          अमावस रिमाइंडर
-        </span>
-        <button onclick="closeReminderBanner()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: #856404; font-weight: bold;">×</button>
-      </div>
-      <h3 id="reminder-banner-title" style="margin: 4px 0; color: #856404; font-size: 16px; font-weight: 800;">
-        🔔 मासिक अमावस बैठक
-      </h3>
-      <p id="reminder-banner-text" style="margin: 4px 0 0; color: #533f03; font-size: 13.5px; line-height: 1.5;">
-        सभी सदस्य समय पर बैठक में उपस्थित हों एवं अपना मासिक योगदान जमा कराएं।
-      </p>
-    </div>
-
-    <!-- Quick Action Bar -->
-    <div class="quick-actions">
-      <a class="action-btn btn-wa" href="https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh?s=cl&p=a&iam=2" target="_blank" rel="noopener">
-        <span>💬</span>
-        <span>व्हाट्सएप ग्रुप से जुड़ें</span>
-      </a>
-      <button class="action-btn btn-pay" id="openPayModalBtn">
-        <span>💳</span>
-        <span>PhonePe / UPI जमा करें</span>
-      </button>
-      <button class="action-btn btn-join" onclick="openJoinRequestModal()">
-        <span>📝</span>
-        <span>नया पंजीकरण अनुरोध</span>
-      </button>
-      <a class="action-btn btn-apk" href="yuva-shakti.apk" download="YuvaShakti_v3.0.apk">
-        <span>📥</span>
-        <span>डायरेक्ट APK डाउनलोड (v3.0)</span>
-      </a>
-      <a class="action-btn" href="portal/" style="background: linear-gradient(135deg, #0a84ff, #0056b3); color: #ffffff;">
-        <span>✨</span>
-        <span>iOS लाइव पोर्टल व डिजिटल रसीद</span>
-      </a>
-    </div>
-
-    <!-- Live Balance Sheet Cards (Income, Expense, Balance) -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 18px;">
-      <div style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid rgba(16, 185, 129, 0.4); padding: 16px; border-radius: 14px; text-align: center;">
-        <div style="color: #34d399; font-size: 12.5px; font-weight: bold; text-transform: uppercase;">कुल जमा (Income)</div>
-        <h3 id="live-total-income" style="margin: 6px 0 0; color: #34d399; font-size: 24px; font-weight: 800;">₹0</h3>
-      </div>
-      <div style="background: rgba(239, 68, 68, 0.12); border: 1.5px solid rgba(239, 68, 68, 0.4); padding: 16px; border-radius: 14px; text-align: center;">
-        <div style="color: #f87171; font-size: 12.5px; font-weight: bold; text-transform: uppercase;">कुल खर्च (Expense)</div>
-        <h3 id="live-total-expense" style="margin: 6px 0 0; color: #f87171; font-size: 24px; font-weight: 800;">₹0</h3>
-      </div>
-      <div style="background: rgba(59, 130, 246, 0.12); border: 1.5px solid rgba(59, 130, 246, 0.4); padding: 16px; border-radius: 14px; text-align: center;">
-        <div style="color: #60a5fa; font-size: 12.5px; font-weight: bold; text-transform: uppercase;">बचा हुआ बैलेंस</div>
-        <h3 id="live-remaining-balance" style="margin: 6px 0 0; color: #34d399; font-size: 24px; font-weight: 800;">₹0</h3>
-      </div>
-    </div>
-
-    <!-- Login & Identity Bar -->
-    <div class="auth-strip">
-      <div id="authStatusText">
-        <span style="font-weight: 700; color: #cbd5e1;">👤 अपनी पहचान दर्ज करें:</span>
-        <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">अपना व्यक्तिगत सदस्य / एडमिन कोड दर्ज करें</span>
-      </div>
-      <div class="auth-input-group" id="loginFormGroup">
-        <input type="password" id="memberCodeInput" class="auth-input" placeholder="कोड (उदा. 992942)" maxlength="8">
-        <button id="loginBtn" class="auth-btn">लॉगिन ➔</button>
-      </div>
-      <div id="adminPanelArea" style="display: none;" class="admin-controls">
-        <button id="viewRegistrationsBtn" class="admin-btn" style="background: #eab308; color: #1e293b;">📝 सदस्य सत्यापन (<span id="regPendingCount">0</span>)</button>
-        <button onclick="openAddExpenseModal()" class="admin-btn admin-only" style="background: #0284c7;">+ खर्च जोड़ें</button>
-        <button onclick="triggerPoliceSiren()" class="admin-btn admin-only">🚨 सायरन तगादा</button>
-        <button id="logoutBtn" class="auth-btn" style="background: #334155; color: #fff;">लॉगआउट ✖</button>
-      </div>
-    </div>
-
-    <!-- =======================================================
-         PASSBOOK & PDF REPORTS DOWNLOAD SECTION
-         ======================================================= -->
-    <div style="margin: 0 0 18px; padding: 16px; border: 1px solid var(--card-border); border-radius: 14px; background: var(--card-bg); text-align: center;">
-      <h3 style="margin-top: 0; color: var(--saffron); font-size: 15px; font-weight: 800;">📄 पासबुक एवं रिपोर्ट डाउनलोड</h3>
-      <p style="font-size: 12px; color: var(--text-muted); margin: 4px 0 12px;">अमावस योगदान और खर्च की पूरी बैलेंस शीट एक क्लिक में PDF के रूप में सेव करें।</p>
-      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-        <button onclick="downloadContributionsPDF()" class="action-btn" style="background: #10b981; color: white;">
-          📥 योगदान पासबुक (PDF)
-        </button>
-        <button onclick="downloadCompleteBalanceSheetPDF()" class="action-btn" style="background: #0284c7; color: white;">
-          📊 संपूर्ण बैलेंस शीट (PDF)
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:12px; color:var(--text-muted);">
+        <span id="memberCountText">कुल सदस्य: 0</span>
+        <button onclick="switchTab('form')" style="background:none; border:none; color:#2563eb; font-weight:600; cursor:pointer; font-size:12px;">
+          <i class="fa-solid fa-plus"></i> नया सदस्य जोड़ें
         </button>
       </div>
-    </div>
 
-    <!-- =======================================================
-         ADMIN ONLY SECTIONS (Role Based Security)
-         ======================================================= -->
-    
-    <!-- 1. Admin Form: Amavas Rashi Jama & Live Alert Trigger -->
-    <div class="admin-only" style="border: 2px solid #28a745; padding: 18px; border-radius: 14px; margin-bottom: 20px; background: #0f1c18;">
-      <h3 style="margin-top:0; color:#34d399; text-align:center; font-size: 16px; margin-bottom: 12px;">💰 अमावस राशि जमा (Admin Only)</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 12px;">
-        <input type="text" id="entryCode" placeholder="सदस्य कोड (उदा. 1025)" class="auth-input" style="width: 100%;" />
-        <input type="text" id="entryName" placeholder="सदस्य का पूरा नाम" class="auth-input" style="width: 100%;" />
-        <input type="text" id="entryMonth" placeholder="महीना (उदा. मार्गशीर्ष अमावस)" class="auth-input" style="width: 100%;" />
-        <input type="number" id="entryAmount" placeholder="राशि ₹ (उदा. 100)" class="auth-input" style="width: 100%;" />
-      </div>
-      <button onclick="submitAmavasEntry()" style="padding: 11px; width: 100%; background: #10b981; color: #022c22; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer;">
-        ✔ जमा करें एवं सभी को लाइव सूचना भेजें
-      </button>
-    </div>
-
-    <!-- 2. Admin Form: Naya Kharch Darj Karein -->
-    <div id="expenseEntryModal" class="modal-overlay">
-      <div class="modal-card" style="text-align: left;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h3 style="margin: 0; color: #f87171; font-size: 16px;">💸 खर्च दर्ज करें (Admin Only)</h3>
-          <button onclick="document.getElementById('expenseEntryModal').style.display='none'" style="background: none; border: none; color: #fff; font-size: 18px; cursor: pointer;">×</button>
+      <div id="membersList">
+        <div class="card" style="text-align:center; color:#64748b; font-size:13px; padding:24px;">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size:22px; color:#2563eb; margin-bottom:8px;"></i>
+          <div>डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
         </div>
-        <input type="text" id="expenseTitle" placeholder="खर्च का विवरण (उदा. माइक किराया, मिठाई, दरी)" class="auth-input" style="width: 100%; margin-bottom: 10px;" /><br/>
-        <input type="number" id="expenseAmount" placeholder="खर्च राशि (₹)" class="auth-input" style="width: 100%; margin-bottom: 10px;" /><br/>
-        <input type="text" id="expenseCategory" placeholder="श्रेणी / मद (उदा. बैठक खर्च, धार्मिक कार्य)" class="auth-input" style="width: 100%; margin-bottom: 10px;" /><br/>
-        <label style="font-size: 12px; font-weight: bold; color: var(--text-muted);">बिल / रसीद की फोटो (वैकल्पिक):</label><br/>
-        <input type="file" id="billFileInput" accept="image/*" style="margin-top: 5px; margin-bottom: 15px; color: #cbd5e1; font-size: 12px;" /><br/>
-        <button onclick="submitExpenseEntry()" style="padding: 10px 20px; width: 100%; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-          💾 खर्च सेव करें व लाइव बहीखाता अपडेट करें
+      </div>
+    </div>
+
+    <!-- 2. अमावस्या बही-खाता टैब -->
+    <div id="viewLedger" class="section-view">
+      
+      <!-- Metrics Grid -->
+      <div class="ledger-grid">
+        <div class="ledger-box green">
+          <div class="ledger-label"><i class="fa-solid fa-hand-holding-dollar"></i> कुल जमा</div>
+          <div class="ledger-val" id="totalCollected">₹0</div>
+        </div>
+        <div class="ledger-box red">
+          <div class="ledger-label"><i class="fa-solid fa-money-bill-wave"></i> कुल खर्च</div>
+          <div class="ledger-val" id="totalExpense">₹0</div>
+        </div>
+        <div class="ledger-box blue">
+          <div class="ledger-label"><i class="fa-solid fa-vault"></i> उपलब्ध शेष</div>
+          <div class="ledger-val" id="netBalance">₹0</div>
+        </div>
+      </div>
+
+      <!-- Quick Action Tools for Ledger -->
+      <div class="ledger-actions-bar">
+        <button class="btn-tool" onclick="shareLedgerSummaryToWA()">
+          <i class="fa-brands fa-whatsapp" style="color:#16a34a; font-size:14px;"></i>
+          <span>ग्रुप पर शेयर करें</span>
+        </button>
+        <button class="btn-tool" onclick="exportLedgerToCSV()">
+          <i class="fa-solid fa-file-csv" style="color:#0284c7; font-size:14px;"></i>
+          <span>CSV डाउनलोड</span>
         </button>
       </div>
-    </div>
 
-    <!-- 3. Admin: Aagami Amavasya Date Modal -->
-    <div id="targetAmavasDateModal" class="modal-overlay">
-      <div class="modal-card" style="text-align: left;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h3 style="margin: 0; color: #fbbf24; font-size: 16px;">📅 आगामी अमावस सेट करें (Admin Only)</h3>
-          <button onclick="document.getElementById('targetAmavasDateModal').style.display='none'" style="background: none; border: none; color: #fff; font-size: 18px; cursor: pointer;">×</button>
+      <!-- Add Transaction Card -->
+      <div class="card" id="ledgerFormCard">
+        <div class="card-title">
+          <span><i class="fa-solid fa-file-invoice-dollar" style="color:#2563eb;"></i> नया लेनदेन दर्ज करें</span>
+          <span class="badge" id="ledgerFormBadge">अमावस्या बही-खाता</span>
         </div>
-        <label style="font-weight: bold; font-size: 13px; color: #cbd5e1;">अमावस की तारीख चुनें:</label><br/>
-        <input type="date" id="targetAmavasDate" class="auth-input" style="width: 100%; margin: 6px 0 12px;" /><br/>
-        <label style="font-weight: bold; font-size: 13px; color: #cbd5e1;">शीर्षक (Title):</label><br/>
-        <input type="text" id="targetAmavasTitle" placeholder="उदा. मार्गशीर्ष अमावस बैठक" class="auth-input" style="width: 100%; margin: 6px 0 12px;" /><br/>
-        <label style="font-weight: bold; font-size: 13px; color: #cbd5e1;">संदेश (Message):</label><br/>
-        <textarea id="targetAmavasMsg" rows="3" placeholder="उदा. सभी सदस्य बैठक में उपस्थित रहें और योगदान जमा करवाएं..." class="auth-input" style="width: 100%; margin: 6px 0 15px; height: 75px;"></textarea><br/>
-        <button onclick="saveUpcomingAmavasya()" style="width: 100%; padding: 12px; background: #f59e0b; color: #451a03; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer;">
-          तारीख और सूचना सुरक्षित करें
-        </button>
-      </div>
-    </div>
-
-    <!-- 4. Admin Emergency Siren Control Card -->
-    <div class="admin-only" id="sirenControlCard" style="border: 2px solid #dc3545; background: #200f14; padding: 16px; border-radius: 14px; margin-bottom: 20px; text-align: center;">
-      <h4 style="color: #f87171; margin-top: 0; font-size: 15px; margin-bottom: 10px;">🚨 एडमिन आपातकालीन सायरन कंट्रोल</h4>
-      <textarea id="adminAlertMessage" placeholder="अलर्ट संदेश लिखें (उदा. सभी सदस्य तुरंत मीटिंग के लिए जुड़ें)..." rows="2" class="auth-input" style="width: 100%; margin-bottom: 12px; height: 60px;"></textarea>
-      <button onclick="triggerEmergencySiren()" style="width: 100%; padding: 12px; background: #dc3545; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-        <span>🚨</span> समस्त मोबाइलों में सायरन और अलर्ट भेजें
-      </button>
-    </div>
-
-    <!-- =======================================================
-         MEMBERS STATUS TABLE (Green Symbol / Red Button Table)
-         ======================================================= -->
-    <div class="table-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-        <div>
-          <h3 style="font-size: 16px; color: var(--saffron); font-weight: 800;">🚩 सदस्य अंशदान लाइव स्थिति (Real-time Status)</h3>
-          <p style="font-size: 11.5px; color: var(--text-muted);">🟢 जमा (Paid) या 🔴 बाकी (Pending) लाइव सिंक</p>
+        
+        <div class="form-group">
+          <label>प्रकार</label>
+          <select id="transType" onchange="handleTransTypeChange()">
+            <option value="contribution">अमावस्या अंशदान (जमा)</option>
+            <option value="expense">ग्रुप व्यय (खर्च)</option>
+          </select>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-          <div style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #34d399;">
-            कुल जमा: <span id="total-collected">₹0</span>
-          </div>
-          <div style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #f87171;">
-            बाकी सदस्य: <span id="total-pending">0</span>
+
+        <div class="form-group">
+          <label id="transDescLabel">सदस्य का नाम</label>
+          <input type="text" id="transDesc" list="memberSuggestions" placeholder="सदस्य का नाम या खर्च विवरण लिखें">
+          <datalist id="memberSuggestions"></datalist>
+        </div>
+
+        <div class="form-group">
+          <label>राशि (₹)</label>
+          <input type="number" id="transAmount" placeholder="उदा. 500">
+          <div class="chips-group">
+            <button type="button" class="chip-btn" onclick="setQuickAmount(200)">+ ₹200</button>
+            <button type="button" class="chip-btn" onclick="setQuickAmount(500)">+ ₹500</button>
+            <button type="button" class="chip-btn" onclick="setQuickAmount(1000)">+ ₹1000</button>
+            <button type="button" class="chip-btn" onclick="setQuickAmount(2100)">+ ₹2100</button>
           </div>
         </div>
+
+        <div class="form-group">
+          <label>भुगतान का माध्यम</label>
+          <select id="transPayMethod">
+            <option value="नकद">नकद (Cash)</option>
+            <option value="PhonePe / GPay / UPI">PhonePe / GPay / UPI</option>
+            <option value="बैंक ट्रांसफर">बैंक ट्रांसफर</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>तारीख / अमावस्या तिथि</label>
+          <div style="display:flex; gap:6px;">
+            <input type="date" id="transDate">
+            <button type="button" onclick="setTodayDate('transDate')" style="padding:0 12px; background:#e2e8f0; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;">आज</button>
+          </div>
+        </div>
+
+        <button class="btn-main" onclick="saveTransaction()">
+          <i class="fa-solid fa-check"></i> बही-खाते में जोड़ें
+        </button>
       </div>
 
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th style="text-align: center;">कोड</th>
-              <th>सदस्य का नाम</th>
-              <th style="text-align: center;">मासिक अंशदान</th>
-              <th style="text-align: center;">स्थिति (Status / Action)</th>
-            </tr>
-          </thead>
-          <tbody id="members-status-body">
-            <tr>
-              <td colspan="4" style="text-align: center; padding: 25px; color: var(--text-muted);">
-                🔄 क्लाउड से सदस्य डेटा लोड हो रहा है...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <!-- Ledger Table Card -->
+      <div class="card">
+        <div class="card-title">
+          <span><i class="fa-solid fa-list-check"></i> लेनदेन विवरण</span>
+          <div style="display:flex; gap:4px;">
+            <select id="ledgerFilterType" onchange="renderLedgerTable()" style="padding:4px 8px; font-size:11px; width:auto; border-radius:6px;">
+              <option value="all">सभी रिकॉर्ड</option>
+              <option value="contribution">केवल जमा</option>
+              <option value="expense">केवल खर्च</option>
+            </select>
+          </div>
+        </div>
 
-      <!-- Admin: Naya Sadasya jodne ka chhota form -->
-      <div class="admin-only" style="margin-top: 18px; padding: 14px; border: 1px dashed #4b5563; border-radius: 10px; background: rgba(0,0,0,0.25);">
-        <h4 style="margin-top: 0; font-size: 13.5px; color: #cbd5e1; margin-bottom: 8px;">➕ नया सदस्य सूची में जोड़ें (डिफ़ॉल्ट 'बाकी' रहेगा)</h4>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <input type="text" id="newMemberCode" placeholder="कोड (उदा. 1026)" class="auth-input" style="flex: 1; min-width: 120px;" />
-          <input type="text" id="newMemberName" placeholder="पूरा नाम" class="auth-input" style="flex: 2; min-width: 160px;" />
-          <input type="number" id="fixedAmount" placeholder="अमावस राशि (₹)" value="100" class="auth-input" style="width: 110px;" />
-          <button onclick="addNewMemberToList()" style="padding: 8px 16px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-            जोड़ें
-          </button>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>विवरण/सदस्य</th>
+                <th>तारीख</th>
+                <th>राशि</th>
+                <th>माध्यम</th>
+                <th>प्रकार</th>
+                <th id="thLedgerAction" style="display:none; text-align:center;">हटाएं</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerTableBody">
+              <tr><td colspan="5" style="text-align:center; color:#64748b; padding:16px;">कोई लेनदेन दर्ज नहीं है।</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <!-- =======================================================
-         LIVE EXPENSE BREAKDOWN TABLE
-         ======================================================= -->
-    <div class="table-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-        <h3 style="font-size: 15px; color: #f87171; font-weight: 800;">📋 ग्रुप खर्च विवरण एवं रसीदें (Live Expense Sheet)</h3>
-        <button onclick="openAddExpenseModal()" class="action-btn admin-only" style="background: #ef4444; color: white; padding: 6px 14px; font-size: 12px;">
-          + नया खर्च जोड़ें
+    <!-- 3. कैलेंडर टैब -->
+    <div id="viewCalendar" class="section-view">
+      
+      <!-- Upcoming 30 Days Events -->
+      <div class="card">
+        <div class="card-title">
+          <span><i class="fa-solid fa-cake-candles" style="color:#ea580c;"></i> आगामी 30 दिनों के उत्सव</span>
+          <span class="badge" id="upcomingCountBadge">0 आगामी</span>
+        </div>
+        <div id="upcomingEvents">
+          <div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">आगामी 30 दिनों में कोई जन्मदिन या वर्षगांठ नहीं है।</div>
+        </div>
+      </div>
+
+      <!-- All Birthdays & Anniversaries -->
+      <div class="card">
+        <div class="card-title">
+          <span><i class="fa-solid fa-calendar-days" style="color:#2563eb;"></i> वार्षिक उत्सव पंजी (Calendar Roster)</span>
+        </div>
+        <div id="calendarList">
+          <div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">सदस्य विवरण लोड हो रहा है...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. सदस्य फॉर्म टैब -->
+    <div id="viewForm" class="section-view">
+      <div class="card">
+        <div class="card-title">
+          <span id="formTitle"><i class="fa-solid fa-user-plus" style="color:#2563eb;"></i> नया सदस्य जोड़ें</span>
+          <span class="badge" id="formBadge">भाटी परिवार</span>
+        </div>
+        <input type="hidden" id="editDocId">
+        
+        <div class="form-group">
+          <label>सदस्य का पूरा नाम <span style="color:#dc2626;">*</span></label>
+          <input type="text" id="memName" placeholder="उदा. रेवंतराम भाटी">
+        </div>
+        
+        <div class="form-group">
+          <label>मोबाइल नंबर (कॉल हेतु) <span style="color:#dc2626;">*</span></label>
+          <input type="tel" id="memPhone" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
+        </div>
+        
+        <div class="form-group">
+          <label>व्हाट्सएप नंबर (कंट्री कोड 91 सहित या 10 अंक)</label>
+          <input type="tel" id="memWA" placeholder="उदा. 918696663615">
+        </div>
+        
+        <div class="form-group">
+          <label>इंस्टाग्राम आईडी (बिना @ के)</label>
+          <input type="text" id="memInsta" placeholder="उदा. revant_bhati">
+        </div>
+        
+        <div class="form-group">
+          <label>जन्मदिन (Date of Birth)</label>
+          <input type="date" id="memDob">
+        </div>
+        
+        <div class="form-group">
+          <label>विवाह वर्षगांठ (Wedding Anniversary - ऐच्छिक)</label>
+          <input type="date" id="memAnniversary">
+        </div>
+        
+        <button class="btn-main" id="saveMemberBtn" onclick="saveMember()">
+          <i class="fa-solid fa-floppy-disk"></i> सुरक्षित करें
+        </button>
+        <button class="btn-sub" id="cancelEditBtn" onclick="resetMemberForm()">
+          <i class="fa-solid fa-xmark"></i> संपादन रद्द करें
         </button>
       </div>
-
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>तारीख</th>
-              <th>विवरण</th>
-              <th>मद / श्रेणी</th>
-              <th style="text-align: right;">रकम</th>
-              <th style="text-align: center;">बिल रसीद</th>
-            </tr>
-          </thead>
-          <tbody id="expense-table-body">
-            <tr>
-              <td colspan="5" style="text-align: center; padding: 25px; color: var(--text-muted);">खर्च डेटा लोड हो रहा है...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
   </div>
 
-  <!-- =======================================================
-       MODALS
-       ======================================================= -->
+  <!-- Bottom Navigation Bar -->
+  <nav class="nav-bar">
+    <button class="nav-item active" onclick="switchTab('members', this)">
+      <i class="fa-solid fa-users"></i>
+      <span>सदस्य</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('ledger', this)">
+      <i class="fa-solid fa-book-bookmark"></i>
+      <span>बही-खाता</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('calendar', this)">
+      <i class="fa-solid fa-calendar-check"></i>
+      <span>कैलेंडर</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('form', this)">
+      <i class="fa-solid fa-user-plus"></i>
+      <span>फॉर्म</span>
+    </button>
+  </nav>
 
-  <!-- 1. Bill Receipt Image Preview Modal -->
-  <div id="receipt-preview-modal" class="modal-overlay">
-    <div class="modal-card" style="max-width: 600px;">
-      <h3 style="color: var(--saffron); margin-bottom: 10px; font-size: 16px;">🧾 बिल / रसीद का पूर्वावलोकन</h3>
-      <img id="receipt-preview-img" src="" alt="Bill Receipt" style="max-width: 100%; max-height: 70vh; border-radius: 10px; border: 1px solid var(--card-border);" />
-      <div style="margin-top: 14px;">
-        <button onclick="closeReceiptModal()" class="auth-btn" style="background: #334155; color: #fff;">बंद करें (Close)</button>
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="font-size:16px; font-weight:700;"><i class="fa-solid fa-key" style="color:#2563eb;"></i> सदस्य व्यक्तिगत लॉगिन</h3>
+        <button onclick="closeLoginModal()" style="border:none; background:none; font-size:18px; color:#64748b; cursor:pointer;">✕</button>
       </div>
-    </div>
-  </div>
-
-  <!-- 2. Naya Sadasya Join Request Modal -->
-  <div id="joinRequestModal" class="modal-overlay">
-    <div class="modal-card" style="text-align: left;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h3 style="margin: 0; color: var(--saffron); font-size: 17px;">📝 नया सदस्य पंजीकरण अनुरोध</h3>
-        <button onclick="document.getElementById('joinRequestModal').style.display='none'" style="background: none; border: none; color: #fff; font-size: 18px; cursor: pointer;">×</button>
-      </div>
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">विवरण भरें। एडमिन द्वारा स्वीकृत होने के बाद आप ग्रुप से जुड़ जाएंगे।</p>
+      <p style="font-size:12px; color:#64748b; margin-bottom:14px;">अपने रजिस्टर्ड मोबाइल नंबर और 4-अंकों के पिन से लॉगिन करें। यदि पहली बार लॉगिन कर रहे हैं तो नया पिन सेट हो जाएगा।</p>
       
-      <label style="font-size: 12px; font-weight: bold; color: #cbd5e1;">इच्छित सदस्य कोड (कम से कम 4 अंक):</label><br/>
-      <input type="text" id="userCode" placeholder="उदा. 1025" class="auth-input" style="width: 100%; margin: 4px 0 12px;" /><br/>
-
-      <label style="font-size: 12px; font-weight: bold; color: #cbd5e1;">पूरा नाम:</label><br/>
-      <input type="text" id="userName" placeholder="अपना पूरा नाम लिखें" class="auth-input" style="width: 100%; margin: 4px 0 12px;" /><br/>
-
-      <label style="font-size: 12px; font-weight: bold; color: #cbd5e1;">मोबाइल नंबर:</label><br/>
-      <input type="tel" id="userPhone" placeholder="10 अंकों का मोबाइल नंबर" class="auth-input" style="width: 100%; margin: 4px 0 16px;" /><br/>
-
-      <button onclick="submitJoinRequest()" style="width: 100%; padding: 12px; background: var(--saffron); color: #451a03; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer;">
-        🚀 अनुरोध भेजें (Submit Request)
+      <div class="form-group">
+        <label>रजिस्टर्ड 10 अंकों का मोबाइल नंबर</label>
+        <input type="tel" id="loginUserPhone" placeholder="उदा. 8696663615" maxlength="10">
+      </div>
+      <div class="form-group">
+        <label>4-अंकों का गुप्त पिन (Secret PIN)</label>
+        <input type="password" id="loginUserPin" placeholder="••••" maxlength="4" inputmode="numeric">
+      </div>
+      
+      <button class="btn-main" onclick="processMemberLogin()" style="margin-top:14px;">
+        <i class="fa-solid fa-right-to-bracket"></i> लॉगिन / पिन सेट करें
       </button>
     </div>
   </div>
 
-  <!-- 3. Pending Requests Verification Modal (Admin Only) -->
-  <div class="modal-overlay" id="registrationsModal">
-    <div class="modal-card" style="max-width: 520px; text-align: left;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h2 style="font-size: 17px; color: var(--saffron); margin: 0;">📝 नए सदस्य सत्यापन अनुरोध</h2>
-        <button id="closeRegModalBtn" class="action-btn" style="background: transparent; color: #cbd5e1; font-size: 16px; padding: 4px 8px;">✖</button>
-      </div>
-      <ul id="pending-requests-list" style="list-style: none; max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 0;">
-        <li style="color: var(--text-muted); font-size: 12px;">जांच जारी है...</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 4. UPI Payment Modal -->
-  <div class="modal-overlay" id="payModal">
-    <div class="modal-card">
-      <h2 style="font-size: 18px; color: var(--saffron); margin-bottom: 6px;">💳 मासिक अंशदान PhonePe / UPI भुगतान</h2>
-      <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 14px;">आधिकारिक युवा शक्ति ग्रुप ट्रस्ट खाता</p>
-      
-      <div style="background: #ffffff; padding: 14px; border-radius: 12px; display: inline-block; margin-bottom: 12px;">
-        <img id="upiQrCodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi%3A%2F%2Fpay%3Fpa%3D7850983600%40ibl%26pn%3DYuva%20Shakti%20Group%20Kuchera%26cu%3DINR" alt="UPI QR Code" style="width: 160px; height: 160px; display: block;">
-      </div>
-
-      <div style="background: #0b0f19; padding: 10px; border-radius: 8px; border: 1px solid var(--card-border); margin-bottom: 14px;">
-        <div style="font-size: 11px; color: var(--text-muted);">आधिकारिक UPI ID:</div>
-        <div style="font-size: 15px; font-weight: 800; color: #38bdf8; margin-top: 2px;">7850983600@ibl</div>
-      </div>
-
-      <div style="display: flex; gap: 8px;">
-        <a id="directUpiPayLink" href="upi://pay?pa=7850983600@ibl&pn=Yuva%20Shakti%20Bhati%20Parivar%20Kuchera&cu=INR" class="action-btn btn-pay" style="flex: 1; text-align: center;">PhonePe / GPay खोलें</a>
-        <button id="closePayModalBtn" class="action-btn" style="background: #334155; color: #fff;">बंद करें</button>
+  <!-- Custom Confirmation Dialog Modal -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-content">
+      <h3 style="font-size:16px; font-weight:700; margin-bottom:8px;" id="confirmTitle">पुष्टि करें</h3>
+      <p style="font-size:13px; color:#64748b; margin-bottom:16px;" id="confirmMessage">क्या आप वाकई आगे बढ़ना चाहते हैं?</p>
+      <div style="display:flex; gap:8px;">
+        <button onclick="closeConfirmModal(false)" style="flex:1; padding:10px; border-radius:8px; border:1px solid #cbd5e1; background:white; font-weight:600; font-size:13px; cursor:pointer;">रद्द करें</button>
+        <button id="confirmActionBtn" style="flex:1; padding:10px; border-radius:8px; border:none; background:#dc2626; color:white; font-weight:600; font-size:13px; cursor:pointer;">हां, हटाएं</button>
       </div>
     </div>
   </div>
 
-  <!-- =======================================================
-       FIREBASE MODULAR SDK LOGIC (v10.8.0)
-       ======================================================= -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { 
-      getFirestore, 
-      collection, 
-      doc, 
-      setDoc, 
-      addDoc, 
-      getDoc, 
-      getDocs, 
-      updateDoc, 
-      onSnapshot, 
-      query, 
-      where, 
-      orderBy, 
-      serverTimestamp 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    // 1. Firebase Configuration (Official yuva-shakti-group Project)
+  <!-- Firebase & Application Logic -->
+  <script>
+    // 1. Firebase Configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyDjBcyZZIQZSX8MMJ-FaO_uuc2EoSrFVuA",
-      authDomain: "yuva-shakti-group.firebaseapp.com",
-      projectId: "yuva-shakti-group",
-      storageBucket: "yuva-shakti-group.firebasestorage.app",
-      messagingSenderId: "122021296018",
-      appId: "1:122021296018:android:a1fbd7b69b2f7b5654734b"
+      apiKey: "AIzaSyDQtLX8Sl0IWeTYMElptVyNCyRb-qWvAuc",
+      authDomain: "yuva-shakti-group-ace55.firebaseapp.com",
+      projectId: "yuva-shakti-group-ace55",
+      storageBucket: "yuva-shakti-group-ace55.firebasestorage.app",
+      messagingSenderId: "803378454655",
+      appId: "1:803378454655:web:99ac1ec1897c64fc965f4a"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
 
-    let totalIncome = 0;
-    let totalExpense = 0;
-    let currentRole = "member";
-    const ADMIN_SECRET_PIN = "8696";
+    // 2. State Management
+    let loggedInMemberPhone = localStorage.getItem("loggedInMemberPhone") || null;
+    let isAdmin = localStorage.getItem("isAdminSession") === "true";
+    const DEFAULT_ADMIN_PIN = "1234";
+    let membersList = [];
+    let transactions = [];
+    let confirmCallback = null;
 
-    // --- Role Based UI Security ---
-    window.applyRoleBasedUI = function(userRole) {
-      currentRole = userRole;
-      const adminElements = document.querySelectorAll(".admin-only");
+    // Set today's date in ledger by default
+    setTodayDate('transDate');
 
-      if (userRole === "admin") {
-        adminElements.forEach((el) => {
-          if (el.tagName === "BUTTON" || el.tagName === "A") {
-            el.style.display = "inline-flex";
-          } else {
-            el.style.display = "block";
-          }
-        });
-        document.getElementById("adminPanelArea").style.display = "flex";
-        document.getElementById("loginFormGroup").style.display = "none";
-        document.getElementById("authStatusText").innerHTML = `<span style="font-weight: 800; color: #fbbf24;">🛡️ मुख्य व्यवस्थापक (Admin) मोड सक्रिय!</span>`;
+    function setTodayDate(elementId) {
+      const today = new Date().toISOString().split('T')[0];
+      const el = document.getElementById(elementId);
+      if (el) el.value = today;
+    }
+
+    function setQuickAmount(val) {
+      const input = document.getElementById("transAmount");
+      const current = Number(input.value) || 0;
+      input.value = current + val;
+    }
+
+    function handleTransTypeChange() {
+      const type = document.getElementById("transType").value;
+      const label = document.getElementById("transDescLabel");
+      const badge = document.getElementById("ledgerFormBadge");
+      if (type === "contribution") {
+        label.innerText = "सदस्य का नाम";
+        document.getElementById("transDesc").placeholder = "सदस्य का नाम चुनें या लिखें";
+        badge.innerText = "अंशदान (जमा)";
       } else {
-        adminElements.forEach((el) => {
-          el.style.display = "none";
-        });
+        label.innerText = "खर्च का विवरण";
+        document.getElementById("transDesc").placeholder = "उदा. सत्संग, प्रसाद, बैनर, आदि";
+        badge.innerText = "ग्रुप व्यय (खर्च)";
       }
-    };
+    }
 
-    window.verifyAdminPIN = function() {
-      if (currentRole === "admin") return true;
-      const enteredPin = prompt("सुरक्षा पिन: कृपया एडमिन पिन दर्ज करें (उदा. 8696 या 992942):");
-      if (enteredPin === ADMIN_SECRET_PIN || enteredPin === "992942") {
-        applyRoleBasedUI("admin");
-        return true;
+    // 3. Toast Notifications
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+
+      let icon = "fa-circle-info";
+      if (type === "success") icon = "fa-circle-check";
+      if (type === "error") icon = "fa-circle-exclamation";
+      if (type === "warning") icon = "fa-triangle-exclamation";
+
+      toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transition = "opacity 0.3s ease";
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    // 4. Modals Management
+    function openLoginModal() {
+      document.getElementById("loginModal").style.display = "flex";
+      document.getElementById("loginUserPhone").focus();
+    }
+
+    function closeLoginModal() {
+      document.getElementById("loginModal").style.display = "none";
+    }
+
+    function showConfirmDialog(title, message, onConfirm) {
+      document.getElementById("confirmTitle").innerText = title;
+      document.getElementById("confirmMessage").innerText = message;
+      document.getElementById("confirmModal").style.display = "flex";
+      confirmCallback = onConfirm;
+    }
+
+    function closeConfirmModal(proceed) {
+      document.getElementById("confirmModal").style.display = "none";
+      if (proceed && typeof confirmCallback === "function") {
+        confirmCallback();
+      }
+      confirmCallback = null;
+    }
+
+    document.getElementById("confirmActionBtn").onclick = () => closeConfirmModal(true);
+
+    // 5. Authentication & Permissions
+    function updateAuthUI() {
+      const statusText = document.getElementById("userStatusText");
+      const loginBtn = document.getElementById("loginBtn");
+      const adminBtn = document.getElementById("adminToggleBtn");
+      const adminNotice = document.getElementById("adminNotice");
+      const adminBtnText = document.getElementById("adminBtnText");
+      const thAction = document.getElementById("thLedgerAction");
+
+      if (loggedInMemberPhone) {
+        const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+        const displayName = found ? found.name : loggedInMemberPhone;
+        statusText.innerText = displayName;
+        loginBtn.innerHTML = `<i class="fa-solid fa-right-from-bracket"></i> <span>लॉगआउट</span>`;
+        loginBtn.onclick = logoutMember;
       } else {
-        alert("गलत पिन! केवल अधिकृत व्यवस्थापक ही यह कार्य कर सकते हैं।");
-        return false;
+        statusText.innerText = "अतिथि मोड";
+        loginBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>लॉगिन</span>`;
+        loginBtn.onclick = openLoginModal;
       }
-    };
 
-    // --- 2. NAYA USER: Request bhejkar register hona ---
-    window.openJoinRequestModal = function() {
-      document.getElementById("joinRequestModal").style.display = "flex";
-      if (!document.getElementById("userCode").value) {
-        document.getElementById("userCode").value = Math.floor(1001 + Math.random() * 8999);
+      if (isAdmin) {
+        adminBtn.classList.add("active-admin");
+        adminBtnText.innerText = "एडमिन सक्रिय";
+        adminNotice.style.display = "flex";
+        if (thAction) thAction.style.display = "table-cell";
+      } else {
+        adminBtn.classList.remove("active-admin");
+        adminBtnText.innerText = "एडमिन";
+        adminNotice.style.display = "none";
+        if (thAction) thAction.style.display = "none";
       }
-    };
 
-    window.submitJoinRequest = async function() {
-      const userCode = document.getElementById("userCode").value.trim();
-      const userName = document.getElementById("userName").value.trim();
-      const userPhone = document.getElementById("userPhone").value.trim();
+      renderMembers();
+      renderLedgerTable();
+    }
 
-      if (!userCode || !userName) {
-        alert("कृपया अपना कोड और नाम अवश्य भरें!");
+    async function processMemberLogin() {
+      const phoneInput = document.getElementById("loginUserPhone").value.trim().replace(/\D/g, '');
+      const pin = document.getElementById("loginUserPin").value.trim();
+
+      if (phoneInput.length !== 10 || pin.length !== 4) {
+        showToast("कृपया 10 अंकों का मोबाइल नंबर और 4 अंकों का पिन दर्ज करें।", "warning");
+        return;
+      }
+
+      const member = membersList.find(m => m.phone && m.phone.endsWith(phoneInput));
+      if (!member) {
+        showToast("यह नंबर ग्रुप में दर्ज नहीं है! कृपया पहले फॉर्म टैब में जाकर सदस्य जोड़ें।", "error");
         return;
       }
 
       try {
-        // Document ID ke roop mein userCode ka use
-        await setDoc(doc(db, "app_users", userCode), {
-          userCode: userCode,
-          name: userName,
-          phone: userPhone,
-          status: "pending",
-          role: "member",
-          createdAt: serverTimestamp()
-        }, { merge: true });
-
-        // Dual-write into pending_registrations for Android app compatibility
-        await setDoc(doc(db, "pending_registrations", "reg_" + userCode), {
-          requestId: "reg_" + userCode,
-          memberCode: userCode,
-          name: userName,
-          phone: userPhone,
-          status: "Pending",
-          timestamp: Date.now()
-        }, { merge: true });
-
-        alert("आपकी पंजीकरण रिक्वेस्ट भेज दी गई है! एडमिन द्वारा स्वीकृत होने के बाद आपका एक्सेस स्वतः सक्रिय हो जाएगा।");
-        document.getElementById("joinRequestModal").style.display = "none";
-        document.getElementById("userName").value = "";
-        document.getElementById("userPhone").value = "";
-      } catch (error) {
-        console.error("Request भेजने में समस्या:", error);
-        alert("त्रुटि: " + error.message);
-      }
-    };
-
-    // --- 3. ADMIN: Pending Requests Real-time Listener ---
-    const pendingQuery = query(collection(db, "app_users"), where("status", "==", "pending"));
-
-    onSnapshot(pendingQuery, (snapshot) => {
-      const listContainer = document.getElementById("pending-requests-list");
-      const badgeElem = document.getElementById("regPendingCount");
-      if (badgeElem) badgeElem.innerText = snapshot.size;
-
-      if (!listContainer) return;
-      listContainer.innerHTML = "";
-
-      if (snapshot.empty) {
-        listContainer.innerHTML = "<li style='padding:15px; text-align:center; color: var(--text-muted);'>कोई नया सत्यापन अनुरोध लंबित नहीं है।</li>";
-        return;
-      }
-
-      snapshot.forEach((docSnapshot) => {
-        const user = docSnapshot.data();
-        const li = document.createElement("li");
-        li.style.cssText = "background: #0f172a; border: 1px solid var(--card-border); padding: 12px; border-radius: 10px;";
-
-        li.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <strong style="color: #f8fafc; font-size:14px;">${user.name}</strong>
-            <span class="code-badge">कोड: ${user.userCode}</span>
-          </div>
-          <div style="font-size:12px; color: var(--text-muted); margin-bottom:8px;">
-            📞 मोबाइल: ${user.phone || 'N/A'}
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <button onclick="handleRequestAction('${user.userCode}', 'approved')" style="flex:1; padding:7px; background: #10b981; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
-              स्वीकार करें (Approve)
-            </button>
-            <button onclick="handleRequestAction('${user.userCode}', 'rejected')" style="padding:7px 12px; background: #ef4444; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
-              अस्वीकार (Reject)
-            </button>
-          </div>
-        `;
-        listContainer.appendChild(li);
-      });
-    });
-
-    window.handleRequestAction = async function(userCode, actionStatus) {
-      try {
-        const userRef = doc(db, "app_users", userCode);
-        await updateDoc(userRef, {
-          status: actionStatus,
-          updatedAt: serverTimestamp()
-        });
-
-        // Dual update pending_registrations and amavas_status
-        await setDoc(doc(db, "pending_registrations", "reg_" + userCode), {
-          status: actionStatus === "approved" ? "Approved" : "Rejected",
-          approvedAt: Date.now()
-        }, { merge: true });
-
-        if (actionStatus === "approved") {
-          const snap = await getDoc(userRef);
-          const uData = snap.data() || {};
-          await setDoc(doc(db, "amavas_status", userCode), {
-            memberCode: userCode,
-            name: uData.name || "सदस्य",
-            amount: 100,
-            status: "unpaid",
-            createdAt: serverTimestamp()
-          }, { merge: true });
-
-          alert(`सदस्य कोड: ${userCode} को युवा शक्ति ग्रुप में शामिल कर लिया गया है!`);
+        if (!member.pin) {
+          await db.collection("members").doc(member.id).update({ pin: pin });
+          localStorage.setItem("loggedInMemberPhone", phoneInput);
+          loggedInMemberPhone = phoneInput;
+          showToast(`नमस्ते ${member.name}! पिन सेट हो गया और आप लॉगिन हो गए।`, "success");
+        } else if (member.pin === pin) {
+          localStorage.setItem("loggedInMemberPhone", phoneInput);
+          loggedInMemberPhone = phoneInput;
+          showToast(`स्वागत है, ${member.name}! लॉगिन सफल रहा।`, "success");
         } else {
-          alert(`सदस्य कोड: ${userCode} का अनुरोध अस्वीकार किया गया।`);
-        }
-      } catch (error) {
-        console.error("Status update error:", error);
-        alert("त्रुटि: " + error.message);
-      }
-    };
-
-    // --- 4. ADMIN: Amavas Rashi Jama & Live Alert Trigger ---
-    window.submitAmavasEntry = async function() {
-      if (!verifyAdminPIN()) return;
-
-      const memberCode = document.getElementById("entryCode").value.trim();
-      const memberName = document.getElementById("entryName").value.trim();
-      const amount = document.getElementById("entryAmount").value.trim();
-      const amavasMonth = document.getElementById("entryMonth").value.trim() || "अमावस";
-
-      if (!memberCode || !memberName || !amount) {
-        alert("कृपया सदस्य कोड, नाम और राशि अवश्य भरें!");
-        return;
-      }
-
-      try {
-        // 1. Contribution entry save karein
-        await addDoc(collection(db, "amavas_contributions"), {
-          memberCode: memberCode,
-          name: memberName,
-          amount: Number(amount),
-          month: amavasMonth,
-          date: new Date().toLocaleDateString('hi-IN'),
-          createdAt: serverTimestamp()
-        });
-
-        // Update status in amavas_status
-        await setDoc(doc(db, "amavas_status", memberCode), {
-          memberCode: memberCode,
-          name: memberName,
-          amount: Number(amount),
-          status: "paid",
-          paidAt: serverTimestamp()
-        }, { merge: true });
-
-        // 2. Online Live Notification Trigger
-        await setDoc(doc(db, "live_alerts", "latest_update"), {
-          message: `${memberName} (कोड: ${memberCode}) ने ${amavasMonth} के ₹${amount} जमा किए!`,
-          timestamp: Date.now()
-        });
-
-        alert("राशि जमा हो गई और सभी सदस्यों को लाइव सूचना भेज दी गई!");
-        document.getElementById("entryCode").value = "";
-        document.getElementById("entryName").value = "";
-        document.getElementById("entryAmount").value = "";
-      } catch (error) {
-        console.error("Data save karne me truti:", error);
-        alert("त्रुटि: " + error.message);
-      }
-    };
-
-    // --- 5. SABHI MOBILES KE LIYE: Live Notification Listener ---
-    let isInitialLoad = true;
-
-    onSnapshot(doc(db, "live_alerts", "latest_update"), (docSnap) => {
-      if (isInitialLoad) {
-        isInitialLoad = false;
-        return;
-      }
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        showLivePopup(data.message);
-      }
-    });
-
-    function showLivePopup(text) {
-      const banner = document.getElementById("live-notification-banner");
-      const bannerText = document.getElementById("notification-text");
-      const audio = document.getElementById("notification-sound");
-
-      if (banner && bannerText) {
-        bannerText.innerText = text;
-        banner.style.display = "block";
-
-        if (audio) {
-          audio.currentTime = 0;
-          audio.play().catch(e => console.log("Sound play error:", e));
-        }
-
-        setTimeout(() => {
-          banner.style.display = "none";
-        }, 6000);
-      }
-    }
-
-    // --- 6. REAL-TIME MEMBER STATUS TABLE (Green / Red) ---
-    const membersRef = collection(db, "amavas_status");
-
-    onSnapshot(membersRef, (snapshot) => {
-      const listTable = document.getElementById("members-status-body");
-      const totalCollectedElem = document.getElementById("total-collected");
-      const totalPendingElem = document.getElementById("total-pending");
-
-      if (!listTable) return;
-      listTable.innerHTML = "";
-
-      let collectedSum = 0;
-      let pendingCount = 0;
-
-      if (snapshot.empty) {
-        listTable.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:15px; color: var(--text-muted);">कोई सदस्य उपलब्ध नहीं है।</td></tr>`;
-        return;
-      }
-
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        const isPaid = data.status === "paid";
-
-        if (isPaid) {
-          collectedSum += Number(data.amount) || 0;
-        } else {
-          pendingCount++;
-        }
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td style="padding: 12px; text-align: center;"><span class="code-badge">🔑 ${data.memberCode}</span></td>
-          <td style="padding: 12px; font-weight: bold; color: #f8fafc;">${data.name}</td>
-          <td style="padding: 12px; text-align: center; font-weight: 700; color: #fbbf24;">₹${data.amount || 100}</td>
-          <td style="padding: 12px; text-align: center;">
-            ${
-              isPaid
-                ? `<span style="background-color: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 11.5px; display: inline-flex; align-items: center; gap: 4px;">
-                     ✔ जमा (Paid)
-                   </span>`
-                : `<button onclick="markAsPaid('${docSnap.id}', '${data.name}', ${data.amount || 100})" 
-                           style="background-color: #ef4444; color: white; padding: 6px 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 11.5px; cursor: pointer; box-shadow: 0 2px 8px rgba(239,68,68,0.4);">
-                     ✖ बाकी (जमा करें)
-                   </button>`
-            }
-          </td>
-        `;
-        listTable.appendChild(tr);
-      });
-
-      if (totalCollectedElem) totalCollectedElem.innerText = `₹${collectedSum.toLocaleString('en-IN')}`;
-      if (totalPendingElem) totalPendingElem.innerText = pendingCount;
-    });
-
-    window.markAsPaid = async function(docId, memberName, amount) {
-      if (!verifyAdminPIN()) return;
-
-      const confirmAction = confirm(`क्या आप ${memberName} के ₹${amount} जमा मार्क करना चाहते हैं?`);
-      if (!confirmAction) return;
-
-      try {
-        const memberDocRef = doc(db, "amavas_status", docId);
-        await updateDoc(memberDocRef, {
-          status: "paid",
-          paidAt: serverTimestamp()
-        });
-
-        // Also add contribution record
-        await addDoc(collection(db, "amavas_contributions"), {
-          memberCode: docId,
-          name: memberName,
-          amount: Number(amount),
-          month: "अमावस",
-          date: new Date().toLocaleDateString('hi-IN'),
-          createdAt: serverTimestamp()
-        });
-
-        // Sabhi devices ke liye live notification alert trigger
-        await setDoc(doc(db, "live_alerts", "latest_update"), {
-          message: `${memberName} के ₹${amount} सफलतापूर्वक जमा हो चुके हैं!`,
-          timestamp: Date.now()
-        });
-
-        alert("जमा दर्ज और सूचना प्रसारित!");
-      } catch (error) {
-        console.error("Status update error: ", error);
-        alert("त्रुटि: " + error.message);
-      }
-    };
-
-    window.addNewMemberToList = async function() {
-      if (!verifyAdminPIN()) return;
-
-      const code = document.getElementById("newMemberCode").value.trim();
-      const name = document.getElementById("newMemberName").value.trim();
-      const amount = document.getElementById("fixedAmount").value.trim() || 100;
-
-      if (!code || !name) {
-        alert("कृपया कोड और नाम अवश्य भरें!");
-        return;
-      }
-
-      try {
-        await setDoc(doc(db, "amavas_status", code), {
-          memberCode: code,
-          name: name,
-          amount: Number(amount),
-          status: "unpaid",
-          createdAt: serverTimestamp()
-        });
-
-        alert("सदस्य सूची में जुड़ गया है!");
-        document.getElementById("newMemberCode").value = "";
-        document.getElementById("newMemberName").value = "";
-      } catch (error) {
-        alert("त्रुटि: " + error.message);
-      }
-    };
-
-    // --- 7. EMERGENCY SIREN SYSTEM ---
-    window.triggerEmergencySiren = async function() {
-      if (!verifyAdminPIN()) return;
-
-      const alertMsg = document.getElementById("adminAlertMessage").value.trim() || "चेतावनी! युवा शक्ति ग्रुप की ओर से महत्वपूर्ण सूचना!";
-
-      try {
-        await setDoc(doc(db, "emergency_system", "current_alert"), {
-          active: true,
-          message: alertMsg,
-          timestamp: Date.now()
-        });
-
-        // Also trigger emergency_alerts for Android app listener compatibility
-        await setDoc(doc(db, "emergency_alerts", "current_live_alert"), {
-          alertId: "alert_" + Date.now(),
-          title: "🚨 आपातकालीन सायरन तगादा!",
-          message: alertMsg,
-          sender: "मुख्य व्यवस्थापक",
-          isSiren: true,
-          timestamp: Date.now()
-        });
-
-        alert("सायरन और अलर्ट सभी सदस्यों के पास लाइव भेज दिया गया है!");
-      } catch (error) {
-        console.error("Siren trigger error: ", error);
-        alert("त्रुटि: " + error.message);
-      }
-    };
-
-    let pageLoadTime = Date.now();
-
-    onSnapshot(doc(db, "emergency_system", "current_alert"), (docSnap) => {
-      if (!docSnap.exists()) return;
-      const alertData = docSnap.data();
-
-      if (alertData.timestamp > pageLoadTime && alertData.active) {
-        startSirenAlarm(alertData.message);
-      }
-    });
-
-    function startSirenAlarm(message) {
-      const sirenModal = document.getElementById("siren-modal");
-      const sirenMsg = document.getElementById("siren-modal-msg");
-      const audio = document.getElementById("siren-audio");
-
-      if (sirenModal && sirenMsg) {
-        sirenMsg.innerText = message;
-        sirenModal.style.display = "flex";
-
-        if (audio) {
-          audio.currentTime = 0;
-          audio.play().catch(err => console.log("Audio autoplay policy error:", err));
-        }
-      }
-    }
-
-    window.stopSirenModal = function() {
-      const sirenModal = document.getElementById("siren-modal");
-      const audio = document.getElementById("siren-audio");
-
-      if (sirenModal) {
-        sirenModal.style.display = "none";
-      }
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-      }
-    };
-
-    // --- 8. EXPENSES & LIVE BALANCE SHEET CALCULATION ---
-    function recalculateBalance() {
-      const balance = totalIncome - totalExpense;
-      
-      document.getElementById("live-total-income").innerText = `₹${totalIncome.toLocaleString('en-IN')}`;
-      document.getElementById("live-total-expense").innerText = `₹${totalExpense.toLocaleString('en-IN')}`;
-      const balanceElem = document.getElementById("live-remaining-balance");
-      balanceElem.innerText = `₹${balance.toLocaleString('en-IN')}`;
-
-      if (balance >= 0) {
-        balanceElem.style.color = "#34d399";
-      } else {
-        balanceElem.style.color = "#f87171";
-      }
-    }
-
-    onSnapshot(collection(db, "amavas_contributions"), (snapshot) => {
-      totalIncome = 0;
-      snapshot.forEach((docSnap) => {
-        totalIncome += Number(docSnap.data().amount) || 0;
-      });
-      recalculateBalance();
-    });
-
-    const expenseQuery = query(collection(db, "group_expenses"), orderBy("createdAt", "desc"));
-
-    onSnapshot(expenseQuery, (snapshot) => {
-      totalExpense = 0;
-      const expenseList = document.getElementById("expense-table-body");
-      if (!expenseList) return;
-
-      expenseList.innerHTML = "";
-
-      if (snapshot.empty) {
-        expenseList.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:15px; color: var(--text-muted);">अभी तक कोई खर्च दर्ज नहीं हुआ है।</td></tr>`;
-        recalculateBalance();
-        return;
-      }
-
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        totalExpense += Number(data.amount) || 0;
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td style="padding: 10px; color: var(--text-muted);">${data.date || "-"}</td>
-          <td style="padding: 10px; font-weight: bold; color: #f8fafc;">${data.title}</td>
-          <td style="padding: 10px; color: #cbd5e1;">${data.category || "सामान्य"}</td>
-          <td style="padding: 10px; text-align: right; font-weight: 700; color: #f87171;">₹${data.amount}</td>
-          <td style="padding: 10px; text-align: center;">
-            ${data.receiptUrl ? `<button onclick="openReceiptModal('${data.receiptUrl}')" style="background:#0284c7; color:white; border:none; padding:4px 8px; border-radius:6px; font-size:11px; cursor:pointer;">बिल देखें</button>` : `<span style="color:var(--text-muted); font-size:11px;">—</span>`}
-          </td>
-        `;
-        expenseList.appendChild(tr);
-      });
-
-      recalculateBalance();
-    });
-
-    window.submitExpenseEntry = async function() {
-      if (!verifyAdminPIN()) return;
-
-      const title = document.getElementById("expenseTitle").value.trim();
-      const amount = document.getElementById("expenseAmount").value.trim();
-      const category = document.getElementById("expenseCategory").value.trim() || "सामान्य खर्च";
-      const fileInput = document.getElementById("billFileInput");
-
-      if (!title || !amount) {
-        alert("कृपया खर्च का विवरण और राशि दर्ज करें!");
-        return;
-      }
-
-      let receiptDataUrl = "";
-      if (fileInput.files && fileInput.files[0]) {
-        receiptDataUrl = await new Promise(resolve => {
-          const reader = new FileReader();
-          reader.onload = e => resolve(e.target.result);
-          reader.readAsDataURL(fileInput.files[0]);
-        });
-      }
-
-      try {
-        await addDoc(collection(db, "group_expenses"), {
-          title: title,
-          amount: Number(amount),
-          category: category,
-          receiptUrl: receiptDataUrl,
-          date: new Date().toLocaleDateString('hi-IN'),
-          createdAt: serverTimestamp()
-        });
-
-        alert("खर्च सफलतापूर्वक दर्ज हुआ!");
-        document.getElementById("expenseEntryModal").style.display = "none";
-        document.getElementById("expenseTitle").value = "";
-        document.getElementById("expenseAmount").value = "";
-        document.getElementById("expenseCategory").value = "";
-        document.getElementById("billFileInput").value = "";
-      } catch (err) {
-        alert("त्रुटि: " + err.message);
-      }
-    };
-
-    window.openReceiptModal = function(url) {
-      document.getElementById("receipt-preview-img").src = url;
-      document.getElementById("receipt-preview-modal").style.display = "flex";
-    };
-
-    window.closeReceiptModal = function() {
-      document.getElementById("receipt-preview-modal").style.display = "none";
-    };
-
-    // --- 9. AUTOMATIC 2-DAY AMAVASYA REMINDER ---
-    window.saveUpcomingAmavasya = async function() {
-      if (!verifyAdminPIN()) return;
-
-      const amavasDate = document.getElementById("targetAmavasDate").value;
-      const amavasTitle = document.getElementById("targetAmavasTitle").value.trim() || "मासिक अमावस बैठक";
-      const customMsg = document.getElementById("targetAmavasMsg").value.trim() || "सभी सदस्य समय पर बैठक में उपस्थित हों एवं अपना योगदान जमा कराएं।";
-
-      if (!amavasDate) {
-        alert("कृपया अमावस्या की तारीख अवश्य चुनें!");
-        return;
-      }
-
-      try {
-        await setDoc(doc(db, "app_settings", "upcoming_amavasya"), {
-          date: amavasDate,
-          title: amavasTitle,
-          message: customMsg,
-          updatedAt: Date.now()
-        });
-
-        // Dual write to settings/general for Android compatibility
-        const parsedTime = new Date(amavasDate).getTime();
-        await setDoc(doc(db, "settings", "general"), {
-          targetAmavasyaMillis: parsedTime,
-          amavasyaCycleName: amavasTitle
-        }, { merge: true });
-
-        alert("आगामी अमावस की तारीख ऑनलाइन सुरक्षित हो गई!");
-        document.getElementById("targetAmavasDateModal").style.display = "none";
-      } catch (error) {
-        console.error("Taarikh set karne me truti:", error);
-        alert("त्रुटि: " + error.message);
-      }
-    };
-
-    onSnapshot(doc(db, "app_settings", "upcoming_amavasya"), (docSnap) => {
-      if (!docSnap.exists()) return;
-
-      const data = docSnap.data();
-      const targetDateStr = data.date;
-
-      if (!targetDateStr) return;
-
-      document.getElementById("headerAmavasDateText").innerText = `अगली अमावस्या: ${targetDateStr} (${data.title || 'बैठक'})`;
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const amavasDate = new Date(targetDateStr);
-      amavasDate.setHours(0, 0, 0, 0);
-
-      const timeDiff = amavasDate.getTime() - today.getTime();
-      const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-      const reminderBox = document.getElementById("amavasya-reminder-banner");
-      const reminderTitle = document.getElementById("reminder-banner-title");
-      const reminderText = document.getElementById("reminder-banner-text");
-      const daysBadge = document.getElementById("reminder-days-badge");
-
-      if (daysLeft >= 0 && daysLeft <= 2) {
-        if (reminderBox) {
-          reminderBox.style.display = "block";
-
-          let dayString = "";
-          if (daysLeft === 0) {
-            dayString = "आज ही अमावस है!";
-          } else if (daysLeft === 1) {
-            dayString = "कल अमावस है (1 दिन बाकी)";
-          } else {
-            dayString = "अमावस में सिर्फ 2 दिन बाकी हैं!";
-          }
-
-          if (daysBadge) daysBadge.innerText = dayString;
-          if (reminderTitle) reminderTitle.innerText = `🔔 ${data.title} (${targetDateStr})`;
-          if (reminderText) reminderText.innerText = data.message;
-        }
-      } else {
-        if (reminderBox) reminderBox.style.display = "none";
-      }
-    });
-
-    window.closeReminderBanner = function() {
-      document.getElementById("amavasya-reminder-banner").style.display = "none";
-    };
-
-    // --- 10. PDF REPORTS GENERATION (jsPDF) ---
-    window.downloadContributionsPDF = async function() {
-      try {
-        const { jsPDF } = window.jspdf;
-        const docPdf = new jsPDF();
-
-        docPdf.setFontSize(18);
-        docPdf.setTextColor(40, 50, 70);
-        docPdf.text("Yuva Shakti Group - Amavasya Passbook", 14, 20);
-
-        docPdf.setFontSize(11);
-        docPdf.setTextColor(100);
-        docPdf.text(`Report Date: ${new Date().toLocaleDateString('en-GB')}`, 14, 28);
-
-        const qContrib = query(collection(db, "amavas_contributions"), orderBy("createdAt", "desc"));
-        const snapshot = await getDocs(qContrib);
-
-        if (snapshot.empty) {
-          alert("डाउनलोड के लिए कोई योगदान डेटा उपलब्ध नहीं है!");
+          showToast("गलत पिन! कृपया सही 4-अंकों का पिन दर्ज करें।", "error");
           return;
         }
-
-        const tableData = [];
-        let totalSum = 0;
-
-        snapshot.forEach((item, index) => {
-          const d = item.data();
-          totalSum += Number(d.amount) || 0;
-          tableData.push([
-            index + 1,
-            d.date || "-",
-            d.memberCode || "-",
-            d.name || "-",
-            d.month || "-",
-            `Rs. ${d.amount}`
-          ]);
-        });
-
-        tableData.push(["", "", "", "", "Kul Jama (Total):", `Rs. ${totalSum}`]);
-
-        docPdf.autoTable({
-          startY: 34,
-          head: [['#', 'Tarikh', 'Sadasya Code', 'Naam', 'Amavas', 'Rashi']],
-          body: tableData,
-          theme: 'striped',
-          headStyles: { fillColor: [40, 167, 69] },
-          footStyles: { fontStyle: 'bold' }
-        });
-
-        docPdf.save(`Amavas_Passbook_${Date.now()}.pdf`);
-      } catch (error) {
-        console.error("PDF generate karne me samasya: ", error);
-        alert("त्रुटि: " + error.message);
-      }
-    };
-
-    window.downloadCompleteBalanceSheetPDF = async function() {
-      try {
-        const { jsPDF } = window.jspdf;
-        const docPdf = new jsPDF();
-
-        docPdf.setFontSize(18);
-        docPdf.setTextColor(30, 40, 60);
-        docPdf.text("Yuva Shakti Group - Sampoorn Balance Sheet", 14, 18);
-
-        docPdf.setFontSize(10);
-        docPdf.setTextColor(100);
-        docPdf.text(`Taarikh: ${new Date().toLocaleDateString('en-GB')}`, 14, 25);
-
-        const incomeSnap = await getDocs(collection(db, "amavas_contributions"));
-        let pdfTotalIncome = 0;
-        incomeSnap.forEach(d => pdfTotalIncome += (Number(d.data().amount) || 0));
-
-        const expenseSnap = await getDocs(collection(db, "group_expenses"));
-        let pdfTotalExpense = 0;
-        const expenseRows = [];
-
-        expenseSnap.forEach((item, index) => {
-          const exp = item.data();
-          pdfTotalExpense += (Number(exp.amount) || 0);
-          expenseRows.push([
-            index + 1,
-            exp.date || "-",
-            exp.title || "-",
-            exp.category || "General",
-            `Rs. ${exp.amount}`
-          ]);
-        });
-
-        const remBalance = pdfTotalIncome - pdfTotalExpense;
-
-        docPdf.setFillColor(245, 247, 250);
-        docPdf.rect(14, 30, 182, 22, 'F');
-        docPdf.setFontSize(11);
-        docPdf.setTextColor(0);
-        docPdf.text(`Kul Jama: Rs. ${pdfTotalIncome}   |   Kul Kharch: Rs. ${pdfTotalExpense}   |   Bacha Balance: Rs. ${remBalance}`, 20, 44);
-
-        docPdf.setFontSize(13);
-        docPdf.text("Kharch Vivran (Expense Breakdown)", 14, 60);
-
-        if (expenseRows.length > 0) {
-          docPdf.autoTable({
-            startY: 65,
-            head: [['#', 'Tarikh', 'Vivran', 'Shreni', 'Rashi']],
-            body: expenseRows,
-            theme: 'grid',
-            headStyles: { fillColor: [220, 53, 69] }
-          });
-        } else {
-          docPdf.setFontSize(10);
-          docPdf.text("कोई खर्च दर्ज नहीं है।", 14, 68);
-        }
-
-        docPdf.save(`Balance_Sheet_${Date.now()}.pdf`);
-      } catch (error) {
-        console.error("Balance sheet PDF error: ", error);
-        alert("त्रुटि: " + error.message);
-      }
-    };
-
-    // --- 11. Modal Trigger Wrappers with PIN Protection ---
-    window.openChangeDateModal = function() {
-      if (!verifyAdminPIN()) return;
-      document.getElementById("targetAmavasDateModal").style.display = "flex";
-    };
-
-    window.openAddExpenseModal = function() {
-      if (!verifyAdminPIN()) return;
-      document.getElementById("expenseEntryModal").style.display = "flex";
-    };
-
-    window.triggerPoliceSiren = function() {
-      if (!verifyAdminPIN()) return;
-      triggerEmergencySiren();
-    };
-
-    // --- 12. Login / Role Verification ---
-    document.getElementById("loginBtn").addEventListener("click", async () => {
-      const code = document.getElementById("memberCodeInput").value.trim();
-      if (!code) {
-        alert("कृपया सदस्य कोड दर्ज करें।");
-        return;
-      }
-
-      if (code === "992942" || code === "8696") {
-        localStorage.setItem("ys_logged_code", code);
-        applyRoleBasedUI("admin");
-        alert("✅ व्यवस्थापक कोड सत्यापित! एडमिन मोड सक्रिय हुआ।");
-      } else {
-        localStorage.setItem("ys_logged_code", code);
-        try {
-          const userDocRef = doc(db, "app_users", code);
-          const userSnap = await getDoc(userDocRef);
-          if (userSnap.exists() && userSnap.data().role === "admin") {
-            applyRoleBasedUI("admin");
-          } else {
-            applyRoleBasedUI("member");
-            document.getElementById("authStatusText").innerHTML = `<span style="font-weight: 800; color: #34d399;">👋 सदस्य कोड (${code}) लॉगिन सक्रिय!</span>`;
-            document.getElementById("loginFormGroup").style.display = "none";
-            document.getElementById("adminPanelArea").style.display = "flex";
-          }
-        } catch (e) {
-          applyRoleBasedUI("member");
-        }
-        alert(`✅ कोड ${code} के साथ लॉगिन संपन्न हुआ।`);
-      }
-    });
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("ys_logged_code");
-      applyRoleBasedUI("member");
-      document.getElementById("loginFormGroup").style.display = "flex";
-      document.getElementById("adminPanelArea").style.display = "none";
-      document.getElementById("memberCodeInput").value = "";
-      document.getElementById("authStatusText").innerHTML = `
-        <span style="font-weight: 700; color: #cbd5e1;">👤 अपनी पहचान दर्ज करें:</span>
-        <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">अपना व्यक्तिगत सदस्य / एडमिन कोड दर्ज करें</span>
-      `;
-      alert("लॉगआउट संपन्न।");
-    });
-
-    // Check auto-login on load
-    const savedCode = localStorage.getItem("ys_logged_code");
-    if (savedCode) {
-      if (savedCode === "992942" || savedCode === "8696") {
-        applyRoleBasedUI("admin");
-      } else {
-        applyRoleBasedUI("member");
-        document.getElementById("authStatusText").innerHTML = `<span style="font-weight: 800; color: #34d399;">👋 सदस्य कोड (${savedCode}) लॉगिन सक्रिय!</span>`;
-        document.getElementById("loginFormGroup").style.display = "none";
-        document.getElementById("adminPanelArea").style.display = "flex";
+        closeLoginModal();
+        updateAuthUI();
+      } catch (err) {
+        showToast("त्रुटि: " + err.message, "error");
       }
     }
 
-    // Modal close listeners
-    document.getElementById("openPayModalBtn").addEventListener("click", () => { document.getElementById("payModal").style.display = "flex"; });
-    document.getElementById("closePayModalBtn").addEventListener("click", () => { document.getElementById("payModal").style.display = "none"; });
+    function logoutMember() {
+      localStorage.removeItem("loggedInMemberPhone");
+      loggedInMemberPhone = null;
+      showToast("आप सफलतापूर्वक लॉगआउट हो गए हैं।", "info");
+      updateAuthUI();
+    }
 
-    document.getElementById("viewRegistrationsBtn").addEventListener("click", () => {
-      if (!verifyAdminPIN()) return;
-      document.getElementById("registrationsModal").style.display = "flex";
-    });
-    document.getElementById("closeRegModalBtn").addEventListener("click", () => {
-      document.getElementById("registrationsModal").style.display = "none";
-    });
-
-    window.addEventListener("click", (e) => {
-      if (e.target.classList.contains("modal-overlay")) {
-        e.target.style.display = "none";
+    function toggleAdminPrompt() {
+      if (!isAdmin) {
+        const pin = prompt("व्यवस्थापक (Admin) 4-अंकों का पिन दर्ज करें:");
+        if (pin === DEFAULT_ADMIN_PIN) {
+          isAdmin = true;
+          localStorage.setItem("isAdminSession", "true");
+          showToast("व्यवस्थापक (Admin) मोड सक्रिय हुआ!", "success");
+          updateAuthUI();
+        } else if (pin !== null) {
+          showToast("गलत व्यवस्थापक पिन!", "error");
+        }
+      } else {
+        isAdmin = false;
+        localStorage.removeItem("isAdminSession");
+        showToast("व्यवस्थापक मोड बंद हो गया।", "info");
+        updateAuthUI();
       }
-    });
-  </script>
+    }
 
+    // 6. Navigation Tabs
+    function switchTab(tabName, el) {
+      document.querySelectorAll('.section-view').forEach(s => s.classList.remove('active-view'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+      const navButtons = document.querySelectorAll('.nav-bar .nav-item');
+      if (tabName === 'members') {
+        document.getElementById('viewMembers').classList.add('active-view');
+        if (navButtons[0]) navButtons[0].classList.add('active');
+      } else if (tabName === 'ledger') {
+        document.getElementById('viewLedger').classList.add('active-view');
+        if (navButtons[1]) navButtons[1].classList.add('active');
+        renderLedgerTable();
+      } else if (tabName === 'calendar') {
+        document.getElementById('viewCalendar').classList.add('active-view');
+        if (navButtons[2]) navButtons[2].classList.add('active');
+        renderCalendar();
+      } else if (tabName === 'form') {
+        document.getElementById('viewForm').classList.add('active-view');
+        if (navButtons[3]) navButtons[3].classList.add('active');
+      }
+
+      if (el) {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 7. Firestore Realtime Listeners
+    db.collection("members").onSnapshot((snapshot) => {
+      membersList = [];
+      const datalist = document.getElementById("memberSuggestions");
+      if (datalist) datalist.innerHTML = "";
+
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        membersList.push({ id: docSnap.id, ...data });
+
+        if (datalist && data.name) {
+          const opt = document.createElement("option");
+          opt.value = data.name;
+          datalist.appendChild(opt);
+        }
+      });
+
+      // Sort alphabetically by name
+      membersList.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'hi'));
+
+      document.getElementById("memberCountText").innerText = `कुल सदस्य: ${membersList.length}`;
+      renderMembers();
+      renderCalendar();
+      updateAuthUI();
+    }, (error) => {
+      console.error("Firestore read error:", error);
+      document.getElementById("membersList").innerHTML = `
+        <div class="card" style="text-align:center; color:#dc2626; padding:20px;">
+          <i class="fa-solid fa-triangle-exclamation" style="font-size:24px; margin-bottom:8px;"></i>
+          <div>डेटा लोड नहीं हो पाया: ${error.message}</div>
+        </div>
+      `;
+    });
+
+    db.collection("ledger").onSnapshot((snapshot) => {
+      transactions = [];
+      let totalIn = 0;
+      let totalOut = 0;
+
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        transactions.push({ id: docSnap.id, ...data });
+        const amt = Number(data.amount) || 0;
+        if (data.type === "contribution") {
+          totalIn += amt;
+        } else if (data.type === "expense") {
+          totalOut += amt;
+        }
+      });
+
+      document.getElementById("totalCollected").innerText = "₹" + totalIn.toLocaleString('en-IN');
+      document.getElementById("totalExpense").innerText = "₹" + totalOut.toLocaleString('en-IN');
+      const net = totalIn - totalOut;
+      const netEl = document.getElementById("netBalance");
+      netEl.innerText = "₹" + net.toLocaleString('en-IN');
+      netEl.style.color = net >= 0 ? '#1d4ed8' : '#b91c1c';
+
+      renderLedgerTable();
+    }, (error) => {
+      console.error("Ledger snapshot error:", error);
+    });
+
+    // 8. Render Members
+    function handleMemberSearch() {
+      renderMembers();
+    }
+
+    function renderMembers() {
+      const container = document.getElementById("membersList");
+      const searchTerm = (document.getElementById("memberSearchInput")?.value || '').trim().toLowerCase();
+      
+      let filtered = membersList;
+      if (searchTerm) {
+        filtered = membersList.filter(m => 
+          (m.name && m.name.toLowerCase().includes(searchTerm)) ||
+          (m.phone && m.phone.includes(searchTerm))
+        );
+      }
+
+      container.innerHTML = "";
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="text-align:center; color:#64748b; font-size:13px; padding:24px;">
+            <i class="fa-solid fa-user-slash" style="font-size:24px; color:#cbd5e1; margin-bottom:8px;"></i>
+            <div>${searchTerm ? 'खोज के अनुसार कोई सदस्य नहीं मिला।' : 'अभी कोई सदस्य नहीं जुड़ा है।'}</div>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(m => {
+        const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
+        const card = document.createElement("div");
+        card.className = "member-card";
+
+        const firstChar = (m.name || 'U').trim().charAt(0);
+        const cleanPhone = (m.phone || '').replace(/\D/g, '');
+        const cleanWA = (m.whatsapp || m.phone || '').replace(/\D/g, '');
+
+        let adminButtons = "";
+        if (isAdmin || isSelf) {
+          adminButtons = `
+            <div class="member-controls">
+              <button class="btn-icon btn-edit" onclick="editMember('${m.id}')" title="एडिट करें">
+                <i class="fa-solid fa-pen"></i> एडिट
+              </button>
+              ${isAdmin ? `
+                <button class="btn-icon btn-delete" onclick="promptDeleteMember('${m.id}', '${m.name}')" title="हटाएं">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              ` : ''}
+            </div>
+          `;
+        }
+
+        let datesHtml = "";
+        if (m.dob || m.anniversary) {
+          datesHtml = `
+            <div class="member-dates">
+              ${m.dob ? `<span class="date-pill"><i class="fa-solid fa-cake-candles" style="color:#ea580c;"></i> जन्म: <strong>${formatDisplayDate(m.dob)}</strong></span>` : ''}
+              ${m.anniversary ? `<span class="date-pill"><i class="fa-solid fa-rings-wedding" style="color:#db2777;"></i> वर्षगांठ: <strong>${formatDisplayDate(m.anniversary)}</strong></span>` : ''}
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="member-header">
+            <div class="member-info">
+              <div class="avatar">${firstChar}</div>
+              <div class="member-details">
+                <h3>
+                  <span>${m.name}</span>
+                  ${isSelf ? '<span class="self-badge">आप</span>' : ''}
+                </h3>
+                <div class="member-subtext">
+                  <span class="member-tag">भाटी परिवार</span>
+                  <span>📱 ${m.phone}</span>
+                </div>
+              </div>
+            </div>
+            ${adminButtons}
+          </div>
+          ${datesHtml}
+          <div class="action-grid">
+            <a href="tel:${cleanPhone}" class="btn-act act-call">
+              <i class="fa-solid fa-phone"></i> कॉल
+            </a>
+            <a href="https://wa.me/${cleanWA.startsWith('91') ? cleanWA : '91' + cleanWA}" target="_blank" class="btn-act act-wa">
+              <i class="fa-brands fa-whatsapp"></i> व्हाट्सएप
+            </a>
+            ${m.instagram ? `
+              <a href="https://instagram.com/${m.instagram.replace('@','')}" target="_blank" class="btn-act act-insta">
+                <i class="fa-brands fa-instagram"></i> इंस्टाग्राम
+              </a>
+            ` : `
+              <button disabled class="btn-act" style="background:#cbd5e1; cursor:not-allowed;">
+                <i class="fa-brands fa-instagram"></i> इंस्टाग्राम
+              </button>
+            `}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // 9. Member Form Handlers
+    async function saveMember() {
+      const editId = document.getElementById("editDocId").value;
+      const name = document.getElementById("memName").value.trim();
+      let phone = document.getElementById("memPhone").value.trim().replace(/\D/g, '');
+      let wa = document.getElementById("memWA").value.trim().replace(/\D/g, '');
+      const insta = document.getElementById("memInsta").value.trim().replace('@', '');
+      const dob = document.getElementById("memDob").value;
+      const anniversary = document.getElementById("memAnniversary").value;
+
+      if (!name) {
+        showToast("कृपया सदस्य का पूरा नाम दर्ज करें।", "warning");
+        return;
+      }
+      if (phone.length < 10) {
+        showToast("कृपया 10 अंकों का वैध मोबाइल नंबर दर्ज करें।", "warning");
+        return;
+      }
+
+      // Format WhatsApp number
+      if (wa && wa.length === 10) {
+        wa = "91" + wa;
+      } else if (!wa) {
+        wa = "91" + phone;
+      }
+
+      try {
+        const payload = {
+          name,
+          phone,
+          whatsapp: wa,
+          instagram: insta,
+          dob: dob || null,
+          anniversary: anniversary || null,
+          updatedAt: new Date()
+        };
+
+        if (editId) {
+          await db.collection("members").doc(editId).update(payload);
+          showToast(`सदस्य ${name} की जानकारी सफलतापूर्वक अपडेट हुई!`, "success");
+        } else {
+          payload.createdAt = new Date();
+          await db.collection("members").add(payload);
+          showToast(`नया सदस्य ${name} सफलतापूर्वक जुड़ गया!`, "success");
+        }
+
+        resetMemberForm();
+        switchTab('members');
+      } catch (err) {
+        showToast("डेटा सहेजने में त्रुटि: " + err.message, "error");
+      }
+    }
+
+    function editMember(id) {
+      const m = membersList.find(x => x.id === id);
+      if (!m) return;
+
+      document.getElementById("editDocId").value = m.id;
+      document.getElementById("memName").value = m.name || "";
+      document.getElementById("memPhone").value = m.phone || "";
+      document.getElementById("memWA").value = m.whatsapp || "";
+      document.getElementById("memInsta").value = m.instagram || "";
+      document.getElementById("memDob").value = m.dob || "";
+      document.getElementById("memAnniversary").value = m.anniversary || "";
+
+      document.getElementById("formTitle").innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:#2563eb;"></i> सदस्य विवरण संपादित करें`;
+      document.getElementById("saveMemberBtn").innerHTML = `<i class="fa-solid fa-check"></i> अपडेट सहेजें`;
+      document.getElementById("cancelEditBtn").style.display = "block";
+      switchTab('form');
+    }
+
+    function resetMemberForm() {
+      document.getElementById("editDocId").value = "";
+      document.getElementById("memName").value = "";
+      document.getElementById("memPhone").value = "";
+      document.getElementById("memWA").value = "";
+      document.getElementById("memInsta").value = "";
+      document.getElementById("memDob").value = "";
+      document.getElementById("memAnniversary").value = "";
+
+      document.getElementById("formTitle").innerHTML = `<i class="fa-solid fa-user-plus" style="color:#2563eb;"></i> नया सदस्य जोड़ें`;
+      document.getElementById("saveMemberBtn").innerHTML = `<i class="fa-solid fa-floppy-disk"></i> सुरक्षित करें`;
+      document.getElementById("cancelEditBtn").style.display = "none";
+    }
+
+    function promptDeleteMember(id, name) {
+      showConfirmDialog(
+        "सदस्य हटाएं",
+        `क्या आप वाकई ${name} को ग्रुप से हटाना चाहते हैं?`,
+        async () => {
+          try {
+            await db.collection("members").doc(id).delete();
+            showToast(`${name} को सफलतापूर्वक हटा दिया गया।`, "info");
+          } catch (e) {
+            showToast("त्रुटि: " + e.message, "error");
+          }
+        }
+      );
+    }
+
+    // 10. Ledger Handlers
+    async function saveTransaction() {
+      const type = document.getElementById("transType").value;
+      const desc = document.getElementById("transDesc").value.trim();
+      const amount = Number(document.getElementById("transAmount").value);
+      const payMethod = document.getElementById("transPayMethod").value;
+      const date = document.getElementById("transDate").value;
+
+      if (!desc) {
+        showToast("कृपया सदस्य का नाम या खर्च विवरण दर्ज करें।", "warning");
+        return;
+      }
+      if (!amount || amount <= 0) {
+        showToast("कृपया वैध राशि दर्ज करें।", "warning");
+        return;
+      }
+      if (!date) {
+        showToast("कृपया तारीख चुनें।", "warning");
+        return;
+      }
+
+      try {
+        await db.collection("ledger").add({
+          type,
+          description: desc,
+          amount,
+          payMethod,
+          date,
+          createdAt: new Date()
+        });
+
+        showToast("लेनदेन बही-खाते में सफलतापूर्वक दर्ज हुआ!", "success");
+        document.getElementById("transDesc").value = "";
+        document.getElementById("transAmount").value = "";
+        setTodayDate('transDate');
+      } catch (err) {
+        showToast("लेनदेन दर्ज करने में त्रुटि: " + err.message, "error");
+      }
+    }
+
+    function renderLedgerTable() {
+      const tbody = document.getElementById("ledgerTableBody");
+      const filter = document.getElementById("ledgerFilterType")?.value || "all";
+      const thAction = document.getElementById("thLedgerAction");
+
+      if (isAdmin && thAction) {
+        thAction.style.display = "table-cell";
+      } else if (thAction) {
+        thAction.style.display = "none";
+      }
+
+      tbody.innerHTML = "";
+
+      let filtered = transactions;
+      if (filter !== "all") {
+        filtered = transactions.filter(t => t.type === filter);
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${isAdmin ? 6 : 5}" style="text-align:center; color:#64748b; padding:18px;">कोई लेनदेन दर्ज नहीं है।</td></tr>`;
+        return;
+      }
+
+      // Sort newest date first
+      filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      filtered.forEach(t => {
+        const tr = document.createElement("tr");
+        const isIncome = t.type === "contribution";
+
+        tr.innerHTML = `
+          <td><strong>${t.description}</strong></td>
+          <td style="white-space:nowrap;">${formatDisplayDate(t.date)}</td>
+          <td style="color:${isIncome ? '#047857' : '#b91c1c'}; font-weight:700; white-space:nowrap;">₹${Number(t.amount || 0).toLocaleString('en-IN')}</td>
+          <td><span style="font-size:10px; background:#f1f5f9; padding:2px 6px; border-radius:4px; color:#475569;">${t.payMethod || 'नकद'}</span></td>
+          <td>
+            <span style="background:${isIncome ? '#ecfdf5' : '#fef2f2'}; color:${isIncome ? '#047857' : '#b91c1c'}; padding:2px 6px; border-radius:4px; font-weight:700; font-size:10px;">
+              ${isIncome ? 'जमा' : 'खर्च'}
+            </span>
+          </td>
+          ${isAdmin ? `
+            <td style="text-align:center;">
+              <button onclick="promptDeleteTransaction('${t.id}')" style="background:#fef2f2; border:none; color:#dc2626; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:11px;">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          ` : ''}
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function promptDeleteTransaction(id) {
+      showConfirmDialog(
+        "लेनदेन हटाएं",
+        "क्या आप वाकई इस लेनदेन रिकॉर्ड को बही-खाते से हटाना चाहते हैं?",
+        async () => {
+          try {
+            await db.collection("ledger").doc(id).delete();
+            showToast("लेनदेन रिकॉर्ड हटा दिया गया।", "info");
+          } catch (e) {
+            showToast("त्रुटि: " + e.message, "error");
+          }
+        }
+      );
+    }
+
+    function exportLedgerToCSV() {
+      if (!transactions.length) {
+        showToast("एक्सपोर्ट के लिए कोई लेनदेन उपलब्ध नहीं है।", "warning");
+        return;
+      }
+
+      let csv = "प्रकार,विवरण/सदस्य,राशि,भुगतान माध्यम,तारीख\n";
+      transactions.forEach(t => {
+        const typeStr = t.type === 'contribution' ? 'अंशदान (जमा)' : 'खर्च (व्यय)';
+        const safeDesc = `"${(t.description || '').replace(/"/g, '""')}"`;
+        csv += `${typeStr},${safeDesc},${t.amount || 0},${t.payMethod || 'नकद'},${t.date || ''}\n`;
+      });
+
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Yuva_Shakti_BahiKhata_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("लेज़र रिपोर्ट सफलतापूर्वक डाउनलोड हो गई!", "success");
+    }
+
+    function shareLedgerSummaryToWA() {
+      let totalIn = transactions.filter(t => t.type === 'contribution').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let totalOut = transactions.filter(t => t.type === 'expense').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let net = totalIn - totalOut;
+
+      let text = `🚩 *युवा शक्ति ग्रुप - बही-खाता सारांश* 🚩\n\n`;
+      text += `💰 *कुल जमा (अंशदान):* ₹${totalIn.toLocaleString('en-IN')}\n`;
+      text += `💸 *कुल खर्च:* ₹${totalOut.toLocaleString('en-IN')}\n`;
+      text += `⚖️ *उपलब्ध शेष राशि:* ₹${net.toLocaleString('en-IN')}\n\n`;
+      text += `👥 *पंजीकृत सदस्य:* ${membersList.length}\n`;
+      text += `📅 *दिनांक:* ${new Date().toLocaleDateString('hi-IN')}\n\n`;
+      text += `_युवा शक्ति ग्रुप परिवार प्रबंधन_`;
+
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // 11. Calendar & Celebrations
+    function getDaysUntilNextEvent(dateString) {
+      if (!dateString) return null;
+      const parts = dateString.split("-");
+      if (parts.length !== 3) return null;
+
+      const month = parseInt(parts[1], 10) - 1; // 0-based
+      const day = parseInt(parts[2], 10);
+
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      let nextDate = new Date(today.getFullYear(), month, day);
+
+      if (nextDate < today) {
+        nextDate = new Date(today.getFullYear() + 1, month, day);
+      }
+
+      const diffTime = nextDate.getTime() - today.getTime();
+      return Math.round(diffTime / (1000 * 60 * 60 * 24));
+    }
+
+    function renderCalendar() {
+      const upcomingDiv = document.getElementById("upcomingEvents");
+      const listDiv = document.getElementById("calendarList");
+      const badge = document.getElementById("upcomingCountBadge");
+      
+      upcomingDiv.innerHTML = "";
+      listDiv.innerHTML = "";
+
+      let upcomingEventsList = [];
+      let allCalendarItems = [];
+
+      membersList.forEach(m => {
+        if (m.dob) {
+          const days = getDaysUntilNextEvent(m.dob);
+          if (days !== null) {
+            allCalendarItems.push({
+              type: 'birthday',
+              name: m.name,
+              phone: m.whatsapp || m.phone,
+              date: m.dob,
+              daysLeft: days
+            });
+            if (days <= 30) {
+              upcomingEventsList.push({
+                type: 'birthday',
+                name: m.name,
+                phone: m.whatsapp || m.phone,
+                date: m.dob,
+                daysLeft: days
+              });
+            }
+          }
+        }
+
+        if (m.anniversary) {
+          const days = getDaysUntilNextEvent(m.anniversary);
+          if (days !== null) {
+            allCalendarItems.push({
+              type: 'anniversary',
+              name: m.name,
+              phone: m.whatsapp || m.phone,
+              date: m.anniversary,
+              daysLeft: days
+            });
+            if (days <= 30) {
+              upcomingEventsList.push({
+                type: 'anniversary',
+                name: m.name,
+                phone: m.whatsapp || m.phone,
+                date: m.anniversary,
+                daysLeft: days
+              });
+            }
+          }
+        }
+      });
+
+      // Sort upcoming events by days left
+      upcomingEventsList.sort((a, b) => a.daysLeft - b.daysLeft);
+      badge.innerText = `${upcomingEventsList.length} आगामी`;
+
+      if (upcomingEventsList.length === 0) {
+        upcomingDiv.innerHTML = `<div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">आगामी 30 दिनों में कोई उत्सव नहीं है।</div>`;
+      } else {
+        upcomingEventsList.forEach(ev => {
+          const isBday = ev.type === 'birthday';
+          const isToday = ev.daysLeft === 0;
+          const daysText = isToday ? '🎂 आज ही है!' : (ev.daysLeft === 1 ? 'कल है!' : `${ev.daysLeft} दिन शेष`);
+
+          const card = document.createElement("div");
+          card.className = `event-card ${isBday ? 'event-bday' : 'event-anni'}`;
+          card.innerHTML = `
+            <div class="event-info">
+              <strong>${isBday ? '🎂 जन्मदिन:' : '💐 वर्षगांठ:'} ${ev.name}</strong>
+              <span>दिनांक: ${formatDisplayDate(ev.date)}</span>
+            </div>
+            <div class="event-right">
+              <span class="days-badge ${isToday ? 'days-today' : 'days-upcoming'}">${daysText}</span>
+              <button class="btn-wish" onclick="sendGreeting('${ev.type}', '${ev.name}', '${ev.phone}')">
+                <i class="fa-brands fa-whatsapp"></i> बधाई भेजें
+              </button>
+            </div>
+          `;
+          upcomingDiv.appendChild(card);
+        });
+      }
+
+      // Sort all roster items by upcoming calendar date
+      allCalendarItems.sort((a, b) => a.daysLeft - b.daysLeft);
+
+      if (allCalendarItems.length === 0) {
+        listDiv.innerHTML = `<div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">पंजी में कोई जन्म या वर्षगांठ तिथि नहीं है।</div>`;
+      } else {
+        allCalendarItems.forEach(item => {
+          const isBday = item.type === 'birthday';
+          const row = document.createElement("div");
+          row.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:12px;";
+          row.innerHTML = `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:15px;">${isBday ? '🎂' : '💐'}</span>
+              <div>
+                <strong>${item.name}</strong>
+                <span style="color:#64748b; font-size:11px;">(${isBday ? 'जन्मदिन' : 'वर्षगांठ'})</span>
+              </div>
+            </div>
+            <div style="color:#475569; font-weight:600;">
+              ${formatDisplayDate(item.date)}
+            </div>
+          `;
+          listDiv.appendChild(row);
+        });
+      }
+    }
+
+    function sendGreeting(type, name, phone) {
+      let cleanPhone = (phone || '').replace(/\D/g, '');
+      if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+
+      let message = "";
+      if (type === 'birthday') {
+        message = `युवा शक्ति ग्रुप की ओर से आदरणीय ${name} जी को जन्मदिन की अनंत कोटि शुभकामनाएं एवं मंगलकामनाएं! 🎂🎉 ईश्वर आपको उत्तम स्वास्थ्य, सुख-समृद्धि एवं दीर्घायु प्रदान करें।💐`;
+      } else {
+        message = `युवा शक्ति ग्रुप की ओर से आदरणीय ${name} जी को विवाह वर्षगांठ की हार्दिक बधाई एवं शुभकामनाएं! 💐💍❤️ आपका दांपत्य जीवन सदैव प्रेम और खुशियों से परिपूर्ण रहे।`;
+      }
+
+      const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+    }
+
+    function formatDisplayDate(dateStr) {
+      if (!dateStr) return "";
+      const parts = dateStr.split("-");
+      if (parts.length === 3) {
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      }
+      return dateStr;
+    }
+
+    // Initialize Auth UI on page load
+    updateAuthUI();
+  </script>
 </body>
 </html>

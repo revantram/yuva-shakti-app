@@ -17,3 +17,5 @@ local.properties
 .env
 *.apk
 *.zip
+!yuva-shakti.apk
+!YuvaShaktiGroup.apk
