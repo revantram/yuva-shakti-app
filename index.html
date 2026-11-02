@@ -2023,7 +2023,14 @@
     }
 
     function downloadLatestApp() {
-      window.open(latestDownloadUrl, '_blank');
+      showToast("अपडेट डाउनलोड शुरू हो रहा है...", "info");
+
+      if (window.AndroidApp && typeof window.AndroidApp.downloadAndInstall === "function") {
+        window.AndroidApp.downloadAndInstall(latestDownloadUrl, APP_VERSION);
+      } else {
+        // Fallback: navigate current window which triggers WebView shouldOverrideUrlLoading & DownloadListener
+        window.location.href = latestDownloadUrl;
+      }
       closeUpdateModal();
     }
 
