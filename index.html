@@ -1001,6 +1001,126 @@
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
     }
+
+    /* Dark Theme Styles */
+    body.dark-theme {
+      --bg-color: #0b0f19;
+      --card-bg: #151d30;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+    }
+    body.dark-theme header {
+      background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);
+    }
+    body.dark-theme .nav-bar {
+      background: #151d30;
+      border-top-color: #23314f;
+    }
+    body.dark-theme .nav-item {
+      color: #94a3b8;
+    }
+    body.dark-theme .nav-item.active {
+      color: #60a5fa;
+    }
+    body.dark-theme input,
+    body.dark-theme select,
+    body.dark-theme textarea {
+      background: #1e293b;
+      color: #f8fafc;
+      border-color: #334155;
+    }
+    body.dark-theme .search-input {
+      background: #1e293b;
+      color: #f8fafc;
+    }
+    body.dark-theme .member-card {
+      background: #151d30;
+      border-color: #23314f;
+    }
+    body.dark-theme .card {
+      background: #151d30;
+      border-color: #23314f;
+    }
+    body.dark-theme .card-title {
+      border-bottom-color: #1e293b;
+      color: #f8fafc;
+    }
+    body.dark-theme .member-details h3 {
+      color: #f8fafc;
+    }
+    body.dark-theme .member-tag {
+      background: #1e293b;
+      color: #94a3b8;
+    }
+    body.dark-theme .ledger-box {
+      background: #151d30;
+      border-color: #23314f;
+    }
+    body.dark-theme .btn-tool {
+      background: #1e293b;
+      color: #f8fafc;
+      border-color: #334155;
+    }
+    body.dark-theme .pill-btn {
+      background: #1e293b;
+      color: #94a3b8;
+      border-color: #334155;
+    }
+    body.dark-theme .pill-btn.active {
+      background: #2563eb;
+      color: white;
+    }
+    body.dark-theme table {
+      background: #151d30;
+    }
+    body.dark-theme th {
+      background: #1e293b;
+      color: #cbd5e1;
+    }
+    body.dark-theme td {
+      border-bottom-color: #1e293b;
+    }
+    body.dark-theme .modal-content {
+      background: #151d30;
+      color: #f8fafc;
+    }
+    body.dark-theme .event-card {
+      background: #151d30;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    body.dark-theme .event-info strong {
+      color: #f8fafc;
+    }
+    body.dark-theme .chip-btn {
+      background: #1e293b;
+      color: #cbd5e1;
+      border-color: #334155;
+    }
+
+    /* Theme Card Selector in Settings */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .theme-card {
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--card-bg);
+    }
+
+    .theme-card.active {
+      border-color: #2563eb;
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 0 0 1px #2563eb;
+    }
   </style>
 </head>
 <body>
@@ -1023,18 +1143,10 @@
       </div>
     </div>
     <div class="header-actions">
-      <!-- Check Updates Button -->
-      <button class="auth-btn" onclick="checkForAppUpdates(false)" title="अपडेट की जांच करें">
-        <i class="fa-solid fa-arrows-rotate"></i>
-        <span>अपडेट</span>
-      </button>
+      <!-- Member Login Button -->
       <button class="auth-btn" id="loginBtn" onclick="openLoginModal()">
         <i class="fa-solid fa-right-to-bracket"></i>
         <span>लॉगिन</span>
-      </button>
-      <button class="auth-btn" id="adminToggleBtn" onclick="toggleAdminPrompt()">
-        <i class="fa-solid fa-shield-halved"></i>
-        <span id="adminBtnText">एडमिन</span>
       </button>
     </div>
   </header>
@@ -1340,6 +1452,92 @@
       </div>
     </div>
 
+    <!-- 5. सेटिंग्स टैब -->
+    <div id="viewSettings" class="section-view">
+      
+      <!-- Profile Card -->
+      <div class="card">
+        <div class="card-title">
+          <span><i class="fa-solid fa-user-shield" style="color:#2563eb;"></i> खाता एवं प्रोफाइल</span>
+          <span class="badge" id="settingsAuthBadge">अतिथि मोड</span>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 0;">
+          <div>
+            <div style="font-size:15px; font-weight:700; color:var(--text-main);" id="settingsUserName">अतिथि (Guest)</div>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="settingsUserPhone">व्यक्तिगत पिन से लॉगिन नहीं हैं</div>
+          </div>
+          <button class="btn-tool" style="width:auto; padding:8px 14px; font-weight:700;" id="settingsLoginBtn" onclick="openLoginModal()">
+            लॉगिन करें
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Control Card (Moved from header to Settings) -->
+      <div class="card">
+        <div class="card-title">
+          <span><i class="fa-solid fa-shield-halved" style="color:#dc2626;"></i> व्यवस्थापक (Admin) नियंत्रण</span>
+          <span class="badge" id="settingsAdminBadge" style="background:#fee2e2; color:#dc2626;">निष्क्रिय</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+          व्यवस्थापक मोड सक्रिय करके आप सदस्यों को जोड़ने, हटाने, संपादित करने और गलत लेनदेन रिकॉर्ड सुधारने में सक्षम होते हैं।
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="btn-main" id="settingsAdminToggleBtn" onclick="toggleAdminPrompt()" style="background:#dc2626;">
+            <i class="fa-solid fa-shield-cat"></i> व्यवस्थापक लॉगिन करें
+          </button>
+          <button class="btn-tool" id="btnChangeAdminPin" onclick="changeAdminPinPrompt()" style="display:none; width:100%; border-color:#cbd5e1;">
+            <i class="fa-solid fa-key" style="color:#f59e0b;"></i> व्यवस्थापक पिन बदलें
+          </button>
+        </div>
+      </div>
+
+      <!-- Theme Selector Card -->
+      <div class="card">
+        <div class="card-title">
+          <span><i class="fa-solid fa-palette" style="color:#ea580c;"></i> ऐप थीम (रंग-रूप)</span>
+          <span class="badge" id="currentThemeBadge">लाइट थीम</span>
+        </div>
+        <div class="theme-grid">
+          <div class="theme-card active" id="themeLight" onclick="setAppTheme('light')">
+            <i class="fa-solid fa-sun" style="color:#f59e0b; font-size:22px; margin-bottom:6px;"></i>
+            <div style="font-weight:700; font-size:13px; color:var(--text-main);">लाइट थीम (दिन)</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">क्लासिक सफेद व नीला</div>
+          </div>
+          <div class="theme-card" id="themeDark" onclick="setAppTheme('dark')">
+            <i class="fa-solid fa-moon" style="color:#818cf8; font-size:22px; margin-bottom:6px;"></i>
+            <div style="font-weight:700; font-size:13px; color:var(--text-main);">डार्क थीम (रात)</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">आंखों के लिए आरामदायक</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Info & Version -->
+      <div class="card">
+        <div class="card-title">
+          <span><i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> ऐप विवरण एवं अपडेट</span>
+          <span class="badge" style="background:#e0f2fe; color:#0369a1;">v4.1.3</span>
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between;">
+            <span>एप्लिकेशन नाम:</span>
+            <strong style="color:var(--text-main);">युवा शक्ति ग्रुप (कुचेरा)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>वर्तमान संस्करण:</span>
+            <strong style="color:var(--text-main);">v4.1.3 (नवीनतम)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>क्लाउड डेटाबेस:</span>
+            <span style="color:#10b981; font-weight:700;">🟢 Firebase कनेक्टेड</span>
+          </div>
+        </div>
+        <button class="btn-tool" onclick="checkForAppUpdates(false)" style="margin-top:12px; width:100%; font-weight:700;">
+          <i class="fa-solid fa-arrows-rotate"></i> अपडेट की जांच करें
+        </button>
+      </div>
+
+    </div>
+
   </div>
 
   <!-- Bottom Navigation Bar -->
@@ -1359,6 +1557,10 @@
     <button class="nav-item" onclick="switchTab('form', this)">
       <i class="fa-solid fa-user-plus"></i>
       <span>फॉर्म</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('settings', this)">
+      <i class="fa-solid fa-gear"></i>
+      <span>सेटिंग्स</span>
     </button>
   </nav>
 
@@ -1429,7 +1631,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.1.2";
+    const APP_VERSION = "4.1.3";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -1786,20 +1988,101 @@
         loginBtn.onclick = openLoginModal;
       }
 
-      if (isAdmin) {
-        adminBtn.classList.add("active-admin");
-        adminBtnText.innerText = "एडमिन सक्रिय";
-        adminNotice.style.display = "flex";
-        if (thAction) thAction.style.display = "table-cell";
-      } else {
-        adminBtn.classList.remove("active-admin");
-        adminBtnText.innerText = "एडमिन";
-        adminNotice.style.display = "none";
-        if (thAction) thAction.style.display = "none";
+      if (thAction) {
+        thAction.style.display = isAdmin ? "table-cell" : "none";
       }
 
+      updateSettingsUI();
       renderMembers();
       renderLedgerTable();
+    }
+
+    function updateSettingsUI() {
+      const authBadge = document.getElementById("settingsAuthBadge");
+      const userName = document.getElementById("settingsUserName");
+      const userPhone = document.getElementById("settingsUserPhone");
+      const loginBtn = document.getElementById("settingsLoginBtn");
+
+      if (authBadge && userName && userPhone && loginBtn) {
+        if (loggedInMemberPhone) {
+          const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+          authBadge.innerText = "सत्यापित सदस्य";
+          authBadge.style.background = "#dbeafe";
+          authBadge.style.color = "#1d4ed8";
+          userName.innerText = found ? found.name : "सदस्य";
+          userPhone.innerText = `📱 +91 ${loggedInMemberPhone}`;
+          loginBtn.innerText = "लॉगआउट";
+          loginBtn.onclick = logoutMember;
+        } else {
+          authBadge.innerText = "अतिथि मोड";
+          authBadge.style.background = "#f1f5f9";
+          authBadge.style.color = "#64748b";
+          userName.innerText = "अतिथि (Guest)";
+          userPhone.innerText = "व्यक्तिगत पिन से लॉगिन नहीं हैं";
+          loginBtn.innerText = "लॉगिन करें";
+          loginBtn.onclick = openLoginModal;
+        }
+      }
+
+      const adminBadge = document.getElementById("settingsAdminBadge");
+      const adminToggleBtn = document.getElementById("settingsAdminToggleBtn");
+      const changePinBtn = document.getElementById("btnChangeAdminPin");
+
+      if (adminBadge && adminToggleBtn) {
+        if (isAdmin) {
+          adminBadge.innerText = "सक्रिय (Active)";
+          adminBadge.style.background = "#fee2e2";
+          adminBadge.style.color = "#dc2626";
+          adminToggleBtn.innerHTML = `<i class="fa-solid fa-right-from-bracket"></i> व्यवस्थापक मोड बंद करें (लॉगआउट)`;
+          adminToggleBtn.style.background = "#64748b";
+          if (changePinBtn) changePinBtn.style.display = "inline-flex";
+        } else {
+          adminBadge.innerText = "निष्क्रिय (Off)";
+          adminBadge.style.background = "#f1f5f9";
+          adminBadge.style.color = "#64748b";
+          adminToggleBtn.innerHTML = `<i class="fa-solid fa-shield-cat"></i> व्यवस्थापक लॉगिन करें`;
+          adminToggleBtn.style.background = "#dc2626";
+          if (changePinBtn) changePinBtn.style.display = "none";
+        }
+      }
+    }
+
+    function changeAdminPinPrompt() {
+      if (!isAdmin) return;
+      const currentSaved = localStorage.getItem("customAdminPin") || DEFAULT_ADMIN_PIN;
+      const oldPin = prompt("वर्तमान व्यवस्थापक पिन दर्ज करें:");
+      if (oldPin !== currentSaved) {
+        showToast("गलत वर्तमान पिन!", "error");
+        return;
+      }
+      const newPin = prompt("नया 4-अंकों का व्यवस्थापक पिन दर्ज करें:");
+      if (!newPin || newPin.trim().length !== 4) {
+        showToast("पिन ठीक 4 अंकों का होना चाहिए।", "warning");
+        return;
+      }
+      localStorage.setItem("customAdminPin", newPin.trim());
+      showToast("व्यवस्थापक पिन सफलतापूर्वक बदल दिया गया!", "success");
+    }
+
+    // Theme Switcher Logic
+    function setAppTheme(theme) {
+      const badge = document.getElementById('currentThemeBadge');
+      const lightCard = document.getElementById('themeLight');
+      const darkCard = document.getElementById('themeDark');
+
+      if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+        localStorage.setItem('appTheme', 'dark');
+        if (badge) badge.innerText = "डार्क थीम";
+        if (lightCard) lightCard.classList.remove('active');
+        if (darkCard) darkCard.classList.add('active');
+      } else {
+        document.body.classList.remove('dark-theme');
+        localStorage.setItem('appTheme', 'light');
+        if (badge) badge.innerText = "लाइट थीम";
+        if (lightCard) lightCard.classList.add('active');
+        if (darkCard) darkCard.classList.remove('active');
+      }
     }
 
     async function processMemberLogin() {
@@ -1846,9 +2129,10 @@
     }
 
     function toggleAdminPrompt() {
+      const currentPin = localStorage.getItem("customAdminPin") || DEFAULT_ADMIN_PIN;
       if (!isAdmin) {
         const pin = prompt("व्यवस्थापक (Admin) 4-अंकों का पिन दर्ज करें:");
-        if (pin === DEFAULT_ADMIN_PIN) {
+        if (pin === currentPin) {
           isAdmin = true;
           localStorage.setItem("isAdminSession", "true");
           showToast("व्यवस्थापक (Admin) मोड सक्रिय हुआ!", "success");
@@ -1884,6 +2168,10 @@
       } else if (tabName === 'form') {
         document.getElementById('viewForm').classList.add('active-view');
         if (navButtons[3]) navButtons[3].classList.add('active');
+      } else if (tabName === 'settings') {
+        document.getElementById('viewSettings').classList.add('active-view');
+        if (navButtons[4]) navButtons[4].classList.add('active');
+        updateSettingsUI();
       }
 
       if (el) {
@@ -2560,8 +2848,11 @@
       return dateStr;
     }
 
-    // Initialize UI and Check for Updates on App Launch
+    // Initialize UI, Theme, Settings, and Check for Updates on App Launch
+    const savedTheme = localStorage.getItem('appTheme') || 'light';
+    setAppTheme(savedTheme);
     updateAuthUI();
+    updateSettingsUI();
     setTimeout(() => {
       checkForAppUpdates(true);
     }, 1500);
