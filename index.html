@@ -1585,6 +1585,45 @@
     .calendar-day.selected .cal-tithi-name {
       color: #fef08a !important;
     }
+
+    /* Member Designation Tag Badges */
+    .member-tag-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      letter-spacing: 0.2px;
+    }
+    .member-tag-badge.sanchalak {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+      box-shadow: 0 1px 4px rgba(217, 119, 6, 0.3);
+    }
+    .member-tag-badge.other {
+      background: rgba(37, 99, 235, 0.1);
+      color: #1d4ed8;
+      border: 1px solid rgba(37, 99, 235, 0.25);
+    }
+    body.dark-theme .member-tag-badge.other {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    #hinduCalendarCard {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.94) 100%);
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    }
+    body.dark-theme #hinduCalendarCard {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.85) 100%);
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
     /* iOS Liquid Glass Settings List Item & Tiles */
     .settings-list-item {
       display: flex;
@@ -1895,9 +1934,9 @@
     </div>
 
     <!-- Admin Active Notice -->
-    <div id="adminNotice" class="admin-banner" style="display:none;">
-      <span><i class="fa-solid fa-shield-cat"></i> व्यवस्थापक मोड सक्रिय (Admin Mode)</span>
-      <button onclick="toggleAdminPrompt()" style="background:rgba(255,255,255,0.25); border:none; color:white; padding:2px 8px; border-radius:4px; font-size:10px; cursor:pointer;">लॉगआउट करें</button>
+    <div id="adminNotice" class="admin-banner" style="display:none; background:linear-gradient(135deg, #d97706, #b45309);">
+      <span><i class="fa-solid fa-crown" style="color:#fef08a;"></i> संचालक मोड सक्रिय • रेवंतराम भाटी</span>
+      <button onclick="logoutMember()" style="background:rgba(255,255,255,0.25); border:none; color:white; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:600; cursor:pointer;">लॉगआउट</button>
     </div>
 
     <!-- 1. सदस्य डायरेक्टरी टैब -->
@@ -2028,23 +2067,8 @@
         <input type="number" id="transAmount">
         <select id="transPayMethod"><option value="नकद">नकद</option><option value="PhonePe / GPay / UPI">PhonePe / GPay / UPI</option></select>
         <input type="date" id="transDate">
+        <span id="ledgerUpiDisplay">7850983600@ibl</span>
         <div id="transSelfLockNotice"></div>
-      </div>
-
-      <!-- PhonePe / UPI Quick Deposit Card -->
-      <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(95, 37, 159, 0.12) 0%, rgba(59, 20, 100, 0.05) 100%); border:1px solid rgba(95, 37, 159, 0.22); border-radius:16px; padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div style="font-weight:700; font-size:12px; display:flex; align-items:center; gap:6px; color:var(--text-color);">
-            <i class="fa-solid fa-qrcode" style="color:#7c3aed; font-size:15px;"></i>
-            <span>अमावस्या अंशदान (₹100)</span>
-          </div>
-          <div style="font-size:10px; color:var(--text-muted); margin-top:1px;">
-            UPI: <span id="ledgerUpiDisplay">7850983600@ibl</span>
-          </div>
-        </div>
-        <button onclick="openPhonePeModal('अमावस्या अंशदान', 100)" style="background:#5f259f; color:white; border:none; padding:7px 12px; border-radius:10px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 6px rgba(95,37,159,0.3);">
-          <i class="fa-solid fa-mobile-screen-button"></i> <span>PhonePe ₹100</span>
-        </button>
       </div>
 
       <!-- Admin Add Expense Controls (Only visible if isAdmin) -->
@@ -2062,22 +2086,18 @@
       <!-- Member Read-Only Notice (Visible when !isAdmin) -->
       <div id="expenseReadOnlyNotice" class="ios-glass-card" style="display:flex; align-items:center; gap:10px; padding:10px 12px; margin-bottom:12px; background:rgba(37, 99, 235, 0.08); border:1px solid rgba(37, 99, 235, 0.2); border-radius:14px; font-size:11px; color:var(--text-color);">
         <i class="fa-solid fa-shield-halved" style="color:#2563eb; font-size:16px; flex-shrink:0;"></i>
-        <div><strong>व्यवस्थापक नियंत्रण:</strong> केवल व्यवस्थापक (Admin) खर्च व सामग्री जोड़/बदल सकते हैं। सदस्य सभी खर्चों की तालिका व शेष राशि देख सकते हैं।</div>
+        <div><strong>व्यवस्थापक नियंत्रण:</strong> केवल संचालक / व्यवस्थापक खर्च व सामग्री जोड़/बदल सकते हैं। सदस्य सभी खर्चों की तालिका व शेष राशि देख सकते हैं।</div>
       </div>
 
-      <!-- Quick Action Tools (Share WA, PDF, CSV) -->
+      <!-- Quick Action Tools (Share WA, PDF) -->
       <div class="ledger-actions-bar" style="margin-bottom:12px;">
-        <button class="btn-tool" onclick="shareExpensesToWA()">
+        <button class="btn-tool" onclick="shareExpensesToWA()" style="flex:1;">
           <i class="fa-brands fa-whatsapp" style="color:#16a34a; font-size:14px;"></i>
           <span>व्हाट्सएप शेयर</span>
         </button>
-        <button class="btn-tool" onclick="exportExpensesToPDF()">
+        <button class="btn-tool" onclick="exportExpensesToPDF()" style="flex:1;">
           <i class="fa-solid fa-file-pdf" style="color:#ef4444; font-size:14px;"></i>
           <span>PDF रिपोर्ट</span>
-        </button>
-        <button class="btn-tool" onclick="exportExpensesToCSV()">
-          <i class="fa-solid fa-file-excel" style="color:#059669; font-size:14px;"></i>
-          <span>CSV स्प्रेडशीट</span>
         </button>
       </div>
 
@@ -2122,41 +2142,6 @@
           </table>
         </div>
       </div>
-
-      <!-- Collapsible Section for All Transactions & Income Records -->
-      <details class="card ios-glass-card" style="border-radius:16px; padding:12px 14px; margin-bottom:14px;">
-        <summary style="font-weight:700; font-size:12px; color:var(--text-color); cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
-          <span><i class="fa-solid fa-clock-rotate-left" style="color:#2563eb; margin-right:6px;"></i> समस्त लेनदेन व जमा इतिहास (All Records)</span>
-          <i class="fa-solid fa-chevron-down" style="font-size:11px; color:var(--text-muted);"></i>
-        </summary>
-        <div style="margin-top:10px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-size:11px; color:var(--text-muted);">फ़िल्टर:</span>
-            <select id="ledgerFilterType" onchange="renderLedgerTable()" style="padding:4px 8px; font-size:11px; border-radius:6px; border:1px solid var(--border-color); background:var(--input-bg); color:var(--text-color);">
-              <option value="all">सभी रिकॉर्ड</option>
-              <option value="contribution">केवल जमा</option>
-              <option value="expense">केवल खर्च</option>
-            </select>
-          </div>
-          <div class="table-container" style="border-radius:10px; border:1px solid var(--border-color); overflow-x:auto;">
-            <table style="width:100%; border-collapse:collapse; font-size:11px;">
-              <thead>
-                <tr style="background:rgba(0,0,0,0.04);">
-                  <th style="padding:8px 6px;">विवरण/सदस्य</th>
-                  <th style="padding:8px 6px;">तारीख</th>
-                  <th style="padding:8px 6px; text-align:right;">राशि</th>
-                  <th style="padding:8px 6px;">माध्यम</th>
-                  <th style="padding:8px 6px;">प्रकार</th>
-                  <th id="thLedgerAction" style="display:none; text-align:center; padding:8px 6px;">हटाएं</th>
-                </tr>
-              </thead>
-              <tbody id="ledgerTableBody">
-                <tr><td colspan="5" style="text-align:center; color:#64748b; padding:12px;">कोई लेनदेन दर्ज नहीं है।</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </details>
     </div>
 
     <!-- 3. हिंदू कैलेंडर व उत्सव टैब -->
@@ -2206,11 +2191,8 @@
       </div>
 
       <!-- Filter Pills for Calendar -->
-      <div class="filter-pills">
-        <button class="pill-btn active" onclick="setCalendarFilter('all', this)">
-          <i class="fa-solid fa-layer-group"></i> <span data-i18n="filter_all_events">सभी उत्सव</span>
-        </button>
-        <button class="pill-btn" onclick="setCalendarFilter('festivals', this)">
+      <div class="filter-pills" id="calendarFilterPills">
+        <button class="pill-btn active" onclick="setCalendarFilter('festivals', this)">
           <i class="fa-solid fa-om" style="color:#ea580c;"></i> <span data-i18n="filter_festivals">हिंदू पर्व व त्यौहार</span>
         </button>
         <button class="pill-btn" onclick="setCalendarFilter('amavasya', this)">
@@ -2220,14 +2202,14 @@
           <i class="fa-solid fa-cake-candles" style="color:#eab308;"></i> <span data-i18n="filter_birthdays">जन्मदिन</span>
         </button>
         <button class="pill-btn" onclick="setCalendarFilter('anniversaries', this)">
-          <i class="fa-solid fa-rings-wedding" style="color:#db2777;"></i> <span data-i18n="filter_anniversaries">वर्षगांठ</span>
+          <i class="fa-solid fa-rings-wedding" style="color:#db2777;"></i> <span data-i18n="filter_anniversaries">विवाह वर्षगांठ</span>
         </button>
       </div>
 
       <!-- Upcoming 30 Days Events -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-solid fa-bell" style="color:#ea580c;"></i> <span data-i18n="upcoming_30_days">आगामी 30 दिनों के उत्सव</span></span>
+          <span id="upcomingEventsTitle"><i class="fa-solid fa-om" style="color:#ea580c;"></i> <span>आगामी 30 दिनों के हिंदू पर्व</span></span>
           <span class="badge" id="upcomingCountBadge">0 आगामी</span>
         </div>
         <div id="upcomingEvents">
@@ -2284,6 +2266,21 @@
           <label data-i18n="anniversary_label">विवाह वर्षगांठ (Wedding Anniversary - ऐच्छिक)</label>
           <input type="date" id="memAnniversary">
         </div>
+
+        <div class="form-group" id="memTagGroup">
+          <label><i class="fa-solid fa-id-badge" style="color:#d97706;"></i> <span>पद / पदनाम टैग (Designation Tag)</span></label>
+          <input type="text" id="memTag" list="tagSuggestions" placeholder="उदा. संचालक, कोषाध्यक्ष, प्रबंधक, सदस्य...">
+          <datalist id="tagSuggestions">
+            <option value="संचालक">
+            <option value="उप-संचालक">
+            <option value="कोषाध्यक्ष">
+            <option value="व्यवस्थापक">
+            <option value="प्रबंधक">
+            <option value="सलाहकार">
+            <option value="सक्रिय सदस्य">
+            <option value="सदस्य">
+          </datalist>
+        </div>
         
         <button class="btn-main" id="saveMemberBtn" onclick="saveMember()">
           <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_save">सुरक्षित करें</span>
@@ -2306,7 +2303,7 @@
             </div>
             <span data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span>
           </span>
-          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.2.9</span>
+          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.3.0</span>
         </div>
         <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between;">
@@ -2314,12 +2311,12 @@
             <strong style="color:var(--text-main);">युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
-            <span>मुख्य डेवलपर:</span>
-            <strong style="color:var(--text-main);">रेवंतराम भाटी (Dev Lead)</strong>
+            <span>मुख्य डेवलपर व संचालक:</span>
+            <strong style="color:var(--text-main);">रेवंतराम भाटी</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.2.9 (नवीनतम रिलीज)</strong>
+            <strong style="color:var(--text-main);">v4.3.0 (नवीनतम रिलीज)</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>क्लाउड डेटाबेस:</span>
@@ -2443,48 +2440,45 @@
         </div>
       </div>
 
-      <!-- 4. व्यवस्थापक (Admin) नियंत्रण -->
-      <div class="card">
+      <!-- 4. संचालक नियंत्रण (Admin Settings - केवल रेवंतराम भाटी के लिए) -->
+      <div class="card ios-glass-card" id="adminSettingsCard" style="display:none; border:1px solid rgba(217, 119, 6, 0.35); background:linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(245, 158, 11, 0.02) 100%);">
         <div class="card-title">
           <span style="display:flex; align-items:center; gap:8px;">
-            <div class="ios-icon-tile ios-icon-red" style="width:28px; height:28px; font-size:13px; border-radius:8px;">
-              <i class="fa-solid fa-shield-halved"></i>
+            <div class="ios-icon-tile" style="background:#d97706; color:white; width:28px; height:28px; font-size:13px; border-radius:8px;">
+              <i class="fa-solid fa-crown"></i>
             </div>
-            <span data-i18n="settings_admin_title">व्यवस्थापक (Admin) नियंत्रण</span>
+            <span>संचालक नियंत्रण (Admin Settings)</span>
           </span>
-          <span class="ios-value-badge" id="settingsAdminBadge" style="background:rgba(239,68,68,0.12); color:#dc2626; border:1px solid rgba(239,68,68,0.25); font-size:11px; padding:2px 8px;">निष्क्रिय</span>
+          <span class="badge" style="background:linear-gradient(135deg, #d97706, #b45309); color:white; font-size:11px; padding:2px 8px; border-radius:6px;">संचालक: रेवंतराम भाटी</span>
         </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;" data-i18n="admin_desc">
-          व्यवस्थापक मोड सक्रिय करके आप सदस्यों को जोड़ने, हटाने, संपादित करने और लेनदेन रिकॉर्ड सुधारने में सक्षम होते हैं।
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+          आप संचालक (रेवंतराम भाटी) के रूप में लॉगिन हैं। आप ग्रुप की PhonePe / UPI ID बदल सकते हैं एवं सभी सदस्यों के पद / टैग प्रबंधित कर सकते हैं।
         </p>
         <div style="display:flex; flex-direction:column; gap:8px;">
-          <button class="btn-main" id="settingsAdminToggleBtn" onclick="toggleAdminPrompt()" style="background:#dc2626; border-radius:14px;">
-            <i class="fa-solid fa-shield-cat"></i> <span id="settingsAdminBtnLabel" data-i18n="admin_login_btn">व्यवस्थापक लॉगिन करें</span>
-          </button>
-          <button class="btn-tool" id="btnChangeAdminPin" onclick="changeAdminPinPrompt()" style="display:none; width:100%; border-color:#cbd5e1; border-radius:14px;">
-            <i class="fa-solid fa-key" style="color:#f59e0b;"></i> <span data-i18n="admin_change_pin">व्यवस्थापक पिन बदलें</span>
+          <button class="btn-main" onclick="promptChangeUpiId()" style="background:#5f259f; border-radius:14px;">
+            <i class="fa-solid fa-pen-to-square"></i> <span>PhonePe / UPI ID व नाम बदलें</span>
           </button>
         </div>
       </div>
 
-      <!-- 5. खाता प्रबंधन एवं लॉगआउट (सबसे अंत / नीचे) -->
+      <!-- 5. खाता प्रोफाइल एवं लॉगआउट (Account Profile) -->
       <div class="card" id="settingsAuthCard" style="margin-bottom:20px;">
         <div class="card-title">
           <span style="display:flex; align-items:center; gap:8px;">
             <div class="ios-icon-tile ios-icon-gray" style="width:28px; height:28px; font-size:13px; border-radius:8px;">
               <i class="fa-solid fa-user-gear"></i>
             </div>
-            <span data-i18n="settings_auth_title">खाता प्रबंधन एवं लॉगआउट</span>
+            <span data-i18n="settings_auth_title">खाता प्रोफाइल एवं लॉगआउट</span>
           </span>
-          <span class="ios-value-badge" id="settingsAuthBadge" style="font-size:11px; padding:2px 8px;">अतिथि मोड</span>
+          <span class="ios-value-badge" id="settingsAuthBadge" style="font-size:11px; padding:2px 8px;">लॉगिन नहीं हैं</span>
         </div>
         <div style="padding:6px 0 12px 0;">
-          <div style="font-size:15px; font-weight:700; color:var(--text-main);" id="settingsUserName">अतिथि (Guest)</div>
-          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="settingsUserPhone">व्यक्तिगत पिन से लॉगिन नहीं हैं</div>
+          <div style="font-size:15px; font-weight:700; color:var(--text-main);" id="settingsUserName">लॉगिन नहीं हैं</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="settingsUserPhone">ग्रुप सदस्य या संचालक लॉगिन करें</div>
         </div>
         <div id="settingsAuthActionBox">
           <button class="btn-main" style="width:100%; border-radius:14px;" id="settingsLoginBtn" onclick="openLoginModal()">
-            <i class="fa-solid fa-right-to-bracket"></i> सदस्य लॉगिन करें
+            <i class="fa-solid fa-right-to-bracket"></i> सदस्य / संचालक लॉगिन करें
           </button>
         </div>
       </div>
@@ -2625,19 +2619,19 @@
         <h3 style="font-size:16px; font-weight:700;"><i class="fa-solid fa-key" style="color:#2563eb;"></i> सदस्य व्यक्तिगत लॉगिन</h3>
         <button onclick="closeLoginModal()" style="border:none; background:none; font-size:18px; color:#64748b; cursor:pointer;">✕</button>
       </div>
-      <p style="font-size:12px; color:#64748b; margin-bottom:14px;">अपने रजिस्टर्ड मोबाइल नंबर और 4-अंकों के पिन से लॉगिन करें। यदि पहली बार लॉगिन कर रहे हैं तो नया पिन सेट हो जाएगा।</p>
+      <p style="font-size:12px; color:#64748b; margin-bottom:14px;">अपने 10-अंकों के मोबाइल नंबर और पिन/कोड से लॉगिन करें। संचालक महोदय अपने नंबर व कोड (992942) से सीधे संचालक मोड में लॉगिन होंगे।</p>
       
       <div class="form-group">
         <label>रजिस्टर्ड 10 अंकों का मोबाइल नंबर</label>
         <input type="tel" id="loginUserPhone" placeholder="उदा. 8696663615" maxlength="10">
       </div>
       <div class="form-group">
-        <label>4-अंकों का गुप्त पिन (Secret PIN)</label>
-        <input type="password" id="loginUserPin" placeholder="••••" maxlength="4" inputmode="numeric">
+        <label>गुप्त पिन / संचालक कोड (Secret PIN)</label>
+        <input type="password" id="loginUserPin" placeholder="••••••" maxlength="6" inputmode="numeric">
       </div>
       
       <button class="btn-main" onclick="processMemberLogin()" style="margin-top:14px;">
-        <i class="fa-solid fa-right-to-bracket"></i> लॉगिन / पिन सेट करें
+        <i class="fa-solid fa-right-to-bracket"></i> लॉगिन करें
       </button>
     </div>
   </div>
@@ -3050,8 +3044,13 @@
       </div>
 
       <div class="form-group" style="margin-bottom:12px;">
-        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">सदस्य का नाम</label>
-        <input type="text" id="adminContribDesc" list="memberSuggestions" placeholder="सदस्य का नाम चुनें...">
+        <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">
+          <i class="fa-solid fa-users" style="color:#059669;"></i> सदस्य चुनें (Member Select) <span style="color:#dc2626;">*</span>
+        </label>
+        <select id="adminContribMemberSelect" onchange="if(this.value) document.getElementById('adminContribDesc').value = this.value" style="width:100%; padding:10px; font-size:13px; font-weight:600; border-radius:12px; border:1.5px solid #059669; background:var(--card-bg); color:var(--text-main); margin-bottom:6px;">
+          <option value="">-- सदस्यों की सूची में से चुनें --</option>
+        </select>
+        <input type="text" id="adminContribDesc" list="memberSuggestions" placeholder="या सदस्य का नाम लिखें...">
       </div>
 
       <div class="form-group" style="margin-bottom:12px;">
@@ -3095,7 +3094,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.2.9";
+    const APP_VERSION = "4.3.0";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -3115,17 +3114,21 @@
     const db = firebase.firestore();
 
     // 3. State Management
+    const SANCHALAK_PHONE = "8696663615";
+    const SANCHALAK_CODE = "992942";
     let loggedInMemberPhone = localStorage.getItem("loggedInMemberPhone") || null;
-    let isAdmin = localStorage.getItem("isAdminSession") === "true";
-    let currentLang = localStorage.getItem("appLang") || "hi";
-    const DEFAULT_ADMIN_PIN = "9929";
-    if (localStorage.getItem("customAdminPin") === "1234") {
-      localStorage.setItem("customAdminPin", "9929");
+    let isAdmin = false;
+    // केवल रेवंतराम भाटी (8696663615) के वैध सत्र में ही संचालक/व्यवस्थापक मोड सक्रिय रहेगा
+    if (loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE) && localStorage.getItem("isAdminSession") === "true") {
+      isAdmin = true;
+    } else {
+      localStorage.removeItem("isAdminSession");
     }
+    let currentLang = localStorage.getItem("appLang") || "hi";
     let membersList = [];
     let transactions = [];
     let confirmCallback = null;
-    let calendarFilter = "all";
+    let calendarFilter = "festivals";
 
     // 4. Daily Inspiring Suvichar Database (31 Days Cycle)
     const DAILY_SUVICHAR_LIST = [
@@ -3925,20 +3928,26 @@
     function updateAuthUI() {
       const statusText = document.getElementById("userStatusText");
       const loginBtn = document.getElementById("loginBtn");
-      const adminBtn = document.getElementById("adminToggleBtn");
       const adminNotice = document.getElementById("adminNotice");
-      const adminBtnText = document.getElementById("adminBtnText");
       const thAction = document.getElementById("thLedgerAction");
 
       if (loggedInMemberPhone) {
-        const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
-        const displayName = found ? found.name : loggedInMemberPhone;
-        if (statusText) statusText.innerText = displayName;
+        if (isAdmin) {
+          if (statusText) statusText.innerText = "रेवंतराम भाटी (संचालक)";
+        } else {
+          const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+          const displayName = found ? found.name : loggedInMemberPhone;
+          if (statusText) statusText.innerText = displayName;
+        }
       } else {
-        if (statusText) statusText.innerText = currentLang === 'en' ? "Guest Mode" : "अतिथि मोड";
+        if (statusText) statusText.innerText = "";
       }
 
-      // Hide login button in header once logged in (either member or admin)
+      if (adminNotice) {
+        adminNotice.style.display = isAdmin ? "flex" : "none";
+      }
+
+      // Hide login button in header once logged in
       if (loginBtn) {
         if (loggedInMemberPhone || isAdmin) {
           loginBtn.style.display = "none";
@@ -3965,33 +3974,54 @@
       const userName = document.getElementById("settingsUserName");
       const userPhone = document.getElementById("settingsUserPhone");
       const authActionBox = document.getElementById("settingsAuthActionBox");
+      const adminSettingsCard = document.getElementById("adminSettingsCard");
+
+      if (adminSettingsCard) {
+        adminSettingsCard.style.display = isAdmin ? "block" : "none";
+      }
 
       if (authBadge && userName && userPhone) {
         if (loggedInMemberPhone) {
-          const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
-          authBadge.innerText = currentLang === 'en' ? "Member" : "सदस्य";
-          authBadge.style.background = "#dbeafe";
-          authBadge.style.color = "#1d4ed8";
-          userName.innerText = found ? found.name : (currentLang === 'en' ? "Member" : "सदस्य");
-          userPhone.innerText = `📱 +91 ${loggedInMemberPhone}`;
-          if (authActionBox) {
-            authActionBox.innerHTML = `
-              <button class="btn-main" onclick="logoutMember()" style="background:#dc2626; width:100%; font-weight:700;">
-                <i class="fa-solid fa-right-from-bracket"></i> ${currentLang === 'en' ? 'Logout (Exit Account)' : 'लॉगआउट करें (खाता बंद करें)'}
-              </button>
-            `;
+          if (isAdmin) {
+            authBadge.innerText = currentLang === 'en' ? "Sanchalak (Admin)" : "संचालक (Admin)";
+            authBadge.style.background = "linear-gradient(135deg, #d97706, #b45309)";
+            authBadge.style.color = "#ffffff";
+            userName.innerText = "रेवंतराम भाटी";
+            userPhone.innerText = "📱 +91 8696663615 • संचालक व व्यवस्थापक";
+            if (authActionBox) {
+              authActionBox.innerHTML = `
+                <button class="btn-main" onclick="logoutMember()" style="background:#dc2626; width:100%; font-weight:700;">
+                  <i class="fa-solid fa-right-from-bracket"></i> ${currentLang === 'en' ? 'Logout (Exit Sanchalak Mode)' : 'लॉगआउट करें (संचालक मोड बंद करें)'}
+                </button>
+              `;
+            }
+          } else {
+            const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+            const memberTag = found?.tag || (currentLang === 'en' ? "Member" : "सदस्य");
+            authBadge.innerText = memberTag;
+            authBadge.style.background = "#dbeafe";
+            authBadge.style.color = "#1d4ed8";
+            userName.innerText = found ? found.name : (currentLang === 'en' ? "Member" : "सदस्य");
+            userPhone.innerText = `📱 +91 ${loggedInMemberPhone}`;
+            if (authActionBox) {
+              authActionBox.innerHTML = `
+                <button class="btn-main" onclick="logoutMember()" style="background:#dc2626; width:100%; font-weight:700;">
+                  <i class="fa-solid fa-right-from-bracket"></i> ${currentLang === 'en' ? 'Logout (Exit Account)' : 'लॉगआउट करें (खाता बंद करें)'}
+                </button>
+              `;
+            }
           }
         } else {
-          authBadge.innerText = currentLang === 'en' ? "Guest Mode" : "अतिथि मोड";
+          authBadge.innerText = currentLang === 'en' ? "Not Logged In" : "लॉगिन नहीं हैं";
           authBadge.className = "ios-value-badge";
           authBadge.style.background = "rgba(142, 142, 147, 0.12)";
           authBadge.style.color = "#8e8e93";
-          userName.innerText = currentLang === 'en' ? "Guest" : "अतिथि (Guest)";
-          userPhone.innerText = currentLang === 'en' ? "Not logged in with personal PIN" : "व्यक्तिगत पिन से लॉगिन नहीं हैं";
+          userName.innerText = currentLang === 'en' ? "Not Logged In" : "लॉगिन नहीं हैं";
+          userPhone.innerText = currentLang === 'en' ? "Login with phone number and PIN" : "ग्रुप सदस्य या संचालक व्यक्तिगत लॉगिन करें";
           if (authActionBox) {
             authActionBox.innerHTML = `
               <button class="btn-main" onclick="openLoginModal()" style="width:100%; font-weight:700; border-radius:14px;">
-                <i class="fa-solid fa-right-to-bracket"></i> ${currentLang === 'en' ? 'Member Login with PIN' : 'सदस्य लॉगिन करें'}
+                <i class="fa-solid fa-right-to-bracket"></i> ${currentLang === 'en' ? 'Member / Admin Login' : 'सदस्य / संचालक लॉगिन करें'}
               </button>
             `;
           }
@@ -4027,32 +4057,6 @@
           themeBadge.innerText = currentLang === 'en' ? "Light Mode" : "लाइट मोड";
           themeBadge.className = "ios-value-badge ios-value-orange";
           if (themeSub) themeSub.innerText = currentLang === 'en' ? "Classic White & Blue" : "क्लासिक सफेद व साफ रूप";
-        }
-      }
-
-      const adminBadge = document.getElementById("settingsAdminBadge");
-      const adminToggleBtn = document.getElementById("settingsAdminToggleBtn");
-      const changePinBtn = document.getElementById("btnChangeAdminPin");
-
-      if (adminBadge && adminToggleBtn) {
-        if (isAdmin) {
-          adminBadge.innerText = currentLang === 'en' ? "Active" : "सक्रिय (Active)";
-          adminBadge.className = "ios-value-badge";
-          adminBadge.style.background = "rgba(239, 68, 68, 0.15)";
-          adminBadge.style.color = "#dc2626";
-          adminBadge.style.border = "1px solid rgba(239, 68, 68, 0.3)";
-          adminToggleBtn.innerHTML = currentLang === 'en' ? `<i class="fa-solid fa-right-from-bracket"></i> Exit Admin Mode` : `<i class="fa-solid fa-right-from-bracket"></i> व्यवस्थापक मोड बंद करें`;
-          adminToggleBtn.style.background = "#64748b";
-          if (changePinBtn) changePinBtn.style.display = "inline-flex";
-        } else {
-          adminBadge.innerText = currentLang === 'en' ? "Off" : "निष्क्रिय (Off)";
-          adminBadge.className = "ios-value-badge";
-          adminBadge.style.background = "rgba(142, 142, 147, 0.12)";
-          adminBadge.style.color = "#8e8e93";
-          adminBadge.style.border = "1px solid rgba(142, 142, 147, 0.2)";
-          adminToggleBtn.innerHTML = currentLang === 'en' ? `<i class="fa-solid fa-shield-cat"></i> Admin Login` : `<i class="fa-solid fa-shield-cat"></i> व्यवस्थापक लॉगिन करें`;
-          adminToggleBtn.style.background = "#dc2626";
-          if (changePinBtn) changePinBtn.style.display = "none";
         }
       }
 
@@ -4168,11 +4172,51 @@
       const phoneInput = document.getElementById("loginUserPhone").value.trim().replace(/\D/g, '');
       const pin = document.getElementById("loginUserPin").value.trim();
 
-      if (phoneInput.length !== 10 || pin.length !== 4) {
-        showToast("कृपया 10 अंकों का मोबाइल नंबर और 4 अंकों का पिन दर्ज करें।", "warning");
+      if (phoneInput.length !== 10 || pin.length < 4 || pin.length > 6) {
+        showToast("कृपया 10 अंकों का मोबाइल नंबर और 4-6 अंकों का पिन दर्ज करें।", "warning");
         return;
       }
 
+      // 1. संचालक (रेवंतराम भाटी) लॉगिन जांच: 8696663615 एवं कोड 992942
+      if (phoneInput.endsWith(SANCHALAK_PHONE)) {
+        if (pin === SANCHALAK_CODE) {
+          isAdmin = true;
+          localStorage.setItem("isAdminSession", "true");
+          localStorage.setItem("loggedInMemberPhone", phoneInput);
+          loggedInMemberPhone = phoneInput;
+
+          // सुनिश्चित करें कि रेवंतराम भाटी संचालक के रूप में सदस्य सूची में दर्ज हैं
+          const existingRevant = membersList.find(m => m.phone && m.phone.endsWith(SANCHALAK_PHONE));
+          if (!existingRevant) {
+            try {
+              await db.collection("members").add({
+                name: "रेवंतराम भाटी",
+                phone: "8696663615",
+                whatsapp: "918696663615",
+                tag: "संचालक",
+                pin: SANCHALAK_CODE,
+                createdAt: new Date().toISOString()
+              });
+            } catch (e) {
+              console.warn("Auto sanchalak add error:", e);
+            }
+          } else if (existingRevant.tag !== "संचालक") {
+            try {
+              await db.collection("members").doc(existingRevant.id).update({ tag: "संचालक" });
+            } catch (e) {}
+          }
+
+          showToast("नमस्ते रेवंतराम जी भाटी! संचालक (Admin) मोड सक्रिय हुआ।", "success");
+          closeLoginModal();
+          updateAuthUI();
+          return;
+        } else {
+          showToast("गलत संचालक कोड! कृपया सही पिन कोड (992942) दर्ज करें।", "error");
+          return;
+        }
+      }
+
+      // 2. सामान्य सदस्य लॉगिन
       const member = membersList.find(m => m.phone && m.phone.endsWith(phoneInput));
       if (!member) {
         showToast("यह नंबर ग्रुप में दर्ज नहीं है! कृपया पहले फॉर्म टैब में जाकर सदस्य जोड़ें।", "error");
@@ -4181,6 +4225,9 @@
 
       try {
         let isFirstTime = false;
+        isAdmin = false;
+        localStorage.removeItem("isAdminSession");
+
         if (!member.pin) {
           await db.collection("members").doc(member.id).update({ pin: pin });
           localStorage.setItem("loggedInMemberPhone", phoneInput);
@@ -4192,7 +4239,7 @@
           loggedInMemberPhone = phoneInput;
           showToast(`स्वागत है, ${member.name}! लॉगिन सफल रहा।`, "success");
         } else {
-          showToast("गलत पिन! कृपया सही 4-अंकों का पिन दर्ज करें।", "error");
+          showToast("गलत पिन! कृपया सही पिन दर्ज करें।", "error");
           return;
         }
         closeLoginModal();
@@ -4581,28 +4628,18 @@
 
     function logoutMember() {
       localStorage.removeItem("loggedInMemberPhone");
+      localStorage.removeItem("isAdminSession");
       loggedInMemberPhone = null;
+      isAdmin = false;
       showToast("आप सफलतापूर्वक लॉगआउट हो गए हैं।", "info");
       updateAuthUI();
     }
 
     function toggleAdminPrompt() {
-      const currentPin = localStorage.getItem("customAdminPin") || DEFAULT_ADMIN_PIN;
-      if (!isAdmin) {
-        const pin = prompt("व्यवस्थापक (Admin) 4-अंकों का पिन दर्ज करें:");
-        if (pin === currentPin) {
-          isAdmin = true;
-          localStorage.setItem("isAdminSession", "true");
-          showToast("व्यवस्थापक (Admin) मोड सक्रिय हुआ!", "success");
-          updateAuthUI();
-        } else if (pin !== null) {
-          showToast("गलत व्यवस्थापक पिन!", "error");
-        }
+      if (isAdmin) {
+        logoutMember();
       } else {
-        isAdmin = false;
-        localStorage.removeItem("isAdminSession");
-        showToast("व्यवस्थापक मोड बंद हो गया।", "info");
-        updateAuthUI();
+        openLoginModal();
       }
     }
 
@@ -4787,6 +4824,14 @@
         const payStatus = getMemberPaymentStatus(m);
         const firstChar = (m.name || 'U').trim().charAt(0);
 
+        const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : "");
+        let tagBadgeHtml = "";
+        if (memberTag === "संचालक") {
+          tagBadgeHtml = `<span class="member-tag-badge sanchalak"><i class="fa-solid fa-crown"></i> संचालक</span>`;
+        } else if (memberTag) {
+          tagBadgeHtml = `<span class="member-tag-badge other">${memberTag}</span>`;
+        }
+
         const card = document.createElement("div");
         card.className = "member-card member-card-compact";
         card.onclick = () => openMemberProfileModal(m.id);
@@ -4805,6 +4850,7 @@
             <div class="member-details">
               <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                 <strong style="font-size:15px; color:var(--text-main);">${m.name}</strong>
+                ${tagBadgeHtml}
                 ${statusBadgeHtml}
                 ${isSelf ? `<span class="self-badge">${currentLang === 'en' ? 'You' : 'आप'}</span>` : ''}
               </div>
@@ -4830,7 +4876,15 @@
       const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
       const canEdit = isAdmin || isSelf;
 
-      document.getElementById("profileModalName").innerText = m.name;
+      const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : "");
+      let tagHtml = "";
+      if (memberTag === "संचालक") {
+        tagHtml = ` <span class="member-tag-badge sanchalak"><i class="fa-solid fa-crown"></i> संचालक</span>`;
+      } else if (memberTag) {
+        tagHtml = ` <span class="member-tag-badge other">${memberTag}</span>`;
+      }
+
+      document.getElementById("profileModalName").innerHTML = `${m.name}${tagHtml}`;
 
       const avatarBox = document.getElementById("profileModalAvatar");
       if (m.photoUrl) {
@@ -4967,9 +5021,19 @@
         controlsDiv.appendChild(editBtn);
       }
       if (isAdmin) {
+        const tagBtn = document.createElement("button");
+        tagBtn.className = "btn-tool";
+        tagBtn.style.flex = "1";
+        tagBtn.style.padding = "8px";
+        tagBtn.style.fontSize = "12px";
+        tagBtn.style.borderRadius = "12px";
+        tagBtn.innerHTML = `<i class="fa-solid fa-id-badge" style="color:#d97706;"></i> पद बदलें`;
+        tagBtn.onclick = () => promptEditMemberTag(m.id);
+        controlsDiv.appendChild(tagBtn);
+
         const delBtn = document.createElement("button");
         delBtn.className = "btn-sub";
-        delBtn.style.flex = "1";
+        delBtn.style.flex = "0.8";
         delBtn.style.padding = "8px";
         delBtn.style.fontSize = "12px";
         delBtn.style.color = "#dc2626";
@@ -4983,6 +5047,22 @@
       }
 
       document.getElementById("memberProfileModal").style.display = "flex";
+    }
+
+    async function promptEditMemberTag(memberId) {
+      if (!isAdmin) return;
+      const m = membersList.find(x => x.id === memberId);
+      if (!m) return;
+      const currentTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) ? "संचालक" : "");
+      const newTag = prompt(`सदस्य "${m.name}" के लिए पद / पदनाम टैग दर्ज करें (उदा. संचालक, उप-संचालक, कोषाध्यक्ष, व्यवस्थापक, प्रबंधक, सलाहकार, सक्रिय सदस्य):`, currentTag);
+      if (newTag === null) return;
+      try {
+        await db.collection("members").doc(memberId).update({ tag: newTag.trim() });
+        showToast(`"${m.name}" का पद / टैग "${newTag.trim() || 'सामान्य सदस्य'}" अपडेट हुआ!`, "success");
+        openMemberProfileModal(memberId);
+      } catch (err) {
+        showToast("त्रुटि: " + err.message, "error");
+      }
     }
 
     function closeMemberProfileModal() {
@@ -5124,6 +5204,7 @@
       const insta = document.getElementById("memInsta").value.trim().replace('@', '');
       const dob = document.getElementById("memDob").value;
       const anniversary = document.getElementById("memAnniversary").value;
+      const tagInput = document.getElementById("memTag")?.value.trim() || "";
 
       if (!name) {
         showToast("कृपया सदस्य का पूरा नाम दर्ज करें।", "warning");
@@ -5140,6 +5221,11 @@
         wa = "91" + phone;
       }
 
+      let finalTag = tagInput;
+      if (!finalTag && (phone.endsWith(SANCHALAK_PHONE) || name.includes("रेवंतराम"))) {
+        finalTag = "संचालक";
+      }
+
       try {
         const payload = {
           name,
@@ -5148,6 +5234,7 @@
           instagram: insta,
           dob: dob || null,
           anniversary: anniversary || null,
+          tag: finalTag,
           updatedAt: new Date()
         };
 
@@ -5178,6 +5265,9 @@
       document.getElementById("memInsta").value = m.instagram || "";
       document.getElementById("memDob").value = m.dob || "";
       document.getElementById("memAnniversary").value = m.anniversary || "";
+      if (document.getElementById("memTag")) {
+        document.getElementById("memTag").value = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) ? "संचालक" : "");
+      }
 
       document.getElementById("formTitle").innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:#2563eb;"></i> सदस्य विवरण संपादित करें`;
       document.getElementById("saveMemberBtn").innerHTML = `<i class="fa-solid fa-check"></i> अपडेट सहेजें`;
@@ -5193,6 +5283,9 @@
       document.getElementById("memInsta").value = "";
       document.getElementById("memDob").value = "";
       document.getElementById("memAnniversary").value = "";
+      if (document.getElementById("memTag")) {
+        document.getElementById("memTag").value = "";
+      }
 
       document.getElementById("formTitle").innerHTML = `<i class="fa-solid fa-user-plus" style="color:#2563eb;"></i> नया सदस्य जोड़ें`;
       document.getElementById("saveMemberBtn").innerHTML = `<i class="fa-solid fa-floppy-disk"></i> सुरक्षित करें`;
@@ -5484,7 +5577,7 @@
     // Admin Add Contribution Modal
     function openAdminContributionModal() {
       if (!isAdmin) {
-        showToast("यह सुविधा केवल व्यवस्थापक (Admin) के लिए है।", "warning");
+        showToast("यह सुविधा केवल संचालक / व्यवस्थापक के लिए है।", "warning");
         return;
       }
       const modal = document.getElementById("adminContributionModal");
@@ -5493,6 +5586,18 @@
       if (desc) desc.value = "";
       const amt = document.getElementById("adminContribAmount");
       if (amt) amt.value = "100";
+
+      const select = document.getElementById("adminContribMemberSelect");
+      if (select) {
+        select.innerHTML = `<option value="">-- सदस्यों की सूची में से चुनें (${membersList.length} सदस्य) --</option>`;
+        membersList.forEach(m => {
+          const opt = document.createElement("option");
+          opt.value = m.name;
+          opt.textContent = `${m.name} (${m.phone || 'नंबर नहीं'})`;
+          select.appendChild(opt);
+        });
+      }
+
       if (modal) modal.style.display = "flex";
       setTimeout(() => desc && desc.focus(), 150);
     }
@@ -5504,16 +5609,16 @@
 
     async function saveAdminContributionRecord() {
       if (!isAdmin) {
-        showToast("केवल व्यवस्थापक ही जमा दर्ज कर सकते हैं।", "error");
+        showToast("केवल संचालक ही जमा दर्ज कर सकते हैं।", "error");
         return;
       }
-      const desc = document.getElementById("adminContribDesc")?.value.trim();
+      const desc = document.getElementById("adminContribDesc")?.value.trim() || document.getElementById("adminContribMemberSelect")?.value.trim();
       const amount = Number(document.getElementById("adminContribAmount")?.value);
       const method = document.getElementById("adminContribMethod")?.value || "PhonePe / UPI";
       const date = document.getElementById("adminContribDate")?.value;
 
       if (!desc) {
-        showToast("कृपया सदस्य का नाम लिखें।", "warning");
+        showToast("कृपया सदस्य का नाम चुनें या लिखें।", "warning");
         return;
       }
       if (!amount || amount <= 0) {
@@ -5861,22 +5966,22 @@
 
     // Gregorian National / Observance Days
     const GREGORIAN_DAYS = [
-      { date: "01-01", name: "अंग्रेजी नववर्ष (New Year's Day)", wish: "नववर्ष की हार्दिक शुभकामनाएं! नया साल आपके जीवन में खुशहाली और सफलता लेकर आए।" },
-      { date: "01-12", name: "राष्ट्रीय युवा दिवस (स्वामी विवेकानंद जयंती)", wish: "राष्ट्रीय युवा दिवस की शुभकामनाएं! उठो, जागो और तब तक मत रुको जब तक लक्ष्य प्राप्त न हो जाए।" },
-      { date: "01-26", name: "गणतंत्र दिवस (Republic Day)", wish: "गणतंत्र दिवस की हार्दिक शुभकामनाएं! भारत माता की जय! वन्दे मातरम्!" },
-      { date: "02-28", name: "राष्ट्रीय विज्ञान दिवस", wish: "राष्ट्रीय विज्ञान दिवस की शुभकामनाएं!" },
-      { date: "03-08", name: "अंतरराष्ट्रीय महिला दिवस (Women's Day)", wish: "अंतरराष्ट्रीय महिला दिवस की शुभकामनाएं! मातृशक्ति को नमन।" },
-      { date: "04-14", name: "डॉ. भीमराव आंबेडकर जयंती", wish: "बाबासाहेब डॉ. भीमराव आंबेडकर जयंती पर कोटि-कोटि नमन।" },
-      { date: "05-01", name: "अंतरराष्ट्रीय मजदूर दिवस (Labour Day)", wish: "मजदूर दिवस की शुभकामनाएं!" },
-      { date: "06-21", name: "अंतरराष्ट्रीय योग दिवस (Yoga Day)", wish: "योग दिवस की शुभकामनाएं! योग करें, स्वस्थ रहें।" },
-      { date: "08-15", name: "स्वतंत्रता दिवस (Independence Day)", wish: "स्वतंत्रता दिवस की हार्दिक शुभकामनाएं! जय हिन्द! वन्दे मातरम्!" },
-      { date: "09-05", name: "शिक्षक दिवस (Teachers' Day)", wish: "शिक्षक दिवस की हार्दिक शुभकामनाएं! गुरुजनों को कोटि-कोटि वंदन।" },
-      { date: "09-14", name: "हिंदी दिवस (Hindi Diwas)", wish: "हिंदी दिवस की शुभकामनाएं! हमारी भाषा, हमारा अभिमान - हिंदी।" },
-      { date: "10-02", name: "गांधी जयंती व शास्त्री जयंती", wish: "महात्मा गांधी एवं लाल बहादुर शास्त्री जयंती पर शत-शत नमन।" },
-      { date: "10-31", name: "राष्ट्रीय एकता दिवस (सरदार पटेल जयंती)", wish: "लौह पुरुष सरदार वल्लभभाई पटेल जयंती की शुभकामनाएं!" },
-      { date: "11-11", name: "राष्ट्रीय शिक्षा दिवस", wish: "राष्ट्रीय शिक्षा दिवस की शुभकामनाएं!" },
-      { date: "11-14", name: "बाल दिवस (Children's Day)", wish: "बाल दिवस की शुभकामनाएं!" },
-      { date: "12-25", name: "क्रिसमस / सुशासन दिवस", wish: "क्रिसमस एवं सुशासन दिवस की शुभकामनाएं!" }
+      { date: "01-01", name: "अंग्रेजी नववर्ष (New Year's Day)", icon: "✨", wish: "नववर्ष की हार्दिक शुभकामनाएं! नया साल आपके जीवन में खुशहाली और सफलता लेकर आए।" },
+      { date: "01-12", name: "राष्ट्रीय युवा दिवस (स्वामी विवेकानंद जयंती)", icon: "🕊️", wish: "राष्ट्रीय युवा दिवस की शुभकामनाएं! उठो, जागो और तब तक मत रुको जब तक लक्ष्य प्राप्त न हो जाए।" },
+      { date: "01-26", name: "गणतंत्र दिवस (Republic Day)", icon: "🇮🇳", isTiranga: true, wish: "गणतंत्र दिवस की हार्दिक शुभकामनाएं! भारत माता की जय! वन्दे मातरम्!" },
+      { date: "02-28", name: "राष्ट्रीय विज्ञान दिवस", icon: "🔬", wish: "राष्ट्रीय विज्ञान दिवस की शुभकामनाएं!" },
+      { date: "03-08", name: "अंतरराष्ट्रीय महिला दिवस (Women's Day)", icon: "🌸", wish: "अंतरराष्ट्रीय महिला दिवस की शुभकामनाएं! मातृशक्ति को नमन।" },
+      { date: "04-14", name: "डॉ. भीमराव आंबेडकर जयंती", icon: "📜", wish: "बाबासाहेब डॉ. भीमराव आंबेडकर जयंती पर कोटि-कोटि नमन।" },
+      { date: "05-01", name: "अंतरराष्ट्रीय मजदूर दिवस (Labour Day)", icon: "⚒️", wish: "मजदूर दिवस की शुभकामनाएं!" },
+      { date: "06-21", name: "अंतरराष्ट्रीय योग दिवस (Yoga Day)", icon: "🧘", wish: "योग दिवस की शुभकामनाएं! योग करें, स्वस्थ रहें।" },
+      { date: "08-15", name: "स्वतंत्रता दिवस (Independence Day)", icon: "🇮🇳", isTiranga: true, wish: "स्वतंत्रता दिवस की हार्दिक शुभकामनाएं! जय हिन्द! वन्दे मातरम्!" },
+      { date: "09-05", name: "शिक्षक दिवस (Teachers' Day)", icon: "📚", wish: "शिक्षक दिवस की हार्दिक शुभकामनाएं! गुरुजनों को कोटि-कोटि वंदन।" },
+      { date: "09-14", name: "हिंदी दिवस (Hindi Diwas)", icon: "✍️", wish: "हिंदी दिवस की शुभकामनाएं! हमारी भाषा, हमारा अभिमान - हिंदी।" },
+      { date: "10-02", name: "गांधी जयंती व शास्त्री जयंती", icon: "🕊️", wish: "महात्मा गांधी एवं लाल बहादुर शास्त्री जयंती पर शत-शत नमन।" },
+      { date: "10-31", name: "राष्ट्रीय एकता दिवस (सरदार पटेल जयंती)", icon: "🤝", wish: "लौह पुरुष सरदार वल्लभभाई पटेल जयंती की शुभकामनाएं!" },
+      { date: "11-11", name: "राष्ट्रीय शिक्षा दिवस", icon: "📖", wish: "राष्ट्रीय शिक्षा दिवस की शुभकामनाएं!" },
+      { date: "11-14", name: "बाल दिवस (Children's Day)", icon: "🎈", wish: "बाल दिवस की शुभकामनाएं!" },
+      { date: "12-25", name: "क्रिसमस / सुशासन दिवस", icon: "🎄", wish: "क्रिसमस एवं सुशासन दिवस की शुभकामनाएं!" }
     ];
 
     const TITHI_NAMES_SHUKLA = [
@@ -6020,30 +6125,38 @@
         let badgeText = "";
         let badgeColor = "#ea580c";
 
-        if (festival) {
-          cell.classList.add("has-festival");
-          dotsHtml += `<span>🚩</span>`;
-          badgeText = festival.shortBadge || festival.name.split('/')[0].split('(')[0].trim().slice(0, 6);
-          badgeColor = "#ea580c";
-        }
-        if (amavasya) {
-          cell.classList.add("has-amavasya");
-          dotsHtml += `<span>🌑</span>`;
-          if (!badgeText) {
+        if (calendarFilter === 'festivals') {
+          if (festival) {
+            cell.classList.add("has-festival");
+            dotsHtml = `<span>🚩</span>`;
+            badgeText = festival.shortBadge || festival.name.split('/')[0].split('(')[0].trim().slice(0, 6);
+            badgeColor = "#ea580c";
+          } else if (nationalDay) {
+            const isTiranga = (nationalDay.date === "01-26" || nationalDay.date === "08-15");
+            const sym = isTiranga ? "🇮🇳" : (nationalDay.icon || "🌟");
+            dotsHtml = `<span>${sym}</span>`;
+            badgeText = nationalDay.name.split('(')[0].trim().slice(0, 5);
+            badgeColor = isTiranga ? "#15803d" : "#0284c7";
+          }
+        } else if (calendarFilter === 'amavasya') {
+          if (amavasya) {
+            cell.classList.add("has-amavasya");
+            dotsHtml = `<span>🌑</span>`;
             badgeText = currentLang === 'en' ? "Amavasya" : "अमावस्या";
             badgeColor = "#1d4ed8";
           }
-        }
-        if (nationalDay && !badgeText) {
-          dotsHtml += `<span>🇮🇳</span>`;
-          badgeText = nationalDay.name.split('(')[0].trim().slice(0, 5);
-          badgeColor = "#15803d";
-        }
-        if (bdays.length > 0) {
-          dotsHtml += `<span>🎂</span>`;
-        }
-        if (annivs.length > 0) {
-          dotsHtml += `<span>💍</span>`;
+        } else if (calendarFilter === 'birthdays') {
+          if (bdays.length > 0) {
+            dotsHtml = `<span>🎂</span>`;
+            badgeText = bdays[0].name.slice(0, 5);
+            badgeColor = "#d97706";
+          }
+        } else if (calendarFilter === 'anniversaries') {
+          if (annivs.length > 0) {
+            dotsHtml = `<span>💍</span>`;
+            badgeText = annivs[0].name.slice(0, 5);
+            badgeColor = "#db2777";
+          }
         }
 
         cell.innerHTML = `
@@ -6169,10 +6282,12 @@
       }
 
       if (nationalDay) {
+        const isTiranga = (nationalDay.date === "01-26" || nationalDay.date === "08-15");
+        const natSymbol = isTiranga ? "🇮🇳" : (nationalDay.icon || "🌟");
         eventsHtml += `
           <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px; margin-bottom:8px;">
             <div style="font-weight:700; color:#15803d; font-size:13px;">
-              🇮🇳 ${nationalDay.name}
+              ${natSymbol} ${nationalDay.name}
             </div>
             <div style="font-size:11px; color:#16a34a; margin-top:2px;">
               ${nationalDay.wish}
@@ -6409,10 +6524,12 @@
       }
 
       if (nationalDayToday) {
+        const isTiranga = (nationalDayToday.date === "01-26" || nationalDayToday.date === "08-15");
+        const natSymbol = isTiranga ? "🇮🇳" : (nationalDayToday.icon || "🌟");
         html += `
           <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:10px; text-align:left;">
             <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:24px;">🇮🇳</span>
+              <span style="font-size:24px;">${natSymbol}</span>
               <div>
                 <strong style="color:#15803d; font-size:14px;">${nationalDayToday.name}</strong>
                 <div style="font-size:11px; color:#16a34a;">${nationalDayToday.wish}</div>
@@ -6546,14 +6663,43 @@
         }
       });
 
-      // Sort upcoming by days left
-      upcomingEventsList.sort((a, b) => a.daysLeft - b.daysLeft);
-      badge.innerText = `${upcomingEventsList.length} आगामी`;
+      // Filter both upcoming events and roster strictly based on calendarFilter
+      let targetCat = 'festival';
+      let emptyMsg = 'आगामी 30 दिनों में कोई हिंदू पर्व नहीं है।';
+      let upcomingHeader = `<i class="fa-solid fa-om" style="color:#ea580c;"></i> <span>आगामी 30 दिनों के हिंदू पर्व</span>`;
+      let rosterHeader = `<i class="fa-solid fa-om" style="color:#ea580c;"></i> <span>हिंदू पर्व व त्यौहार पंजी</span>`;
 
-      if (upcomingEventsList.length === 0) {
-        upcomingDiv.innerHTML = `<div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">आगामी 30 दिनों में कोई उत्सव नहीं है।</div>`;
+      if (calendarFilter === 'amavasya') {
+        targetCat = 'amavasya';
+        emptyMsg = 'आगामी 30 दिनों में कोई अमावस्या नहीं है।';
+        upcomingHeader = `<i class="fa-solid fa-moon" style="color:#2563eb;"></i> <span>आगामी 30 दिनों की अमावस्या</span>`;
+        rosterHeader = `<i class="fa-solid fa-moon" style="color:#2563eb;"></i> <span>अमावस्या व सत्संग पंजी</span>`;
+      } else if (calendarFilter === 'birthdays') {
+        targetCat = 'birthday';
+        emptyMsg = 'आगामी 30 दिनों में किसी सदस्य का जन्मदिन नहीं है।';
+        upcomingHeader = `<i class="fa-solid fa-cake-candles" style="color:#eab308;"></i> <span>आगामी 30 दिनों के जन्मदिन</span>`;
+        rosterHeader = `<i class="fa-solid fa-cake-candles" style="color:#eab308;"></i> <span>सदस्य जन्मदिन पंजी</span>`;
+      } else if (calendarFilter === 'anniversaries') {
+        targetCat = 'anniversary';
+        emptyMsg = 'आगामी 30 दिनों में किसी सदस्य की विवाह वर्षगांठ नहीं है।';
+        upcomingHeader = `<i class="fa-solid fa-rings-wedding" style="color:#db2777;"></i> <span>आगामी 30 दिनों की विवाह वर्षगांठ</span>`;
+        rosterHeader = `<i class="fa-solid fa-rings-wedding" style="color:#db2777;"></i> <span>सदस्य विवाह वर्षगांठ पंजी</span>`;
+      }
+
+      const upTitleEl = document.getElementById("upcomingEventsTitle");
+      if (upTitleEl) upTitleEl.innerHTML = upcomingHeader;
+      const roTitleEl = document.getElementById("calendarListTitle");
+      if (roTitleEl) roTitleEl.innerHTML = rosterHeader;
+
+      // Filter upcoming by category
+      let filteredUpcoming = upcomingEventsList.filter(x => x.category === targetCat);
+      filteredUpcoming.sort((a, b) => a.daysLeft - b.daysLeft);
+      badge.innerText = `${filteredUpcoming.length} आगामी`;
+
+      if (filteredUpcoming.length === 0) {
+        upcomingDiv.innerHTML = `<div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">${emptyMsg}</div>`;
       } else {
-        upcomingEventsList.forEach(ev => {
+        filteredUpcoming.forEach(ev => {
           const isToday = ev.daysLeft === 0;
           const daysText = isToday ? '🎉 आज ही है!' : (ev.daysLeft === 1 ? 'कल है!' : `${ev.daysLeft} दिन शेष`);
 
@@ -6601,17 +6747,8 @@
         });
       }
 
-      // Filter allItems according to active filter
-      let filteredItems = allItems;
-      if (calendarFilter === 'festivals') {
-        filteredItems = allItems.filter(x => x.category === 'festival');
-      } else if (calendarFilter === 'amavasya') {
-        filteredItems = allItems.filter(x => x.category === 'amavasya');
-      } else if (calendarFilter === 'birthdays') {
-        filteredItems = allItems.filter(x => x.category === 'birthday');
-      } else if (calendarFilter === 'anniversaries') {
-        filteredItems = allItems.filter(x => x.category === 'anniversary');
-      }
+      // Filter allItems strictly according to active filter
+      let filteredItems = allItems.filter(x => x.category === targetCat);
 
       // Sort full roster by days left
       filteredItems.sort((a, b) => a.daysLeft - b.daysLeft);
