@@ -1448,176 +1448,220 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
-    /* Hindu Calendar Auspicious Gradient Background & Grid Styles */
+    /*  iPhone Liquid Glass Calendar Box & Dynamic Glass Tiles */
+    .ios-liquid-calendar-box,
     #hinduCalendarCard {
-      background: linear-gradient(155deg, #ffffff 0%, #fffdf5 25%, #fef3c7 65%, #fff7ed 100%);
-      border: 1.5px solid rgba(245, 158, 11, 0.35);
-      border-radius: 20px;
-      padding: 14px 12px;
-      margin-bottom: 14px;
-      box-shadow: 0 12px 30px -4px rgba(217, 119, 6, 0.14),
-                  0 4px 12px rgba(0, 0, 0, 0.04),
-                  inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(240, 247, 255, 0.72) 40%, rgba(245, 243, 255, 0.75) 100%);
+      backdrop-filter: blur(36px) saturate(210%);
+      -webkit-backdrop-filter: blur(36px) saturate(210%);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      border-radius: 26px;
+      padding: 16px 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 20px 48px -10px rgba(15, 23, 42, 0.12),
+                  0 0 0 1px rgba(56, 189, 248, 0.18),
+                  inset 0 1.5px 2px rgba(255, 255, 255, 1),
+                  inset 0 -1.5px 3px rgba(0, 122, 255, 0.06);
       position: relative;
       overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    .ios-liquid-calendar-box::before,
     #hinduCalendarCard::before {
       content: "";
       position: absolute;
-      top: -30px;
-      right: -30px;
-      width: 120px;
-      height: 120px;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 70%);
+      top: -50px;
+      right: -50px;
+      width: 170px;
+      height: 170px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(99, 102, 241, 0.18) 45%, transparent 70%);
       border-radius: 50%;
+      filter: blur(18px);
       pointer-events: none;
     }
+    .ios-liquid-calendar-box::after,
     #hinduCalendarCard::after {
       content: "";
       position: absolute;
-      bottom: -40px;
-      left: -40px;
-      width: 140px;
-      height: 140px;
-      background: radial-gradient(circle, rgba(234, 88, 12, 0.12) 0%, transparent 70%);
+      bottom: -60px;
+      left: -50px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(234, 88, 12, 0.14) 45%, transparent 70%);
       border-radius: 50%;
+      filter: blur(22px);
       pointer-events: none;
     }
+    body.dark-mode .ios-liquid-calendar-box,
     body.dark-mode #hinduCalendarCard {
-      background: linear-gradient(155deg, #1e1b4b 0%, #0f172a 40%, #1e293b 80%, #31104b 100%);
-      border: 1.5px solid rgba(245, 158, 11, 0.3);
-      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.72) 0%, rgba(15, 23, 42, 0.82) 50%, rgba(30, 27, 75, 0.78) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 24px 55px -10px rgba(0, 0, 0, 0.65),
+                  0 0 0 1px rgba(99, 102, 241, 0.25),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.18);
     }
+    body.dark-mode .ios-liquid-calendar-box::before,
     body.dark-mode #hinduCalendarCard::before {
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, rgba(99, 102, 241, 0.12) 50%, transparent 70%);
+    }
+    body.dark-mode .ios-liquid-calendar-box::after,
+    body.dark-mode #hinduCalendarCard::after {
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.16) 0%, transparent 70%);
     }
 
     .calendar-nav-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 8px;
-      padding-bottom: 6px;
-      border-bottom: 1px dashed rgba(245, 158, 11, 0.25);
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0, 122, 255, 0.12);
+      position: relative;
+      z-index: 1;
+    }
+    body.dark-mode .calendar-nav-header {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
     }
     .cal-nav-btn {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1.5px solid rgba(245, 158, 11, 0.3);
-      color: #7c2d12;
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.2px solid rgba(255, 255, 255, 0.95);
+      color: #0369a1;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       font-size: 14px;
-      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.12);
-      transition: all 0.15s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), inset 0 1px 1px rgba(255, 255, 255, 1);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     body.dark-mode .cal-nav-btn {
-      background: rgba(30, 41, 59, 0.85);
-      color: #fef08a;
-      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(51, 65, 85, 0.75);
+      color: #7dd3fc;
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.12);
     }
     .cal-nav-btn:active {
-      transform: scale(0.92);
+      transform: scale(0.9);
     }
     .calendar-month-title {
       text-align: center;
     }
     .calendar-month-title h3 {
-      font-size: 16.5px;
+      font-size: 17px;
       font-weight: 800;
-      color: #1e3a8a;
+      color: #0f172a;
       line-height: 1.2;
-      letter-spacing: -0.2px;
+      letter-spacing: -0.3px;
+      margin: 0;
     }
     body.dark-mode .calendar-month-title h3 {
-      color: #93c5fd;
+      color: #f8fafc;
     }
     .cal-hindu-tithi-sub {
-      font-size: 11.5px;
+      display: inline-block;
+      font-size: 11px;
       font-weight: 700;
-      color: #ea580c;
-      margin-top: 2px;
+      color: #b45309;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      padding: 2px 9px;
+      border-radius: 12px;
+      margin-top: 4px;
       letter-spacing: 0.2px;
     }
     body.dark-mode .cal-hindu-tithi-sub {
-      color: #f59e0b;
+      color: #fef08a;
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(245, 158, 11, 0.35);
     }
     .btn-today-pill {
-      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-      border: 1px solid #93c5fd;
-      color: #1d4ed8;
+      background: linear-gradient(135deg, rgba(239, 246, 255, 0.85) 0%, rgba(219, 234, 254, 0.85) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.2px solid rgba(147, 197, 253, 0.8);
+      color: #0284c7;
       font-size: 11.5px;
       font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 20px;
+      padding: 5px 14px;
+      border-radius: 9999px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15);
-      transition: all 0.15s;
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.dark-mode .btn-today-pill {
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(14, 116, 144, 0.45) 100%);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #7dd3fc;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15);
     }
     .btn-today-pill:active {
-      transform: scale(0.94);
+      transform: scale(0.93);
     }
     .calendar-weekdays-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 4px;
       text-align: center;
-      margin-bottom: 6px;
-      background: rgba(245, 158, 11, 0.14);
-      border-radius: 12px;
-      padding: 4px 2px;
-      border: 1px solid rgba(245, 158, 11, 0.22);
+      margin-bottom: 8px;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 14px;
+      padding: 6px 2px;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
     }
     body.dark-mode .calendar-weekdays-grid {
-      background: rgba(245, 158, 11, 0.1);
-      border-color: rgba(245, 158, 11, 0.2);
+      background: rgba(30, 41, 59, 0.65);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
     .cal-weekday {
       font-size: 11.5px;
       font-weight: 800;
-      color: #78350f;
-      padding: 3px 0;
+      color: #475569;
+      padding: 2px 0;
     }
     body.dark-mode .cal-weekday {
-      color: #fed7aa;
+      color: #cbd5e1;
     }
     .cal-weekday.sun {
-      color: #dc2626 !important;
+      color: #ef4444 !important;
     }
     .calendar-days-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      gap: 5px;
     }
     .calendar-day {
-      min-height: 52px;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(245, 158, 11, 0.18);
-      border-radius: 10px;
-      padding: 3px 2px;
+      min-height: 54px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 13px;
+      padding: 4px 2px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       cursor: pointer;
       position: relative;
-      transition: all 0.15s ease-in-out;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.9);
     }
     body.dark-mode .calendar-day {
-      background: rgba(30, 41, 59, 0.88);
-      border-color: rgba(255, 255, 255, 0.08);
+      background: rgba(30, 41, 59, 0.68);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.08);
     }
     .calendar-day.empty {
       background: transparent !important;
@@ -1626,33 +1670,34 @@
       cursor: default;
     }
     .calendar-day:not(.empty):active {
-      transform: scale(0.93);
+      transform: scale(0.92);
     }
     .calendar-day.today {
-      border: 2px solid #2563eb !important;
-      background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.9) 100%) !important;
-      box-shadow: 0 0 10px rgba(37, 99, 235, 0.28) !important;
+      border: 2px solid #0284c7 !important;
+      background: linear-gradient(135deg, rgba(224, 242, 254, 0.9) 0%, rgba(186, 230, 253, 0.88) 100%) !important;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28), inset 0 1px 1px rgba(255, 255, 255, 1) !important;
     }
     body.dark-mode .calendar-day.today {
-      background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(37, 99, 235, 0.3) 100%) !important;
+      background: linear-gradient(135deg, rgba(14, 116, 144, 0.45) 0%, rgba(2, 132, 199, 0.4) 100%) !important;
+      border-color: #38bdf8 !important;
     }
     .calendar-day.selected {
-      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
       color: white !important;
-      border-color: #1e3a8a !important;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35) !important;
+      border-color: #38bdf8 !important;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.42), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
     }
     .calendar-day.selected .cal-day-num {
       color: white !important;
     }
     .calendar-day.selected .cal-tithi-name {
-      color: #fed7aa !important;
-    }
-    .calendar-day.selected .cal-badge-mini {
       color: #fef08a !important;
     }
+    .calendar-day.selected .cal-badge-mini {
+      color: #fed7aa !important;
+    }
     .cal-day-num {
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 800;
       color: var(--text-main);
       line-height: 1.2;
@@ -1680,27 +1725,31 @@
       padding: 0 1px;
     }
     .calendar-day.has-amavasya {
-      border-color: #60a5fa !important;
-      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+      border: 1.4px solid #60a5fa !important;
+      background: linear-gradient(135deg, rgba(239, 246, 255, 0.88) 0%, rgba(219, 234, 254, 0.85) 100%) !important;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.18) !important;
     }
     body.dark-mode .calendar-day.has-amavasya {
-      background: linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(30, 27, 75, 0.4) 100%) !important;
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(30, 27, 75, 0.5) 100%) !important;
+      border-color: #3b82f6 !important;
     }
     .calendar-day.has-festival {
-      border-color: #fb923c !important;
-      background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%) !important;
+      border: 1.4px solid #fb923c !important;
+      background: linear-gradient(135deg, rgba(255, 247, 237, 0.88) 0%, rgba(254, 215, 170, 0.85) 100%) !important;
+      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.18) !important;
     }
     body.dark-mode .calendar-day.has-festival {
-      background: linear-gradient(135deg, rgba(124, 45, 18, 0.3) 0%, rgba(154, 52, 18, 0.25) 100%) !important;
+      background: linear-gradient(135deg, rgba(124, 45, 18, 0.4) 0%, rgba(154, 52, 18, 0.35) 100%) !important;
+      border-color: #ea580c !important;
     }
     .calendar-day.has-birthday {
-      border: 1.5px solid #f59e0b !important;
-      background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%) !important;
-      box-shadow: 0 2px 7px rgba(245, 158, 11, 0.25) !important;
+      border: 1.6px solid #f59e0b !important;
+      background: linear-gradient(145deg, rgba(255, 251, 235, 0.92) 0%, rgba(254, 243, 199, 0.88) 100%) !important;
+      box-shadow: 0 3px 12px rgba(245, 158, 11, 0.28) !important;
     }
     body.dark-mode .calendar-day.has-birthday {
-      border: 1.5px solid #d97706 !important;
-      background: linear-gradient(145deg, rgba(120, 53, 15, 0.4) 0%, rgba(180, 83, 9, 0.3) 100%) !important;
+      border: 1.6px solid #d97706 !important;
+      background: linear-gradient(145deg, rgba(120, 53, 15, 0.5) 0%, rgba(180, 83, 9, 0.4) 100%) !important;
     }
     .cal-bday-cake-float {
       position: absolute;
@@ -2347,8 +2396,8 @@
     <!-- 3. हिंदू कैलेंडर व उत्सव टैब -->
     <div id="viewCalendar" class="section-view">
       
-      <!-- 🚩 Interactive Hindu Month Calendar Grid -->
-      <div class="card" id="hinduCalendarCard" style="margin-bottom:14px;">
+      <!-- 🚩  iPhone Liquid Glass Hindu Month Calendar Box -->
+      <div class="ios-liquid-calendar-box" id="hinduCalendarCard">
         <div class="calendar-nav-header">
           <button class="cal-nav-btn" onclick="changeCalendarMonth(-1)" title="पिछला महीना">
             <i class="fa-solid fa-chevron-left"></i>
@@ -2494,24 +2543,20 @@
     <!-- 5. सेटिंग्स टैब -->
     <div id="viewSettings" class="section-view">
       
-      <!-- 1. ऐप विवरण एवं डेवलपर जानकारी (सबसे ऊपर) -->
+      <!-- 1. डेवलपर ऑप्शन एवं अपडेट (सबसे ऊपर) -->
       <div class="card ios-glass-card" id="developerInfoCard" style="border:1.5px solid rgba(37, 99, 235, 0.25); background:linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(239, 246, 255, 0.90) 100%); box-shadow:0 8px 24px -4px rgba(37,99,235,0.12);">
         <div class="card-title">
           <span style="display:flex; align-items:center; gap:8px;">
-            <div class="ios-icon-tile ios-icon-indigo" style="width:30px; height:30px; font-size:14px; border-radius:9px; background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white;">
-              <i class="fa-solid fa-code"></i>
+            <div class="ios-icon-tile ios-icon-indigo" style="width:30px; height:30px; font-size:14px; border-radius:9px; background:linear-gradient(135deg, #4338ca, #3b82f6); color:white; box-shadow:0 3px 8px rgba(67, 56, 202, 0.3);">
+              <i class="fa-solid fa-sliders"></i>
             </div>
-            <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span>
+            <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v4.3.2
+            APK v4.3.3
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
-            <span>एप्लिकेशन नाम:</span>
-            <strong style="color:var(--text-main); font-weight:700;">युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)</strong>
-          </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>मुख्य डेवलपर व संचालक:</span>
             <strong style="color:#1e3a8a; font-weight:800;">रेवंतराम भाटी</strong>
@@ -2536,10 +2581,10 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.3.2 (बिल्ड कोड: 18)
+              v4.3.3 (बिल्ड कोड: 19)
             </span>
           </div>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
             <span style="color:#10b981; font-weight:700; font-size:12px;">🟢 Firebase Firestore कनेक्टेड</span>
           </div>
@@ -3508,7 +3553,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.3.2";
+    const APP_VERSION = "4.3.3";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -3863,7 +3908,7 @@
         wa_group_badge: "भाटी परिवार",
         wa_group_desc: "युवा शक्ति ग्रुप (भाटी परिवार) के आधिकारिक व्हाट्सएप ग्रुप से जुड़ें। यहाँ ग्रुप की सभी नई सूचनाएं, सत्संग, कार्यक्रम और अमावस्या अंशदान की जानकारी सीधे प्राप्त करें।",
         btn_join_wa: "व्हाट्सएप ग्रुप में शामिल हों (Join Group)",
-        app_info_title: "ऐप विवरण एवं अपडेट",
+        app_info_title: "डेवलपर ऑप्शन एवं अपडेट",
         login_code_label: "लॉगिन कोड (PIN)"
       },
       en: {
@@ -3960,7 +4005,7 @@
         wa_group_badge: "Bhati Parivar",
         wa_group_desc: "Join the official WhatsApp group of Yuva Shakti Group (Bhati Parivar). Get updates on satsang, events, and Amavasya contributions directly.",
         btn_join_wa: "Join WhatsApp Group",
-        app_info_title: "App Details & Updates",
+        app_info_title: "Developer Options & Updates",
         login_code_label: "Login Code (PIN)"
       }
     };
@@ -4426,6 +4471,11 @@
 
       if (adminSettingsCard) {
         adminSettingsCard.style.display = isAdmin ? "block" : "none";
+      }
+
+      const cloudDbRow = document.getElementById("developerCardCloudDbRow");
+      if (cloudDbRow) {
+        cloudDbRow.style.display = isAdmin ? "flex" : "none";
       }
 
       if (authBadge && userName && userPhone) {
