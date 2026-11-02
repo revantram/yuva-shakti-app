@@ -1427,6 +1427,63 @@
       border-color: #fed7aa;
       background: #fff7ed;
     }
+    .cal-tithi-name {
+      font-size: 8px;
+      font-weight: 700;
+      color: #ea580c;
+      line-height: 1.1;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .calendar-day.selected .cal-tithi-name {
+      color: #fef08a !important;
+    }
+    .settings-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .settings-list-item:active {
+      transform: scale(0.98);
+      background: var(--bg-color);
+    }
+    .settings-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .settings-item-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-option-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      cursor: pointer;
+      background: var(--card-bg);
+      transition: all 0.15s;
+    }
+    .modal-option-card:active {
+      transform: scale(0.98);
+    }
+    .modal-option-card.selected {
+      border-color: #2563eb;
+      background: rgba(37, 99, 235, 0.08);
+    }
 
     /* Selected Day Details Card */
     .selected-day-card {
@@ -1942,86 +1999,74 @@
     <!-- 5. सेटिंग्स टैब -->
     <div id="viewSettings" class="section-view">
       
-      <!-- Profile Card -->
-      <div class="card">
+      <!-- 1. ऐप विवरण एवं डेवलपर जानकारी (सबसे ऊपर) -->
+      <div class="card" id="developerInfoCard">
         <div class="card-title">
-          <span><i class="fa-solid fa-user-shield" style="color:#2563eb;"></i> <span data-i18n="settings_auth_title">खाता एवं प्रोफाइल</span></span>
-          <span class="badge" id="settingsAuthBadge">अतिथि मोड</span>
+          <span><i class="fa-solid fa-code" style="color:#0284c7;"></i> <span data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span></span>
+          <span class="badge" style="background:#e0f2fe; color:#0369a1;">v4.2.4</span>
         </div>
-        <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 0;">
-          <div>
-            <div style="font-size:15px; font-weight:700; color:var(--text-main);" id="settingsUserName">अतिथि (Guest)</div>
-            <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="settingsUserPhone">व्यक्तिगत पिन से लॉगिन नहीं हैं</div>
+        <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between;">
+            <span>एप्लिकेशन नाम:</span>
+            <strong style="color:var(--text-main);">युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)</strong>
           </div>
-          <button class="btn-tool" style="width:auto; padding:8px 14px; font-weight:700;" id="settingsLoginBtn" onclick="openLoginModal()">
-            लॉगिन करें
-          </button>
+          <div style="display:flex; justify-content:space-between;">
+            <span>मुख्य डेवलपर:</span>
+            <strong style="color:var(--text-main);">रेवंतराम भाटी (Dev Lead)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>वर्तमान संस्करण:</span>
+            <strong style="color:var(--text-main);">v4.2.4 (नवीनतम रिलीज)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>क्लाउड डेटाबेस:</span>
+            <span style="color:#10b981; font-weight:700;">🟢 Firebase Firestore कनेक्टेड</span>
+          </div>
         </div>
+        <button class="btn-tool" onclick="checkForAppUpdates(false)" style="margin-top:12px; width:100%; font-weight:700;">
+          <i class="fa-solid fa-arrows-rotate"></i> अपडेट की जांच करें
+        </button>
       </div>
 
-      <!-- Admin Control Card (Moved from header to Settings) -->
+      <!-- 2. सामान्य प्राथमिकताएं (भाषा एवं थीम मोडल पॉपअप) -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-solid fa-shield-halved" style="color:#dc2626;"></i> <span data-i18n="settings_admin_title">व्यवस्थापक (Admin) नियंत्रण</span></span>
-          <span class="badge" id="settingsAdminBadge" style="background:#fee2e2; color:#dc2626;">निष्क्रिय</span>
+          <span><i class="fa-solid fa-sliders" style="color:#2563eb;"></i> <span>सामान्य प्राथमिकताएं (Preferences)</span></span>
         </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;" data-i18n="admin_desc">
-          व्यवस्थापक मोड सक्रिय करके आप सदस्यों को जोड़ने, हटाने, संपादित करने और गलत लेनदेन रिकॉर्ड सुधारने में सक्षम होते हैं।
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          <button class="btn-main" id="settingsAdminToggleBtn" onclick="toggleAdminPrompt()" style="background:#dc2626;">
-            <i class="fa-solid fa-shield-cat"></i> <span id="settingsAdminBtnLabel" data-i18n="admin_login_btn">व्यवस्थापक लॉगिन करें</span>
-          </button>
-          <button class="btn-tool" id="btnChangeAdminPin" onclick="changeAdminPinPrompt()" style="display:none; width:100%; border-color:#cbd5e1;">
-            <i class="fa-solid fa-key" style="color:#f59e0b;"></i> <span data-i18n="admin_change_pin">व्यवस्थापक पिन बदलें</span>
-          </button>
-        </div>
-      </div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <!-- भाषा रो (क्लिक करने पर पॉपअप खुलेगा) -->
+          <div class="settings-list-item" onclick="openLanguageModal()">
+            <div class="settings-item-left">
+              <i class="fa-solid fa-language" style="color:#2563eb; font-size:20px; width:24px; text-align:center;"></i>
+              <div>
+                <div style="font-weight:700; font-size:14px; color:var(--text-main);" data-i18n="lang_title">भाषा (Language)</div>
+                <div style="font-size:11px; color:var(--text-muted);" id="settingLangSub">हिन्दी / English</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="badge" id="settingLangPreviewBadge" style="background:#dbeafe; color:#1d4ed8;">हिन्दी</span>
+              <i class="fa-solid fa-chevron-right" style="color:#94a3b8; font-size:12px;"></i>
+            </div>
+          </div>
 
-      <!-- Language Selector Card (हिन्दी / English) -->
-      <div class="card">
-        <div class="card-title">
-          <span><i class="fa-solid fa-language" style="color:#2563eb;"></i> <span data-i18n="lang_title">भाषा (Language)</span></span>
-          <span class="badge" id="currentLangBadge" style="background:#dbeafe; color:#1d4ed8;">हिन्दी</span>
-        </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px; line-height:1.4;" data-i18n="lang_desc">
-          एप्लिकेशन की भाषा चुनें / Choose application language:
-        </p>
-        <div class="theme-grid">
-          <div class="theme-card active" id="langCardHi" onclick="setAppLanguage('hi')">
-            <span style="font-size:20px; font-weight:800; display:block; margin-bottom:4px; color:#ea580c;">अ</span>
-            <div style="font-weight:700; font-size:13px; color:var(--text-main);">हिन्दी</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">हिन्दी भाषा</div>
-          </div>
-          <div class="theme-card" id="langCardEn" onclick="setAppLanguage('en')">
-            <span style="font-size:20px; font-weight:800; display:block; margin-bottom:4px; color:#2563eb;">A</span>
-            <div style="font-weight:700; font-size:13px; color:var(--text-main);">English</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">English Language</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Theme Selector Card -->
-      <div class="card">
-        <div class="card-title">
-          <span><i class="fa-solid fa-palette" style="color:#ea580c;"></i> <span data-i18n="theme_title">ऐप थीम (रंग-रूप)</span></span>
-          <span class="badge" id="currentThemeBadge">लाइट थीम</span>
-        </div>
-        <div class="theme-grid">
-          <div class="theme-card active" id="themeLight" onclick="setAppTheme('light')">
-            <i class="fa-solid fa-sun" style="color:#f59e0b; font-size:22px; margin-bottom:6px;"></i>
-            <div style="font-weight:700; font-size:13px; color:var(--text-main);" data-i18n="theme_light_btn">लाइट थीम (दिन)</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" data-i18n="theme_light_sub">क्लासिक सफेद व नीला</div>
-          </div>
-          <div class="theme-card" id="themeDark" onclick="setAppTheme('dark')">
-            <i class="fa-solid fa-moon" style="color:#818cf8; font-size:22px; margin-bottom:6px;"></i>
-            <div style="font-weight:700; font-size:13px; color:var(--text-main);" data-i18n="theme_dark_btn">डार्क थीम (रात)</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" data-i18n="theme_dark_sub">आंखों के लिए आरामदायक</div>
+          <!-- थीम मोड रो (क्लिक करने पर पॉपअप खुलेगा) -->
+          <div class="settings-list-item" onclick="openThemeModal()">
+            <div class="settings-item-left">
+              <i class="fa-solid fa-palette" style="color:#ea580c; font-size:19px; width:24px; text-align:center;"></i>
+              <div>
+                <div style="font-weight:700; font-size:14px; color:var(--text-main);" data-i18n="theme_title">थीम मोड (Theme Mode)</div>
+                <div style="font-size:11px; color:var(--text-muted);" id="settingThemeSub">लाइट / डार्क / ऑटो मोड</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="badge" id="settingThemePreviewBadge" style="background:#fef3c7; color:#b45309;">लाइट मोड</span>
+              <i class="fa-solid fa-chevron-right" style="color:#94a3b8; font-size:12px;"></i>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- PhonePe & UPI Settings Card -->
+      <!-- 3. PhonePe & UPI खाता सेटिंग्स -->
       <div class="card">
         <div class="card-title">
           <span><i class="fa-solid fa-mobile-screen-button" style="color:#5f259f;"></i> <span data-i18n="upi_settings_title">PhonePe / UPI खाता सेटिंग्स</span></span>
@@ -2030,7 +2075,7 @@
         <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;" data-i18n="upi_desc">
           ग्रुप के सदस्य सीधे PhonePe अथवा किसी भी UPI ऐप से अमावस्या अंशदान जमा कर सकते हैं।
         </p>
-        <div class="phonepe-upi-row" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <div class="phonepe-upi-row" style="background:var(--bg-color); border:1px solid var(--border-color); border-radius:8px; padding:10px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="font-size:11px; color:var(--text-muted);" data-i18n="receiver_account">प्राप्तकर्ता खाता:</div>
             <strong style="font-size:13px; color:var(--text-main);" id="settingsUpiName">Yuva Shakti Bhati Parivar</strong>
@@ -2047,43 +2092,40 @@
         </div>
       </div>
 
-      <!-- Official WhatsApp Group Card -->
+      <!-- 4. व्यवस्थापक (Admin) नियंत्रण -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-brands fa-whatsapp" style="color:#16a34a; font-size:18px;"></i> <span data-i18n="wa_group_title">आधिकारिक व्हाट्सएप ग्रुप</span></span>
-          <span class="badge" style="background:#dcfce7; color:#15803d;" data-i18n="wa_group_badge">भाटी परिवार</span>
+          <span><i class="fa-solid fa-shield-halved" style="color:#dc2626;"></i> <span data-i18n="settings_admin_title">व्यवस्थापक (Admin) नियंत्रण</span></span>
+          <span class="badge" id="settingsAdminBadge" style="background:#fee2e2; color:#dc2626;">निष्क्रिय</span>
         </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;" data-i18n="wa_group_desc">
-          युवा शक्ति ग्रुप (भाटी परिवार) के आधिकारिक व्हाट्सएप ग्रुप से जुड़ें। यहाँ ग्रुप की सभी नई सूचनाएं, सत्संग, कार्यक्रम और अमावस्या अंशदान की जानकारी सीधे प्राप्त करें।
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;" data-i18n="admin_desc">
+          व्यवस्थापक मोड सक्रिय करके आप सदस्यों को जोड़ने, हटाने, संपादित करने और लेनदेन रिकॉर्ड सुधारने में सक्षम होते हैं।
         </p>
-        <a href="https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh" target="_blank" class="btn-main" style="background:#16a34a; text-decoration:none; font-weight:700;">
-          <i class="fa-brands fa-whatsapp" style="font-size:18px;"></i> <span data-i18n="btn_join_wa">व्हाट्सएप ग्रुप में शामिल हों (Join Group)</span>
-        </a>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="btn-main" id="settingsAdminToggleBtn" onclick="toggleAdminPrompt()" style="background:#dc2626;">
+            <i class="fa-solid fa-shield-cat"></i> <span id="settingsAdminBtnLabel" data-i18n="admin_login_btn">व्यवस्थापक लॉगिन करें</span>
+          </button>
+          <button class="btn-tool" id="btnChangeAdminPin" onclick="changeAdminPinPrompt()" style="display:none; width:100%; border-color:#cbd5e1;">
+            <i class="fa-solid fa-key" style="color:#f59e0b;"></i> <span data-i18n="admin_change_pin">व्यवस्थापक पिन बदलें</span>
+          </button>
+        </div>
       </div>
 
-      <!-- App Info & Version -->
-      <div class="card">
+      <!-- 5. खाता प्रबंधन एवं लॉगआउट (सबसे अंत / नीचे) -->
+      <div class="card" id="settingsAuthCard" style="border-top:2px solid var(--border-color); margin-bottom:20px;">
         <div class="card-title">
-          <span><i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> <span data-i18n="app_info_title">ऐप विवरण एवं अपडेट</span></span>
-          <span class="badge" style="background:#e0f2fe; color:#0369a1;">v4.2.3</span>
+          <span><i class="fa-solid fa-user-gear" style="color:#475569;"></i> <span data-i18n="settings_auth_title">खाता प्रबंधन एवं लॉगआउट</span></span>
+          <span class="badge" id="settingsAuthBadge">अतिथि मोड</span>
         </div>
-        <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
-          <div style="display:flex; justify-content:space-between;">
-            <span>एप्लिकेशन नाम:</span>
-            <strong style="color:var(--text-main);">युवा शक्ति ग्रुप (भाटी परिवार)</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between;">
-            <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.2.3 (नवीनतम)</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between;">
-            <span>क्लाउड डेटाबेस:</span>
-            <span style="color:#10b981; font-weight:700;">🟢 Firebase कनेक्टेड</span>
-          </div>
+        <div style="padding:6px 0 12px 0;">
+          <div style="font-size:15px; font-weight:700; color:var(--text-main);" id="settingsUserName">अतिथि (Guest)</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="settingsUserPhone">व्यक्तिगत पिन से लॉगिन नहीं हैं</div>
         </div>
-        <button class="btn-tool" onclick="checkForAppUpdates(false)" style="margin-top:12px; width:100%; font-weight:700;">
-          <i class="fa-solid fa-arrows-rotate"></i> अपडेट की जांच करें
-        </button>
+        <div id="settingsAuthActionBox">
+          <button class="btn-main" style="width:100%;" id="settingsLoginBtn" onclick="openLoginModal()">
+            <i class="fa-solid fa-right-to-bracket"></i> सदस्य लॉगिन करें
+          </button>
+        </div>
       </div>
 
     </div>
@@ -2112,7 +2154,107 @@
       <i class="fa-solid fa-gear"></i>
       <span data-i18n="nav_settings">सेटिंग्स</span>
     </button>
-  </nav>
+  <!-- Language Modal (पॉपअप) -->
+  <div class="modal-overlay" id="languageModal">
+    <div class="modal-content" style="max-width:340px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="font-size:16px; font-weight:800; color:var(--text-main); display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-language" style="color:#2563eb;"></i> भाषा चुनें (Language)
+        </h3>
+        <button onclick="closeLanguageModal()" style="border:none; background:none; font-size:18px; color:var(--text-muted); cursor:pointer;">✕</button>
+      </div>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">एप्लिकेशन की पसंदीदा भाषा चुनें:</p>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div class="modal-option-card selected" id="langOptHi" onclick="chooseLanguage('hi')">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:20px; font-weight:800; color:#ea580c;">अ</span>
+            <div>
+              <strong style="font-size:14px; color:var(--text-main);">हिन्दी (Hindi)</strong>
+              <div style="font-size:11px; color:var(--text-muted);">सम्पूर्ण ऐप हिन्दी भाषा में</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-circle-check" id="langCheckHi" style="color:#2563eb; font-size:16px;"></i>
+        </div>
+        <div class="modal-option-card" id="langOptEn" onclick="chooseLanguage('en')">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:20px; font-weight:800; color:#2563eb;">A</span>
+            <div>
+              <strong style="font-size:14px; color:var(--text-main);">English</strong>
+              <div style="font-size:11px; color:var(--text-muted);">Use app in English</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-circle-check" id="langCheckEn" style="color:#2563eb; font-size:16px; display:none;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme Modal (पॉपअप) -->
+  <div class="modal-overlay" id="themeModal">
+    <div class="modal-content" style="max-width:340px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="font-size:16px; font-weight:800; color:var(--text-main); display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-palette" style="color:#ea580c;"></i> थीम मोड चुनें (Theme)
+        </h3>
+        <button onclick="closeThemeModal()" style="border:none; background:none; font-size:18px; color:var(--text-muted); cursor:pointer;">✕</button>
+      </div>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">अपनी पसंद अनुसार रंग-रूप चुनें:</p>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div class="modal-option-card selected" id="themeOptLight" onclick="chooseTheme('light')">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <i class="fa-solid fa-sun" style="font-size:19px; color:#f59e0b;"></i>
+            <div>
+              <strong style="font-size:14px; color:var(--text-main);" data-i18n="theme_light_btn">लाइट मोड (White / Light)</strong>
+              <div style="font-size:11px; color:var(--text-muted);">सफेद व साफ क्लासिक रूप</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-circle-check" id="themeCheckLight" style="color:#2563eb; font-size:16px;"></i>
+        </div>
+        <div class="modal-option-card" id="themeOptDark" onclick="chooseTheme('dark')">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <i class="fa-solid fa-moon" style="font-size:19px; color:#818cf8;"></i>
+            <div>
+              <strong style="font-size:14px; color:var(--text-main);" data-i18n="theme_dark_btn">डार्क मोड (Dark Mode)</strong>
+              <div style="font-size:11px; color:var(--text-muted);">आंखों के लिए आरामदायक</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-circle-check" id="themeCheckDark" style="color:#2563eb; font-size:16px; display:none;"></i>
+        </div>
+        <div class="modal-option-card" id="themeOptAuto" onclick="chooseTheme('auto')">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <i class="fa-solid fa-circle-half-stroke" style="font-size:19px; color:#10b981;"></i>
+            <div>
+              <strong style="font-size:14px; color:var(--text-main);">ऑटो मोड (Auto / System)</strong>
+              <div style="font-size:11px; color:var(--text-muted);">मोबाइल सिस्टम सेटिंग के अनुसार</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-circle-check" id="themeCheckAuto" style="color:#2563eb; font-size:16px; display:none;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Today Celebration / Greetings Modal (आज का विशेष उत्सव एवं शुभकामनाएं) -->
+  <div class="modal-overlay" id="todayCelebrationModal">
+    <div class="modal-content" style="max-width:380px; text-align:center;">
+      <div style="display:flex; justify-content:flex-end;">
+        <button onclick="closeTodayCelebrationModal()" style="border:none; background:none; font-size:20px; color:var(--text-muted); cursor:pointer;">✕</button>
+      </div>
+      <div style="font-size:32px; margin-top:-10px;">🎉 🎂 💐</div>
+      <h3 style="font-size:17px; font-weight:800; color:#ea580c; margin:4px 0 6px 0;" id="todayCelebTitle">
+        आज का पावन दिन एवं मंगलकामनाएं!
+      </h3>
+      <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) की ओर से हार्दिक बधाई</p>
+      
+      <div id="todayCelebContent" style="text-align:left; max-height:360px; overflow-y:auto; padding-right:2px; display:flex; flex-direction:column; gap:8px;">
+        <!-- Filled dynamically -->
+      </div>
+
+      <button class="btn-main" onclick="closeTodayCelebrationModal()" style="margin-top:14px; width:100%;">
+        आगे बढ़ें (Continue)
+      </button>
+    </div>
+  </div>
 
   <!-- Login Modal -->
   <div class="modal-overlay" id="loginModal">
@@ -2337,7 +2479,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.2.3";
+    const APP_VERSION = "4.2.4";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -3055,26 +3197,66 @@
       const authBadge = document.getElementById("settingsAuthBadge");
       const userName = document.getElementById("settingsUserName");
       const userPhone = document.getElementById("settingsUserPhone");
-      const loginBtn = document.getElementById("settingsLoginBtn");
+      const authActionBox = document.getElementById("settingsAuthActionBox");
 
-      if (authBadge && userName && userPhone && loginBtn) {
+      if (authBadge && userName && userPhone) {
         if (loggedInMemberPhone) {
           const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
-          authBadge.innerText = currentLang === 'en' ? "Verified Member" : "सत्यापित सदस्य";
+          authBadge.innerText = currentLang === 'en' ? "Member" : "सदस्य";
           authBadge.style.background = "#dbeafe";
           authBadge.style.color = "#1d4ed8";
           userName.innerText = found ? found.name : (currentLang === 'en' ? "Member" : "सदस्य");
           userPhone.innerText = `📱 +91 ${loggedInMemberPhone}`;
-          loginBtn.innerText = currentLang === 'en' ? "Logout" : "लॉगआउट";
-          loginBtn.onclick = logoutMember;
+          if (authActionBox) {
+            authActionBox.innerHTML = `
+              <button class="btn-main" onclick="logoutMember()" style="background:#dc2626; width:100%; font-weight:700;">
+                <i class="fa-solid fa-right-from-bracket"></i> ${currentLang === 'en' ? 'Logout (Exit Account)' : 'लॉगआउट करें (खाता बंद करें)'}
+              </button>
+            `;
+          }
         } else {
           authBadge.innerText = currentLang === 'en' ? "Guest Mode" : "अतिथि मोड";
           authBadge.style.background = "#f1f5f9";
           authBadge.style.color = "#64748b";
           userName.innerText = currentLang === 'en' ? "Guest" : "अतिथि (Guest)";
           userPhone.innerText = currentLang === 'en' ? "Not logged in with personal PIN" : "व्यक्तिगत पिन से लॉगिन नहीं हैं";
-          loginBtn.innerText = currentLang === 'en' ? "Login" : "लॉगिन करें";
-          loginBtn.onclick = openLoginModal;
+          if (authActionBox) {
+            authActionBox.innerHTML = `
+              <button class="btn-main" onclick="openLoginModal()" style="width:100%; font-weight:700;">
+                <i class="fa-solid fa-right-to-bracket"></i> ${currentLang === 'en' ? 'Member Login with PIN' : 'सदस्य लॉगिन करें'}
+              </button>
+            `;
+          }
+        }
+      }
+
+      // Update Language and Theme preview badges in Settings list items
+      const langBadge = document.getElementById("settingLangPreviewBadge");
+      const langSub = document.getElementById("settingLangSub");
+      if (langBadge) {
+        langBadge.innerText = currentLang === 'en' ? "English" : "हिन्दी";
+        if (langSub) langSub.innerText = currentLang === 'en' ? "Active Language: English" : "सक्रिय भाषा: हिन्दी";
+      }
+
+      const theme = localStorage.getItem('appTheme') || 'light';
+      const themeBadge = document.getElementById("settingThemePreviewBadge");
+      const themeSub = document.getElementById("settingThemeSub");
+      if (themeBadge) {
+        if (theme === 'dark') {
+          themeBadge.innerText = currentLang === 'en' ? "Dark Mode" : "डार्क मोड";
+          themeBadge.style.background = "#312e81";
+          themeBadge.style.color = "#c7d2fe";
+          if (themeSub) themeSub.innerText = currentLang === 'en' ? "Comfortable Night Mode" : "आंखों के लिए आरामदायक डार्क रूप";
+        } else if (theme === 'auto') {
+          themeBadge.innerText = currentLang === 'en' ? "Auto (System)" : "ऑटो (सिस्टम)";
+          themeBadge.style.background = "#dcfce7";
+          themeBadge.style.color = "#15803d";
+          if (themeSub) themeSub.innerText = currentLang === 'en' ? "Matches Device Theme" : "मोबाइल सिस्टम थीम के अनुसार";
+        } else {
+          themeBadge.innerText = currentLang === 'en' ? "Light Mode" : "लाइट मोड";
+          themeBadge.style.background = "#fef3c7";
+          themeBadge.style.color = "#b45309";
+          if (themeSub) themeSub.innerText = currentLang === 'en' ? "Classic White & Blue" : "क्लासिक सफेद व साफ रूप";
         }
       }
 
@@ -3087,7 +3269,7 @@
           adminBadge.innerText = currentLang === 'en' ? "Active" : "सक्रिय (Active)";
           adminBadge.style.background = "#fee2e2";
           adminBadge.style.color = "#dc2626";
-          adminToggleBtn.innerHTML = currentLang === 'en' ? `<i class="fa-solid fa-right-from-bracket"></i> Exit Admin Mode (Logout)` : `<i class="fa-solid fa-right-from-bracket"></i> व्यवस्थापक मोड बंद करें (लॉगआउट)`;
+          adminToggleBtn.innerHTML = currentLang === 'en' ? `<i class="fa-solid fa-right-from-bracket"></i> Exit Admin Mode` : `<i class="fa-solid fa-right-from-bracket"></i> व्यवस्थापक मोड बंद करें`;
           adminToggleBtn.style.background = "#64748b";
           if (changePinBtn) changePinBtn.style.display = "inline-flex";
         } else {
@@ -3126,24 +3308,85 @@
       showToast("व्यवस्थापक पिन सफलतापूर्वक बदल दिया गया!", "success");
     }
 
-    // Theme Switcher Logic
-    function setAppTheme(theme) {
-      const badge = document.getElementById('currentThemeBadge');
-      const lightCard = document.getElementById('themeLight');
-      const darkCard = document.getElementById('themeDark');
+    // Modal Control: Language Selection
+    function openLanguageModal() {
+      const isHi = currentLang === 'hi';
+      const optHi = document.getElementById("langOptHi");
+      const optEn = document.getElementById("langOptEn");
+      const checkHi = document.getElementById("langCheckHi");
+      const checkEn = document.getElementById("langCheckEn");
 
+      if (optHi) optHi.className = isHi ? "modal-option-card selected" : "modal-option-card";
+      if (optEn) optEn.className = !isHi ? "modal-option-card selected" : "modal-option-card";
+      if (checkHi) checkHi.style.display = isHi ? "inline-block" : "none";
+      if (checkEn) checkEn.style.display = !isHi ? "inline-block" : "none";
+
+      document.getElementById("languageModal").style.display = "flex";
+    }
+
+    function closeLanguageModal() {
+      document.getElementById("languageModal").style.display = "none";
+    }
+
+    function chooseLanguage(lang) {
+      setAppLanguage(lang);
+      closeLanguageModal();
+    }
+
+    // Modal Control: Theme Mode Selection
+    function openThemeModal() {
+      const currentTheme = localStorage.getItem("appTheme") || "light";
+      const optLight = document.getElementById("themeOptLight");
+      const optDark = document.getElementById("themeOptDark");
+      const optAuto = document.getElementById("themeOptAuto");
+      const checkLight = document.getElementById("themeCheckLight");
+      const checkDark = document.getElementById("themeCheckDark");
+      const checkAuto = document.getElementById("themeCheckAuto");
+
+      if (optLight) optLight.className = currentTheme === 'light' ? "modal-option-card selected" : "modal-option-card";
+      if (optDark) optDark.className = currentTheme === 'dark' ? "modal-option-card selected" : "modal-option-card";
+      if (optAuto) optAuto.className = currentTheme === 'auto' ? "modal-option-card selected" : "modal-option-card";
+
+      if (checkLight) checkLight.style.display = currentTheme === 'light' ? "inline-block" : "none";
+      if (checkDark) checkDark.style.display = currentTheme === 'dark' ? "inline-block" : "none";
+      if (checkAuto) checkAuto.style.display = currentTheme === 'auto' ? "inline-block" : "none";
+
+      document.getElementById("themeModal").style.display = "flex";
+    }
+
+    function closeThemeModal() {
+      document.getElementById("themeModal").style.display = "none";
+    }
+
+    function chooseTheme(theme) {
+      setAppTheme(theme);
+      closeThemeModal();
+    }
+
+    // Enhanced Theme Switcher Logic (Light, Dark, Auto)
+    function setAppTheme(theme) {
+      localStorage.setItem('appTheme', theme);
+      applyThemeFromStorage();
+      updateSettingsUI();
+      const themeText = theme === 'dark' ? (currentLang === 'en' ? "Dark Mode applied" : "डार्क मोड सक्रिय किया गया") :
+                       (theme === 'auto' ? (currentLang === 'en' ? "Auto (System) Mode applied" : "ऑटो सिस्टम मोड सक्रिय किया गया") :
+                       (currentLang === 'en' ? "Light Mode applied" : "लाइट मोड सक्रिय किया गया"));
+      showToast(themeText, "info");
+    }
+
+    function applyThemeFromStorage() {
+      const theme = localStorage.getItem('appTheme') || 'light';
       if (theme === 'dark') {
         document.body.classList.add('dark-theme');
-        localStorage.setItem('appTheme', 'dark');
-        if (badge) badge.innerText = "डार्क थीम";
-        if (lightCard) lightCard.classList.remove('active');
-        if (darkCard) darkCard.classList.add('active');
-      } else {
+      } else if (theme === 'light') {
         document.body.classList.remove('dark-theme');
-        localStorage.setItem('appTheme', 'light');
-        if (badge) badge.innerText = "लाइट थीम";
-        if (lightCard) lightCard.classList.add('active');
-        if (darkCard) darkCard.classList.remove('active');
+      } else if (theme === 'auto') {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.body.classList.add('dark-theme');
+        } else {
+          document.body.classList.remove('dark-theme');
+        }
       }
     }
 
@@ -3267,6 +3510,7 @@
       renderMembers();
       renderCalendar();
       updateAuthUI();
+      checkAndShowTodayCelebrations();
     }, (error) => {
       console.error("Firestore read error:", error);
       document.getElementById("membersList").innerHTML = `
@@ -4104,6 +4348,91 @@
       return `वि. संवत ${samvat}`;
     }
 
+    // Gregorian National / Observance Days
+    const GREGORIAN_DAYS = [
+      { date: "01-01", name: "अंग्रेजी नववर्ष (New Year's Day)", wish: "नववर्ष की हार्दिक शुभकामनाएं! नया साल आपके जीवन में खुशहाली और सफलता लेकर आए।" },
+      { date: "01-12", name: "राष्ट्रीय युवा दिवस (स्वामी विवेकानंद जयंती)", wish: "राष्ट्रीय युवा दिवस की शुभकामनाएं! उठो, जागो और तब तक मत रुको जब तक लक्ष्य प्राप्त न हो जाए।" },
+      { date: "01-26", name: "गणतंत्र दिवस (Republic Day)", wish: "गणतंत्र दिवस की हार्दिक शुभकामनाएं! भारत माता की जय! वन्दे मातरम्!" },
+      { date: "02-28", name: "राष्ट्रीय विज्ञान दिवस", wish: "राष्ट्रीय विज्ञान दिवस की शुभकामनाएं!" },
+      { date: "03-08", name: "अंतरराष्ट्रीय महिला दिवस (Women's Day)", wish: "अंतरराष्ट्रीय महिला दिवस की शुभकामनाएं! मातृशक्ति को नमन।" },
+      { date: "04-14", name: "डॉ. भीमराव आंबेडकर जयंती", wish: "बाबासाहेब डॉ. भीमराव आंबेडकर जयंती पर कोटि-कोटि नमन।" },
+      { date: "05-01", name: "अंतरराष्ट्रीय मजदूर दिवस (Labour Day)", wish: "मजदूर दिवस की शुभकामनाएं!" },
+      { date: "06-21", name: "अंतरराष्ट्रीय योग दिवस (Yoga Day)", wish: "योग दिवस की शुभकामनाएं! योग करें, स्वस्थ रहें।" },
+      { date: "08-15", name: "स्वतंत्रता दिवस (Independence Day)", wish: "स्वतंत्रता दिवस की हार्दिक शुभकामनाएं! जय हिन्द! वन्दे मातरम्!" },
+      { date: "09-05", name: "शिक्षक दिवस (Teachers' Day)", wish: "शिक्षक दिवस की हार्दिक शुभकामनाएं! गुरुजनों को कोटि-कोटि वंदन।" },
+      { date: "09-14", name: "हिंदी दिवस (Hindi Diwas)", wish: "हिंदी दिवस की शुभकामनाएं! हमारी भाषा, हमारा अभिमान - हिंदी।" },
+      { date: "10-02", name: "गांधी जयंती व शास्त्री जयंती", wish: "महात्मा गांधी एवं लाल बहादुर शास्त्री जयंती पर शत-शत नमन।" },
+      { date: "10-31", name: "राष्ट्रीय एकता दिवस (सरदार पटेल जयंती)", wish: "लौह पुरुष सरदार वल्लभभाई पटेल जयंती की शुभकामनाएं!" },
+      { date: "11-11", name: "राष्ट्रीय शिक्षा दिवस", wish: "राष्ट्रीय शिक्षा दिवस की शुभकामनाएं!" },
+      { date: "11-14", name: "बाल दिवस (Children's Day)", wish: "बाल दिवस की शुभकामनाएं!" },
+      { date: "12-25", name: "क्रिसमस / सुशासन दिवस", wish: "क्रिसमस एवं सुशासन दिवस की शुभकामनाएं!" }
+    ];
+
+    const TITHI_NAMES_SHUKLA = [
+      "प्रतिपदा", "द्वितीया", "तृतीया", "चतुर्थी", "पंचमी",
+      "षष्ठी", "सप्तमी", "अष्टमी", "नवमी", "दशमी",
+      "एकादशी", "द्वादशी", "त्रयोदशी", "चतुर्दशी", "पूर्णिमा"
+    ];
+    const TITHI_NAMES_KRISHNA = [
+      "प्रतिपदा", "द्वितीया", "तृतीया", "चतुर्थी", "पंचमी",
+      "षष्ठी", "सप्तमी", "अष्टमी", "नवमी", "दशमी",
+      "एकादशी", "द्वादशी", "त्रयोदशी", "चतुर्दशी", "अमावस्या"
+    ];
+
+    function getHinduTithiInfo(dateStr) {
+      const festival = HINDU_FESTIVALS.find(f => f.date === dateStr);
+      if (festival && festival.tithi) {
+        let short = festival.tithi;
+        if (short.includes("अमावस्या")) short = "अमावस्या";
+        else if (short.includes("पूर्णिमा")) short = "पूर्णिमा";
+        else if (short.includes("एकादशी")) short = "एकादशी";
+        else short = festival.tithi.split(" ").slice(-1)[0] || festival.tithi;
+        return { full: festival.tithi, short: short };
+      }
+      const amavasya = AMAVASYA_LIST.find(a => a.date === dateStr);
+      if (amavasya) {
+        return { full: "अमावस्या तिथि (मासिक सत्संग व अंशदान)", short: "अमावस्या" };
+      }
+
+      const refTime = new Date("2026-01-18T12:00:00Z").getTime();
+      const targetTime = new Date(dateStr + "T12:00:00Z").getTime();
+      const diffDays = (targetTime - refTime) / (1000 * 60 * 60 * 24);
+      const synodicMonth = 29.53058867;
+      const age = ((diffDays % synodicMonth) + synodicMonth) % synodicMonth;
+      const tithiIndex = Math.min(29, Math.floor((age / synodicMonth) * 30));
+
+      if (tithiIndex < 15) {
+        const name = TITHI_NAMES_SHUKLA[tithiIndex];
+        return {
+          full: `शुक्ल पक्ष • ${name}`,
+          short: (name === "पूर्णिमा" || name === "एकादशी") ? name : `शु. ${name.slice(0, 4)}`
+        };
+      } else {
+        const name = TITHI_NAMES_KRISHNA[tithiIndex - 15];
+        return {
+          full: `कृष्ण पक्ष • ${name}`,
+          short: (name === "अमावस्या" || name === "एकादशी") ? name : `कृ. ${name.slice(0, 4)}`
+        };
+      }
+    }
+
+    function openWhatsAppUrl(url) {
+      if (window.AndroidApp && typeof window.AndroidApp.openWhatsApp === 'function') {
+        window.AndroidApp.openWhatsApp(url);
+        return;
+      }
+      window.location.href = url;
+    }
+
+    function shareCustomText(text, title) {
+      if (window.AndroidApp && typeof window.AndroidApp.shareText === 'function') {
+        window.AndroidApp.shareText(text, title || "शेयर करें");
+        return;
+      }
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      openWhatsAppUrl(url);
+    }
+
     function renderHinduMonthCalendar() {
       const titleEl = document.getElementById("calMonthYearTitle");
       const subEl = document.getElementById("calHinduMonthSub");
@@ -4111,17 +4440,21 @@
       if (!gridEl) return;
 
       const monthName = currentLang === 'en' ? EN_MONTH_NAMES[currentCalMonth] : HINDI_MONTH_NAMES[currentCalMonth];
+      const enMonthName = EN_MONTH_NAMES[currentCalMonth];
       const hinduPair = HINDU_MONTH_PAIRS[currentCalMonth];
       const samvatStr = getHinduSamvat(currentCalYear, currentCalMonth);
 
-      if (titleEl) titleEl.innerText = `${monthName} ${currentCalYear}`;
-      if (subEl) subEl.innerText = currentLang === 'en' ? `${hinduPair} | Vikrami Samvat` : `${hinduPair} | ${samvatStr}`;
+      if (titleEl) {
+        titleEl.innerText = currentLang === 'en' ? `${enMonthName} ${currentCalYear}` : `${monthName} ${currentCalYear} (${enMonthName})`;
+      }
+      if (subEl) {
+        subEl.innerText = `${hinduPair} • ${samvatStr}`;
+      }
 
       gridEl.innerHTML = "";
 
       const firstDayOfWeek = new Date(currentCalYear, currentCalMonth, 1).getDay();
       const daysInMonth = new Date(currentCalYear, currentCalMonth + 1, 0).getDate();
-
       const todayStr = new Date().toISOString().split('T')[0];
 
       // Empty leading cells
@@ -4131,7 +4464,7 @@
         gridEl.appendChild(emptyCell);
       }
 
-      // Days of month
+      // Unified Days Grid: Gregorian Date + Hindu Tithi + Observance Badges
       for (let d = 1; d <= daysInMonth; d++) {
         const dayStr = String(d).padStart(2, '0');
         const monthStr = String(currentCalMonth + 1).padStart(2, '0');
@@ -4146,25 +4479,35 @@
         if (dateStr === todayStr) cell.classList.add("today");
         if (dateStr === selectedCalDateStr) cell.classList.add("selected");
 
+        const tithiInfo = getHinduTithiInfo(dateStr);
         const festival = HINDU_FESTIVALS.find(f => f.date === dateStr);
         const amavasya = AMAVASYA_LIST.find(a => a.date === dateStr);
+        const nationalDay = GREGORIAN_DAYS.find(g => g.date === `${monthStr}-${dayStr}`);
         const bdays = membersList.filter(m => m.dob && m.dob.endsWith(`-${monthStr}-${dayStr}`));
         const annivs = membersList.filter(m => m.anniversary && m.anniversary.endsWith(`-${monthStr}-${dayStr}`));
 
         let dotsHtml = "";
         let badgeText = "";
+        let badgeColor = "#ea580c";
 
         if (amavasya) {
           cell.classList.add("has-amavasya");
           dotsHtml += `<span>🌑</span>`;
           badgeText = currentLang === 'en' ? "Amavasya" : "अमावस्या";
+          badgeColor = "#1d4ed8";
         }
         if (festival) {
           cell.classList.add("has-festival");
           dotsHtml += `<span>🚩</span>`;
           if (!badgeText) {
             badgeText = festival.name.split('/')[0].split('(')[0].trim().slice(0, 5);
+            badgeColor = "#ea580c";
           }
+        }
+        if (nationalDay && !badgeText) {
+          dotsHtml += `<span>🇮🇳</span>`;
+          badgeText = nationalDay.name.split('(')[0].trim().slice(0, 5);
+          badgeColor = "#15803d";
         }
         if (bdays.length > 0) {
           dotsHtml += `<span>🎂</span>`;
@@ -4175,8 +4518,9 @@
 
         cell.innerHTML = `
           <span class="cal-day-num">${d}</span>
+          <span class="cal-tithi-name">${tithiInfo.short}</span>
           ${dotsHtml ? `<div class="cal-day-dots">${dotsHtml}</div>` : ''}
-          ${badgeText ? `<div class="cal-badge-mini" style="color:${amavasya ? '#1d4ed8' : '#ea580c'};">${badgeText}</div>` : ''}
+          ${badgeText ? `<div class="cal-badge-mini" style="color:${badgeColor};">${badgeText}</div>` : ''}
         `;
 
         cell.onclick = () => {
@@ -4231,10 +4575,12 @@
       const dayName = currentLang === 'en' ? EN_DAYS[dateObj.getDay()] : HINDI_DAYS[dateObj.getDay()];
       const formattedDate = currentLang === 'en' ? `${EN_MONTH_NAMES[m]} ${d}, ${y} (${dayName})` : `${d} ${HINDI_MONTH_NAMES[m]} ${y}, ${dayName}`;
 
+      const tithiInfo = getHinduTithiInfo(dateStr);
       const festival = HINDU_FESTIVALS.find(f => f.date === dateStr);
       const amavasya = AMAVASYA_LIST.find(a => a.date === dateStr);
       const monthStr = String(m + 1).padStart(2, '0');
       const dayStr = String(d).padStart(2, '0');
+      const nationalDay = GREGORIAN_DAYS.find(g => g.date === `${monthStr}-${dayStr}`);
       const bdays = membersList.filter(mem => mem.dob && mem.dob.endsWith(`-${monthStr}-${dayStr}`));
       const annivs = membersList.filter(mem => mem.anniversary && mem.anniversary.endsWith(`-${monthStr}-${dayStr}`));
 
@@ -4249,9 +4595,12 @@
             <div style="font-size:11px; color:#3b82f6; margin-top:2px;">
               ${amavasya.desc || 'सत्संग, अंशदान एवं पितृ तर्पण दिवस'}
             </div>
-            <div style="margin-top:6px; display:flex; gap:6px;">
-              <button onclick="openPhonePeModal('अंशदान - ' + '${amavasya.name}')" class="btn-quick-phonepe" style="padding:4px 8px; font-size:11px;">
+            <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+              <button onclick="openPhonePeModal('अंशदान - ' + '${amavasya.name}')" class="btn-quick-phonepe" style="padding:5px 10px; font-size:11px;">
                 <i class="fa-solid fa-mobile-screen-button"></i> PhonePe अंशदान
+              </button>
+              <button onclick="sendFestivalGreeting('${amavasya.name}', '${amavasya.name} की हार्दिक शुभकामनाएं! सत्संग व सेवा भाव से जीवन सुखमय रहे।', 'group')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
+                <i class="fa-brands fa-whatsapp"></i> ग्रुप में शेयर करें
               </button>
             </div>
           </div>
@@ -4271,12 +4620,33 @@
               <div style="font-size:11px; color:#78350f; font-style:italic; margin-top:4px; background:rgba(255,255,255,0.7); padding:6px; border-radius:6px;">
                 "${festival.wish}"
               </div>
-              <div style="margin-top:6px;">
-                <button onclick="shareFestivalWish('${festival.name}', '${(festival.wish || '').replace(/'/g, "\\'")}')" style="background:#16a34a; color:white; border:none; padding:4px 9px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
-                  <i class="fa-brands fa-whatsapp"></i> शुभकामनाएं शेयर करें
+              <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+                <button onclick="sendFestivalGreeting('${festival.name}', '${(festival.wish || '').replace(/'/g, "\\'")}', 'group')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
+                  <i class="fa-brands fa-whatsapp"></i> ग्रुप में शेयर
+                </button>
+                <button onclick="sendFestivalGreeting('${festival.name}', '${(festival.wish || '').replace(/'/g, "\\'")}', 'direct')" style="background:#0284c7; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
+                  <i class="fa-solid fa-share-nodes"></i> सीधे भेजें
                 </button>
               </div>
             ` : ''}
+          </div>
+        `;
+      }
+
+      if (nationalDay) {
+        eventsHtml += `
+          <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px; margin-bottom:8px;">
+            <div style="font-weight:700; color:#15803d; font-size:13px;">
+              🇮🇳 ${nationalDay.name}
+            </div>
+            <div style="font-size:11px; color:#16a34a; margin-top:2px;">
+              ${nationalDay.wish}
+            </div>
+            <div style="margin-top:8px;">
+              <button onclick="sendFestivalGreeting('${nationalDay.name}', '${(nationalDay.wish || '').replace(/'/g, "\\'")}', 'group')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
+                <i class="fa-brands fa-whatsapp"></i> शुभकामनाएं शेयर करें
+              </button>
+            </div>
           </div>
         `;
       }
@@ -4291,11 +4661,14 @@
               <div style="font-size:11px; color:#a16207; margin-top:2px;">
                 युवा शक्ति ग्रुप (भाटी परिवार) की ओर से हार्दिक शुभकामनाएं!
               </div>
-              <div style="margin-top:6px; display:flex; gap:6px;">
-                <button onclick="shareMemberWish('birthday', '${mem.name}', '${mem.whatsapp || mem.phone}')" style="background:#16a34a; color:white; border:none; padding:4px 9px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
-                  <i class="fa-brands fa-whatsapp"></i> बधाई भेजें
+              <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+                <button onclick="shareMemberWish('birthday', '${mem.name}', '${mem.whatsapp || mem.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-brands fa-whatsapp"></i> व्यक्तिगत बधाई
                 </button>
-                <a href="tel:${mem.phone}" style="background:#2563eb; color:white; text-decoration:none; padding:4px 9px; border-radius:6px; font-weight:600; font-size:11px; display:inline-flex; align-items:center; gap:4px;">
+                <button onclick="shareMemberWish('birthday', '${mem.name}', '${mem.whatsapp || mem.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-users"></i> ग्रुप में शेयर
+                </button>
+                <a href="tel:${mem.phone}" style="background:#475569; color:white; text-decoration:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; display:inline-flex; align-items:center; gap:4px;">
                   <i class="fa-solid fa-phone"></i> कॉल
                 </a>
               </div>
@@ -4314,9 +4687,12 @@
               <div style="font-size:11px; color:#be185d; margin-top:2px;">
                 सुखी एवं मंगलमय दांपत्य जीवन की अनंत शुभकामनाएं!
               </div>
-              <div style="margin-top:6px; display:flex; gap:6px;">
-                <button onclick="shareMemberWish('anniversary', '${mem.name}', '${mem.whatsapp || mem.phone}')" style="background:#16a34a; color:white; border:none; padding:4px 9px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
-                  <i class="fa-brands fa-whatsapp"></i> बधाई भेजें
+              <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+                <button onclick="shareMemberWish('anniversary', '${mem.name}', '${mem.whatsapp || mem.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-brands fa-whatsapp"></i> व्यक्तिगत बधाई
+                </button>
+                <button onclick="shareMemberWish('anniversary', '${mem.name}', '${mem.whatsapp || mem.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-users"></i> ग्रुप में शेयर
                 </button>
               </div>
             </div>
@@ -4334,31 +4710,216 @@
 
       detailsEl.innerHTML = `
         <div class="selected-day-header">
-          <h4><i class="fa-solid fa-calendar-day" style="color:#2563eb;"></i> ${formattedDate}</h4>
-          <span style="font-size:11px; font-weight:700; color:#ea580c; background:#fff7ed; padding:1px 6px; border-radius:6px;">पंचांग विवरण</span>
+          <div>
+            <h4 style="margin:0;"><i class="fa-solid fa-calendar-day" style="color:#2563eb;"></i> ${formattedDate}</h4>
+            <div style="font-size:11px; color:#ea580c; font-weight:700; margin-top:2px;">
+              ${tithiInfo.full} • ${getHinduSamvat(y, m)}
+            </div>
+          </div>
+          <span style="font-size:11px; font-weight:700; color:#1e40af; background:#eff6ff; padding:2px 8px; border-radius:6px;">एकीकृत पंचांग</span>
         </div>
         ${eventsHtml}
       `;
     }
 
-    function shareFestivalWish(festivalName, wish) {
+    function shareFestivalWish(festivalName, wish, mode = 'group') {
       const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n*${festivalName}*\n\n${wish}\n\n📲 युवा शक्ति ऐप डाउनलोड करें:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
+      openWhatsAppUrl(url);
     }
 
-    function shareMemberWish(type, name, phone) {
+    function shareMemberWish(type, name, phone, mode = 'personal') {
+      const cleanPhone = (phone || '').replace(/\D/g, '');
+      const fullPhone = cleanPhone.startsWith('91') ? cleanPhone : ('91' + cleanPhone);
+      const cleanName = (name || '').replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').trim();
+
       let text = "";
       if (type === 'birthday') {
-        text = `🎂 *जन्मदिन की हार्दिक शुभकामनाएं!* 🎂\n\nआदरणीय *${name} जी*,\nयुवा शक्ति ग्रुप (भाटी परिवार कुचेरा) की ओर से आपको जन्मदिन की अनंत मंगलकामनाएं! ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु और अपार खुशियां प्रदान करें। 💐🎉\n\n🚩 *युवा शक्ति ग्रुप*`;
+        if (mode === 'group') {
+          text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n🎉 आज हमारे ग्रुप के आदरणीय सदस्य *${cleanName} जी* का *जन्मदिन* है!\n\nसमस्त भाटी परिवार की ओर से आपको जन्मदिन की अनंत कोटि शुभकामनाएं एवं मंगलकामनाएं! 🎂💐 ईश्वर आपको उत्तम स्वास्थ्य, सुख-समृद्धि एवं दीर्घायु प्रदान करें।\n\n🚩 *युवा शक्ति ग्रुप*`;
+        } else {
+          text = `🎂 *जन्मदिन की अनंत शुभकामनाएं!* 🎂\n\nआदरणीय *${cleanName} जी*,\nयुवा शक्ति ग्रुप (भाटी परिवार कुचेरा) की ओर से आपको जन्मदिन की हार्दिक शुभकामनाएं! ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु और अपार खुशियां प्रदान करें। 💐🎉\n\n🚩 *युवा शक्ति ग्रुप*`;
+        }
       } else {
-        text = `💍 *विवाह वर्षगांठ की हार्दिक बधाई!* 💍\n\nआदरणीय *${name} जी*,\nआपको विवाह वर्षगांठ की हार्दिक शुभकामनाएं! आपका दांपत्य जीवन सदैव प्रेम, विश्वास और खुशियों से परिपूर्ण रहे। 💐\n\n🚩 *युवा शक्ति ग्रुप*`;
+        if (mode === 'group') {
+          text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n💍 आज हमारे ग्रुप के आदरणीय सदस्य *${cleanName} जी* की *विवाह वर्षगांठ* है!\n\nसमस्त भाटी परिवार की ओर से सुखी एवं मंगलमय दांपत्य जीवन की अनंत शुभकामनाएं! 💐\n\n🚩 *युवा शक्ति ग्रुप*`;
+        } else {
+          text = `💍 *विवाह वर्षगांठ की हार्दिक बधाई!* 💍\n\nआदरणीय *${cleanName} जी*,\nआपको विवाह वर्षगांठ की हार्दिक मंगलकामनाएं! आपका दांपत्य जीवन सदैव प्रेम, विश्वास और खुशियों से परिपूर्ण रहे। 💐\n\n🚩 *युवा शक्ति ग्रुप*`;
+        }
       }
-      const cleanPhone = (phone || '').replace(/\D/g, '');
-      const url = cleanPhone ? 
-        `https://wa.me/${cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(text)}` :
-        `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
+
+      if (mode === 'group' || !cleanPhone) {
+        const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+        openWhatsAppUrl(url);
+      } else {
+        const url = `https://wa.me/${fullPhone}?text=${encodeURIComponent(text)}`;
+        openWhatsAppUrl(url);
+      }
+    }
+
+    function checkAndShowTodayCelebrations() {
+      const now = new Date();
+      const monthStr = String(now.getMonth() + 1).padStart(2, '0');
+      const dayStr = String(now.getDate()).padStart(2, '0');
+      const todayDateStr = `${now.getFullYear()}-${monthStr}-${dayStr}`;
+      const mmdd = `${monthStr}-${dayStr}`;
+
+      const bdaysToday = membersList.filter(m => m.dob && m.dob.endsWith(`-${mmdd}`));
+      const annivsToday = membersList.filter(m => m.anniversary && m.anniversary.endsWith(`-${mmdd}`));
+      const festivalToday = HINDU_FESTIVALS.find(f => f.date === todayDateStr);
+      const amavasyaToday = AMAVASYA_LIST.find(a => a.date === todayDateStr);
+      const nationalDayToday = GREGORIAN_DAYS.find(g => g.date === mmdd);
+
+      const hasCelebration = bdaysToday.length > 0 || annivsToday.length > 0 || festivalToday || amavasyaToday || nationalDayToday;
+      if (!hasCelebration) return;
+
+      const lastDismissed = sessionStorage.getItem("todayCelebrationDismissed");
+      if (lastDismissed === todayDateStr) return;
+
+      const contentBox = document.getElementById("todayCelebContent");
+      if (!contentBox) return;
+
+      let html = "";
+
+      if (bdaysToday.length > 0) {
+        bdaysToday.forEach(m => {
+          html += `
+            <div style="background:#fefce8; border:1px solid #fef08a; border-radius:10px; padding:10px; text-align:left;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:24px;">🎂</span>
+                <div>
+                  <strong style="color:#854d0e; font-size:14px;">${m.name} का जन्मदिन!</strong>
+                  <div style="font-size:11px; color:#a16207;">युवा शक्ति ग्रुप की ओर से हार्दिक मंगलकामनाएं!</div>
+                </div>
+              </div>
+              <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+                <button onclick="shareMemberWish('birthday', '${m.name}', '${m.whatsapp || m.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-brands fa-whatsapp"></i> व्यक्तिगत बधाई
+                </button>
+                <button onclick="shareMemberWish('birthday', '${m.name}', '${m.whatsapp || m.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-users"></i> ग्रुप में शेयर
+                </button>
+                <a href="tel:${m.phone}" style="background:#475569; color:white; text-decoration:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-phone"></i> कॉल
+                </a>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      if (annivsToday.length > 0) {
+        annivsToday.forEach(m => {
+          html += `
+            <div style="background:#fdf2f8; border:1px solid #fbcfe8; border-radius:10px; padding:10px; text-align:left;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:24px;">💍</span>
+                <div>
+                  <strong style="color:#9d174d; font-size:14px;">${m.name} की विवाह वर्षगांठ!</strong>
+                  <div style="font-size:11px; color:#be185d;">सुखी व मंगलमय दांपत्य जीवन की शुभकामनाएं!</div>
+                </div>
+              </div>
+              <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+                <button onclick="shareMemberWish('anniversary', '${m.name}', '${m.whatsapp || m.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-brands fa-whatsapp"></i> व्यक्तिगत बधाई
+                </button>
+                <button onclick="shareMemberWish('anniversary', '${m.name}', '${m.whatsapp || m.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-users"></i> ग्रुप में शेयर
+                </button>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      if (festivalToday) {
+        html += `
+          <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:10px; text-align:left;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:24px;">🚩</span>
+              <div>
+                <strong style="color:#c2410c; font-size:14px;">${festivalToday.name}</strong>
+                <div style="font-size:11px; color:#ea580c;">${festivalToday.tithi || 'पावन हिंदू पर्व'}</div>
+              </div>
+            </div>
+            <div style="font-size:11px; color:#78350f; font-style:italic; margin-top:6px; background:rgba(255,255,255,0.7); padding:6px; border-radius:6px;">
+              "${festivalToday.wish}"
+            </div>
+            <div style="margin-top:8px;">
+              <button onclick="sendFestivalGreeting('${festivalToday.name}', '${(festivalToday.wish || '').replace(/'/g, "\\'")}', 'group')" style="background:#16a34a; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-brands fa-whatsapp"></i> व्हाट्सएप पर शुभकामनाएं भेजें
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      if (amavasyaToday) {
+        html += `
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:10px; text-align:left;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:24px;">🌑</span>
+              <div>
+                <strong style="color:#1e40af; font-size:14px;">${amavasyaToday.name}</strong>
+                <div style="font-size:11px; color:#3b82f6;">मासिक सत्संग एवं अंशदान दिवस</div>
+              </div>
+            </div>
+            <div style="margin-top:8px; display:flex; gap:6px;">
+              <button onclick="closeTodayCelebrationModal(); openPhonePeModal('अंशदान - ' + '${amavasyaToday.name}')" class="btn-quick-phonepe" style="padding:6px 10px; font-size:11px;">
+                <i class="fa-solid fa-mobile-screen-button"></i> PhonePe अंशदान
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      if (nationalDayToday) {
+        html += `
+          <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:10px; text-align:left;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:24px;">🇮🇳</span>
+              <div>
+                <strong style="color:#15803d; font-size:14px;">${nationalDayToday.name}</strong>
+                <div style="font-size:11px; color:#16a34a;">${nationalDayToday.wish}</div>
+              </div>
+            </div>
+            <div style="margin-top:8px;">
+              <button onclick="sendFestivalGreeting('${nationalDayToday.name}', '${(nationalDayToday.wish || '').replace(/'/g, "\\'")}', 'group')" style="background:#16a34a; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-brands fa-whatsapp"></i> शुभकामनाएं शेयर करें
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      contentBox.innerHTML = html;
+      document.getElementById("todayCelebrationModal").style.display = "flex";
+
+      try {
+        if (window.AndroidApp && typeof window.AndroidApp.postNotification === 'function') {
+          let notifTitle = "🚩 युवा शक्ति ग्रुप - आज का विशेष दिन";
+          let notifMsg = "आज के उत्सव एवं सदस्यों की शुभकामनाएं ऐप में देखें";
+          if (bdaysToday.length > 0) {
+            notifTitle = `🎂 जन्मदिन की शुभकामनाएं: ${bdaysToday[0].name}`;
+            notifMsg = "युवा शक्ति ग्रुप की ओर से हार्दिक बधाई! व्हाट्सएप पर संदेश भेजें।";
+          } else if (festivalToday) {
+            notifTitle = `🚩 ${festivalToday.name}`;
+            notifMsg = festivalToday.wish;
+          }
+          window.AndroidApp.postNotification(notifTitle, notifMsg);
+        }
+      } catch (e) {
+        console.warn("Notification error:", e);
+      }
+    }
+
+    function closeTodayCelebrationModal() {
+      const now = new Date();
+      const monthStr = String(now.getMonth() + 1).padStart(2, '0');
+      const dayStr = String(now.getDate()).padStart(2, '0');
+      const todayDateStr = `${now.getFullYear()}-${monthStr}-${dayStr}`;
+      sessionStorage.setItem("todayCelebrationDismissed", todayDateStr);
+      document.getElementById("todayCelebrationModal").style.display = "none";
     }
 
     function renderCalendar() {
@@ -4477,15 +5038,25 @@
             <div class="event-right">
               <span class="days-badge ${isToday ? 'days-today' : 'days-upcoming'}">${daysText}</span>
               ${ev.category === 'birthday' ? `
-                <button class="btn-wish" onclick="sendGreeting('birthday', '${ev.name}', '${ev.phone}')">
-                  <i class="fa-brands fa-whatsapp"></i> बधाई
-                </button>
+                <div style="display:flex; gap:4px;">
+                  <button class="btn-wish" onclick="sendGreeting('birthday', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'personal')">
+                    <i class="fa-brands fa-whatsapp"></i> बधाई
+                  </button>
+                  <button class="btn-wish" style="background:#0284c7; padding:4px 7px;" onclick="sendGreeting('birthday', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'group')" title="ग्रुप में शेयर">
+                    <i class="fa-solid fa-users"></i>
+                  </button>
+                </div>
               ` : (ev.category === 'anniversary' ? `
-                <button class="btn-wish" onclick="sendGreeting('anniversary', '${ev.name}', '${ev.phone}')">
-                  <i class="fa-brands fa-whatsapp"></i> बधाई
-                </button>
+                <div style="display:flex; gap:4px;">
+                  <button class="btn-wish" onclick="sendGreeting('anniversary', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'personal')">
+                    <i class="fa-brands fa-whatsapp"></i> बधाई
+                  </button>
+                  <button class="btn-wish" style="background:#0284c7; padding:4px 7px;" onclick="sendGreeting('anniversary', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'group')" title="ग्रुप में शेयर">
+                    <i class="fa-solid fa-users"></i>
+                  </button>
+                </div>
               ` : `
-                <button class="btn-wish" style="background:#ea580c;" onclick="sendFestivalGreeting('${ev.name}', '${ev.wish || ''}')">
+                <button class="btn-wish" style="background:#ea580c;" onclick="sendFestivalGreeting('${(ev.name || '').replace(/'/g, "\\'")}', '${(ev.wish || '').replace(/'/g, "\\'")}', 'group')">
                   <i class="fa-brands fa-whatsapp"></i> शेयर
                 </button>
               `)}
@@ -4542,25 +5113,16 @@
       }
     }
 
-    function sendGreeting(type, name, phone) {
-      let cleanPhone = (phone || '').replace(/\D/g, '');
-      if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
-
-      let message = "";
-      if (type === 'birthday') {
-        message = `युवा शक्ति ग्रुप की ओर से आदरणीय ${name} जी को जन्मदिन की अनंत कोटि शुभकामनाएं एवं मंगलकामनाएं! 🎂🎉 ईश्वर आपको उत्तम स्वास्थ्य, सुख-समृद्धि एवं दीर्घायु प्रदान करें।💐`;
-      } else {
-        message = `युवा शक्ति ग्रुप की ओर से आदरणीय ${name} जी को विवाह वर्षगांठ की हार्दिक बधाई एवं शुभकामनाएं! 💐💍❤️ आपका दांपत्य जीवन सदैव प्रेम और खुशियों से परिपूर्ण रहे।`;
-      }
-
-      const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
-      window.open(url, '_blank');
+    function sendGreeting(type, name, phone, mode = 'personal') {
+      const cleanName = (name || '').replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').trim();
+      shareMemberWish(type, cleanName, phone, mode);
     }
 
-    function sendFestivalGreeting(festivalName, customWish) {
+    function sendFestivalGreeting(festivalName, customWish, mode = 'group') {
       const wish = customWish || `युवा शक्ति ग्रुप की ओर से आप सभी को ${festivalName} की हार्दिक शुभकामनाएं एवं बधाई!`;
-      const text = `🚩 *युवा शक्ति ग्रुप (कुचेरा)* 🚩\n\n✨ *${festivalName}* ✨\n\n${wish}\n\n_सप्रेम - युवा शक्ति ग्रुप परिवार_`;
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n✨ *${festivalName}* ✨\n\n${wish}\n\n📲 युवा शक्ति ऐप डाउनलोड करें:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh\n\n_सप्रेम - युवा शक्ति ग्रुप परिवार_`;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      openWhatsAppUrl(url);
     }
 
     function formatDisplayDate(dateStr) {
@@ -4666,7 +5228,7 @@
       const note = document.getElementById("phonepePayNote").value || "अमावस्या अंशदान";
       const today = new Date().toLocaleDateString('hi-IN');
       const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\nमैंने *₹${amount}* का अंशदान PhonePe / UPI द्वारा जमा कर दिया है।\n\n📅 *तारीख:* ${today}\n📝 *विवरण:* ${note}\n📲 *UPI ID:* ${currentUpiId}\n🔗 *व्हाट्सएप ग्रुप:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh\n\nकृपया इसे ग्रुप के बही-खाते में दर्ज करें। 🙏`;
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+      openWhatsAppUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
     }
 
     function recordInLedgerFromPhonePe() {
@@ -4719,6 +5281,7 @@
     updateSettingsUI();
     updateUpiDisplayEverywhere();
     setTimeout(() => {
+      checkAndShowTodayCelebrations();
       checkForAppUpdates(true);
     }, 1500);
   </script>

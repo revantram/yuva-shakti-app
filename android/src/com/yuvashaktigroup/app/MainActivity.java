@@ -67,6 +67,33 @@ public class MainActivity extends Activity {
         public void saveLedgerPdf(String summaryJson, String transactionsJson) {
             generateAndSaveLedgerPdf(summaryJson, transactionsJson);
         }
+
+        @JavascriptInterface
+        public void openWhatsApp(String url) {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(MainActivity.this, "व्हाट्सएप उपलब्ध नहीं है", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @JavascriptInterface
+        public void shareText(String text, String title) {
+            try {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                startActivity(Intent.createChooser(intent, title != null ? title : "शेयर करें"));
+            } catch (Exception e) {
+                Toast.makeText(MainActivity.this, "शेयर करने में त्रुटि", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @JavascriptInterface
+        public void postNotification(String title, String message) {
+            showSystemNotification(title, message);
+        }
     }
 
     @Override
@@ -649,6 +676,45 @@ public class MainActivity extends Activity {
                 out.write(buf, 0, len);
             }
         }
+    }
+
+    private void showSystemNotification(String title, String message) {
+        try {
+            android.app.NotificationManager nm = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (nm == null) return;
+            String channelId = "yuva_shakti_greetings";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                android.app.NotificationChannel channel = new android.app.NotificationChannel(
+                    channelId,
+                    "त्योहार व शुभकामनाएं",
+                    android.app.NotificationManager.IMPORTANCE_DEFAULT
+                );
+                channel.setDescription("जन्मदिन, वर्षगांठ एवं हिंदू पर्वों की सूचनाएं");
+                nm.createNotificationChannel(channel);
+            }
+
+            Intent notifyIntent = new Intent(this, MainActivity.class);
+            notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            android.app.PendingIntent pendingIntent = android.app.PendingIntent.getActivity(
+                this, 0, notifyIntent,
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? (android.app.PendingIntent.FLAG_IMMUTABLE | android.app.PendingIntent.FLAG_UPDATE_CURRENT) : android.app.PendingIntent.FLAG_UPDATE_CURRENT
+            );
+
+            android.app.Notification.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder = new android.app.Notification.Builder(this, channelId);
+            } else {
+                builder = new android.app.Notification.Builder(this);
+            }
+
+            builder.setContentTitle(title)
+                   .setContentText(message)
+                   .setSmallIcon(android.R.drawable.ic_dialog_info)
+                   .setAutoCancel(true)
+                   .setContentIntent(pendingIntent);
+
+            nm.notify(101, builder.build());
+        } catch (Exception ignored) {}
     }
 
     @Override
