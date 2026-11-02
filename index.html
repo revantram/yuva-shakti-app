@@ -955,81 +955,101 @@
       white-space: nowrap;
     }
 
-    /* iOS Liquid Glass Floating Dock Navigation Bar */
+    /* iOS 18 Liquid Glass Floating Dock Navigation Bar */
     .nav-bar {
       position: fixed;
-      bottom: 14px;
-      left: 14px;
-      right: 14px;
-      max-width: 480px;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      max-width: 460px;
       margin: 0 auto;
-      height: 62px;
-      background: rgba(255, 255, 255, 0.78);
-      backdrop-filter: blur(28px) saturate(200%);
-      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      height: 64px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(240, 246, 255, 0.82) 45%, rgba(255, 255, 255, 0.90) 100%);
+      backdrop-filter: blur(36px) saturate(220%);
+      -webkit-backdrop-filter: blur(36px) saturate(220%);
       border-radius: 36px;
-      border: 1px solid rgba(255, 255, 255, 0.75);
-      box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.12),
-                  0 2px 8px rgba(0, 0, 0, 0.04),
-                  inset 0 1px 1.5px rgba(255, 255, 255, 0.95);
+      border: 1.5px solid rgba(255, 255, 255, 0.98);
+      outline: 1.5px solid rgba(37, 99, 235, 0.20);
+      box-shadow: 0 20px 45px -4px rgba(15, 23, 42, 0.30),
+                  0 8px 22px -2px rgba(37, 99, 235, 0.25),
+                  inset 0 2px 3px rgba(255, 255, 255, 1),
+                  inset 0 -2px 3px rgba(37, 99, 235, 0.10);
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding: 4px 6px;
+      padding: 5px 8px;
       z-index: 1000;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    .nav-bar::before {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 28px;
+      right: 28px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 1), rgba(191, 219, 254, 0.95), transparent);
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
     .nav-item {
       flex: 1;
-      height: 50px;
-      border-radius: 25px;
+      height: 52px;
+      border-radius: 26px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 2px;
-      color: #8e8e93;
+      color: #475569;
       border: none;
       background: transparent;
       cursor: pointer;
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       padding: 2px 4px;
       user-select: none;
       -webkit-user-select: none;
+      position: relative;
     }
 
     .nav-item:active {
       transform: scale(0.92);
-      background: rgba(0, 0, 0, 0.04);
+      background: rgba(37, 99, 235, 0.08);
     }
 
     .nav-item i {
-      font-size: 18px;
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 19px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      color: #64748b;
     }
 
     .nav-item span {
       font-size: 10.5px;
-      font-weight: 500;
+      font-weight: 600;
       letter-spacing: -0.2px;
-      transition: color 0.2s;
+      transition: color 0.2s, font-weight 0.2s;
+      color: #64748b;
     }
 
     .nav-item.active {
-      color: #007aff;
-      background: rgba(0, 122, 255, 0.12);
-      box-shadow: inset 0 1px 2px rgba(0, 122, 255, 0.15);
+      color: #ffffff !important;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.6);
     }
 
     .nav-item.active i {
-      transform: scale(1.14);
-      filter: drop-shadow(0 2px 4px rgba(0, 122, 255, 0.35));
+      transform: scale(1.12);
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+      color: #ffffff !important;
     }
 
     .nav-item.active span {
       font-weight: 700;
-      color: #007aff;
+      color: #ffffff !important;
     }
 
     /* Tab views */
@@ -1091,9 +1111,10 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(2px);
-      z-index: 1000;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 1005;
       display: none;
       align-items: center;
       justify-content: center;
@@ -1101,13 +1122,16 @@
     }
 
     .modal-content {
-      background: white;
-      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-radius: 26px;
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 24px 50px -10px rgba(15, 23, 42, 0.35), 0 4px 12px rgba(0, 0, 0, 0.08);
       width: 100%;
-      max-width: 420px;
-      box-shadow: var(--shadow-lg);
-      padding: 18px;
-      animation: zoomIn 0.2s ease-out;
+      max-width: 440px;
+      padding: 20px;
+      animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes zoomIn {
@@ -1127,25 +1151,32 @@
       background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);
     }
     body.dark-theme .nav-bar {
-      background: rgba(28, 28, 30, 0.82);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 18px 40px -4px rgba(0, 0, 0, 0.5),
-                  0 2px 6px rgba(0, 0, 0, 0.2),
-                  inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.94) 0%, rgba(15, 23, 42, 0.88) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.24);
+      outline: 1.5px solid rgba(59, 130, 246, 0.35);
+      box-shadow: 0 24px 50px -4px rgba(0, 0, 0, 0.8),
+                  0 8px 24px rgba(37, 99, 235, 0.3),
+                  inset 0 2px 2px rgba(255, 255, 255, 0.3);
+    }
+    body.dark-theme .nav-bar::before {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
     }
     body.dark-theme .nav-item {
-      color: #8e8e93;
+      color: #94a3b8;
     }
-    body.dark-theme .nav-item:active {
-      background: rgba(255, 255, 255, 0.05);
+    body.dark-theme .nav-item i,
+    body.dark-theme .nav-item span {
+      color: #94a3b8;
     }
     body.dark-theme .nav-item.active {
-      color: #0a84ff;
-      background: rgba(10, 132, 255, 0.18);
-      box-shadow: inset 0 1px 2px rgba(10, 132, 255, 0.2);
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #ffffff !important;
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.6),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.45);
     }
+    body.dark-theme .nav-item.active i,
     body.dark-theme .nav-item.active span {
-      color: #0a84ff;
+      color: #ffffff !important;
     }
     body.dark-theme input,
     body.dark-theme select,
@@ -1206,7 +1237,11 @@
       border-bottom-color: #1e293b;
     }
     body.dark-theme .modal-content {
-      background: #151d30;
+      background: rgba(21, 29, 48, 0.95);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 26px 60px -8px rgba(0, 0, 0, 0.8);
       color: #f8fafc;
     }
     body.dark-theme .event-card {
@@ -1231,6 +1266,57 @@
     }
     body.dark-theme .phonepe-upi-row strong {
       color: #93c5fd !important;
+    }
+
+    /* Daily Suvichar & Welcome Modal Styles */
+    .suvichar-modal-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(254, 243, 199, 0.90) 100%);
+    }
+    .suvichar-quote-box {
+      background: rgba(255, 255, 255, 0.92);
+    }
+    .welcome-modal-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(239, 246, 255, 0.94) 100%);
+    }
+    .welcome-scroll-box {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    body.dark-theme .suvichar-modal-card {
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme .suvichar-quote-box {
+      background: rgba(30, 41, 59, 0.85) !important;
+      border-color: rgba(245, 158, 11, 0.3) !important;
+    }
+    body.dark-theme #dailySuvicharModal h3 {
+      color: #fbbf24 !important;
+    }
+    body.dark-theme #dailySuvicharModal #suvicharText {
+      color: #f8fafc !important;
+    }
+    body.dark-theme .welcome-modal-card {
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme .welcome-scroll-box {
+      background: rgba(30, 41, 59, 0.85) !important;
+      border-color: rgba(59, 130, 246, 0.3) !important;
+      color: #cbd5e1 !important;
+    }
+    body.dark-theme #firstTimeWelcomeModal h3 {
+      color: #60a5fa !important;
+    }
+    body.dark-theme #firstTimeWelcomeModal h4 {
+      color: #93c5fd !important;
+    }
+    body.dark-theme .suvichar-home-banner {
+      background: linear-gradient(135deg, rgba(69, 26, 3, 0.5) 0%, rgba(30, 41, 59, 0.8) 100%) !important;
+      border-color: rgba(245, 158, 11, 0.35) !important;
+    }
+    body.dark-theme .suvichar-home-banner #homeSuvicharPreview {
+      color: #fef3c7 !important;
     }
 
     /* Theme Card Selector in Settings */
@@ -1817,6 +1903,27 @@
     <!-- 1. सदस्य डायरेक्टरी टैब -->
     <div id="viewMembers" class="section-view active-view">
       
+      <!-- 🌟 Daily Suvichar Floating Capsule Banner -->
+      <div onclick="openDailySuvicharModal()" class="suvichar-home-banner" style="cursor:pointer; margin-bottom:12px; background:linear-gradient(135deg, rgba(254, 243, 199, 0.95) 0%, rgba(255, 251, 235, 0.92) 100%); border:1.5px solid #fde68a; border-radius:18px; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 6px 16px rgba(245, 158, 11, 0.12); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);">
+        <div style="display:flex; align-items:center; gap:10px; overflow:hidden;">
+          <div style="width:34px; height:34px; border-radius:12px; background:linear-gradient(135deg, #f59e0b, #d97706); display:flex; align-items:center; justify-content:center; color:white; font-size:15px; flex-shrink:0; box-shadow:0 3px 8px rgba(245, 158, 11, 0.3);">
+            <i class="fa-solid fa-quote-left"></i>
+          </div>
+          <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <div style="font-size:11px; font-weight:800; color:#b45309; display:flex; align-items:center; gap:5px;">
+              <span>आज का सुविचार</span> <span style="font-size:9.5px; background:#fde68a; color:#78350f; padding:1px 6px; border-radius:10px; font-weight:700;">दैनिक प्रेरणा</span>
+            </div>
+            <div id="homeSuvicharPreview" style="font-size:12px; color:#451a03; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:1px;">
+              संगठन में ही शक्ति है...
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+          <span style="font-size:11px; font-weight:700; color:#d97706;">पढ़ें</span>
+          <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#f59e0b;"></i>
+        </div>
+      </div>
+
       <!-- 🌙 Amavasya Live Countdown Card (Shown only on main tab) -->
       <div class="amavasya-card" id="amavasyaHeroCard">
         <div class="amavasya-header">
@@ -2172,7 +2279,7 @@
             </div>
             <span data-i18n="app_info_title">ऐप विवरण एवं डेवलपर जानकारी</span>
           </span>
-          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.2.6</span>
+          <span class="ios-value-badge ios-value-blue" style="font-size:11px; padding:2px 8px;">v4.2.7</span>
         </div>
         <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between;">
@@ -2185,7 +2292,7 @@
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.2.6 (नवीनतम रिलीज)</strong>
+            <strong style="color:var(--text-main);">v4.2.7 (नवीनतम रिलीज)</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>क्लाउड डेटाबेस:</span>
@@ -2238,6 +2345,40 @@
             </div>
             <div class="settings-item-right">
               <span class="ios-value-badge ios-value-orange" id="settingThemePreviewBadge">लाइट मोड</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
+
+          <!-- आज का सुविचार रो -->
+          <div class="settings-list-item" onclick="openDailySuvicharModal()">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile ios-icon-orange" style="background:linear-gradient(135deg, #f59e0b, #d97706); box-shadow:0 4px 10px rgba(245, 158, 11, 0.35);">
+                <i class="fa-solid fa-sun"></i>
+              </div>
+              <div>
+                <div style="font-weight:700; font-size:14px; color:var(--text-main);">आज का सुविचार (Daily Thought)</div>
+                <div style="font-size:11px; color:var(--text-muted);">दैनिक प्रेरक विचार पढ़ें व व्हाट्सएप पर शेयर करें</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a;">सुविचार</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
+
+          <!-- एप्लिकेशन उद्देश्य एवं परिचय रो -->
+          <div class="settings-list-item" onclick="openAppObjectiveModal()">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile ios-icon-green">
+                <i class="fa-solid fa-bullseye"></i>
+              </div>
+              <div>
+                <div style="font-weight:700; font-size:14px; color:var(--text-main);">ग्रुप उद्देश्य एवं परिचय (App Mission)</div>
+                <div style="font-size:11px; color:var(--text-muted);">पारिवारिक एकता, मासिक अंशदान व सहयोग नियम</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge ios-value-green">मार्गदर्शन</span>
               <i class="fa-solid fa-chevron-right ios-chevron"></i>
             </div>
           </div>
@@ -2670,10 +2811,132 @@
     </div>
   </div>
 
+  <!-- Daily Suvichar Modal (रोज का नया सुविचार) -->
+  <div class="modal-overlay" id="dailySuvicharModal" style="display:none; z-index:1005;">
+    <div class="modal-content suvichar-modal-card" style="max-width:440px; text-align:center; padding:22px 18px; border-radius:28px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:11px; font-weight:700; color:#b45309; background:#fef3c7; border:1px solid #fde68a; padding:4px 12px; border-radius:20px; display:inline-flex; align-items:center; gap:5px;">
+          <i class="fa-solid fa-sun" style="color:#f59e0b;"></i> <span id="suvicharDateDisplay">आज का विचार</span>
+        </span>
+        <button onclick="closeDailySuvicharModal()" style="background:rgba(0,0,0,0.06); border:none; border-radius:50%; width:30px; height:30px; cursor:pointer; font-size:14px; color:#64748b; display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div style="width:60px; height:60px; margin:0 auto 12px; border-radius:20px; background:linear-gradient(135deg, #f59e0b, #d97706); display:flex; align-items:center; justify-content:center; color:white; font-size:26px; box-shadow:0 10px 20px rgba(245, 158, 11, 0.35);">
+        <i class="fa-solid fa-quote-left"></i>
+      </div>
+
+      <h3 style="margin:0 0 10px; font-size:18px; font-weight:800; color:#78350f;">
+        ✨ आज का प्रेरक सुविचार ✨
+      </h3>
+
+      <div class="suvichar-quote-box" style="backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1.5px solid #fde68a; border-radius:18px; padding:18px 16px; margin:12px 0 16px; box-shadow:0 8px 20px rgba(245, 158, 11, 0.12);">
+        <p id="suvicharText" style="font-size:15px; line-height:1.7; color:#1e293b; font-weight:600; margin:0 0 10px; font-family:'Noto Sans Devanagari', -apple-system, sans-serif;">
+          "संगठन में ही शक्ति है। जब पूरा परिवार एक साथ कदम बढ़ाता है, तो कोई भी कठिनाई बड़ी नहीं होती।"
+        </p>
+        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #fcd34d; padding-top:8px; margin-top:8px;">
+          <span style="font-size:11px; color:#b45309; font-weight:700;">
+            <i class="fa-solid fa-feather-pointed"></i> <span id="suvicharAuthor">युवा शक्ति विचार वाटिका</span>
+          </span>
+          <button onclick="cycleNextSuvichar()" style="background:transparent; border:none; color:#d97706; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+            <i class="fa-solid fa-arrows-rotate"></i> अगला विचार
+          </button>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button onclick="shareDailySuvichar()" class="btn-primary" style="background:linear-gradient(135deg, #25d366, #16a34a); border:none; padding:11px; border-radius:14px; font-size:13px; font-weight:700; box-shadow:0 6px 16px rgba(37, 211, 102, 0.35); display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-brands fa-whatsapp" style="font-size:17px;"></i> व्हाट्सएप पर शेयर करें
+        </button>
+        <button onclick="closeDailySuvicharModal()" style="background:rgba(255, 255, 255, 0.9); border:1px solid #e2e8f0; color:#475569; padding:10px; border-radius:14px; font-size:12px; font-weight:700; cursor:pointer;">
+          शुभ दिन • आगे बढ़ें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- First Time Member Welcome & Objective Modal (प्रथम लॉगिन स्वागत व उद्देश्य) -->
+  <div class="modal-overlay" id="firstTimeWelcomeModal" style="display:none; z-index:1006;">
+    <div class="modal-content welcome-modal-card" style="max-width:440px; padding:22px 18px; border-radius:28px;">
+      <div style="text-align:center; margin-bottom:14px;">
+        <div style="width:62px; height:62px; margin:0 auto 10px; border-radius:22px; background:linear-gradient(135deg, #3b82f6, #1d4ed8); display:flex; align-items:center; justify-content:center; color:white; font-size:28px; box-shadow:0 10px 22px rgba(37, 99, 235, 0.35);">
+          <i class="fa-solid fa-hands-praying"></i>
+        </div>
+        <span style="font-size:11px; font-weight:700; color:#1d4ed8; background:#dbeafe; border:1px solid #bfdbfe; padding:3px 12px; border-radius:20px; display:inline-block; margin-bottom:6px;">
+          स्वागतम् • युवा शक्ति ग्रुप
+        </span>
+        <h3 id="welcomeMemberGreeting" style="margin:0 0 4px; font-size:18px; font-weight:800; color:#1e3a8a;">
+          नमस्ते सदस्य जी!
+        </h3>
+        <p style="margin:0; font-size:12px; color:#64748b;">
+          युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) के डिजिटल परिवार में आपका हार्दिक स्वागत है।
+        </p>
+      </div>
+
+      <div class="welcome-scroll-box" style="backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1.5px solid #bfdbfe; border-radius:18px; padding:14px; margin-bottom:16px; max-height:280px; overflow-y:auto; box-shadow:0 6px 16px rgba(30, 58, 138, 0.06);">
+        <h4 style="margin:0 0 10px; font-size:13px; font-weight:800; color:#1e40af; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-bullseye" style="color:#2563eb;"></i> इस एप्लिकेशन का उद्देश्य एवं महत्व:
+        </h4>
+
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:12px; color:#334155; line-height:1.5;">
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="background:#eff6ff; color:#2563eb; width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:12px;">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+              <strong style="color:#1e3a8a;">पारिवारिक एकता एवं जुड़ाव:</strong> भाटी परिवार कुचेरा के सभी बंधुओं और युवा पीढ़ी को एक मजबूत सूत्र में पिरोना ताकि दूर रहकर भी आपस में जुड़ाव बना रहे।
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="background:#ecfdf5; color:#059669; width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:12px;">
+              <i class="fa-solid fa-hand-holding-dollar"></i>
+            </div>
+            <div>
+              <strong style="color:#065f46;">मासिक अंशदान व पारदर्शी हिसाब:</strong> हर अमावस्या पर स्वेच्छा से जमा होने वाले अंशदान का 100% पारदर्शी डिजिटल रिकॉर्ड, जिसमें कोई भी सदस्य कभी भी अपनी व पूरे ग्रुप की पासबुक देख सकता है।
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="background:#fff7ed; color:#ea580c; width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:12px;">
+              <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <div>
+              <strong style="color:#9a3412;">संकट में पारस्परिक संबल:</strong> परिवार के किसी भी सदस्य को आकस्मिक आवश्यकता, स्वास्थ्य या सामाजिक कार्य में ग्रुप के सामूहिक कोष से त्वरित सहयोग प्रदान करना।
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="background:#faf5ff; color:#9333ea; width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:12px;">
+              <i class="fa-solid fa-cake-candles"></i>
+            </div>
+            <div>
+              <strong style="color:#6b21a8;">उत्सव, पर्व व वैदिक पंचांग:</strong> परिवार के सदस्यों के जन्मदिन, वैवाहिक वर्षगांठ और हिंदू वैदिक त्योहारों पर खुशियां बांटना और परस्पर बधाई देना।
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="background:#fef2f2; color:#dc2626; width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:12px;">
+              <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <div>
+              <strong style="color:#991b1b;">सुरक्षित व्यक्तिगत लॉगिन:</strong> आपका 4-अंकों का लॉगिन कोड केवल आपके पास सुरक्षित है, जिससे केवल आप ही अपना अंशदान जमा कर सकते हैं।
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="acknowledgeWelcomeModal()" class="btn-primary" style="width:100%; padding:12px; border-radius:14px; font-weight:700; font-size:13px; box-shadow:0 6px 18px rgba(37, 99, 235, 0.35); display:flex; align-items:center; justify-content:center; gap:8px;">
+        <i class="fa-solid fa-check"></i> मैं उद्देश्य समझ गया • आगे बढ़ें
+      </button>
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.2.6";
+    const APP_VERSION = "4.2.7";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -2702,7 +2965,135 @@
     let confirmCallback = null;
     let calendarFilter = "all";
 
-    // 4. Hindu Festivals Database (2026 - 2028)
+    // 4. Daily Inspiring Suvichar Database (31 Days Cycle)
+    const DAILY_SUVICHAR_LIST = [
+      {
+        quote: "संगठन में ही सबसे बड़ी शक्ति है। जब पूरा परिवार एक विचार और एक लक्ष्य के साथ चलता है, तो कोई भी संकट टिक नहीं सकता।",
+        author: "युवा शक्ति विचार सूत्र"
+      },
+      {
+        quote: "सच्चा धन भौतिक संपदा नहीं, बल्कि परिवार का आपसी प्रेम, अटूट विश्वास और परस्पर सम्मान है।",
+        author: "नीति वचन"
+      },
+      {
+        quote: "कर्म ही मनुष्य की सच्ची पहचान है। निष्ठा, ईमानदारी और सेवा भाव से किया गया छोटा सा प्रयास भी जीवन को महान बना देता है।",
+        author: "श्रीमद्भगवद्गीता ज्ञान"
+      },
+      {
+        quote: "धैर्य और संयम वो ढाल हैं, जो जीवन की सबसे विकट परिस्थितियों में भी मनुष्य को विचलित नहीं होने देते।",
+        author: "महापुरुष अमृत विचार"
+      },
+      {
+        quote: "मुस्कान और विनम्र वाणी वो अनमोल आभूषण हैं, जो बिना किसी खर्च के हर किसी के दिल को जीत लेते हैं।",
+        author: "सद्वाणी"
+      },
+      {
+        quote: "दान और अंशदान केवल धन का लेनदेन नहीं, बल्कि समाज और परिवार के प्रति हमारे समर्पण और अपनत्व का प्रतीक है।",
+        author: "युवा शक्ति जीवन दृष्टि"
+      },
+      {
+        quote: "अपनों के सुख में उत्सव मनाना और उनके दुख में सबसे आगे खड़े रहना ही एक आदर्श परिवार का सच्चा धर्म है।",
+        author: "पारिवारिक संस्कार"
+      },
+      {
+        quote: "समय अनमोल है; बीता हुआ पल कभी लौटकर नहीं आता। आज के शुभ संकल्प को कल पर कभी मत टालिए।",
+        author: "समय दर्शन"
+      },
+      {
+        quote: "ज्ञान से विनम्रता आती है, विनम्रता से योग्यता, और योग्यता से धर्म व सुख की प्राप्ति होती है।",
+        author: "विद्या सूत्र"
+      },
+      {
+        quote: "क्रोध में लिया गया निर्णय और अहंकार में बोला गया शब्द सदैव पश्चाताप का कारण बनता है। वाणी में संयम रखें।",
+        author: "शांति संदेश"
+      },
+      {
+        quote: "सफलता का कोई जादुई मार्ग नहीं होता; निरंतर कठिन परिश्रम, अनुशासन और सकारात्मक सोच ही विजय दिलाती है।",
+        author: "प्रेरणा सूत्र"
+      },
+      {
+        quote: "बड़ों का आशीर्वाद और छोटों का स्नेह, जीवन की वो अनमोल पूंजी है जो हर संकट में सुरक्षा कवच बनती है।",
+        author: "संस्कार वाटिका"
+      },
+      {
+        quote: "सेवा वह दीपक है, जो दूसरों के जीवन से अंधकार मिटाते हुए अपने मार्ग को भी आलोकित कर देता है।",
+        author: "सेवा संकल्प"
+      },
+      {
+        quote: "सत्य की नाव भले डगमगाए, लेकिन कभी डूबती नहीं। सत्य और धर्म के पथ पर चलने वाले सदैव विजयी होते हैं।",
+        author: "सत्यमेव जयते"
+      },
+      {
+        quote: "परिवर्तन संसार का शाश्वत नियम है। स्वयं को समय के साथ अधिक श्रेष्ठ, संवेदनशील और सक्षम बनाते रहें।",
+        author: "चिंतन धारा"
+      },
+      {
+        quote: "गलतियां इस बात का प्रमाण हैं कि आप प्रयास कर रहे हैं। गलतियों से सीखें और दुगुने उत्साह से आगे बढ़ें।",
+        author: "सकारात्मक विचार"
+      },
+      {
+        quote: "जिस घर और समूह में परस्पर संवाद, क्षमा और आदर का भाव होता है, वहां साक्षात ईश्वर का वास होता है।",
+        author: "पारिवारिक सद्भाव"
+      },
+      {
+        quote: "उत्साह और उमंग जीवन के वो पंख हैं, जिनकी मदद से हर ऊंची उड़ान और कठिन मंजिल संभव हो जाती है।",
+        author: "उत्साह दर्शन"
+      },
+      {
+        quote: "दूसरों की मदद के लिए उठे हाथ, प्रार्थना में जुड़े हाथों से कहीं अधिक पवित्र और पूजनीय होते हैं।",
+        author: "मानव धर्म"
+      },
+      {
+        quote: "स्वयं पर विश्वास ही सफलता की पहली सीढ़ी है। यदि मन में दृढ़ संकल्प है, तो कोई भी राह असंभव नहीं।",
+        author: "आत्मविश्वास सूत्र"
+      },
+      {
+        quote: "सादा जीवन और उच्च विचार ही मानव को सच्चा आदर, शांति और आत्मिक संतोष प्रदान करते हैं।",
+        author: "संत विचार"
+      },
+      {
+        quote: "प्रसन्नता कोई तैयार वस्तु नहीं है, यह आपके अपने सत्कर्मों, संतोषजनक विचारों और प्रेम से उत्पन्न होती है।",
+        author: "सुख रहस्य"
+      },
+      {
+        quote: "वृक्ष अपने फल स्वयं नहीं खाते और नदियां अपना जल स्वयं नहीं पीतीं; परोपकार ही जीवन का सर्वोच्च धर्म है।",
+        author: "परोपकार सूत्र"
+      },
+      {
+        quote: "कठिनाइयां जब आती हैं तो मनुष्य को तोड़ने नहीं, बल्कि उसकी आंतरिक सोई हुई शक्तियों को जगाने आती हैं।",
+        author: "संकल्प शक्ति"
+      },
+      {
+        quote: "एकता में वह शक्ति है जो साधारण तिनकों को जोड़कर एक शक्तिशाली रस्सी बना देती है, जिससे हाथी भी बंध जाता है।",
+        author: "संगठन संदेश"
+      },
+      {
+        quote: "अतीत को भुलाकर और भविष्य की व्यर्थ चिंता छोड़, वर्तमान के इस पावन पल में अपना सर्वश्रेष्ठ देने का प्रयास करें।",
+        author: "कर्मयोग"
+      },
+      {
+        quote: "मधुर वाणी और सहनशीलता वे दिव्य गुण हैं, जो पराए को भी अपना और शत्रु को भी मित्र बना लेते हैं।",
+        author: "वाणी संयम"
+      },
+      {
+        quote: "अपने अधिकारों से पहले अपने कर्तव्यों का ध्यान रखें; जब हर कोई कर्तव्य निभाएगा तो अधिकार स्वतः सुरक्षित होंगे।",
+        author: "कर्तव्य बोध"
+      },
+      {
+        quote: "हर नई सुबह एक नया अवसर लेकर आती है। नई ऊर्जा और नए संकल्प के साथ अपने दिन की शुरुआत करें।",
+        author: "प्रभात संदेश"
+      },
+      {
+        quote: "ईश्वर ने हमें जो कुछ भी दिया है, उसके प्रति कृतज्ञ रहें। संतोष ही सबसे बड़ा सुख और सबसे अनमोल धन है।",
+        author: "संतोष सूत्र"
+      },
+      {
+        quote: "युवा शक्ति किसी भी परिवार और समाज की रीढ़ होती है। सही दिशा में लगा युवा प्रयास पूरे कुल का नाम रोशन करता है।",
+        author: "युवा गौरव"
+      }
+    ];
+
+    // 5. Hindu Festivals Database (2026 - 2028)
     const HINDU_FESTIVALS = [
       // 2026
       { name: "मकर संक्रांति / उत्तरायण", date: "2026-01-14", tithi: "माघ संक्रांति", type: "festival", wish: "मकर संक्रांति की हार्दिक शुभकामनाएं! भगवान सूर्य देव आपके जीवन में सुख, स्वास्थ्य एवं समृद्धि लाएं।" },
@@ -3624,11 +4015,13 @@
       }
 
       try {
+        let isFirstTime = false;
         if (!member.pin) {
           await db.collection("members").doc(member.id).update({ pin: pin });
           localStorage.setItem("loggedInMemberPhone", phoneInput);
           loggedInMemberPhone = phoneInput;
           showToast(`नमस्ते ${member.name}! पिन सेट हो गया और आप लॉगिन हो गए।`, "success");
+          isFirstTime = true;
         } else if (member.pin === pin) {
           localStorage.setItem("loggedInMemberPhone", phoneInput);
           loggedInMemberPhone = phoneInput;
@@ -3639,9 +4032,108 @@
         }
         closeLoginModal();
         updateAuthUI();
+
+        // प्रथम लॉगिन स्वागत एवं उद्देश्य पॉपअप जांच
+        const welcomeKey = "welcomeSeen_" + phoneInput;
+        if (isFirstTime || !localStorage.getItem(welcomeKey)) {
+          setTimeout(() => {
+            openFirstTimeWelcomeModal(member.name, phoneInput);
+          }, 350);
+        }
       } catch (err) {
         showToast("त्रुटि: " + err.message, "error");
       }
+    }
+
+    // --- दैनिक सुविचार एवं प्रथम लॉगिन स्वागत लॉजिक ---
+    let currentSuvicharIndex = -1;
+    let currentWelcomePhone = null;
+
+    function getDailySuvichar(date = new Date()) {
+      const day = date.getDate();
+      const idx = (day - 1) % DAILY_SUVICHAR_LIST.length;
+      return DAILY_SUVICHAR_LIST[idx];
+    }
+
+    function updateHomeSuvicharSnippet() {
+      const item = getDailySuvichar();
+      const previewEl = document.getElementById("homeSuvicharPreview");
+      if (previewEl && item) {
+        previewEl.innerText = item.quote;
+      }
+    }
+
+    function openDailySuvicharModal(forcedIndex) {
+      const now = new Date();
+      if (typeof forcedIndex === 'number') {
+        currentSuvicharIndex = (forcedIndex + DAILY_SUVICHAR_LIST.length) % DAILY_SUVICHAR_LIST.length;
+      } else {
+        currentSuvicharIndex = (now.getDate() - 1) % DAILY_SUVICHAR_LIST.length;
+      }
+
+      const item = DAILY_SUVICHAR_LIST[currentSuvicharIndex];
+      const HINDI_MONTHS = ["जनवरी", "फरवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"];
+      const dateFormatted = `${now.getDate()} ${HINDI_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+
+      const dateDisp = document.getElementById("suvicharDateDisplay");
+      if (dateDisp) dateDisp.innerText = dateFormatted;
+
+      const textEl = document.getElementById("suvicharText");
+      if (textEl) textEl.innerText = `“${item.quote}”`;
+
+      const authorEl = document.getElementById("suvicharAuthor");
+      if (authorEl) authorEl.innerText = item.author;
+
+      const modal = document.getElementById("dailySuvicharModal");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function cycleNextSuvichar() {
+      openDailySuvicharModal(currentSuvicharIndex + 1);
+    }
+
+    function closeDailySuvicharModal() {
+      const modal = document.getElementById("dailySuvicharModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function shareDailySuvichar() {
+      const item = DAILY_SUVICHAR_LIST[currentSuvicharIndex >= 0 ? currentSuvicharIndex : (new Date().getDate() - 1) % DAILY_SUVICHAR_LIST.length];
+      const text = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author}*\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📱 आपसी एकता, मासिक अंशदान एवं पारिवारिक सहयोग`;
+      shareCustomText(text, "आज का सुविचार");
+    }
+
+    function checkDailySuvicharOnAppOpen() {
+      const sessionShown = sessionStorage.getItem("suvicharSessionShown");
+      if (!sessionShown) {
+        sessionStorage.setItem("suvicharSessionShown", "true");
+        setTimeout(() => {
+          openDailySuvicharModal();
+        }, 600);
+      }
+    }
+
+    function openFirstTimeWelcomeModal(memberName, phone) {
+      currentWelcomePhone = phone || loggedInMemberPhone;
+      const greetingEl = document.getElementById("welcomeMemberGreeting");
+      if (greetingEl) {
+        greetingEl.innerText = memberName ? `नमस्ते ${memberName} जी!` : "नमस्ते सदस्य जी!";
+      }
+      const modal = document.getElementById("firstTimeWelcomeModal");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function acknowledgeWelcomeModal() {
+      if (currentWelcomePhone) {
+        localStorage.setItem("welcomeSeen_" + currentWelcomePhone, "true");
+      }
+      const modal = document.getElementById("firstTimeWelcomeModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function openAppObjectiveModal() {
+      const self = loggedInMemberPhone ? membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone)) : null;
+      openFirstTimeWelcomeModal(self ? self.name : "भाटी परिवार सदस्य", loggedInMemberPhone);
     }
 
     function logoutMember() {
@@ -5522,6 +6014,8 @@
     updateAuthUI();
     updateSettingsUI();
     updateUpiDisplayEverywhere();
+    updateHomeSuvicharSnippet();
+    checkDailySuvicharOnAppOpen();
     setTimeout(() => {
       checkAndShowTodayCelebrations();
       checkForAppUpdates(true);
