@@ -334,6 +334,72 @@
       transform: scale(0.97);
     }
 
+    .btn-quick-phonepe {
+      background: linear-gradient(135deg, #5f259f 0%, #7b3eb8 100%);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: transform 0.15s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-quick-phonepe:active {
+      transform: scale(0.97);
+    }
+
+    .btn-phonepe-launch {
+      background: linear-gradient(135deg, #5f259f 0%, #4a1580 100%);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(95, 37, 159, 0.35);
+      transition: all 0.2s;
+    }
+
+    .btn-phonepe-launch:active {
+      opacity: 0.9;
+      transform: scale(0.98);
+    }
+
+    .btn-upi-launch {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+      transition: all 0.2s;
+    }
+
+    .btn-upi-launch:active {
+      opacity: 0.9;
+      transform: scale(0.98);
+    }
+
     /* Admin Banner */
     .admin-banner {
       background: linear-gradient(135deg, #dc2626, #b91c1c);
@@ -1097,6 +1163,17 @@
       color: #cbd5e1;
       border-color: #334155;
     }
+    body.dark-theme .phonepe-qr-box {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme .phonepe-upi-row {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    body.dark-theme .phonepe-upi-row strong {
+      color: #93c5fd !important;
+    }
 
     /* Theme Card Selector in Settings */
     .theme-grid {
@@ -1215,9 +1292,14 @@
           <div class="amavasya-subtext" id="amavasyaTithiDesc">
             <i class="fa-solid fa-om" style="color:#fbbf24;"></i> सत्संग व अंशदान दिवस
           </div>
-          <button class="btn-quick-contrib" onclick="quickFillAmavasya()">
-            <i class="fa-solid fa-hand-holding-dollar"></i> अंशदान जोड़ें
-          </button>
+          <div style="display:flex; gap:6px;">
+            <button class="btn-quick-phonepe" onclick="openPhonePeModal('अमावस्या अंशदान')">
+              <i class="fa-solid fa-mobile-screen-button"></i> PhonePe
+            </button>
+            <button class="btn-quick-contrib" onclick="quickFillAmavasya()">
+              <i class="fa-solid fa-hand-holding-dollar"></i> अंशदान जोड़ें
+            </button>
+          </div>
         </div>
       </div>
       
@@ -1259,6 +1341,22 @@
           <div class="ledger-label"><i class="fa-solid fa-vault"></i> उपलब्ध शेष</div>
           <div class="ledger-val" id="netBalance">₹0</div>
         </div>
+      </div>
+
+      <!-- PhonePe / UPI Quick Pay Card in Ledger -->
+      <div style="background:linear-gradient(135deg, #5f259f 0%, #3b1464 100%); color:white; border-radius:var(--radius); padding:12px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm);">
+        <div>
+          <div style="font-weight:700; font-size:13px; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-qrcode" style="color:#fbbf24; font-size:16px;"></i>
+            <span>PhonePe / UPI से ऑनलाइन अंशदान</span>
+          </div>
+          <div style="font-size:11px; opacity:0.85; margin-top:2px;">
+            UPI ID: <span id="ledgerUpiDisplay">7850983600@ibl</span>
+          </div>
+        </div>
+        <button onclick="openPhonePeModal('अमावस्या अंशदान')" style="background:#fbbf24; color:#5f259f; border:none; padding:8px 12px; border-radius:8px; font-weight:700; font-size:12px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">
+          <i class="fa-solid fa-mobile-screen-button"></i> PhonePe खोलें
+        </button>
       </div>
 
       <!-- Quick Action Tools for Ledger -->
@@ -1511,11 +1609,37 @@
         </div>
       </div>
 
+      <!-- PhonePe & UPI Settings Card -->
+      <div class="card">
+        <div class="card-title">
+          <span><i class="fa-solid fa-mobile-screen-button" style="color:#5f259f;"></i> PhonePe / UPI खाता सेटिंग्स</span>
+          <span class="badge" style="background:#f3e8ff; color:#6b21a8;">ऑनलाइन अंशदान</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+          ग्रुप के सदस्य सीधे PhonePe अथवा किसी भी UPI ऐप से अमावस्या अंशदान जमा कर सकते हैं।
+        </p>
+        <div class="phonepe-upi-row" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:11px; color:var(--text-muted);">प्राप्तकर्ता खाता:</div>
+            <strong style="font-size:13px; color:var(--text-main);" id="settingsUpiName">Yuva Shakti Bhati Parivar</strong>
+            <div style="font-size:12px; font-family:monospace; color:#5f259f; font-weight:700; margin-top:2px;" id="settingsUpiId">7850983600@ibl</div>
+          </div>
+          <button class="btn-tool" style="width:auto; padding:6px 12px; font-weight:700;" onclick="openPhonePeModal('ग्रुप अंशदान')">
+            <i class="fa-solid fa-qrcode"></i> QR देखें
+          </button>
+        </div>
+        <div id="adminUpiControlBox" style="display:none; flex-direction:column; gap:8px;">
+          <button class="btn-tool" onclick="promptChangeUpiId()" style="width:100%; border-color:#cbd5e1; font-weight:600;">
+            <i class="fa-solid fa-pen-to-square" style="color:#5f259f;"></i> UPI ID व नाम बदलें (Admin)
+          </button>
+        </div>
+      </div>
+
       <!-- App Info & Version -->
       <div class="card">
         <div class="card-title">
           <span><i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> ऐप विवरण एवं अपडेट</span>
-          <span class="badge" style="background:#e0f2fe; color:#0369a1;">v4.1.3</span>
+          <span class="badge" style="background:#e0f2fe; color:#0369a1;">v4.2.0</span>
         </div>
         <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between;">
@@ -1524,7 +1648,7 @@
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.1.3 (नवीनतम)</strong>
+            <strong style="color:var(--text-main);">v4.2.0 (नवीनतम)</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>क्लाउड डेटाबेस:</span>
@@ -1616,6 +1740,85 @@
     </div>
   </div>
 
+  <!-- PhonePe / UPI Payment Modal -->
+  <div class="modal-overlay" id="phonepeModal" style="display:none;">
+    <div class="modal-content" style="max-height:92vh; overflow-y:auto; padding:18px 16px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg, #5f259f, #7b3eb8); color:white; display:flex; align-items:center; justify-content:center; font-size:18px;">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+          <div>
+            <h3 style="font-size:15px; font-weight:800; color:var(--text-main);">PhonePe / UPI अंशदान</h3>
+            <div style="font-size:11px; color:var(--text-muted);" id="modalUpiReceiverSub">Yuva Shakti Bhati Parivar</div>
+          </div>
+        </div>
+        <button onclick="closePhonePeModal()" style="border:none; background:none; font-size:20px; color:#64748b; cursor:pointer; padding:2px 6px;">✕</button>
+      </div>
+
+      <!-- QR Code Display Box -->
+      <div class="phonepe-qr-box" style="text-align:center; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 10px; margin-bottom:14px;">
+        <div style="font-size:11px; color:var(--text-muted); font-weight:600; margin-bottom:6px;">
+          <i class="fa-solid fa-qrcode" style="color:#5f259f;"></i> किसी भी UPI ऐप (PhonePe / GPay / Paytm) से स्कैन करें
+        </div>
+        <div class="qr-container" style="background:white; padding:10px; border-radius:10px; display:inline-block; border:1px solid #cbd5e1; box-shadow:var(--shadow-sm);">
+          <img id="phonepeQrImg" src="" alt="UPI QR Code" style="width:180px; height:180px; display:block; margin:0 auto; object-fit:contain;">
+        </div>
+        <div style="font-size:14px; font-weight:800; color:#5f259f; margin-top:6px;" id="phonepeQrAmountTag">
+          राशि: ₹500
+        </div>
+      </div>
+
+      <!-- UPI ID Copy Row -->
+      <div class="phonepe-upi-row" style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div>
+          <div style="font-size:10px; color:#1e40af; font-weight:600;">ग्रुप की UPI ID:</div>
+          <strong style="font-size:13px; color:#1e3a8a; font-family:monospace;" id="modalUpiIdText">7850983600@ibl</strong>
+        </div>
+        <button type="button" onclick="copyUpiId()" id="btnCopyUpi" style="background:#2563eb; color:white; border:none; padding:6px 10px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+          <i class="fa-regular fa-copy"></i> कॉपी करें
+        </button>
+      </div>
+
+      <!-- Amount Selector -->
+      <div class="form-group" style="margin-bottom:10px;">
+        <label style="font-size:12px; font-weight:700;">अंशदान राशि (₹)</label>
+        <input type="number" id="phonepePayAmount" value="500" min="1" step="50" oninput="handlePhonePeAmountChange()" style="font-size:16px; font-weight:700; text-align:center;">
+        <div class="chips-group" style="justify-content:center; margin-top:6px;">
+          <button type="button" class="chip-btn" onclick="setPhonePeAmount(200)">₹200</button>
+          <button type="button" class="chip-btn" onclick="setPhonePeAmount(500)">₹500</button>
+          <button type="button" class="chip-btn" onclick="setPhonePeAmount(1000)">₹1000</button>
+          <button type="button" class="chip-btn" onclick="setPhonePeAmount(2100)">₹2100</button>
+        </div>
+      </div>
+
+      <!-- Note / Purpose -->
+      <div class="form-group" style="margin-bottom:14px;">
+        <label style="font-size:12px; font-weight:700;">विवरण / टिप्पणी (Note)</label>
+        <input type="text" id="phonepePayNote" value="अमावस्या अंशदान" oninput="handlePhonePeAmountChange()">
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-phonepe-launch" onclick="launchPhonePeApp()">
+          <i class="fa-solid fa-mobile-screen-button"></i> 📱 सीधे PhonePe में खोलें
+        </button>
+        
+        <button class="btn-upi-launch" onclick="launchGenericUpiApp()">
+          <i class="fa-solid fa-bolt"></i> अन्य UPI ऐप्स (GPay / Paytm / BHIM)
+        </button>
+
+        <button onclick="sharePaymentProofOnWA()" style="background:#16a34a; color:white; border:none; padding:10px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; margin-top:4px;">
+          <i class="fa-brands fa-whatsapp"></i> भुगतान के बाद व्हाट्सएप पर सूचना भेजें
+        </button>
+
+        <button onclick="recordInLedgerFromPhonePe()" style="background:white; color:#334155; border:1px solid #cbd5e1; padding:9px; border-radius:8px; font-weight:600; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <i class="fa-solid fa-receipt"></i> बही-खाते में दर्ज करें
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Custom Confirmation Dialog Modal -->
   <div class="modal-overlay" id="confirmModal">
     <div class="modal-content">
@@ -1631,7 +1834,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.1.3";
+    const APP_VERSION = "4.2.0";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -2044,6 +2247,14 @@
           adminToggleBtn.style.background = "#dc2626";
           if (changePinBtn) changePinBtn.style.display = "none";
         }
+      }
+
+      const adminUpiBox = document.getElementById("adminUpiControlBox");
+      if (adminUpiBox) {
+        adminUpiBox.style.display = isAdmin ? "flex" : "none";
+      }
+      if (typeof updateUpiDisplayEverywhere === "function") {
+        updateUpiDisplayEverywhere();
       }
     }
 
@@ -2848,11 +3059,145 @@
       return dateStr;
     }
 
+    // 14. PhonePe & UPI Integration Logic
+    let currentUpiId = localStorage.getItem('group_upi_id') || "7850983600@ibl";
+    let currentUpiName = localStorage.getItem('group_upi_name') || "Yuva Shakti Bhati Parivar";
+
+    function getUpiPayUrl(amount, note) {
+      const amt = (amount && amount > 0) ? amount.toString() : "500";
+      const nt = note || "अमावस्या अंशदान";
+      return `upi://pay?pa=${encodeURIComponent(currentUpiId)}&pn=${encodeURIComponent(currentUpiName)}&am=${encodeURIComponent(amt)}&cu=INR&tn=${encodeURIComponent(nt)}`;
+    }
+
+    function openPhonePeModal(defaultNote = "अमावस्या अंशदान", defaultAmount = 500) {
+      document.getElementById("phonepeModal").style.display = "flex";
+      document.getElementById("phonepePayAmount").value = defaultAmount;
+      document.getElementById("phonepePayNote").value = defaultNote;
+      updatePhonePeQr();
+    }
+
+    function closePhonePeModal() {
+      document.getElementById("phonepeModal").style.display = "none";
+    }
+
+    function setPhonePeAmount(val) {
+      document.getElementById("phonepePayAmount").value = val;
+      updatePhonePeQr();
+    }
+
+    function handlePhonePeAmountChange() {
+      updatePhonePeQr();
+    }
+
+    function updatePhonePeQr() {
+      const amount = Number(document.getElementById("phonepePayAmount").value) || 0;
+      const note = document.getElementById("phonepePayNote").value || "अमावस्या अंशदान";
+      const upiUrl = getUpiPayUrl(amount, note);
+
+      const qrImg = document.getElementById("phonepeQrImg");
+      const qrTag = document.getElementById("phonepeQrAmountTag");
+      const idText = document.getElementById("modalUpiIdText");
+      const receiverSub = document.getElementById("modalUpiReceiverSub");
+
+      if (idText) idText.innerText = currentUpiId;
+      if (receiverSub) receiverSub.innerText = currentUpiName;
+      if (qrTag) qrTag.innerText = amount > 0 ? `राशि: ₹${amount}` : `राशि दर्ज करें`;
+
+      // Generate dynamic QR code URL
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=1&data=${encodeURIComponent(upiUrl)}`;
+      if (qrImg) qrImg.src = qrApiUrl;
+    }
+
+    function launchPhonePeApp() {
+      const amount = Number(document.getElementById("phonepePayAmount").value) || 0;
+      const note = document.getElementById("phonepePayNote").value || "अमावस्या अंशदान";
+      const upiUrl = getUpiPayUrl(amount, note);
+      window.location.href = upiUrl;
+    }
+
+    function launchGenericUpiApp() {
+      const amount = Number(document.getElementById("phonepePayAmount").value) || 0;
+      const note = document.getElementById("phonepePayNote").value || "अमावस्या अंशदान";
+      const upiUrl = getUpiPayUrl(amount, note);
+      window.location.href = upiUrl;
+    }
+
+    function copyUpiId() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(currentUpiId).then(() => {
+          showToast(`UPI ID (${currentUpiId}) कॉपी हो गई!`, "success");
+        }).catch(() => fallbackCopyUpi());
+      } else {
+        fallbackCopyUpi();
+      }
+    }
+
+    function fallbackCopyUpi() {
+      const tempInput = document.createElement("input");
+      tempInput.value = currentUpiId;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      showToast(`UPI ID (${currentUpiId}) कॉपी हो गई!`, "success");
+    }
+
+    function sharePaymentProofOnWA() {
+      const amount = document.getElementById("phonepePayAmount").value || "500";
+      const note = document.getElementById("phonepePayNote").value || "अमावस्या अंशदान";
+      const today = new Date().toLocaleDateString('hi-IN');
+      const text = `🚩 *युवा शक्ति ग्रुप (कुचेरा)* 🚩\n\nमैंने *₹${amount}* का अंशदान PhonePe / UPI द्वारा जमा कर दिया है।\n\n📅 *तारीख:* ${today}\n📝 *विवरण:* ${note}\n📲 *UPI ID:* ${currentUpiId}\n\nकृपया इसे ग्रुप के बही-खाते में दर्ज करें। 🙏`;
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function recordInLedgerFromPhonePe() {
+      const amount = document.getElementById("phonepePayAmount").value || "500";
+      const note = document.getElementById("phonepePayNote").value || "अमावस्या अंशदान";
+      closePhonePeModal();
+      switchTab('ledger');
+      document.getElementById("transAmount").value = amount;
+      document.getElementById("transPayMethod").value = "PhonePe / GPay / UPI";
+      document.getElementById("transDesc").value = note;
+      document.getElementById("transType").value = "contribution";
+      handleTransTypeChange();
+      setTodayDate('transDate');
+      showToast(`बही-खाता फॉर्म में ₹${amount} PhonePe अंशदान भरा गया।`, "info");
+    }
+
+    function promptChangeUpiId() {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल व्यवस्थापक के लिए है।", "error");
+        return;
+      }
+      const newId = prompt("ग्रुप की नई UPI ID दर्ज करें:", currentUpiId);
+      if (newId && newId.trim()) {
+        const newName = prompt("प्राप्तकर्ता का नाम दर्ज करें:", currentUpiName);
+        currentUpiId = newId.trim();
+        if (newName && newName.trim()) {
+          currentUpiName = newName.trim();
+        }
+        localStorage.setItem('group_upi_id', currentUpiId);
+        localStorage.setItem('group_upi_name', currentUpiName);
+        updateUpiDisplayEverywhere();
+        showToast("UPI ID सफलतापूर्वक अपडेट हो गई!", "success");
+      }
+    }
+
+    function updateUpiDisplayEverywhere() {
+      const ledgerDisplay = document.getElementById("ledgerUpiDisplay");
+      const settingsId = document.getElementById("settingsUpiId");
+      const settingsName = document.getElementById("settingsUpiName");
+      if (ledgerDisplay) ledgerDisplay.innerText = currentUpiId;
+      if (settingsId) settingsId.innerText = currentUpiId;
+      if (settingsName) settingsName.innerText = currentUpiName;
+    }
+
     // Initialize UI, Theme, Settings, and Check for Updates on App Launch
     const savedTheme = localStorage.getItem('appTheme') || 'light';
     setAppTheme(savedTheme);
     updateAuthUI();
     updateSettingsUI();
+    updateUpiDisplayEverywhere();
     setTimeout(() => {
       checkForAppUpdates(true);
     }, 1500);

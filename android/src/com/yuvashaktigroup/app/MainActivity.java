@@ -40,6 +40,39 @@ public class MainActivity extends Activity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url == null) return false;
 
+                // Handle PhonePe & UPI payments
+                if (url.startsWith("upi://") || url.startsWith("phonepe://")) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(intent);
+                        return true;
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, "PhonePe / UPI ऐप नहीं मिला", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                }
+
+                // Handle intent:// schemes
+                if (url.startsWith("intent://")) {
+                    try {
+                        Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                        if (intent != null) {
+                            if (getPackageManager().resolveActivity(intent, 0) != null) {
+                                startActivity(intent);
+                                return true;
+                            }
+                            String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                            if (fallbackUrl != null) {
+                                view.loadUrl(fallbackUrl);
+                                return true;
+                            }
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, "ऐप खोलने में असमर्थ", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                }
+
                 // Handle telephone calls
                 if (url.startsWith("tel:")) {
                     try {
@@ -73,6 +106,17 @@ public class MainActivity extends Activity {
                     } catch (Exception e) {
                         Toast.makeText(MainActivity.this, "इंस्टाग्राम खोलने में असमर्थ", Toast.LENGTH_SHORT).show();
                         return true;
+                    }
+                }
+
+                // Handle APK downloads and external releases
+                if (url.endsWith(".apk") || url.contains("/releases/download/")) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(intent);
+                        return true;
+                    } catch (Exception e) {
+                        // ignore
                     }
                 }
 
