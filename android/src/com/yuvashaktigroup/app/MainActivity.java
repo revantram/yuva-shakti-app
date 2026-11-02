@@ -498,13 +498,15 @@ public class MainActivity extends Activity {
                     paint.setColor(Color.WHITE);
                     paint.setTextSize(16);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    String title = isEnglish ? "Yuva Shakti Group (Bhati Parivar Kuchera)" : "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)";
+                    String defaultTitle = isEnglish ? "Yuva Shakti Group (Bhati Parivar Kuchera)" : "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)";
+                    String title = summary.optString("title", defaultTitle);
                     canvas.drawText(title, 50, 64, paint);
 
                     paint.setColor(Color.parseColor("#fbbf24"));
                     paint.setTextSize(11);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    String sub = isEnglish ? "Official Ledger & Financial Statement" : "आधिकारिक बही-खाता एवं आय-व्यय रिपोर्ट";
+                    String defaultSub = isEnglish ? "Official Ledger & Financial Statement" : "आधिकारिक बही-खाता एवं आय-व्यय रिपोर्ट";
+                    String sub = summary.optString("subTitle", defaultSub);
                     canvas.drawText(sub, 50, 82, paint);
 
                     paint.setColor(Color.parseColor("#e0e7ff"));
@@ -641,13 +643,14 @@ public class MainActivity extends Activity {
                         downloadDir.mkdirs();
                     }
                     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-                    File pdfFile = new File(downloadDir, "Yuva_Shakti_BahiKhata_" + timeStamp + ".pdf");
+                    String prefix = summary.optString("filePrefix", "Yuva_Shakti_BahiKhata_");
+                    File pdfFile = new File(downloadDir, prefix + timeStamp + ".pdf");
 
                     try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
                         document.writeTo(fos);
                     }
 
-                    File fixedPdf = new File(downloadDir, "Yuva_Shakti_BahiKhata.pdf");
+                    File fixedPdf = new File(downloadDir, prefix.replaceAll("_$", "") + ".pdf");
                     copyFile(pdfFile, fixedPdf);
 
                     // 6. Media Scan & Download Manager registration

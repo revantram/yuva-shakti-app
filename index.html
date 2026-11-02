@@ -1448,20 +1448,19 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
-    /*  iPhone Liquid Glass Calendar Box & Dynamic Glass Tiles */
+    /* 🌑  iPhone Liquid Glass Calendar Box (Halka Black Theme) */
     .ios-liquid-calendar-box,
     #hinduCalendarCard {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(240, 247, 255, 0.72) 40%, rgba(245, 243, 255, 0.75) 100%);
+      background: linear-gradient(145deg, #18202f 0%, #0f172a 45%, #111a28 100%) !important;
       backdrop-filter: blur(36px) saturate(210%);
       -webkit-backdrop-filter: blur(36px) saturate(210%);
-      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
       border-radius: 26px;
       padding: 16px 14px;
       margin-bottom: 16px;
-      box-shadow: 0 20px 48px -10px rgba(15, 23, 42, 0.12),
-                  0 0 0 1px rgba(56, 189, 248, 0.18),
-                  inset 0 1.5px 2px rgba(255, 255, 255, 1),
-                  inset 0 -1.5px 3px rgba(0, 122, 255, 0.06);
+      box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.45),
+                  0 0 0 1px rgba(255, 255, 255, 0.08),
+                  inset 0 1.5px 2px rgba(255, 255, 255, 0.12);
       position: relative;
       overflow: hidden;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1474,7 +1473,7 @@
       right: -50px;
       width: 170px;
       height: 170px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(99, 102, 241, 0.18) 45%, transparent 70%);
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(99, 102, 241, 0.09) 45%, transparent 70%);
       border-radius: 50%;
       filter: blur(18px);
       pointer-events: none;
@@ -1487,26 +1486,10 @@
       left: -50px;
       width: 180px;
       height: 180px;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(234, 88, 12, 0.14) 45%, transparent 70%);
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
       border-radius: 50%;
       filter: blur(22px);
       pointer-events: none;
-    }
-    body.dark-mode .ios-liquid-calendar-box,
-    body.dark-mode #hinduCalendarCard {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.72) 0%, rgba(15, 23, 42, 0.82) 50%, rgba(30, 27, 75, 0.78) 100%);
-      border: 1.5px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 24px 55px -10px rgba(0, 0, 0, 0.65),
-                  0 0 0 1px rgba(99, 102, 241, 0.25),
-                  inset 0 1px 1px rgba(255, 255, 255, 0.18);
-    }
-    body.dark-mode .ios-liquid-calendar-box::before,
-    body.dark-mode #hinduCalendarCard::before {
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, rgba(99, 102, 241, 0.12) 50%, transparent 70%);
-    }
-    body.dark-mode .ios-liquid-calendar-box::after,
-    body.dark-mode #hinduCalendarCard::after {
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.16) 0%, transparent 70%);
     }
 
     .calendar-nav-header {
@@ -1515,19 +1498,16 @@
       justify-content: space-between;
       margin-bottom: 10px;
       padding-bottom: 8px;
-      border-bottom: 1px solid rgba(0, 122, 255, 0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
       position: relative;
       z-index: 1;
     }
-    body.dark-mode .calendar-nav-header {
-      border-bottom-color: rgba(255, 255, 255, 0.1);
-    }
     .cal-nav-btn {
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.1) !important;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1.2px solid rgba(255, 255, 255, 0.95);
-      color: #0369a1;
+      border: 1.2px solid rgba(255, 255, 255, 0.18) !important;
+      color: #ffffff !important;
       width: 38px;
       height: 38px;
       border-radius: 50%;
@@ -1536,14 +1516,8 @@
       justify-content: center;
       cursor: pointer;
       font-size: 14px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), inset 0 1px 1px rgba(255, 255, 255, 1);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    body.dark-mode .cal-nav-btn {
-      background: rgba(51, 65, 85, 0.75);
-      color: #7dd3fc;
-      border-color: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.12);
     }
     .cal-nav-btn:active {
       transform: scale(0.9);
@@ -1554,37 +1528,29 @@
     .calendar-month-title h3 {
       font-size: 17px;
       font-weight: 800;
-      color: #0f172a;
+      color: #ffffff !important;
       line-height: 1.2;
       letter-spacing: -0.3px;
       margin: 0;
-    }
-    body.dark-mode .calendar-month-title h3 {
-      color: #f8fafc;
     }
     .cal-hindu-tithi-sub {
       display: inline-block;
       font-size: 11px;
       font-weight: 700;
-      color: #b45309;
-      background: rgba(245, 158, 11, 0.14);
-      border: 1px solid rgba(245, 158, 11, 0.28);
+      color: #fde047 !important;
+      background: rgba(245, 158, 11, 0.18) !important;
+      border: 1px solid rgba(245, 158, 11, 0.35) !important;
       padding: 2px 9px;
       border-radius: 12px;
       margin-top: 4px;
       letter-spacing: 0.2px;
     }
-    body.dark-mode .cal-hindu-tithi-sub {
-      color: #fef08a;
-      background: rgba(245, 158, 11, 0.18);
-      border-color: rgba(245, 158, 11, 0.35);
-    }
     .btn-today-pill {
-      background: linear-gradient(135deg, rgba(239, 246, 255, 0.85) 0%, rgba(219, 234, 254, 0.85) 100%);
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.6) 0%, rgba(14, 116, 144, 0.5) 100%) !important;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1.2px solid rgba(147, 197, 253, 0.8);
-      color: #0284c7;
+      border: 1.2px solid rgba(56, 189, 248, 0.4) !important;
+      color: #38bdf8 !important;
       font-size: 11.5px;
       font-weight: 700;
       padding: 5px 14px;
@@ -1593,14 +1559,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    body.dark-mode .btn-today-pill {
-      background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(14, 116, 144, 0.45) 100%);
-      border-color: rgba(56, 189, 248, 0.4);
-      color: #7dd3fc;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15);
     }
     .btn-today-pill:active {
       transform: scale(0.93);
@@ -1611,30 +1571,22 @@
       gap: 4px;
       text-align: center;
       margin-bottom: 8px;
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(15, 23, 42, 0.75) !important;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-radius: 14px;
       padding: 6px 2px;
-      border: 1px solid rgba(255, 255, 255, 0.85);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-    }
-    body.dark-mode .calendar-weekdays-grid {
-      background: rgba(30, 41, 59, 0.65);
-      border-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
     .cal-weekday {
       font-size: 11.5px;
       font-weight: 800;
-      color: #475569;
+      color: #cbd5e1 !important;
       padding: 2px 0;
     }
-    body.dark-mode .cal-weekday {
-      color: #cbd5e1;
-    }
     .cal-weekday.sun {
-      color: #ef4444 !important;
+      color: #f87171 !important;
     }
     .calendar-days-grid {
       display: grid;
@@ -1643,10 +1595,10 @@
     }
     .calendar-day {
       min-height: 54px;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(30, 41, 59, 0.75) !important;
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border: 1.2px solid rgba(255, 255, 255, 0.9);
+      border: 1.2px solid rgba(255, 255, 255, 0.09) !important;
       border-radius: 13px;
       padding: 4px 2px;
       display: flex;
@@ -1656,7 +1608,7 @@
       cursor: pointer;
       position: relative;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
     }
     body.dark-mode .calendar-day {
       background: rgba(30, 41, 59, 0.68);
@@ -1699,11 +1651,11 @@
     .cal-day-num {
       font-size: 13px;
       font-weight: 800;
-      color: var(--text-main);
+      color: #f8fafc !important;
       line-height: 1.2;
     }
     .calendar-day.sun .cal-day-num {
-      color: #dc2626;
+      color: #f87171 !important;
     }
     .cal-day-dots {
       display: flex;
@@ -1725,26 +1677,26 @@
       padding: 0 1px;
     }
     .calendar-day.has-amavasya {
-      border: 1.4px solid #60a5fa !important;
-      background: linear-gradient(135deg, rgba(239, 246, 255, 0.88) 0%, rgba(219, 234, 254, 0.85) 100%) !important;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.18) !important;
+      border: 1.4px solid #38bdf8 !important;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%) !important;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25) !important;
     }
     body.dark-mode .calendar-day.has-amavasya {
-      background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(30, 27, 75, 0.5) 100%) !important;
-      border-color: #3b82f6 !important;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%) !important;
+      border-color: #38bdf8 !important;
     }
     .calendar-day.has-festival {
-      border: 1.4px solid #fb923c !important;
-      background: linear-gradient(135deg, rgba(255, 247, 237, 0.88) 0%, rgba(254, 215, 170, 0.85) 100%) !important;
-      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.18) !important;
+      border: 1.4px solid rgba(249, 115, 22, 0.6) !important;
+      background: linear-gradient(135deg, rgba(67, 20, 7, 0.75) 0%, rgba(124, 45, 18, 0.55) 100%) !important;
+      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.25) !important;
     }
     body.dark-mode .calendar-day.has-festival {
-      background: linear-gradient(135deg, rgba(124, 45, 18, 0.4) 0%, rgba(154, 52, 18, 0.35) 100%) !important;
+      background: linear-gradient(135deg, rgba(67, 20, 7, 0.75) 0%, rgba(124, 45, 18, 0.55) 100%) !important;
       border-color: #ea580c !important;
     }
     .calendar-day.has-birthday {
       border: 1.6px solid #f59e0b !important;
-      background: linear-gradient(145deg, rgba(255, 251, 235, 0.92) 0%, rgba(254, 243, 199, 0.88) 100%) !important;
+      background: linear-gradient(145deg, rgba(120, 53, 15, 0.5) 0%, rgba(180, 83, 9, 0.4) 100%) !important;
       box-shadow: 0 3px 12px rgba(245, 158, 11, 0.28) !important;
     }
     body.dark-mode .calendar-day.has-birthday {
@@ -1768,7 +1720,7 @@
     .cal-tithi-name {
       font-size: 8px;
       font-weight: 700;
-      color: #ea580c;
+      color: #f59e0b !important;
       line-height: 1.1;
       margin-top: 1px;
       white-space: nowrap;
@@ -2076,13 +2028,15 @@
       background: rgba(10, 132, 255, 0.16);
     }
 
-    /* Selected Day Details Card */
+    /* Selected Day Details Card (Halka Black Theme) */
     .selected-day-card {
       margin-top: 12px;
       padding: 12px;
-      border-radius: 10px;
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.88) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      color: #f1f5f9 !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
     .selected-day-header {
       display: flex;
@@ -2090,12 +2044,12 @@
       align-items: center;
       margin-bottom: 8px;
       padding-bottom: 6px;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
     .selected-day-header h4 {
       font-size: 13px;
       font-weight: 700;
-      color: var(--text-main);
+      color: #ffffff !important;
     }
 
     /* Dark Theme Extras */
@@ -2379,17 +2333,16 @@
           <div style="font-size:10px; color:#ef4444; margin-top:3px; font-weight:600;">सामग्री व व्यवस्था व्यय</div>
         </div>
 
-        <!-- Side 2: उपलब्ध कुल कोष (बाकी बचे पैसे - संपादन योग्य) -->
+        <!-- Side 2: बाकी बचे पैसे (संपादन योग्य) -->
         <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(5, 150, 105, 0.05) 100%); border:1px solid rgba(16, 185, 129, 0.3); border-radius:18px; padding:14px 10px; text-align:center; box-shadow:0 4px 16px rgba(16,185,129,0.08); position:relative;">
           <div style="font-size:12px; font-weight:700; color:#059669; display:flex; align-items:center; justify-content:center; gap:5px; margin-bottom:6px;">
             <i class="fa-solid fa-vault" style="font-size:13px;"></i>
-            <span>उपलब्ध कुल कोष</span>
-            <button id="btnEditOpeningBalance" onclick="promptEditOpeningBalance()" style="display:none; background:rgba(5,150,105,0.18); border:none; border-radius:50%; width:22px; height:22px; color:#047857; font-size:11px; cursor:pointer;" title="उपलब्ध कुल कोष बदलें (Admin)">
+            <span>बाकी बचे पैसे</span>
+            <button id="btnEditOpeningBalance" onclick="promptEditOpeningBalance()" style="display:none; background:rgba(5,150,105,0.18); border:none; border-radius:50%; width:22px; height:22px; color:#047857; font-size:11px; cursor:pointer;" title="बाकी बचे पैसे बदलें (Admin)">
               <i class="fa-solid fa-pen"></i>
             </button>
           </div>
           <div id="remainingBalanceAmount" style="font-size:22px; font-weight:900; color:#047857; letter-spacing:-0.5px;">₹1,963</div>
-          <div id="expenseFundSub" style="font-size:9.5px; color:#059669; margin-top:3px; font-weight:600;">बाकी बचे पैसे: ₹1,963</div>
         </div>
       </div>
 
@@ -2416,22 +2369,31 @@
 
         <!-- Collapsible Ganesh Details -->
         <div id="ganeshVisarjanDetails" style="display:none; padding:12px 14px 14px; border-top:1px dashed #fcd34d; background:rgba(255, 255, 255, 0.75);">
-          <!-- 3 Distinct Stat Metrics for Ganesh Visarjan -->
+          <!-- 3 Distinct Stat Metrics for Ganesh Visarjan: 1. आय, 2. कुल खर्च, 3. बाकी बचे पैसे (All Admin Editable) -->
           <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;">
-            <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:12px; padding:8px 6px; text-align:center;">
-              <div style="font-size:10px; color:#9f1239; font-weight:700;">1. कुल विसर्जन खर्च</div>
-              <div id="ganeshStatExpense" style="font-size:13.5px; font-weight:800; color:#e11d48; margin-top:2px;">₹0</div>
-            </div>
+            <!-- Box 1: चंदा व आरती आय -->
             <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:8px 6px; text-align:center; position:relative;">
-              <div style="font-size:10px; color:#065f46; font-weight:700;">2. चंदा व आरती आय</div>
-              <div id="ganeshStatIncome" style="font-size:13.5px; font-weight:800; color:#059669; margin-top:2px;">₹0</div>
+              <div style="font-size:10px; color:#065f46; font-weight:700;">1. चंदा व आरती आय</div>
+              <div id="ganeshStatIncome" style="font-size:13.5px; font-weight:800; color:#059669; margin-top:2px;">₹15,830</div>
               <button id="btnEditGaneshIncome" onclick="promptEditGaneshIncome()" style="display:none; position:absolute; top:2px; right:3px; background:transparent; border:none; color:#047857; font-size:10px; cursor:pointer;" title="आय राशि बदलें (संचालक)">
                 <i class="fa-solid fa-pen"></i>
               </button>
             </div>
-            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:8px 6px; text-align:center;">
+            <!-- Box 2: कुल विसर्जन खर्च -->
+            <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:12px; padding:8px 6px; text-align:center; position:relative;">
+              <div style="font-size:10px; color:#9f1239; font-weight:700;">2. कुल विसर्जन खर्च</div>
+              <div id="ganeshStatExpense" style="font-size:13.5px; font-weight:800; color:#e11d48; margin-top:2px;">₹14,640</div>
+              <button id="btnEditGaneshExpense" onclick="promptEditGaneshExpense()" style="display:none; position:absolute; top:2px; right:3px; background:transparent; border:none; color:#b91c1c; font-size:10px; cursor:pointer;" title="विसर्जन खर्च बदलें (संचालक)">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+            </div>
+            <!-- Box 3: बाकी बचे पैसे -->
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:8px 6px; text-align:center; position:relative;">
               <div style="font-size:10px; color:#15803d; font-weight:700;">3. बाकी बचे पैसे</div>
-              <div id="ganeshStatRemaining" style="font-size:13.5px; font-weight:800; color:#16a34a; margin-top:2px;">₹0</div>
+              <div id="ganeshStatRemaining" style="font-size:13.5px; font-weight:800; color:#16a34a; margin-top:2px;">₹1,190</div>
+              <button id="btnEditGaneshRemaining" onclick="promptEditGaneshRemaining()" style="display:none; position:absolute; top:2px; right:3px; background:transparent; border:none; color:#15803d; font-size:10px; cursor:pointer;" title="बाकी बचे पैसे बदलें (संचालक)">
+                <i class="fa-solid fa-pen"></i>
+              </button>
             </div>
           </div>
 
@@ -2439,9 +2401,14 @@
             <span style="font-size:11.5px; font-weight:700; color:#78350f;">
               <i class="fa-solid fa-list-check"></i> विसर्जन खर्च सूची (<span id="ganeshItemCount">0 मद</span>)
             </span>
-            <button id="btnAddGaneshExpenseBtn" onclick="openExpenseModal('ganesh')" class="btn-main" style="display:none; background:#d97706; padding:6px 12px; font-size:11px; width:auto; border-radius:10px; font-weight:700;">
-              <i class="fa-solid fa-plus"></i> विसर्जन खर्च जोड़ें
-            </button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button onclick="downloadGaneshVisarjanPdf()" class="btn-main" style="background:#0284c7; padding:6px 12px; font-size:11px; width:auto; border-radius:10px; font-weight:700;">
+                <i class="fa-solid fa-file-pdf"></i> PDF डाउनलोड
+              </button>
+              <button id="btnAddGaneshExpenseBtn" onclick="openExpenseModal('ganesh')" class="btn-main" style="display:none; background:#d97706; padding:6px 12px; font-size:11px; width:auto; border-radius:10px; font-weight:700;">
+                <i class="fa-solid fa-plus"></i> विसर्जन खर्च जोड़ें
+              </button>
+            </div>
           </div>
 
           <div class="table-container" style="border-radius:10px; border:1px solid #fde68a; overflow-x:auto;">
@@ -2709,7 +2676,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v4.3.7
+            APK v4.3.8
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -2737,7 +2704,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.3.7 (बिल्ड कोड: 23)
+              v4.3.8 (बिल्ड कोड: 24)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -4059,7 +4026,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.3.7";
+    const APP_VERSION = "4.3.8";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4759,10 +4726,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 22)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 24)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 22)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 24)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -4785,6 +4752,21 @@
 
         // Compare versions
         if (isVersionGreater(latestTag, currentClean)) {
+          // Automatic system push notification when a new update arrives
+          const lastNotifiedVer = localStorage.getItem("last_notified_update_version");
+          if (lastNotifiedVer !== latestTag) {
+            localStorage.setItem("last_notified_update_version", latestTag);
+            if (window.AndroidApp && typeof window.AndroidApp.postNotification === "function") {
+              window.AndroidApp.postNotification(
+                "युवा शक्ति ग्रुप - नया अपडेट उपलब्ध! 🚀",
+                `नया संस्करण v${latestTag} उपलब्ध है। टैप करके अभी ऐप अपडेट करें!`
+              );
+            }
+            if (typeof addNotificationRecord === "function") {
+              addNotificationRecord("नया अपडेट उपलब्ध", `युवा शक्ति ग्रुप ऐप का नया संस्करण v${latestTag} उपलब्ध है। कृपया अपडेट करें।`, "update");
+            }
+          }
+
           // Show Update Banner and Modal
           const banner = document.getElementById("updateBanner");
           if (banner) {
@@ -4803,7 +4785,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 22)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 24)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'अभी अपडेट करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -6621,16 +6603,15 @@
       const upcomingTotalIn = upcomingContributions.reduce((sum, c) => sum + (Number(c.amount) || 0), 0);
       const upcomingTotalOut = upcomingExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
-      const openingBal = getOpeningBalance(); // default 1963
-      const net = openingBal + upcomingTotalIn - upcomingTotalOut;
+      const openingBal = getOpeningBalance(); // strictly 1963 or admin edited
 
       if (totalExpenseEl) totalExpenseEl.innerText = "₹" + regularTotalOut.toLocaleString('en-IN');
       if (remainingBalanceEl) {
-        remainingBalanceEl.innerText = "₹" + net.toLocaleString('en-IN');
-        remainingBalanceEl.style.color = net >= 0 ? '#047857' : '#dc2626';
+        remainingBalanceEl.innerText = "₹" + openingBal.toLocaleString('en-IN');
+        remainingBalanceEl.style.color = '#047857';
       }
       if (expenseFundSub) {
-        expenseFundSub.innerText = `बाकी बचे पैसे: ₹${net.toLocaleString('en-IN')}`;
+        expenseFundSub.innerText = `बाकी बचे पैसे: ₹${openingBal.toLocaleString('en-IN')}`;
       }
 
       const btnEditOpen = document.getElementById("btnEditOpeningBalance");
@@ -6641,17 +6622,24 @@
       const ganeshStatIncome = document.getElementById("ganeshStatIncome");
       const ganeshStatRemaining = document.getElementById("ganeshStatRemaining");
       const btnEditGaneshInc = document.getElementById("btnEditGaneshIncome");
+      const btnEditGaneshExp = document.getElementById("btnEditGaneshExpense");
+      const btnEditGaneshRem = document.getElementById("btnEditGaneshRemaining");
 
-      const ganeshIncome = getGaneshIncome();
-      const ganeshRemaining = ganeshIncome - ganeshTotalOut;
+      const ganeshIncome = getGaneshIncome(); // default 15830
+      const ganeshExpense = ganeshExpenses.length > 0
+        ? ganeshExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0)
+        : getGaneshExpense(); // default 14640
+      const ganeshRemaining = getGaneshRemaining(); // default 1190
 
-      if (ganeshStatExpense) ganeshStatExpense.innerText = "₹" + ganeshTotalOut.toLocaleString('en-IN');
       if (ganeshStatIncome) ganeshStatIncome.innerText = "₹" + ganeshIncome.toLocaleString('en-IN');
+      if (ganeshStatExpense) ganeshStatExpense.innerText = "₹" + ganeshExpense.toLocaleString('en-IN');
       if (ganeshStatRemaining) {
         ganeshStatRemaining.innerText = "₹" + ganeshRemaining.toLocaleString('en-IN');
-        ganeshStatRemaining.style.color = ganeshRemaining >= 0 ? '#047857' : '#dc2626';
+        ganeshStatRemaining.style.color = ganeshRemaining >= 0 ? '#16a34a' : '#dc2626';
       }
       if (btnEditGaneshInc) btnEditGaneshInc.style.display = isAdmin ? "inline-block" : "none";
+      if (btnEditGaneshExp) btnEditGaneshExp.style.display = isAdmin ? "inline-block" : "none";
+      if (btnEditGaneshRem) btnEditGaneshRem.style.display = isAdmin ? "inline-block" : "none";
 
       const ganeshTotalBadge = document.getElementById("ganeshTotalBadge");
       const ganeshTotalFooter = document.getElementById("ganeshTotalFooter");
@@ -6810,7 +6798,7 @@
 
     function getOpeningBalance() {
       const val = localStorage.getItem("initial_opening_balance");
-      if (val === "2463" || val === "2163") {
+      if (val === "2463" || val === "2163" || val === "3063") {
         localStorage.setItem("initial_opening_balance", "1963");
         return 1963;
       }
@@ -6827,7 +6815,7 @@
         return;
       }
       const current = getOpeningBalance();
-      const input = prompt("उपलब्ध कुल कोष (बाकी बचे पैसे) दर्ज करें (उदा. 1963):", current);
+      const input = prompt("बाकी बचे पैसे दर्ज करें (उदा. 1963):", current);
       if (input === null) return;
       const num = Number(input);
       if (isNaN(num) || num < 0) {
@@ -6837,19 +6825,35 @@
       localStorage.setItem("initial_opening_balance", num);
       try {
         await db.collection("settings").doc("finance").set({ openingBalance: num, updatedAt: new Date() }, { merge: true });
-        showToast(`उपलब्ध कुल कोष ₹${num.toLocaleString('en-IN')} सुरक्षित हुआ!`, "success");
+        showToast(`बाकी बचे पैसे ₹${num.toLocaleString('en-IN')} सुरक्षित हुए!`, "success");
       } catch (e) {
-        showToast(`उपलब्ध कुल कोष ₹${num.toLocaleString('en-IN')} स्थानीय रूप से सेट हुआ।`, "info");
+        showToast(`बाकी बचे पैसे ₹${num.toLocaleString('en-IN')} स्थानीय रूप से सेट हुए।`, "info");
       }
       renderExpensesSpreadsheet();
     }
 
     function getGaneshIncome() {
       const stored = localStorage.getItem("ganesh_visarjan_income");
-      if (stored !== null && !isNaN(Number(stored))) {
+      if (stored !== null && !isNaN(Number(stored)) && Number(stored) > 0) {
+        return Number(stored);
+      }
+      return 15830;
+    }
+
+    function getGaneshExpense() {
+      const stored = localStorage.getItem("ganesh_visarjan_expense");
+      if (stored !== null && !isNaN(Number(stored)) && Number(stored) > 0) {
         return Number(stored);
       }
       return 14640;
+    }
+
+    function getGaneshRemaining() {
+      const stored = localStorage.getItem("ganesh_visarjan_remaining");
+      if (stored !== null && !isNaN(Number(stored))) {
+        return Number(stored);
+      }
+      return 1190;
     }
 
     async function promptEditGaneshIncome() {
@@ -6858,7 +6862,7 @@
         return;
       }
       const current = getGaneshIncome();
-      const input = prompt("गणेश विसर्जन कुल आय (चंदा व आरती) दर्ज करें:", current);
+      const input = prompt("1. गणेश विसर्जन कुल आय (चंदा व आरती) दर्ज करें:", current);
       if (input === null) return;
       const num = Number(input);
       if (isNaN(num) || num < 0) {
@@ -6866,16 +6870,131 @@
         return;
       }
       localStorage.setItem("ganesh_visarjan_income", num);
+      const curExp = getGaneshExpense();
+      const newRem = num - curExp;
+      localStorage.setItem("ganesh_visarjan_remaining", newRem);
       try {
-        await db.collection("settings").doc("finance").set({ ganeshIncome: num, updatedAt: new Date() }, { merge: true });
-        showToast(`गणेश विसर्जन आय ₹${num.toLocaleString('en-IN')} सुरक्षित हुई!`, "success");
+        await db.collection("settings").doc("finance").set({ 
+          ganeshIncome: num, 
+          ganeshRemaining: newRem, 
+          updatedAt: new Date() 
+        }, { merge: true });
+        showToast(`विसर्जन आय ₹${num.toLocaleString('en-IN')} सुरक्षित हुई!`, "success");
       } catch (e) {
-        showToast(`गणेश विसर्जन आय ₹${num.toLocaleString('en-IN')} सेट हुई।`, "info");
+        showToast(`विसर्जन आय ₹${num.toLocaleString('en-IN')} सेट हुई।`, "info");
       }
       renderExpensesSpreadsheet();
     }
 
-    // Firestore listener for opening balance and ganesh income in settings/finance
+    async function promptEditGaneshExpense() {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
+        return;
+      }
+      const current = getGaneshExpense();
+      const input = prompt("2. कुल गणेश विसर्जन खर्च दर्ज करें:", current);
+      if (input === null) return;
+      const num = Number(input);
+      if (isNaN(num) || num < 0) {
+        showToast("कृपया वैध राशि दर्ज करें।", "warning");
+        return;
+      }
+      localStorage.setItem("ganesh_visarjan_expense", num);
+      const curInc = getGaneshIncome();
+      const newRem = curInc - num;
+      localStorage.setItem("ganesh_visarjan_remaining", newRem);
+      try {
+        await db.collection("settings").doc("finance").set({ 
+          ganeshExpense: num, 
+          ganeshRemaining: newRem, 
+          updatedAt: new Date() 
+        }, { merge: true });
+        showToast(`कुल विसर्जन खर्च ₹${num.toLocaleString('en-IN')} सुरक्षित हुआ!`, "success");
+      } catch (e) {
+        showToast(`कुल विसर्जन खर्च ₹${num.toLocaleString('en-IN')} सेट हुआ।`, "info");
+      }
+      renderExpensesSpreadsheet();
+    }
+
+    async function promptEditGaneshRemaining() {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
+        return;
+      }
+      const current = getGaneshRemaining();
+      const input = prompt("3. गणेश विसर्जन बाकी बचे पैसे दर्ज करें:", current);
+      if (input === null) return;
+      const num = Number(input);
+      if (isNaN(num)) {
+        showToast("कृपया वैध राशि दर्ज करें।", "warning");
+        return;
+      }
+      localStorage.setItem("ganesh_visarjan_remaining", num);
+      try {
+        await db.collection("settings").doc("finance").set({ 
+          ganeshRemaining: num, 
+          updatedAt: new Date() 
+        }, { merge: true });
+        showToast(`विसर्जन शेष राशि ₹${num.toLocaleString('en-IN')} सुरक्षित हुई!`, "success");
+      } catch (e) {
+        showToast(`विसर्जन शेष राशि ₹${num.toLocaleString('en-IN')} सेट हुई।`, "info");
+      }
+      renderExpensesSpreadsheet();
+    }
+
+    function downloadGaneshVisarjanPdf() {
+      const ganeshItems = transactions.filter(t => t.type === "expense" && isGaneshItem(t));
+      const income = getGaneshIncome();
+      const expense = ganeshItems.length > 0 
+        ? ganeshItems.reduce((s, e) => s + (Number(e.amount) || 0), 0)
+        : getGaneshExpense();
+      const remaining = getGaneshRemaining();
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      let rows = [];
+      if (ganeshItems.length > 0) {
+        rows = ganeshItems.map(t => ({
+          description: t.description || 'गणेश विसर्जन खर्च',
+          date: t.date || todayStr,
+          payMethod: t.payMethod || 'नकद',
+          type: 'expense',
+          amount: Number(t.amount) || 0
+        }));
+      } else {
+        rows.push({
+          description: "श्री गणेश विसर्जन एवं शोभायात्रा सम्पूर्ण आयोजन खर्च",
+          date: "2026-09-23",
+          payMethod: "नकद / ऑनलाइन",
+          type: "expense",
+          amount: expense
+        });
+      }
+
+      const summaryData = {
+        lang: currentLang,
+        title: "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)",
+        subTitle: "श्री गणेश विसर्जन - सम्पूर्ण आय एवं खर्च लेखा-जोखा",
+        filePrefix: "Ganesh_Visarjan_Hisab_",
+        totalIn: income,
+        totalOut: expense,
+        net: remaining,
+        count: rows.length,
+        date: todayStr
+      };
+
+      if (window.AndroidApp && typeof window.AndroidApp.saveLedgerPdf === 'function') {
+        showToast("गणेश विसर्जन PDF रिपोर्ट डाउनलोड फोल्डर में सेव की जा रही है...", "info");
+        window.AndroidApp.saveLedgerPdf(JSON.stringify(summaryData), JSON.stringify(rows));
+        return;
+      }
+      if (window.AndroidApp && typeof window.AndroidApp.printLedgerPdf === 'function') {
+        window.AndroidApp.printLedgerPdf();
+        return;
+      }
+      window.print();
+    }
+
+    // Firestore listener for opening balance and ganesh finance in settings/finance
     try {
       db.collection("settings").doc("finance").onSnapshot(doc => {
         if (doc && doc.exists) {
@@ -6885,6 +7004,12 @@
           }
           if (typeof data.ganeshIncome === "number") {
             localStorage.setItem("ganesh_visarjan_income", data.ganeshIncome);
+          }
+          if (typeof data.ganeshExpense === "number") {
+            localStorage.setItem("ganesh_visarjan_expense", data.ganeshExpense);
+          }
+          if (typeof data.ganeshRemaining === "number") {
+            localStorage.setItem("ganesh_visarjan_remaining", data.ganeshRemaining);
           }
           renderExpensesSpreadsheet();
         }
@@ -8213,8 +8338,14 @@
         if (festival) {
           cell.classList.add("has-festival");
           const fName = (festival.name || "").toLowerCase();
-          if (fName.includes("दीपावली") || fName.includes("दिवाली") || fName.includes("धनतेरस") || fName.includes("रूप चौदस") || fName.includes("देव दीपावली")) {
-            festSymbol = "🪔";
+          if (fName.includes("दीपावली") || fName.includes("दिवाली")) {
+            if (fName.includes("देव दीपावली")) {
+              festSymbol = "🌕";
+            } else {
+              festSymbol = "🪔"; // ONLY Deepawali gets the Diya icon
+            }
+          } else if (fName.includes("अमावस्या")) {
+            festSymbol = "🌑"; // Black moon on Amavasya
           } else if (fName.includes("शिव") || fName.includes("महाशिवरात्रि")) {
             festSymbol = "🕉️";
           } else if (fName.includes("होली") || fName.includes("धुलंडी")) {
@@ -8233,8 +8364,22 @@
             festSymbol = "🧵";
           } else if (fName.includes("हनुमान")) {
             festSymbol = "🚩";
+          } else if (fName.includes("गोवर्धन") || fName.includes("अन्नकूट")) {
+            festSymbol = "🌾";
+          } else if (fName.includes("भाई दूज") || fName.includes("यम द्वितीया")) {
+            festSymbol = "👫";
+          } else if (fName.includes("छठ")) {
+            festSymbol = "🌅";
+          } else if (fName.includes("देवउठनी") || fName.includes("तुलसी विवाह")) {
+            festSymbol = "🌿";
+          } else if (fName.includes("पूर्णिमा")) {
+            festSymbol = "🌕";
+          } else if (fName.includes("धनतेरस")) {
+            festSymbol = "";
+          } else if (fName.includes("रूप चौदस") || fName.includes("नरक चतुर्दशी")) {
+            festSymbol = "";
           } else {
-            festSymbol = "🚩";
+            festSymbol = ""; // No generic flags
           }
           badgeText = festival.shortBadge || festival.name.split('/')[0].split('(')[0].trim().slice(0, 6);
           badgeColor = "#ea580c";
@@ -8242,7 +8387,7 @@
           cell.classList.add("has-amavasya");
           festSymbol = "🌑";
           badgeText = currentLang === 'en' ? "Amavasya" : "अमावस्या";
-          badgeColor = "#1d4ed8";
+          badgeColor = "#38bdf8";
         } else if (nationalDay) {
           const isTiranga = (nationalDay.date === "01-26" || nationalDay.date === "08-15");
           festSymbol = isTiranga ? "🇮🇳" : (nationalDay.icon || "🌟");
