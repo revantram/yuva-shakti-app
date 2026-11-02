@@ -10,23 +10,45 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.webkit.DownloadListener;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class MainActivity extends Activity {
 
     private WebView mWebView;
     private long mLastBackPressTime = 0;
+    private ValueCallback<Uri[]> mFilePathCallback;
+    private static final int FILECHOOSER_RESULTCODE = 1001;
 
     public class WebAppInterface {
         @JavascriptInterface
         public void downloadAndInstall(String apkUrl, String versionName) {
             downloadAndInstallApk(apkUrl);
+        }
+
+        @JavascriptInterface
+        public void shareAppApk() {
+            shareApplicationApk();
+        }
+
+        @JavascriptInterface
+        public void printLedgerPdf() {
+            printLedgerReport();
         }
     }
 
@@ -77,6 +99,30 @@ public class MainActivity extends Activity {
                     return false;
                 }
                 return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg);
+            }
+
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                if (mFilePathCallback != null) {
+                    mFilePathCallback.onReceiveValue(null);
+                }
+                mFilePathCallback = filePathCallback;
+
+                Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                contentSelectionIntent.setType("image/*");
+
+                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "प्रोफाइल फोटो चुनें");
+
+                try {
+                    startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
+                    return true;
+                } catch (Exception e) {
+                    mFilePathCallback = null;
+                    return false;
+                }
             }
         });
 
@@ -179,6 +225,18 @@ public class MainActivity extends Activity {
         mWebView.loadUrl("file:///android_asset/index.html");
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FILECHOOSER_RESULTCODE) {
+            if (mFilePathCallback != null) {
+                mFilePathCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
+                mFilePathCallback = null;
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     public void downloadAndInstallApk(final String url) {
         if (url == null || url.trim().isEmpty()) return;
 
@@ -241,6 +299,71 @@ public class MainActivity extends Activity {
         });
     }
 
+    public void shareApplicationApk() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    File apkFile = new File("/sdcard/Download/YuvaShaktiGroup.apk");
+                    if (!apkFile.exists()) {
+                        File source = new File(getPackageCodePath());
+                        copyFile(source, apkFile);
+                    }
+
+                    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                    StrictMode.setVmPolicy(builder.build());
+
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("application/vnd.android.package-archive");
+                    if (apkFile.exists()) {
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(apkFile));
+                    }
+                    String shareText = "🚩 *युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)* 🚩\n\nआधिकारिक परिवार प्रबंधन एवं बही-खाता एप्लिकेशन डाउनलोड करें:\n\n📲 APK सीधा डाउनलोड लिंक:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "युवा शक्ति ग्रुप ऐप (भाटी परिवार)");
+                    startActivity(Intent.createChooser(shareIntent, "ऐप व्हाट्सएप पर शेयर करें"));
+                } catch (Exception e) {
+                    try {
+                        String shareText = "🚩 *युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)* 🚩\n\nआधिकारिक परिवार प्रबंधन एवं बही-खाता एप्लिकेशन डाउनलोड करें:\n\n📲 APK सीधा डाउनलोड लिंक:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh";
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?text=" + Uri.encode(shareText)));
+                        startActivity(intent);
+                    } catch (Exception ex) {
+                        Toast.makeText(MainActivity.this, "शेयर करने में असमर्थ: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
+    public void printLedgerReport() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+                    if (printManager != null) {
+                        String jobName = "युवा शक्ति ग्रुप - बही-खाता रिपोर्ट";
+                        PrintDocumentAdapter printAdapter = mWebView.createPrintDocumentAdapter(jobName);
+                        printManager.print(jobName, printAdapter, new PrintAttributes.Builder().build());
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "प्रिंट / पीडीएफ तैयार करने में असमर्थ: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void copyFile(File src, File dst) throws Exception {
+        try (InputStream in = new FileInputStream(src);
+             OutputStream out = new FileOutputStream(dst)) {
+            byte[] buf = new byte[8192];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (mWebView != null && mWebView.canGoBack()) {
@@ -248,7 +371,6 @@ public class MainActivity extends Activity {
             return;
         }
 
-        // Double back press to exit
         long currentTime = System.currentTimeMillis();
         if (currentTime - mLastBackPressTime < 2000) {
             super.onBackPressed();

@@ -1198,6 +1198,338 @@
       background: rgba(37, 99, 235, 0.08);
       box-shadow: 0 0 0 1px #2563eb;
     }
+
+    /* Member List Status Badges */
+    .member-card-compact {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 12px 14px;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .member-card-compact:active {
+      transform: scale(0.99);
+      background: #f8fafc;
+    }
+    .badge-status-paid {
+      font-size: 11px;
+      font-weight: 700;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      padding: 1px 7px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-status-unpaid {
+      font-size: 11px;
+      font-weight: 700;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+      padding: 1px 7px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Member Profile Modal */
+    .profile-photo-wrapper {
+      position: relative;
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 12px auto;
+    }
+    .profile-avatar-large {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 800;
+      border: 3px solid #fbbf24;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+    .profile-avatar-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .btn-edit-photo {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #ea580c;
+      color: white;
+      border: 2px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    /* Hindu Calendar Grid Styles */
+    .calendar-nav-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .cal-nav-btn {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .cal-nav-btn:active {
+      transform: scale(0.92);
+    }
+    .calendar-month-title {
+      text-align: center;
+    }
+    .calendar-month-title h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+    .cal-hindu-tithi-sub {
+      font-size: 11px;
+      font-weight: 600;
+      color: #ea580c;
+      margin-top: 2px;
+    }
+    .btn-today-pill {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .calendar-weekdays-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .cal-weekday {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 4px 0;
+    }
+    .cal-weekday.sun {
+      color: #dc2626;
+    }
+    .calendar-days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .calendar-day {
+      min-height: 50px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 3px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s;
+    }
+    .calendar-day.empty {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+    }
+    .calendar-day:not(.empty):active {
+      transform: scale(0.94);
+    }
+    .calendar-day.today {
+      border: 2px solid #2563eb;
+      background: rgba(37, 99, 235, 0.06);
+    }
+    .calendar-day.selected {
+      background: #1e3a8a !important;
+      color: white !important;
+      border-color: #1e3a8a !important;
+    }
+    .calendar-day.selected .cal-day-num {
+      color: white !important;
+    }
+    .calendar-day.selected .cal-badge-mini {
+      color: #fef08a !important;
+    }
+    .cal-day-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+    .calendar-day.sun .cal-day-num {
+      color: #dc2626;
+    }
+    .cal-day-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      margin-top: 2px;
+      font-size: 10px;
+      line-height: 1;
+    }
+    .cal-badge-mini {
+      font-size: 8px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      margin-top: 1px;
+      padding: 0 1px;
+    }
+    .calendar-day.has-amavasya {
+      border-color: #93c5fd;
+      background: #f0f9ff;
+    }
+    .calendar-day.has-festival {
+      border-color: #fed7aa;
+      background: #fff7ed;
+    }
+
+    /* Selected Day Details Card */
+    .selected-day-card {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+    }
+    .selected-day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .selected-day-header h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Dark Theme Extras */
+    body.dark-theme .member-card-compact:active {
+      background: #1e293b !important;
+    }
+    body.dark-theme .badge-status-paid {
+      background: #064e3b;
+      color: #6ee7b7;
+      border-color: #047857;
+    }
+    body.dark-theme .badge-status-unpaid {
+      background: #7f1d1d;
+      color: #fca5a5;
+      border-color: #991b1b;
+    }
+    body.dark-theme .selected-day-card {
+      background: #0f172a;
+      border-color: #334155;
+    }
+    body.dark-theme .calendar-day {
+      background: #1e293b;
+      border-color: #334155;
+    }
+    body.dark-theme .calendar-day.has-amavasya {
+      background: #1e1b4b;
+      border-color: #4338ca;
+    }
+    body.dark-theme .calendar-day.has-festival {
+      background: #431407;
+      border-color: #9a3412;
+    }
+
+    /* Print Styles for Official Ledger PDF */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        padding-bottom: 0 !important;
+      }
+      header, nav, .bottom-nav, .filter-pills, .ledger-actions-bar,
+      #ledgerFormCard, #upiQuickCard, .amavasya-card, .search-box,
+      #updateBanner, #adminNotice, .modal-overlay, #toastContainer,
+      .action-grid, .btn-main, .btn-sub, .btn-tool, .chip-group,
+      .theme-grid, .btn-quick-phonepe, .btn-quick-contrib, #settingsCard {
+        display: none !important;
+      }
+      .section-view {
+        display: none !important;
+      }
+      #viewLedger {
+        display: block !important;
+      }
+      .card {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .table-responsive {
+        overflow: visible !important;
+      }
+      table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+      }
+      th, td {
+        border: 1px solid #cbd5e1 !important;
+        color: black !important;
+        padding: 8px !important;
+      }
+      .print-only-header {
+        display: block !important;
+        text-align: center;
+        margin-bottom: 16px;
+      }
+    }
+    @media screen {
+      .print-only-header {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1213,26 +1545,22 @@
         <i class="fa-solid fa-people-roof" style="display:none;"></i>
       </div>
       <div class="header-text">
-        <h1 style="display:flex; align-items:center; gap:6px;">
-          <span>युवा शक्ति ग्रुप</span>
-          <span style="font-size:11px; font-weight:700; background:#ea580c; color:white; padding:1px 6px; border-radius:4px; letter-spacing:0.2px;">भाटी परिवार</span>
-        </h1>
-        <div style="display:flex; align-items:center; gap:6px; margin-top:2px;">
-          <div class="header-status-badge" id="userStatusBadge">
-            <i class="fa-solid fa-circle-user"></i>
-            <span id="userStatusText">अतिथि मोड</span>
-          </div>
-          <span style="font-size:10px; color:#cbd5e1; font-weight:500;">• कुचेरा</span>
-        </div>
+        <h1 style="font-size:16px; font-weight:800; line-height:1.2; margin:0; letter-spacing:-0.2px;">युवा शक्ति ग्रुप</h1>
+        <div style="font-size:11px; color:#fef08a; font-weight:700; margin-top:1px; letter-spacing:0.2px;">भाटी परिवार कुचेरा</div>
       </div>
     </div>
     <div class="header-actions">
+      <!-- Direct APK Share via WhatsApp -->
+      <button class="auth-btn" onclick="shareAppDirectly()" style="background:#ea580c; border-color:#f97316;" title="APK व्हाट्सएप पर शेयर करें">
+        <i class="fa-solid fa-share-nodes"></i>
+        <span>शेयर</span>
+      </button>
       <!-- Official WhatsApp Group Link Button -->
       <a href="https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh" target="_blank" class="auth-btn" style="background:#16a34a; border-color:#22c55e; text-decoration:none;" title="आधिकारिक व्हाट्सएप ग्रुप से जुड़ें">
         <i class="fa-brands fa-whatsapp"></i>
         <span>ग्रुप</span>
       </a>
-      <!-- Member Login Button -->
+      <!-- Member Login Button (hidden when logged in) -->
       <button class="auth-btn" id="loginBtn" onclick="openLoginModal()">
         <i class="fa-solid fa-right-to-bracket"></i>
         <span>लॉगिन</span>
@@ -1394,9 +1722,9 @@
           <i class="fa-brands fa-whatsapp" style="color:#16a34a; font-size:14px;"></i>
           <span>ग्रुप पर शेयर करें</span>
         </button>
-        <button class="btn-tool" onclick="exportLedgerToCSV()">
-          <i class="fa-solid fa-file-csv" style="color:#0284c7; font-size:14px;"></i>
-          <span>CSV डाउनलोड</span>
+        <button class="btn-tool" onclick="exportLedgerToPDF()">
+          <i class="fa-solid fa-file-pdf" style="color:#ef4444; font-size:14px;"></i>
+          <span>PDF रिपोर्ट</span>
         </button>
       </div>
 
@@ -1456,6 +1784,11 @@
 
       <!-- Ledger Table Card -->
       <div class="card">
+        <div class="print-only-header">
+          <h2 style="font-size:20px; font-weight:800; margin-bottom:4px; color:#1e3a8a;">युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)</h2>
+          <div style="font-size:14px; font-weight:600; color:#334155;">आधिकारिक बही-खाता एवं आय-व्यय रिपोर्ट</div>
+          <div style="font-size:12px; color:#64748b; margin-top:4px;" id="printDateStr">रिपोर्ट दिनांक</div>
+        </div>
         <div class="card-title">
           <span><i class="fa-solid fa-list-check"></i> लेनदेन विवरण</span>
           <div style="display:flex; gap:4px;">
@@ -1490,6 +1823,49 @@
     <!-- 3. हिंदू कैलेंडर व उत्सव टैब -->
     <div id="viewCalendar" class="section-view">
       
+      <!-- 🚩 Interactive Hindu Month Calendar Grid -->
+      <div class="card" id="hinduCalendarCard" style="margin-bottom:14px;">
+        <div class="calendar-nav-header">
+          <button class="cal-nav-btn" onclick="changeCalendarMonth(-1)" title="पिछला महीना">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <div class="calendar-month-title">
+            <h3 id="calMonthYearTitle">नवंबर 2026</h3>
+            <div class="cal-hindu-tithi-sub" id="calHinduMonthSub">कार्तिक - मार्गशीर्ष | वि. संवत 2083</div>
+          </div>
+          <button class="cal-nav-btn" onclick="changeCalendarMonth(1)" title="अगला महीना">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div style="display:flex; justify-content:center; margin-bottom:10px;">
+          <button class="btn-today-pill" onclick="resetCalendarToToday()">
+            <i class="fa-solid fa-calendar-check"></i> आज पर जाएं
+          </button>
+        </div>
+
+        <!-- Weekdays Header (रवि to शनि) -->
+        <div class="calendar-weekdays-grid">
+          <div class="cal-weekday sun">रवि</div>
+          <div class="cal-weekday">सोम</div>
+          <div class="cal-weekday">मंगल</div>
+          <div class="cal-weekday">बुध</div>
+          <div class="cal-weekday">गुरु</div>
+          <div class="cal-weekday">शुक्र</div>
+          <div class="cal-weekday">शनि</div>
+        </div>
+
+        <!-- Dynamic Days Grid -->
+        <div class="calendar-days-grid" id="calendarDaysGrid">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Selected Date Details -->
+        <div class="selected-day-card" id="selectedDayCard">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
       <!-- Filter Pills for Calendar -->
       <div class="filter-pills">
         <button class="pill-btn active" onclick="setCalendarFilter('all', this)">
@@ -1597,6 +1973,20 @@
             लॉगिन करें
           </button>
         </div>
+      </div>
+
+      <!-- Direct WhatsApp APK Share Card -->
+      <div class="card" style="border:1px solid #fed7aa; background:linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);">
+        <div class="card-title">
+          <span><i class="fa-solid fa-share-nodes" style="color:#ea580c;"></i> ऐप शेयर करें</span>
+          <span class="badge" style="background:#ea580c; color:white;">APK शेयर</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.4;">
+          परिवार के अन्य सदस्यों को सीधे व्हाट्सएप पर युवा शक्ति ऐप की APK फाइल व डाउनलोड लिंक भेजें।
+        </p>
+        <button onclick="shareAppDirectly()" class="btn-main" style="background:#16a34a; border-color:#15803d; font-size:13px;">
+          <i class="fa-brands fa-whatsapp" style="font-size:16px;"></i> व्हाट्सएप पर APK शेयर करें
+        </button>
       </div>
 
       <!-- Admin Control Card (Moved from header to Settings) -->
@@ -1870,6 +2260,70 @@
       <div style="display:flex; gap:8px;">
         <button onclick="closeConfirmModal(false)" style="flex:1; padding:10px; border-radius:8px; border:1px solid #cbd5e1; background:white; font-weight:600; font-size:13px; cursor:pointer;">रद्द करें</button>
         <button id="confirmActionBtn" style="flex:1; padding:10px; border-radius:8px; border:none; background:#dc2626; color:white; font-weight:600; font-size:13px; cursor:pointer;">हां, हटाएं</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Member Profile Popup Modal -->
+  <div class="modal-overlay" id="memberProfileModal" style="display:none;">
+    <div class="modal-content" style="max-width:380px; text-align:center; position:relative; max-height:90vh; overflow-y:auto;">
+      <!-- Hidden file input for photo upload -->
+      <input type="file" id="memberPhotoFileInput" accept="image/*" style="display:none;" onchange="handleProfilePhotoSelected(event)">
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:12px; font-weight:700; color:#ea580c; background:#fff7ed; padding:2px 8px; border-radius:12px; border:1px solid #fed7aa;">
+          सदस्य प्रोफाइल
+        </span>
+        <button onclick="closeMemberProfileModal()" style="border:none; background:none; font-size:20px; color:#64748b; cursor:pointer; padding:2px 6px;">✕</button>
+      </div>
+
+      <!-- Avatar & Photo Upload Trigger -->
+      <div class="profile-photo-wrapper">
+        <div class="profile-avatar-large" id="profileModalAvatar">
+          <span id="profileModalAvatarText">U</span>
+        </div>
+        <button class="btn-edit-photo" id="btnEditProfilePhoto" onclick="triggerProfilePhotoUpload()" title="फोटो बदलें">
+          <i class="fa-solid fa-camera"></i>
+        </button>
+      </div>
+
+      <!-- Name & Subtitle -->
+      <h3 style="font-size:18px; font-weight:800; color:var(--text-main); margin-bottom:2px;" id="profileModalName">सदस्य का नाम</h3>
+      <div style="font-size:12px; color:#64748b; font-weight:600; margin-bottom:12px;">🚩 भाटी परिवार • कुचेरा</div>
+
+      <!-- Payment Status Card -->
+      <div id="profileModalPaymentBanner" style="border-radius:10px; padding:10px 12px; margin-bottom:14px; text-align:left; border:1px solid #cbd5e1;">
+        <!-- Filled dynamically -->
+      </div>
+
+      <!-- Quick Action Buttons: Call, WhatsApp, Instagram -->
+      <div class="action-grid" style="margin-bottom:14px;" id="profileModalActions">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Details List -->
+      <div style="background:var(--bg-color); border-radius:10px; padding:10px 12px; text-align:left; font-size:12px; margin-bottom:14px; border:1px solid var(--border-color);">
+        <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px dashed var(--border-color);">
+          <span style="color:#64748b;"><i class="fa-solid fa-phone" style="width:18px;"></i> मोबाइल</span>
+          <strong id="profileModalPhone" style="color:var(--text-main);">-</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px dashed var(--border-color);">
+          <span style="color:#64748b;"><i class="fa-brands fa-whatsapp" style="width:18px; color:#16a34a;"></i> व्हाट्सएप</span>
+          <strong id="profileModalWA" style="color:var(--text-main);">-</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px dashed var(--border-color);">
+          <span style="color:#64748b;"><i class="fa-solid fa-cake-candles" style="width:18px; color:#ea580c;"></i> जन्मदिन</span>
+          <strong id="profileModalDob" style="color:var(--text-main);">-</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:5px 0;">
+          <span style="color:#64748b;"><i class="fa-solid fa-rings-wedding" style="width:18px; color:#db2777;"></i> वर्षगांठ</span>
+          <strong id="profileModalAnniversary" style="color:var(--text-main);">-</strong>
+        </div>
+      </div>
+
+      <!-- Edit / Admin Controls -->
+      <div id="profileModalControls" style="display:flex; gap:8px;">
+        <!-- Filled dynamically if admin or self -->
       </div>
     </div>
   </div>
@@ -2232,13 +2686,20 @@
       if (loggedInMemberPhone) {
         const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
         const displayName = found ? found.name : loggedInMemberPhone;
-        statusText.innerText = displayName;
-        loginBtn.innerHTML = `<i class="fa-solid fa-right-from-bracket"></i> <span>लॉगआउट</span>`;
-        loginBtn.onclick = logoutMember;
+        if (statusText) statusText.innerText = displayName;
       } else {
-        statusText.innerText = "अतिथि मोड";
-        loginBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>लॉगिन</span>`;
-        loginBtn.onclick = openLoginModal;
+        if (statusText) statusText.innerText = "अतिथि मोड";
+      }
+
+      // Hide login button in header once logged in (either member or admin)
+      if (loginBtn) {
+        if (loggedInMemberPhone || isAdmin) {
+          loginBtn.style.display = "none";
+        } else {
+          loginBtn.style.display = "inline-flex";
+          loginBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>लॉगिन</span>`;
+          loginBtn.onclick = openLoginModal;
+        }
       }
 
       if (thAction) {
@@ -2504,13 +2965,49 @@
       console.error("Ledger snapshot error:", error);
     });
 
-    // 13. Render Members
+    // 13. Member Payment Status & Profile Modal
+    function getMemberPaymentStatus(member) {
+      if (!member) return { isPaid: false, lastPayment: null, total: 0, count: 0 };
+      const memberName = (member.name || '').trim().toLowerCase();
+      const cleanPhone = (member.phone || '').replace(/\D/g, '').slice(-10);
+
+      const memberContributions = transactions.filter(t => {
+        if (t.type !== 'contribution') return false;
+        const desc = (t.description || '').toLowerCase();
+        const matchesName = memberName && (desc.includes(memberName) || memberName.includes(desc));
+        const matchesPhone = cleanPhone && desc.includes(cleanPhone);
+        return matchesName || matchesPhone;
+      });
+
+      if (memberContributions.length === 0) {
+        return { isPaid: false, lastPayment: null, total: 0, count: 0 };
+      }
+
+      memberContributions.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const latest = memberContributions[0];
+
+      const now = new Date();
+      const payDate = new Date(latest.date);
+      const isCurrentMonth = (now.getFullYear() === payDate.getFullYear() && now.getMonth() === payDate.getMonth());
+      const diffDays = Math.round((now - payDate) / (1000 * 60 * 60 * 24));
+      const isRecent = isCurrentMonth || (diffDays >= 0 && diffDays <= 35);
+      const total = memberContributions.reduce((sum, c) => sum + (Number(c.amount) || 0), 0);
+
+      return {
+        isPaid: isRecent,
+        lastPayment: latest,
+        total: total,
+        count: memberContributions.length
+      };
+    }
+
     function handleMemberSearch() {
       renderMembers();
     }
 
     function renderMembers() {
       const container = document.getElementById("membersList");
+      const countText = document.getElementById("memberCountText");
       const searchTerm = (document.getElementById("memberSearchInput")?.value || '').trim().toLowerCase();
       
       let filtered = membersList;
@@ -2519,6 +3016,10 @@
           (m.name && m.name.toLowerCase().includes(searchTerm)) ||
           (m.phone && m.phone.includes(searchTerm))
         );
+      }
+
+      if (countText) {
+        countText.innerText = `कुल सदस्य: ${membersList.length}${searchTerm ? ' (फ़िल्टर: ' + filtered.length + ')' : ''}`;
       }
 
       container.innerHTML = "";
@@ -2535,77 +3036,243 @@
 
       filtered.forEach(m => {
         const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
-        const card = document.createElement("div");
-        card.className = "member-card";
-
+        const payStatus = getMemberPaymentStatus(m);
         const firstChar = (m.name || 'U').trim().charAt(0);
-        const cleanPhone = (m.phone || '').replace(/\D/g, '');
-        const cleanWA = (m.whatsapp || m.phone || '').replace(/\D/g, '');
 
-        let adminButtons = "";
-        if (isAdmin || isSelf) {
-          adminButtons = `
-            <div class="member-controls">
-              <button class="btn-icon btn-edit" onclick="editMember('${m.id}')" title="एडिट करें">
-                <i class="fa-solid fa-pen"></i> एडिट
-              </button>
-              ${isAdmin ? `
-                <button class="btn-icon btn-delete" onclick="promptDeleteMember('${m.id}', '${m.name}')" title="हटाएं">
-                  <i class="fa-solid fa-trash"></i>
-                </button>
-              ` : ''}
-            </div>
-          `;
-        }
+        const card = document.createElement("div");
+        card.className = "member-card member-card-compact";
+        card.onclick = () => openMemberProfileModal(m.id);
 
-        let datesHtml = "";
-        if (m.dob || m.anniversary) {
-          datesHtml = `
-            <div class="member-dates">
-              ${m.dob ? `<span class="date-pill"><i class="fa-solid fa-cake-candles" style="color:#ea580c;"></i> जन्म: <strong>${formatDisplayDate(m.dob)}</strong></span>` : ''}
-              ${m.anniversary ? `<span class="date-pill"><i class="fa-solid fa-rings-wedding" style="color:#db2777;"></i> वर्षगांठ: <strong>${formatDisplayDate(m.anniversary)}</strong></span>` : ''}
-            </div>
-          `;
-        }
+        const avatarHtml = m.photoUrl ? 
+          `<img src="${m.photoUrl}" alt="${m.name}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : 
+          firstChar;
+
+        const statusBadgeHtml = payStatus.isPaid ?
+          `<span class="badge-status-paid"><i class="fa-solid fa-circle-check"></i> जमा</span>` :
+          `<span class="badge-status-unpaid"><i class="fa-solid fa-circle-exclamation"></i> बाकी</span>`;
 
         card.innerHTML = `
-          <div class="member-header">
-            <div class="member-info">
-              <div class="avatar">${firstChar}</div>
-              <div class="member-details">
-                <h3>
-                  <span>${m.name}</span>
-                  ${isSelf ? '<span class="self-badge">आप</span>' : ''}
-                </h3>
-                <div class="member-subtext">
-                  <span class="member-tag">भाटी परिवार</span>
-                  <span>📱 ${m.phone}</span>
-                </div>
+          <div class="member-info">
+            <div class="avatar" style="overflow:hidden;">${avatarHtml}</div>
+            <div class="member-details">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <strong style="font-size:15px; color:var(--text-main);">${m.name}</strong>
+                ${statusBadgeHtml}
+                ${isSelf ? '<span class="self-badge">आप</span>' : ''}
+              </div>
+              <div class="member-subtext">
+                <span class="member-tag">भाटी परिवार</span>
+                <span>📱 ${m.phone}</span>
               </div>
             </div>
-            ${adminButtons}
           </div>
-          ${datesHtml}
-          <div class="action-grid">
-            <a href="tel:${cleanPhone}" class="btn-act act-call">
-              <i class="fa-solid fa-phone"></i> कॉल
-            </a>
-            <a href="https://wa.me/${cleanWA.startsWith('91') ? cleanWA : '91' + cleanWA}" target="_blank" class="btn-act act-wa">
-              <i class="fa-brands fa-whatsapp"></i> व्हाट्सएप
-            </a>
-            ${m.instagram ? `
-              <a href="https://instagram.com/${m.instagram.replace('@','')}" target="_blank" class="btn-act act-insta">
-                <i class="fa-brands fa-instagram"></i> इंस्टाग्राम
-              </a>
-            ` : `
-              <button disabled class="btn-act" style="background:#cbd5e1; cursor:not-allowed;">
-                <i class="fa-brands fa-instagram"></i> इंस्टाग्राम
-              </button>
-            `}
+          <div style="color:#94a3b8; font-size:13px; display:flex; align-items:center; gap:4px; padding-left:6px;">
+            <span style="font-size:11px; color:#64748b;">प्रोफाइल</span>
+            <i class="fa-solid fa-chevron-right"></i>
           </div>
         `;
         container.appendChild(card);
       });
+    }
+
+    function openMemberProfileModal(memberId) {
+      const m = membersList.find(x => x.id === memberId);
+      if (!m) return;
+      currentProfileModalMemberId = memberId;
+
+      const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
+      const canEdit = isAdmin || isSelf;
+
+      document.getElementById("profileModalName").innerText = m.name;
+
+      const avatarBox = document.getElementById("profileModalAvatar");
+      if (m.photoUrl) {
+        avatarBox.innerHTML = `<img src="${m.photoUrl}" alt="${m.name}">`;
+      } else {
+        const firstChar = (m.name || 'U').trim().charAt(0);
+        avatarBox.innerHTML = `<span>${firstChar}</span>`;
+      }
+
+      const btnEditPhoto = document.getElementById("btnEditProfilePhoto");
+      if (btnEditPhoto) {
+        btnEditPhoto.style.display = canEdit ? "flex" : "none";
+      }
+
+      const payStatus = getMemberPaymentStatus(m);
+      const banner = document.getElementById("profileModalPaymentBanner");
+      if (payStatus.isPaid) {
+        banner.style.background = "#ecfdf5";
+        banner.style.borderColor = "#a7f3d0";
+        banner.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; color:#047857; font-size:13px;">
+                <i class="fa-solid fa-circle-check"></i> अंशदान जमा (सक्रिय)
+              </span>
+              <div style="font-size:11px; color:#065f46; margin-top:2px;">
+                अंतिम जमा: ₹${Number(payStatus.lastPayment.amount || 0).toLocaleString('en-IN')} (${formatDisplayDate(payStatus.lastPayment.date)})
+              </div>
+            </div>
+            <span class="badge-status-paid" style="font-size:12px; padding:3px 9px;">जमा</span>
+          </div>
+        `;
+      } else {
+        banner.style.background = "#fef2f2";
+        banner.style.borderColor = "#fecaca";
+        banner.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-weight:700; color:#b91c1c; font-size:13px;">
+                <i class="fa-solid fa-circle-exclamation"></i> इस माह का अंशदान बाकी
+              </span>
+              <div style="font-size:11px; color:#991b1b; margin-top:2px;">
+                अमावस्या सत्संग व ग्रुप सेवा अंशदान अपेक्षित
+              </div>
+            </div>
+            <button onclick="closeMemberProfileModal(); openPhonePeModal('अंशदान - ' + '${m.name}')" style="background:#dc2626; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer;">
+              जमा करें
+            </button>
+          </div>
+        `;
+      }
+
+      const cleanPhone = (m.phone || '').replace(/\D/g, '');
+      const cleanWA = (m.whatsapp || m.phone || '').replace(/\D/g, '');
+
+      const actionsDiv = document.getElementById("profileModalActions");
+      actionsDiv.innerHTML = `
+        <a href="tel:${cleanPhone}" class="btn-act act-call">
+          <i class="fa-solid fa-phone"></i> कॉल
+        </a>
+        <a href="https://wa.me/${cleanWA.startsWith('91') ? cleanWA : '91' + cleanWA}" target="_blank" class="btn-act act-wa">
+          <i class="fa-brands fa-whatsapp"></i> व्हाट्सएप
+        </a>
+        ${m.instagram ? `
+          <a href="https://instagram.com/${m.instagram.replace('@','')}" target="_blank" class="btn-act act-insta">
+            <i class="fa-brands fa-instagram"></i> इंस्टाग्राम
+          </a>
+        ` : `
+          <button disabled class="btn-act" style="background:#cbd5e1; cursor:not-allowed;">
+            <i class="fa-brands fa-instagram"></i> इंस्टाग्राम
+          </button>
+        `}
+      `;
+
+      document.getElementById("profileModalPhone").innerText = m.phone ? `+91 ${m.phone}` : 'दर्ज नहीं';
+      document.getElementById("profileModalWA").innerText = m.whatsapp ? `+91 ${m.whatsapp}` : (m.phone ? `+91 ${m.phone}` : 'दर्ज नहीं');
+      document.getElementById("profileModalDob").innerText = m.dob ? formatDisplayDate(m.dob) : 'दर्ज नहीं';
+      document.getElementById("profileModalAnniversary").innerText = m.anniversary ? formatDisplayDate(m.anniversary) : 'दर्ज नहीं';
+
+      const controlsDiv = document.getElementById("profileModalControls");
+      controlsDiv.innerHTML = "";
+      if (canEdit) {
+        const editBtn = document.createElement("button");
+        editBtn.className = "btn-main";
+        editBtn.style.flex = "1";
+        editBtn.style.padding = "8px";
+        editBtn.style.fontSize = "12px";
+        editBtn.innerHTML = `<i class="fa-solid fa-user-pen"></i> विवरण एडिट करें`;
+        editBtn.onclick = () => {
+          closeMemberProfileModal();
+          editMember(m.id);
+        };
+        controlsDiv.appendChild(editBtn);
+      }
+      if (isAdmin) {
+        const delBtn = document.createElement("button");
+        delBtn.className = "btn-sub";
+        delBtn.style.flex = "1";
+        delBtn.style.padding = "8px";
+        delBtn.style.fontSize = "12px";
+        delBtn.style.color = "#dc2626";
+        delBtn.style.borderColor = "#fecaca";
+        delBtn.innerHTML = `<i class="fa-solid fa-trash"></i> हटाएं`;
+        delBtn.onclick = () => {
+          closeMemberProfileModal();
+          promptDeleteMember(m.id, m.name);
+        };
+        controlsDiv.appendChild(delBtn);
+      }
+
+      document.getElementById("memberProfileModal").style.display = "flex";
+    }
+
+    function closeMemberProfileModal() {
+      document.getElementById("memberProfileModal").style.display = "none";
+    }
+
+    function triggerProfilePhotoUpload() {
+      const currentMember = membersList.find(m => m.id === currentProfileModalMemberId);
+      const isSelf = currentMember && loggedInMemberPhone && currentMember.phone && currentMember.phone.endsWith(loggedInMemberPhone);
+      if (!isAdmin && !isSelf) {
+        showToast("फोटो बदलने हेतु सदस्य लॉगिन अथवा एडमिन मोड आवश्यक है।", "warning");
+        return;
+      }
+      document.getElementById("memberPhotoFileInput").click();
+    }
+
+    function handleProfilePhotoSelected(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      if (!currentProfileModalMemberId) {
+        showToast("कोई सदस्य चयनित नहीं है।", "warning");
+        return;
+      }
+
+      showToast("फोटो प्रोसेस हो रही है...", "info");
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = async function() {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+          const maxSize = 256;
+
+          if (width > height) {
+            if (width > maxSize) {
+              height = Math.round((height * maxSize) / width);
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width = Math.round((width * maxSize) / height);
+              height = maxSize;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.78);
+
+          try {
+            await db.collection("members").doc(currentProfileModalMemberId).update({
+              photoUrl: compressedDataUrl,
+              updatedAt: new Date()
+            });
+
+            const found = membersList.find(m => m.id === currentProfileModalMemberId);
+            if (found) {
+              found.photoUrl = compressedDataUrl;
+            }
+
+            openMemberProfileModal(currentProfileModalMemberId);
+            renderMembers();
+            showToast("प्रोफाइल फोटो सफलतापूर्वक अपडेट हो गई!", "success");
+          } catch (err) {
+            console.error("Photo upload error:", err);
+            showToast("फोटो सेव करने में त्रुटि: " + err.message, "error");
+          }
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      event.target.value = "";
     }
 
     // 14. Member Form Handlers
@@ -2814,6 +3481,36 @@
       );
     }
 
+    function exportLedgerToPDF() {
+      if (!transactions.length) {
+        showToast("एक्सपोर्ट के लिए कोई लेनदेन उपलब्ध नहीं है।", "warning");
+        return;
+      }
+
+      const pDate = document.getElementById("printDateStr");
+      if (pDate) {
+        pDate.innerText = `रिपोर्ट दिनांक: ${new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+      }
+
+      if (window.AndroidApp && typeof window.AndroidApp.printLedgerPdf === 'function') {
+        showToast("बही-खाता पीडीएफ तैयार हो रही है...", "info");
+        window.AndroidApp.printLedgerPdf();
+        return;
+      }
+
+      window.print();
+    }
+
+    function shareAppDirectly() {
+      if (window.AndroidApp && typeof window.AndroidApp.shareAppApk === 'function') {
+        window.AndroidApp.shareAppApk();
+        return;
+      }
+      const shareText = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)* 🚩\n\nआधिकारिक परिवार प्रबंधन एवं बही-खाता एप्लिकेशन डाउनलोड करें:\n\n📲 APK सीधा डाउनलोड लिंक:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+      window.open(url, '_blank');
+    }
+
     function exportLedgerToCSV() {
       if (!transactions.length) {
         showToast("एक्सपोर्ट के लिए कोई लेनदेन उपलब्ध नहीं है।", "warning");
@@ -2900,7 +3597,284 @@
       return Math.round(diffTime / (1000 * 60 * 60 * 24));
     }
 
+    let currentCalYear = new Date().getFullYear();
+    let currentCalMonth = new Date().getMonth();
+    let selectedCalDateStr = new Date().toISOString().split('T')[0];
+
+    const HINDI_MONTH_NAMES = [
+      "जनवरी", "फरवरी", "मार्च", "अप्रैल", "मई", "जून",
+      "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"
+    ];
+
+    const HINDU_MONTH_PAIRS = [
+      "पौष - माघ", "माघ - फाल्गुन", "फाल्गुन - चैत्र", "चैत्र - वैशाख",
+      "वैशाख - ज्येष्ठ", "ज्येष्ठ - आषाढ़", "आषाढ़ - श्रावण", "श्रावण - भाद्रपद",
+      "भाद्रपद - आश्विन", "आश्विन - कार्तिक", "कार्तिक - मार्गशीर्ष", "मार्गशीर्ष - पौष"
+    ];
+
+    function getHinduSamvat(year, month) {
+      const samvat = month >= 2 ? year + 57 : year + 56;
+      return `वि. संवत ${samvat}`;
+    }
+
+    function renderHinduMonthCalendar() {
+      const titleEl = document.getElementById("calMonthYearTitle");
+      const subEl = document.getElementById("calHinduMonthSub");
+      const gridEl = document.getElementById("calendarDaysGrid");
+      if (!gridEl) return;
+
+      const monthName = HINDI_MONTH_NAMES[currentCalMonth];
+      const hinduPair = HINDU_MONTH_PAIRS[currentCalMonth];
+      const samvatStr = getHinduSamvat(currentCalYear, currentCalMonth);
+
+      if (titleEl) titleEl.innerText = `${monthName} ${currentCalYear}`;
+      if (subEl) subEl.innerText = `${hinduPair} | ${samvatStr}`;
+
+      gridEl.innerHTML = "";
+
+      const firstDayOfWeek = new Date(currentCalYear, currentCalMonth, 1).getDay();
+      const daysInMonth = new Date(currentCalYear, currentCalMonth + 1, 0).getDate();
+
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      // Empty leading cells
+      for (let i = 0; i < firstDayOfWeek; i++) {
+        const emptyCell = document.createElement("div");
+        emptyCell.className = "calendar-day empty";
+        gridEl.appendChild(emptyCell);
+      }
+
+      // Days of month
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dayStr = String(d).padStart(2, '0');
+        const monthStr = String(currentCalMonth + 1).padStart(2, '0');
+        const dateStr = `${currentCalYear}-${monthStr}-${dayStr}`;
+
+        const cell = document.createElement("div");
+        cell.className = "calendar-day";
+
+        const dayOfWeek = (firstDayOfWeek + d - 1) % 7;
+        if (dayOfWeek === 0) cell.classList.add("sun");
+
+        if (dateStr === todayStr) cell.classList.add("today");
+        if (dateStr === selectedCalDateStr) cell.classList.add("selected");
+
+        const festival = HINDU_FESTIVALS.find(f => f.date === dateStr);
+        const amavasya = AMAVASYA_LIST.find(a => a.date === dateStr);
+        const bdays = membersList.filter(m => m.dob && m.dob.endsWith(`-${monthStr}-${dayStr}`));
+        const annivs = membersList.filter(m => m.anniversary && m.anniversary.endsWith(`-${monthStr}-${dayStr}`));
+
+        let dotsHtml = "";
+        let badgeText = "";
+
+        if (amavasya) {
+          cell.classList.add("has-amavasya");
+          dotsHtml += `<span>🌑</span>`;
+          badgeText = "अमावस्या";
+        }
+        if (festival) {
+          cell.classList.add("has-festival");
+          dotsHtml += `<span>🚩</span>`;
+          if (!badgeText) {
+            badgeText = festival.name.split('/')[0].split('(')[0].trim().slice(0, 5);
+          }
+        }
+        if (bdays.length > 0) {
+          dotsHtml += `<span>🎂</span>`;
+        }
+        if (annivs.length > 0) {
+          dotsHtml += `<span>💍</span>`;
+        }
+
+        cell.innerHTML = `
+          <span class="cal-day-num">${d}</span>
+          ${dotsHtml ? `<div class="cal-day-dots">${dotsHtml}</div>` : ''}
+          ${badgeText ? `<div class="cal-badge-mini" style="color:${amavasya ? '#1d4ed8' : '#ea580c'};">${badgeText}</div>` : ''}
+        `;
+
+        cell.onclick = () => {
+          selectedCalDateStr = dateStr;
+          renderHinduMonthCalendar();
+          renderSelectedDayDetails(dateStr);
+        };
+
+        gridEl.appendChild(cell);
+      }
+
+      renderSelectedDayDetails(selectedCalDateStr);
+    }
+
+    function changeCalendarMonth(delta) {
+      currentCalMonth += delta;
+      if (currentCalMonth < 0) {
+        currentCalMonth = 11;
+        currentCalYear -= 1;
+      } else if (currentCalMonth > 11) {
+        currentCalMonth = 0;
+        currentCalYear += 1;
+      }
+      const selDate = new Date(selectedCalDateStr);
+      if (selDate.getFullYear() !== currentCalYear || selDate.getMonth() !== currentCalMonth) {
+        const monthStr = String(currentCalMonth + 1).padStart(2, '0');
+        selectedCalDateStr = `${currentCalYear}-${monthStr}-01`;
+      }
+      renderHinduMonthCalendar();
+    }
+
+    function resetCalendarToToday() {
+      const now = new Date();
+      currentCalYear = now.getFullYear();
+      currentCalMonth = now.getMonth();
+      selectedCalDateStr = now.toISOString().split('T')[0];
+      renderHinduMonthCalendar();
+    }
+
+    function renderSelectedDayDetails(dateStr) {
+      const detailsEl = document.getElementById("selectedDayCard");
+      if (!detailsEl) return;
+
+      const parts = dateStr.split('-');
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      const dateObj = new Date(y, m, d);
+
+      const HINDI_DAYS = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
+      const dayName = HINDI_DAYS[dateObj.getDay()];
+      const formattedDate = `${d} ${HINDI_MONTH_NAMES[m]} ${y}, ${dayName}`;
+
+      const festival = HINDU_FESTIVALS.find(f => f.date === dateStr);
+      const amavasya = AMAVASYA_LIST.find(a => a.date === dateStr);
+      const monthStr = String(m + 1).padStart(2, '0');
+      const dayStr = String(d).padStart(2, '0');
+      const bdays = membersList.filter(mem => mem.dob && mem.dob.endsWith(`-${monthStr}-${dayStr}`));
+      const annivs = membersList.filter(mem => mem.anniversary && mem.anniversary.endsWith(`-${monthStr}-${dayStr}`));
+
+      let eventsHtml = "";
+
+      if (amavasya) {
+        eventsHtml += `
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px; margin-bottom:8px;">
+            <div style="font-weight:700; color:#1e40af; font-size:13px;">
+              🌑 ${amavasya.name}
+            </div>
+            <div style="font-size:11px; color:#3b82f6; margin-top:2px;">
+              ${amavasya.desc || 'सत्संग, अंशदान एवं पितृ तर्पण दिवस'}
+            </div>
+            <div style="margin-top:6px; display:flex; gap:6px;">
+              <button onclick="openPhonePeModal('अंशदान - ' + '${amavasya.name}')" class="btn-quick-phonepe" style="padding:4px 8px; font-size:11px;">
+                <i class="fa-solid fa-mobile-screen-button"></i> PhonePe अंशदान
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      if (festival) {
+        eventsHtml += `
+          <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:10px; margin-bottom:8px;">
+            <div style="font-weight:700; color:#c2410c; font-size:13px;">
+              🚩 ${festival.name}
+            </div>
+            <div style="font-size:11px; color:#ea580c; margin-top:2px;">
+              तिथि: ${festival.tithi}
+            </div>
+            ${festival.wish ? `
+              <div style="font-size:11px; color:#78350f; font-style:italic; margin-top:4px; background:rgba(255,255,255,0.7); padding:6px; border-radius:6px;">
+                "${festival.wish}"
+              </div>
+              <div style="margin-top:6px;">
+                <button onclick="shareFestivalWish('${festival.name}', '${(festival.wish || '').replace(/'/g, "\\'")}')" style="background:#16a34a; color:white; border:none; padding:4px 9px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
+                  <i class="fa-brands fa-whatsapp"></i> शुभकामनाएं शेयर करें
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      if (bdays.length > 0) {
+        bdays.forEach(mem => {
+          eventsHtml += `
+            <div style="background:#fefce8; border:1px solid #fef08a; border-radius:8px; padding:10px; margin-bottom:8px;">
+              <div style="font-weight:700; color:#854d0e; font-size:13px;">
+                🎂 ${mem.name} का जन्मदिन!
+              </div>
+              <div style="font-size:11px; color:#a16207; margin-top:2px;">
+                युवा शक्ति ग्रुप (भाटी परिवार) की ओर से हार्दिक शुभकामनाएं!
+              </div>
+              <div style="margin-top:6px; display:flex; gap:6px;">
+                <button onclick="shareMemberWish('birthday', '${mem.name}', '${mem.whatsapp || mem.phone}')" style="background:#16a34a; color:white; border:none; padding:4px 9px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
+                  <i class="fa-brands fa-whatsapp"></i> बधाई भेजें
+                </button>
+                <a href="tel:${mem.phone}" style="background:#2563eb; color:white; text-decoration:none; padding:4px 9px; border-radius:6px; font-weight:600; font-size:11px; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-phone"></i> कॉल
+                </a>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      if (annivs.length > 0) {
+        annivs.forEach(mem => {
+          eventsHtml += `
+            <div style="background:#fdf2f8; border:1px solid #fbcfe8; border-radius:8px; padding:10px; margin-bottom:8px;">
+              <div style="font-weight:700; color:#9d174d; font-size:13px;">
+                💍 ${mem.name} की विवाह वर्षगांठ!
+              </div>
+              <div style="font-size:11px; color:#be185d; margin-top:2px;">
+                सुखी एवं मंगलमय दांपत्य जीवन की अनंत शुभकामनाएं!
+              </div>
+              <div style="margin-top:6px; display:flex; gap:6px;">
+                <button onclick="shareMemberWish('anniversary', '${mem.name}', '${mem.whatsapp || mem.phone}')" style="background:#16a34a; color:white; border:none; padding:4px 9px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
+                  <i class="fa-brands fa-whatsapp"></i> बधाई भेजें
+                </button>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      if (!eventsHtml) {
+        eventsHtml = `
+          <div style="font-size:12px; color:#64748b; padding:8px 0;">
+            <i class="fa-solid fa-sun" style="color:#f59e0b;"></i> इस तिथि पर कोई विशेष पर्व या उत्सव दर्ज नहीं है। सामान्य शुभ दिवस।
+          </div>
+        `;
+      }
+
+      detailsEl.innerHTML = `
+        <div class="selected-day-header">
+          <h4><i class="fa-solid fa-calendar-day" style="color:#2563eb;"></i> ${formattedDate}</h4>
+          <span style="font-size:11px; font-weight:700; color:#ea580c; background:#fff7ed; padding:1px 6px; border-radius:6px;">पंचांग विवरण</span>
+        </div>
+        ${eventsHtml}
+      `;
+    }
+
+    function shareFestivalWish(festivalName, wish) {
+      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n*${festivalName}*\n\n${wish}\n\n📲 युवा शक्ति ऐप डाउनलोड करें:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    function shareMemberWish(type, name, phone) {
+      let text = "";
+      if (type === 'birthday') {
+        text = `🎂 *जन्मदिन की हार्दिक शुभकामनाएं!* 🎂\n\nआदरणीय *${name} जी*,\nयुवा शक्ति ग्रुप (भाटी परिवार कुचेरा) की ओर से आपको जन्मदिन की अनंत मंगलकामनाएं! ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु और अपार खुशियां प्रदान करें। 💐🎉\n\n🚩 *युवा शक्ति ग्रुप*`;
+      } else {
+        text = `💍 *विवाह वर्षगांठ की हार्दिक बधाई!* 💍\n\nआदरणीय *${name} जी*,\nआपको विवाह वर्षगांठ की हार्दिक शुभकामनाएं! आपका दांपत्य जीवन सदैव प्रेम, विश्वास और खुशियों से परिपूर्ण रहे। 💐\n\n🚩 *युवा शक्ति ग्रुप*`;
+      }
+      const cleanPhone = (phone || '').replace(/\D/g, '');
+      const url = cleanPhone ? 
+        `https://wa.me/${cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(text)}` :
+        `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
     function renderCalendar() {
+      renderHinduMonthCalendar();
       const upcomingDiv = document.getElementById("upcomingEvents");
       const listDiv = document.getElementById("calendarList");
       const badge = document.getElementById("upcomingCountBadge");
