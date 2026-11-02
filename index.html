@@ -1848,7 +1848,82 @@
       90% { transform: rotate(-15deg); }
       95% { transform: rotate(8deg); }
     }
-    /* iOS Liquid Glass Settings List Item & Tiles */
+
+    /* 🟢 iOS Toggle Switch for Payment Status (On/Off) */
+    .ios-toggle-switch {
+      position: relative;
+      width: 60px;
+      height: 28px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      padding: 2px;
+      transition: background 0.25s ease, box-shadow 0.25s ease;
+      user-select: none;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .ios-toggle-switch.on {
+      background: #16a34a;
+    }
+    .ios-toggle-switch.off {
+      background: #dc2626;
+    }
+    .ios-toggle-switch .toggle-thumb {
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ios-toggle-switch.on .toggle-thumb {
+      transform: translateX(32px);
+    }
+    .ios-toggle-switch.off .toggle-thumb {
+      transform: translateX(0px);
+    }
+    .ios-toggle-switch .toggle-label {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 0.3px;
+    }
+    .ios-toggle-switch.on .toggle-label {
+      left: 7px;
+    }
+    .ios-toggle-switch.off .toggle-label {
+      right: 7px;
+    }
+
+    /* Header Bell Button & Notification Items */
+    .notif-bell-btn:active {
+      transform: scale(0.92);
+    }
+    .notif-item-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 122, 255, 0.12);
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+    body.dark-theme .notif-item-card {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .cal-anniv-ring-float {
+      position: absolute;
+      top: 1px;
+      left: 2px;
+      font-size: 11px;
+      line-height: 1;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+      animation: cakeFloatBounce 2.4s ease-in-out infinite;
+      z-index: 2;
+    }
     .settings-list-item {
       display: flex;
       align-items: center;
@@ -2119,7 +2194,13 @@
       <h1 id="appTitleText" data-i18n="app_title">युवा शक्ति ग्रुप</h1>
       <div class="header-subtitle" id="appSubTitleText" data-i18n="app_subtitle">भाटी परिवार कुचेरा</div>
     </div>
-    <div class="header-actions" id="mainHeaderActions" style="min-width:40px; display:flex; justify-content:flex-end;">
+    <div class="header-actions" id="mainHeaderActions" style="display:flex; align-items:center; gap:8px; justify-content:flex-end;">
+      <!-- 🔔 Notification Center Bell Button -->
+      <button class="notif-bell-btn" id="notifBellBtn" onclick="openNotificationCenterModal()" title="सूचनाएं (Notifications)" style="position:relative; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.88); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1.2px solid rgba(0,122,255,0.25); color:#1d4ed8; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.06); transition:transform 0.15s;">
+        <i class="fa-solid fa-bell"></i>
+        <span id="notifBadgeCount" style="display:none; position:absolute; top:-3px; right:-3px; background:#dc2626; color:white; font-size:9.5px; font-weight:800; border-radius:10px; min-width:16px; height:16px; align-items:center; justify-content:center; padding:0 3px; border:1.5px solid white;">0</span>
+      </button>
+
       <!-- Member Login Button (hidden when logged in) -->
       <button class="auth-btn" id="loginBtn" onclick="openLoginModal()" style="border-radius:10px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; border:none; padding:5px 8px; font-weight:700; font-size:10.5px; box-shadow:0 2px 6px rgba(37,99,235,0.28);">
         <i class="fa-solid fa-right-to-bracket"></i>
@@ -2213,14 +2294,29 @@
           <div class="amavasya-subtext" id="amavasyaTithiDesc">
             <i class="fa-solid fa-om" style="color:#fbbf24;"></i> <span data-i18n="amavasya_footer_desc">सत्संग व अंशदान दिवस</span>
           </div>
-          <div style="display:flex; gap:6px;">
-            <button class="btn-quick-phonepe" onclick="openPhonePeModal('अमावस्या अंशदान')">
-              <i class="fa-solid fa-mobile-screen-button"></i> PhonePe
-            </button>
-            <button class="btn-quick-contrib" onclick="quickFillAmavasya()">
-              <i class="fa-solid fa-hand-holding-dollar"></i> <span data-i18n="btn_add_contrib">अंशदान जोड़ें</span>
-            </button>
+        </div>
+      </div>
+
+      <!-- 💳 अपना बकाया अभी भुगतान करें Box (PhonePe & Google Pay Quick Pay) -->
+      <div class="ios-glass-card" style="margin-bottom:12px; background:linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(240, 247, 255, 0.90) 100%); border:1.5px solid rgba(37, 99, 235, 0.22); border-radius:18px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 6px 18px rgba(37, 99, 235, 0.08);">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:34px; height:34px; border-radius:11px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; display:flex; align-items:center; justify-content:center; font-size:15px; box-shadow:0 3px 8px rgba(22,163,74,0.3); flex-shrink:0;">
+            <i class="fa-solid fa-wallet"></i>
           </div>
+          <div>
+            <strong style="font-size:13px; color:var(--text-main); display:block; line-height:1.2;">अपना बकाया अभी भुगतान करें</strong>
+            <span style="font-size:10.5px; color:var(--text-muted);">सीधे UPI द्वारा सुरक्षित भुगतान</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <!-- PhonePe Button -->
+          <button onclick="payViaApp('phonepe')" style="background:#5f259f; color:white; border:none; padding:7px 11px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 3px 8px rgba(95,37,159,0.3);">
+            <i class="fa-solid fa-mobile-screen-button"></i> <span>PhonePe</span>
+          </button>
+          <!-- Google Pay Button -->
+          <button onclick="payViaApp('gpay')" style="background:#ffffff; color:#1f2937; border:1.5px solid #cbd5e1; padding:7px 11px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 3px 8px rgba(0,0,0,0.06);">
+            <i class="fa-brands fa-google-pay" style="font-size:16px; color:#4285f4;"></i> <span>GPay</span>
+          </button>
         </div>
       </div>
 
@@ -2317,6 +2413,25 @@
 
         <!-- Collapsible Ganesh Details -->
         <div id="ganeshVisarjanDetails" style="display:none; padding:12px 14px 14px; border-top:1px dashed #fcd34d; background:rgba(255, 255, 255, 0.75);">
+          <!-- 3 Distinct Stat Metrics for Ganesh Visarjan -->
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;">
+            <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:12px; padding:8px 6px; text-align:center;">
+              <div style="font-size:10px; color:#9f1239; font-weight:700;">1. कुल विसर्जन खर्च</div>
+              <div id="ganeshStatExpense" style="font-size:13.5px; font-weight:800; color:#e11d48; margin-top:2px;">₹0</div>
+            </div>
+            <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:12px; padding:8px 6px; text-align:center; position:relative;">
+              <div style="font-size:10px; color:#065f46; font-weight:700;">2. चंदा व आरती आय</div>
+              <div id="ganeshStatIncome" style="font-size:13.5px; font-weight:800; color:#059669; margin-top:2px;">₹0</div>
+              <button id="btnEditGaneshIncome" onclick="promptEditGaneshIncome()" style="display:none; position:absolute; top:2px; right:3px; background:transparent; border:none; color:#047857; font-size:10px; cursor:pointer;" title="आय राशि बदलें (संचालक)">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+            </div>
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:8px 6px; text-align:center;">
+              <div style="font-size:10px; color:#15803d; font-weight:700;">3. बाकी बचे पैसे</div>
+              <div id="ganeshStatRemaining" style="font-size:13.5px; font-weight:800; color:#16a34a; margin-top:2px;">₹0</div>
+            </div>
+          </div>
+
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
             <span style="font-size:11.5px; font-weight:700; color:#78350f;">
               <i class="fa-solid fa-list-check"></i> विसर्जन खर्च सूची (<span id="ganeshItemCount">0 मद</span>)
@@ -2600,7 +2715,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v4.3.4
+            APK v4.3.5
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -2628,7 +2743,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.3.4 (बिल्ड कोड: 20)
+              v4.3.5 (बिल्ड कोड: 21)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -3746,10 +3861,81 @@
     </div>
   </div>
 
+  <!-- 🔔 Notification Center Modal (सूचना केंद्र व एडमिन पुश संदेश) -->
+  <div id="notificationCenterModal" class="modal-overlay" style="display:none; z-index:1010;" onclick="if(event.target===this) closeNotificationCenterModal()">
+    <div class="modal-content ios-glass-card" style="max-width:480px; width:94%; max-height:92vh; overflow-y:auto; padding:20px 16px; border-radius:26px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        <div style="font-weight:800; font-size:16px; color:#1d4ed8; display:flex; align-items:center; gap:8px;">
+          <div style="width:32px; height:32px; border-radius:50%; background:#dbeafe; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-size:15px;">
+            <i class="fa-solid fa-bell"></i>
+          </div>
+          <span>सूचना केंद्र (Notifications)</span>
+        </div>
+        <button onclick="closeNotificationCenterModal()" style="background:rgba(0,0,0,0.06); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; color:var(--text-color); display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- 📢 Admin Push Broadcast Box (Only for Admin) -->
+      <div id="notifAdminPushSection" style="display:none; background:linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(219, 234, 254, 0.85)); border:1.5px solid #93c5fd; border-radius:18px; padding:12px; margin-bottom:14px; box-shadow:0 4px 12px rgba(37,99,235,0.08);">
+        <div style="font-weight:800; font-size:12.5px; color:#1e40af; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
+          <span><i class="fa-solid fa-bullhorn" style="color:#2563eb;"></i> संचालक पुश संदेश (सभी को भेजें)</span>
+          <span style="font-size:10px; background:#bfdbfe; color:#1e3a8a; padding:1px 6px; border-radius:10px;">संचालक</span>
+        </div>
+        <input type="text" id="adminPushMsgTitle" placeholder="सूचना शीर्षक (उदा. विशेष बैठक, अमावस्या सूचना)" style="width:100%; padding:8px 10px; border-radius:10px; border:1px solid #93c5fd; font-size:12px; margin-bottom:6px; background:white;">
+        <textarea id="adminPushMsgBody" placeholder="समस्त ग्रुप सदस्यों के लिए संदेश लिखें..." style="width:100%; padding:8px 10px; border-radius:10px; border:1px solid #93c5fd; font-size:12px; min-height:60px; resize:vertical; margin-bottom:8px; background:white; font-family:inherit;"></textarea>
+        <button onclick="sendAdminPushMessage()" class="btn-main" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border-radius:12px; padding:9px 14px; font-size:12px; font-weight:800; width:100%; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 8px rgba(37,99,235,0.3);">
+          <i class="fa-solid fa-paper-plane"></i> <span>सभी ग्रुप सदस्यों को पुश संदेश भेजें</span>
+        </button>
+      </div>
+
+      <!-- Notification History Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <strong style="font-size:13px; color:var(--text-main);">
+          <i class="fa-solid fa-clock-rotate-left" style="color:#64748b;"></i> सूचना इतिहास (Notification History)
+        </strong>
+        <span id="notifHistoryCountBadge" style="font-size:10.5px; background:rgba(0,122,255,0.1); color:#1d4ed8; padding:2px 8px; border-radius:12px; font-weight:700;">0 सूचनाएं</span>
+      </div>
+
+      <!-- History Items Container -->
+      <div id="notificationListContainer" style="display:flex; flex-direction:column; gap:8px; max-height:340px; overflow-y:auto; padding-right:2px; margin-bottom:14px;">
+        <div style="text-align:center; padding:20px; color:#64748b; font-size:12px;">सूचनाएं लोड हो रही हैं...</div>
+      </div>
+
+      <button type="button" onclick="closeNotificationCenterModal()" style="width:100%; background:rgba(0,0,0,0.06); border:none; padding:10px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; color:var(--text-color);">
+        बंद करें
+      </button>
+    </div>
+  </div>
+
+  <!-- 🎉 Day Celebration & Greeting Modal (तारीख क्लिक पर उत्सव व बधाई पॉपअप) -->
+  <div id="dayCelebrationModal" class="modal-overlay" style="display:none; z-index:1011;" onclick="if(event.target===this) closeDayCelebrationModal()">
+    <div class="modal-content ios-glass-card" style="max-width:420px; width:92%; padding:22px 18px; border-radius:26px; text-align:center; background:linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 247, 237, 0.92) 100%); border:1.5px solid rgba(249, 115, 22, 0.25);">
+      <div id="dayCelebIcon" style="font-size:46px; line-height:1; margin-bottom:8px; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));">🪔</div>
+      <h3 id="dayCelebTitle" style="font-size:18px; font-weight:900; color:#9a3412; margin:0 0 4px 0;">दीपावली की हार्दिक शुभकामनाएं!</h3>
+      <div id="dayCelebDate" style="font-size:12px; font-weight:700; color:#ea580c; margin-bottom:12px;">8 नवंबर 2026</div>
+
+      <div style="background:rgba(255, 255, 255, 0.85); border:1px solid #fed7aa; border-radius:16px; padding:14px; margin-bottom:14px; text-align:left; box-shadow:0 4px 12px rgba(234,88,12,0.08);">
+        <p id="dayCelebWish" style="font-size:13px; line-height:1.6; color:#431407; margin:0; font-weight:600;">
+          दीपावली के पावन पर्व पर आप सभी के जीवन में सुख, शांति, समृद्धि एवं आरोग्य का संचार हो।
+        </p>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button id="dayCelebBtnGroupShare" class="btn-main" style="background:linear-gradient(135deg, #16a34a, #15803d); border-radius:14px; padding:11px; font-size:13px; font-weight:800; box-shadow:0 4px 12px rgba(22, 163, 74, 0.3); display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-brands fa-whatsapp" style="font-size:16px;"></i> <span>व्हाट्सएप पर शेयर करें (Share to WhatsApp)</span>
+        </button>
+        <button type="button" onclick="closeDayCelebrationModal()" style="background:rgba(0,0,0,0.06); border:none; padding:9px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; color:var(--text-color);">
+          बंद करें
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.3.4";
+    const APP_VERSION = "4.3.5";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -5521,9 +5707,15 @@
           `<img src="${m.photoUrl}" alt="${m.name}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : 
           firstChar;
 
-        const statusBadgeHtml = payStatus.isPaid ?
-          `<span class="badge-status-paid" ${isAdmin ? `onclick="event.stopPropagation(); quickToggleMemberPayment('${m.id}')" title="क्लिक करके स्थिति बदलें (संचालक)" style="cursor:pointer;"` : ''}><i class="fa-solid fa-circle-check"></i> ${currentLang === 'en' ? 'Paid' : 'जमा'}${isAdmin ? ' <i class="fa-solid fa-pen" style="font-size:8.5px; margin-left:2px;"></i>' : ''}</span>` :
-          `<span class="badge-status-unpaid" ${isAdmin ? `onclick="event.stopPropagation(); quickToggleMemberPayment('${m.id}')" title="क्लिक करके स्थिति बदलें (संचालक)" style="cursor:pointer;"` : ''}><i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'en' ? 'Due' : 'बाकी'}${isAdmin ? ' <i class="fa-solid fa-pen" style="font-size:8.5px; margin-left:2px;"></i>' : ''}</span>`;
+        const statusBadgeHtml = isAdmin ? `
+          <div class="ios-toggle-switch ${payStatus.isPaid ? 'on' : 'off'}" onclick="event.stopPropagation(); toggleMemberPaymentSwitch('${m.id}', ${!payStatus.isPaid})" title="क्लिक करके जमा या बाकी करें (संचालक)">
+            <span class="toggle-label">${payStatus.isPaid ? (currentLang === 'en' ? 'Paid' : 'जमा') : (currentLang === 'en' ? 'Due' : 'बाकी')}</span>
+            <div class="toggle-thumb"></div>
+          </div>
+        ` : (payStatus.isPaid ?
+          `<span class="badge-status-paid"><i class="fa-solid fa-circle-check"></i> ${currentLang === 'en' ? 'Paid' : 'जमा'}</span>` :
+          `<span class="badge-status-unpaid"><i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'en' ? 'Due' : 'बाकी'}</span>`
+        );
 
         const quickReminderBtn = (isAdmin && !payStatus.isPaid) ?
           `<button onclick="event.stopPropagation(); sendIndividualDueReminder('${m.id}')" title="इस सदस्य को व्हाट्सएप पर बकाया स्मरण भेजें" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; padding:2px 7px; border-radius:6px; font-size:9.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:3px;"><i class="fa-brands fa-whatsapp" style="color:#16a34a;"></i> स्मरण</button>` : '';
@@ -5610,13 +5802,15 @@
                 ${currentLang === 'en' ? 'Last Paid: ₹' : 'अंतिम जमा: ₹'}${Number(payStatus.lastPayment.amount || 0).toLocaleString('en-IN')} (${formatDisplayDate(payStatus.lastPayment.date)})
               </div>
             </div>
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span class="badge-status-paid" style="font-size:12px; padding:3px 9px;">${currentLang === 'en' ? 'Paid' : 'जमा'}</span>
+            <div style="display:flex; align-items:center; gap:8px;">
               ${isAdmin ? `
-                <button onclick="quickToggleMemberPayment('${m.id}')" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; padding:4px 8px; border-radius:8px; font-weight:700; font-size:10.5px; cursor:pointer;" title="स्थिति बाकी करें">
-                  <i class="fa-solid fa-arrows-rotate"></i> बाकी करें
-                </button>
-              ` : ''}
+                <div class="ios-toggle-switch ${payStatus.isPaid ? 'on' : 'off'}" onclick="toggleMemberPaymentSwitch('${m.id}', ${!payStatus.isPaid})" title="टॉगल करके स्थिति बदलें (संचालक)">
+                  <span class="toggle-label">${payStatus.isPaid ? 'जमा' : 'बाकी'}</span>
+                  <div class="toggle-thumb"></div>
+                </div>
+              ` : `
+                <span class="badge-status-paid" style="font-size:12px; padding:3px 9px;">${currentLang === 'en' ? 'Paid' : 'जमा'}</span>
+              `}
             </div>
           </div>
         `;
@@ -5633,11 +5827,12 @@
                 ${currentLang === 'en' ? 'Monthly Amavasya satsang & group contribution pending' : 'अमावस्या सत्संग व ग्रुप सेवा अंशदान अपेक्षित'}
               </div>
             </div>
-            <div style="display:flex; align-items:center; gap:6px;">
+            <div style="display:flex; align-items:center; gap:8px;">
               ${isAdmin ? `
-                <button onclick="quickToggleMemberPayment('${m.id}')" style="background:#dcfce7; border:1px solid #86efac; color:#166534; padding:4px 8px; border-radius:8px; font-weight:700; font-size:10.5px; cursor:pointer;" title="1-क्लिक में जमा करें">
-                  <i class="fa-solid fa-check"></i> जमा करें
-                </button>
+                <div class="ios-toggle-switch ${payStatus.isPaid ? 'on' : 'off'}" onclick="toggleMemberPaymentSwitch('${m.id}', ${!payStatus.isPaid})" title="टॉगल करके स्थिति बदलें (संचालक)">
+                  <span class="toggle-label">${payStatus.isPaid ? 'जमा' : 'बाकी'}</span>
+                  <div class="toggle-thumb"></div>
+                </div>
               ` : `
                 <span class="badge-status-unpaid" style="font-size:11px; padding:3px 8px;">${currentLang === 'en' ? 'Due' : 'बाकी'}</span>
               `}
@@ -5702,6 +5897,11 @@
       if (pinRow && pinValEl) {
         if (isSelf || isAdmin) {
           pinRow.style.display = "flex";
+          if ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम"))) {
+            if (!m.pin || m.pin === "1234") {
+              m.pin = "992942";
+            }
+          }
           if (m.pin) {
             pinValEl.innerText = isProfilePinVisible ? m.pin : '••••';
             pinValEl.style.color = "#1d4ed8";
@@ -5819,14 +6019,14 @@
       }
 
       const promptMsg = m.pin ? 
-        (currentLang === 'en' ? `Enter new 4-digit login PIN for ${m.name}:` : `${m.name} के लिए नया 4-अंकों का लॉगिन कोड (PIN) दर्ज करें:`) :
-        (currentLang === 'en' ? `Set 4-digit login PIN for ${m.name}:` : `${m.name} के लिए 4-अंकों का लॉगिन कोड (PIN) सेट करें:`);
+        (currentLang === 'en' ? `Enter new 4-6 digit login PIN for ${m.name}:` : `${m.name} के लिए नया 4 से 6 अंकों का लॉगिन कोड (PIN) दर्ज करें:`) :
+        (currentLang === 'en' ? `Set 4-6 digit login PIN for ${m.name}:` : `${m.name} के लिए 4 से 6 अंकों का लॉगिन कोड (PIN) सेट करें:`);
       
       const newPin = prompt(promptMsg, m.pin || "");
       if (newPin === null) return;
       const cleanPin = newPin.trim();
-      if (!/^\d{4}$/.test(cleanPin)) {
-        showToast(currentLang === 'en' ? "PIN must be exactly 4 digits (e.g. 1234)" : "पिन ठीक 4 अंकों का होना चाहिए (उदा. 1234)", "warning");
+      if (!/^\d{4,6}$/.test(cleanPin)) {
+        showToast(currentLang === 'en' ? "PIN must be 4 to 6 digits (e.g. 992942)" : "पिन 4 से 6 अंकों का होना चाहिए (उदा. 992942)", "warning");
         return;
       }
 
@@ -6054,37 +6254,63 @@
       const thAction = document.getElementById("thExpenseAction");
       const totalFooter = document.getElementById("expensesTotalFooter");
 
-      // Calculate totals
-      let totalIn = 0;
-      let totalOut = 0;
-      transactions.forEach(t => {
-        const amt = Number(t.amount) || 0;
-        if (t.type === "contribution") totalIn += amt;
-        else if (t.type === "expense") totalOut += amt;
-      });
-      const openingBal = getOpeningBalance();
-      const net = (openingBal + totalIn) - totalOut;
+      // Helper to identify Ganesh Visarjan transactions
+      const isGaneshItem = t => t.isGaneshVisarjan || t.category === "ganesh_visarjan" || 
+                                (t.description || '').includes("गणेश विसर्जन") || 
+                                (t.description || '').includes("गणेशोत्सव") || 
+                                (t.description || '').includes("गणेश");
 
-      if (totalExpenseEl) totalExpenseEl.innerText = "₹" + totalOut.toLocaleString('en-IN');
+      // Regular expenses exclude Ganesh Visarjan items
+      const regularExpenses = transactions.filter(t => t.type === "expense" && !isGaneshItem(t));
+      const ganeshExpenses = transactions.filter(t => t.type === "expense" && isGaneshItem(t));
+
+      const regularTotalOut = regularExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+      const ganeshTotalOut = ganeshExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+
+      // For contributions: opening balance (₹1963) ALREADY includes members' past/historical contributions.
+      // Only new upcoming Amavasya contributions add to current balance.
+      const newContributions = transactions.filter(t => 
+        t.type === "contribution" && 
+        !t.isPastRecord && 
+        !(t.description || '').includes("अक्टूबर") && 
+        !(t.description || '').includes("पुराना") && 
+        !(t.description || '').includes("पूर्व")
+      );
+      const newTotalIn = newContributions.reduce((sum, c) => sum + (Number(c.amount) || 0), 0);
+
+      const openingBal = getOpeningBalance(); // default 1963
+      const net = openingBal + newTotalIn - regularTotalOut;
+
+      if (totalExpenseEl) totalExpenseEl.innerText = "₹" + regularTotalOut.toLocaleString('en-IN');
       if (remainingBalanceEl) {
         remainingBalanceEl.innerText = "₹" + net.toLocaleString('en-IN');
         remainingBalanceEl.style.color = net >= 0 ? '#047857' : '#dc2626';
       }
       if (expenseFundSub) {
         expenseFundSub.innerText = openingBal > 0 ?
-          `पूर्व शेष: ₹${openingBal.toLocaleString('en-IN')} | कुल जमा: ₹${totalIn.toLocaleString('en-IN')}` :
-          `कुल जमा: ₹${totalIn.toLocaleString('en-IN')}`;
+          `प्रारंभिक शेष: ₹${openingBal.toLocaleString('en-IN')} | उपलब्ध कुल कोष: ₹${net.toLocaleString('en-IN')}` :
+          `कुल जमा: ₹${newTotalIn.toLocaleString('en-IN')}`;
       }
 
       const btnEditOpen = document.getElementById("btnEditOpeningBalance");
       if (btnEditOpen) btnEditOpen.style.display = isAdmin ? "inline-flex" : "none";
 
-      // Render Ganesh Visarjan Sub-Table & Badges
-      const ganeshExpenses = transactions.filter(t => 
-        t.type === "expense" && 
-        (t.isGaneshVisarjan || t.category === "ganesh_visarjan" || (t.description || '').includes("गणेश विसर्जन") || (t.description || '').includes("गणेशोत्सव"))
-      );
-      const ganeshTotal = ganeshExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+      // Render Ganesh Visarjan 3 Stat Metrics & Sub-Table
+      const ganeshStatExpense = document.getElementById("ganeshStatExpense");
+      const ganeshStatIncome = document.getElementById("ganeshStatIncome");
+      const ganeshStatRemaining = document.getElementById("ganeshStatRemaining");
+      const btnEditGaneshInc = document.getElementById("btnEditGaneshIncome");
+
+      const ganeshIncome = getGaneshIncome();
+      const ganeshRemaining = ganeshIncome - ganeshTotalOut;
+
+      if (ganeshStatExpense) ganeshStatExpense.innerText = "₹" + ganeshTotalOut.toLocaleString('en-IN');
+      if (ganeshStatIncome) ganeshStatIncome.innerText = "₹" + ganeshIncome.toLocaleString('en-IN');
+      if (ganeshStatRemaining) {
+        ganeshStatRemaining.innerText = "₹" + ganeshRemaining.toLocaleString('en-IN');
+        ganeshStatRemaining.style.color = ganeshRemaining >= 0 ? '#047857' : '#dc2626';
+      }
+      if (btnEditGaneshInc) btnEditGaneshInc.style.display = isAdmin ? "inline-block" : "none";
 
       const ganeshTotalBadge = document.getElementById("ganeshTotalBadge");
       const ganeshTotalFooter = document.getElementById("ganeshTotalFooter");
@@ -6093,8 +6319,8 @@
       const thGaneshAction = document.getElementById("thGaneshAction");
       const ganeshTbody = document.getElementById("ganeshExpensesTableBody");
 
-      if (ganeshTotalBadge) ganeshTotalBadge.innerText = "₹" + ganeshTotal.toLocaleString('en-IN');
-      if (ganeshTotalFooter) ganeshTotalFooter.innerText = "₹" + ganeshTotal.toLocaleString('en-IN');
+      if (ganeshTotalBadge) ganeshTotalBadge.innerText = "₹" + ganeshTotalOut.toLocaleString('en-IN');
+      if (ganeshTotalFooter) ganeshTotalFooter.innerText = "₹" + ganeshTotalOut.toLocaleString('en-IN');
       if (ganeshItemCount) ganeshItemCount.innerText = `${ganeshExpenses.length} मद`;
       if (btnAddGanesh) btnAddGanesh.style.display = isAdmin ? "inline-flex" : "none";
       if (thGaneshAction) thGaneshAction.style.display = isAdmin ? "table-cell" : "none";
@@ -6132,8 +6358,8 @@
       const legIn = document.getElementById("totalCollected");
       const legOut = document.getElementById("totalExpense");
       const legNet = document.getElementById("netBalance");
-      if (legIn) legIn.innerText = "₹" + totalIn.toLocaleString('en-IN');
-      if (legOut) legOut.innerText = "₹" + totalOut.toLocaleString('en-IN');
+      if (legIn) legIn.innerText = "₹" + newTotalIn.toLocaleString('en-IN');
+      if (legOut) legOut.innerText = "₹" + regularTotalOut.toLocaleString('en-IN');
       if (legNet) {
         legNet.innerText = "₹" + net.toLocaleString('en-IN');
         legNet.style.color = net >= 0 ? '#1d4ed8' : '#b91c1c';
@@ -6146,8 +6372,8 @@
 
       if (!tbody) return;
 
-      // Filter expenses
-      let expenses = transactions.filter(t => t.type === "expense");
+      // Filter expenses - regular table excludes Ganesh Visarjan items
+      let expenses = regularExpenses;
 
       if (searchTerm) {
         expenses = expenses.filter(t => {
@@ -6242,7 +6468,11 @@
     }
 
     function getOpeningBalance() {
-      return Number(localStorage.getItem("initial_opening_balance")) || 0;
+      const val = localStorage.getItem("initial_opening_balance");
+      if (val !== null && !isNaN(Number(val))) {
+        return Number(val);
+      }
+      return 1963;
     }
 
     async function promptEditOpeningBalance() {
@@ -6251,7 +6481,7 @@
         return;
       }
       const current = getOpeningBalance();
-      const input = prompt("ग्रुप के पास पहले से बचे हुए पैसे (प्रारंभिक शेष राशि) दर्ज करें (उदा. 5000):", current);
+      const input = prompt("ग्रुप के पास पहले से बचे हुए पैसे (प्रारंभिक शेष राशि) दर्ज करें (उदा. 1963):", current);
       if (input === null) return;
       const num = Number(input);
       if (isNaN(num) || num < 0) {
@@ -6268,21 +6498,55 @@
       renderExpensesSpreadsheet();
     }
 
-    // Firestore listener for opening balance in settings/finance
+    function getGaneshIncome() {
+      const stored = localStorage.getItem("ganesh_visarjan_income");
+      if (stored !== null && !isNaN(Number(stored))) {
+        return Number(stored);
+      }
+      return 14640;
+    }
+
+    async function promptEditGaneshIncome() {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
+        return;
+      }
+      const current = getGaneshIncome();
+      const input = prompt("गणेश विसर्जन कुल आय (चंदा व आरती) दर्ज करें:", current);
+      if (input === null) return;
+      const num = Number(input);
+      if (isNaN(num) || num < 0) {
+        showToast("कृपया वैध राशि दर्ज करें।", "warning");
+        return;
+      }
+      localStorage.setItem("ganesh_visarjan_income", num);
+      try {
+        await db.collection("settings").doc("finance").set({ ganeshIncome: num, updatedAt: new Date() }, { merge: true });
+        showToast(`गणेश विसर्जन आय ₹${num.toLocaleString('en-IN')} सुरक्षित हुई!`, "success");
+      } catch (e) {
+        showToast(`गणेश विसर्जन आय ₹${num.toLocaleString('en-IN')} सेट हुई।`, "info");
+      }
+      renderExpensesSpreadsheet();
+    }
+
+    // Firestore listener for opening balance and ganesh income in settings/finance
     try {
       db.collection("settings").doc("finance").onSnapshot(doc => {
         if (doc && doc.exists) {
           const data = doc.data();
           if (typeof data.openingBalance === "number") {
             localStorage.setItem("initial_opening_balance", data.openingBalance);
-            renderExpensesSpreadsheet();
           }
+          if (typeof data.ganeshIncome === "number") {
+            localStorage.setItem("ganesh_visarjan_income", data.ganeshIncome);
+          }
+          renderExpensesSpreadsheet();
         }
       }, err => console.log("Finance listener notice:", err));
     } catch (e) {}
 
-    // Quick 1-click toggle between "बाकी" and "जमा" for Admin
-    async function quickToggleMemberPayment(memberId) {
+    // Direct iOS 1-tap Toggle Switch between "बाकी" and "जमा" for Admin
+    async function toggleMemberPaymentSwitch(memberId, willBePaid) {
       if (!isAdmin) {
         showToast("अंशदान स्थिति बदलने का अधिकार केवल संचालक के पास है।", "warning");
         return;
@@ -6291,51 +6555,52 @@
       if (!m) return;
       const payStatus = getMemberPaymentStatus(m);
 
-      if (payStatus.isPaid) {
-        showConfirmDialog(
-          "स्थिति 'बाकी' में बदलें",
-          `क्या आप वाकई सदस्य "${m.name}" की स्थिति को 'बाकी' (Due) में बदलना चाहते हैं?`,
-          async () => {
-            try {
-              if (payStatus.lastPayment && payStatus.lastPayment.id) {
-                await db.collection("ledger").doc(payStatus.lastPayment.id).delete();
-                showToast(`"${m.name}" की स्थिति 'बाकी' में बदल दी गई।`, "info");
-              } else {
-                showToast("हालिया भुगतान रिकॉर्ड नहीं मिला।", "warning");
-              }
-              if (document.getElementById("memberProfileModal").style.display !== "none") {
-                openMemberProfileModal(memberId);
-              }
-            } catch (err) {
-              showToast("त्रुटि: " + err.message, "error");
-            }
+      if (willBePaid) {
+        try {
+          const todayStr = new Date().toISOString().slice(0, 10);
+          await db.collection("ledger").add({
+            type: "contribution",
+            description: `मासिक अंशदान - ${m.name} (${m.phone || ''})`,
+            amount: 100,
+            payMethod: "नकद",
+            date: todayStr,
+            createdAt: new Date()
+          });
+          showToast(`"${m.name}" को 'जमा' (Paid) कर दिया गया!`, "success");
+          addNotificationRecord({
+            title: "अंशदान जमा 💰",
+            message: `${m.name} का ₹100 मासिक अंशदान संचालक द्वारा 'जमा' दर्ज किया गया।`,
+            type: "contribution",
+            sender: "रेवंतराम भाटी"
+          });
+          if (document.getElementById("memberProfileModal") && document.getElementById("memberProfileModal").style.display !== "none") {
+            openMemberProfileModal(memberId);
           }
-        );
+        } catch (err) {
+          showToast("त्रुटि: " + err.message, "error");
+        }
       } else {
-        showConfirmDialog(
-          "स्थिति 'जमा' में बदलें",
-          `क्या सदस्य "${m.name}" का इस माह का ₹100 अंशदान 'जमा' (Paid) दर्ज करना चाहते हैं?`,
-          async () => {
-            try {
-              const todayStr = new Date().toISOString().slice(0, 10);
-              await db.collection("ledger").add({
-                type: "contribution",
-                description: `मासिक अंशदान - ${m.name} (${m.phone || ''})`,
-                amount: 100,
-                payMethod: "नकद",
-                date: todayStr,
-                createdAt: new Date()
-              });
-              showToast(`"${m.name}" का ₹100 अंशदान 'जमा' दर्ज हुआ!`, "success");
-              if (document.getElementById("memberProfileModal").style.display !== "none") {
-                openMemberProfileModal(memberId);
-              }
-            } catch (err) {
-              showToast("त्रुटि: " + err.message, "error");
-            }
+        try {
+          if (payStatus.lastPayment && payStatus.lastPayment.id) {
+            await db.collection("ledger").doc(payStatus.lastPayment.id).delete();
+            showToast(`"${m.name}" को 'बाकी' (Due) कर दिया गया।`, "info");
+          } else {
+            showToast("हालिया भुगतान रिकॉर्ड नहीं मिला।", "warning");
           }
-        );
+          if (document.getElementById("memberProfileModal") && document.getElementById("memberProfileModal").style.display !== "none") {
+            openMemberProfileModal(memberId);
+          }
+        } catch (err) {
+          showToast("त्रुटि: " + err.message, "error");
+        }
       }
+    }
+
+    async function quickToggleMemberPayment(memberId) {
+      const m = membersList.find(x => x.id === memberId);
+      if (!m) return;
+      const payStatus = getMemberPaymentStatus(m);
+      return toggleMemberPaymentSwitch(memberId, !payStatus.isPaid);
     }
 
     // Payment Verification Request System
@@ -6694,10 +6959,22 @@
         if (editId) {
           await db.collection("ledger").doc(editId).update(payload);
           showToast("खर्च सफलतापूर्वक अपडेट किया गया!", "success");
+          addNotificationRecord({
+            title: isGanesh ? "गणेश विसर्जन खर्च अपडेट 🐘" : "खर्च विवरण अपडेट 🧾",
+            message: `₹${amount.toLocaleString('en-IN')} - ${desc} (${spentBy})`,
+            type: "expense",
+            sender: spentBy
+          });
         } else {
           payload.createdAt = new Date();
           await db.collection("ledger").add(payload);
           showToast(isGanesh ? "गणेश विसर्जन खर्च स्प्रेडशीट में जुड़ गया!" : "नया खर्च स्प्रेडशीट में जोड़ दिया गया!", "success");
+          addNotificationRecord({
+            title: isGanesh ? "गणेश विसर्जन खर्च दर्ज 🐘" : "नया खर्च दर्ज 🧾",
+            message: `₹${amount.toLocaleString('en-IN')} - ${desc} (${spentBy})`,
+            type: "expense",
+            sender: spentBy
+          });
         }
         closeExpenseModal();
       } catch (err) {
@@ -7299,60 +7576,80 @@
           birthdayCakeHtml = `<div class="cal-bday-cake-float" title="🎂 जन्मदिन: ${bdayNames}">🎂</div>`;
         }
 
-        let dotsHtml = "";
+        let anniversaryRingHtml = "";
+        if (annivs.length > 0) {
+          cell.classList.add("has-anniversary");
+          const annivNames = annivs.map(a => a.name).join(', ');
+          anniversaryRingHtml = `<div class="cal-anniv-ring-float" title="💍 वर्षगांठ: ${annivNames}">💍</div>`;
+        }
+
+        // Determine specific festival symbol and badge
+        let festSymbol = "";
         let badgeText = "";
         let badgeColor = "#ea580c";
 
-        if (calendarFilter === 'festivals') {
-          if (festival) {
-            cell.classList.add("has-festival");
-            dotsHtml = `<span>🚩</span>`;
-            badgeText = festival.shortBadge || festival.name.split('/')[0].split('(')[0].trim().slice(0, 6);
-            badgeColor = "#ea580c";
-          } else if (nationalDay) {
-            const isTiranga = (nationalDay.date === "01-26" || nationalDay.date === "08-15");
-            const sym = isTiranga ? "🇮🇳" : (nationalDay.icon || "🌟");
-            dotsHtml = `<span>${sym}</span>`;
-            badgeText = nationalDay.name.split('(')[0].trim().slice(0, 5);
-            badgeColor = isTiranga ? "#15803d" : "#0284c7";
-          } else if (bdays.length > 0) {
-            dotsHtml = `<span>🎂</span>`;
-            badgeText = bdays[0].name.slice(0, 5);
-            badgeColor = "#d97706";
+        if (festival) {
+          cell.classList.add("has-festival");
+          const fName = (festival.name || "").toLowerCase();
+          if (fName.includes("दीपावली") || fName.includes("दिवाली") || fName.includes("धनतेरस") || fName.includes("रूप चौदस") || fName.includes("देव दीपावली")) {
+            festSymbol = "🪔";
+          } else if (fName.includes("शिव") || fName.includes("महाशिवरात्रि")) {
+            festSymbol = "🕉️";
+          } else if (fName.includes("होली") || fName.includes("धुलंडी")) {
+            festSymbol = "🎨";
+          } else if (fName.includes("राम") || fName.includes("दशहरा") || fName.includes("विजयादशमी")) {
+            festSymbol = "🏹";
+          } else if (fName.includes("कृष्ण") || fName.includes("जन्माष्टमी")) {
+            festSymbol = "🦚";
+          } else if (fName.includes("गणेश")) {
+            festSymbol = "🐘";
+          } else if (fName.includes("नवरात्रि") || fName.includes("दुर्गा")) {
+            festSymbol = "🌸";
+          } else if (fName.includes("संक्रांति") || fName.includes("पतंग")) {
+            festSymbol = "🪁";
+          } else if (fName.includes("रक्षाबंधन")) {
+            festSymbol = "🧵";
+          } else if (fName.includes("हनुमान")) {
+            festSymbol = "🚩";
+          } else {
+            festSymbol = "🚩";
           }
-        } else if (calendarFilter === 'amavasya') {
-          if (amavasya) {
-            cell.classList.add("has-amavasya");
-            dotsHtml = `<span>🌑</span>`;
-            badgeText = currentLang === 'en' ? "Amavasya" : "अमावस्या";
-            badgeColor = "#1d4ed8";
-          }
-        } else if (calendarFilter === 'birthdays') {
-          if (bdays.length > 0) {
-            dotsHtml = `<span>🎂</span>`;
-            badgeText = bdays.map(b => b.name.slice(0, 5)).join(', ');
-            badgeColor = "#d97706";
-          }
-        } else if (calendarFilter === 'anniversaries') {
-          if (annivs.length > 0) {
-            dotsHtml = `<span>💍</span>`;
-            badgeText = annivs.map(a => a.name.slice(0, 5)).join(', ');
-            badgeColor = "#db2777";
-          }
+          badgeText = festival.shortBadge || festival.name.split('/')[0].split('(')[0].trim().slice(0, 6);
+          badgeColor = "#ea580c";
+        } else if (amavasya) {
+          cell.classList.add("has-amavasya");
+          festSymbol = "🌑";
+          badgeText = currentLang === 'en' ? "Amavasya" : "अमावस्या";
+          badgeColor = "#1d4ed8";
+        } else if (nationalDay) {
+          const isTiranga = (nationalDay.date === "01-26" || nationalDay.date === "08-15");
+          festSymbol = isTiranga ? "🇮🇳" : (nationalDay.icon || "🌟");
+          badgeText = nationalDay.name.split('(')[0].trim().slice(0, 5);
+          badgeColor = isTiranga ? "#15803d" : "#0284c7";
+        } else if (bdays.length > 0) {
+          badgeText = bdays[0].name.slice(0, 5);
+          badgeColor = "#d97706";
+        } else if (annivs.length > 0) {
+          badgeText = annivs[0].name.slice(0, 5);
+          badgeColor = "#db2777";
         }
 
         cell.innerHTML = `
           ${birthdayCakeHtml}
+          ${anniversaryRingHtml}
           <span class="cal-day-num">${d}</span>
           <span class="cal-tithi-name">${tithiInfo.short}</span>
-          ${dotsHtml ? `<div class="cal-day-dots">${dotsHtml}</div>` : ''}
-          ${badgeText ? `<div class="cal-badge-mini" style="color:${badgeColor};">${badgeText}</div>` : ''}
+          ${festSymbol ? `<div class="cal-day-dots"><span style="font-size:13.5px; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.2));">${festSymbol}</span></div>` : ''}
+          ${badgeText ? `<div class="cal-badge-mini" style="color:${badgeColor}; font-weight:800;">${badgeText}</div>` : ''}
         `;
 
         cell.onclick = () => {
           selectedCalDateStr = dateStr;
           renderHinduMonthCalendar();
           renderSelectedDayDetails(dateStr);
+          if (festival || amavasya || bdays.length > 0 || annivs.length > 0 || nationalDay) {
+            openDayCelebrationModal(dateStr);
+          }
         };
 
         gridEl.appendChild(cell);
@@ -8017,6 +8314,350 @@
       const amt = (amount && amount > 0) ? amount.toString() : "100";
       const nt = note || "अमावस्या अंशदान";
       return `upi://pay?pa=${encodeURIComponent(currentUpiId)}&pn=${encodeURIComponent(currentUpiName)}&am=${encodeURIComponent(amt)}&cu=INR&tn=${encodeURIComponent(nt)}`;
+    }
+
+    // 💳 Direct App UPI Launcher for "अपना बकाया अभी भुगतान करें" Box
+    function payViaApp(app) {
+      let note = "अमावस्या अंशदान";
+      if (loggedInMemberPhone) {
+        const self = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+        if (self) note = `अंशदान - ${self.name}`;
+      }
+      const amt = 100;
+      const upiQuery = `pa=${encodeURIComponent(currentUpiId)}&pn=${encodeURIComponent(currentUpiName)}&am=${amt}&cu=INR&tn=${encodeURIComponent(note)}`;
+      
+      if (app === 'phonepe') {
+        const phonepeUrl = `phonepe://pay?${upiQuery}`;
+        try {
+          window.location.href = phonepeUrl;
+        } catch (e) {
+          window.location.href = `upi://pay?${upiQuery}`;
+        }
+      } else if (app === 'gpay') {
+        const gpayUrl = `gpay://upi/pay?${upiQuery}`;
+        try {
+          window.location.href = gpayUrl;
+        } catch (e) {
+          window.location.href = `upi://pay?${upiQuery}`;
+        }
+      } else {
+        window.location.href = `upi://pay?${upiQuery}`;
+      }
+    }
+
+    // 🎉 Day Celebration Modal Functions (तारीख क्लिक पर उत्सव व बधाई पॉपअप)
+    function openDayCelebrationModal(dateStr) {
+      const parts = dateStr.split('-');
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      const monthStr = String(m + 1).padStart(2, '0');
+      const dayStr = String(d).padStart(2, '0');
+
+      const festival = HINDU_FESTIVALS.find(f => f.date === dateStr);
+      const amavasya = AMAVASYA_LIST.find(a => a.date === dateStr);
+      const nationalDay = GREGORIAN_DAYS.find(g => g.date === `${monthStr}-${dayStr}`);
+      const bdays = membersList.filter(mem => {
+        if (!mem.dob) return false;
+        const clean = mem.dob.trim().replace(/\//g, '-');
+        return clean.endsWith(`-${monthStr}-${dayStr}`);
+      });
+      const annivs = membersList.filter(mem => {
+        if (!mem.anniversary) return false;
+        const clean = mem.anniversary.trim().replace(/\//g, '-');
+        return clean.endsWith(`-${monthStr}-${dayStr}`);
+      });
+
+      if (!festival && !amavasya && !nationalDay && bdays.length === 0 && annivs.length === 0) {
+        return;
+      }
+
+      const modal = document.getElementById("dayCelebrationModal");
+      const iconEl = document.getElementById("dayCelebIcon");
+      const titleEl = document.getElementById("dayCelebTitle");
+      const dateEl = document.getElementById("dayCelebDate");
+      const wishEl = document.getElementById("dayCelebWish");
+      const btnGroupShare = document.getElementById("dayCelebBtnGroupShare");
+
+      let icon = "🪔";
+      let title = "शुभकामनाएं";
+      let wish = "";
+
+      if (festival) {
+        const fName = (festival.name || "").toLowerCase();
+        if (fName.includes("दीपावली") || fName.includes("दिवाली") || fName.includes("धनतेरस") || fName.includes("रूप चौदस") || fName.includes("देव दीपावली")) {
+          icon = "🪔";
+        } else if (fName.includes("शिव") || fName.includes("महाशिवरात्रि")) {
+          icon = "🕉️";
+        } else if (fName.includes("होली") || fName.includes("धुलंडी")) {
+          icon = "🎨";
+        } else if (fName.includes("राम") || fName.includes("दशहरा") || fName.includes("विजयादशमी")) {
+          icon = "🏹";
+        } else if (fName.includes("कृष्ण") || fName.includes("जन्माष्टमी")) {
+          icon = "🦚";
+        } else if (fName.includes("गणेश")) {
+          icon = "🐘";
+        } else if (fName.includes("नवरात्रि") || fName.includes("दुर्गा")) {
+          icon = "🌸";
+        } else if (fName.includes("संक्रांति") || fName.includes("पतंग")) {
+          icon = "🪁";
+        } else if (fName.includes("रक्षाबंधन")) {
+          icon = "🧵";
+        } else {
+          icon = "🚩";
+        }
+        title = `${festival.name} की हार्दिक शुभकामनाएं!`;
+        wish = festival.wish || `${festival.name} के पावन पर्व पर आप सभी के जीवन में सुख, शांति व समृद्धि की मंगलकामनाएं।`;
+      } else if (amavasya) {
+        icon = "🌑";
+        title = `${amavasya.name} की हार्दिक शुभकामनाएं!`;
+        wish = `${amavasya.name} सत्संग व पूजा के पावन अवसर पर युवा शक्ति ग्रुप की ओर से हार्दिक मंगलकामनाएं।`;
+      } else if (bdays.length > 0) {
+        icon = "🎂";
+        const names = bdays.map(b => b.name).join(", ");
+        title = `जन्मदिन की अनंत शुभकामनाएं! 🎂`;
+        wish = `${names} जी को युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) की ओर से जन्मदिन की अनंत मंगलकामनाएं! ईश्वर आपको दीर्घायु, उत्तम स्वास्थ्य व खुशियां प्रदान करें।`;
+      } else if (annivs.length > 0) {
+        icon = "💍";
+        const names = annivs.map(a => a.name).join(", ");
+        title = `विवाह वर्षगांठ की हार्दिक बधाई! 💍`;
+        wish = `${names} जी को दांपत्य जीवन की वर्षगांठ पर हार्दिक बधाई! आपका जीवन प्रेम, विश्वास और खुशियों से परिपूर्ण रहे।`;
+      } else if (nationalDay) {
+        const isTiranga = (nationalDay.date === "01-26" || nationalDay.date === "08-15");
+        icon = isTiranga ? "🇮🇳" : (nationalDay.icon || "🌟");
+        title = `${nationalDay.name} की हार्दिक बधाई!`;
+        wish = nationalDay.wish || "समस्त देशवासियों को हार्दिक शुभकामनाएं।";
+      }
+
+      if (iconEl) iconEl.innerText = icon;
+      if (titleEl) titleEl.innerText = title;
+      if (dateEl) dateEl.innerText = formatDisplayDate(dateStr);
+      if (wishEl) wishEl.innerText = wish;
+
+      if (btnGroupShare) {
+        btnGroupShare.onclick = () => {
+          sendFestivalGreeting(title, wish, "group");
+        };
+      }
+
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeDayCelebrationModal() {
+      const modal = document.getElementById("dayCelebrationModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    // =========================================================================
+    // 🔔 Notification Center, Push Broadcast & Realtime History
+    // =========================================================================
+    let notificationHistoryList = [];
+    let lastReadNotificationTime = Number(localStorage.getItem("lastReadNotifTime") || 0);
+
+    async function addNotificationRecord(data) {
+      try {
+        const record = {
+          title: data.title || "सूचना",
+          message: data.message || "",
+          type: data.type || "general",
+          sender: data.sender || "व्यवस्थापक",
+          timestamp: Date.now(),
+          createdAt: new Date()
+        };
+        if (typeof db !== "undefined" && db) {
+          await db.collection("notifications").add(record);
+        }
+      } catch (e) {
+        console.warn("Could not save notification:", e);
+      }
+    }
+
+    // Firestore listener for notifications collection
+    if (typeof db !== "undefined" && db) {
+      try {
+        db.collection("notifications").orderBy("timestamp", "desc").limit(40).onSnapshot(snapshot => {
+          notificationHistoryList = [];
+          snapshot.forEach(docSnap => {
+            notificationHistoryList.push({ id: docSnap.id, ...docSnap.data() });
+          });
+          updateNotificationBadge();
+          renderNotificationCenterList();
+        }, err => console.log("Notification listener error:", err));
+      } catch (e) {}
+    }
+
+    function updateNotificationBadge() {
+      const badgeEl = document.getElementById("notifBadgeCount");
+      if (!badgeEl) return;
+      const unreadCount = notificationHistoryList.filter(n => (n.timestamp || 0) > lastReadNotificationTime).length;
+      if (unreadCount > 0) {
+        badgeEl.innerText = unreadCount > 9 ? "9+" : unreadCount;
+        badgeEl.style.display = "flex";
+      } else {
+        badgeEl.style.display = "none";
+      }
+    }
+
+    function openNotificationCenterModal() {
+      const modal = document.getElementById("notificationCenterModal");
+      if (modal) {
+        modal.style.display = "flex";
+        lastReadNotificationTime = Date.now();
+        localStorage.setItem("lastReadNotifTime", lastReadNotificationTime.toString());
+        updateNotificationBadge();
+        renderNotificationCenterList();
+
+        const adminPushSection = document.getElementById("notifAdminPushSection");
+        if (adminPushSection) {
+          adminPushSection.style.display = isAdmin ? "block" : "none";
+        }
+      }
+    }
+
+    function closeNotificationCenterModal() {
+      const modal = document.getElementById("notificationCenterModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function renderNotificationCenterList() {
+      const container = document.getElementById("notificationListContainer");
+      const badge = document.getElementById("notifHistoryCountBadge");
+      if (!container) return;
+
+      if (badge) {
+        badge.innerText = `${notificationHistoryList.length} सूचनाएं`;
+      }
+
+      if (notificationHistoryList.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:24px 12px; color:var(--text-muted);">
+            <i class="fa-solid fa-bell-slash" style="font-size:26px; color:#cbd5e1; margin-bottom:8px; display:block;"></i>
+            <div>अभी कोई नई सूचना उपलब्ध नहीं है।</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = "";
+      notificationHistoryList.forEach(item => {
+        const dateStr = item.timestamp ? new Date(item.timestamp).toLocaleString('hi-IN', { dateStyle: 'short', timeStyle: 'short' }) : 'हाल ही में';
+        let iconHtml = '<i class="fa-solid fa-bell" style="color:#2563eb;"></i>';
+        let bgTag = '#dbeafe';
+
+        if (item.type === 'expense') {
+          iconHtml = '<i class="fa-solid fa-receipt" style="color:#dc2626;"></i>';
+          bgTag = '#fee2e2';
+        } else if (item.type === 'contribution') {
+          iconHtml = '<i class="fa-solid fa-hand-holding-dollar" style="color:#16a34a;"></i>';
+          bgTag = '#dcfce7';
+        } else if (item.type === 'admin_broadcast') {
+          iconHtml = '<i class="fa-solid fa-bullhorn" style="color:#d97706;"></i>';
+          bgTag = '#fef3c7';
+        }
+
+        const card = document.createElement("div");
+        card.className = "notif-item-card";
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+            <div style="display:flex; align-items:flex-start; gap:8px;">
+              <div style="width:28px; height:28px; border-radius:8px; background:${bgTag}; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:12px; margin-top:2px;">
+                ${iconHtml}
+              </div>
+              <div>
+                <strong style="font-size:12.5px; color:var(--text-main); display:block; line-height:1.3;">${escapeHtml(item.title || 'सूचना')}</strong>
+                <p style="margin:3px 0 0; font-size:11.5px; color:var(--text-muted); line-height:1.4;">${escapeHtml(item.message || '')}</p>
+                <div style="font-size:9.5px; color:#94a3b8; margin-top:4px;">
+                  <span>🕒 ${dateStr}</span>
+                  ${item.sender ? ` • <span>${escapeHtml(item.sender)}</span>` : ''}
+                </div>
+              </div>
+            </div>
+            ${isAdmin ? `
+              <div style="display:flex; gap:3px; flex-shrink:0;">
+                <button onclick="promptEditNotificationItem('${item.id}')" title="संपादित करें" style="background:rgba(37,99,235,0.1); border:none; color:#2563eb; padding:4px 6px; border-radius:6px; cursor:pointer; font-size:10px;">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button onclick="deleteNotificationItem('${item.id}')" title="हटाएं" style="background:rgba(220,38,38,0.1); border:none; color:#dc2626; padding:4px 6px; border-radius:6px; cursor:pointer; font-size:10px;">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function sendAdminPushMessage() {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल संचालक के पास है।", "warning");
+        return;
+      }
+      const titleInput = document.getElementById("adminPushMsgTitle");
+      const bodyInput = document.getElementById("adminPushMsgBody");
+      const title = (titleInput ? titleInput.value : "").trim() || "🚩 संचालक द्वारा आवश्यक सूचना";
+      const body = (bodyInput ? bodyInput.value : "").trim();
+
+      if (!body) {
+        showToast("कृपया संदेश लिखें।", "warning");
+        return;
+      }
+
+      try {
+        await addNotificationRecord({
+          title: title,
+          message: body,
+          type: "admin_broadcast",
+          sender: "रेवंतराम भाटी (संचालक)"
+        });
+
+        if (typeof db !== "undefined" && db) {
+          await db.collection("settings").doc("reminders").set({
+            active: true,
+            broadcastAt: Date.now(),
+            broadcastBy: "रेवंतराम भाटी",
+            title: title,
+            message: body
+          }, { merge: true });
+        }
+
+        triggerSystemNotification(title, body);
+
+        if (bodyInput) bodyInput.value = "";
+        showToast("✅ संदेश सभी ग्रुप सदस्यों को सफलतापूर्वक प्रेषित हो गया!", "success");
+      } catch (err) {
+        showToast("त्रुटि: " + err.message, "error");
+      }
+    }
+
+    async function deleteNotificationItem(id) {
+      if (!isAdmin) {
+        showToast("केवल संचालक सूचना हटा सकते हैं।", "warning");
+        return;
+      }
+      try {
+        await db.collection("notifications").doc(id).delete();
+        showToast("सूचना हटा दी गई।", "info");
+      } catch (e) {
+        showToast("त्रुटि: " + e.message, "error");
+      }
+    }
+
+    async function promptEditNotificationItem(id) {
+      if (!isAdmin) return;
+      const item = notificationHistoryList.find(n => n.id === id);
+      if (!item) return;
+      const newMsg = prompt("सूचना का संदेश संपादित करें:", item.message || "");
+      if (newMsg === null) return;
+      try {
+        await db.collection("notifications").doc(id).update({
+          message: newMsg.trim(),
+          updatedAt: new Date()
+        });
+        showToast("सूचना अपडेट कर दी गई!", "success");
+      } catch (e) {
+        showToast("त्रुटि: " + e.message, "error");
+      }
     }
 
     function openPhonePeModal(defaultNote = "अमावस्या अंशदान", defaultAmount = 100) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yuvashaktigroup.app"
-    android:versionCode="20"
-    android:versionName="4.3.4">
+    android:versionCode="21"
+    android:versionName="4.3.5">
 
     <uses-sdk
         android:minSdkVersion="24"
@@ -15,6 +15,7 @@
 
     <queries>
         <package android:name="com.phonepe.app" />
+        <package android:name="com.google.android.apps.nbu.paisa.user" />
         <package android:name="com.whatsapp" />
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -23,6 +24,10 @@
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="phonepe" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="gpay" />
         </intent>
     </queries>
 
