@@ -2183,16 +2183,16 @@
   <div id="toastContainer"></div>
 
   <!-- Header - iOS Liquid Glass Centered -->
-  <header>
+  <header id="mainAppHeader">
     <div style="width:40px; display:flex; align-items:center;">
       <div class="header-logo" style="overflow:hidden; padding:2px;">
         <img src="ic_launcher.png" alt="युवा शक्ति ग्रुप" style="width:100%; height:100%; border-radius:9px; object-fit:cover;" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
         <i class="fa-solid fa-people-roof" style="display:none; color:white; font-size:16px;"></i>
       </div>
     </div>
-    <div class="header-center-info">
-      <h1 id="appTitleText" data-i18n="app_title">युवा शक्ति ग्रुप</h1>
-      <div class="header-subtitle" id="appSubTitleText" data-i18n="app_subtitle">भाटी परिवार कुचेरा</div>
+    <div class="header-center-info" style="flex:1; text-align:center;">
+      <h1 id="appTitleText" data-i18n="app_title" style="text-align:center; margin:0;">युवा शक्ति ग्रुप</h1>
+      <div class="header-subtitle" id="appSubTitleText" data-i18n="app_subtitle" style="text-align:center; margin-top:1px;">भाटी परिवार कुचेरा</div>
     </div>
     <div class="header-actions" id="mainHeaderActions" style="display:flex; align-items:center; gap:8px; justify-content:flex-end;">
       <!-- 🔔 Notification Center Bell Button -->
@@ -2628,15 +2628,6 @@
         </div>
       </div>
 
-      <!-- All Calendar Roster -->
-      <div class="card">
-        <div class="card-title">
-          <span id="calendarListTitle"><i class="fa-solid fa-calendar-days" style="color:#2563eb;"></i> <span data-i18n="roster_title">वार्षिक उत्सव व पंचांग पंजी</span></span>
-        </div>
-        <div id="calendarList">
-          <div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">पंजी लोड हो रही है...</div>
-        </div>
-      </div>
     </div>
 
     <!-- 4. सदस्य फॉर्म टैब -->
@@ -2715,7 +2706,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v4.3.5
+            APK v4.3.6
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -2743,7 +2734,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.3.5 (बिल्ड कोड: 21)
+              v4.3.6 (बिल्ड कोड: 22)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -2842,19 +2833,19 @@
             </div>
           </div>
 
-          <!-- एप्लिकेशन उद्देश्य एवं परिचय रो -->
+          <!-- वेलकम संदेश रो -->
           <div class="settings-list-item" onclick="openAppObjectiveModal()">
             <div class="settings-item-left">
               <div class="ios-icon-tile ios-icon-green">
-                <i class="fa-solid fa-bullseye"></i>
+                <i class="fa-solid fa-hands-praying"></i>
               </div>
               <div>
-                <div style="font-weight:700; font-size:14px; color:var(--text-main);">ग्रुप उद्देश्य एवं परिचय (App Mission)</div>
-                <div style="font-size:11px; color:var(--text-muted);">पारिवारिक एकता, मासिक अंशदान व सहयोग नियम</div>
+                <div style="font-weight:700; font-size:14px; color:var(--text-main);">वेलकम संदेश</div>
+                <div style="font-size:11px; color:var(--text-muted);">स्वागत संदेश, पारिवारिक एकता व सहयोग नियम</div>
               </div>
             </div>
             <div class="settings-item-right">
-              <span class="ios-value-badge ios-value-green">मार्गदर्शन</span>
+              <span class="ios-value-badge ios-value-green">संदेश</span>
               <i class="fa-solid fa-chevron-right ios-chevron"></i>
             </div>
           </div>
@@ -3033,16 +3024,6 @@
             </div>
           </div>
           <i class="fa-solid fa-circle-check" id="themeCheckDark" style="color:#2563eb; font-size:16px; display:none;"></i>
-        </div>
-        <div class="modal-option-card" id="themeOptAuto" onclick="chooseTheme('auto')">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <i class="fa-solid fa-circle-half-stroke" style="font-size:19px; color:#10b981;"></i>
-            <div>
-              <strong style="font-size:14px; color:var(--text-main);">ऑटो मोड (Auto / System)</strong>
-              <div style="font-size:11px; color:var(--text-muted);">मोबाइल सिस्टम सेटिंग के अनुसार</div>
-            </div>
-          </div>
-          <i class="fa-solid fa-circle-check" id="themeCheckAuto" style="color:#2563eb; font-size:16px; display:none;"></i>
         </div>
       </div>
     </div>
@@ -3734,10 +3715,10 @@
       
       <div style="background:rgba(239, 68, 68, 0.08); border:1.5px dashed rgba(239, 68, 68, 0.35); border-radius:16px; padding:12px; text-align:left; font-size:12.5px; color:#451a03; line-height:1.55; margin-bottom:12px;">
         <p style="margin:0 0 6px 0;">
-          <strong>जय श्री राम!</strong> युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) के रिकॉर्ड अनुसार आपका इस माह का पावन अमावस्या सत्संग एवं पूजा अंशदान अभी जमा होना शेष है।
+          <strong>जय श्री राम!</strong> युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) के रिकॉर्ड अनुसार आपका इस माह का अमावस्या पूंजी/सहयोग अंशदान अभी जमा होना शेष है।
         </p>
         <p style="margin:0; font-size:11.5px; color:#7f1d1d;">
-          कृपया ग्रुप की धार्मिक व सामाजिक गतिविधियों, अमावस्या सत्संग एवं पूजा व्यवस्था के सुचारू संचालन हेतु अपना अंशदान जल्द से जल्द जमा करवाने की कृपा करें।
+          कृपया ग्रुप निर्णय अनुसार अपना अंशदान जल्द से जल्द जमा करवाने की कृपा करें।
         </p>
       </div>
 
@@ -3768,40 +3749,31 @@
       <div class="reminder-glow-icon" style="background:linear-gradient(135deg, #1e1b4b, #312e81); color:#fbbf24; border:2px solid #fbbf24;">
         <i class="fa-solid fa-moon"></i>
       </div>
-      <div style="display:inline-block; margin-bottom:6px;">
-        <span style="background:linear-gradient(135deg, #fef3c7, #fde68a); color:#78350f; font-size:11px; padding:3px 12px; border-radius:12px; font-weight:800; border:1px solid #f59e0b;">
-          🪔 विशेष सत्संग व पूजा सूचना
-        </span>
-      </div>
-      <h3 style="font-weight:900; font-size:20px; color:#1e1b4b; margin:4px 0 2px 0;">कल पावन अमावस्या है! 🌙</h3>
-      <div style="font-size:12px; font-weight:700; color:#ea580c; margin-bottom:10px;" id="amavasyaEveNameHeader">अमावस्या सत्संग व अंशदान दिवस</div>
+      <h3 style="font-weight:900; font-size:20px; color:#1e1b4b; margin:6px 0 2px 0; text-align:center;">कल पावन अमावस्या है! 🌙</h3>
+      <div style="font-size:12px; font-weight:700; color:#ea580c; margin-bottom:12px; text-align:center;" id="amavasyaEveNameHeader">अमावस्या पूंजी व सहयोग दिवस</div>
 
-      <div style="background:linear-gradient(135deg, rgba(254, 243, 199, 0.95), rgba(255, 251, 235, 0.9)); border:1.5px solid #fde68a; border-radius:18px; padding:14px 12px; text-align:left; font-size:12.5px; color:#451a03; line-height:1.6; margin-bottom:12px; box-shadow:0 4px 12px rgba(245, 158, 11, 0.1);">
-        <p style="margin:0 0 8px 0; font-weight:700;">
-          🚩 <strong>जय श्री राम! जय गोगाजी री सा!</strong>
+      <div style="background:linear-gradient(135deg, rgba(254, 243, 199, 0.95), rgba(255, 251, 235, 0.9)); border:1.5px solid #fde68a; border-radius:18px; padding:16px 14px; text-align:center; font-size:13px; color:#451a03; line-height:1.65; margin-bottom:12px; box-shadow:0 4px 12px rgba(245, 158, 11, 0.1);">
+        <div style="text-align:center; font-weight:900; font-size:16px; color:#c2410c; margin-bottom:8px;">
+          🚩 <strong>जय श्री राम!</strong> 🚩
+        </div>
+        <p style="margin:0 0 10px 0; text-align:center; font-size:13px; line-height:1.65; color:#451a03;">
+          समस्त युवा शक्ति ग्रुप भाटी परिवार कुचेरा के आदरणीय सदस्यों को सूचित किया जाता है कि कल अमावस्या है तो इस दिन जो हम सदस्यों ने निर्णय लिया था कि हम हर अमावस को एक पूंजी इकट्ठा करेंगे तो अपनी सहयोग राशि समय पर जमा करवाए।
         </p>
-        <p style="margin:0 0 8px 0;">
-          समस्त युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) के आदरणीय सदस्यों को सूचित किया जाता है कि <strong>कल पावन अमावस्या</strong> है।
-        </p>
-        <p style="margin:0; font-size:12px; color:#78350f;">
-          अमावस्या के पावन अवसर पर आयोजित सत्संग, भोग-प्रसाद एवं ग्रुप की सामाजिक-धार्मिक व्यवस्था हेतु अपना मासिक अंशदान समय पर जमा करवाएं।
-        </p>
-        <div style="margin-top:10px; padding:6px 10px; background:rgba(255,255,255,0.85); border-radius:10px; font-size:11.5px; font-weight:700; color:#1e3a8a; display:flex; align-items:center; gap:6px;">
+        <div style="margin-top:10px; padding:7px 10px; background:rgba(255,255,255,0.85); border-radius:10px; font-size:11.5px; font-weight:700; color:#1e3a8a; display:flex; align-items:center; justify-content:center; gap:6px;">
           <i class="fa-solid fa-calendar-day" style="color:#f59e0b;"></i>
           <span>कल की पावन तिथि: <span id="amavasyaEveDateDisplay">गणना हो रही है...</span></span>
         </div>
+        <div style="text-align:right; margin-top:8px; font-size:11.5px; font-weight:800; color:#78350f;">
+          (भाटी परिवार कुचेरा)
+        </div>
       </div>
-
-      <p style="font-size:11.5px; color:var(--text-muted); font-style:italic; margin:0 0 14px 0;">
-        "दान-पुण्य और सेवा ही सच्चा धर्म है। अपना अंशदान समय पर देकर पुण्य के भागीदार बनें।"
-      </p>
 
       <div style="display:flex; flex-direction:column; gap:8px;">
         <button class="btn-main" onclick="openPhonePeModal('कल अमावस्या अंशदान'); closeAmavasyaEveModal();" style="background:linear-gradient(135deg, #0284c7, #0369a1); border-radius:14px; padding:11px; font-size:13px; font-weight:800; box-shadow:0 4px 12px rgba(2, 132, 199, 0.35);">
           <i class="fa-solid fa-mobile-screen-button"></i> <span>अभी PhonePe / UPI से अंशदान जमा करें</span>
         </button>
-        <button type="button" onclick="shareAmavasyaEveNotice()" style="background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:10px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 8px rgba(22, 163, 74, 0.25);">
-          <i class="fa-brands fa-whatsapp"></i> <span>व्हाट्सएप ग्रुप पर सूचना साझा करें</span>
+        <button type="button" onclick="shareAmavasyaEveImage()" style="background:linear-gradient(135deg, #25d366, #16a34a); color:white; border:none; padding:11px; border-radius:14px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 3px 8px rgba(22, 163, 74, 0.25);">
+          <i class="fa-brands fa-whatsapp" style="font-size:17px;"></i> <i class="fa-solid fa-image"></i> <span>व्हाट्सएप पर फोटो के रूप में साझा करें</span>
         </button>
         <button type="button" onclick="closeAmavasyaEveModal()" style="background:rgba(0,0,0,0.06); border:none; padding:9px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; color:var(--text-color);">
           धन्यवाद / ठीक है
@@ -3935,7 +3907,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.3.5";
+    const APP_VERSION = "4.3.6";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4635,10 +4607,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड 18)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 22)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड 18)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 22)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -4679,7 +4651,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 18)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 22)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'अभी अपडेट करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -4934,10 +4906,6 @@
           themeBadge.innerText = currentLang === 'en' ? "Dark Mode" : "डार्क मोड";
           themeBadge.className = "ios-value-badge ios-value-purple";
           if (themeSub) themeSub.innerText = currentLang === 'en' ? "Comfortable Night Mode" : "आंखों के लिए आरामदायक डार्क रूप";
-        } else if (theme === 'auto') {
-          themeBadge.innerText = currentLang === 'en' ? "Auto (System)" : "ऑटो (सिस्टम)";
-          themeBadge.className = "ios-value-badge ios-value-green";
-          if (themeSub) themeSub.innerText = currentLang === 'en' ? "Matches Device Theme" : "मोबाइल सिस्टम थीम के अनुसार";
         } else {
           themeBadge.innerText = currentLang === 'en' ? "Light Mode" : "लाइट मोड";
           themeBadge.className = "ios-value-badge ios-value-orange";
@@ -4996,23 +4964,20 @@
       closeLanguageModal();
     }
 
-    // Modal Control: Theme Mode Selection
+    // Modal Control: Theme Mode Selection (Light & Dark)
     function openThemeModal() {
-      const currentTheme = localStorage.getItem("appTheme") || "light";
+      let currentTheme = localStorage.getItem("appTheme") || "light";
+      if (currentTheme !== 'dark') currentTheme = 'light';
       const optLight = document.getElementById("themeOptLight");
       const optDark = document.getElementById("themeOptDark");
-      const optAuto = document.getElementById("themeOptAuto");
       const checkLight = document.getElementById("themeCheckLight");
       const checkDark = document.getElementById("themeCheckDark");
-      const checkAuto = document.getElementById("themeCheckAuto");
 
       if (optLight) optLight.className = currentTheme === 'light' ? "modal-option-card selected" : "modal-option-card";
       if (optDark) optDark.className = currentTheme === 'dark' ? "modal-option-card selected" : "modal-option-card";
-      if (optAuto) optAuto.className = currentTheme === 'auto' ? "modal-option-card selected" : "modal-option-card";
 
       if (checkLight) checkLight.style.display = currentTheme === 'light' ? "inline-block" : "none";
       if (checkDark) checkDark.style.display = currentTheme === 'dark' ? "inline-block" : "none";
-      if (checkAuto) checkAuto.style.display = currentTheme === 'auto' ? "inline-block" : "none";
 
       document.getElementById("themeModal").style.display = "flex";
     }
@@ -5026,14 +4991,14 @@
       closeThemeModal();
     }
 
-    // Enhanced Theme Switcher Logic (Light, Dark, Auto)
+    // Theme Switcher Logic (Light & Dark)
     function setAppTheme(theme) {
+      if (theme !== 'dark') theme = 'light';
       localStorage.setItem('appTheme', theme);
       applyThemeFromStorage();
       updateSettingsUI();
       const themeText = theme === 'dark' ? (currentLang === 'en' ? "Dark Mode applied" : "डार्क मोड सक्रिय किया गया") :
-                       (theme === 'auto' ? (currentLang === 'en' ? "Auto (System) Mode applied" : "ऑटो सिस्टम मोड सक्रिय किया गया") :
-                       (currentLang === 'en' ? "Light Mode applied" : "लाइट मोड सक्रिय किया गया"));
+                       (currentLang === 'en' ? "Light Mode applied" : "लाइट मोड सक्रिय किया गया");
       showToast(themeText, "info");
     }
 
@@ -5041,15 +5006,8 @@
       const theme = localStorage.getItem('appTheme') || 'light';
       if (theme === 'dark') {
         document.body.classList.add('dark-theme');
-      } else if (theme === 'light') {
+      } else {
         document.body.classList.remove('dark-theme');
-      } else if (theme === 'auto') {
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-          document.body.classList.add('dark-theme');
-        } else {
-          document.body.classList.remove('dark-theme');
-        }
       }
     }
 
@@ -5454,6 +5412,211 @@
       }, 800);
     }
 
+    // Canvas Graphics Renderer for Amavasya Eve Notice
+    function generateAmavasyaEveCardDataUrl(amav) {
+      const canvas = document.createElement("canvas");
+      const width = 800;
+      const height = 800;
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+
+      // 1. Warm devotional gradient background
+      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+      bgGrad.addColorStop(0, "#fffbeb");
+      bgGrad.addColorStop(0.35, "#fef3c7");
+      bgGrad.addColorStop(0.75, "#fed7aa");
+      bgGrad.addColorStop(1, "#fde68a");
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Watermark Circles
+      ctx.save();
+      ctx.fillStyle = "rgba(245, 158, 11, 0.08)";
+      ctx.beginPath();
+      ctx.arc(100, 100, 160, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(width - 80, height - 100, 200, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 2. Ornate Golden Borders
+      ctx.strokeStyle = "#d97706";
+      ctx.lineWidth = 4;
+      canvasRoundRect(ctx, 22, 22, width - 44, height - 44, 24, false, true);
+
+      ctx.strokeStyle = "#f59e0b";
+      ctx.lineWidth = 1.5;
+      canvasRoundRect(ctx, 30, 30, width - 60, height - 60, 18, false, true);
+
+      drawCornerDiamonds(ctx, 30, 30, width - 60, height - 60);
+
+      // 3. Top Branding Pill
+      const pillWidth = 560;
+      const pillHeight = 46;
+      const pillX = (width - pillWidth) / 2;
+      const pillY = 46;
+
+      ctx.save();
+      ctx.shadowColor = "rgba(234, 88, 12, 0.3)";
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetY = 4;
+      const pillGrad = ctx.createLinearGradient(pillX, pillY, pillX + pillWidth, pillY + pillHeight);
+      pillGrad.addColorStop(0, "#ea580c");
+      pillGrad.addColorStop(1, "#c2410c");
+      ctx.fillStyle = pillGrad;
+      canvasRoundRect(ctx, pillX, pillY, pillWidth, pillHeight, 22, true, false);
+      ctx.restore();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 21px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("🚩 युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) 🚩", width / 2, pillY + pillHeight / 2);
+
+      // 4. Center Title: कल पावन अमावस्या है! 🌙
+      const titleY = pillY + pillHeight + 36;
+      ctx.fillStyle = "#1e1b4b";
+      ctx.font = "900 28px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("🌙 कल पावन अमावस्या है! 🌙", width / 2, titleY);
+
+      // 5. White Glass Card in Center
+      const cardX = 46;
+      const cardY = titleY + 26;
+      const cardW = width - 92;
+      const cardH = 450;
+
+      ctx.save();
+      ctx.shadowColor = "rgba(180, 83, 9, 0.16)";
+      ctx.shadowBlur = 20;
+      ctx.shadowOffsetY = 8;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+      canvasRoundRect(ctx, cardX, cardY, cardW, cardH, 22, true, false);
+      ctx.restore();
+
+      ctx.strokeStyle = "#fde68a";
+      ctx.lineWidth = 2;
+      canvasRoundRect(ctx, cardX, cardY, cardW, cardH, 22, false, true);
+
+      // Inside card: Center "जय श्री राम!"
+      ctx.fillStyle = "#c2410c";
+      ctx.font = "900 32px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("🚩 जय श्री राम! 🚩", width / 2, cardY + 44);
+
+      // Message text
+      const messageText = "समस्त युवा शक्ति ग्रुप भाटी परिवार कुचेरा के आदरणीय सदस्यों को सूचित किया जाता है कि कल अमावस्या है तो इस दिन जो हम सदस्यों ने निर्णय लिया था कि हम हर अमावस को एक पूंजी इकट्ठा करेंगे तो अपनी सहयोग राशि समय पर जमा करवाए।";
+
+      ctx.fillStyle = "#331505";
+      ctx.font = "600 22px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+
+      const maxTextWidth = cardW - 64;
+      const lineHeight = 36;
+      const msgStartY = cardY + 90;
+      const lastMsgY = drawWrappedText(ctx, messageText, width / 2, msgStartY, maxTextWidth, lineHeight);
+
+      // Divider line
+      const divY = Math.max(lastMsgY + 24, cardY + cardH - 120);
+      ctx.strokeStyle = "#fed7aa";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([6, 5]);
+      ctx.beginPath();
+      ctx.moveTo(cardX + 40, divY);
+      ctx.lineTo(cardX + cardW - 40, divY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Tithi Date display
+      const amavDate = amav ? formatDisplayDate(amav.date) : "कल की पावन तिथि";
+      const amavName = amav ? amav.name : "पावन अमावस्या";
+      ctx.fillStyle = "#1e3a8a";
+      ctx.font = "bold 17px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(`🗓️ अमावस्या तिथि: ${amavDate} (${amavName})`, width / 2, divY + 28);
+
+      // Bottom Right inside card: (भाटी परिवार कुचेरा)
+      ctx.fillStyle = "#9a3412";
+      ctx.font = "bold 20px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      ctx.fillText("(भाटी परिवार कुचेरा)", cardX + cardW - 30, cardY + cardH - 30);
+
+      // 6. Bottom Devotional Banner / UPI
+      const footerY = cardY + cardH + 34;
+      ctx.fillStyle = "#7c2d12";
+      ctx.font = "bold 16px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(`📲 PhonePe / UPI: ${currentUpiId} (${currentUpiName})`, width / 2, footerY);
+
+      ctx.fillStyle = "#9a3412";
+      ctx.font = "600 13px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.fillText("सेवा • संस्कार • संगठन | युवा शक्ति ग्रुप", width / 2, footerY + 24);
+
+      return canvas.toDataURL("image/jpeg", 0.95);
+    }
+
+    function shareAmavasyaEveImage() {
+      const amav = getNextAmavasya();
+      showToast("अमावस्या सूचना फोटो तैयार की जा रही है...", "info");
+
+      try {
+        const dataUrl = generateAmavasyaEveCardDataUrl(amav);
+        const caption = `🚩 *जय श्री राम!* 🚩\n🌙 *कल पावन अमावस्या है!* 🌙\n\nसमस्त युवा शक्ति ग्रुप भाटी परिवार कुचेरा के आदरणीय सदस्यों को सूचित किया जाता है कि कल अमावस्या है तो इस दिन जो हम सदस्यों ने निर्णय लिया था कि हम हर अमावस को एक पूंजी इकट्ठा करेंगे तो अपनी सहयोग राशि समय पर जमा करवाए।\n\n📲 *PhonePe / UPI*: ${currentUpiId} (${currentUpiName})\n\n*(भाटी परिवार कुचेरा)*\n🔗 https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+
+        if (window.AndroidApp && typeof window.AndroidApp.shareImage === 'function') {
+          window.AndroidApp.shareImage(dataUrl, caption);
+          return;
+        }
+
+        if (navigator.share && navigator.canShare) {
+          fetch(dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+              const file = new File([blob], `amavasya_suchna_${Date.now()}.jpg`, { type: 'image/jpeg' });
+              if (navigator.canShare({ files: [file] })) {
+                navigator.share({
+                  files: [file],
+                  title: "कल अमावस्या है - युवा शक्ति ग्रुप",
+                  text: caption
+                }).catch(e => {
+                  if (e.name !== 'AbortError') fallbackDownloadAmavasyaImage(dataUrl, caption);
+                });
+              } else {
+                fallbackDownloadAmavasyaImage(dataUrl, caption);
+              }
+            })
+            .catch(() => fallbackDownloadAmavasyaImage(dataUrl, caption));
+          return;
+        }
+
+        fallbackDownloadAmavasyaImage(dataUrl, caption);
+      } catch (err) {
+        console.error("Amavasya image share error:", err);
+        shareAmavasyaEveNotice();
+      }
+    }
+
+    function fallbackDownloadAmavasyaImage(dataUrl, caption) {
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `Yuva_Shakti_Amavasya_${Date.now()}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("सूचना फोटो डाउनलोड हो गई है! अब व्हाट्सएप पर भेजें।", "success");
+      setTimeout(() => {
+        openWhatsAppUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(caption)}`);
+      }, 800);
+    }
+
     function checkDailySuvicharOnAppOpen() {
       const sessionShown = sessionStorage.getItem("suvicharSessionShown");
       if (!sessionShown) {
@@ -5534,6 +5697,12 @@
       if (el) {
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
+      }
+
+      // Show top header branding only on 'members' (होम/सदस्य) tab, hide on all other tabs (खर्च, पंचांग, नया सदस्य, सेटिंग)
+      const mainAppHeader = document.getElementById('mainAppHeader');
+      if (mainAppHeader) {
+        mainAppHeader.style.display = (tabName === 'members') ? 'flex' : 'none';
       }
 
       // Show top toggle actions only on first page ('members'), hide on all other pages
@@ -8081,7 +8250,7 @@
       const badge = document.getElementById("upcomingCountBadge");
       
       upcomingDiv.innerHTML = "";
-      listDiv.innerHTML = "";
+      if (listDiv) listDiv.innerHTML = "";
 
       let upcomingEventsList = [];
       let allItems = [];
@@ -8253,35 +8422,37 @@
       // Sort full roster by days left
       filteredItems.sort((a, b) => a.daysLeft - b.daysLeft);
 
-      if (filteredItems.length === 0) {
-        listDiv.innerHTML = `<div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">इस श्रेणी में कोई रिकॉर्ड नहीं मिला।</div>`;
-      } else {
-        filteredItems.forEach(item => {
-          let badgeColor = "#ea580c";
-          let badgeText = "पर्व";
-          if (item.category === 'amavasya') { badgeColor = "#2563eb"; badgeText = "अमावस्या"; }
-          if (item.category === 'birthday') { badgeColor = "#eab308"; badgeText = "जन्मदिन"; }
-          if (item.category === 'anniversary') { badgeColor = "#db2777"; badgeText = "वर्षगांठ"; }
+      if (listDiv) {
+        if (filteredItems.length === 0) {
+          listDiv.innerHTML = `<div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">इस श्रेणी में कोई रिकॉर्ड नहीं मिला।</div>`;
+        } else {
+          filteredItems.forEach(item => {
+            let badgeColor = "#ea580c";
+            let badgeText = "पर्व";
+            if (item.category === 'amavasya') { badgeColor = "#2563eb"; badgeText = "अमावस्या"; }
+            if (item.category === 'birthday') { badgeColor = "#eab308"; badgeText = "जन्मदिन"; }
+            if (item.category === 'anniversary') { badgeColor = "#db2777"; badgeText = "वर्षगांठ"; }
 
-          const row = document.createElement("div");
-          row.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:12px;";
-          row.innerHTML = `
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:10px; font-weight:700; background:${badgeColor}15; color:${badgeColor}; border:1px solid ${badgeColor}30; padding:2px 6px; border-radius:4px; white-space:nowrap;">
-                ${badgeText}
-              </span>
-              <div>
-                <strong style="color:#1e293b;">${item.name}</strong>
-                <div style="color:#64748b; font-size:11px;">${item.sub}</div>
+            const row = document.createElement("div");
+            row.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:12px;";
+            row.innerHTML = `
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:10px; font-weight:700; background:${badgeColor}15; color:${badgeColor}; border:1px solid ${badgeColor}30; padding:2px 6px; border-radius:4px; white-space:nowrap;">
+                  ${badgeText}
+                </span>
+                <div>
+                  <strong style="color:#1e293b;">${item.name}</strong>
+                  <div style="color:#64748b; font-size:11px;">${item.sub}</div>
+                </div>
               </div>
-            </div>
-            <div style="text-align:right;">
-              <div style="color:#334155; font-weight:700;">${formatDisplayDate(item.date)}</div>
-              <div style="font-size:10px; color:#94a3b8;">${item.daysLeft === 0 ? 'आज है' : item.daysLeft + ' दिन'}</div>
-            </div>
-          `;
-          listDiv.appendChild(row);
-        });
+              <div style="text-align:right;">
+                <div style="color:#334155; font-weight:700;">${formatDisplayDate(item.date)}</div>
+                <div style="font-size:10px; color:#94a3b8;">${item.daysLeft === 0 ? 'आज है' : item.daysLeft + ' दिन'}</div>
+              </div>
+            `;
+            listDiv.appendChild(row);
+          });
+        }
       }
     }
 
@@ -8980,7 +9151,7 @@
       const amav = getNextAmavasya();
       const amavDate = amav ? formatDisplayDate(amav.date) : "कल";
       const amavName = amav ? amav.name : "पावन अमावस्या";
-      const text = `🌙 *कल पावन अमावस्या है!* 🪔\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\nजय श्री राम! जय गोगाजी री सा! 🙏\n\nसमस्त आदरणीय सदस्यों को सूचित किया जाता है कि *कल पावन अमावस्या* (${amavDate} • ${amavName}) है।\n\nअमावस्या के पावन अवसर पर आयोजित होने वाले सत्संग, भोग-प्रसाद एवं ग्रुप की सामाजिक-धार्मिक व्यवस्था हेतु अपना मासिक अंशदान समय पर जमा करवाकर पुण्य के भागीदार बनें।\n\n📲 *PhonePe / UPI ID*: ${currentUpiId} (${currentUpiName})\n\n*"दान-पुण्य और सेवा ही सच्चा धर्म है।"*\n\n🙏 *निवेदक*:\n*संचालक: रेवंतराम भाटी*\n📱 मोबाइल: 8696663615\n🔗 *व्हाट्सएप ग्रुप:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+      const text = `🚩 *जय श्री राम!* 🚩\n🌙 *कल पावन अमावस्या है!* 🌙\n\nसमस्त युवा शक्ति ग्रुप भाटी परिवार कुचेरा के आदरणीय सदस्यों को सूचित किया जाता है कि कल अमावस्या (${amavDate} • ${amavName}) है तो इस दिन जो हम सदस्यों ने निर्णय लिया था कि हम हर अमावस को एक पूंजी इकट्ठा करेंगे तो अपनी सहयोग राशि समय पर जमा करवाए।\n\n📲 *PhonePe / UPI ID*: ${currentUpiId} (${currentUpiName})\n\n*(भाटी परिवार कुचेरा)*\n\n🙏 *निवेदक*:\n*संचालक: रेवंतराम भाटी*\n📱 मोबाइल: 8696663615\n🔗 *व्हाट्सएप ग्रुप:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
       openWhatsAppUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
     }
 
@@ -9055,7 +9226,7 @@
     }
 
     function shareBroadcastDueReminderWhatsApp() {
-      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n*अति-आवश्यक सूचना: बकाया अंशदान स्मरण* 🔔\n\nजय श्री राम! समस्त आदरणीय बंधुओं, 🙏\n\nयुवा शक्ति ग्रुप के रिकॉर्ड अनुसार जिन सदस्यों का इस माह का पावन अमावस्या सत्संग एवं पूजा अंशदान अभी जमा होना बाकी है, वे कृपया ग्रुप की धार्मिक व सामाजिक व्यवस्था के सुचारू संचालन हेतु अपना अंशदान जल्द से जल्द जमा करवाने की कृपा करें।\n\n📲 *PhonePe / UPI ID*: ${currentUpiId} (${currentUpiName})\n\n*"दान-पुण्य और सेवा ही सच्चा धर्म है।"*\n\n🙏 *निवेदक*:\n*संचालक: रेवंतराम भाटी*\n📱 मोबाइल: 8696663615\n🔗 *व्हाट्सएप ग्रुप:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n*अति-आवश्यक सूचना: बकाया सहयोग राशि स्मरण* 🔔\n\nजय श्री राम! समस्त आदरणीय बंधुओं, 🙏\n\nयुवा शक्ति ग्रुप के रिकॉर्ड अनुसार जिन सदस्यों का इस माह का अमावस्या पूंजी/सहयोग अंशदान अभी जमा होना बाकी है, वे कृपया ग्रुप निर्णय अनुसार अपना अंशदान जल्द से जल्द जमा करवाने की कृपा करें।\n\n📲 *PhonePe / UPI ID*: ${currentUpiId} (${currentUpiName})\n\n*(भाटी परिवार कुचेरा)*\n\n🙏 *निवेदक*:\n*संचालक: रेवंतराम भाटी*\n📱 मोबाइल: 8696663615\n🔗 *व्हाट्सएप ग्रुप:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
       openWhatsAppUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
     }
 
@@ -9066,7 +9237,7 @@
       const cleanPhone = (member.whatsapp || member.phone || '').replace(/\D/g, '');
       const fullPhone = cleanPhone.startsWith('91') ? cleanPhone : ('91' + cleanPhone);
 
-      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\nजय श्री राम *${member.name} जी*! 🙏\n\nयुवा शक्ति ग्रुप के रिकॉर्ड अनुसार आपका इस माह का पावन अमावस्या सत्संग एवं पूजा अंशदान अभी बकाया है।\n\nकृपया ग्रुप की धार्मिक गतिविधियों एवं पूजा व्यवस्था के सुचारू संचालन हेतु अपना अंशदान समय पर PhonePe / UPI द्वारा जमा करवाने की कृपा करें।\n\n📲 *PhonePe / UPI ID*: ${currentUpiId} (${currentUpiName})\n\n(यदि आपने पहले ही नकद या अन्य माध्यम से भुगतान कर दिया है तो कृपया सूचित करें।)\n\nधन्यवाद,\n*संचालक: रेवंतराम भाटी*\n📱 मोबाइल: 8696663615`;
+      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\nजय श्री राम *${member.name} जी*! 🙏\n\nयुवा शक्ति ग्रुप के रिकॉर्ड अनुसार आपका इस माह का अमावस्या पूंजी/सहयोग अंशदान अभी बकाया है।\n\nकृपया ग्रुप निर्णय अनुसार अपना अंशदान समय पर PhonePe / UPI द्वारा जमा करवाने की कृपा करें।\n\n📲 *PhonePe / UPI ID*: ${currentUpiId} (${currentUpiName})\n\n*(भाटी परिवार कुचेरा)*\n(यदि आपने पहले ही नकद या अन्य माध्यम से भुगतान कर दिया है तो कृपया सूचित करें।)\n\nधन्यवाद,\n*संचालक: रेवंतराम भाटी*\n📱 मोबाइल: 8696663615`;
 
       openWhatsAppUrl(`https://wa.me/${fullPhone}?text=${encodeURIComponent(text)}`);
     }
