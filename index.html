@@ -1050,9 +1050,12 @@
           <div style="font-size:11px; color:#e0e7ff;" id="updateBannerSub">नया वर्जन डाउनलोड करें</div>
         </div>
       </div>
-      <button class="update-banner-btn" id="updateBannerBtn" onclick="downloadLatestApp()">
-        <i class="fa-solid fa-download"></i> अपडेट करें
-      </button>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="update-banner-btn" id="updateBannerBtn" onclick="downloadLatestApp()">
+          <i class="fa-solid fa-download"></i> अपडेट करें
+        </button>
+        <button onclick="document.getElementById('updateBanner').style.display='none'" style="background:none; border:none; color:white; font-size:16px; cursor:pointer; padding:2px 6px;" title="बंद करें">✕</button>
+      </div>
     </div>
 
     <!-- Admin Active Notice -->
@@ -1426,7 +1429,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.0.0";
+    const APP_VERSION = "4.1.1";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -1654,6 +1657,7 @@
           document.getElementById("updateModalNotes").innerText = release.body || "नए फीचर्स और सुधार शामिल हैं।";
           document.getElementById("updateModal").style.display = "flex";
         } else {
+          document.getElementById("updateBanner").style.display = "none";
           if (!silent) {
             showToast(`आपका ऐप पहले से ही नवीनतम संस्करण (v${APP_VERSION}) पर है!`, "success");
           }
