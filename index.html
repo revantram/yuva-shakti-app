@@ -1810,16 +1810,43 @@
       border-color: rgba(59, 130, 246, 0.3);
     }
 
-    #hinduCalendarCard {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.94) 100%);
-      border: 1px solid rgba(226, 232, 240, 0.85);
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    /* 🔔 Reminders & Amavasya Eve Alert Styling */
+    .due-reminder-modal-card,
+    .amavasya-eve-modal-card,
+    .admin-broadcast-modal-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.92) 100%);
+      backdrop-filter: blur(32px) saturate(200%);
+      -webkit-backdrop-filter: blur(32px) saturate(200%);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+      box-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.25),
+                  0 0 0 1px rgba(0, 122, 255, 0.1),
+                  inset 0 1.5px 2px rgba(255, 255, 255, 1);
     }
-    body.dark-theme #hinduCalendarCard {
-      background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.85) 100%);
-      border-color: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    body.dark-theme .due-reminder-modal-card,
+    body.dark-theme .amavasya-eve-modal-card,
+    body.dark-theme .admin-broadcast-modal-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7);
+    }
+    .reminder-glow-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px auto;
+      font-size: 26px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      animation: bellShake 3s ease-in-out infinite;
+    }
+    @keyframes bellShake {
+      0%, 80%, 100% { transform: rotate(0); }
+      85% { transform: rotate(15deg); }
+      90% { transform: rotate(-15deg); }
+      95% { transform: rotate(8deg); }
     }
     /* iOS Liquid Glass Settings List Item & Tiles */
     .settings-list-item {
@@ -2196,6 +2223,26 @@
           </div>
         </div>
       </div>
+
+      <!-- 🔔 Admin Dues Reminder Action Bar (Shown only when isAdmin === true) -->
+      <div id="adminDuesReminderBar" class="ios-glass-card" style="display:none; margin-bottom:12px; background:linear-gradient(135deg, rgba(254, 242, 242, 0.95) 0%, rgba(255, 237, 213, 0.9) 100%); border:1.5px solid rgba(239, 68, 68, 0.35); border-radius:18px; padding:12px 14px; box-shadow:0 6px 18px rgba(220, 38, 38, 0.1);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="font-weight:800; font-size:13px; color:#991b1b; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-bell"></i> <span>बकायादार सदस्य रिमाइंडर (संचालक)</span>
+              <span id="adminPendingDueCountBadge" style="background:#fee2e2; color:#b91c1c; font-size:10.5px; padding:2px 8px; border-radius:10px; font-weight:800;">0 सदस्य बाकी</span>
+            </div>
+            <div style="font-size:11px; color:#7f1d1d; margin-top:2px;">
+              जिन सदस्यों के पैसे बाकी हैं, उन्हें सीधे 1-क्लिक में इन-ऐप व व्हाट्सएप रिमाइंडर भेजें।
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button onclick="sendDueReminderToAllPending()" class="btn-main" style="background:linear-gradient(135deg, #dc2626, #b91c1c); color:white; border:none; padding:7px 12px; border-radius:10px; font-weight:700; font-size:11.5px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 3px 8px rgba(220, 38, 38, 0.3);">
+              <i class="fa-solid fa-paper-plane"></i> <span>सभी बकायादारों को रिमाइंडर भेजें</span>
+            </button>
+          </div>
+        </div>
+      </div>
       
       <!-- Search & Counts -->
       <div class="search-box">
@@ -2553,7 +2600,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v4.3.3
+            APK v4.3.4
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -2581,7 +2628,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.3.3 (बिल्ड कोड: 19)
+              v4.3.4 (बिल्ड कोड: 20)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -2745,6 +2792,12 @@
           आप संचालक (रेवंतराम भाटी) के रूप में लॉगिन हैं। आप ग्रुप की PhonePe / UPI ID बदल सकते हैं एवं सभी सदस्यों के पद / टैग प्रबंधित कर सकते हैं।
         </p>
         <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="btn-main" onclick="sendDueReminderToAllPending()" style="background:linear-gradient(135deg, #dc2626, #b91c1c); border-radius:14px;">
+            <i class="fa-solid fa-bell"></i> <span>सभी बकायादारों को 1-क्लिक में रिमाइंडर भेजें</span>
+          </button>
+          <button class="btn-tool" onclick="previewAmavasyaEveAlert()" style="width:100%; border-color:#cbd5e1; font-weight:600; border-radius:14px;">
+            <i class="fa-solid fa-moon" style="color:#2563eb;"></i> <span>अमावस्या पूर्व सूचना (कल अमावस्या है) पूर्वावलोकन</span>
+          </button>
           <button class="btn-main" onclick="promptChangeUpiId()" style="background:#5f259f; border-radius:14px;">
             <i class="fa-solid fa-pen-to-square"></i> <span>PhonePe / UPI ID व नाम बदलें</span>
           </button>
@@ -3550,10 +3603,153 @@
     </div>
   </div>
 
+  <!-- 🔔 1. सदस्य बकाया अंशदान स्मरण पॉपअप (सुबह 8:00, शाम 8:00 व ऐप ओपन पर) -->
+  <div id="memberDueReminderModal" class="modal-overlay" style="display:none; z-index:1008;" onclick="if(event.target===this) closeDueReminderModal()">
+    <div class="modal-content due-reminder-modal-card" style="max-width:420px; width:92%; max-height:92vh; overflow-y:auto; padding:22px 18px; text-align:center;">
+      <div class="reminder-glow-icon" style="background:linear-gradient(135deg, #ef4444, #dc2626); color:white;">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      <div style="display:inline-block; margin-bottom:6px;">
+        <span id="dueReminderTimeBadge" style="background:#fee2e2; color:#b91c1c; font-size:11px; padding:3px 10px; border-radius:12px; font-weight:800; border:1px solid #fca5a5;">
+          ⏰ प्रातः 8:00 बजे का स्मरण
+        </span>
+      </div>
+      <h3 style="font-weight:900; font-size:19px; color:#991b1b; margin:4px 0 2px 0;">बकाया अंशदान स्मरण</h3>
+      <div id="dueReminderMemberName" style="font-size:15px; font-weight:800; color:#1e3a8a; margin:4px 0 8px 0;">नमस्ते सदस्य जी!</div>
+      
+      <div style="background:rgba(239, 68, 68, 0.08); border:1.5px dashed rgba(239, 68, 68, 0.35); border-radius:16px; padding:12px; text-align:left; font-size:12.5px; color:#451a03; line-height:1.55; margin-bottom:12px;">
+        <p style="margin:0 0 6px 0;">
+          <strong>जय श्री राम!</strong> युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) के रिकॉर्ड अनुसार आपका इस माह का पावन अमावस्या सत्संग एवं पूजा अंशदान अभी जमा होना शेष है।
+        </p>
+        <p style="margin:0; font-size:11.5px; color:#7f1d1d;">
+          कृपया ग्रुप की धार्मिक व सामाजिक गतिविधियों, अमावस्या सत्संग एवं पूजा व्यवस्था के सुचारू संचालन हेतु अपना अंशदान जल्द से जल्द जमा करवाने की कृपा करें।
+        </p>
+      </div>
+
+      <div style="background:linear-gradient(135deg, #fef2f2, #fff1f2); border:1px solid #fecaca; border-radius:12px; padding:8px 12px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+        <span style="font-weight:700; color:#991b1b;">
+          <i class="fa-solid fa-circle-exclamation"></i> वर्तमान स्थिति:
+        </span>
+        <span class="badge-status-unpaid" style="font-size:11px; padding:3px 8px;">अंशदान बाकी (Due)</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-main" onclick="payDueReminderOnline()" style="background:linear-gradient(135deg, #dc2626, #b91c1c); border-radius:14px; padding:11px; font-size:13px; font-weight:800; box-shadow:0 4px 12px rgba(220, 38, 38, 0.35);">
+          <i class="fa-solid fa-mobile-screen-button"></i> <span>अभी PhonePe / UPI से जमा करें</span>
+        </button>
+        <button type="button" onclick="requestVerificationFromReminder()" style="background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:10px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <i class="fa-solid fa-paper-plane"></i> <span>मैंने जमा कर दिया है (सत्यापन अनुरोध भेजें)</span>
+        </button>
+        <button type="button" onclick="closeDueReminderModal()" style="background:rgba(0,0,0,0.06); border:none; padding:9px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; color:var(--text-color);">
+          बाद में देखें / बंद करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🌙 2. अमावस्या से 1 दिन पूर्व सूचना पॉपअप (कल अमावस्या है) -->
+  <div id="amavasyaEveModal" class="modal-overlay" style="display:none; z-index:1007;" onclick="if(event.target===this) closeAmavasyaEveModal()">
+    <div class="modal-content amavasya-eve-modal-card" style="max-width:430px; width:92%; max-height:92vh; overflow-y:auto; padding:22px 18px; text-align:center;">
+      <div class="reminder-glow-icon" style="background:linear-gradient(135deg, #1e1b4b, #312e81); color:#fbbf24; border:2px solid #fbbf24;">
+        <i class="fa-solid fa-moon"></i>
+      </div>
+      <div style="display:inline-block; margin-bottom:6px;">
+        <span style="background:linear-gradient(135deg, #fef3c7, #fde68a); color:#78350f; font-size:11px; padding:3px 12px; border-radius:12px; font-weight:800; border:1px solid #f59e0b;">
+          🪔 विशेष सत्संग व पूजा सूचना
+        </span>
+      </div>
+      <h3 style="font-weight:900; font-size:20px; color:#1e1b4b; margin:4px 0 2px 0;">कल पावन अमावस्या है! 🌙</h3>
+      <div style="font-size:12px; font-weight:700; color:#ea580c; margin-bottom:10px;" id="amavasyaEveNameHeader">अमावस्या सत्संग व अंशदान दिवस</div>
+
+      <div style="background:linear-gradient(135deg, rgba(254, 243, 199, 0.95), rgba(255, 251, 235, 0.9)); border:1.5px solid #fde68a; border-radius:18px; padding:14px 12px; text-align:left; font-size:12.5px; color:#451a03; line-height:1.6; margin-bottom:12px; box-shadow:0 4px 12px rgba(245, 158, 11, 0.1);">
+        <p style="margin:0 0 8px 0; font-weight:700;">
+          🚩 <strong>जय श्री राम! जय गोगाजी री सा!</strong>
+        </p>
+        <p style="margin:0 0 8px 0;">
+          समस्त युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) के आदरणीय सदस्यों को सूचित किया जाता है कि <strong>कल पावन अमावस्या</strong> है।
+        </p>
+        <p style="margin:0; font-size:12px; color:#78350f;">
+          अमावस्या के पावन अवसर पर आयोजित सत्संग, भोग-प्रसाद एवं ग्रुप की सामाजिक-धार्मिक व्यवस्था हेतु अपना मासिक अंशदान समय पर जमा करवाएं।
+        </p>
+        <div style="margin-top:10px; padding:6px 10px; background:rgba(255,255,255,0.85); border-radius:10px; font-size:11.5px; font-weight:700; color:#1e3a8a; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-calendar-day" style="color:#f59e0b;"></i>
+          <span>कल की पावन तिथि: <span id="amavasyaEveDateDisplay">गणना हो रही है...</span></span>
+        </div>
+      </div>
+
+      <p style="font-size:11.5px; color:var(--text-muted); font-style:italic; margin:0 0 14px 0;">
+        "दान-पुण्य और सेवा ही सच्चा धर्म है। अपना अंशदान समय पर देकर पुण्य के भागीदार बनें।"
+      </p>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-main" onclick="openPhonePeModal('कल अमावस्या अंशदान'); closeAmavasyaEveModal();" style="background:linear-gradient(135deg, #0284c7, #0369a1); border-radius:14px; padding:11px; font-size:13px; font-weight:800; box-shadow:0 4px 12px rgba(2, 132, 199, 0.35);">
+          <i class="fa-solid fa-mobile-screen-button"></i> <span>अभी PhonePe / UPI से अंशदान जमा करें</span>
+        </button>
+        <button type="button" onclick="shareAmavasyaEveNotice()" style="background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:10px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 8px rgba(22, 163, 74, 0.25);">
+          <i class="fa-brands fa-whatsapp"></i> <span>व्हाट्सएप ग्रुप पर सूचना साझा करें</span>
+        </button>
+        <button type="button" onclick="closeAmavasyaEveModal()" style="background:rgba(0,0,0,0.06); border:none; padding:9px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; color:var(--text-color);">
+          धन्यवाद / ठीक है
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📢 3. संचालक नियंत्रण: सभी बकायादारों को 1-क्लिक में रिमाइंडर मैनेजर मोडल -->
+  <div id="adminDueBroadcastModal" class="modal-overlay" style="display:none; z-index:1009;" onclick="if(event.target===this) closeAdminDueBroadcastModal()">
+    <div class="modal-content admin-broadcast-modal-card" style="max-width:460px; width:94%; max-height:92vh; overflow-y:auto; padding:22px 18px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        <div style="font-weight:800; font-size:16px; color:#dc2626; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-bell"></i>
+          <span>बकायादार सदस्य रिमाइंडर (संचालक)</span>
+        </div>
+        <button onclick="closeAdminDueBroadcastModal()" style="background:rgba(0,0,0,0.05); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; color:var(--text-color); display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div style="background:linear-gradient(135deg, #fef2f2, #fff7ed); border:1.5px solid #fecaca; border-radius:16px; padding:12px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:13px; font-weight:800; color:#991b1b;" id="adminBroadcastPendingCountText">
+            लोड हो रहा है...
+          </span>
+          <span class="badge-status-unpaid" style="font-size:11px; padding:3px 8px;">बाकी सूची</span>
+        </div>
+        <div style="font-size:11.5px; color:#7f1d1d; margin-top:4px;">
+          यहाँ से आप एक क्लिक में सभी बकायादार सदस्यों को इन-ऐप पॉपअप अलर्ट और व्हाट्सएप ब्रॉडकास्ट भेज सकते हैं।
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+        <button class="btn-main" onclick="executeAdminBroadcastDueReminder()" style="background:linear-gradient(135deg, #dc2626, #b91c1c); border-radius:14px; padding:10px; font-size:12.5px; font-weight:800; box-shadow:0 4px 12px rgba(220, 38, 38, 0.3);">
+          <i class="fa-solid fa-bullhorn"></i> <span>1. इन-ऐप पॉपअप रिमाइंडर ब्रॉडकास्ट करें (सभी को)</span>
+        </button>
+        <button class="btn-main" onclick="shareBroadcastDueReminderWhatsApp()" style="background:linear-gradient(135deg, #16a34a, #15803d); border-radius:14px; padding:10px; font-size:12.5px; font-weight:800; box-shadow:0 4px 12px rgba(22, 163, 74, 0.3);">
+          <i class="fa-brands fa-whatsapp"></i> <span>2. व्हाट्सएप ग्रुप/ब्रॉडकास्ट पर संदेश भेजें</span>
+        </button>
+      </div>
+
+      <!-- Individual Due Members Interactive List -->
+      <div style="font-weight:800; font-size:13px; color:var(--text-main); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+        <span>व्यक्तिगत सदस्य सूची (1-क्लिक व्हाट्सएप):</span>
+        <span style="font-size:11px; color:var(--text-muted);" id="adminBroadcastListSub">...</span>
+      </div>
+
+      <div id="adminBroadcastDueMembersList" style="display:flex; flex-direction:column; gap:6px; max-height:220px; overflow-y:auto; padding-right:2px; margin-bottom:14px;">
+        <div style="text-align:center; padding:16px; color:#64748b; font-size:12px;">लोड हो रहा है...</div>
+      </div>
+
+      <button type="button" onclick="closeAdminDueBroadcastModal()" style="width:100%; background:rgba(0,0,0,0.06); border:none; padding:10px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; color:var(--text-color);">
+        बंद करें
+      </button>
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.3.3";
+    const APP_VERSION = "4.3.4";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4473,6 +4669,11 @@
         adminSettingsCard.style.display = isAdmin ? "block" : "none";
       }
 
+      const duesBar = document.getElementById("adminDuesReminderBar");
+      if (duesBar) {
+        duesBar.style.display = isAdmin ? "block" : "none";
+      }
+
       const cloudDbRow = document.getElementById("developerCardCloudDbRow");
       if (cloudDbRow) {
         cloudDbRow.style.display = isAdmin ? "flex" : "none";
@@ -5281,6 +5482,12 @@
           `कुल सदस्य: ${membersList.length}${searchTerm ? ' (फ़िल्टर: ' + filtered.length + ')' : ''}`;
       }
 
+      const pendingMembersCount = membersList.filter(x => !getMemberPaymentStatus(x).isPaid).length;
+      const adminPendingBadge = document.getElementById("adminPendingDueCountBadge");
+      if (adminPendingBadge) {
+        adminPendingBadge.innerText = `${pendingMembersCount} सदस्य बाकी`;
+      }
+
       container.innerHTML = "";
 
       if (filtered.length === 0) {
@@ -5318,6 +5525,9 @@
           `<span class="badge-status-paid" ${isAdmin ? `onclick="event.stopPropagation(); quickToggleMemberPayment('${m.id}')" title="क्लिक करके स्थिति बदलें (संचालक)" style="cursor:pointer;"` : ''}><i class="fa-solid fa-circle-check"></i> ${currentLang === 'en' ? 'Paid' : 'जमा'}${isAdmin ? ' <i class="fa-solid fa-pen" style="font-size:8.5px; margin-left:2px;"></i>' : ''}</span>` :
           `<span class="badge-status-unpaid" ${isAdmin ? `onclick="event.stopPropagation(); quickToggleMemberPayment('${m.id}')" title="क्लिक करके स्थिति बदलें (संचालक)" style="cursor:pointer;"` : ''}><i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'en' ? 'Due' : 'बाकी'}${isAdmin ? ' <i class="fa-solid fa-pen" style="font-size:8.5px; margin-left:2px;"></i>' : ''}</span>`;
 
+        const quickReminderBtn = (isAdmin && !payStatus.isPaid) ?
+          `<button onclick="event.stopPropagation(); sendIndividualDueReminder('${m.id}')" title="इस सदस्य को व्हाट्सएप पर बकाया स्मरण भेजें" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; padding:2px 7px; border-radius:6px; font-size:9.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:3px;"><i class="fa-brands fa-whatsapp" style="color:#16a34a;"></i> स्मरण</button>` : '';
+
         card.innerHTML = `
           <div class="member-info">
             <div class="avatar" style="overflow:hidden;">${avatarHtml}</div>
@@ -5326,6 +5536,7 @@
                 <strong style="font-size:15px; color:var(--text-main);">${m.name}</strong>
                 ${tagBadgeHtml}
                 ${statusBadgeHtml}
+                ${quickReminderBtn}
                 ${isSelf ? `<span class="self-badge">${currentLang === 'en' ? 'You' : 'आप'}</span>` : ''}
               </div>
               <div class="member-subtext">
@@ -5443,6 +5654,13 @@
               <i class="fa-solid fa-paper-plane"></i> <span>भुगतान सत्यापन अनुरोध (मैंने जमा कर दिया है)</span>
             </button>
           </div>
+          ${isAdmin ? `
+            <div style="margin-top:8px;">
+              <button onclick="sendIndividualDueReminder('${m.id}')" class="btn-main" style="background:linear-gradient(135deg, #ea580c, #c2410c); color:white; border:none; padding:8px 12px; border-radius:10px; font-weight:700; font-size:11.5px; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 8px rgba(234,88,12,0.3);">
+                <i class="fa-brands fa-whatsapp"></i> <span>व्हाट्सएप पर बकाया स्मरण भेजें (Send Reminder)</span>
+              </button>
+            </div>
+          ` : ''}
         `;
       }
 
@@ -7930,6 +8148,309 @@
       if (settingsName) settingsName.innerText = currentUpiName;
     }
 
+    // =========================================================================
+    // 14. Due Reminders & Amavasya Eve Notifications System
+    // =========================================================================
+    let currentDueMemberName = "";
+    let currentDueMemberId = "";
+    let currentDueMemberPhone = "";
+
+    function requestNotificationPermission() {
+      if ("Notification" in window && Notification.permission === "default") {
+        try {
+          Notification.requestPermission().catch(() => {});
+        } catch (e) {}
+      }
+    }
+
+    function triggerSystemNotification(title, body) {
+      if ("Notification" in window && Notification.permission === "granted") {
+        try {
+          new Notification(title, {
+            body: body,
+            icon: "ic_launcher.png"
+          });
+        } catch (e) {
+          console.log("System notification error:", e);
+        }
+      }
+    }
+
+    function getCurrentUserDueStatus() {
+      if (loggedInMemberPhone) {
+        const member = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+        if (member) {
+          const status = getMemberPaymentStatus(member);
+          return {
+            hasDue: !status.isPaid,
+            name: member.name,
+            memberId: member.id,
+            phone: member.phone
+          };
+        }
+      }
+      return { hasDue: false, name: "", memberId: "", phone: "" };
+    }
+
+    function openMemberDueReminderModal(memberName, memberId, timeBadgeText, phone) {
+      currentDueMemberName = memberName || "";
+      currentDueMemberId = memberId || "";
+      currentDueMemberPhone = phone || "";
+
+      const nameEl = document.getElementById("dueReminderMemberName");
+      if (nameEl) {
+        nameEl.innerText = memberName ? `नमस्ते ${memberName} जी!` : "नमस्ते सदस्य जी!";
+      }
+
+      const badgeEl = document.getElementById("dueReminderTimeBadge");
+      if (badgeEl && timeBadgeText) {
+        badgeEl.innerText = timeBadgeText;
+      }
+
+      const modal = document.getElementById("memberDueReminderModal");
+      if (modal) {
+        modal.style.display = "flex";
+      }
+    }
+
+    function closeDueReminderModal() {
+      const modal = document.getElementById("memberDueReminderModal");
+      if (modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    function payDueReminderOnline() {
+      closeDueReminderModal();
+      const note = currentDueMemberName ? `अंशदान - ${currentDueMemberName}` : "अमावस्या अंशदान";
+      openPhonePeModal(note);
+    }
+
+    function requestVerificationFromReminder() {
+      closeDueReminderModal();
+      if (currentDueMemberId) {
+        openPaymentRequestModal(currentDueMemberId);
+      } else {
+        const self = loggedInMemberPhone ? membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone)) : null;
+        if (self) {
+          openPaymentRequestModal(self.id);
+        } else {
+          showToast("कृपया पहले अपने मोबाइल नंबर से लॉगिन करें।", "warning");
+        }
+      }
+    }
+
+    // Check Morning (8:00 AM) and Evening (8:00 PM) scheduled alerts, as well as on app open
+    function checkScheduledDueReminders() {
+      const now = new Date();
+      const currentHour = now.getHours(); // 0-23
+      const todayDateStr = now.toISOString().split('T')[0];
+
+      const dueInfo = getCurrentUserDueStatus();
+      if (!dueInfo.hasDue) {
+        // Check if admin has recently broadcasted a due alert and user is not logged in
+        const adminBroadcastActive = localStorage.getItem("adminDueBroadcastActive");
+        if (adminBroadcastActive && !loggedInMemberPhone) {
+          const generalKey = `adminBroadcastGeneralSeen_${todayDateStr}`;
+          if (!localStorage.getItem(generalKey)) {
+            localStorage.setItem(generalKey, "true");
+            setTimeout(() => {
+              openMemberDueReminderModal("सदस्य", "", "📢 संचालक द्वारा प्रेषित विशेष सूचना");
+            }, 1800);
+          }
+        }
+        return;
+      }
+
+      const isMorning = (currentHour >= 8 && currentHour < 10);
+      const isEvening = (currentHour >= 20 && currentHour < 22);
+
+      const morningKey = `dueRemind_morning_${todayDateStr}_${dueInfo.phone || 'me'}`;
+      const eveningKey = `dueRemind_evening_${todayDateStr}_${dueInfo.phone || 'me'}`;
+      const openKey = `dueRemind_opened_${todayDateStr}_${dueInfo.phone || 'me'}`;
+
+      if (isMorning && !localStorage.getItem(morningKey)) {
+        localStorage.setItem(morningKey, "true");
+        openMemberDueReminderModal(dueInfo.name, dueInfo.memberId, "🌅 प्रातः 8:00 बजे का स्मरण", dueInfo.phone);
+        triggerSystemNotification("युवा शक्ति ग्रुप • प्रातः अंशदान स्मरण 🚩", `जय श्री राम ${dueInfo.name} जी! आपका इस माह का अमावस्या पूजा/अंशदान बाकी है। कृपया समय पर जमा करवाएं।`);
+      } else if (isEvening && !localStorage.getItem(eveningKey)) {
+        localStorage.setItem(eveningKey, "true");
+        openMemberDueReminderModal(dueInfo.name, dueInfo.memberId, "🌙 सायं 8:00 बजे का स्मरण", dueInfo.phone);
+        triggerSystemNotification("युवा शक्ति ग्रुप • सायं अंशदान स्मरण 🚩", `जय श्री राम ${dueInfo.name} जी! आपका इस माह का अमावस्या पूजा/अंशदान बाकी है। कृपया समय पर जमा करवाएं।`);
+      } else if (!localStorage.getItem(openKey)) {
+        localStorage.setItem(openKey, "true");
+        setTimeout(() => {
+          openMemberDueReminderModal(dueInfo.name, dueInfo.memberId, "⚠️ बकाया अंशदान स्मरण", dueInfo.phone);
+        }, 1200);
+      }
+    }
+
+    // Amavasya 1-Day Prior Alert (कल अमावस्या है)
+    function checkAmavasyaEveAlert() {
+      const nextAmav = getNextAmavasya();
+      if (!nextAmav || !nextAmav.date) return;
+
+      const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+
+      const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+      const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+      const targetTime = new Date(`${nextAmav.date}T00:00:00`).getTime();
+      const diffHours = (targetTime - now.getTime()) / (1000 * 60 * 60);
+
+      // Check if tomorrow is Amavasya, or within 12 to 36 hours of Amavasya
+      const isEve = (tomorrowStr === nextAmav.date) || (diffHours > 0 && diffHours <= 36);
+
+      if (isEve) {
+        const eveKey = `amavasyaEveShown_${nextAmav.date}_${todayStr}`;
+        if (!localStorage.getItem(eveKey)) {
+          localStorage.setItem(eveKey, "true");
+          setTimeout(() => {
+            openAmavasyaEveModal(nextAmav);
+            triggerSystemNotification("कल पावन अमावस्या है! 🌙 🪔", `युवा शक्ति ग्रुप: कल पावन अमावस्या (${formatDisplayDate(nextAmav.date)}) है। कृपया सत्संग व सेवा हेतु अंशदान समय पर जमा करवाएं।`);
+          }, 1500);
+        }
+      }
+    }
+
+    function openAmavasyaEveModal(amavInfo) {
+      const amav = amavInfo || getNextAmavasya();
+      const nameEl = document.getElementById("amavasyaEveNameHeader");
+      const dateEl = document.getElementById("amavasyaEveDateDisplay");
+      if (nameEl && amav) nameEl.innerText = amav.name || "अमावस्या सत्संग व अंशदान दिवस";
+      if (dateEl && amav) dateEl.innerText = formatDisplayDate(amav.date);
+
+      const modal = document.getElementById("amavasyaEveModal");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeAmavasyaEveModal() {
+      const modal = document.getElementById("amavasyaEveModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function previewAmavasyaEveAlert() {
+      openAmavasyaEveModal(getNextAmavasya());
+      showToast("अमावस्या पूर्व सूचना का पूर्वावलोकन प्रस्तुत किया गया।", "info");
+    }
+
+    function shareAmavasyaEveNotice() {
+      const amav = getNextAmavasya();
+      const amavDate = amav ? formatDisplayDate(amav.date) : "कल";
+      const amavName = amav ? amav.name : "पावन अमावस्या";
+      const text = `🌙 *कल पावन अमावस्या है!* 🪔\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\nजय श्री राम! जय गोगाजी री सा! 🙏\n\nसमस्त आदरणीय सदस्यों को सूचित किया जाता है कि *कल पावन अमावस्या* (${amavDate} • ${amavName}) है।\n\nअमावस्या के पावन अवसर पर आयोजित होने वाले सत्संग, भोग-प्रसाद एवं ग्रुप की सामाजिक-धार्मिक व्यवस्था हेतु अपना मासिक अंशदान समय पर जमा करवाकर पुण्य के भागीदार बनें।\n\n📲 *PhonePe / UPI ID*: ${currentUpiId} (${currentUpiName})\n\n*"दान-पुण्य और सेवा ही सच्चा धर्म है।"*\n\n🙏 *निवेदक*:\n*संचालक: रेवंतराम भाटी*\n📱 मोबाइल: 8696663615\n🔗 *व्हाट्सएप ग्रुप:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+      openWhatsAppUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
+    }
+
+    // =========================================================================
+    // Admin Due Reminders Broadcast & Individual WhatsApp Reminders
+    // =========================================================================
+    function sendDueReminderToAllPending() {
+      if (!isAdmin) {
+        showToast("यह सुविधा केवल संचालक (एडमिन) के लिए है।", "error");
+        return;
+      }
+
+      const dueMembers = membersList.filter(m => !getMemberPaymentStatus(m).isPaid);
+      const countEl = document.getElementById("adminBroadcastPendingCountText");
+      const subEl = document.getElementById("adminBroadcastListSub");
+      const listEl = document.getElementById("adminBroadcastDueMembersList");
+
+      if (countEl) {
+        countEl.innerText = `⚠️ कुल ${dueMembers.length} सदस्यों का अंशदान अभी बाकी है`;
+      }
+      if (subEl) {
+        subEl.innerText = `${dueMembers.length} सदस्य`;
+      }
+
+      if (listEl) {
+        listEl.innerHTML = "";
+        if (dueMembers.length === 0) {
+          listEl.innerHTML = `
+            <div style="text-align:center; padding:18px; color:#16a34a; font-weight:700; font-size:12.5px;">
+              <i class="fa-solid fa-circle-check" style="font-size:20px; display:block; margin-bottom:6px;"></i>
+              बहुत बढ़िया! सभी सदस्यों का अंशदान पूर्णतः जमा है।
+            </div>
+          `;
+        } else {
+          dueMembers.forEach((m, idx) => {
+            const item = document.createElement("div");
+            item.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:7px 10px; background:rgba(255,255,255,0.7); border-radius:10px; border:1px solid rgba(220,38,38,0.15); font-size:12px;";
+            item.innerHTML = `
+              <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:8px;">
+                <strong style="color:var(--text-main);">${idx + 1}. ${m.name}</strong>
+                <div style="font-size:11px; color:#64748b;">📱 ${m.phone}</div>
+              </div>
+              <button onclick="sendIndividualDueReminder('${m.id}')" style="background:#22c55e; color:white; border:none; padding:4px 9px; border-radius:8px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; flex-shrink:0;" title="व्हाट्सएप भेजें">
+                <i class="fa-brands fa-whatsapp"></i> भेजें
+              </button>
+            `;
+            listEl.appendChild(item);
+          });
+        }
+      }
+
+      const modal = document.getElementById("adminDueBroadcastModal");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeAdminDueBroadcastModal() {
+      const modal = document.getElementById("adminDueBroadcastModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function executeAdminBroadcastDueReminder() {
+      localStorage.setItem("adminDueBroadcastActive", Date.now().toString());
+      if (typeof db !== "undefined" && db) {
+        db.collection("settings").doc("reminders").set({
+          active: true,
+          broadcastAt: Date.now(),
+          broadcastBy: "रेवंतराम भाटी",
+          message: "संचालक (रेवंतराम भाटी) द्वारा सभी बकायादार सदस्यों को अंशदान जमा करवाने हेतु विशेष स्मरण भेजा गया है।"
+        }, { merge: true }).catch(err => console.log("Reminder broadcast error:", err));
+      }
+      showToast("✅ सभी बकायादार सदस्यों के लिए इन-ऐप स्मरण सक्रिय कर दिया गया है!", "success");
+    }
+
+    function shareBroadcastDueReminderWhatsApp() {
+      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n*अति-आवश्यक सूचना: बकाया अंशदान स्मरण* 🔔\n\nजय श्री राम! समस्त आदरणीय बंधुओं, 🙏\n\nयुवा शक्ति ग्रुप के रिकॉर्ड अनुसार जिन सदस्यों का इस माह का पावन अमावस्या सत्संग एवं पूजा अंशदान अभी जमा होना बाकी है, वे कृपया ग्रुप की धार्मिक व सामाजिक व्यवस्था के सुचारू संचालन हेतु अपना अंशदान जल्द से जल्द जमा करवाने की कृपा करें।\n\n📲 *PhonePe / UPI ID*: ${currentUpiId} (${currentUpiName})\n\n*"दान-पुण्य और सेवा ही सच्चा धर्म है।"*\n\n🙏 *निवेदक*:\n*संचालक: रेवंतराम भाटी*\n📱 मोबाइल: 8696663615\n🔗 *व्हाट्सएप ग्रुप:* https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+      openWhatsAppUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
+    }
+
+    function sendIndividualDueReminder(memberId) {
+      const member = membersList.find(x => x.id === memberId);
+      if (!member) return;
+
+      const cleanPhone = (member.whatsapp || member.phone || '').replace(/\D/g, '');
+      const fullPhone = cleanPhone.startsWith('91') ? cleanPhone : ('91' + cleanPhone);
+
+      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\nजय श्री राम *${member.name} जी*! 🙏\n\nयुवा शक्ति ग्रुप के रिकॉर्ड अनुसार आपका इस माह का पावन अमावस्या सत्संग एवं पूजा अंशदान अभी बकाया है।\n\nकृपया ग्रुप की धार्मिक गतिविधियों एवं पूजा व्यवस्था के सुचारू संचालन हेतु अपना अंशदान समय पर PhonePe / UPI द्वारा जमा करवाने की कृपा करें।\n\n📲 *PhonePe / UPI ID*: ${currentUpiId} (${currentUpiName})\n\n(यदि आपने पहले ही नकद या अन्य माध्यम से भुगतान कर दिया है तो कृपया सूचित करें।)\n\nधन्यवाद,\n*संचालक: रेवंतराम भाटी*\n📱 मोबाइल: 8696663615`;
+
+      openWhatsAppUrl(`https://wa.me/${fullPhone}?text=${encodeURIComponent(text)}`);
+    }
+
+    // Listen for realtime admin broadcast from Firestore
+    if (typeof db !== "undefined" && db) {
+      db.collection("settings").doc("reminders").onSnapshot(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data && data.active && data.broadcastAt) {
+            const lastSeen = localStorage.getItem("lastAdminBroadcastSeen") || 0;
+            if (data.broadcastAt > Number(lastSeen)) {
+              localStorage.setItem("lastAdminBroadcastSeen", data.broadcastAt.toString());
+              const dueInfo = getCurrentUserDueStatus();
+              if (dueInfo.hasDue) {
+                setTimeout(() => {
+                  openMemberDueReminderModal(dueInfo.name, dueInfo.memberId, "🔔 संचालक द्वारा प्रेषित विशेष स्मरण", dueInfo.phone);
+                }, 1000);
+              }
+            }
+          }
+        }
+      }, err => console.log("Reminders listener:", err));
+    }
+
     // Initialize UI, Theme, Settings, and Check for Updates on App Launch
     const savedTheme = localStorage.getItem('appTheme') || 'light';
     setAppTheme(savedTheme);
@@ -7939,10 +8460,16 @@
     updateUpiDisplayEverywhere();
     updateHomeSuvicharSnippet();
     checkDailySuvicharOnAppOpen();
+    requestNotificationPermission();
     setTimeout(() => {
       checkAndShowTodayCelebrations();
+      checkAmavasyaEveAlert();
+      checkScheduledDueReminders();
       checkForAppUpdates(true);
     }, 1500);
+
+    // Periodic check every 60 seconds for scheduled 8:00 AM / 8:00 PM alerts while app is running
+    setInterval(checkScheduledDueReminders, 60000);
   </script>
 </body>
 </html>
