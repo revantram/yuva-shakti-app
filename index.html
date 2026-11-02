@@ -1730,6 +1730,7 @@
           <label id="transDescLabel" data-i18n="field_name">सदस्य का नाम</label>
           <input type="text" id="transDesc" list="memberSuggestions" placeholder="सदस्य का नाम या खर्च विवरण लिखें" data-i18n-ph="trans_desc_ph">
           <datalist id="memberSuggestions"></datalist>
+          <div id="transSelfLockNotice" style="display:none; font-size:11px; margin-top:4px; color:#2563eb; font-weight:600;"></div>
         </div>
 
         <div class="form-group">
@@ -1958,20 +1959,6 @@
         </div>
       </div>
 
-      <!-- Direct WhatsApp APK Share Card -->
-      <div class="card" style="border:1px solid #fed7aa; background:linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);">
-        <div class="card-title">
-          <span><i class="fa-solid fa-share-nodes" style="color:#ea580c;"></i> <span data-i18n="share_app_card_title">ऐप शेयर करें</span></span>
-          <span class="badge" style="background:#ea580c; color:white;">APK</span>
-        </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.4;" data-i18n="share_app_card_desc">
-          परिवार के अन्य सदस्यों को सीधे व्हाट्सएप पर युवा शक्ति ऐप की APK फाइल व डाउनलोड लिंक भेजें।
-        </p>
-        <button onclick="shareAppDirectly()" class="btn-main" style="background:#16a34a; border-color:#15803d; font-size:13px;">
-          <i class="fa-brands fa-whatsapp" style="font-size:16px;"></i> <span data-i18n="btn_share_apk_wa">व्हाट्सएप पर APK शेयर करें</span>
-        </button>
-      </div>
-
       <!-- Admin Control Card (Moved from header to Settings) -->
       <div class="card">
         <div class="card-title">
@@ -2078,7 +2065,7 @@
       <div class="card">
         <div class="card-title">
           <span><i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> <span data-i18n="app_info_title">ऐप विवरण एवं अपडेट</span></span>
-          <span class="badge" style="background:#e0f2fe; color:#0369a1;">v4.2.2</span>
+          <span class="badge" style="background:#e0f2fe; color:#0369a1;">v4.2.3</span>
         </div>
         <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between;">
@@ -2087,7 +2074,7 @@
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>वर्तमान संस्करण:</span>
-            <strong style="color:var(--text-main);">v4.2.2 (नवीनतम)</strong>
+            <strong style="color:var(--text-main);">v4.2.3 (नवीनतम)</strong>
           </div>
           <div style="display:flex; justify-content:space-between;">
             <span>क्लाउड डेटाबेस:</span>
@@ -2325,6 +2312,19 @@
           <span style="color:#64748b;"><i class="fa-solid fa-rings-wedding" style="width:18px; color:#db2777;"></i> वर्षगांठ</span>
           <strong id="profileModalAnniversary" style="color:var(--text-main);">-</strong>
         </div>
+        <!-- Personal Login Code (PIN) Row -->
+        <div id="profileModalPinRow" style="display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-top:1px dashed var(--border-color); margin-top:5px;">
+          <span style="color:#2563eb; font-weight:700;"><i class="fa-solid fa-key" style="width:18px;"></i> <span id="profileModalPinLabel" data-i18n="login_code_label">लॉगिन कोड (PIN)</span></span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <strong id="profileModalPinVal" style="font-family:monospace; font-size:14px; background:#eff6ff; color:#1d4ed8; padding:3px 9px; border-radius:6px; letter-spacing:2px; font-weight:800;">••••</strong>
+            <button type="button" id="btnTogglePinView" onclick="toggleProfilePinVisibility()" style="border:none; background:#e2e8f0; color:#475569; border-radius:6px; padding:4px 8px; font-size:11px; cursor:pointer;" title="पिन देखें / छिपाएं">
+              <i class="fa-solid fa-eye" id="pinEyeIcon"></i>
+            </button>
+            <button type="button" id="btnChangeMemberPinInProfile" onclick="promptChangeMemberPinInProfile()" style="border:none; background:#dbeafe; color:#1d4ed8; border-radius:6px; padding:4px 8px; font-size:11px; font-weight:700; cursor:pointer;" title="पिन बदलें">
+              <i class="fa-solid fa-pen-to-square"></i> बदलें
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Edit / Admin Controls -->
@@ -2337,7 +2337,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.2.2";
+    const APP_VERSION = "4.2.3";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -2539,7 +2539,8 @@
         wa_group_badge: "भाटी परिवार",
         wa_group_desc: "युवा शक्ति ग्रुप (भाटी परिवार) के आधिकारिक व्हाट्सएप ग्रुप से जुड़ें। यहाँ ग्रुप की सभी नई सूचनाएं, सत्संग, कार्यक्रम और अमावस्या अंशदान की जानकारी सीधे प्राप्त करें।",
         btn_join_wa: "व्हाट्सएप ग्रुप में शामिल हों (Join Group)",
-        app_info_title: "ऐप विवरण एवं अपडेट"
+        app_info_title: "ऐप विवरण एवं अपडेट",
+        login_code_label: "लॉगिन कोड (PIN)"
       },
       en: {
         app_title: "Yuva Shakti Group",
@@ -2634,7 +2635,8 @@
         wa_group_badge: "Bhati Parivar",
         wa_group_desc: "Join the official WhatsApp group of Yuva Shakti Group (Bhati Parivar). Get updates on satsang, events, and Amavasya contributions directly.",
         btn_join_wa: "Join WhatsApp Group",
-        app_info_title: "App Details & Updates"
+        app_info_title: "App Details & Updates",
+        login_code_label: "Login Code (PIN)"
       }
     };
 
@@ -2735,14 +2737,72 @@
       const label = document.getElementById("transDescLabel");
       const badge = document.getElementById("ledgerFormBadge");
       const descInput = document.getElementById("transDesc");
+      const lockNotice = document.getElementById("transSelfLockNotice");
+
       if (type === "contribution") {
         if (label) label.innerText = currentLang === 'en' ? "Member Name" : "सदस्य का नाम";
-        if (descInput) descInput.placeholder = currentLang === 'en' ? "Choose or type member name" : "सदस्य का नाम चुनें या लिखें";
         if (badge) badge.innerText = currentLang === 'en' ? "Contribution (Deposit)" : "अंशदान (जमा)";
+
+        if (isAdmin) {
+          if (descInput) {
+            descInput.readOnly = false;
+            descInput.style.background = "";
+            descInput.placeholder = currentLang === 'en' ? "Choose or type member name" : "सदस्य का नाम चुनें या लिखें";
+          }
+          if (lockNotice) lockNotice.style.display = "none";
+        } else if (loggedInMemberPhone) {
+          const self = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+          const selfName = self ? self.name : loggedInMemberPhone;
+          if (descInput) {
+            descInput.value = selfName;
+            descInput.readOnly = true;
+            descInput.style.background = "#f1f5f9";
+          }
+          if (lockNotice) {
+            lockNotice.style.display = "block";
+            lockNotice.innerHTML = currentLang === 'en' ? 
+              `<i class="fa-solid fa-lock" style="color:#2563eb;"></i> Only your own contribution (${selfName}) can be deposited` :
+              `<i class="fa-solid fa-lock" style="color:#2563eb;"></i> आप केवल अपना स्वयं का अंशदान (${selfName}) जमा कर सकते हैं`;
+          }
+        } else {
+          if (descInput) {
+            descInput.value = "";
+            descInput.readOnly = true;
+            descInput.style.background = "#f1f5f9";
+            descInput.placeholder = currentLang === 'en' ? "Please login to deposit contribution" : "अंशदान जमा करने हेतु लॉगिन करें";
+          }
+          if (lockNotice) {
+            lockNotice.style.display = "block";
+            lockNotice.innerHTML = currentLang === 'en' ? 
+              `<i class="fa-solid fa-circle-exclamation" style="color:#ea580c;"></i> <a href="javascript:void(0)" onclick="openLoginModal()" style="color:#2563eb; font-weight:700;">Login</a> required to deposit contribution` :
+              `<i class="fa-solid fa-circle-exclamation" style="color:#ea580c;"></i> अंशदान जमा करने हेतु कृपया <a href="javascript:void(0)" onclick="openLoginModal()" style="color:#2563eb; font-weight:700;">लॉगिन करें</a>`;
+          }
+        }
       } else {
         if (label) label.innerText = currentLang === 'en' ? "Expense Description" : "खर्च का विवरण";
-        if (descInput) descInput.placeholder = currentLang === 'en' ? "e.g. Satsang, Prasad, Banner, etc." : "उदा. सत्संग, प्रसाद, बैनर, आदि";
         if (badge) badge.innerText = currentLang === 'en' ? "Group Expense" : "ग्रुप व्यय (खर्च)";
+
+        if (isAdmin) {
+          if (descInput) {
+            descInput.readOnly = false;
+            descInput.style.background = "";
+            descInput.placeholder = currentLang === 'en' ? "e.g. Satsang, Prasad, Banner, etc." : "उदा. सत्संग, प्रसाद, बैनर, आदि";
+          }
+          if (lockNotice) lockNotice.style.display = "none";
+        } else {
+          if (descInput) {
+            descInput.value = "";
+            descInput.readOnly = true;
+            descInput.style.background = "#f1f5f9";
+            descInput.placeholder = currentLang === 'en' ? "Only Admin can record group expenses" : "ग्रुप खर्च केवल व्यवस्थापक दर्ज कर सकते हैं";
+          }
+          if (lockNotice) {
+            lockNotice.style.display = "block";
+            lockNotice.innerHTML = currentLang === 'en' ? 
+              `<i class="fa-solid fa-shield-halved" style="color:#dc2626;"></i> Only Admin can record group expenses` :
+              `<i class="fa-solid fa-shield-halved" style="color:#dc2626;"></i> ग्रुप खर्च केवल व्यवस्थापक (Admin) द्वारा दर्ज किया जा सकता है`;
+          }
+        }
       }
     }
 
@@ -2988,6 +3048,7 @@
       updateSettingsUI();
       renderMembers();
       renderLedgerTable();
+      handleTransTypeChange();
     }
 
     function updateSettingsUI() {
@@ -3410,9 +3471,13 @@
                 ${currentLang === 'en' ? 'Monthly Amavasya satsang & group contribution pending' : 'अमावस्या सत्संग व ग्रुप सेवा अंशदान अपेक्षित'}
               </div>
             </div>
-            <button onclick="closeMemberProfileModal(); openPhonePeModal('अंशदान - ' + '${m.name}')" style="background:#dc2626; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer;">
-              ${currentLang === 'en' ? 'Pay Now' : 'जमा करें'}
-            </button>
+            ${(isSelf || isAdmin) ? `
+              <button onclick="closeMemberProfileModal(); openPhonePeModal('अंशदान - ' + '${m.name}')" style="background:#dc2626; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer;">
+                ${currentLang === 'en' ? 'Pay Now' : 'जमा करें'}
+              </button>
+            ` : `
+              <span class="badge-status-unpaid" style="font-size:11px; padding:3px 8px;">${currentLang === 'en' ? 'Due' : 'बाकी'}</span>
+            `}
           </div>
         `;
       }
@@ -3444,6 +3509,42 @@
       document.getElementById("profileModalWA").innerText = m.whatsapp ? `+91 ${m.whatsapp}` : (m.phone ? `+91 ${m.phone}` : notProvided);
       document.getElementById("profileModalDob").innerText = m.dob ? formatDisplayDate(m.dob) : notProvided;
       document.getElementById("profileModalAnniversary").innerText = m.anniversary ? formatDisplayDate(m.anniversary) : notProvided;
+
+      // Display personal login PIN row for self or admin
+      const pinRow = document.getElementById("profileModalPinRow");
+      const pinValEl = document.getElementById("profileModalPinVal");
+      const btnToggle = document.getElementById("btnTogglePinView");
+      const btnChangePin = document.getElementById("btnChangeMemberPinInProfile");
+      const pinEyeIcon = document.getElementById("pinEyeIcon");
+
+      if (pinRow && pinValEl) {
+        if (isSelf || isAdmin) {
+          pinRow.style.display = "flex";
+          if (m.pin) {
+            pinValEl.innerText = isProfilePinVisible ? m.pin : '••••';
+            pinValEl.style.color = "#1d4ed8";
+            pinValEl.style.background = "#eff6ff";
+          } else {
+            pinValEl.innerText = currentLang === 'en' ? "Not Set" : "सेट नहीं";
+            pinValEl.style.color = "#ea580c";
+            pinValEl.style.background = "#fff7ed";
+          }
+          if (btnToggle) {
+            btnToggle.style.display = m.pin ? "inline-flex" : "none";
+            if (pinEyeIcon) {
+              pinEyeIcon.className = isProfilePinVisible ? "fa-solid fa-eye-slash" : "fa-solid fa-eye";
+            }
+          }
+          if (btnChangePin) {
+            btnChangePin.style.display = "inline-flex";
+            btnChangePin.innerHTML = m.pin ?
+              `<i class="fa-solid fa-pen-to-square"></i> ${currentLang === 'en' ? 'Change' : 'बदलें'}` :
+              `<i class="fa-solid fa-plus"></i> ${currentLang === 'en' ? 'Set PIN' : 'पिन सेट करें'}`;
+          }
+        } else {
+          pinRow.style.display = "none";
+        }
+      }
 
       const controlsDiv = document.getElementById("profileModalControls");
       controlsDiv.innerHTML = "";
@@ -3481,6 +3582,58 @@
 
     function closeMemberProfileModal() {
       document.getElementById("memberProfileModal").style.display = "none";
+    }
+
+    let isProfilePinVisible = true;
+
+    function toggleProfilePinVisibility() {
+      isProfilePinVisible = !isProfilePinVisible;
+      const m = membersList.find(x => x.id === currentProfileModalMemberId);
+      const pinValEl = document.getElementById("profileModalPinVal");
+      const eyeIcon = document.getElementById("pinEyeIcon");
+      if (m && pinValEl) {
+        if (m.pin) {
+          pinValEl.innerText = isProfilePinVisible ? m.pin : '••••';
+        }
+      }
+      if (eyeIcon) {
+        eyeIcon.className = isProfilePinVisible ? "fa-solid fa-eye-slash" : "fa-solid fa-eye";
+      }
+    }
+
+    async function promptChangeMemberPinInProfile() {
+      const m = membersList.find(x => x.id === currentProfileModalMemberId);
+      if (!m) return;
+      const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
+      if (!isSelf && !isAdmin) {
+        showToast(currentLang === 'en' ? "Self login or admin mode required to change PIN." : "पिन बदलने हेतु स्वयं का लॉगिन अथवा एडमिन होना आवश्यक है।", "error");
+        return;
+      }
+
+      const promptMsg = m.pin ? 
+        (currentLang === 'en' ? `Enter new 4-digit login PIN for ${m.name}:` : `${m.name} के लिए नया 4-अंकों का लॉगिन कोड (PIN) दर्ज करें:`) :
+        (currentLang === 'en' ? `Set 4-digit login PIN for ${m.name}:` : `${m.name} के लिए 4-अंकों का लॉगिन कोड (PIN) सेट करें:`);
+      
+      const newPin = prompt(promptMsg, m.pin || "");
+      if (newPin === null) return;
+      const cleanPin = newPin.trim();
+      if (!/^\d{4}$/.test(cleanPin)) {
+        showToast(currentLang === 'en' ? "PIN must be exactly 4 digits (e.g. 1234)" : "पिन ठीक 4 अंकों का होना चाहिए (उदा. 1234)", "warning");
+        return;
+      }
+
+      try {
+        await db.collection("members").doc(m.id).update({
+          pin: cleanPin,
+          updatedAt: new Date()
+        });
+        m.pin = cleanPin;
+        openMemberProfileModal(m.id);
+        showToast(currentLang === 'en' ? "Login PIN updated successfully!" : "लॉगिन कोड (PIN) सफलतापूर्वक सेट / अपडेट हो गया!", "success");
+      } catch (err) {
+        console.error("Error setting member pin:", err);
+        showToast("पिन अपडेट करने में त्रुटि: " + err.message, "error");
+      }
     }
 
     function triggerProfilePhotoUpload() {
@@ -3659,10 +3812,26 @@
     // 15. Ledger Handlers
     async function saveTransaction() {
       const type = document.getElementById("transType").value;
-      const desc = document.getElementById("transDesc").value.trim();
+      let desc = document.getElementById("transDesc").value.trim();
       const amount = Number(document.getElementById("transAmount").value);
       const payMethod = document.getElementById("transPayMethod").value;
       const date = document.getElementById("transDate").value;
+
+      if (!isAdmin) {
+        if (!loggedInMemberPhone) {
+          showToast(currentLang === 'en' ? "Please login to record contribution." : "अंशदान जमा करने हेतु कृपया पहले लॉगिन करें।", "error");
+          openLoginModal();
+          return;
+        }
+        if (type === "expense") {
+          showToast(currentLang === 'en' ? "Only Admin can record group expenses." : "ग्रुप खर्च केवल व्यवस्थापक (Admin) दर्ज कर सकते हैं।", "error");
+          return;
+        }
+        // Force member's own name so non-admins cannot deposit under another member's name
+        const self = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+        const selfName = self ? self.name : loggedInMemberPhone;
+        desc = selfName;
+      }
 
       if (!desc) {
         showToast("कृपया सदस्य का नाम या खर्च विवरण दर्ज करें।", "warning");
@@ -3688,9 +3857,9 @@
         });
 
         showToast("लेनदेन बही-खाते में सफलतापूर्वक दर्ज हुआ!", "success");
-        document.getElementById("transDesc").value = "";
         document.getElementById("transAmount").value = "";
         setTodayDate('transDate');
+        handleTransTypeChange();
       } catch (err) {
         showToast("लेनदेन दर्ज करने में त्रुटि: " + err.message, "error");
       }
@@ -4414,6 +4583,12 @@
     }
 
     function openPhonePeModal(defaultNote = "अमावस्या अंशदान", defaultAmount = 500) {
+      if (defaultNote === "अमावस्या अंशदान" && loggedInMemberPhone) {
+        const self = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+        if (self) {
+          defaultNote = `अंशदान - ${self.name}`;
+        }
+      }
       document.getElementById("phonepeModal").style.display = "flex";
       document.getElementById("phonepePayAmount").value = defaultAmount;
       document.getElementById("phonepePayNote").value = defaultNote;
