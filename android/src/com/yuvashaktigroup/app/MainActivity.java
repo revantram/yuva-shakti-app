@@ -22,11 +22,23 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
+import android.media.MediaScannerConnection;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends Activity {
 
@@ -49,6 +61,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void printLedgerPdf() {
             printLedgerReport();
+        }
+
+        @JavascriptInterface
+        public void saveLedgerPdf(String summaryJson, String transactionsJson) {
+            generateAndSaveLedgerPdf(summaryJson, transactionsJson);
         }
     }
 
@@ -351,6 +368,276 @@ public class MainActivity extends Activity {
                 }
             }
         });
+    }
+
+    public void generateAndSaveLedgerPdf(final String summaryJson, final String transactionsJson) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                PdfDocument document = null;
+                try {
+                    JSONObject summary = new JSONObject(summaryJson != null ? summaryJson : "{}");
+                    JSONArray transactions = new JSONArray(transactionsJson != null ? transactionsJson : "[]");
+
+                    boolean isEnglish = "en".equalsIgnoreCase(summary.optString("lang", "hi"));
+                    long totalIn = summary.optLong("totalIn", 0);
+                    long totalOut = summary.optLong("totalOut", 0);
+                    long net = summary.optLong("net", totalIn - totalOut);
+                    int count = summary.optInt("count", transactions.length());
+                    String dateStr = summary.optString("date", "");
+
+                    document = new PdfDocument();
+                    int pageWidth = 595;
+                    int pageHeight = 842;
+                    int pageNumber = 1;
+
+                    PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create();
+                    PdfDocument.Page page = document.startPage(pageInfo);
+                    Canvas canvas = page.getCanvas();
+
+                    Paint paint = new Paint();
+                    paint.setAntiAlias(true);
+
+                    // 1. Draw Header Banner
+                    paint.setColor(Color.parseColor("#1e3a8a"));
+                    canvas.drawRoundRect(new RectF(36, 36, 559, 105), 8, 8, paint);
+
+                    paint.setColor(Color.WHITE);
+                    paint.setTextSize(16);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    String title = isEnglish ? "Yuva Shakti Group (Bhati Parivar Kuchera)" : "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)";
+                    canvas.drawText(title, 50, 64, paint);
+
+                    paint.setColor(Color.parseColor("#fbbf24"));
+                    paint.setTextSize(11);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    String sub = isEnglish ? "Official Ledger & Financial Statement" : "आधिकारिक बही-खाता एवं आय-व्यय रिपोर्ट";
+                    canvas.drawText(sub, 50, 82, paint);
+
+                    paint.setColor(Color.parseColor("#e0e7ff"));
+                    paint.setTextSize(9);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                    String dateMeta = (isEnglish ? "Report Date: " : "रिपोर्ट दिनांक: ") + dateStr + "  |  " + (isEnglish ? "Total Records: " : "कुल लेनदेन: ") + count;
+                    canvas.drawText(dateMeta, 50, 96, paint);
+
+                    // 2. Summary Boxes (3 horizontal cards)
+                    float boxY1 = 115;
+                    float boxY2 = 160;
+                    float boxW = 166;
+
+                    // Box 1: Total In
+                    paint.setColor(Color.parseColor("#ecfdf5"));
+                    canvas.drawRoundRect(new RectF(36, boxY1, 36 + boxW, boxY2), 6, 6, paint);
+                    paint.setColor(Color.parseColor("#a7f3d0"));
+                    paint.setStyle(Paint.Style.STROKE);
+                    canvas.drawRoundRect(new RectF(36, boxY1, 36 + boxW, boxY2), 6, 6, paint);
+                    paint.setStyle(Paint.Style.FILL);
+                    paint.setColor(Color.parseColor("#065f46"));
+                    paint.setTextSize(9);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                    canvas.drawText(isEnglish ? "TOTAL DEPOSITS" : "कुल जमा (अंशदान)", 46, boxY1 + 18, paint);
+                    paint.setColor(Color.parseColor("#047857"));
+                    paint.setTextSize(14);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    canvas.drawText("₹" + String.format(Locale.US, "%,d", totalIn), 46, boxY1 + 36, paint);
+
+                    // Box 2: Total Out
+                    float box2X = 36 + boxW + 12;
+                    paint.setColor(Color.parseColor("#fef2f2"));
+                    canvas.drawRoundRect(new RectF(box2X, boxY1, box2X + boxW, boxY2), 6, 6, paint);
+                    paint.setColor(Color.parseColor("#fecaca"));
+                    paint.setStyle(Paint.Style.STROKE);
+                    canvas.drawRoundRect(new RectF(box2X, boxY1, box2X + boxW, boxY2), 6, 6, paint);
+                    paint.setStyle(Paint.Style.FILL);
+                    paint.setColor(Color.parseColor("#991b1b"));
+                    paint.setTextSize(9);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                    canvas.drawText(isEnglish ? "TOTAL EXPENSES" : "कुल खर्च (व्यय)", box2X + 10, boxY1 + 18, paint);
+                    paint.setColor(Color.parseColor("#b91c1c"));
+                    paint.setTextSize(14);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    canvas.drawText("₹" + String.format(Locale.US, "%,d", totalOut), box2X + 10, boxY1 + 36, paint);
+
+                    // Box 3: Net Balance
+                    float box3X = box2X + boxW + 12;
+                    paint.setColor(Color.parseColor("#eff6ff"));
+                    canvas.drawRoundRect(new RectF(box3X, boxY1, 559, boxY2), 6, 6, paint);
+                    paint.setColor(Color.parseColor("#bfdbfe"));
+                    paint.setStyle(Paint.Style.STROKE);
+                    canvas.drawRoundRect(new RectF(box3X, boxY1, 559, boxY2), 6, 6, paint);
+                    paint.setStyle(Paint.Style.FILL);
+                    paint.setColor(Color.parseColor("#1e40af"));
+                    paint.setTextSize(9);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                    canvas.drawText(isEnglish ? "NET BALANCE" : "उपलब्ध शेष राशि", box3X + 10, boxY1 + 18, paint);
+                    paint.setColor(Color.parseColor("#1d4ed8"));
+                    paint.setTextSize(14);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    canvas.drawText("₹" + String.format(Locale.US, "%,d", net), box3X + 10, boxY1 + 36, paint);
+
+                    // 3. Table Header
+                    int currentY = 175;
+                    drawTableHeader(canvas, paint, currentY, isEnglish);
+                    currentY += 24;
+
+                    // 4. Rows
+                    for (int i = 0; i < transactions.length(); i++) {
+                        if (currentY > 790) {
+                            drawPageFooter(canvas, paint, pageNumber, isEnglish);
+                            document.finishPage(page);
+
+                            pageNumber++;
+                            pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create();
+                            page = document.startPage(pageInfo);
+                            canvas = page.getCanvas();
+
+                            currentY = 45;
+                            drawTableHeader(canvas, paint, currentY, isEnglish);
+                            currentY += 24;
+                        }
+
+                        JSONObject row = transactions.getJSONObject(i);
+                        String desc = row.optString("description", "");
+                        String date = row.optString("date", "");
+                        String method = row.optString("payMethod", "");
+                        String typeStr = row.optString("type", "");
+                        long amount = row.optLong("amount", 0);
+                        boolean isIncome = "contribution".equalsIgnoreCase(typeStr);
+
+                        if (i % 2 == 1) {
+                            paint.setColor(Color.parseColor("#f8fafc"));
+                            canvas.drawRect(36, currentY - 14, 559, currentY + 6, paint);
+                        }
+
+                        paint.setColor(Color.parseColor("#e2e8f0"));
+                        paint.setStrokeWidth(0.5f);
+                        canvas.drawLine(36, currentY + 6, 559, currentY + 6, paint);
+
+                        paint.setColor(Color.parseColor("#1e293b"));
+                        paint.setTextSize(9);
+                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                        String truncatedDesc = desc.length() > 32 ? desc.substring(0, 30) + "..." : desc;
+                        canvas.drawText(truncatedDesc, 42, currentY, paint);
+
+                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                        paint.setColor(Color.parseColor("#475569"));
+                        canvas.drawText(date, 245, currentY, paint);
+
+                        String truncatedMethod = method.length() > 14 ? method.substring(0, 12) + "..." : method;
+                        canvas.drawText(truncatedMethod, 325, currentY, paint);
+
+                        String displayType = isIncome ? (isEnglish ? "Deposit" : "जमा") : (isEnglish ? "Expense" : "खर्च");
+                        paint.setColor(isIncome ? Color.parseColor("#047857") : Color.parseColor("#b91c1c"));
+                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                        canvas.drawText(displayType, 410, currentY, paint);
+
+                        String amtText = "₹" + String.format(Locale.US, "%,d", amount);
+                        paint.setColor(isIncome ? Color.parseColor("#047857") : Color.parseColor("#b91c1c"));
+                        float amtWidth = paint.measureText(amtText);
+                        canvas.drawText(amtText, 550 - amtWidth, currentY, paint);
+
+                        currentY += 20;
+                    }
+
+                    drawPageFooter(canvas, paint, pageNumber, isEnglish);
+                    document.finishPage(page);
+
+                    // 5. Save to Mobile Storage (/sdcard/Download)
+                    File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    if (!downloadDir.exists()) {
+                        downloadDir.mkdirs();
+                    }
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+                    File pdfFile = new File(downloadDir, "Yuva_Shakti_BahiKhata_" + timeStamp + ".pdf");
+
+                    try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
+                        document.writeTo(fos);
+                    }
+
+                    File fixedPdf = new File(downloadDir, "Yuva_Shakti_BahiKhata.pdf");
+                    copyFile(pdfFile, fixedPdf);
+
+                    // 6. Media Scan & Download Manager registration
+                    MediaScannerConnection.scanFile(
+                        MainActivity.this,
+                        new String[]{pdfFile.getAbsolutePath(), fixedPdf.getAbsolutePath()},
+                        new String[]{"application/pdf", "application/pdf"},
+                        null
+                    );
+
+                    DownloadManager dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                    if (dm != null) {
+                        dm.addCompletedDownload(
+                            pdfFile.getName(),
+                            "युवा शक्ति ग्रुप बही-खाता रिपोर्ट",
+                            true,
+                            "application/pdf",
+                            pdfFile.getAbsolutePath(),
+                            pdfFile.length(),
+                            true
+                        );
+                    }
+
+                    Toast.makeText(MainActivity.this, "📄 बही-खाता PDF डाउनलोड फोल्डर में सेव हो गई:\n" + pdfFile.getName(), Toast.LENGTH_LONG).show();
+
+                    // 7. Open with PDF Viewer
+                    try {
+                        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                        StrictMode.setVmPolicy(builder.build());
+
+                        Intent viewIntent = new Intent(Intent.ACTION_VIEW);
+                        viewIntent.setDataAndType(Uri.fromFile(pdfFile), "application/pdf");
+                        viewIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(Intent.createChooser(viewIntent, isEnglish ? "Open PDF Report" : "बही-खाता PDF खोलें"));
+                    } catch (Exception ex) {
+                        // User can still open from notification or Downloads folder
+                    }
+
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "PDF तैयार करने में त्रुटि: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                } finally {
+                    if (document != null) {
+                        document.close();
+                    }
+                }
+            }
+        });
+    }
+
+    private void drawTableHeader(Canvas canvas, Paint paint, int y, boolean isEnglish) {
+        paint.setColor(Color.parseColor("#f1f5f9"));
+        canvas.drawRect(36, y - 14, 559, y + 8, paint);
+
+        paint.setColor(Color.parseColor("#334155"));
+        paint.setTextSize(9);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
+        canvas.drawText(isEnglish ? "DESCRIPTION / MEMBER" : "विवरण / सदस्य", 42, y, paint);
+        canvas.drawText(isEnglish ? "DATE" : "तारीख", 245, y, paint);
+        canvas.drawText(isEnglish ? "METHOD" : "माध्यम", 325, y, paint);
+        canvas.drawText(isEnglish ? "TYPE" : "प्रकार", 410, y, paint);
+
+        String amtHeader = isEnglish ? "AMOUNT" : "राशि";
+        float amtWidth = paint.measureText(amtHeader);
+        canvas.drawText(amtHeader, 550 - amtWidth, y, paint);
+
+        paint.setColor(Color.parseColor("#cbd5e1"));
+        paint.setStrokeWidth(1.0f);
+        canvas.drawLine(36, y + 8, 559, y + 8, paint);
+    }
+
+    private void drawPageFooter(Canvas canvas, Paint paint, int pageNumber, boolean isEnglish) {
+        paint.setColor(Color.parseColor("#94a3b8"));
+        paint.setTextSize(8);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        String footerText = isEnglish ? 
+            "Yuva Shakti Group • Kuchera (Nagaur) • Parivar Management" :
+            "युवा शक्ति ग्रुप • कुचेरा (नागौर) • परिवार प्रबंधन एवं बही-खाता";
+        canvas.drawText(footerText, 42, 820, paint);
+
+        String pageStr = (isEnglish ? "Page " : "पृष्ठ ") + pageNumber;
+        float pWidth = paint.measureText(pageStr);
+        canvas.drawText(pageStr, 550 - pWidth, 820, paint);
     }
 
     private void copyFile(File src, File dst) throws Exception {

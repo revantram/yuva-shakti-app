@@ -1545,25 +1545,25 @@
         <i class="fa-solid fa-people-roof" style="display:none;"></i>
       </div>
       <div class="header-text">
-        <h1 style="font-size:16px; font-weight:800; line-height:1.2; margin:0; letter-spacing:-0.2px;">युवा शक्ति ग्रुप</h1>
-        <div style="font-size:11px; color:#fef08a; font-weight:700; margin-top:1px; letter-spacing:0.2px;">भाटी परिवार कुचेरा</div>
+        <h1 style="font-size:16px; font-weight:800; line-height:1.2; margin:0; letter-spacing:-0.2px;" id="appTitleText" data-i18n="app_title">युवा शक्ति ग्रुप</h1>
+        <div style="font-size:11px; color:#fef08a; font-weight:700; margin-top:1px; letter-spacing:0.2px;" id="appSubTitleText" data-i18n="app_subtitle">भाटी परिवार कुचेरा</div>
       </div>
     </div>
     <div class="header-actions">
       <!-- Direct APK Share via WhatsApp -->
       <button class="auth-btn" onclick="shareAppDirectly()" style="background:#ea580c; border-color:#f97316;" title="APK व्हाट्सएप पर शेयर करें">
         <i class="fa-solid fa-share-nodes"></i>
-        <span>शेयर</span>
+        <span data-i18n="btn_share">शेयर</span>
       </button>
       <!-- Official WhatsApp Group Link Button -->
       <a href="https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh" target="_blank" class="auth-btn" style="background:#16a34a; border-color:#22c55e; text-decoration:none;" title="आधिकारिक व्हाट्सएप ग्रुप से जुड़ें">
         <i class="fa-brands fa-whatsapp"></i>
-        <span>ग्रुप</span>
+        <span data-i18n="btn_group">ग्रुप</span>
       </a>
       <!-- Member Login Button (hidden when logged in) -->
       <button class="auth-btn" id="loginBtn" onclick="openLoginModal()">
         <i class="fa-solid fa-right-to-bracket"></i>
-        <span>लॉगिन</span>
+        <span data-i18n="btn_login">लॉगिन</span>
       </button>
     </div>
   </header>
@@ -1596,23 +1596,6 @@
     <!-- 1. सदस्य डायरेक्टरी टैब -->
     <div id="viewMembers" class="section-view active-view">
       
-      <!-- 🚩 Brand & Official WhatsApp Banner -->
-      <div style="background:linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%); color:white; border-radius:var(--radius); padding:12px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid rgba(251, 191, 36, 0.35); box-shadow:var(--shadow-sm);">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <img src="ic_launcher.png" alt="Logo" style="width:42px; height:42px; border-radius:50%; border:2px solid #fbbf24; object-fit:cover; box-shadow:0 2px 6px rgba(0,0,0,0.3);">
-          <div>
-            <div style="font-weight:800; font-size:14px; display:flex; align-items:center; gap:5px;">
-              <span>युवा शक्ति ग्रुप</span>
-              <span style="font-size:10px; background:#ea580c; color:white; padding:1px 5px; border-radius:4px; font-weight:700;">भाटी परिवार</span>
-            </div>
-            <div style="font-size:11px; color:#cbd5e1; margin-top:2px;">🚩 कुचेरा (नागौर) • परिवार प्रबंधन</div>
-          </div>
-        </div>
-        <a href="https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh" target="_blank" style="background:#22c55e; color:white; padding:7px 11px; border-radius:8px; font-weight:700; font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 4px rgba(0,0,0,0.25);">
-          <i class="fa-brands fa-whatsapp" style="font-size:14px;"></i> ग्रुप से जुड़ें
-        </a>
-      </div>
-
       <!-- 🌙 Amavasya Live Countdown Card (Shown only on main tab) -->
       <div class="amavasya-card" id="amavasyaHeroCard">
         <div class="amavasya-header">
@@ -1629,32 +1612,32 @@
         <div class="countdown-grid">
           <div class="countdown-box">
             <div class="countdown-val" id="cdDays">00</div>
-            <div class="countdown-lbl">दिन</div>
+            <div class="countdown-lbl" data-i18n="days">दिन</div>
           </div>
           <div class="countdown-box">
             <div class="countdown-val" id="cdHours">00</div>
-            <div class="countdown-lbl">घंटे</div>
+            <div class="countdown-lbl" data-i18n="hours">घंटे</div>
           </div>
           <div class="countdown-box">
             <div class="countdown-val" id="cdMins">00</div>
-            <div class="countdown-lbl">मिनट</div>
+            <div class="countdown-lbl" data-i18n="mins">मिनट</div>
           </div>
           <div class="countdown-box">
             <div class="countdown-val" id="cdSecs">00</div>
-            <div class="countdown-lbl">सेकंड</div>
+            <div class="countdown-lbl" data-i18n="secs">सेकंड</div>
           </div>
         </div>
 
         <div class="amavasya-footer">
           <div class="amavasya-subtext" id="amavasyaTithiDesc">
-            <i class="fa-solid fa-om" style="color:#fbbf24;"></i> सत्संग व अंशदान दिवस
+            <i class="fa-solid fa-om" style="color:#fbbf24;"></i> <span data-i18n="amavasya_footer_desc">सत्संग व अंशदान दिवस</span>
           </div>
           <div style="display:flex; gap:6px;">
             <button class="btn-quick-phonepe" onclick="openPhonePeModal('अमावस्या अंशदान')">
               <i class="fa-solid fa-mobile-screen-button"></i> PhonePe
             </button>
             <button class="btn-quick-contrib" onclick="quickFillAmavasya()">
-              <i class="fa-solid fa-hand-holding-dollar"></i> अंशदान जोड़ें
+              <i class="fa-solid fa-hand-holding-dollar"></i> <span data-i18n="btn_add_contrib">अंशदान जोड़ें</span>
             </button>
           </div>
         </div>
@@ -1663,13 +1646,13 @@
       <!-- Search & Counts -->
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="memberSearchInput" class="search-input" placeholder="सदस्य नाम या मोबाइल नंबर से खोजें..." oninput="handleMemberSearch()">
+        <input type="text" id="memberSearchInput" class="search-input" placeholder="सदस्य नाम या मोबाइल नंबर से खोजें..." oninput="handleMemberSearch()" data-i18n-ph="search_placeholder">
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:12px; color:var(--text-muted);">
         <span id="memberCountText">कुल सदस्य: 0</span>
         <button onclick="switchTab('form')" style="background:none; border:none; color:#2563eb; font-weight:600; cursor:pointer; font-size:12px;">
-          <i class="fa-solid fa-plus"></i> नया सदस्य जोड़ें
+          <i class="fa-solid fa-plus"></i> <span data-i18n="nav_add_member">नया सदस्य जोड़ें</span>
         </button>
       </div>
 
@@ -1687,15 +1670,15 @@
       <!-- Metrics Grid -->
       <div class="ledger-grid">
         <div class="ledger-box green">
-          <div class="ledger-label"><i class="fa-solid fa-hand-holding-dollar"></i> कुल जमा</div>
+          <div class="ledger-label"><i class="fa-solid fa-hand-holding-dollar"></i> <span data-i18n="total_income">कुल जमा</span></div>
           <div class="ledger-val" id="totalCollected">₹0</div>
         </div>
         <div class="ledger-box red">
-          <div class="ledger-label"><i class="fa-solid fa-money-bill-wave"></i> कुल खर्च</div>
+          <div class="ledger-label"><i class="fa-solid fa-money-bill-wave"></i> <span data-i18n="total_expense">कुल खर्च</span></div>
           <div class="ledger-val" id="totalExpense">₹0</div>
         </div>
         <div class="ledger-box blue">
-          <div class="ledger-label"><i class="fa-solid fa-vault"></i> उपलब्ध शेष</div>
+          <div class="ledger-label"><i class="fa-solid fa-vault"></i> <span data-i18n="net_balance">उपलब्ध शेष</span></div>
           <div class="ledger-val" id="netBalance">₹0</div>
         </div>
       </div>
@@ -1705,14 +1688,14 @@
         <div>
           <div style="font-weight:700; font-size:13px; display:flex; align-items:center; gap:6px;">
             <i class="fa-solid fa-qrcode" style="color:#fbbf24; font-size:16px;"></i>
-            <span>PhonePe / UPI से ऑनलाइन अंशदान</span>
+            <span data-i18n="online_contrib">PhonePe / UPI से ऑनलाइन अंशदान</span>
           </div>
           <div style="font-size:11px; opacity:0.85; margin-top:2px;">
             UPI ID: <span id="ledgerUpiDisplay">7850983600@ibl</span>
           </div>
         </div>
         <button onclick="openPhonePeModal('अमावस्या अंशदान')" style="background:#fbbf24; color:#5f259f; border:none; padding:8px 12px; border-radius:8px; font-weight:700; font-size:12px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">
-          <i class="fa-solid fa-mobile-screen-button"></i> PhonePe खोलें
+          <i class="fa-solid fa-mobile-screen-button"></i> <span data-i18n="open_phonepe">PhonePe खोलें</span>
         </button>
       </div>
 
@@ -1720,37 +1703,37 @@
       <div class="ledger-actions-bar">
         <button class="btn-tool" onclick="shareLedgerSummaryToWA()">
           <i class="fa-brands fa-whatsapp" style="color:#16a34a; font-size:14px;"></i>
-          <span>ग्रुप पर शेयर करें</span>
+          <span data-i18n="share_on_group">ग्रुप पर शेयर करें</span>
         </button>
         <button class="btn-tool" onclick="exportLedgerToPDF()">
           <i class="fa-solid fa-file-pdf" style="color:#ef4444; font-size:14px;"></i>
-          <span>PDF रिपोर्ट</span>
+          <span data-i18n="pdf_report">PDF रिपोर्ट</span>
         </button>
       </div>
 
       <!-- Add Transaction Card -->
       <div class="card" id="ledgerFormCard">
         <div class="card-title">
-          <span><i class="fa-solid fa-file-invoice-dollar" style="color:#2563eb;"></i> नया लेनदेन दर्ज करें</span>
-          <span class="badge" id="ledgerFormBadge">अमावस्या बही-खाता</span>
+          <span><i class="fa-solid fa-file-invoice-dollar" style="color:#2563eb;"></i> <span data-i18n="add_transaction_title">नया लेनदेन दर्ज करें</span></span>
+          <span class="badge" id="ledgerFormBadge" data-i18n="ledger_badge">अमावस्या बही-खाता</span>
         </div>
         
         <div class="form-group">
-          <label>प्रकार</label>
+          <label data-i18n="field_type">प्रकार</label>
           <select id="transType" onchange="handleTransTypeChange()">
-            <option value="contribution">अमावस्या अंशदान (जमा)</option>
-            <option value="expense">ग्रुप व्यय (खर्च)</option>
+            <option value="contribution" data-i18n="contrib_opt">अमावस्या अंशदान (जमा)</option>
+            <option value="expense" data-i18n="expense_opt">ग्रुप व्यय (खर्च)</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label id="transDescLabel">सदस्य का नाम</label>
-          <input type="text" id="transDesc" list="memberSuggestions" placeholder="सदस्य का नाम या खर्च विवरण लिखें">
+          <label id="transDescLabel" data-i18n="field_name">सदस्य का नाम</label>
+          <input type="text" id="transDesc" list="memberSuggestions" placeholder="सदस्य का नाम या खर्च विवरण लिखें" data-i18n-ph="trans_desc_ph">
           <datalist id="memberSuggestions"></datalist>
         </div>
 
         <div class="form-group">
-          <label>राशि (₹)</label>
+          <label data-i18n="field_amount">राशि (₹)</label>
           <input type="number" id="transAmount" placeholder="उदा. 500">
           <div class="chips-group">
             <button type="button" class="chip-btn" onclick="setQuickAmount(200)">+ ₹200</button>
@@ -1761,7 +1744,7 @@
         </div>
 
         <div class="form-group">
-          <label>भुगतान का माध्यम</label>
+          <label data-i18n="field_method">भुगतान का माध्यम</label>
           <select id="transPayMethod">
             <option value="नकद">नकद (Cash)</option>
             <option value="PhonePe / GPay / UPI">PhonePe / GPay / UPI</option>
@@ -1770,15 +1753,15 @@
         </div>
 
         <div class="form-group">
-          <label>तारीख / अमावस्या तिथि</label>
+          <label data-i18n="field_date">तारीख / अमावस्या तिथि</label>
           <div style="display:flex; gap:6px;">
             <input type="date" id="transDate">
-            <button type="button" onclick="setTodayDate('transDate')" style="padding:0 12px; background:#e2e8f0; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;">आज</button>
+            <button type="button" onclick="setTodayDate('transDate')" style="padding:0 12px; background:#e2e8f0; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap;" data-i18n="btn_today">आज</button>
           </div>
         </div>
 
         <button class="btn-main" onclick="saveTransaction()">
-          <i class="fa-solid fa-check"></i> बही-खाते में जोड़ें
+          <i class="fa-solid fa-check"></i> <span data-i18n="btn_save_ledger">बही-खाते में जोड़ें</span>
         </button>
       </div>
 
@@ -1790,12 +1773,12 @@
           <div style="font-size:12px; color:#64748b; margin-top:4px;" id="printDateStr">रिपोर्ट दिनांक</div>
         </div>
         <div class="card-title">
-          <span><i class="fa-solid fa-list-check"></i> लेनदेन विवरण</span>
+          <span><i class="fa-solid fa-list-check"></i> <span data-i18n="ledger_list_title">लेनदेन विवरण</span></span>
           <div style="display:flex; gap:4px;">
             <select id="ledgerFilterType" onchange="renderLedgerTable()" style="padding:4px 8px; font-size:11px; width:auto; border-radius:6px;">
-              <option value="all">सभी रिकॉर्ड</option>
-              <option value="contribution">केवल जमा</option>
-              <option value="expense">केवल खर्च</option>
+              <option value="all" data-i18n="filter_all_records">सभी रिकॉर्ड</option>
+              <option value="contribution" data-i18n="filter_income_only">केवल जमा</option>
+              <option value="expense" data-i18n="filter_expense_only">केवल खर्च</option>
             </select>
           </div>
         </div>
@@ -1804,12 +1787,12 @@
           <table>
             <thead>
               <tr>
-                <th>विवरण/सदस्य</th>
-                <th>तारीख</th>
-                <th>राशि</th>
-                <th>माध्यम</th>
-                <th>प्रकार</th>
-                <th id="thLedgerAction" style="display:none; text-align:center;">हटाएं</th>
+                <th data-i18n="th_desc">विवरण/सदस्य</th>
+                <th data-i18n="th_date">तारीख</th>
+                <th data-i18n="th_amount">राशि</th>
+                <th data-i18n="th_method">माध्यम</th>
+                <th data-i18n="th_type">प्रकार</th>
+                <th id="thLedgerAction" style="display:none; text-align:center;" data-i18n="th_delete">हटाएं</th>
               </tr>
             </thead>
             <tbody id="ledgerTableBody">
@@ -1840,7 +1823,7 @@
 
         <div style="display:flex; justify-content:center; margin-bottom:10px;">
           <button class="btn-today-pill" onclick="resetCalendarToToday()">
-            <i class="fa-solid fa-calendar-check"></i> आज पर जाएं
+            <i class="fa-solid fa-calendar-check"></i> <span data-i18n="btn_go_today">आज पर जाएं</span>
           </button>
         </div>
 
@@ -1869,26 +1852,26 @@
       <!-- Filter Pills for Calendar -->
       <div class="filter-pills">
         <button class="pill-btn active" onclick="setCalendarFilter('all', this)">
-          <i class="fa-solid fa-layer-group"></i> सभी उत्सव
+          <i class="fa-solid fa-layer-group"></i> <span data-i18n="filter_all_events">सभी उत्सव</span>
         </button>
         <button class="pill-btn" onclick="setCalendarFilter('festivals', this)">
-          <i class="fa-solid fa-om" style="color:#ea580c;"></i> हिंदू पर्व व त्यौहार
+          <i class="fa-solid fa-om" style="color:#ea580c;"></i> <span data-i18n="filter_festivals">हिंदू पर्व व त्यौहार</span>
         </button>
         <button class="pill-btn" onclick="setCalendarFilter('amavasya', this)">
-          <i class="fa-solid fa-moon" style="color:#2563eb;"></i> अमावस्या सूची
+          <i class="fa-solid fa-moon" style="color:#2563eb;"></i> <span data-i18n="filter_amavasya">अमावस्या सूची</span>
         </button>
         <button class="pill-btn" onclick="setCalendarFilter('birthdays', this)">
-          <i class="fa-solid fa-cake-candles" style="color:#eab308;"></i> जन्मदिन
+          <i class="fa-solid fa-cake-candles" style="color:#eab308;"></i> <span data-i18n="filter_birthdays">जन्मदिन</span>
         </button>
         <button class="pill-btn" onclick="setCalendarFilter('anniversaries', this)">
-          <i class="fa-solid fa-rings-wedding" style="color:#db2777;"></i> वर्षगांठ
+          <i class="fa-solid fa-rings-wedding" style="color:#db2777;"></i> <span data-i18n="filter_anniversaries">वर्षगांठ</span>
         </button>
       </div>
 
       <!-- Upcoming 30 Days Events -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-solid fa-bell" style="color:#ea580c;"></i> आगामी 30 दिनों के उत्सव</span>
+          <span><i class="fa-solid fa-bell" style="color:#ea580c;"></i> <span data-i18n="upcoming_30_days">आगामी 30 दिनों के उत्सव</span></span>
           <span class="badge" id="upcomingCountBadge">0 आगामी</span>
         </div>
         <div id="upcomingEvents">
@@ -1899,7 +1882,7 @@
       <!-- All Calendar Roster -->
       <div class="card">
         <div class="card-title">
-          <span id="calendarListTitle"><i class="fa-solid fa-calendar-days" style="color:#2563eb;"></i> वार्षिक उत्सव व पंचांग पंजी</span>
+          <span id="calendarListTitle"><i class="fa-solid fa-calendar-days" style="color:#2563eb;"></i> <span data-i18n="roster_title">वार्षिक उत्सव व पंचांग पंजी</span></span>
         </div>
         <div id="calendarList">
           <div style="font-size:12px; color:#64748b; text-align:center; padding:12px;">पंजी लोड हो रही है...</div>
@@ -1911,46 +1894,46 @@
     <div id="viewForm" class="section-view">
       <div class="card">
         <div class="card-title">
-          <span id="formTitle"><i class="fa-solid fa-user-plus" style="color:#2563eb;"></i> नया सदस्य जोड़ें</span>
-          <span class="badge" id="formBadge">भाटी परिवार</span>
+          <span id="formTitle"><i class="fa-solid fa-user-plus" style="color:#2563eb;"></i> <span data-i18n="form_title">नया सदस्य जोड़ें</span></span>
+          <span class="badge" id="formBadge" data-i18n="form_badge">भाटी परिवार</span>
         </div>
         <input type="hidden" id="editDocId">
         
         <div class="form-group">
-          <label>सदस्य का पूरा नाम <span style="color:#dc2626;">*</span></label>
-          <input type="text" id="memName" placeholder="उदा. रेवंतराम भाटी">
+          <label><span data-i18n="full_name">सदस्य का पूरा नाम</span> <span style="color:#dc2626;">*</span></label>
+          <input type="text" id="memName" placeholder="उदा. रेवंतराम भाटी" data-i18n-ph="mem_name_ph">
         </div>
         
         <div class="form-group">
-          <label>मोबाइल नंबर (कॉल हेतु) <span style="color:#dc2626;">*</span></label>
-          <input type="tel" id="memPhone" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10">
+          <label><span data-i18n="mobile_phone">मोबाइल नंबर (कॉल हेतु)</span> <span style="color:#dc2626;">*</span></label>
+          <input type="tel" id="memPhone" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10" data-i18n-ph="mem_phone_ph">
         </div>
         
         <div class="form-group">
-          <label>व्हाट्सएप नंबर (कंट्री कोड 91 सहित या 10 अंक)</label>
+          <label data-i18n="wa_number">व्हाट्सएप नंबर (कंट्री कोड 91 सहित या 10 अंक)</label>
           <input type="tel" id="memWA" placeholder="उदा. 918696663615">
         </div>
         
         <div class="form-group">
-          <label>इंस्टाग्राम आईडी (बिना @ के)</label>
+          <label data-i18n="insta_id">इंस्टाग्राम आईडी (बिना @ के)</label>
           <input type="text" id="memInsta" placeholder="उदा. revant_bhati">
         </div>
         
         <div class="form-group">
-          <label>जन्मदिन (Date of Birth)</label>
+          <label data-i18n="dob_label">जन्मदिन (Date of Birth)</label>
           <input type="date" id="memDob">
         </div>
         
         <div class="form-group">
-          <label>विवाह वर्षगांठ (Wedding Anniversary - ऐच्छिक)</label>
+          <label data-i18n="anniversary_label">विवाह वर्षगांठ (Wedding Anniversary - ऐच्छिक)</label>
           <input type="date" id="memAnniversary">
         </div>
         
         <button class="btn-main" id="saveMemberBtn" onclick="saveMember()">
-          <i class="fa-solid fa-floppy-disk"></i> सुरक्षित करें
+          <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_save">सुरक्षित करें</span>
         </button>
         <button class="btn-sub" id="cancelEditBtn" onclick="resetMemberForm()">
-          <i class="fa-solid fa-xmark"></i> संपादन रद्द करें
+          <i class="fa-solid fa-xmark"></i> <span data-i18n="btn_cancel_edit">संपादन रद्द करें</span>
         </button>
       </div>
     </div>
@@ -1961,7 +1944,7 @@
       <!-- Profile Card -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-solid fa-user-shield" style="color:#2563eb;"></i> खाता एवं प्रोफाइल</span>
+          <span><i class="fa-solid fa-user-shield" style="color:#2563eb;"></i> <span data-i18n="settings_auth_title">खाता एवं प्रोफाइल</span></span>
           <span class="badge" id="settingsAuthBadge">अतिथि मोड</span>
         </div>
         <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 0;">
@@ -1978,52 +1961,75 @@
       <!-- Direct WhatsApp APK Share Card -->
       <div class="card" style="border:1px solid #fed7aa; background:linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);">
         <div class="card-title">
-          <span><i class="fa-solid fa-share-nodes" style="color:#ea580c;"></i> ऐप शेयर करें</span>
-          <span class="badge" style="background:#ea580c; color:white;">APK शेयर</span>
+          <span><i class="fa-solid fa-share-nodes" style="color:#ea580c;"></i> <span data-i18n="share_app_card_title">ऐप शेयर करें</span></span>
+          <span class="badge" style="background:#ea580c; color:white;">APK</span>
         </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.4;">
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.4;" data-i18n="share_app_card_desc">
           परिवार के अन्य सदस्यों को सीधे व्हाट्सएप पर युवा शक्ति ऐप की APK फाइल व डाउनलोड लिंक भेजें।
         </p>
         <button onclick="shareAppDirectly()" class="btn-main" style="background:#16a34a; border-color:#15803d; font-size:13px;">
-          <i class="fa-brands fa-whatsapp" style="font-size:16px;"></i> व्हाट्सएप पर APK शेयर करें
+          <i class="fa-brands fa-whatsapp" style="font-size:16px;"></i> <span data-i18n="btn_share_apk_wa">व्हाट्सएप पर APK शेयर करें</span>
         </button>
       </div>
 
       <!-- Admin Control Card (Moved from header to Settings) -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-solid fa-shield-halved" style="color:#dc2626;"></i> व्यवस्थापक (Admin) नियंत्रण</span>
+          <span><i class="fa-solid fa-shield-halved" style="color:#dc2626;"></i> <span data-i18n="settings_admin_title">व्यवस्थापक (Admin) नियंत्रण</span></span>
           <span class="badge" id="settingsAdminBadge" style="background:#fee2e2; color:#dc2626;">निष्क्रिय</span>
         </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;" data-i18n="admin_desc">
           व्यवस्थापक मोड सक्रिय करके आप सदस्यों को जोड़ने, हटाने, संपादित करने और गलत लेनदेन रिकॉर्ड सुधारने में सक्षम होते हैं।
         </p>
         <div style="display:flex; flex-direction:column; gap:8px;">
           <button class="btn-main" id="settingsAdminToggleBtn" onclick="toggleAdminPrompt()" style="background:#dc2626;">
-            <i class="fa-solid fa-shield-cat"></i> व्यवस्थापक लॉगिन करें
+            <i class="fa-solid fa-shield-cat"></i> <span id="settingsAdminBtnLabel" data-i18n="admin_login_btn">व्यवस्थापक लॉगिन करें</span>
           </button>
           <button class="btn-tool" id="btnChangeAdminPin" onclick="changeAdminPinPrompt()" style="display:none; width:100%; border-color:#cbd5e1;">
-            <i class="fa-solid fa-key" style="color:#f59e0b;"></i> व्यवस्थापक पिन बदलें
+            <i class="fa-solid fa-key" style="color:#f59e0b;"></i> <span data-i18n="admin_change_pin">व्यवस्थापक पिन बदलें</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Language Selector Card (हिन्दी / English) -->
+      <div class="card">
+        <div class="card-title">
+          <span><i class="fa-solid fa-language" style="color:#2563eb;"></i> <span data-i18n="lang_title">भाषा (Language)</span></span>
+          <span class="badge" id="currentLangBadge" style="background:#dbeafe; color:#1d4ed8;">हिन्दी</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px; line-height:1.4;" data-i18n="lang_desc">
+          एप्लिकेशन की भाषा चुनें / Choose application language:
+        </p>
+        <div class="theme-grid">
+          <div class="theme-card active" id="langCardHi" onclick="setAppLanguage('hi')">
+            <span style="font-size:20px; font-weight:800; display:block; margin-bottom:4px; color:#ea580c;">अ</span>
+            <div style="font-weight:700; font-size:13px; color:var(--text-main);">हिन्दी</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">हिन्दी भाषा</div>
+          </div>
+          <div class="theme-card" id="langCardEn" onclick="setAppLanguage('en')">
+            <span style="font-size:20px; font-weight:800; display:block; margin-bottom:4px; color:#2563eb;">A</span>
+            <div style="font-weight:700; font-size:13px; color:var(--text-main);">English</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">English Language</div>
+          </div>
         </div>
       </div>
 
       <!-- Theme Selector Card -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-solid fa-palette" style="color:#ea580c;"></i> ऐप थीम (रंग-रूप)</span>
+          <span><i class="fa-solid fa-palette" style="color:#ea580c;"></i> <span data-i18n="theme_title">ऐप थीम (रंग-रूप)</span></span>
           <span class="badge" id="currentThemeBadge">लाइट थीम</span>
         </div>
         <div class="theme-grid">
           <div class="theme-card active" id="themeLight" onclick="setAppTheme('light')">
             <i class="fa-solid fa-sun" style="color:#f59e0b; font-size:22px; margin-bottom:6px;"></i>
-            <div style="font-weight:700; font-size:13px; color:var(--text-main);">लाइट थीम (दिन)</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">क्लासिक सफेद व नीला</div>
+            <div style="font-weight:700; font-size:13px; color:var(--text-main);" data-i18n="theme_light_btn">लाइट थीम (दिन)</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" data-i18n="theme_light_sub">क्लासिक सफेद व नीला</div>
           </div>
           <div class="theme-card" id="themeDark" onclick="setAppTheme('dark')">
             <i class="fa-solid fa-moon" style="color:#818cf8; font-size:22px; margin-bottom:6px;"></i>
-            <div style="font-weight:700; font-size:13px; color:var(--text-main);">डार्क थीम (रात)</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">आंखों के लिए आरामदायक</div>
+            <div style="font-weight:700; font-size:13px; color:var(--text-main);" data-i18n="theme_dark_btn">डार्क थीम (रात)</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" data-i18n="theme_dark_sub">आंखों के लिए आरामदायक</div>
           </div>
         </div>
       </div>
@@ -2031,25 +2037,25 @@
       <!-- PhonePe & UPI Settings Card -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-solid fa-mobile-screen-button" style="color:#5f259f;"></i> PhonePe / UPI खाता सेटिंग्स</span>
-          <span class="badge" style="background:#f3e8ff; color:#6b21a8;">ऑनलाइन अंशदान</span>
+          <span><i class="fa-solid fa-mobile-screen-button" style="color:#5f259f;"></i> <span data-i18n="upi_settings_title">PhonePe / UPI खाता सेटिंग्स</span></span>
+          <span class="badge" style="background:#f3e8ff; color:#6b21a8;" data-i18n="upi_badge">ऑनलाइन अंशदान</span>
         </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;" data-i18n="upi_desc">
           ग्रुप के सदस्य सीधे PhonePe अथवा किसी भी UPI ऐप से अमावस्या अंशदान जमा कर सकते हैं।
         </p>
         <div class="phonepe-upi-row" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <div style="font-size:11px; color:var(--text-muted);">प्राप्तकर्ता खाता:</div>
+            <div style="font-size:11px; color:var(--text-muted);" data-i18n="receiver_account">प्राप्तकर्ता खाता:</div>
             <strong style="font-size:13px; color:var(--text-main);" id="settingsUpiName">Yuva Shakti Bhati Parivar</strong>
             <div style="font-size:12px; font-family:monospace; color:#5f259f; font-weight:700; margin-top:2px;" id="settingsUpiId">7850983600@ibl</div>
           </div>
           <button class="btn-tool" style="width:auto; padding:6px 12px; font-weight:700;" onclick="openPhonePeModal('ग्रुप अंशदान')">
-            <i class="fa-solid fa-qrcode"></i> QR देखें
+            <i class="fa-solid fa-qrcode"></i> <span data-i18n="btn_view_qr">QR देखें</span>
           </button>
         </div>
         <div id="adminUpiControlBox" style="display:none; flex-direction:column; gap:8px;">
           <button class="btn-tool" onclick="promptChangeUpiId()" style="width:100%; border-color:#cbd5e1; font-weight:600;">
-            <i class="fa-solid fa-pen-to-square" style="color:#5f259f;"></i> UPI ID व नाम बदलें (Admin)
+            <i class="fa-solid fa-pen-to-square" style="color:#5f259f;"></i> <span data-i18n="btn_change_upi">UPI ID व नाम बदलें (Admin)</span>
           </button>
         </div>
       </div>
@@ -2057,21 +2063,21 @@
       <!-- Official WhatsApp Group Card -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-brands fa-whatsapp" style="color:#16a34a; font-size:18px;"></i> आधिकारिक व्हाट्सएप ग्रुप</span>
-          <span class="badge" style="background:#dcfce7; color:#15803d;">भाटी परिवार</span>
+          <span><i class="fa-brands fa-whatsapp" style="color:#16a34a; font-size:18px;"></i> <span data-i18n="wa_group_title">आधिकारिक व्हाट्सएप ग्रुप</span></span>
+          <span class="badge" style="background:#dcfce7; color:#15803d;" data-i18n="wa_group_badge">भाटी परिवार</span>
         </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;" data-i18n="wa_group_desc">
           युवा शक्ति ग्रुप (भाटी परिवार) के आधिकारिक व्हाट्सएप ग्रुप से जुड़ें। यहाँ ग्रुप की सभी नई सूचनाएं, सत्संग, कार्यक्रम और अमावस्या अंशदान की जानकारी सीधे प्राप्त करें।
         </p>
         <a href="https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh" target="_blank" class="btn-main" style="background:#16a34a; text-decoration:none; font-weight:700;">
-          <i class="fa-brands fa-whatsapp" style="font-size:18px;"></i> व्हाट्सएप ग्रुप में शामिल हों (Join Group)
+          <i class="fa-brands fa-whatsapp" style="font-size:18px;"></i> <span data-i18n="btn_join_wa">व्हाट्सएप ग्रुप में शामिल हों (Join Group)</span>
         </a>
       </div>
 
       <!-- App Info & Version -->
       <div class="card">
         <div class="card-title">
-          <span><i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> ऐप विवरण एवं अपडेट</span>
+          <span><i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> <span data-i18n="app_info_title">ऐप विवरण एवं अपडेट</span></span>
           <span class="badge" style="background:#e0f2fe; color:#0369a1;">v4.2.1</span>
         </div>
         <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
@@ -2101,23 +2107,23 @@
   <nav class="nav-bar">
     <button class="nav-item active" onclick="switchTab('members', this)">
       <i class="fa-solid fa-users"></i>
-      <span>सदस्य</span>
+      <span data-i18n="nav_members">सदस्य</span>
     </button>
     <button class="nav-item" onclick="switchTab('ledger', this)">
       <i class="fa-solid fa-book-bookmark"></i>
-      <span>बही-खाता</span>
+      <span data-i18n="nav_ledger">बही-खाता</span>
     </button>
     <button class="nav-item" onclick="switchTab('calendar', this)">
       <i class="fa-solid fa-calendar-check"></i>
-      <span>पंचांग</span>
+      <span data-i18n="nav_calendar">पंचांग</span>
     </button>
     <button class="nav-item" onclick="switchTab('form', this)">
       <i class="fa-solid fa-user-plus"></i>
-      <span>फॉर्म</span>
+      <span data-i18n="nav_add_member">नया सदस्य</span>
     </button>
     <button class="nav-item" onclick="switchTab('settings', this)">
       <i class="fa-solid fa-gear"></i>
-      <span>सेटिंग्स</span>
+      <span data-i18n="nav_settings">सेटिंग्स</span>
     </button>
   </nav>
 
@@ -2353,6 +2359,7 @@
     // 3. State Management
     let loggedInMemberPhone = localStorage.getItem("loggedInMemberPhone") || null;
     let isAdmin = localStorage.getItem("isAdminSession") === "true";
+    let currentLang = localStorage.getItem("appLang") || "hi";
     const DEFAULT_ADMIN_PIN = "1234";
     let membersList = [];
     let transactions = [];
@@ -2437,6 +2444,277 @@
       { name: "पौष अमावस्या 2027", date: "2027-12-27", desc: "पौष अमावस्या" }
     ];
 
+    // 5.1 Bilingual Localization (i18n) Engine
+    const I18N = {
+      hi: {
+        app_title: "युवा शक्ति ग्रुप",
+        app_subtitle: "भाटी परिवार कुचेरा",
+        btn_share: "शेयर",
+        btn_group: "ग्रुप",
+        btn_login: "लॉगिन",
+        days: "दिन",
+        hours: "घंटे",
+        mins: "मिनट",
+        secs: "सेकंड",
+        amavasya_footer_desc: "सत्संग व अंशदान दिवस",
+        btn_add_contrib: "अंशदान जोड़ें",
+        search_placeholder: "सदस्य नाम या मोबाइल नंबर से खोजें...",
+        btn_add_member: "नया सदस्य जोड़ें",
+        lang_title: "भाषा (Language)",
+        lang_desc: "एप्लिकेशन की भाषा चुनें / Choose application language:",
+        nav_members: "सदस्य",
+        nav_ledger: "बही-खाता",
+        nav_calendar: "पंचांग",
+        nav_add_member: "नया सदस्य",
+        nav_settings: "सेटिंग्स",
+        total_income: "कुल जमा",
+        total_expense: "कुल खर्च",
+        net_balance: "उपलब्ध शेष",
+        online_contrib: "PhonePe / UPI से ऑनलाइन अंशदान",
+        open_phonepe: "PhonePe खोलें",
+        share_on_group: "ग्रुप पर शेयर करें",
+        pdf_report: "PDF रिपोर्ट",
+        add_transaction_title: "नया लेनदेन दर्ज करें",
+        ledger_badge: "अमावस्या बही-खाता",
+        field_type: "प्रकार",
+        contrib_opt: "अमावस्या अंशदान (जमा)",
+        expense_opt: "ग्रुप व्यय (खर्च)",
+        field_name: "सदस्य का नाम",
+        trans_desc_ph: "सदस्य का नाम या खर्च विवरण लिखें",
+        field_amount: "राशि (₹)",
+        field_method: "भुगतान का माध्यम",
+        field_date: "तारीख / अमावस्या तिथि",
+        btn_today: "आज",
+        btn_save_ledger: "बही-खाते में जोड़ें",
+        ledger_list_title: "लेनदेन विवरण",
+        filter_all_records: "सभी रिकॉर्ड",
+        filter_income_only: "केवल जमा",
+        filter_expense_only: "केवल खर्च",
+        th_desc: "विवरण/सदस्य",
+        th_date: "तारीख",
+        th_amount: "राशि",
+        th_method: "माध्यम",
+        th_type: "प्रकार",
+        th_delete: "हटाएं",
+        btn_go_today: "आज पर जाएं",
+        filter_all_events: "सभी उत्सव",
+        filter_festivals: "हिंदू पर्व व त्यौहार",
+        filter_amavasya: "अमावस्या सूची",
+        filter_birthdays: "जन्मदिन",
+        filter_anniversaries: "वर्षगांठ",
+        upcoming_30_days: "आगामी 30 दिनों के उत्सव",
+        roster_title: "वार्षिक उत्सव व पंचांग पंजी",
+        form_title: "नया सदस्य जोड़ें",
+        form_badge: "भाटी परिवार",
+        full_name: "सदस्य का पूरा नाम",
+        mem_name_ph: "उदा. रेवंतराम भाटी",
+        mobile_phone: "मोबाइल नंबर (कॉल हेतु)",
+        mem_phone_ph: "10 अंकों का मोबाइल नंबर",
+        wa_number: "व्हाट्सएप नंबर (कंट्री कोड 91 सहित या 10 अंक)",
+        insta_id: "इंस्टाग्राम आईडी (बिना @ के)",
+        dob_label: "जन्मदिन (Date of Birth)",
+        anniversary_label: "विवाह वर्षगांठ (Wedding Anniversary - ऐच्छिक)",
+        btn_save: "सुरक्षित करें",
+        btn_cancel_edit: "संपादन रद्द करें",
+        settings_auth_title: "खाता एवं प्रोफाइल",
+        share_app_card_title: "ऐप शेयर करें",
+        share_app_card_desc: "परिवार के अन्य सदस्यों को सीधे व्हाट्सएप पर युवा शक्ति ऐप की APK फाइल व डाउनलोड लिंक भेजें।",
+        btn_share_apk_wa: "व्हाट्सएप पर APK शेयर करें",
+        settings_admin_title: "व्यवस्थापक (Admin) नियंत्रण",
+        admin_desc: "व्यवस्थापक मोड सक्रिय करके आप सदस्यों को जोड़ने, हटाने, संपादित करने और गलत लेनदेन रिकॉर्ड सुधारने में सक्षम होते हैं।",
+        admin_login_btn: "व्यवस्थापक लॉगिन करें",
+        admin_change_pin: "व्यवस्थापक पिन बदलें",
+        theme_title: "ऐप थीम (रंग-रूप)",
+        theme_light_btn: "लाइट थीम (दिन)",
+        theme_light_sub: "क्लासिक सफेद व नीला",
+        theme_dark_btn: "डार्क थीम (रात)",
+        theme_dark_sub: "आंखों के लिए आरामदायक",
+        upi_settings_title: "PhonePe / UPI खाता सेटिंग्स",
+        upi_badge: "ऑनलाइन अंशदान",
+        upi_desc: "ग्रुप के सदस्य सीधे PhonePe अथवा किसी भी UPI ऐप से अमावस्या अंशदान जमा कर सकते हैं।",
+        receiver_account: "प्राप्तकर्ता खाता:",
+        btn_view_qr: "QR देखें",
+        btn_change_upi: "UPI ID व नाम बदलें (Admin)",
+        wa_group_title: "आधिकारिक व्हाट्सएप ग्रुप",
+        wa_group_badge: "भाटी परिवार",
+        wa_group_desc: "युवा शक्ति ग्रुप (भाटी परिवार) के आधिकारिक व्हाट्सएप ग्रुप से जुड़ें। यहाँ ग्रुप की सभी नई सूचनाएं, सत्संग, कार्यक्रम और अमावस्या अंशदान की जानकारी सीधे प्राप्त करें।",
+        btn_join_wa: "व्हाट्सएप ग्रुप में शामिल हों (Join Group)",
+        app_info_title: "ऐप विवरण एवं अपडेट"
+      },
+      en: {
+        app_title: "Yuva Shakti Group",
+        app_subtitle: "Bhati Parivar Kuchera",
+        btn_share: "Share",
+        btn_group: "Group",
+        btn_login: "Login",
+        days: "Days",
+        hours: "Hours",
+        mins: "Mins",
+        secs: "Secs",
+        amavasya_footer_desc: "Satsang & Contribution Day",
+        btn_add_contrib: "Add Contribution",
+        search_placeholder: "Search by member name or phone...",
+        btn_add_member: "Add New Member",
+        lang_title: "Language (भाषा)",
+        lang_desc: "Choose application language / एप्लिकेशन की भाषा चुनें:",
+        nav_members: "Members",
+        nav_ledger: "Ledger",
+        nav_calendar: "Calendar",
+        nav_add_member: "New Member",
+        nav_settings: "Settings",
+        total_income: "Total Income",
+        total_expense: "Total Expense",
+        net_balance: "Net Balance",
+        online_contrib: "Online Contribution via PhonePe / UPI",
+        open_phonepe: "Open PhonePe",
+        share_on_group: "Share on Group",
+        pdf_report: "PDF Report",
+        add_transaction_title: "Record New Transaction",
+        ledger_badge: "Amavasya Ledger",
+        field_type: "Type",
+        contrib_opt: "Amavasya Contribution (Income)",
+        expense_opt: "Group Expense",
+        field_name: "Member Name",
+        trans_desc_ph: "Type member name or expense note",
+        field_amount: "Amount (₹)",
+        field_method: "Payment Method",
+        field_date: "Date / Amavasya Tithi",
+        btn_today: "Today",
+        btn_save_ledger: "Add to Ledger",
+        ledger_list_title: "Transaction Records",
+        filter_all_records: "All Records",
+        filter_income_only: "Income Only",
+        filter_expense_only: "Expenses Only",
+        th_desc: "Description / Member",
+        th_date: "Date",
+        th_amount: "Amount",
+        th_method: "Method",
+        th_type: "Type",
+        th_delete: "Delete",
+        btn_go_today: "Go to Today",
+        filter_all_events: "All Events",
+        filter_festivals: "Hindu Festivals",
+        filter_amavasya: "Amavasya List",
+        filter_birthdays: "Birthdays",
+        filter_anniversaries: "Anniversaries",
+        upcoming_30_days: "Upcoming Events in 30 Days",
+        roster_title: "Annual Events & Panchang Register",
+        form_title: "Add New Member",
+        form_badge: "Bhati Parivar",
+        full_name: "Full Member Name",
+        mem_name_ph: "e.g. Revantram Bhati",
+        mobile_phone: "Mobile Number (For Calling)",
+        mem_phone_ph: "10-digit mobile number",
+        wa_number: "WhatsApp Number (with 91 code or 10 digits)",
+        insta_id: "Instagram ID (without @)",
+        dob_label: "Date of Birth",
+        anniversary_label: "Wedding Anniversary (Optional)",
+        btn_save: "Save Member",
+        btn_cancel_edit: "Cancel Edit",
+        settings_auth_title: "Account & Profile",
+        share_app_card_title: "Share App",
+        share_app_card_desc: "Send Yuva Shakti APK and download link directly to family members on WhatsApp.",
+        btn_share_apk_wa: "Share APK on WhatsApp",
+        settings_admin_title: "Administrator Mode",
+        admin_desc: "Admin mode lets you add, edit, or delete members and correct ledger transaction entries.",
+        admin_login_btn: "Admin Login",
+        admin_change_pin: "Change Admin PIN",
+        theme_title: "App Theme",
+        theme_light_btn: "Light Theme (Day)",
+        theme_light_sub: "Classic White & Blue",
+        theme_dark_btn: "Dark Theme (Night)",
+        theme_dark_sub: "Comfortable for eyes",
+        upi_settings_title: "PhonePe / UPI Account Settings",
+        upi_badge: "Online Contribution",
+        upi_desc: "Group members can pay their Amavasya contribution directly via PhonePe or any UPI app.",
+        receiver_account: "Beneficiary Account:",
+        btn_view_qr: "View QR",
+        btn_change_upi: "Change UPI ID & Name (Admin)",
+        wa_group_title: "Official WhatsApp Group",
+        wa_group_badge: "Bhati Parivar",
+        wa_group_desc: "Join the official WhatsApp group of Yuva Shakti Group (Bhati Parivar). Get updates on satsang, events, and Amavasya contributions directly.",
+        btn_join_wa: "Join WhatsApp Group",
+        app_info_title: "App Details & Updates"
+      }
+    };
+
+    function setAppLanguage(lang) {
+      if (lang !== 'hi' && lang !== 'en') lang = 'hi';
+      currentLang = lang;
+      localStorage.setItem('appLang', lang);
+      applyLanguage(lang);
+      showToast(lang === 'en' ? "Language changed to English" : "भाषा बदलकर हिन्दी कर दी गई", "info");
+    }
+
+    function applyLanguage(lang) {
+      if (!I18N[lang]) lang = 'hi';
+      const dict = I18N[lang];
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.innerText = dict[key];
+      });
+
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (dict[key]) el.placeholder = dict[key];
+      });
+
+      const cardHi = document.getElementById('langCardHi');
+      const cardEn = document.getElementById('langCardEn');
+      const badge = document.getElementById('currentLangBadge');
+      if (cardHi && cardEn) {
+        if (lang === 'en') {
+          cardHi.classList.remove('active');
+          cardEn.classList.add('active');
+          if (badge) {
+            badge.innerText = "English";
+            badge.style.background = "#dbeafe";
+            badge.style.color = "#1d4ed8";
+          }
+        } else {
+          cardHi.classList.add('active');
+          cardEn.classList.remove('active');
+          if (badge) {
+            badge.innerText = "हिन्दी";
+            badge.style.background = "#ffedd5";
+            badge.style.color = "#c2410c";
+          }
+        }
+      }
+
+      const weekdaysGrid = document.querySelector('.calendar-weekdays-grid');
+      if (weekdaysGrid) {
+        if (lang === 'en') {
+          weekdaysGrid.innerHTML = `
+            <div class="cal-weekday sun">Sun</div>
+            <div class="cal-weekday">Mon</div>
+            <div class="cal-weekday">Tue</div>
+            <div class="cal-weekday">Wed</div>
+            <div class="cal-weekday">Thu</div>
+            <div class="cal-weekday">Fri</div>
+            <div class="cal-weekday">Sat</div>
+          `;
+        } else {
+          weekdaysGrid.innerHTML = `
+            <div class="cal-weekday sun">रवि</div>
+            <div class="cal-weekday">सोम</div>
+            <div class="cal-weekday">मंगल</div>
+            <div class="cal-weekday">बुध</div>
+            <div class="cal-weekday">गुरु</div>
+            <div class="cal-weekday">शुक्र</div>
+            <div class="cal-weekday">शनि</div>
+          `;
+        }
+      }
+
+      updateAuthUI();
+      renderMembers();
+      renderLedgerTable();
+      renderHinduMonthCalendar();
+      updateAmavasyaCountdown();
+    }
+
     // Set today's date in ledger by default
     setTodayDate('transDate');
 
@@ -2456,14 +2734,15 @@
       const type = document.getElementById("transType").value;
       const label = document.getElementById("transDescLabel");
       const badge = document.getElementById("ledgerFormBadge");
+      const descInput = document.getElementById("transDesc");
       if (type === "contribution") {
-        label.innerText = "सदस्य का नाम";
-        document.getElementById("transDesc").placeholder = "सदस्य का नाम चुनें या लिखें";
-        badge.innerText = "अंशदान (जमा)";
+        if (label) label.innerText = currentLang === 'en' ? "Member Name" : "सदस्य का नाम";
+        if (descInput) descInput.placeholder = currentLang === 'en' ? "Choose or type member name" : "सदस्य का नाम चुनें या लिखें";
+        if (badge) badge.innerText = currentLang === 'en' ? "Contribution (Deposit)" : "अंशदान (जमा)";
       } else {
-        label.innerText = "खर्च का विवरण";
-        document.getElementById("transDesc").placeholder = "उदा. सत्संग, प्रसाद, बैनर, आदि";
-        badge.innerText = "ग्रुप व्यय (खर्च)";
+        if (label) label.innerText = currentLang === 'en' ? "Expense Description" : "खर्च का विवरण";
+        if (descInput) descInput.placeholder = currentLang === 'en' ? "e.g. Satsang, Prasad, Banner, etc." : "उदा. सत्संग, प्रसाद, बैनर, आदि";
+        if (badge) badge.innerText = currentLang === 'en' ? "Group Expense" : "ग्रुप व्यय (खर्च)";
       }
     }
 
@@ -2688,7 +2967,7 @@
         const displayName = found ? found.name : loggedInMemberPhone;
         if (statusText) statusText.innerText = displayName;
       } else {
-        if (statusText) statusText.innerText = "अतिथि मोड";
+        if (statusText) statusText.innerText = currentLang === 'en' ? "Guest Mode" : "अतिथि मोड";
       }
 
       // Hide login button in header once logged in (either member or admin)
@@ -2697,7 +2976,7 @@
           loginBtn.style.display = "none";
         } else {
           loginBtn.style.display = "inline-flex";
-          loginBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>लॉगिन</span>`;
+          loginBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> <span>${currentLang === 'en' ? 'Login' : 'लॉगिन'}</span>`;
           loginBtn.onclick = openLoginModal;
         }
       }
@@ -2720,20 +2999,20 @@
       if (authBadge && userName && userPhone && loginBtn) {
         if (loggedInMemberPhone) {
           const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
-          authBadge.innerText = "सत्यापित सदस्य";
+          authBadge.innerText = currentLang === 'en' ? "Verified Member" : "सत्यापित सदस्य";
           authBadge.style.background = "#dbeafe";
           authBadge.style.color = "#1d4ed8";
-          userName.innerText = found ? found.name : "सदस्य";
+          userName.innerText = found ? found.name : (currentLang === 'en' ? "Member" : "सदस्य");
           userPhone.innerText = `📱 +91 ${loggedInMemberPhone}`;
-          loginBtn.innerText = "लॉगआउट";
+          loginBtn.innerText = currentLang === 'en' ? "Logout" : "लॉगआउट";
           loginBtn.onclick = logoutMember;
         } else {
-          authBadge.innerText = "अतिथि मोड";
+          authBadge.innerText = currentLang === 'en' ? "Guest Mode" : "अतिथि मोड";
           authBadge.style.background = "#f1f5f9";
           authBadge.style.color = "#64748b";
-          userName.innerText = "अतिथि (Guest)";
-          userPhone.innerText = "व्यक्तिगत पिन से लॉगिन नहीं हैं";
-          loginBtn.innerText = "लॉगिन करें";
+          userName.innerText = currentLang === 'en' ? "Guest" : "अतिथि (Guest)";
+          userPhone.innerText = currentLang === 'en' ? "Not logged in with personal PIN" : "व्यक्तिगत पिन से लॉगिन नहीं हैं";
+          loginBtn.innerText = currentLang === 'en' ? "Login" : "लॉगिन करें";
           loginBtn.onclick = openLoginModal;
         }
       }
@@ -2744,17 +3023,17 @@
 
       if (adminBadge && adminToggleBtn) {
         if (isAdmin) {
-          adminBadge.innerText = "सक्रिय (Active)";
+          adminBadge.innerText = currentLang === 'en' ? "Active" : "सक्रिय (Active)";
           adminBadge.style.background = "#fee2e2";
           adminBadge.style.color = "#dc2626";
-          adminToggleBtn.innerHTML = `<i class="fa-solid fa-right-from-bracket"></i> व्यवस्थापक मोड बंद करें (लॉगआउट)`;
+          adminToggleBtn.innerHTML = currentLang === 'en' ? `<i class="fa-solid fa-right-from-bracket"></i> Exit Admin Mode (Logout)` : `<i class="fa-solid fa-right-from-bracket"></i> व्यवस्थापक मोड बंद करें (लॉगआउट)`;
           adminToggleBtn.style.background = "#64748b";
           if (changePinBtn) changePinBtn.style.display = "inline-flex";
         } else {
-          adminBadge.innerText = "निष्क्रिय (Off)";
+          adminBadge.innerText = currentLang === 'en' ? "Off" : "निष्क्रिय (Off)";
           adminBadge.style.background = "#f1f5f9";
           adminBadge.style.color = "#64748b";
-          adminToggleBtn.innerHTML = `<i class="fa-solid fa-shield-cat"></i> व्यवस्थापक लॉगिन करें`;
+          adminToggleBtn.innerHTML = currentLang === 'en' ? `<i class="fa-solid fa-shield-cat"></i> Admin Login` : `<i class="fa-solid fa-shield-cat"></i> व्यवस्थापक लॉगिन करें`;
           adminToggleBtn.style.background = "#dc2626";
           if (changePinBtn) changePinBtn.style.display = "none";
         }
@@ -3019,7 +3298,9 @@
       }
 
       if (countText) {
-        countText.innerText = `कुल सदस्य: ${membersList.length}${searchTerm ? ' (फ़िल्टर: ' + filtered.length + ')' : ''}`;
+        countText.innerText = currentLang === 'en' ? 
+          `Total Members: ${membersList.length}${searchTerm ? ' (Filter: ' + filtered.length + ')' : ''}` :
+          `कुल सदस्य: ${membersList.length}${searchTerm ? ' (फ़िल्टर: ' + filtered.length + ')' : ''}`;
       }
 
       container.innerHTML = "";
@@ -3028,7 +3309,7 @@
         container.innerHTML = `
           <div class="card" style="text-align:center; color:#64748b; font-size:13px; padding:24px;">
             <i class="fa-solid fa-user-slash" style="font-size:24px; color:#cbd5e1; margin-bottom:8px;"></i>
-            <div>${searchTerm ? 'खोज के अनुसार कोई सदस्य नहीं मिला।' : 'अभी कोई सदस्य नहीं जुड़ा है।'}</div>
+            <div>${currentLang === 'en' ? (searchTerm ? 'No members found matching search.' : 'No members joined yet.') : (searchTerm ? 'खोज के अनुसार कोई सदस्य नहीं मिला।' : 'अभी कोई सदस्य नहीं जुड़ा है।')}</div>
           </div>
         `;
         return;
@@ -3048,8 +3329,8 @@
           firstChar;
 
         const statusBadgeHtml = payStatus.isPaid ?
-          `<span class="badge-status-paid"><i class="fa-solid fa-circle-check"></i> जमा</span>` :
-          `<span class="badge-status-unpaid"><i class="fa-solid fa-circle-exclamation"></i> बाकी</span>`;
+          `<span class="badge-status-paid"><i class="fa-solid fa-circle-check"></i> ${currentLang === 'en' ? 'Paid' : 'जमा'}</span>` :
+          `<span class="badge-status-unpaid"><i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'en' ? 'Due' : 'बाकी'}</span>`;
 
         card.innerHTML = `
           <div class="member-info">
@@ -3058,16 +3339,16 @@
               <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                 <strong style="font-size:15px; color:var(--text-main);">${m.name}</strong>
                 ${statusBadgeHtml}
-                ${isSelf ? '<span class="self-badge">आप</span>' : ''}
+                ${isSelf ? `<span class="self-badge">${currentLang === 'en' ? 'You' : 'आप'}</span>` : ''}
               </div>
               <div class="member-subtext">
-                <span class="member-tag">भाटी परिवार</span>
+                <span class="member-tag">${currentLang === 'en' ? 'Bhati Parivar' : 'भाटी परिवार'}</span>
                 <span>📱 ${m.phone}</span>
               </div>
             </div>
           </div>
           <div style="color:#94a3b8; font-size:13px; display:flex; align-items:center; gap:4px; padding-left:6px;">
-            <span style="font-size:11px; color:#64748b;">प्रोफाइल</span>
+            <span style="font-size:11px; color:#64748b;">${currentLang === 'en' ? 'Profile' : 'प्रोफाइल'}</span>
             <i class="fa-solid fa-chevron-right"></i>
           </div>
         `;
@@ -3107,13 +3388,13 @@
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
               <span style="font-weight:700; color:#047857; font-size:13px;">
-                <i class="fa-solid fa-circle-check"></i> अंशदान जमा (सक्रिय)
+                <i class="fa-solid fa-circle-check"></i> ${currentLang === 'en' ? 'Contribution Paid (Active)' : 'अंशदान जमा (सक्रिय)'}
               </span>
               <div style="font-size:11px; color:#065f46; margin-top:2px;">
-                अंतिम जमा: ₹${Number(payStatus.lastPayment.amount || 0).toLocaleString('en-IN')} (${formatDisplayDate(payStatus.lastPayment.date)})
+                ${currentLang === 'en' ? 'Last Paid: ₹' : 'अंतिम जमा: ₹'}${Number(payStatus.lastPayment.amount || 0).toLocaleString('en-IN')} (${formatDisplayDate(payStatus.lastPayment.date)})
               </div>
             </div>
-            <span class="badge-status-paid" style="font-size:12px; padding:3px 9px;">जमा</span>
+            <span class="badge-status-paid" style="font-size:12px; padding:3px 9px;">${currentLang === 'en' ? 'Paid' : 'जमा'}</span>
           </div>
         `;
       } else {
@@ -3123,14 +3404,14 @@
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
               <span style="font-weight:700; color:#b91c1c; font-size:13px;">
-                <i class="fa-solid fa-circle-exclamation"></i> इस माह का अंशदान बाकी
+                <i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'en' ? 'Contribution Due This Month' : 'इस माह का अंशदान बाकी'}
               </span>
               <div style="font-size:11px; color:#991b1b; margin-top:2px;">
-                अमावस्या सत्संग व ग्रुप सेवा अंशदान अपेक्षित
+                ${currentLang === 'en' ? 'Monthly Amavasya satsang & group contribution pending' : 'अमावस्या सत्संग व ग्रुप सेवा अंशदान अपेक्षित'}
               </div>
             </div>
             <button onclick="closeMemberProfileModal(); openPhonePeModal('अंशदान - ' + '${m.name}')" style="background:#dc2626; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer;">
-              जमा करें
+              ${currentLang === 'en' ? 'Pay Now' : 'जमा करें'}
             </button>
           </div>
         `;
@@ -3142,26 +3423,27 @@
       const actionsDiv = document.getElementById("profileModalActions");
       actionsDiv.innerHTML = `
         <a href="tel:${cleanPhone}" class="btn-act act-call">
-          <i class="fa-solid fa-phone"></i> कॉल
+          <i class="fa-solid fa-phone"></i> ${currentLang === 'en' ? 'Call' : 'कॉल'}
         </a>
         <a href="https://wa.me/${cleanWA.startsWith('91') ? cleanWA : '91' + cleanWA}" target="_blank" class="btn-act act-wa">
-          <i class="fa-brands fa-whatsapp"></i> व्हाट्सएप
+          <i class="fa-brands fa-whatsapp"></i> ${currentLang === 'en' ? 'WhatsApp' : 'व्हाट्सएप'}
         </a>
         ${m.instagram ? `
           <a href="https://instagram.com/${m.instagram.replace('@','')}" target="_blank" class="btn-act act-insta">
-            <i class="fa-brands fa-instagram"></i> इंस्टाग्राम
+            <i class="fa-brands fa-instagram"></i> ${currentLang === 'en' ? 'Instagram' : 'इंस्टाग्राम'}
           </a>
         ` : `
           <button disabled class="btn-act" style="background:#cbd5e1; cursor:not-allowed;">
-            <i class="fa-brands fa-instagram"></i> इंस्टाग्राम
+            <i class="fa-brands fa-instagram"></i> ${currentLang === 'en' ? 'Instagram' : 'इंस्टाग्राम'}
           </button>
         `}
       `;
 
-      document.getElementById("profileModalPhone").innerText = m.phone ? `+91 ${m.phone}` : 'दर्ज नहीं';
-      document.getElementById("profileModalWA").innerText = m.whatsapp ? `+91 ${m.whatsapp}` : (m.phone ? `+91 ${m.phone}` : 'दर्ज नहीं');
-      document.getElementById("profileModalDob").innerText = m.dob ? formatDisplayDate(m.dob) : 'दर्ज नहीं';
-      document.getElementById("profileModalAnniversary").innerText = m.anniversary ? formatDisplayDate(m.anniversary) : 'दर्ज नहीं';
+      const notProvided = currentLang === 'en' ? 'Not Provided' : 'दर्ज नहीं';
+      document.getElementById("profileModalPhone").innerText = m.phone ? `+91 ${m.phone}` : notProvided;
+      document.getElementById("profileModalWA").innerText = m.whatsapp ? `+91 ${m.whatsapp}` : (m.phone ? `+91 ${m.phone}` : notProvided);
+      document.getElementById("profileModalDob").innerText = m.dob ? formatDisplayDate(m.dob) : notProvided;
+      document.getElementById("profileModalAnniversary").innerText = m.anniversary ? formatDisplayDate(m.anniversary) : notProvided;
 
       const controlsDiv = document.getElementById("profileModalControls");
       controlsDiv.innerHTML = "";
@@ -3171,7 +3453,7 @@
         editBtn.style.flex = "1";
         editBtn.style.padding = "8px";
         editBtn.style.fontSize = "12px";
-        editBtn.innerHTML = `<i class="fa-solid fa-user-pen"></i> विवरण एडिट करें`;
+        editBtn.innerHTML = `<i class="fa-solid fa-user-pen"></i> ${currentLang === 'en' ? 'Edit Details' : 'विवरण एडिट करें'}`;
         editBtn.onclick = () => {
           closeMemberProfileModal();
           editMember(m.id);
@@ -3186,7 +3468,7 @@
         delBtn.style.fontSize = "12px";
         delBtn.style.color = "#dc2626";
         delBtn.style.borderColor = "#fecaca";
-        delBtn.innerHTML = `<i class="fa-solid fa-trash"></i> हटाएं`;
+        delBtn.innerHTML = `<i class="fa-solid fa-trash"></i> ${currentLang === 'en' ? 'Delete' : 'हटाएं'}`;
         delBtn.onclick = () => {
           closeMemberProfileModal();
           promptDeleteMember(m.id, m.name);
@@ -3433,7 +3715,7 @@
       }
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${isAdmin ? 6 : 5}" style="text-align:center; color:#64748b; padding:18px;">कोई लेनदेन दर्ज नहीं है।</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${isAdmin ? 6 : 5}" style="text-align:center; color:#64748b; padding:18px;">${currentLang === 'en' ? 'No transactions recorded.' : 'कोई लेनदेन दर्ज नहीं है।'}</td></tr>`;
         return;
       }
 
@@ -3443,15 +3725,17 @@
       filtered.forEach(t => {
         const tr = document.createElement("tr");
         const isIncome = t.type === "contribution";
+        const defaultMethod = currentLang === 'en' ? 'Cash' : 'नकद';
+        const typeBadgeText = isIncome ? (currentLang === 'en' ? 'Deposit' : 'जमा') : (currentLang === 'en' ? 'Expense' : 'खर्च');
 
         tr.innerHTML = `
           <td><strong>${t.description}</strong></td>
           <td style="white-space:nowrap;">${formatDisplayDate(t.date)}</td>
           <td style="color:${isIncome ? '#047857' : '#b91c1c'}; font-weight:700; white-space:nowrap;">₹${Number(t.amount || 0).toLocaleString('en-IN')}</td>
-          <td><span style="font-size:10px; background:#f1f5f9; padding:2px 6px; border-radius:4px; color:#475569;">${t.payMethod || 'नकद'}</span></td>
+          <td><span style="font-size:10px; background:#f1f5f9; padding:2px 6px; border-radius:4px; color:#475569;">${t.payMethod || defaultMethod}</span></td>
           <td>
             <span style="background:${isIncome ? '#ecfdf5' : '#fef2f2'}; color:${isIncome ? '#047857' : '#b91c1c'}; padding:2px 6px; border-radius:4px; font-weight:700; font-size:10px;">
-              ${isIncome ? 'जमा' : 'खर्च'}
+              ${typeBadgeText}
             </span>
           </td>
           ${isAdmin ? `
@@ -3483,21 +3767,50 @@
 
     function exportLedgerToPDF() {
       if (!transactions.length) {
-        showToast("एक्सपोर्ट के लिए कोई लेनदेन उपलब्ध नहीं है।", "warning");
+        showToast(currentLang === 'en' ? "No transactions available to export." : "एक्सपोर्ट के लिए कोई लेनदेन उपलब्ध नहीं है।", "warning");
         return;
       }
 
-      const pDate = document.getElementById("printDateStr");
-      if (pDate) {
-        pDate.innerText = `रिपोर्ट दिनांक: ${new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+      const todayStr = new Date().toISOString().split('T')[0];
+      let totalIn = transactions.filter(t => t.type === 'contribution').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let totalOut = transactions.filter(t => t.type === 'expense').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let net = totalIn - totalOut;
+
+      const summaryData = {
+        lang: currentLang,
+        totalIn: totalIn,
+        totalOut: totalOut,
+        net: net,
+        count: transactions.length,
+        date: todayStr
+      };
+
+      const cleanTransactions = transactions.map(t => ({
+        description: t.description || '',
+        date: t.date || '',
+        payMethod: t.payMethod || (currentLang === 'en' ? 'Cash' : 'नकद'),
+        type: t.type || 'contribution',
+        amount: Number(t.amount) || 0
+      }));
+
+      // 1. Primary: Save directly to Android Storage (/sdcard/Download)
+      if (window.AndroidApp && typeof window.AndroidApp.saveLedgerPdf === 'function') {
+        showToast(currentLang === 'en' ? "Saving PDF to Downloads folder..." : "बही-खाता PDF डाउनलोड फोल्डर में सेव की जा रही है...", "info");
+        window.AndroidApp.saveLedgerPdf(JSON.stringify(summaryData), JSON.stringify(cleanTransactions));
+        return;
       }
 
+      // 2. Android PrintManager fallback
       if (window.AndroidApp && typeof window.AndroidApp.printLedgerPdf === 'function') {
-        showToast("बही-खाता पीडीएफ तैयार हो रही है...", "info");
         window.AndroidApp.printLedgerPdf();
         return;
       }
 
+      // 3. Web Print fallback
+      const pDate = document.getElementById("printDateStr");
+      if (pDate) {
+        pDate.innerText = (currentLang === 'en' ? "Report Date: " : "रिपोर्ट दिनांक: ") + todayStr;
+      }
       window.print();
     }
 
@@ -3606,6 +3919,11 @@
       "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"
     ];
 
+    const EN_MONTH_NAMES = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
     const HINDU_MONTH_PAIRS = [
       "पौष - माघ", "माघ - फाल्गुन", "फाल्गुन - चैत्र", "चैत्र - वैशाख",
       "वैशाख - ज्येष्ठ", "ज्येष्ठ - आषाढ़", "आषाढ़ - श्रावण", "श्रावण - भाद्रपद",
@@ -3623,12 +3941,12 @@
       const gridEl = document.getElementById("calendarDaysGrid");
       if (!gridEl) return;
 
-      const monthName = HINDI_MONTH_NAMES[currentCalMonth];
+      const monthName = currentLang === 'en' ? EN_MONTH_NAMES[currentCalMonth] : HINDI_MONTH_NAMES[currentCalMonth];
       const hinduPair = HINDU_MONTH_PAIRS[currentCalMonth];
       const samvatStr = getHinduSamvat(currentCalYear, currentCalMonth);
 
       if (titleEl) titleEl.innerText = `${monthName} ${currentCalYear}`;
-      if (subEl) subEl.innerText = `${hinduPair} | ${samvatStr}`;
+      if (subEl) subEl.innerText = currentLang === 'en' ? `${hinduPair} | Vikrami Samvat` : `${hinduPair} | ${samvatStr}`;
 
       gridEl.innerHTML = "";
 
@@ -3670,7 +3988,7 @@
         if (amavasya) {
           cell.classList.add("has-amavasya");
           dotsHtml += `<span>🌑</span>`;
-          badgeText = "अमावस्या";
+          badgeText = currentLang === 'en' ? "Amavasya" : "अमावस्या";
         }
         if (festival) {
           cell.classList.add("has-festival");
@@ -3740,8 +4058,9 @@
       const dateObj = new Date(y, m, d);
 
       const HINDI_DAYS = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
-      const dayName = HINDI_DAYS[dateObj.getDay()];
-      const formattedDate = `${d} ${HINDI_MONTH_NAMES[m]} ${y}, ${dayName}`;
+      const EN_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const dayName = currentLang === 'en' ? EN_DAYS[dateObj.getDay()] : HINDI_DAYS[dateObj.getDay()];
+      const formattedDate = currentLang === 'en' ? `${EN_MONTH_NAMES[m]} ${d}, ${y} (${dayName})` : `${d} ${HINDI_MONTH_NAMES[m]} ${y}, ${dayName}`;
 
       const festival = HINDU_FESTIVALS.find(f => f.date === dateStr);
       const amavasya = AMAVASYA_LIST.find(a => a.date === dateStr);
@@ -4220,6 +4539,7 @@
     // Initialize UI, Theme, Settings, and Check for Updates on App Launch
     const savedTheme = localStorage.getItem('appTheme') || 'light';
     setAppTheme(savedTheme);
+    applyLanguage(currentLang);
     updateAuthUI();
     updateSettingsUI();
     updateUpiDisplayEverywhere();
