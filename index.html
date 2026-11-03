@@ -2289,12 +2289,12 @@
               <i class="fa-solid fa-bell"></i> <span>बकायादार सदस्य रिमाइंडर (संचालक)</span>
               <span id="adminPendingDueCountBadge" style="background:#fee2e2; color:#b91c1c; font-size:10.5px; padding:2px 8px; border-radius:10px; font-weight:800;">0 सदस्य बाकी</span>
             </div>
-            <div style="font-size:11px; color:#7f1d1d; margin-top:2px;">
+            <div id="adminDuesReminderSubtext" style="font-size:11px; color:#7f1d1d; margin-top:2px;">
               जिन सदस्यों के पैसे बाकी हैं, उन्हें सीधे 1-क्लिक में इन-ऐप व व्हाट्सएप रिमाइंडर भेजें।
             </div>
           </div>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <button onclick="sendDueReminderToAllPending()" class="btn-main" style="background:linear-gradient(135deg, #dc2626, #b91c1c); color:white; border:none; padding:7px 12px; border-radius:10px; font-weight:700; font-size:11.5px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 3px 8px rgba(220, 38, 38, 0.3);">
+            <button id="adminSendDueRemindersBtn" onclick="sendDueReminderToAllPending()" class="btn-main" style="background:linear-gradient(135deg, #dc2626, #b91c1c); color:white; border:none; padding:7px 12px; border-radius:10px; font-weight:700; font-size:11.5px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 3px 8px rgba(220, 38, 38, 0.3);">
               <i class="fa-solid fa-paper-plane"></i> <span>सभी बकायादारों को रिमाइंडर भेजें</span>
             </button>
           </div>
@@ -2705,7 +2705,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.4.7 (बिल्ड कोड: 33)
+              v4.4.8 (बिल्ड कोड: 34)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -3088,7 +3088,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.4.7 (बिल्ड कोड: 33)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.4.8 (बिल्ड कोड: 34)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -4094,7 +4094,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.4.7";
+    const APP_VERSION = "4.4.8";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4336,6 +4336,7 @@
       { name: "श्रावण (हरियाली) अमावस्या", date: "2026-07-13", desc: "हरियाली अमावस्या - पौधारोपण व शिव आराधना" },
       { name: "भाद्रपद (पिठोरी) अमावस्या", date: "2026-08-12", desc: "पिठोरी अमावस्या - संतान सुख व समृद्धि दिवस" },
       { name: "आश्विन (सर्वपितृ मोक्ष) अमावस्या", date: "2026-09-10", desc: "सर्वपितृ मोक्ष अमावस्या - पितृ विसर्जन" },
+      { name: "आश्विन/शरद (अक्टूबर) अमावस्या", date: "2026-10-11", desc: "अक्टूबर अमावस्या - समस्त सदस्यों द्वारा अंशदान जमा (कुल ₹613 सोहन राम जी के पास)" },
       { name: "कार्तिक (दीपावली) अमावस्या", date: "2026-11-08", desc: "दीपावली महापर्व - महालक्ष्मी पूजन (अमावस्या प्रारंभ 11:28 AM, रात भर व्यापिनी)" },
       { name: "कार्तिक (सोमवती) अमावस्या", date: "2026-11-09", desc: "स्नान-दान एवं पितृ तर्पण अमावस्या (उदयातिथि - समाप्त दोपहर 12:32 बजे तक)" },
       { name: "मार्गशीर्ष अमावस्या", date: "2026-12-08", desc: "मार्गशीर्ष अमावस्या - श्री कृष्ण आराधना" },
@@ -4811,10 +4812,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 33)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 34)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 33)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 34)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -4933,7 +4934,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 33)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 34)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -4944,7 +4945,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 33)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 34)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -6426,54 +6427,27 @@
     });
 
     // 13. Member Payment Status & Role Hierarchy Rank
+    // 13. Member Payment Status & Role Hierarchy Rank
+    // नियम: सभी सदस्यों की राशि जमा रहे। और जब अमावस निकल जाए उसके बाद में अगर किसी ने पैसे जमा नहीं किया उसके आगे बाकी लिखो।
     function getMemberPaymentStatus(member) {
       if (!member) return { isPaid: false, lastPayment: null, total: 0, count: 0 };
 
-      // 1. Direct status flags on member document (set via toggle switch or admin contribution manager)
-      if (typeof member.paidThisAmavasya === "boolean") {
-        const total = (Number(member.octoberAmavasya?.amount || 0)) + 
-                      (member.novemberAmavasya?.isPaid ? (Number(member.novemberAmavasya?.amount || 100)) : 0) + 
-                      (Number(member.extraContribution || 0));
-        return {
-          isPaid: member.paidThisAmavasya,
-          lastPayment: member.lastPaymentDate ? { amount: 100, date: member.lastPaymentDate } : null,
-          total: total > 0 ? total : (member.paidThisAmavasya ? 100 : 0),
-          count: member.paidThisAmavasya ? 1 : 0
-        };
-      }
-      if (member.paymentStatus === 'paid') {
-        const total = (Number(member.octoberAmavasya?.amount || 0)) + 100 + (Number(member.extraContribution || 0));
-        return {
-          isPaid: true,
-          lastPayment: member.lastPaymentDate ? { amount: 100, date: member.lastPaymentDate } : null,
-          total: total > 0 ? total : 100,
-          count: 1
-        };
-      }
-      if (member.paymentStatus === 'due') {
-        const total = (Number(member.octoberAmavasya?.amount || 0)) + (Number(member.extraContribution || 0));
-        return {
-          isPaid: false,
-          lastPayment: null,
-          total: total,
-          count: 0
-        };
-      }
+      const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
 
-      // 2. Check novemberAmavasya record if present
-      if (member.novemberAmavasya && typeof member.novemberAmavasya.isPaid === "boolean") {
-        const total = (Number(member.octoberAmavasya?.amount || 0)) + 
-                      (member.novemberAmavasya.isPaid ? (Number(member.novemberAmavasya?.amount || 100)) : 0) + 
-                      (Number(member.extraContribution || 0));
-        return {
-          isPaid: member.novemberAmavasya.isPaid,
-          lastPayment: member.novemberAmavasya.date ? { amount: member.novemberAmavasya.amount || 100, date: member.novemberAmavasya.date } : null,
-          total: total,
-          count: member.novemberAmavasya.isPaid ? 1 : 0
-        };
-      }
+      // 1. October Amavasya status (अक्टूबर 2026 - 11/10/26)
+      const octPaid = (member.octoberAmavasya && member.octoberAmavasya.isPaid !== false) || (member.octoberPaid === true);
+      const octAmount = octPaid ? (Number(member.octoberAmavasya?.amount) || 50) : 0;
 
-      // 3. Fallback: match in ledger transactions
+      // 2. November Amavasya status (कार्तिक दीपावली - 08/11/26)
+      const novAmavasyaDate = "2026-11-08";
+      const hasNovAmavasyaPassed = todayStr > novAmavasyaDate;
+      const novPaid = (member.novemberAmavasya && member.novemberAmavasya.isPaid === true);
+      const novAmount = novPaid ? (Number(member.novemberAmavasya?.amount) || 100) : 0;
+
+      // Extra contribution & ledger sum
+      const extraAmount = Number(member.extraContribution || 0);
+
       const memberName = (member.name || '').trim().toLowerCase();
       const cleanPhone = (member.phone || '').replace(/\D/g, '').slice(-10);
 
@@ -6485,25 +6459,63 @@
         return matchesName || matchesPhone;
       });
 
-      if (memberContributions.length === 0) {
-        return { isPaid: false, lastPayment: null, total: 0, count: 0 };
+      const ledgerSum = memberContributions.reduce((sum, c) => sum + (Number(c.amount) || 0), 0);
+      const baseTotal = octAmount + novAmount + extraAmount;
+      const total = Math.max(baseTotal, ledgerSum);
+
+      let latestPayment = null;
+      if (memberContributions.length > 0) {
+        memberContributions.sort((a, b) => new Date(b.date) - new Date(a.date));
+        latestPayment = memberContributions[0];
+      } else if (member.lastPaymentDate) {
+        latestPayment = { amount: octAmount || 50, date: member.lastPaymentDate };
       }
 
-      memberContributions.sort((a, b) => new Date(b.date) - new Date(a.date));
-      const latest = memberContributions[0];
+      // 3. Status determination:
+      // A. Admin manual toggle switch directly on member object
+      if (typeof member.paidThisAmavasya === "boolean") {
+        if (hasNovAmavasyaPassed) {
+          return {
+            isPaid: member.paidThisAmavasya,
+            lastPayment: latestPayment,
+            total: total > 0 ? total : (member.paidThisAmavasya ? 100 : 0),
+            count: member.paidThisAmavasya ? 1 : 0
+          };
+        } else {
+          return {
+            isPaid: member.paidThisAmavasya,
+            lastPayment: latestPayment,
+            total: total > 0 ? total : 50,
+            count: 1
+          };
+        }
+      }
 
-      const now = new Date();
-      const payDate = new Date(latest.date);
-      const isCurrentMonth = (now.getFullYear() === payDate.getFullYear() && now.getMonth() === payDate.getMonth());
-      const diffDays = Math.round((now - payDate) / (1000 * 60 * 60 * 24));
-      const isRecent = isCurrentMonth || (diffDays >= 0 && diffDays <= 35);
-      const total = memberContributions.reduce((sum, c) => sum + (Number(c.amount) || 0), 0);
+      // B. Rule check: "जब अमावस निकल जाए उसके बाद में अगर किसी ने पैसे जमा नहीं किया उसके आगे बाकी लिखो"
+      let isPaid = true;
+
+      if (hasNovAmavasyaPassed) {
+        // Amavasya has passed! If November is not paid, status becomes "बाकी" (due)
+        if (novPaid || member.paymentStatus === 'paid') {
+          isPaid = true;
+        } else {
+          isPaid = false;
+        }
+      } else {
+        // Amavasya has NOT passed yet (अभी अमावस नहीं निकली है)
+        // Since October Amavasya is paid for all members, they are NOT overdue: status is "जमा"
+        if (member.paymentStatus === 'due' && !octPaid) {
+          isPaid = false;
+        } else {
+          isPaid = true;
+        }
+      }
 
       return {
-        isPaid: isRecent,
-        lastPayment: latest,
+        isPaid: isPaid,
+        lastPayment: latestPayment,
         total: total,
-        count: memberContributions.length
+        count: isPaid ? 1 : 0
       };
     }
 
@@ -6581,8 +6593,37 @@
 
       const pendingMembersCount = membersList.filter(x => !getMemberPaymentStatus(x).isPaid).length;
       const adminPendingBadge = document.getElementById("adminPendingDueCountBadge");
+      const adminDuesSubtext = document.getElementById("adminDuesReminderSubtext");
+      const adminDuesBtn = document.getElementById("adminSendDueRemindersBtn");
+
       if (adminPendingBadge) {
-        adminPendingBadge.innerText = `${pendingMembersCount} सदस्य बाकी`;
+        if (pendingMembersCount === 0) {
+          adminPendingBadge.innerText = "0 सदस्य बाकी (सभी जमा ✅)";
+          adminPendingBadge.style.background = "#dcfce7";
+          adminPendingBadge.style.color = "#15803d";
+          if (adminDuesSubtext) {
+            adminDuesSubtext.innerText = "समस्त सदस्यों का अंशदान पूर्ण रूप से जमा है। जब आगामी अमावस्या निकलेगी, तब बकाया रहने पर स्वतः यहां सूची बनेगी।";
+            adminDuesSubtext.style.color = "#166534";
+          }
+          if (adminDuesBtn) {
+            adminDuesBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>सभी का अंशदान जमा है</span>';
+            adminDuesBtn.style.background = "linear-gradient(135deg, #16a34a, #15803d)";
+            adminDuesBtn.style.boxShadow = "0 3px 8px rgba(22, 163, 74, 0.3)";
+          }
+        } else {
+          adminPendingBadge.innerText = `${pendingMembersCount} सदस्य बाकी`;
+          adminPendingBadge.style.background = "#fee2e2";
+          adminPendingBadge.style.color = "#b91c1c";
+          if (adminDuesSubtext) {
+            adminDuesSubtext.innerText = "जिन सदस्यों के पैसे बाकी हैं, उन्हें सीधे 1-क्लिक में इन-ऐप व व्हाट्सएप रिमाइंडर भेजें।";
+            adminDuesSubtext.style.color = "#7f1d1d";
+          }
+          if (adminDuesBtn) {
+            adminDuesBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>सभी बकायादारों को रिमाइंडर भेजें</span>';
+            adminDuesBtn.style.background = "linear-gradient(135deg, #dc2626, #b91c1c)";
+            adminDuesBtn.style.boxShadow = "0 3px 8px rgba(220, 38, 38, 0.3)";
+          }
+        }
       }
 
       container.innerHTML = "";
@@ -7640,6 +7681,8 @@
 
       let octPaidCount = 0;
       let novPaidCount = 0;
+      const todayStr = new Date().toISOString().split('T')[0];
+      const hasNovPassed = todayStr > "2026-11-08";
 
       // Sort members by designation
       const sorted = [...membersList].sort((a, b) => {
@@ -7687,7 +7730,7 @@
                 </div>
                 <div style="background:white; padding:8px; border-radius:8px; border:1px solid #bfdbfe;">
                   <div style="color:#64748b;">8 नवंबर अमावस्या:</div>
-                  <strong style="color:${novPaid ? '#16a34a' : '#dc2626'}; font-size:13px;">${novPaid ? `₹${novAmt} (जमा)` : 'बाकी'}</strong>
+                  <strong style="color:${novPaid ? '#16a34a' : (hasNovPassed ? '#dc2626' : '#2563eb')}; font-size:13px;">${novPaid ? `₹${novAmt} (जमा)` : (hasNovPassed ? 'बाकी' : 'आगामी (8 नव॰)')}</strong>
                 </div>
               </div>
             </div>
@@ -7768,7 +7811,7 @@
             </div>
             <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.02); padding:6px 8px; border-radius:8px;">
               <span style="color:#64748b;">8 नवंबर:</span>
-              <span style="font-weight:700; color:${novPaid ? '#16a34a' : '#dc2626'};">${novPaid ? `₹${novAmt} जमा` : 'बाकी'}</span>
+              <span style="font-weight:700; color:${novPaid ? '#16a34a' : (hasNovPassed ? '#dc2626' : '#2563eb')};">${novPaid ? `₹${novAmt} जमा` : (hasNovPassed ? 'बाकी' : 'आगामी (8 नव॰)')}</span>
             </div>
           </div>
 
