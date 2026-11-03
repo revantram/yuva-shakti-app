@@ -83,54 +83,6 @@
       color: #ffffff !important;
     }
 
-    /* 🟢 Real-Time Online Presence Styles */
-    .online-indicator {
-      width: 12px;
-      height: 12px;
-      background: #10b981;
-      border: 2px solid #ffffff;
-      border-radius: 50%;
-      position: absolute;
-      bottom: -1px;
-      right: -1px;
-      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4), 0 0 8px #10b981;
-      animation: onlinePulse 2s infinite;
-      z-index: 2;
-    }
-    body.dark-theme .online-indicator {
-      border-color: #0f172a;
-    }
-    @keyframes onlinePulse {
-      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7), 0 0 6px #10b981; }
-      70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0), 0 0 10px #10b981; }
-      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0), 0 0 6px #10b981; }
-    }
-    .online-badge-live {
-      display: inline-flex;
-      align-items: center;
-      gap: 3.5px;
-      font-size: 10px;
-      font-weight: 800;
-      color: #047857;
-      background: rgba(16, 185, 129, 0.14);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      padding: 1px 6px;
-      border-radius: 10px;
-      letter-spacing: 0.2px;
-    }
-    .online-dot-mini {
-      width: 6.5px;
-      height: 6.5px;
-      border-radius: 50%;
-      background: #10b981;
-      display: inline-block;
-      box-shadow: 0 0 6px #10b981;
-      animation: onlineBlink 1.5s infinite;
-    }
-    @keyframes onlineBlink {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
 
     .header-logo {
       width: 38px;
@@ -2191,7 +2143,7 @@
     <div class="header-center-info" style="flex:1; text-align:center;">
       <h1 id="appTitleText" data-i18n="app_title" style="text-align:center; margin:0; font-size:15px; font-weight:800; color:#ffffff; letter-spacing:-0.2px;">युवा शक्ति ग्रुप</h1>
       <div class="header-subtitle" id="appSubTitleText" data-i18n="app_subtitle" style="text-align:center; margin-top:0px; font-size:10.5px; font-weight:700; color:#fbbf24;">भाटी परिवार • कुचेरा</div>
-      <div id="headerUserGreeting" onclick="openMemberSelectModal()" style="font-size:10.5px; font-weight:800; color:#38bdf8; margin-top:1px; letter-spacing:0.2px; cursor:pointer;" title="टैप करके अपनी सदस्य पहचान चुनें">(अतिथि)</div>
+      <div id="headerUserGreeting" style="font-size:10.5px; font-weight:800; color:#38bdf8; margin-top:1px; letter-spacing:0.2px;">(अतिथि)</div>
     </div>
     <div class="header-actions" id="mainHeaderActions" style="display:flex; align-items:center; gap:6px; justify-content:flex-end;">
       <!-- 🔔 Notification Center Bell Button -->
@@ -2229,15 +2181,6 @@
 
     <!-- 1. सदस्य डायरेक्टरी टैब -->
     <div id="viewMembers" class="section-view active-view">
-      
-      <!-- 🟢 Live Online Members Counter Capsule -->
-      <div id="liveOnlineSummaryBanner" style="display:none; margin-bottom:10px; background:linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(5, 150, 105, 0.05)); border:1px solid rgba(16, 185, 129, 0.3); border-radius:14px; padding:6px 12px; font-size:11px; font-weight:700; color:#047857; align-items:center; justify-content:space-between;">
-        <span style="display:inline-flex; align-items:center; gap:6px;">
-          <span class="online-dot-mini"></span>
-          <span id="liveOnlineCountText">1 सदस्य लाइव सक्रिय</span>
-        </span>
-        <span style="font-size:9.5px; background:rgba(16,185,129,0.18); color:#065f46; padding:1px 6px; border-radius:8px;">रियल-टाइम</span>
-      </div>
       
       <!-- 🌟 Daily Suvichar Floating Capsule Banner -->
       <div onclick="openDailySuvicharModal()" class="suvichar-home-banner" style="cursor:pointer; margin-bottom:12px; background:linear-gradient(135deg, rgba(254, 243, 199, 0.95) 0%, rgba(255, 251, 235, 0.92) 100%); border:1.5px solid #fde68a; border-radius:18px; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 6px 16px rgba(245, 158, 11, 0.12); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);">
@@ -2459,22 +2402,20 @@
             <table style="width:100%; border-collapse:collapse; font-size:11.5px; background:white;">
               <thead>
                 <tr style="background:#fef3c7; border-bottom:1.5px solid #fde68a;">
-                  <th style="padding:7px 5px; text-align:center; width:24px;">#</th>
-                  <th style="padding:7px 6px; white-space:nowrap;">दिनांक</th>
+                  <th style="padding:7px 5px; text-align:center; width:28px;">#</th>
                   <th style="padding:7px 8px;">सामग्री विवरण</th>
                   <th style="padding:7px 6px; text-align:right; white-space:nowrap;">खर्च (₹)</th>
-                  <th style="padding:7px 6px; white-space:nowrap;">खर्चकर्ता</th>
-                  <th id="thGaneshAction" style="padding:7px 6px; text-align:center; display:none;">एक्शन</th>
+                  <th id="thGaneshAction" style="padding:7px 6px; text-align:center; display:none; width:45px;">एक्शन</th>
                 </tr>
               </thead>
               <tbody id="ganeshExpensesTableBody">
-                <tr><td colspan="6" style="text-align:center; padding:14px; color:#94a3b8;">विवरण लोड हो रहा है...</td></tr>
+                <tr><td colspan="4" style="text-align:center; padding:14px; color:#94a3b8;">विवरण लोड हो रहा है...</td></tr>
               </tbody>
               <tfoot style="background:#fffbeb; font-weight:700; border-top:1.5px solid #fde68a;">
                 <tr>
-                  <td colspan="3" style="padding:8px 6px; text-align:right; color:#78350f;">गणेश विसर्जन कुल योग:</td>
+                  <td colspan="2" style="padding:8px 8px; text-align:right; color:#78350f;">गणेश विसर्जन कुल योग:</td>
                   <td id="ganeshTotalFooter" style="padding:8px 6px; text-align:right; color:#b45309; font-weight:900;">₹0</td>
-                  <td colspan="2"></td>
+                  <td id="tdGaneshFooterAction" style="display:none;"></td>
                 </tr>
               </tfoot>
             </table>
@@ -2720,7 +2661,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v4.4.1
+            APK v4.4.2
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -2748,7 +2689,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.4.1 (बिल्ड कोड: 27)
+              v4.4.2 (बिल्ड कोड: 28)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -3088,10 +3029,6 @@
       </div>
       <p style="font-size:12px; color:#64748b; margin-bottom:14px;">अपने 10-अंकों के मोबाइल नंबर और पिन/कोड से लॉगिन करें। संचालक महोदय अपने नंबर व कोड (992942) से सीधे संचालक मोड में लॉगिन होंगे।</p>
       
-      <button type="button" onclick="closeLoginModal(); openMemberSelectModal();" style="width:100%; margin-top:10px; margin-bottom:12px; background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; padding:9px 12px; border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
-        <i class="fa-solid fa-list-check"></i> <span>सदस्य सूची से 1-क्लिक में नाम चुनें (सरल)</span>
-      </button>
-
       <div class="form-group">
         <label>रजिस्टर्ड 10 अंकों का मोबाइल नंबर</label>
         <input type="tel" id="loginUserPhone" placeholder="उदा. 8696663615" maxlength="10">
@@ -3104,39 +3041,6 @@
       <button class="btn-main" onclick="processMemberLogin()" style="margin-top:14px;">
         <i class="fa-solid fa-right-to-bracket"></i> लॉगिन करें
       </button>
-    </div>
-  </div>
-
-  <!-- 🟢 Member Select / 1-Tap Identity Modal -->
-  <div class="modal-overlay" id="memberSelectModal" style="display:none; align-items:center; justify-content:center; z-index:9999;">
-    <div class="modal-content ios-glass-card" style="max-width:440px; width:92%; max-height:85vh; display:flex; flex-direction:column; padding:18px 16px; border-radius:24px; background:linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 249, 255, 0.94) 100%); border:1.5px solid rgba(16, 185, 129, 0.25); box-shadow:0 20px 48px -10px rgba(0,0,0,0.2);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <div style="width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-size:15px; box-shadow:0 3px 8px rgba(16,185,129,0.3);">
-            <i class="fa-solid fa-user-check"></i>
-          </div>
-          <div>
-            <h3 style="font-size:15.5px; font-weight:800; color:#0f172a; margin:0;">सदस्य पहचान चुनें</h3>
-            <div style="font-size:11px; color:#64748b;">ग्रुप में लाइव ऑनलाइन दिखने हेतु अपना नाम चुनें</div>
-          </div>
-        </div>
-        <button onclick="closeMemberSelectModal()" style="border:none; background:none; font-size:18px; color:#64748b; cursor:pointer; padding:4px;">✕</button>
-      </div>
-
-      <div class="search-box" style="margin-bottom:10px; background:rgba(255,255,255,0.9); border:1px solid #cbd5e1; border-radius:12px; padding:6px 10px; display:flex; align-items:center;">
-        <i class="fa-solid fa-magnifying-glass" style="color:#64748b; margin-right:8px; font-size:13px;"></i>
-        <input type="text" id="memberSelectSearchInput" placeholder="सूची में अपना नाम खोजें..." oninput="filterMemberSelectList()" style="border:none; outline:none; width:88%; font-size:13px; background:transparent;">
-      </div>
-
-      <div id="memberSelectListContainer" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:6px; max-height:360px; padding-right:2px;">
-        <!-- Filled dynamically with member tiles -->
-      </div>
-
-      <div style="display:flex; gap:8px; margin-top:12px;">
-        <button onclick="closeMemberSelectModal()" class="btn-main" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; flex:1; padding:10px; font-size:12.5px; border-radius:12px;">
-          बाद में (अतिथि रहें)
-        </button>
-      </div>
     </div>
   </div>
 
@@ -3284,9 +3188,7 @@
       <!-- Name & Subtitle -->
       <h3 style="font-size:18px; font-weight:800; color:var(--text-main); margin-bottom:2px;" id="profileModalName">सदस्य का नाम</h3>
       <div style="font-size:12px; color:#64748b; font-weight:600; margin-bottom:4px;">🚩 भाटी परिवार • कुचेरा</div>
-      <div id="profileModalOnlineStatus" style="margin-bottom:6px;"></div>
-      <div id="profileModalRoleTag" style="margin-bottom:8px; min-height:22px;"></div>
-      <div id="profileModalClaimBox" style="margin-bottom:12px;"></div>
+      <div id="profileModalRoleTag" style="margin-bottom:14px; min-height:22px;"></div>
 
       <!-- Quick Action Buttons: Call, WhatsApp, Instagram -->
       <div class="action-grid" style="margin-bottom:14px;" id="profileModalActions">
@@ -3470,7 +3372,7 @@
 
       <input type="hidden" id="editExpenseId" value="">
 
-      <div class="form-group" style="margin-bottom:12px;">
+      <div class="form-group" id="fgExpenseDate" style="margin-bottom:12px;">
         <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">दिनांक (Date)</label>
         <div style="display:flex; gap:6px;">
           <input type="date" id="expenseDate" style="flex:1;">
@@ -3506,12 +3408,12 @@
         </div>
       </div>
 
-      <div class="form-group" style="margin-bottom:12px;">
+      <div class="form-group" id="fgExpenseSpentBy" style="margin-bottom:12px;">
         <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">खर्चकर्ता / किसके द्वारा सामग्री लाई गई (Spent By)</label>
         <input type="text" id="expenseSpentBy" list="memberSuggestions" placeholder="नाम लिखें या चुनें...">
       </div>
 
-      <div class="form-group" style="margin-bottom:12px;">
+      <div class="form-group" id="fgExpensePayMethod" style="margin-bottom:12px;">
         <label style="font-weight:700; font-size:12px; margin-bottom:4px; display:block;">भुगतान का माध्यम (Payment Mode)</label>
         <select id="expensePayMethod">
           <option value="नकद">नकद (Cash)</option>
@@ -3524,7 +3426,7 @@
       <!-- Ganesh Visarjan Expense Tag Checkbox -->
       <div class="form-group" style="margin-bottom:12px; background:#fffbeb; padding:9px 12px; border-radius:12px; border:1.5px solid #fde68a;">
         <label style="font-weight:700; font-size:12.5px; margin-bottom:0; display:flex; align-items:center; gap:8px; cursor:pointer; color:#78350f;">
-          <input type="checkbox" id="expenseIsGanesh" style="width:18px; height:18px; accent-color:#d97706; cursor:pointer;">
+          <input type="checkbox" id="expenseIsGanesh" onchange="onExpenseGaneshToggle()" style="width:18px; height:18px; accent-color:#d97706; cursor:pointer;">
           <span>🚩 यह खर्च <strong>'गणेश विसर्जन'</strong> का है</span>
         </label>
       </div>
@@ -4104,7 +4006,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.4.1";
+    const APP_VERSION = "4.4.2";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4141,11 +4043,6 @@
     let transactions = [];
     let confirmCallback = null;
     let calendarFilter = "festivals";
-
-    // 🌐 Real-Time Online Presence State
-    let onlinePresenceMap = new Map();
-    let presenceHeartbeatInterval = null;
-    let lastInteractionTime = 0;
 
     // 4. Daily Inspiring Suvichar Database (31 Days Cycle)
     const DAILY_SUVICHAR_LIST = [
@@ -5038,11 +4935,6 @@
         thAction.style.display = isAdmin ? "table-cell" : "none";
       }
 
-      // Sync real-time presence whenever user login state updates
-      if (typeof sendPresenceHeartbeat === "function") {
-        sendPresenceHeartbeat(true);
-      }
-
       updateSettingsUI();
       renderMembers();
       renderExpensesSpreadsheet();
@@ -5886,18 +5778,12 @@
     }
 
     function logoutMember() {
-      if (typeof sendPresenceHeartbeat === "function") {
-        sendPresenceHeartbeat(false);
-      }
       localStorage.removeItem("loggedInMemberPhone");
       localStorage.removeItem("isAdminSession");
       loggedInMemberPhone = null;
       isAdmin = false;
       showToast("आप सफलतापूर्वक लॉगआउट हो गए हैं।", "info");
       updateAuthUI();
-      if (typeof sendPresenceHeartbeat === "function") {
-        sendPresenceHeartbeat(true);
-      }
     }
 
     function toggleAdminPrompt() {
@@ -5953,363 +5839,6 @@
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // ==========================================
-    // 🌐 REAL-TIME PRESENCE & ONLINE STATUS
-    // ==========================================
-    function getDeviceSessionId() {
-      let sid = sessionStorage.getItem("app_device_session_id");
-      if (!sid) {
-        sid = "sid_" + Math.random().toString(36).substring(2, 10) + "_" + Date.now();
-        sessionStorage.setItem("app_device_session_id", sid);
-      }
-      return sid;
-    }
-
-    function getCurrentUserInfo() {
-      const sessionId = getDeviceSessionId();
-      let phone = loggedInMemberPhone || "";
-      let name = "अतिथि";
-      let role = "guest";
-      let memberId = "";
-
-      if (loggedInMemberPhone) {
-        if (isAdmin || loggedInMemberPhone.endsWith(SANCHALAK_PHONE)) {
-          phone = SANCHALAK_PHONE;
-          name = "रेवंतराम भाटी";
-          role = "sanchalak";
-          const sanchalakMember = membersList.find(m => m.phone && m.phone.endsWith(SANCHALAK_PHONE));
-          if (sanchalakMember) memberId = sanchalakMember.id;
-        } else {
-          const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
-          if (found) {
-            name = found.name;
-            memberId = found.id;
-            role = found.tag || "member";
-          } else {
-            name = loggedInMemberPhone;
-            role = "member";
-          }
-        }
-      }
-
-      const docId = phone ? ("p_" + phone.replace(/\D/g, '').slice(-10)) : ("guest_" + sessionId);
-
-      return {
-        docId,
-        sessionId,
-        phone: phone ? phone.replace(/\D/g, '').slice(-10) : "",
-        name,
-        role,
-        memberId,
-        isAdmin
-      };
-    }
-
-    async function sendPresenceHeartbeat(isOnline = true) {
-      try {
-        const user = getCurrentUserInfo();
-        if (!user.docId) return;
-
-        const presenceDocRef = db.collection("presence").doc(user.docId);
-        const data = {
-          docId: user.docId,
-          sessionId: user.sessionId,
-          phone: user.phone || "",
-          name: user.name,
-          role: user.role,
-          memberId: user.memberId || "",
-          isAdmin: user.isAdmin,
-          isOnline: isOnline,
-          lastActiveMs: Date.now(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-
-        await presenceDocRef.set(data, { merge: true });
-      } catch (err) {
-        console.warn("Presence heartbeat error:", err);
-      }
-    }
-
-    function isMemberOnline(m) {
-      if (!m) return false;
-      const cleanPhone = (m.phone || '').replace(/\D/g, '').slice(-10);
-      let presence = null;
-      if (cleanPhone && onlinePresenceMap.has(cleanPhone)) {
-        presence = onlinePresenceMap.get(cleanPhone);
-      } else if (m.id && onlinePresenceMap.has(m.id)) {
-        presence = onlinePresenceMap.get(m.id);
-      }
-      if (!presence) return false;
-
-      // Online if isOnline is true AND activity recorded within the last 2 minutes (120,000 ms)
-      const diff = presence.lastActiveMs ? Math.abs(Date.now() - Number(presence.lastActiveMs)) : 0;
-      const isRecent = diff < 120000;
-      return Boolean(presence.isOnline && isRecent);
-    }
-
-    function updateLiveOnlineSummary() {
-      const banner = document.getElementById("liveOnlineSummaryBanner");
-      if (!banner) return;
-      const onlineMembers = membersList.filter(m => isMemberOnline(m));
-      const count = onlineMembers.length;
-      if (count > 0) {
-        banner.style.display = "flex";
-        const names = onlineMembers.map(m => (m.name || '').split(' ')[0]).slice(0, 3).join(', ');
-        const extra = count > 3 ? ` +${count - 3} अन्य` : '';
-        banner.innerHTML = `
-          <span style="display:inline-flex; align-items:center; gap:6px;">
-            <span class="online-dot-mini"></span>
-            <span><strong>${count} सदस्य</strong> अभी ऑनलाइन सक्रिय हैं (${names}${extra})</span>
-          </span>
-          <span style="font-size:10px; opacity:0.85; background:rgba(16,185,129,0.2); padding:2px 7px; border-radius:8px; font-weight:800;">LIVE</span>
-        `;
-      } else {
-        banner.style.display = "none";
-      }
-    }
-
-    function updateProfileModalOnlineIndicator(memberId) {
-      const m = membersList.find(x => x.id === memberId);
-      if (!m) return;
-      const isOnline = isMemberOnline(m);
-      const statusEl = document.getElementById("profileModalOnlineStatus");
-      const photoWrapper = document.querySelector(".profile-photo-wrapper");
-
-      if (statusEl) {
-        if (isOnline) {
-          statusEl.innerHTML = `
-            <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(16,185,129,0.14); border:1.5px solid rgba(16,185,129,0.4); padding:4px 12px; border-radius:14px; font-size:11.5px; font-weight:800; color:#047857; box-shadow:0 2px 8px rgba(16,185,129,0.15);">
-              <span class="online-dot-mini" style="width:7px; height:7px;"></span>
-              <span>🟢 अभी ऑनलाइन हैं (सक्रिय)</span>
-            </div>
-          `;
-        } else {
-          statusEl.innerHTML = `
-            <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(148,163,184,0.12); border:1px solid rgba(148,163,184,0.3); padding:4px 12px; border-radius:14px; font-size:11.5px; font-weight:700; color:#64748b;">
-              <i class="fa-solid fa-moon" style="font-size:11px;"></i>
-              <span>🌙 ऑफलाइन</span>
-            </div>
-          `;
-        }
-      }
-
-      if (photoWrapper) {
-        let dot = photoWrapper.querySelector('.profile-online-badge-dot');
-        if (isOnline) {
-          if (!dot) {
-            dot = document.createElement("span");
-            dot.className = "online-indicator profile-online-badge-dot";
-            dot.style.width = "20px";
-            dot.style.height = "20px";
-            dot.style.bottom = "2px";
-            dot.style.right = "6px";
-            dot.style.border = "3px solid #ffffff";
-            dot.style.zIndex = "10";
-            dot.title = "अभी ऑनलाइन हैं (सक्रिय)";
-            photoWrapper.appendChild(dot);
-          }
-        } else {
-          if (dot) dot.remove();
-        }
-      }
-    }
-
-    // 🟢 1-Tap Member Selection & Identity
-    function openMemberSelectModal() {
-      const modal = document.getElementById("memberSelectModal");
-      if (!modal) return;
-      const searchInp = document.getElementById("memberSelectSearchInput");
-      if (searchInp) searchInp.value = "";
-      renderMemberSelectList();
-      modal.style.display = "flex";
-    }
-
-    function closeMemberSelectModal() {
-      const modal = document.getElementById("memberSelectModal");
-      if (modal) modal.style.display = "none";
-    }
-
-    function filterMemberSelectList() {
-      const term = (document.getElementById("memberSelectSearchInput")?.value || "").trim().toLowerCase();
-      renderMemberSelectList(term);
-    }
-
-    function renderMemberSelectList(term = "") {
-      const container = document.getElementById("memberSelectListContainer");
-      if (!container) return;
-      container.innerHTML = "";
-
-      let list = [...membersList];
-      list.sort((a, b) => {
-        const rankA = getMemberRoleRank(a);
-        const rankB = getMemberRoleRank(b);
-        if (rankA !== rankB) return rankA - rankB;
-        return (a.name || '').localeCompare(b.name || '', 'hi');
-      });
-
-      if (term) {
-        list = list.filter(m => (m.name && m.name.toLowerCase().includes(term)) || (m.phone && m.phone.includes(term)));
-      }
-
-      if (list.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:18px; color:#64748b; font-size:12.5px;">कोई सदस्य नहीं मिला।</div>`;
-        return;
-      }
-
-      list.forEach(m => {
-        const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
-        const isSanchalak = (m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम"));
-        const firstChar = (m.name || 'U').trim().charAt(0);
-        const isOnline = isMemberOnline(m);
-        const avatarHtml = m.photoUrl ?
-          `<img src="${m.photoUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` :
-          `<span style="font-weight:800; color:#1e3a8a; font-size:14px;">${firstChar}</span>`;
-
-        const row = document.createElement("div");
-        row.style.cssText = `
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 8px 12px;
-          border-radius: 14px;
-          background: ${isSelf ? 'linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(2, 132, 199, 0.08))' : 'rgba(255, 255, 255, 0.92)'};
-          border: 1.5px solid ${isSelf ? '#60a5fa' : 'rgba(226, 232, 240, 0.9)'};
-          cursor: pointer;
-          transition: transform 0.1s, background 0.15s;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-        `;
-        row.onclick = () => selectMemberAsSelf(m);
-
-        row.innerHTML = `
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div style="position:relative; width:38px; height:38px; border-radius:50%; background:#e0f2fe; display:flex; align-items:center; justify-content:center; overflow:visible; flex-shrink:0; border:1px solid #bfdbfe;">
-              <div style="width:100%; height:100%; border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-                ${avatarHtml}
-              </div>
-              ${isOnline ? '<span class="online-indicator" style="width:10px; height:10px; bottom:0; right:0;" title="ऑनलाइन"></span>' : ''}
-            </div>
-            <div>
-              <div style="font-weight:800; font-size:13.5px; color:#0f172a; display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
-                <span>${m.name}</span>
-                ${isOnline ? '<span style="font-size:9.5px; background:rgba(16,185,129,0.15); color:#047857; padding:1px 5px; border-radius:6px; font-weight:800;"><span class="online-dot-mini" style="width:5px; height:5px;"></span> लाइव</span>' : ''}
-                ${isSanchalak ? '<span style="font-size:9.5px; background:#fef3c7; color:#92400e; padding:1px 5px; border-radius:6px; font-weight:800;">संचालक</span>' : ''}
-                ${isSelf ? '<span style="font-size:9.5px; background:#dbeafe; color:#1d4ed8; padding:1px 5px; border-radius:6px; font-weight:800;">वर्तमान आईडी</span>' : ''}
-              </div>
-              <div style="font-size:11px; color:#64748b;">📱 +91 ${m.phone || 'नंबर दर्ज नहीं'}</div>
-            </div>
-          </div>
-          <div style="font-size:11.5px; font-weight:700; color:${isSelf ? '#16a34a' : '#2563eb'}; display:flex; align-items:center; gap:4px;">
-            ${isSelf ? '<i class="fa-solid fa-circle-check"></i> चुना हुआ' : '<i class="fa-solid fa-arrow-right"></i> चुनें'}
-          </div>
-        `;
-        container.appendChild(row);
-      });
-    }
-
-    async function selectMemberAsSelf(member) {
-      if (!member) return;
-      const isSanchalak = (member.phone && member.phone.endsWith(SANCHALAK_PHONE)) || (member.name && member.name.includes("रेवंतराम"));
-
-      if (isSanchalak) {
-        closeMemberSelectModal();
-        closeMemberProfileModal();
-        openLoginModal();
-        showToast("संचालक मोड हेतु कृपया संचालक कोड (992942) दर्ज करें।", "info");
-        const phoneInput = document.getElementById("loginUserPhone");
-        if (phoneInput) phoneInput.value = SANCHALAK_PHONE;
-        const pinInput = document.getElementById("loginUserPin");
-        if (pinInput) pinInput.focus();
-        return;
-      }
-
-      const cleanPhone = (member.phone || '').replace(/\D/g, '').slice(-10);
-      if (!cleanPhone) {
-        showToast("इस सदस्य का मोबाइल नंबर दर्ज नहीं है!", "error");
-        return;
-      }
-
-      localStorage.setItem("loggedInMemberPhone", cleanPhone);
-      localStorage.removeItem("isAdminSession");
-      loggedInMemberPhone = cleanPhone;
-      isAdmin = false;
-
-      closeMemberSelectModal();
-      closeMemberProfileModal();
-      showToast(`नमस्ते ${member.name}! आपकी सदस्य पहचान सेट हो गई है।`, "success");
-      updateAuthUI();
-      if (typeof sendPresenceHeartbeat === "function") {
-        sendPresenceHeartbeat(true);
-      }
-    }
-
-    function checkFirstTimeMemberPrompt() {
-      if (!loggedInMemberPhone && !sessionStorage.getItem("member_select_prompted")) {
-        sessionStorage.setItem("member_select_prompted", "true");
-        setTimeout(() => {
-          if (!loggedInMemberPhone && typeof openMemberSelectModal === "function") {
-            openMemberSelectModal();
-          }
-        }, 1200);
-      }
-    }
-
-    function initPresenceSystem() {
-      // 1. Initial heartbeat on launch
-      sendPresenceHeartbeat(true);
-
-      // 2. Heartbeat every 30 seconds while tab is active
-      if (presenceHeartbeatInterval) clearInterval(presenceHeartbeatInterval);
-      presenceHeartbeatInterval = setInterval(() => {
-        if (!document.hidden) {
-          sendPresenceHeartbeat(true);
-        }
-      }, 30000);
-
-      // 3. User interaction throttle (at most once per 20 seconds)
-      const handleUserActivity = () => {
-        const now = Date.now();
-        if (now - lastInteractionTime > 20000) {
-          lastInteractionTime = now;
-          sendPresenceHeartbeat(true);
-        }
-      };
-      window.addEventListener("click", handleUserActivity, { passive: true });
-      window.addEventListener("touchstart", handleUserActivity, { passive: true });
-
-      // 4. Page visibility change
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-          sendPresenceHeartbeat(false);
-        } else {
-          sendPresenceHeartbeat(true);
-        }
-      });
-
-      // 5. Page exit / close
-      window.addEventListener("pagehide", () => sendPresenceHeartbeat(false));
-      window.addEventListener("beforeunload", () => sendPresenceHeartbeat(false));
-
-      // 6. Real-time Firestore snapshot for online presence
-      db.collection("presence").onSnapshot((snapshot) => {
-        onlinePresenceMap.clear();
-        snapshot.forEach(docSnap => {
-          const d = docSnap.data();
-          if (d) {
-            if (d.phone) onlinePresenceMap.set(d.phone, d);
-            if (d.memberId) onlinePresenceMap.set(d.memberId, d);
-            if (d.docId) onlinePresenceMap.set(d.docId, d);
-          }
-        });
-        updateLiveOnlineSummary();
-        renderMembers();
-        if (typeof currentProfileModalMemberId !== "undefined" && currentProfileModalMemberId) {
-          updateProfileModalOnlineIndicator(currentProfileModalMemberId);
-        }
-      }, (err) => {
-        console.warn("Presence snapshot listener error:", err);
-      });
     }
 
     // 12. Firestore Realtime Listeners
@@ -6552,7 +6081,6 @@
         const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
         const payStatus = getMemberPaymentStatus(m);
         const firstChar = (m.name || 'U').trim().charAt(0);
-        const isOnline = (typeof isMemberOnline === "function") && isMemberOnline(m);
 
         const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : "");
         let tagBadgeHtml = "";
@@ -6561,9 +6089,6 @@
         } else if (memberTag) {
           tagBadgeHtml = `<span class="member-tag-badge other">${memberTag}</span>`;
         }
-
-        const onlineIndicatorDot = isOnline ? `<span class="online-indicator" title="अभी ऑनलाइन हैं"></span>` : '';
-        const onlineBadgeHtml = isOnline ? `<span class="online-badge-live" title="अभी ऐप में सक्रिय"><span class="online-dot-mini"></span> ऑनलाइन</span>` : '';
 
         const card = document.createElement("div");
         card.className = "member-card member-card-compact";
@@ -6588,14 +6113,10 @@
 
         card.innerHTML = `
           <div class="member-info">
-            <div class="avatar" style="position:relative; overflow:visible;">
-              <div style="width:100%; height:100%; border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center;">${avatarHtml}</div>
-              ${onlineIndicatorDot}
-            </div>
+            <div class="avatar">${avatarHtml}</div>
             <div class="member-details">
               <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                 <strong style="font-size:15px; color:var(--text-main);">${m.name}</strong>
-                ${onlineBadgeHtml}
                 ${tagBadgeHtml}
                 ${statusBadgeHtml}
                 ${quickReminderBtn}
@@ -6801,11 +6322,6 @@
     function closeMemberProfileModal() {
       document.getElementById("memberProfileModal").style.display = "none";
       currentProfileModalMemberId = null;
-      const photoWrapper = document.querySelector(".profile-photo-wrapper");
-      if (photoWrapper) {
-        const dot = photoWrapper.querySelector('.profile-online-badge-dot');
-        if (dot) dot.remove();
-      }
     }
 
     let isProfilePinVisible = true;
@@ -7144,6 +6660,7 @@
       const ganeshItemCount = document.getElementById("ganeshItemCount");
       const btnAddGanesh = document.getElementById("btnAddGaneshExpenseBtn");
       const thGaneshAction = document.getElementById("thGaneshAction");
+      const tdGaneshFooterAction = document.getElementById("tdGaneshFooterAction");
       const ganeshTbody = document.getElementById("ganeshExpensesTableBody");
 
       if (ganeshTotalBadge) ganeshTotalBadge.innerText = "₹" + ganeshTotalOut.toLocaleString('en-IN');
@@ -7151,10 +6668,11 @@
       if (ganeshItemCount) ganeshItemCount.innerText = `${ganeshExpenses.length} मद`;
       if (btnAddGanesh) btnAddGanesh.style.display = isAdmin ? "inline-flex" : "none";
       if (thGaneshAction) thGaneshAction.style.display = isAdmin ? "table-cell" : "none";
+      if (tdGaneshFooterAction) tdGaneshFooterAction.style.display = isAdmin ? "table-cell" : "none";
 
       if (ganeshTbody) {
         if (ganeshExpenses.length === 0) {
-          ganeshTbody.innerHTML = `<tr><td colspan="${isAdmin ? 6 : 5}" style="text-align:center; padding:12px; color:#94a3b8;">गणेश विसर्जन का कोई अलग खर्च दर्ज नहीं है।</td></tr>`;
+          ganeshTbody.innerHTML = `<tr><td colspan="${isAdmin ? 4 : 3}" style="text-align:center; padding:12px; color:#94a3b8;">गणेश विसर्जन का कोई अलग खर्च दर्ज नहीं है।</td></tr>`;
         } else {
           ganeshExpenses.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
           ganeshTbody.innerHTML = "";
@@ -7164,10 +6682,8 @@
             tr.style.borderBottom = "1px solid #fde68a";
             tr.innerHTML = `
               <td style="padding:6px 4px; text-align:center; color:#92400e; font-size:11px;">${idx + 1}</td>
-              <td style="padding:6px; white-space:nowrap; font-size:11px;">${formatDisplayDate(exp.date)}</td>
               <td style="padding:6px 8px; font-weight:700; color:#78350f;">${escapeHtml(exp.description || '')}</td>
               <td style="padding:6px; text-align:right; font-weight:800; color:#b45309; white-space:nowrap;">₹${amt.toLocaleString('en-IN')}</td>
-              <td style="padding:6px; font-size:11px; color:#92400e; white-space:nowrap;">${escapeHtml(exp.spentBy || 'व्यवस्थापक')}</td>
               ${isAdmin ? `
                 <td style="padding:6px; text-align:center; white-space:nowrap;">
                   <button onclick="promptDeleteExpense('${exp.id}')" style="background:#fee2e2; border:none; color:#dc2626; padding:3px 7px; border-radius:4px; cursor:pointer; font-size:10px;">
@@ -8109,6 +7625,21 @@
       }
     }
 
+    function onExpenseGaneshToggle() {
+      const ganeshCheck = document.getElementById("expenseIsGanesh");
+      const isGanesh = ganeshCheck ? ganeshCheck.checked : false;
+      const fgDate = document.getElementById("fgExpenseDate");
+      const fgSpent = document.getElementById("fgExpenseSpentBy");
+      const fgMethod = document.getElementById("fgExpensePayMethod");
+      if (fgDate) fgDate.style.display = isGanesh ? "none" : "block";
+      if (fgSpent) fgSpent.style.display = isGanesh ? "none" : "block";
+      if (fgMethod) fgMethod.style.display = isGanesh ? "none" : "block";
+      const modalTitle = document.getElementById("expenseModalTitle");
+      if (modalTitle) {
+        modalTitle.innerText = isGanesh ? "🚩 गणेश विसर्जन खर्च जोड़ें" : "नया खर्च / सामग्री जोड़ें";
+      }
+    }
+
     function openExpenseModal(editIdOrPreset = null) {
       if (!isAdmin) {
         showToast("यह सुविधा केवल व्यवस्थापक (Admin) के लिए है।", "warning");
@@ -8150,6 +7681,8 @@
         if (saveBtnText) saveBtnText.innerText = "खर्च सहेजें";
       }
 
+      onExpenseGaneshToggle();
+
       if (modal) modal.style.display = "flex";
       setTimeout(() => descInput && descInput.focus(), 150);
     }
@@ -8173,14 +7706,14 @@
         return;
       }
       const editId = document.getElementById("editExpenseId")?.value;
-      const date = document.getElementById("expenseDate")?.value;
+      const isGanesh = document.getElementById("expenseIsGanesh")?.checked || false;
+      const date = document.getElementById("expenseDate")?.value || new Date().toISOString().slice(0, 10);
       const desc = document.getElementById("expenseDesc")?.value.trim();
       const amount = Number(document.getElementById("expenseAmount")?.value);
       const spentBy = document.getElementById("expenseSpentBy")?.value.trim() || "रेवंतराम भाटी";
       const payMethod = document.getElementById("expensePayMethod")?.value || "नकद";
-      const isGanesh = document.getElementById("expenseIsGanesh")?.checked || false;
 
-      if (!date) {
+      if (!isGanesh && !date) {
         showToast("कृपया दिनांक चुनें।", "warning");
         return;
       }
@@ -8324,9 +7857,9 @@
     }
 
     function exportExpensesToCSV() {
-      const expenses = transactions.filter(t => t.type === 'expense');
+      const expenses = transactions.filter(t => t.type === 'expense' && !isGaneshItem(t));
       if (!expenses.length) {
-        showToast("एक्सपोर्ट के लिए कोई खर्च दर्ज नहीं है।", "warning");
+        showToast("एक्सपोर्ट के लिए कोई सामान्य खर्च दर्ज नहीं है।", "warning");
         return;
       }
       expenses.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
@@ -8354,19 +7887,23 @@
     }
 
     function exportExpensesToPDF() {
-      const expenses = transactions.filter(t => t.type === 'expense');
+      // General expenses only (strictly exclude Ganesh Visarjan items)
+      const expenses = transactions.filter(t => t.type === 'expense' && !isGaneshItem(t));
       if (!expenses.length) {
-        showToast("एक्सपोर्ट के लिए कोई खर्च उपलब्ध नहीं है।", "warning");
+        showToast("एक्सपोर्ट के लिए कोई सामान्य सामग्री खर्च उपलब्ध नहीं है।", "warning");
         return;
       }
 
-      let totalIn = transactions.filter(t => t.type === 'contribution').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let totalIn = transactions.filter(t => t.type === 'contribution' && !isGaneshItem(t)).reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
       let totalOut = expenses.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
       let net = totalIn - totalOut;
       const todayStr = new Date().toISOString().split('T')[0];
 
       const summaryData = {
         lang: currentLang,
+        title: "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)",
+        subTitle: "सामग्री खर्च एवं व्यय स्प्रेडशीट रिपोर्ट",
+        filePrefix: "Yuva_Shakti_Kharch_Report_",
         totalIn: totalIn,
         totalOut: totalOut,
         net: net,
@@ -8377,6 +7914,7 @@
       const cleanExpenses = expenses.map(t => ({
         description: t.description || '',
         date: t.date || '',
+        spentBy: t.spentBy || 'व्यवस्थापक',
         payMethod: t.payMethod || 'नकद',
         type: 'expense',
         amount: Number(t.amount) || 0
@@ -8395,12 +7933,12 @@
     }
 
     function shareExpensesToWA() {
-      let totalIn = transactions.filter(t => t.type === 'contribution').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      let totalOut = transactions.filter(t => t.type === 'expense').reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      const regularExpenses = transactions.filter(t => t.type === 'expense' && !isGaneshItem(t));
+      let totalIn = transactions.filter(t => t.type === 'contribution' && !isGaneshItem(t)).reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      let totalOut = regularExpenses.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
       let net = totalIn - totalOut;
 
-      const recentExpenses = transactions
-        .filter(t => t.type === 'expense')
+      const recentExpenses = regularExpenses
         .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
         .slice(0, 5);
 
@@ -10364,14 +9902,11 @@
       }, err => console.log("Reminders listener:", err));
     }
 
-    // Initialize UI, Theme, Settings, Presence, and Check for Updates on App Launch
+    // Initialize UI, Theme, Settings, and Check for Updates on App Launch
     const savedTheme = localStorage.getItem('appTheme') || 'light';
     setAppTheme(savedTheme);
     applyLanguage(currentLang);
     updateAuthUI();
-    if (typeof initPresenceSystem === "function") {
-      initPresenceSystem();
-    }
     updateSettingsUI();
     updateUpiDisplayEverywhere();
     updateHomeSuvicharSnippet();
@@ -10382,9 +9917,6 @@
       checkAmavasyaEveAlert();
       checkScheduledDueReminders();
       checkForAppUpdates(true);
-      if (typeof checkFirstTimeMemberPrompt === "function") {
-        checkFirstTimeMemberPrompt();
-      }
     }, 1500);
 
     // Periodic check every 60 seconds for scheduled 8:00 AM / 8:00 PM alerts while app is running
