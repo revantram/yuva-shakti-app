@@ -13,10 +13,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Firebase Classic Compatibility Scripts -->
+      <!-- Firebase Classic Compatibility Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <style>
     :root {
       --primary: #007aff;
@@ -4122,7 +4122,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.5.3";
+    const APP_VERSION = "4.5.4";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -5394,20 +5394,10 @@
         isAdmin = false;
         localStorage.removeItem("isAdminSession");
 
-        if (!member.pin) {
-          await db.collection("members").doc(member.id).update({ pin: pin });
-          localStorage.setItem("loggedInMemberPhone", phoneInput);
-          loggedInMemberPhone = phoneInput;
-          showToast(`नमस्ते ${member.name}! पिन सेट हो गया और आप लॉगिन हो गए।`, "success");
-          isFirstTime = true;
-        } else if (member.pin === pin) {
-          localStorage.setItem("loggedInMemberPhone", phoneInput);
-          loggedInMemberPhone = phoneInput;
-          showToast(`स्वागत है, ${member.name}! लॉगिन सफल रहा।`, "success");
-        } else {
-          showToast("गलत पिन! कृपया सही पिन दर्ज करें।", "error");
-          return;
-        }
+            localStorage.setItem("loggedInMemberPhone", phoneInput);
+    loggedInMemberPhone = phoneInput;
+    showToast(`स्वागत है, ${member.name}! OTP सत्यापन सफल रहा।`, "success");
+
         closeLoginModal();
         updateAuthUI();
         appOpenRecorded = false;
