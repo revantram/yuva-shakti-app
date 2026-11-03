@@ -846,8 +846,10 @@
       font-weight: 600;
       font-size: 13px;
       cursor: pointer;
-      margin-top: 8px;
-      display: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     /* Tables */
@@ -2672,8 +2674,11 @@
         <button class="btn-main" id="saveMemberBtn" onclick="saveMember()">
           <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_save">सुरक्षित करें</span>
         </button>
-        <button class="btn-sub" id="cancelEditBtn" onclick="resetMemberForm()">
+        <button class="btn-sub" id="cancelEditBtn" onclick="resetMemberForm()" style="display:none; margin-top:8px;">
           <i class="fa-solid fa-xmark"></i> <span data-i18n="btn_cancel_edit">संपादन रद्द करें</span>
+        </button>
+        <button id="deleteMemberFromFormBtn" type="button" onclick="deleteCurrentFormMember()" style="display:none; width:100%; margin-top:8px; padding:11px; border-radius:10px; border:1.5px solid #fecaca; background:#fef2f2; color:#dc2626; font-weight:800; font-size:13px; cursor:pointer;">
+          <i class="fa-solid fa-trash-can"></i> <span>इस सदस्य को हटाएं (Delete Member)</span>
         </button>
       </div>
     </div>
@@ -2719,7 +2724,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.5.0 (बिल्ड कोड: 36)
+              v4.5.1 (बिल्ड कोड: 37)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -3102,7 +3107,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.5.0 (बिल्ड कोड: 36)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.5.1 (बिल्ड कोड: 37)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -3273,13 +3278,15 @@
             </button>
           </div>
         </div>
+      </div>
+
       <!-- Member Contribution Summary Box in Profile Modal -->
-      <div id="profileModalContributionBox" style="background:linear-gradient(135deg, rgba(37,99,235,0.06) 0%, rgba(16,185,129,0.06) 100%); border-radius:12px; padding:10px 12px; margin-bottom:14px; border:1px solid #bfdbfe;">
+      <div id="profileModalContributionBox" style="background:linear-gradient(135deg, rgba(37,99,235,0.06) 0%, rgba(16,185,129,0.06) 100%); border-radius:12px; padding:10px 12px; margin-bottom:12px; border:1px solid #bfdbfe;">
         <!-- Populated dynamically in openMemberProfileModal -->
       </div>
 
       <!-- Edit / Admin Controls -->
-      <div id="profileModalControls" style="display:flex; gap:8px;">
+      <div id="profileModalControls" style="display:flex; flex-direction:column; gap:8px;">
         <!-- Filled dynamically if admin or self -->
       </div>
     </div>
@@ -4111,7 +4118,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.5.0";
+    const APP_VERSION = "4.5.1";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -6448,6 +6455,9 @@
     // नियम: सभी सदस्यों की राशि जमा रहे। और जब अमावस निकल जाए उसके बाद में अगर किसी ने पैसे जमा नहीं किया उसके आगे बाकी लिखो।
     function getMemberPaymentStatus(member) {
       if (!member) return { isPaid: false, lastPayment: null, total: 0, count: 0 };
+      if (member.memberCategory === 'family') {
+        return { isPaid: true, isExempt: true, lastPayment: null, total: 0, count: 0 };
+      }
 
       const now = new Date();
       const todayStr = now.toISOString().split('T')[0];
@@ -6610,7 +6620,7 @@
           `कुल सदस्य: ${membersList.length} (मुख्य ग्रुप: ${coreTotal} • परिवार: ${familyTotal})${searchTerm ? ' [फ़िल्टर: ' + filtered.length + ']' : ''}`;
       }
 
-      const pendingMembersCount = membersList.filter(x => !getMemberPaymentStatus(x).isPaid).length;
+      const pendingMembersCount = membersList.filter(x => x.memberCategory !== 'family' && !getMemberPaymentStatus(x).isPaid).length;
       const adminPendingBadge = document.getElementById("adminPendingDueCountBadge");
       const adminDuesSubtext = document.getElementById("adminDuesReminderSubtext");
       const adminDuesBtn = document.getElementById("adminSendDueRemindersBtn");
@@ -6661,12 +6671,13 @@
         const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
         const payStatus = getMemberPaymentStatus(m);
         const firstChar = (m.name || 'U').trim().charAt(0);
+        const isFamily = (m.memberCategory === 'family');
 
-        const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : (m.memberCategory === 'family' ? "परिवार सदस्य" : ""));
+        const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : (isFamily ? "परिवार सदस्य" : ""));
         let tagBadgeHtml = "";
         if (memberTag === "संचालक") {
           tagBadgeHtml = `<span class="member-tag-badge sanchalak"><i class="fa-solid fa-crown"></i> संचालक</span>`;
-        } else if (m.memberCategory === 'family') {
+        } else if (isFamily) {
           tagBadgeHtml = `<span class="member-tag-badge family" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-people-roof"></i> ${escapeHtml(m.tag || 'परिवार सदस्य')}</span>`;
         } else if (memberTag) {
           tagBadgeHtml = `<span class="member-tag-badge other">${escapeHtml(memberTag)}</span>`;
@@ -6680,18 +6691,35 @@
           `<img src="${m.photoUrl}" alt="${escapeHtml(m.name)}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : 
           firstChar;
 
-        const statusBadgeHtml = isAdmin ? `
-          <div class="ios-toggle-switch ${payStatus.isPaid ? 'on' : 'off'}" onclick="event.stopPropagation(); toggleMemberPaymentSwitch('${m.id}', ${!payStatus.isPaid})" title="क्लिक करके जमा या बाकी करें (संचालक)">
-            <span class="toggle-label">${payStatus.isPaid ? (currentLang === 'en' ? 'Paid' : 'जमा') : (currentLang === 'en' ? 'Due' : 'बाकी')}</span>
-            <div class="toggle-thumb"></div>
-          </div>
-        ` : (payStatus.isPaid ?
-          `<span class="badge-status-paid"><i class="fa-solid fa-circle-check"></i> ${currentLang === 'en' ? 'Paid' : 'जमा'}</span>` :
-          `<span class="badge-status-unpaid"><i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'en' ? 'Due' : 'बाकी'}</span>`
-        );
+        let statusBadgeHtml = "";
+        let quickReminderBtn = "";
+        let familyDeleteBtn = "";
 
-        const quickReminderBtn = (isAdmin && !payStatus.isPaid) ?
-          `<button onclick="event.stopPropagation(); sendIndividualDueReminder('${m.id}')" title="इस सदस्य को व्हाट्सएप पर बकाया स्मरण भेजें" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; padding:2px 7px; border-radius:6px; font-size:9.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:3px;"><i class="fa-brands fa-whatsapp" style="color:#16a34a;"></i> स्मरण</button>` : '';
+        if (isFamily) {
+          // परिवार के सदस्यों द्वारा कोई सहयोग राशि नहीं दी जाएगी: जमा व बाकी पूरी तरह हटाएं!
+          statusBadgeHtml = "";
+          quickReminderBtn = "";
+          if (isAdmin) {
+            familyDeleteBtn = `
+              <button onclick="event.stopPropagation(); promptDeleteMember('${m.id}', '${escapeHtml(m.name)}')" title="परिवार सूची से हटाएं" style="background:#fef2f2; border:1px solid #fecaca; color:#dc2626; padding:3px 8px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 1px 4px rgba(220,38,38,0.08);">
+                <i class="fa-solid fa-trash-can"></i> <span>हटाएं</span>
+              </button>
+            `;
+          }
+        } else {
+          statusBadgeHtml = isAdmin ? `
+            <div class="ios-toggle-switch ${payStatus.isPaid ? 'on' : 'off'}" onclick="event.stopPropagation(); toggleMemberPaymentSwitch('${m.id}', ${!payStatus.isPaid})" title="क्लिक करके जमा या बाकी करें (संचालक)">
+              <span class="toggle-label">${payStatus.isPaid ? (currentLang === 'en' ? 'Paid' : 'जमा') : (currentLang === 'en' ? 'Due' : 'बाकी')}</span>
+              <div class="toggle-thumb"></div>
+            </div>
+          ` : (payStatus.isPaid ?
+            `<span class="badge-status-paid"><i class="fa-solid fa-circle-check"></i> ${currentLang === 'en' ? 'Paid' : 'जमा'}</span>` :
+            `<span class="badge-status-unpaid"><i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'en' ? 'Due' : 'बाकी'}</span>`
+          );
+
+          quickReminderBtn = (isAdmin && !payStatus.isPaid) ?
+            `<button onclick="event.stopPropagation(); sendIndividualDueReminder('${m.id}')" title="इस सदस्य को व्हाट्सएप पर बकाया स्मरण भेजें" style="background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; padding:2px 7px; border-radius:6px; font-size:9.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:3px;"><i class="fa-brands fa-whatsapp" style="color:#16a34a;"></i> स्मरण</button>` : '';
+        }
 
         card.innerHTML = `
           <div class="member-info">
@@ -6709,9 +6737,12 @@
               </div>
             </div>
           </div>
-          <div style="color:#94a3b8; font-size:13px; display:flex; align-items:center; gap:4px; padding-left:6px;">
-            <span style="font-size:11px; color:#64748b;">${currentLang === 'en' ? 'Profile' : 'प्रोफाइल'}</span>
-            <i class="fa-solid fa-chevron-right"></i>
+          <div style="display:flex; align-items:center; gap:8px;">
+            ${familyDeleteBtn}
+            <div style="color:#94a3b8; font-size:13px; display:flex; align-items:center; gap:4px; padding-left:2px;">
+              <span style="font-size:11px; color:#64748b;">${currentLang === 'en' ? 'Profile' : 'प्रोफाइल'}</span>
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
           </div>
         `;
         return card;
@@ -6908,88 +6939,96 @@
 
       const controlsDiv = document.getElementById("profileModalControls");
       controlsDiv.innerHTML = "";
+
+      const actionsRow = document.createElement("div");
+      actionsRow.style.cssText = "display:flex; gap:8px; width:100%;";
+
       if (canEdit) {
         const editBtn = document.createElement("button");
         editBtn.className = "btn-main";
-        editBtn.style.flex = "1";
-        editBtn.style.padding = "8px";
-        editBtn.style.fontSize = "12px";
+        editBtn.style.cssText = "flex:1; padding:10px; font-size:12.5px; font-weight:700; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; gap:6px;";
         editBtn.innerHTML = `<i class="fa-solid fa-user-pen"></i> ${currentLang === 'en' ? 'Edit Details' : 'विवरण एडिट करें'}`;
         editBtn.onclick = () => {
           closeMemberProfileModal();
           editMember(m.id);
         };
-        controlsDiv.appendChild(editBtn);
+        actionsRow.appendChild(editBtn);
       }
       if (isAdmin) {
         const tagBtn = document.createElement("button");
         tagBtn.className = "btn-tool";
-        tagBtn.style.flex = "1";
-        tagBtn.style.padding = "8px";
-        tagBtn.style.fontSize = "12px";
-        tagBtn.style.borderRadius = "12px";
+        tagBtn.style.cssText = "flex:1; padding:10px; font-size:12.5px; font-weight:700; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#fffbeb; border:1px solid #fde68a; color:#b45309;";
         tagBtn.innerHTML = `<i class="fa-solid fa-id-badge" style="color:#d97706;"></i> पद बदलें`;
         tagBtn.onclick = () => promptEditMemberTag(m.id);
-        controlsDiv.appendChild(tagBtn);
+        actionsRow.appendChild(tagBtn);
+      }
+      if (actionsRow.children.length > 0) {
+        controlsDiv.appendChild(actionsRow);
+      }
 
-        const delBtn = document.createElement("button");
-        delBtn.className = "btn-sub";
-        delBtn.style.flex = "0.8";
-        delBtn.style.padding = "8px";
-        delBtn.style.fontSize = "12px";
-        delBtn.style.color = "#dc2626";
-        delBtn.style.borderColor = "#fecaca";
-        delBtn.innerHTML = `<i class="fa-solid fa-trash"></i> ${currentLang === 'en' ? 'Delete' : 'हटाएं'}`;
-        delBtn.onclick = () => {
-          closeMemberProfileModal();
-          promptDeleteMember(m.id, m.name);
-        };
-        controlsDiv.appendChild(delBtn);
+      if (isAdmin) {
+        const isSanchalakSelf = (m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम"));
+        if (!isSanchalakSelf) {
+          const delBtn = document.createElement("button");
+          delBtn.style.cssText = "width:100%; padding:10px 14px; border-radius:12px; border:1.5px solid #fecaca; background:#fef2f2; color:#dc2626; font-weight:800; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 2px 6px rgba(220,38,38,0.08); margin-top:2px;";
+          delBtn.innerHTML = `<i class="fa-solid fa-trash-can" style="font-size:14px;"></i> <span>${m.memberCategory === 'family' ? 'परिवार सूची से सदस्य हटाएं (Delete)' : 'ग्रुप से सदस्य हटाएं (Delete)'}</span>`;
+          delBtn.onclick = () => {
+            closeMemberProfileModal();
+            promptDeleteMember(m.id, m.name);
+          };
+          controlsDiv.appendChild(delBtn);
+        }
       }
 
       // Populate contribution summary box in profile
       const contribBox = document.getElementById("profileModalContributionBox");
       if (contribBox) {
-        const todayStr = new Date().toISOString().split('T')[0];
-        const hasNovPassed = todayStr > "2026-11-08";
-        const octPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
-        const octAmt = octPaid ? (Number(m.octoberAmavasya?.amount) || 50) : 0;
-        const extraAmt = Number(m.extraContribution || 0);
-
-        if (hasNovPassed) {
-          // November Amavasya has passed! Show both months
-          const novPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
-          const novAmt = novPaid ? (Number(m.novemberAmavasya?.amount) || 100) : 0;
-          const totalAmt = octAmt + (novPaid ? novAmt : 0) + extraAmt;
-          contribBox.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span style="font-size:12.5px; font-weight:800; color:#1e40af;"><i class="fa-solid fa-file-invoice-dollar"></i> सहयोग राशि (अंशदान)</span>
-              <span style="font-size:12px; font-weight:900; color:#047857; background:#dcfce7; padding:2px 8px; border-radius:6px;">कुल: ₹${totalAmt.toLocaleString('en-IN')}</span>
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:11px;">
-              <div style="background:white; padding:6px 8px; border-radius:8px; border:1px solid #bfdbfe; display:flex; justify-content:space-between;">
-                <span style="color:#64748b;">अक्टूबर:</span>
-                <strong style="color:${octPaid ? '#16a34a' : '#dc2626'};">${octPaid ? `₹${octAmt} (जमा)` : 'बाकी'}</strong>
-              </div>
-              <div style="background:white; padding:6px 8px; border-radius:8px; border:1px solid #bfdbfe; display:flex; justify-content:space-between;">
-                <span style="color:#64748b;">8 नवंबर:</span>
-                <strong style="color:${novPaid ? '#16a34a' : '#dc2626'};">${novPaid ? `₹${novAmt} (जमा)` : 'बाकी'}</strong>
-              </div>
-            </div>
-          `;
+        if (m.memberCategory === 'family') {
+          // परिवार के सदस्यों द्वारा कोई सहयोग राशि नहीं दी जाएगी: बॉक्स पूरी तरह छिपाएं!
+          contribBox.style.display = "none";
         } else {
-          // November Amavasya has NOT passed yet! Show only October Amavasya and clear total
-          const totalAmt = octAmt + extraAmt;
-          contribBox.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <span style="font-size:12.5px; font-weight:800; color:#1e40af;"><i class="fa-solid fa-file-invoice-dollar"></i> सहयोग राशि (अंशदान)</span>
-              <span style="font-size:12.5px; font-weight:900; color:#047857; background:#dcfce7; padding:2px 8px; border-radius:6px;">कुल जमा: ₹${totalAmt.toLocaleString('en-IN')}</span>
-            </div>
-            <div style="background:white; padding:7px 10px; border-radius:8px; border:1px solid #bfdbfe; display:flex; justify-content:space-between; align-items:center; font-size:11.5px;">
-              <span style="color:#475569; font-weight:600;"><i class="fa-solid fa-moon" style="color:#d97706;"></i> अक्टूबर अमावस्या अंशदान:</span>
-              <strong style="color:${octPaid ? '#16a34a' : '#dc2626'}; font-size:12px;">${octPaid ? `₹${octAmt} (जमा ✅)` : 'बाकी'}</strong>
-            </div>
-          `;
+          contribBox.style.display = "block";
+          const todayStr = new Date().toISOString().split('T')[0];
+          const hasNovPassed = todayStr > "2026-11-08";
+          const octPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
+          const octAmt = octPaid ? (Number(m.octoberAmavasya?.amount) || 50) : 0;
+          const extraAmt = Number(m.extraContribution || 0);
+
+          if (hasNovPassed) {
+            // November Amavasya has passed! Show both months
+            const novPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
+            const novAmt = novPaid ? (Number(m.novemberAmavasya?.amount) || 100) : 0;
+            const totalAmt = octAmt + (novPaid ? novAmt : 0) + extraAmt;
+            contribBox.innerHTML = `
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:12.5px; font-weight:800; color:#1e40af;"><i class="fa-solid fa-file-invoice-dollar"></i> सहयोग राशि (अंशदान)</span>
+                <span style="font-size:12px; font-weight:900; color:#047857; background:#dcfce7; padding:2px 8px; border-radius:6px;">कुल: ₹${totalAmt.toLocaleString('en-IN')}</span>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:11px;">
+                <div style="background:white; padding:6px 8px; border-radius:8px; border:1px solid #bfdbfe; display:flex; justify-content:space-between;">
+                  <span style="color:#64748b;">अक्टूबर:</span>
+                  <strong style="color:${octPaid ? '#16a34a' : '#dc2626'};">${octPaid ? `₹${octAmt} (जमा)` : 'बाकी'}</strong>
+                </div>
+                <div style="background:white; padding:6px 8px; border-radius:8px; border:1px solid #bfdbfe; display:flex; justify-content:space-between;">
+                  <span style="color:#64748b;">8 नवंबर:</span>
+                  <strong style="color:${novPaid ? '#16a34a' : '#dc2626'};">${novPaid ? `₹${novAmt} (जमा)` : 'बाकी'}</strong>
+                </div>
+              </div>
+            `;
+          } else {
+            // November Amavasya has NOT passed yet! Show only October Amavasya and clear total
+            const totalAmt = octAmt + extraAmt;
+            contribBox.innerHTML = `
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:12.5px; font-weight:800; color:#1e40af;"><i class="fa-solid fa-file-invoice-dollar"></i> सहयोग राशि (अंशदान)</span>
+                <span style="font-size:12.5px; font-weight:900; color:#047857; background:#dcfce7; padding:2px 8px; border-radius:6px;">कुल जमा: ₹${totalAmt.toLocaleString('en-IN')}</span>
+              </div>
+              <div style="background:white; padding:7px 10px; border-radius:8px; border:1px solid #bfdbfe; display:flex; justify-content:space-between; align-items:center; font-size:11.5px;">
+                <span style="color:#475569; font-weight:600;"><i class="fa-solid fa-moon" style="color:#d97706;"></i> अक्टूबर अमावस्या अंशदान:</span>
+                <strong style="color:${octPaid ? '#16a34a' : '#dc2626'}; font-size:12px;">${octPaid ? `₹${octAmt} (जमा ✅)` : 'बाकी'}</strong>
+              </div>
+            `;
+          }
         }
       }
 
@@ -7176,6 +7215,17 @@
 
       const category = document.getElementById("memCategory")?.value || "family";
 
+      if (!editId) {
+        const existing = membersList.find(m => m.phone && m.phone.replace(/\D/g, '').endsWith(phone.slice(-10)));
+        if (existing) {
+          showToast(`यह मोबाइल नंबर पहले से सदस्य "${existing.name}" के नाम पर दर्ज है!`, "warning");
+          return;
+        }
+      }
+
+      const saveBtn = document.getElementById("saveMemberBtn");
+      if (saveBtn) saveBtn.disabled = true;
+
       try {
         const payload = {
           name,
@@ -7202,6 +7252,8 @@
         switchTab('members');
       } catch (err) {
         showToast("डेटा सहेजने में त्रुटि: " + err.message, "error");
+      } finally {
+        if (saveBtn) saveBtn.disabled = false;
       }
     }
 
@@ -7226,6 +7278,13 @@
       document.getElementById("formTitle").innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:#2563eb;"></i> सदस्य विवरण संपादित करें`;
       document.getElementById("saveMemberBtn").innerHTML = `<i class="fa-solid fa-check"></i> अपडेट सहेजें`;
       document.getElementById("cancelEditBtn").style.display = "block";
+
+      const delBtnInForm = document.getElementById("deleteMemberFromFormBtn");
+      if (delBtnInForm) {
+        const isSanchalak = (m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम"));
+        delBtnInForm.style.display = (isAdmin && !isSanchalak) ? "block" : "none";
+      }
+
       switchTab('form');
     }
 
@@ -7247,6 +7306,17 @@
       document.getElementById("formTitle").innerHTML = `<i class="fa-solid fa-user-plus" style="color:#2563eb;"></i> नया सदस्य जोड़ें`;
       document.getElementById("saveMemberBtn").innerHTML = `<i class="fa-solid fa-floppy-disk"></i> सुरक्षित करें`;
       document.getElementById("cancelEditBtn").style.display = "none";
+      const delBtnInForm = document.getElementById("deleteMemberFromFormBtn");
+      if (delBtnInForm) delBtnInForm.style.display = "none";
+    }
+
+    function deleteCurrentFormMember() {
+      const id = document.getElementById("editDocId")?.value;
+      const name = document.getElementById("memName")?.value || "सदस्य";
+      if (!id) return;
+      promptDeleteMember(id, name);
+      resetMemberForm();
+      switchTab('members');
     }
 
     function openAddFamilyMemberModal() {
@@ -7266,13 +7336,22 @@
     }
 
     function promptDeleteMember(id, name) {
+      if (!isAdmin) {
+        showToast("केवल संचालक ही सदस्यों को हटा सकते हैं।", "warning");
+        return;
+      }
+      const m = membersList.find(x => x.id === id);
+      if (m && ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")))) {
+        showToast("संचालक (मुख्य एडमिन) को हटाया नहीं जा सकता।", "warning");
+        return;
+      }
       showConfirmDialog(
         "सदस्य हटाएं",
-        `क्या आप वाकई ${name} को ग्रुप से हटाना चाहते हैं?`,
+        `क्या आप वाकई "${name}" को ग्रुप सूची से हटाना चाहते हैं?`,
         async () => {
           try {
             await db.collection("members").doc(id).delete();
-            showToast(`${name} को सफलतापूर्वक हटा दिया गया।`, "info");
+            showToast(`सदस्य "${name}" को सफलतापूर्वक हटा दिया गया।`, "info");
           } catch (e) {
             showToast("त्रुटि: " + e.message, "error");
           }
@@ -7841,16 +7920,17 @@
       const todayStr = new Date().toISOString().split('T')[0];
       const hasNovPassed = todayStr > "2026-11-08";
 
-      // Sort members by designation
-      const sorted = [...membersList].sort((a, b) => {
+      // Sort members by designation (Exclude family members who do not contribute)
+      const sorted = [...membersList].filter(m => m.memberCategory !== 'family').sort((a, b) => {
         const rankA = getMemberRoleRank(a);
         const rankB = getMemberRoleRank(b);
         if (rankA !== rankB) return rankA - rankB;
         return (a.name || '').localeCompare(b.name || '', 'hi');
       });
 
-      // Calculate totals
+      // Calculate totals for core members only
       membersList.forEach(m => {
+        if (m.memberCategory === 'family') return;
         const octIsPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
         const novIsPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
         if (octIsPaid) octPaidCount++;
@@ -7876,7 +7956,7 @@
       // Logged in member personal card
       if (personalCard) {
         const myMember = membersList.find(m => loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone));
-        if (myMember) {
+        if (myMember && myMember.memberCategory !== 'family') {
           personalCard.style.display = "block";
           const octPaid = myMember.octoberAmavasya?.isPaid ?? (myMember.octoberPaid === true);
           const octAmt = octPaid ? (Number(myMember.octoberAmavasya?.amount) || 50) : 0;
