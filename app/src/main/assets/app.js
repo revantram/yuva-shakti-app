@@ -29,38 +29,122 @@ try {
 }
 
 // ==========================================
-// 2. सुरक्षा ऐप लॉक (PIN: 1234 - डिफ़ॉल्ट)
+// 2. मोबाइल OTP सत्यापन एवं ऐप अनलॉक सिस्टम
 // ==========================================
-const APP_PIN = "1234";
-const ADMIN_PIN = "8696";
+let confirmationResultGlobal = null;
 
-document.getElementById('unlockBtn').addEventListener('click', () => {
-  const pinInput = document.getElementById('securityPinInput').value;
-  const errorEl = document.getElementById('lockError');
-  
-  if (pinInput === APP_PIN || pinInput === ADMIN_PIN || pinInput === "992942") {
-    if (pinInput === ADMIN_PIN || pinInput === "992942") {
-      document.body.classList.add('is-admin');
+// Invisible reCAPTCHA सेटअप
+function setupRecaptcha() {
+  if (!window.recaptchaVerifier && typeof firebase !== 'undefined' && firebase.auth) {
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible',
+      'callback': function(response) {
+        // reCAPTCHA पूर्ण हुआ
+      }
+    });
+  }
+}
+
+// 1. OTP भेजने का लॉजिक
+const sendOtpBtn = document.getElementById('sendOtpBtn');
+if (sendOtpBtn) {
+  sendOtpBtn.addEventListener('click', () => {
+    const phone = document.getElementById('mobileNumberInput').value.trim();
+    const errorEl = document.getElementById('lockError');
+    errorEl.innerText = "";
+
+    if (phone.length !== 10) {
+      errorEl.innerText = "कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!";
+      return;
     }
-    document.getElementById('appLockModal').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'flex';
-    initApp(); // लॉक खुलने के बाद ऐप शुरू करें
-  } else {
-    errorEl.innerText = "गलत पिन! कृपया सही पिन दर्ज करें।";
+
+    sendOtpBtn.disabled = true;
+    sendOtpBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> OTP भेजा जा रहा है...';
+
+    setupRecaptcha();
+    const appVerifier = window.recaptchaVerifier;
+    const phoneNumber = "+91" + phone;
+
+    firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        confirmationResultGlobal = confirmationResult;
+        sendOtpBtn.disabled = false;
+        sendOtpBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> OTP भेजें';
+        
+        // OTP इनपुट दृश्य दिखाएं
+        document.getElementById('phoneStep').style.display = 'none';
+        document.getElementById('otpStep').style.display = 'block';
+        document.getElementById('lockSubtitle').innerText = "मोबाइल पर आया OTP दर्ज करें";
+      })
+      .catch((error) => {
+        sendOtpBtn.disabled = false;
+        sendOtpBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> OTP भेजें';
+        errorEl.innerText = "त्रुटि: " + (error.message || "OTP नहीं भेजा जा सका");
+        if (window.recaptchaVerifier) {
+          window.recaptchaVerifier.render().then(widgetId => grecaptcha.reset(widgetId));
+        }
+      });
+  });
+}
+
+// 2. OTP सत्यापित करने का लॉजिक
+const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+if (verifyOtpBtn) {
+  verifyOtpBtn.addEventListener('click', () => {
+    const code = document.getElementById('otpCodeInput').value.trim();
+    const errorEl = document.getElementById('lockError');
     const lockCard = document.querySelector('.lock-card');
-    if (lockCard) {
-      lockCard.classList.add('shake');
-      setTimeout(() => lockCard.classList.remove('shake'), 400);
-    }
-  }
-});
+    errorEl.innerText = "";
 
-// Enter key se unlock
-document.getElementById('securityPinInput').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    document.getElementById('unlockBtn').click();
-  }
-});
+    if (code.length !== 6) {
+      errorEl.innerText = "कृपया 6 अंकों का OTP दर्ज करें!";
+      return;
+    }
+
+    if (!confirmationResultGlobal) {
+      errorEl.innerText = "सत्र समाप्त हुआ। कृपया OTP दोबारा भेजें।";
+      return;
+    }
+
+    verifyOtpBtn.disabled = true;
+    verifyOtpBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> सत्यापन जारी है...';
+
+    confirmationResultGlobal.confirm(code)
+      .then((result) => {
+        const phone = document.getElementById('mobileNumberInput').value.trim();
+        
+        // एडमिन नंबर होने पर एडमिन अधिकार दें
+        if (phone === "8696663615" || phone === "992942") {
+          document.body.classList.add('is-admin');
+        }
+
+        // ऐप अनलॉक करें
+        document.getElementById('appLockModal').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'flex';
+        initApp(); // मुख्य ऐप शुरू करें
+      })
+      .catch((error) => {
+        verifyOtpBtn.disabled = false;
+        verifyOtpBtn.innerHTML = '<i class="fa-solid fa-unlock"></i> OTP सत्यापित करें';
+        errorEl.innerText = "गलत OTP कोड! कृपया पुनः प्रयास करें।";
+        if (lockCard) {
+          lockCard.classList.add('shake');
+          setTimeout(() => lockCard.classList.remove('shake'), 400);
+        }
+      });
+  });
+}
+
+// नंबर बदलने का बटन
+const changePhoneBtn = document.getElementById('changePhoneBtn');
+if (changePhoneBtn) {
+  changePhoneBtn.addEventListener('click', () => {
+    document.getElementById('otpStep').style.display = 'none';
+    document.getElementById('phoneStep').style.display = 'block';
+    document.getElementById('lockSubtitle').innerText = "मोबाइल OTP द्वारा सत्यापन";
+    document.getElementById('lockError').innerText = "";
+  });
+}
 
 // ==========================================
 // 3. डार्क / लाइट मोड टॉगल
