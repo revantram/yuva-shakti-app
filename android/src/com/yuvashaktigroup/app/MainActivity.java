@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -100,11 +101,38 @@ public class MainActivity extends Activity {
         public void postNotification(String title, String message) {
             showSystemNotification(title, message);
         }
+
+        @JavascriptInterface
+        public void requestNotificationPermission() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    checkAndRequestNotificationPermission();
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public boolean hasNotificationPermission() {
+            if (Build.VERSION.SDK_INT >= 33) {
+                return checkSelfPermission("android.permission.POST_NOTIFICATIONS") == PackageManager.PERMISSION_GRANTED;
+            }
+            return true;
+        }
+    }
+
+    private void checkAndRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= 33) {
+            if (checkSelfPermission("android.permission.POST_NOTIFICATIONS") != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{"android.permission.POST_NOTIFICATIONS"}, 200);
+            }
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkAndRequestNotificationPermission();
 
         mWebView = new WebView(this);
         setContentView(mWebView);
@@ -296,6 +324,24 @@ public class MainActivity extends Activity {
                 try {
                     Toast.makeText(MainActivity.this, "अपडेट डाउनलोड शुरू हो रहा है...", Toast.LENGTH_SHORT).show();
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (!getPackageManager().canRequestPackageInstalls()) {
+                            try {
+                                Intent reqIntent = new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + getPackageName()));
+                                startActivity(reqIntent);
+                                Toast.makeText(MainActivity.this, "कृपया ऐप अपडेट इंस्टॉल की अनुमति दें", Toast.LENGTH_LONG).show();
+                            } catch (Exception ignored) {}
+                        }
+                    }
+
+                    File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    if (downloadDir != null) {
+                        File existingApk = new File(downloadDir, "YuvaShaktiGroup.apk");
+                        if (existingApk.exists()) {
+                            existingApk.delete();
+                        }
+                    }
+
                     Uri uri = Uri.parse(url);
                     DownloadManager.Request request = new DownloadManager.Request(uri);
                     request.setTitle("युवा शक्ति ग्रुप - नया अपडेट");
@@ -315,12 +361,17 @@ public class MainActivity extends Activity {
                                 if (id == downloadId) {
                                     try {
                                         Uri apkUri = manager.getUriForDownloadedFile(downloadId);
+                                        File downloadedFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "YuvaShaktiGroup.apk");
+                                        Intent installIntent = new Intent(Intent.ACTION_VIEW);
                                         if (apkUri != null) {
-                                            Intent installIntent = new Intent(Intent.ACTION_VIEW);
                                             installIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
-                                            installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                            context.startActivity(installIntent);
+                                        } else if (downloadedFile.exists()) {
+                                            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                                            StrictMode.setVmPolicy(builder.build());
+                                            installIntent.setDataAndType(Uri.fromFile(downloadedFile), "application/vnd.android.package-archive");
                                         }
+                                        installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                        context.startActivity(installIntent);
                                     } catch (Exception ex) {
                                         Toast.makeText(MainActivity.this, "डाउनलोड पूर्ण हुआ! डाउनलोड्स फोल्डर से इंस्टॉल करें", Toast.LENGTH_LONG).show();
                                     }
@@ -751,21 +802,25 @@ public class MainActivity extends Activity {
         try {
             android.app.NotificationManager nm = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             if (nm == null) return;
-            String channelId = "yuva_shakti_greetings";
+            String channelId = "yuva_shakti_alerts_channel";
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 android.app.NotificationChannel channel = new android.app.NotificationChannel(
                     channelId,
-                    "त्योहार व शुभकामनाएं",
-                    android.app.NotificationManager.IMPORTANCE_DEFAULT
+                    "युवा शक्ति ग्रुप अलर्ट एवं सूचनाएं",
+                    android.app.NotificationManager.IMPORTANCE_HIGH
                 );
-                channel.setDescription("जन्मदिन, वर्षगांठ एवं हिंदू पर्वों की सूचनाएं");
+                channel.setDescription("सुविचार, अंशदान स्मरण एवं महत्वपूर्ण सूचनाएं");
+                channel.enableVibration(true);
+                channel.enableLights(true);
+                channel.setLightColor(Color.parseColor("#ea580c"));
+                channel.setLockscreenVisibility(android.app.Notification.VISIBILITY_PUBLIC);
                 nm.createNotificationChannel(channel);
             }
 
             Intent notifyIntent = new Intent(this, MainActivity.class);
             notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             android.app.PendingIntent pendingIntent = android.app.PendingIntent.getActivity(
-                this, 0, notifyIntent,
+                this, (int) System.currentTimeMillis(), notifyIntent,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? (android.app.PendingIntent.FLAG_IMMUTABLE | android.app.PendingIntent.FLAG_UPDATE_CURRENT) : android.app.PendingIntent.FLAG_UPDATE_CURRENT
             );
 
@@ -778,11 +833,15 @@ public class MainActivity extends Activity {
 
             builder.setContentTitle(title)
                    .setContentText(message)
-                   .setSmallIcon(android.R.drawable.ic_dialog_info)
+                   .setStyle(new android.app.Notification.BigTextStyle().bigText(message))
+                   .setSmallIcon(R.mipmap.ic_launcher)
+                   .setDefaults(android.app.Notification.DEFAULT_ALL)
+                   .setPriority(android.app.Notification.PRIORITY_HIGH)
                    .setAutoCancel(true)
                    .setContentIntent(pendingIntent);
 
-            nm.notify(101, builder.build());
+            int notifId = (int) (System.currentTimeMillis() % 1000000);
+            nm.notify(notifId, builder.build());
         } catch (Exception ignored) {}
     }
 
