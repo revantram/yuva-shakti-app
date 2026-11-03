@@ -3,15 +3,18 @@ package com.yuvashaktigroup.app;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import java.util.List;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
@@ -404,36 +407,115 @@ public class MainActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    File apkFile = new File("/sdcard/Download/YuvaShaktiGroup.apk");
-                    if (!apkFile.exists()) {
-                        File source = new File(getPackageCodePath());
-                        copyFile(source, apkFile);
-                    }
-
-                    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                    StrictMode.setVmPolicy(builder.build());
-
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("application/vnd.android.package-archive");
-                    if (apkFile.exists()) {
-                        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(apkFile));
-                    }
-                    String shareText = "🚩 *युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)* 🚩\n\nआधिकारिक परिवार प्रबंधन एवं बही-खाता एप्लिकेशन डाउनलोड करें:\n\n📲 APK सीधा डाउनलोड लिंक:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh";
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "युवा शक्ति ग्रुप ऐप (भाटी परिवार)");
-                    startActivity(Intent.createChooser(shareIntent, "ऐप व्हाट्सएप पर शेयर करें"));
-                } catch (Exception e) {
-                    try {
-                        String shareText = "🚩 *युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)* 🚩\n\nआधिकारिक परिवार प्रबंधन एवं बही-खाता एप्लिकेशन डाउनलोड करें:\n\n📲 APK सीधा डाउनलोड लिंक:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh";
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?text=" + Uri.encode(shareText)));
-                        startActivity(intent);
-                    } catch (Exception ex) {
-                        Toast.makeText(MainActivity.this, "शेयर करने में असमर्थ: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
+                Toast.makeText(MainActivity.this, "📦 एप्लिकेशन APK तैयार हो रही है...", Toast.LENGTH_SHORT).show();
             }
         });
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    File source = new File(getPackageCodePath());
+                    if (!source.exists() || source.length() == 0) {
+                        source = new File(getApplicationInfo().sourceDir);
+                    }
+
+                    File apkDir = new File(getCacheDir(), "shared_apk");
+                    if (!apkDir.exists()) {
+                        apkDir.mkdirs();
+                    }
+                    File shareApk = new File(apkDir, "YuvaShaktiGroup.apk");
+
+                    if (!shareApk.exists() || shareApk.length() != source.length()) {
+                        copyFile(source, shareApk);
+                    }
+
+                    try {
+                        File extCache = getExternalCacheDir();
+                        if (extCache != null) {
+                            File extApkDir = new File(extCache, "shared_apk");
+                            if (!extApkDir.exists()) extApkDir.mkdirs();
+                            File extShareApk = new File(extApkDir, "YuvaShaktiGroup.apk");
+                            if (!extShareApk.exists() || extShareApk.length() != source.length()) {
+                                copyFile(source, extShareApk);
+                            }
+                        }
+                    } catch (Exception ignored) {}
+
+                    try {
+                        File dlApk = new File("/sdcard/Download/YuvaShaktiGroup.apk");
+                        if (!dlApk.exists() || dlApk.length() != source.length()) {
+                            copyFile(source, dlApk);
+                        }
+                    } catch (Exception ignored) {}
+
+                    final Uri apkUri = Uri.parse("content://" + AppFileProvider.AUTHORITY + "/shared_apk/YuvaShaktiGroup.apk");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                                shareIntent.setType("application/vnd.android.package-archive");
+                                shareIntent.putExtra(Intent.EXTRA_STREAM, apkUri);
+
+                                String shareText = "🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n"
+                                    + "आधिकारिक परिवार प्रबंधन एवं बही-खाता एप्लिकेशन (APK फाइल)।\n\n"
+                                    + "📲 *सीधा APK डाउनलोड लिंक:*\n"
+                                    + "https://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n\n"
+                                    + "💬 *व्हाट्सएप ग्रुप लिंक:*\n"
+                                    + "https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh";
+
+                                shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+                                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "युवा शक्ति ग्रुप ऐप APK");
+
+                                shareIntent.setClipData(ClipData.newRawUri("YuvaShaktiGroup.apk", apkUri));
+                                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                                List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(shareIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                                for (ResolveInfo resolveInfo : resInfoList) {
+                                    String packageName = resolveInfo.activityInfo.packageName;
+                                    grantUriPermission(packageName, apkUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                }
+
+                                boolean whatsappFound = false;
+                                for (String pkg : new String[]{"com.whatsapp", "com.whatsapp.w4b"}) {
+                                    try {
+                                        getPackageManager().getPackageInfo(pkg, 0);
+                                        shareIntent.setPackage(pkg);
+                                        grantUriPermission(pkg, apkUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                        whatsappFound = true;
+                                        break;
+                                    } catch (Exception ignored) {}
+                                }
+
+                                if (!whatsappFound) {
+                                    shareIntent.setPackage(null);
+                                }
+
+                                try {
+                                    startActivity(shareIntent);
+                                } catch (Exception ex) {
+                                    shareIntent.setPackage(null);
+                                    Intent chooser = Intent.createChooser(shareIntent, "युवा शक्ति ऐप APK शेयर करें");
+                                    chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    startActivity(chooser);
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(MainActivity.this, "शेयर त्रुटि: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                } catch (final Exception e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "APK तैयार करने में त्रुटि: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     public void shareGeneratedImage(final String base64Data, final String caption) {
@@ -447,34 +529,54 @@ public class MainActivity extends Activity {
                     }
                     byte[] imageBytes = Base64.decode(cleanBase64, Base64.DEFAULT);
 
-                    File picturesDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "YuvaShakti");
-                    if (!picturesDir.exists()) {
-                        picturesDir.mkdirs();
+                    // 1. Save to external Pictures directory for user's photo gallery
+                    try {
+                        File picturesDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "YuvaShakti");
+                        if (!picturesDir.exists()) {
+                            picturesDir.mkdirs();
+                        }
+                        File imageFile = new File(picturesDir, "suvichar_" + System.currentTimeMillis() + ".jpg");
+                        FileOutputStream fos = new FileOutputStream(imageFile);
+                        fos.write(imageBytes);
+                        fos.flush();
+                        fos.close();
+                        MediaScannerConnection.scanFile(MainActivity.this, new String[]{imageFile.getAbsolutePath()}, new String[]{"image/jpeg"}, null);
+                    } catch (Exception ignored) {}
+
+                    // 2. Save to internal cache for secure content:// URI sharing
+                    File cacheImgDir = new File(getCacheDir(), "shared_images");
+                    if (!cacheImgDir.exists()) {
+                        cacheImgDir.mkdirs();
                     }
-                    File imageFile = new File(picturesDir, "suvichar_" + System.currentTimeMillis() + ".jpg");
-                    FileOutputStream fos = new FileOutputStream(imageFile);
-                    fos.write(imageBytes);
-                    fos.flush();
-                    fos.close();
+                    File cacheImage = new File(cacheImgDir, "suvichar_" + System.currentTimeMillis() + ".jpg");
+                    FileOutputStream fos2 = new FileOutputStream(cacheImage);
+                    fos2.write(imageBytes);
+                    fos2.flush();
+                    fos2.close();
 
-                    MediaScannerConnection.scanFile(MainActivity.this, new String[]{imageFile.getAbsolutePath()}, new String[]{"image/jpeg"}, null);
-
-                    StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                    StrictMode.setVmPolicy(builder.build());
+                    Uri imageUri = Uri.parse("content://" + AppFileProvider.AUTHORITY + "/shared_images/" + cacheImage.getName());
 
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("image/jpeg");
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageFile));
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
                     if (caption != null && !caption.isEmpty()) {
                         shareIntent.putExtra(Intent.EXTRA_TEXT, caption);
                     }
+                    shareIntent.setClipData(ClipData.newRawUri("suvichar.jpg", imageUri));
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(shareIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                    for (ResolveInfo resolveInfo : resInfoList) {
+                        String packageName = resolveInfo.activityInfo.packageName;
+                        grantUriPermission(packageName, imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    }
 
                     boolean whatsappFound = false;
                     for (String pkg : new String[]{"com.whatsapp", "com.whatsapp.w4b"}) {
                         try {
                             getPackageManager().getPackageInfo(pkg, 0);
                             shareIntent.setPackage(pkg);
+                            grantUriPermission(pkg, imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             whatsappFound = true;
                             break;
                         } catch (Exception ignored) {}
@@ -487,7 +589,9 @@ public class MainActivity extends Activity {
                         startActivity(shareIntent);
                     } catch (Exception ex) {
                         shareIntent.setPackage(null);
-                        startActivity(Intent.createChooser(shareIntent, "सुविचार फोटो शेयर करें"));
+                        Intent chooser = Intent.createChooser(shareIntent, "सुविचार फोटो शेयर करें");
+                        chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(chooser);
                     }
                 } catch (Exception e) {
                     Toast.makeText(MainActivity.this, "फोटो शेयर करने में त्रुटि: " + e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -2146,6 +2146,11 @@
       <div id="headerUserGreeting" style="font-size:10.5px; font-weight:800; color:#38bdf8; margin-top:1px; letter-spacing:0.2px;">(अतिथि)</div>
     </div>
     <div class="header-actions" id="mainHeaderActions" style="display:flex; align-items:center; gap:6px; justify-content:flex-end;">
+      <!-- 📤 Share App Button (Direct WhatsApp APK Send) -->
+      <button class="notif-bell-btn" onclick="shareAppDirectly()" title="ऐप APK शेयर करें (WhatsApp)" style="position:relative; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.12); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.18); color:#ffffff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:13px; box-shadow:0 2px 6px rgba(0,0,0,0.25); transition:transform 0.15s;">
+        <i class="fa-solid fa-share-nodes"></i>
+      </button>
+
       <!-- 🔔 Notification Center Bell Button -->
       <button class="notif-bell-btn" id="notifBellBtn" onclick="openNotificationCenterModal()" title="सूचनाएं (Notifications)" style="position:relative; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.12); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.18); color:#ffffff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:13px; box-shadow:0 2px 6px rgba(0,0,0,0.25); transition:transform 0.15s;">
         <i class="fa-solid fa-bell"></i>
@@ -2689,7 +2694,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.4.5 (बिल्ड कोड: 31)
+              v4.4.6 (बिल्ड कोड: 32)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -2723,19 +2728,19 @@
             </div>
           </div>
 
-          <!-- 2. APK Send (ऐप भेजें) -->
+          <!-- 2. APK Send (व्हाट्सएप पर सीधी ऐप भेजें) -->
           <div class="settings-list-item" onclick="shareAppDirectly()" style="padding: 10px 4px; border-bottom: 1px solid var(--border-color); cursor: pointer;">
             <div class="settings-item-left">
               <div class="ios-icon-tile ios-icon-orange" style="width: 32px; height: 32px; font-size: 14px; border-radius: 9px; background: linear-gradient(135deg, #ea580c, #c2410c);">
                 <i class="fa-solid fa-paper-plane"></i>
               </div>
               <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);">APK Send</div>
-                <div style="font-size: 11px; color: var(--text-muted);">परिवारजनों को युवा शक्ति ऐप APK भेजें</div>
+                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);">ऐप शेयर करें (APK Send)</div>
+                <div style="font-size: 11px; color: var(--text-muted);">व्हाट्सएप पर सीधी ऐप (APK फाइल) भेजें</div>
               </div>
             </div>
             <div class="settings-item-right">
-              <span class="ios-value-badge ios-value-orange">शेयर</span>
+              <span class="ios-value-badge ios-value-orange">APK शेयर</span>
               <i class="fa-solid fa-chevron-right ios-chevron"></i>
             </div>
           </div>
@@ -3072,7 +3077,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.4.5 (बिल्ड कोड: 31)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.4.6 (बिल्ड कोड: 32)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -4039,7 +4044,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.4.5";
+    const APP_VERSION = "4.4.6";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4756,10 +4761,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 31)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 32)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 31)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 32)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -4878,7 +4883,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 31)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 32)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -4889,7 +4894,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 31)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 32)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -8550,13 +8555,14 @@
     }
 
     function shareAppDirectly() {
+      showToast("📦 व्हाट्सएप पर युवा शक्ति ऐप (APK) शेयर हो रहा है...", "info");
       if (window.AndroidApp && typeof window.AndroidApp.shareAppApk === 'function') {
         window.AndroidApp.shareAppApk();
         return;
       }
-      const shareText = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)* 🚩\n\nआधिकारिक परिवार प्रबंधन एवं बही-खाता एप्लिकेशन डाउनलोड करें:\n\n📲 APK सीधा डाउनलोड लिंक:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
+      const shareText = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\nआधिकारिक परिवार प्रबंधन एवं बही-खाता एप्लिकेशन (सीधी APK फाइल डाउनलोड करें):\n\n📲 APK सीधा डाउनलोड लिंक:\nhttps://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk\n\n💬 व्हाट्सएप ग्रुप से जुड़ें:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
-      window.open(url, '_blank');
+      openWhatsAppUrl(url);
     }
 
     function exportLedgerToCSV() {
