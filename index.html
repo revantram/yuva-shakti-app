@@ -2689,7 +2689,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.4.4 (बिल्ड कोड: 30)
+              v4.4.5 (बिल्ड कोड: 31)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -3072,7 +3072,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.4.4 (बिल्ड कोड: 30)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.4.5 (बिल्ड कोड: 31)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -4039,7 +4039,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.4.4";
+    const APP_VERSION = "4.4.5";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4756,10 +4756,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 30)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 31)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 30)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 31)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -4878,7 +4878,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 30)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 31)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -4889,7 +4889,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 30)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 31)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -5514,19 +5514,14 @@
       ctx.restore();
     }
 
-    // 🌟 4K Ultra-HD Suvichar Image Card Generator (2160x2160 Resolution)
-    // As requested: "फोटो की quality 4k rakho, लेफ्ट साइड में फोटो बड़ा रखो, राइट साइड में नाम बड़ा रखो"
+    // 🌟 4K Ultra-HD Suvichar Image Card Generator (Dynamic Content-Fit Height)
+    // As requested:
+    // 1. "is niche wale Khali area ko hatao" -> Dynamic height based on content, zero empty bottom space
+    // 2. "aur uska naam bada kar do Thoda aur" -> Sender name enlarged (88px bold, prestigious styling)
+    // 3. "left side me photo bada" -> 270px diameter avatar with dual gold rings
+    // 4. "application download ka niche link bhi sath mein bheja karo iske" -> Download banner pill on card + link in WhatsApp share caption
     async function generateSuvicharCardDataUrl(item) {
       const width = 2160;
-      const height = 2160;
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return null;
-
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
 
       const sender = getSuvicharSender();
       let senderImg = null;
@@ -5537,6 +5532,76 @@
           console.warn("Could not load sender photo for canvas:", e);
         }
       }
+
+      // Step 1: Pre-calculate quote lines and dynamic card height
+      const quoteText = `“${item.quote}”`;
+      let quoteFontSize = 66;
+      if (quoteText.length > 120) quoteFontSize = 58;
+      if (quoteText.length > 220) quoteFontSize = 50;
+
+      const cardX = 140;
+      const cardY = 370;
+      const cardW = width - 280; // 1880px
+      const maxTextWidth = cardW - 200; // 1680px
+      const lineHeight = Math.round(quoteFontSize * 1.55);
+
+      // Measure quote lines using a dummy canvas context
+      const measureCanvas = document.createElement("canvas");
+      const measureCtx = measureCanvas.getContext("2d");
+      measureCtx.font = `600 ${quoteFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
+
+      const words = quoteText.split(/\s+/);
+      const quoteLines = [];
+      let curLine = '';
+      for (let n = 0; n < words.length; n++) {
+        const testLine = curLine + (curLine ? ' ' : '') + words[n];
+        const metrics = measureCtx.measureText(testLine);
+        if (metrics.width > maxTextWidth && n > 0) {
+          quoteLines.push(curLine);
+          curLine = words[n];
+        } else {
+          curLine = testLine;
+        }
+      }
+      if (curLine) quoteLines.push(curLine);
+
+      const quoteStartY = cardY + 180;
+      const quoteEndY = quoteStartY + (quoteLines.length * lineHeight);
+
+      // Sender Box dimensions
+      const senderBoxW = cardW - 120; // 1760px
+      const senderBoxH = 370; // Generous height for 270px avatar and large bold text
+      const senderBoxX = (width - senderBoxW) / 2;
+      const senderBoxY = quoteEndY + 45;
+
+      // Divider & Author line
+      const divY = senderBoxY + senderBoxH + 45;
+      const authorY = divY + 55;
+
+      // Card bottom boundary
+      const cardBottom = authorY + 75;
+      const cardH = cardBottom - cardY;
+
+      // Footer texts & App download link badge outside the card
+      const footerY1 = cardBottom + 65;
+      const footerY2 = footerY1 + 55;
+      const appBadgeY = footerY2 + 50;
+      const appBadgeH = 88;
+      const appBadgeW = 1600;
+      const appBadgeX = (width - appBadgeW) / 2;
+
+      // Total dynamic canvas height snugly fitted to content!
+      const height = appBadgeY + appBadgeH + 90;
+
+      // Step 2: Initialize 4K canvas with exact dynamic content height
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
 
       // 1. Warm saffron & golden devotional background gradient
       const bgGrad = ctx.createLinearGradient(0, 0, width, height);
@@ -5558,7 +5623,7 @@
       ctx.fill();
       ctx.restore();
 
-      // 2. Dual Ornate Golden Borders
+      // 2. Dual Ornate Golden Borders (Dynamic Height)
       ctx.strokeStyle = "#d97706";
       ctx.lineWidth = 10;
       canvasRoundRect(ctx, 60, 60, width - 120, height - 120, 60, false, true);
@@ -5573,7 +5638,7 @@
       const pillWidth = 1560;
       const pillHeight = 126;
       const pillX = (width - pillWidth) / 2;
-      const pillY = 126;
+      const pillY = 120;
 
       ctx.save();
       ctx.shadowColor = "rgba(234, 88, 12, 0.35)";
@@ -5586,7 +5651,6 @@
       canvasRoundRect(ctx, pillX, pillY, pillWidth, pillHeight, 63, true, false);
       ctx.restore();
 
-      // Delicate gold highlight border on pill
       ctx.strokeStyle = "rgba(254, 215, 170, 0.8)";
       ctx.lineWidth = 3;
       canvasRoundRect(ctx, pillX, pillY, pillWidth, pillHeight, 63, false, true);
@@ -5603,12 +5667,7 @@
       ctx.font = "600 42px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.fillText(`☀️ ${todayDateStr} | आज का प्रेरक विचार`, width / 2, pillY + pillHeight + 54);
 
-      // 4. Center Quote Card
-      const cardX = 140;
-      const cardY = 380;
-      const cardW = width - 280; // 1880
-      const cardH = 1420;
-
+      // 4. Center Quote Card (Dynamic snug content-fit)
       ctx.save();
       ctx.shadowColor = "rgba(180, 83, 9, 0.18)";
       ctx.shadowBlur = 55;
@@ -5628,35 +5687,18 @@
       ctx.textBaseline = "middle";
       ctx.fillText("❝", width / 2, cardY + 95);
 
-      // Render Quote Text
-      const quoteText = `“${item.quote}”`;
-      let quoteFontSize = 66;
-      if (quoteText.length > 120) quoteFontSize = 58;
-      if (quoteText.length > 200) quoteFontSize = 50;
-
+      // Render Quote Text Lines
       ctx.fillStyle = "#0f172a";
       ctx.font = `600 ${quoteFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
-
-      const maxTextWidth = cardW - 200; // 1680px
-      const lineHeight = Math.round(quoteFontSize * 1.55);
-      const startY = cardY + 185;
-      const lastY = drawWrappedText(ctx, quoteText, width / 2, startY, maxTextWidth, lineHeight);
-
-      // 4.5. 📸 LARGE SENDER SECTION (Left: Big Photo, Right: Big Separate Name)
-      const senderBoxW = cardW - 120; // 1760px
-      const senderBoxH = 340; // Spacious height
-      const senderBoxX = (width - senderBoxW) / 2;
-
-      // Vertical position calculation
-      const bottomLimit = cardY + cardH - 180;
-      let senderBoxY = lastY + 50;
-      if (bottomLimit - (senderBoxY + senderBoxH) > 40) {
-        senderBoxY = lastY + Math.max(45, (bottomLimit - lastY - senderBoxH) / 2);
+      let drawY = quoteStartY;
+      for (const line of quoteLines) {
+        ctx.fillText(line, width / 2, drawY);
+        drawY += lineHeight;
       }
 
-      // Draw elegant sender card container
+      // 4.5. 📸 LARGE SENDER SECTION (Left: Big 270px Photo, Right: Big Prominent Name)
       ctx.save();
       ctx.shadowColor = "rgba(234, 88, 12, 0.14)";
       ctx.shadowBlur = 28;
@@ -5680,8 +5722,8 @@
       ctx.lineTo(senderBoxX, senderBoxY + senderBoxH - 44);
       ctx.stroke();
 
-      // --- 📸 LEFT SIDE: LARGE PROMINENT PHOTO AVATAR (240px Diameter) ---
-      const avRadius = 120; // 240px diameter!
+      // --- 📸 LEFT SIDE: LARGE PROMINENT PHOTO AVATAR (270px Diameter) ---
+      const avRadius = 135; // 270px diameter!
       const avCx = senderBoxX + avRadius + 50;
       const avCy = senderBoxY + senderBoxH / 2;
 
@@ -5716,7 +5758,7 @@
         ctx.arc(avCx, avCy, avRadius, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 95px 'Noto Sans Devanagari', 'Inter', sans-serif";
+        ctx.font = "bold 105px 'Noto Sans Devanagari', 'Inter', sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         const initial = (sender.name || 'भा').trim().charAt(0);
@@ -5729,51 +5771,53 @@
       ctx.textAlign = "left";
 
       // Line 1: Badge Pill "✨ सुविचार प्रेषक"
-      const badgeW = 320;
-      const badgeH = 50;
-      const badgeY = senderBoxY + 40;
+      const badgeW = 340;
+      const badgeH = 52;
+      const badgeY = senderBoxY + 38;
       ctx.save();
       const badgeGrad = ctx.createLinearGradient(textLeft, badgeY, textLeft + badgeW, badgeY + badgeH);
       badgeGrad.addColorStop(0, "#ffedd5");
       badgeGrad.addColorStop(1, "#fed7aa");
       ctx.fillStyle = badgeGrad;
-      canvasRoundRect(ctx, textLeft, badgeY, badgeW, badgeH, 25, true, false);
+      canvasRoundRect(ctx, textLeft, badgeY, badgeW, badgeH, 26, true, false);
       ctx.strokeStyle = "#f97316";
-      ctx.lineWidth = 2;
-      canvasRoundRect(ctx, textLeft, badgeY, badgeW, badgeH, 25, false, true);
+      ctx.lineWidth = 2.5;
+      canvasRoundRect(ctx, textLeft, badgeY, badgeW, badgeH, 26, false, true);
       ctx.restore();
 
       ctx.fillStyle = "#9a3412";
-      ctx.font = "bold 28px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.font = "bold 30px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textBaseline = "middle";
-      ctx.fillText("✨ सुविचार प्रेषक", textLeft + 22, badgeY + badgeH / 2);
+      ctx.fillText("✨ सुविचार प्रेषक", textLeft + 24, badgeY + badgeH / 2);
 
-      // Line 2: Member Name (VERY BIG, PROMINENT, BOLD)
+      // Line 2: Member Name (VERY BIG, PROMINENT, BOLD 88px)
       ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.08)";
-      ctx.shadowBlur = 8;
-      ctx.shadowOffsetY = 3;
-      ctx.fillStyle = "#431407";
-      let nameFontSize = 68;
-      if ((sender.name || "").length > 18) nameFontSize = 56;
+      ctx.shadowColor = "rgba(0, 0, 0, 0.10)";
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetY = 4;
+      ctx.fillStyle = "#3e1307";
+      let nameFontSize = 88;
+      const sName = sender.name || "भाटी परिवार सदस्य";
+      if (sName.length > 16) nameFontSize = 74;
+      if (sName.length > 22) nameFontSize = 62;
       ctx.font = `bold ${nameFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
       ctx.textBaseline = "top";
-      ctx.fillText(sender.name || "भाटी परिवार सदस्य", textLeft, senderBoxY + 108);
+      ctx.fillText(sName, textLeft, senderBoxY + 104);
       ctx.restore();
 
       // Line 3: Role & Designation
       ctx.fillStyle = "#ea580c";
-      ctx.font = "bold 38px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.font = "bold 40px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textBaseline = "top";
-      ctx.fillText(sender.role || "🚩 भाटी परिवार • कुचेरा (युवा शक्ति ग्रुप)", textLeft, senderBoxY + 195);
+      ctx.fillText(sender.role || "🚩 भाटी परिवार • कुचेरा (युवा शक्ति ग्रुप)", textLeft, senderBoxY + 104 + nameFontSize + 16);
 
       // Line 4: Group & Village Tagline
       ctx.fillStyle = "#9a3412";
-      ctx.font = "600 30px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      ctx.fillText("📍 कुचेरा (नागौर) • सेवा, संस्कार व संगठन", textLeft, senderBoxY + 252);
+      ctx.font = "600 32px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textBaseline = "top";
+      ctx.fillText("📍 कुचेरा (नागौर) • सेवा, संस्कार व संगठन", textLeft, senderBoxY + 104 + nameFontSize + 16 + 52);
 
       // Divider line
-      const divY = senderBoxY + senderBoxH + 42;
       ctx.strokeStyle = "#fed7aa";
       ctx.lineWidth = 3.5;
       ctx.setLineDash([14, 12]);
@@ -5785,22 +5829,44 @@
 
       // Author / Source Line
       ctx.fillStyle = "#ea580c";
-      ctx.font = "bold 48px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.font = "bold 50px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(`🪶 ${item.author || "युवा शक्ति विचार वाटिका"}`, width / 2, divY + 54);
+      ctx.fillText(`🪶 ${item.author || "युवा शक्ति विचार वाटिका"}`, width / 2, authorY);
 
       // 5. Bottom Devotional Banner (Outside Main Card)
-      const footerY = cardY + cardH + 72;
       ctx.fillStyle = "#9a3412";
       ctx.font = "bold 44px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("🪔 धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन 🪔", width / 2, footerY);
+      ctx.fillText("🪔 धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन 🪔", width / 2, footerY1);
 
       ctx.fillStyle = "#7c2d12";
       ctx.font = "600 36px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      ctx.fillText("युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) | सप्रेम भेंट", width / 2, footerY + 56);
+      ctx.fillText("युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) | सप्रेम भेंट", width / 2, footerY2);
+
+      // 6. 📲 APP DOWNLOAD LINK BADGE PILL (On Image Canvas)
+      ctx.save();
+      ctx.shadowColor = "rgba(30, 58, 138, 0.25)";
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 8;
+      const appGrad = ctx.createLinearGradient(appBadgeX, appBadgeY, appBadgeX + appBadgeW, appBadgeY + appBadgeH);
+      appGrad.addColorStop(0, "#1e3a8a");
+      appGrad.addColorStop(0.5, "#0369a1");
+      appGrad.addColorStop(1, "#0284c7");
+      ctx.fillStyle = appGrad;
+      canvasRoundRect(ctx, appBadgeX, appBadgeY, appBadgeW, appBadgeH, 44, true, false);
+      ctx.restore();
+
+      ctx.strokeStyle = "rgba(254, 215, 170, 0.8)";
+      ctx.lineWidth = 3;
+      canvasRoundRect(ctx, appBadgeX, appBadgeY, appBadgeW, appBadgeH, 44, false, true);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 38px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("📲 ऐप डाउनलोड करें: bit.ly/yuva-shakti-app (नवीनतम APK)", width / 2, appBadgeY + appBadgeH / 2);
 
       try {
         return canvas.toDataURL("image/jpeg", 0.98);
@@ -5876,13 +5942,14 @@
     async function shareDailySuvichar() {
       const item = DAILY_SUVICHAR_LIST[currentSuvicharIndex >= 0 ? currentSuvicharIndex : (new Date().getDate() - 1) % DAILY_SUVICHAR_LIST.length];
       const sender = getSuvicharSender();
+      const appDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
       showToast("📸 4K अल्ट्रा-HD सुविचार फोटो तैयार हो रही है...", "info");
 
       try {
         const dataUrl = await generateSuvicharCardDataUrl(item);
         if (!dataUrl) throw new Error("फोटो जनरेट नहीं हो सकी");
 
-        const caption = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author || "युवा शक्ति विचार वाटिका"}*\n\n👤 *सुविचार प्रेषक:* ${sender.name}\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*`;
+        const caption = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author || "युवा शक्ति विचार वाटिका"}*\n\n👤 *सुविचार प्रेषक:* ${sender.name}\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n\n📲 *युवा शक्ति ग्रुप ऐप डाउनलोड करें (सीधा APK लिंक):*\n${appDownloadUrl}`;
 
         if (window.AndroidApp && typeof window.AndroidApp.shareImage === 'function') {
           window.AndroidApp.shareImage(dataUrl, caption);
@@ -5911,7 +5978,7 @@
         fallbackDownloadAndShareImage(dataUrl, caption);
       } catch (e) {
         console.error("Suvichar photo share error:", e);
-        const text = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author}*\n\n👤 *सुविचार प्रेषक:* ${sender.name}\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*`;
+        const text = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author}*\n\n👤 *सुविचार प्रेषक:* ${sender.name}\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n\n📲 *युवा शक्ति ग्रुप ऐप डाउनलोड करें (सीधा APK लिंक):*\n${appDownloadUrl}`;
         shareCustomText(text, "आज का सुविचार");
       }
     }
