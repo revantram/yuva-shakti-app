@@ -2307,11 +2307,13 @@
         <input type="text" id="memberSearchInput" class="search-input" placeholder="सदस्य नाम या मोबाइल नंबर से खोजें..." oninput="handleMemberSearch()" data-i18n-ph="search_placeholder">
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:12px; color:var(--text-muted);">
-        <span id="memberCountText">कुल सदस्य: 0</span>
-        <button onclick="switchTab('form')" style="background:none; border:none; color:#2563eb; font-weight:600; cursor:pointer; font-size:12px;">
-          <i class="fa-solid fa-plus"></i> <span data-i18n="nav_add_member">नया सदस्य जोड़ें</span>
-        </button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:12px; color:var(--text-muted); flex-wrap:wrap; gap:8px;">
+        <span id="memberCountText" style="font-weight:700;">कुल सदस्य: 0</span>
+        <div style="display:flex; gap:6px;">
+          <button onclick="openAddFamilyMemberModal()" style="background:linear-gradient(135deg, #059669, #047857); border:none; color:white; font-weight:800; cursor:pointer; font-size:11.5px; padding:6px 12px; border-radius:10px; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 6px rgba(5,150,105,0.25);">
+            <i class="fa-solid fa-user-plus"></i> <span>+ परिवार सदस्य जोड़ें</span>
+          </button>
+        </div>
       </div>
 
       <div id="membersList">
@@ -2640,6 +2642,17 @@
           <input type="date" id="memAnniversary">
         </div>
 
+        <div class="form-group" id="memCategoryGroup">
+          <label><i class="fa-solid fa-layer-group" style="color:#059669;"></i> <span>सदस्य श्रेणी (Group / Family Category)</span></label>
+          <select id="memCategory" style="width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-main); font-weight:700; font-size:13px;">
+            <option value="family" selected>👨‍👩‍👧‍👦 भाटी परिवार के अन्य सदस्य (विस्तारित परिवार)</option>
+            <option value="core">🚩 युवा शक्ति ग्रुप (मुख्य कार्यकारिणी - 11 सदस्य पूर्ण)</option>
+          </select>
+          <div style="font-size:11px; color:#64748b; margin-top:4px;">
+            मुख्य ग्रुप के 11 सदस्य पूरे हो चुके हैं। परिवार के अन्य सभी सदस्यों को 'विस्तारित परिवार' में जोड़ें।
+          </div>
+        </div>
+
         <div class="form-group" id="memTagGroup">
           <label><i class="fa-solid fa-id-badge" style="color:#d97706;"></i> <span>पद / पदनाम टैग (Designation Tag)</span></label>
           <input type="text" id="memTag" list="tagSuggestions" placeholder="उदा. संचालक, कोषाध्यक्ष, प्रबंधक, सदस्य...">
@@ -2705,7 +2718,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.4.8 (बिल्ड कोड: 34)
+              v4.4.9 (बिल्ड कोड: 35)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -3088,7 +3101,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.4.8 (बिल्ड कोड: 34)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.4.9 (बिल्ड कोड: 35)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -4094,7 +4107,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.4.8";
+    const APP_VERSION = "4.4.9";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -6586,9 +6599,11 @@
       });
 
       if (countText) {
+        const coreTotal = membersList.filter(m => m.memberCategory !== 'family').length;
+        const familyTotal = membersList.filter(m => m.memberCategory === 'family').length;
         countText.innerText = currentLang === 'en' ? 
-          `Total Members: ${membersList.length}${searchTerm ? ' (Filter: ' + filtered.length + ')' : ''}` :
-          `कुल सदस्य: ${membersList.length}${searchTerm ? ' (फ़िल्टर: ' + filtered.length + ')' : ''}`;
+          `Total: ${membersList.length} (Core: ${coreTotal} • Family: ${familyTotal})${searchTerm ? ' [Filter: ' + filtered.length + ']' : ''}` :
+          `कुल सदस्य: ${membersList.length} (मुख्य ग्रुप: ${coreTotal} • परिवार: ${familyTotal})${searchTerm ? ' [फ़िल्टर: ' + filtered.length + ']' : ''}`;
       }
 
       const pendingMembersCount = membersList.filter(x => !getMemberPaymentStatus(x).isPaid).length;
@@ -6638,17 +6653,19 @@
         return;
       }
 
-      filtered.forEach(m => {
+      function createMemberCardItem(m) {
         const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
         const payStatus = getMemberPaymentStatus(m);
         const firstChar = (m.name || 'U').trim().charAt(0);
 
-        const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : "");
+        const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : (m.memberCategory === 'family' ? "परिवार सदस्य" : ""));
         let tagBadgeHtml = "";
         if (memberTag === "संचालक") {
           tagBadgeHtml = `<span class="member-tag-badge sanchalak"><i class="fa-solid fa-crown"></i> संचालक</span>`;
+        } else if (m.memberCategory === 'family') {
+          tagBadgeHtml = `<span class="member-tag-badge family" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-people-roof"></i> ${escapeHtml(m.tag || 'परिवार सदस्य')}</span>`;
         } else if (memberTag) {
-          tagBadgeHtml = `<span class="member-tag-badge other">${memberTag}</span>`;
+          tagBadgeHtml = `<span class="member-tag-badge other">${escapeHtml(memberTag)}</span>`;
         }
 
         const card = document.createElement("div");
@@ -6656,7 +6673,7 @@
         card.onclick = () => openMemberProfileModal(m.id);
 
         const avatarHtml = m.photoUrl ? 
-          `<img src="${m.photoUrl}" alt="${m.name}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : 
+          `<img src="${m.photoUrl}" alt="${escapeHtml(m.name)}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : 
           firstChar;
 
         const statusBadgeHtml = isAdmin ? `
@@ -6677,14 +6694,14 @@
             <div class="avatar">${avatarHtml}</div>
             <div class="member-details">
               <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                <strong style="font-size:15px; color:var(--text-main);">${m.name}</strong>
+                <strong style="font-size:15px; color:var(--text-main);">${escapeHtml(m.name)}</strong>
                 ${tagBadgeHtml}
                 ${statusBadgeHtml}
                 ${quickReminderBtn}
                 ${isSelf ? `<span class="self-badge">${currentLang === 'en' ? 'You' : 'आप'}</span>` : ''}
               </div>
               <div class="member-subtext">
-                <span>📱 ${m.phone}</span>
+                <span>📱 ${escapeHtml(m.phone)}</span>
               </div>
             </div>
           </div>
@@ -6693,8 +6710,73 @@
             <i class="fa-solid fa-chevron-right"></i>
           </div>
         `;
-        container.appendChild(card);
-      });
+        return card;
+      }
+
+      // Separate core members and family members
+      const coreList = filtered.filter(m => m.memberCategory !== 'family');
+      const familyList = filtered.filter(m => m.memberCategory === 'family');
+
+      // 1. SECTION 1: Core Yuva Shakti Group (11 Core Members)
+      if (coreList.length > 0 || !searchTerm) {
+        const sec1Header = document.createElement("div");
+        sec1Header.style.cssText = "background:linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%); color:white; border-radius:14px; padding:11px 14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 3px 10px rgba(30,58,138,0.2);";
+        sec1Header.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:17px;">🚩</span>
+            <div>
+              <div style="font-size:13px; font-weight:800; letter-spacing:0.3px;">युवा शक्ति ग्रुप (मुख्य कार्यकारिणी)</div>
+              <div style="font-size:10.5px; opacity:0.9;">मासिक अमावस्या अंशदान समिति • 11 सदस्य (पूर्ण)</div>
+            </div>
+          </div>
+          <span style="background:rgba(255,255,255,0.22); color:white; font-size:11px; font-weight:800; padding:3px 9px; border-radius:12px;">${coreList.length} सदस्य</span>
+        `;
+        container.appendChild(sec1Header);
+
+        coreList.forEach(m => {
+          container.appendChild(createMemberCardItem(m));
+        });
+      }
+
+      // 2. SECTION 2: Extended Family Members (परिवार के अन्य सदस्य)
+      if (familyList.length > 0 || !searchTerm) {
+        const sec2Header = document.createElement("div");
+        sec2Header.style.cssText = "background:linear-gradient(135deg, #065f46 0%, #047857 100%); color:white; border-radius:14px; padding:11px 14px; margin:22px 0 10px 0; display:flex; justify-content:space-between; align-items:center; box-shadow:0 3px 10px rgba(6,95,70,0.2);";
+        sec2Header.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:17px;">👨‍👩‍👧‍👦</span>
+            <div>
+              <div style="font-size:13px; font-weight:800; letter-spacing:0.3px;">भाटी परिवार के अन्य सदस्य</div>
+              <div style="font-size:10.5px; opacity:0.9;">विस्तारित परिवार, बुजुर्ग, बच्चे एवं अन्य सदस्य</div>
+            </div>
+          </div>
+          <button onclick="openAddFamilyMemberModal()" style="background:#ffffff; color:#065f46; border:none; padding:5px 11px; border-radius:9px; font-weight:800; font-size:11.5px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 2px 5px rgba(0,0,0,0.15);">
+            <i class="fa-solid fa-plus"></i> <span>सदस्य जोड़ें</span>
+          </button>
+        `;
+        container.appendChild(sec2Header);
+
+        if (familyList.length === 0) {
+          const emptyCard = document.createElement("div");
+          emptyCard.className = "ios-glass-card";
+          emptyCard.style.cssText = "background:rgba(6,95,70,0.03); border:1.5px dashed #a7f3d0; border-radius:16px; padding:18px 14px; text-align:center; color:#065f46; margin-bottom:12px;";
+          emptyCard.innerHTML = `
+            <div style="font-size:30px; margin-bottom:6px;">👨‍👩‍👧‍👦</div>
+            <div style="font-weight:800; font-size:13.5px; margin-bottom:4px; color:#064e3b;">परिवार के अन्य सदस्यों को जोड़ें</div>
+            <div style="font-size:11.5px; color:#64748b; line-height:1.5; margin-bottom:12px;">
+              मुख्य ग्रुप के 11 सदस्य पूर्ण हैं। परिवार के अन्य सभी सदस्यों, बच्चों और बुजुर्गों को यहाँ जोड़ें ताकि सभी एक परिवार के रूप में जुड़े रहें।
+            </div>
+            <button onclick="openAddFamilyMemberModal()" class="btn-main" style="background:linear-gradient(135deg, #10b981, #059669); border-radius:10px; padding:7px 14px; font-size:12px; font-weight:800; display:inline-flex; align-items:center; gap:6px; box-shadow:0 3px 8px rgba(16,185,129,0.3);">
+              <i class="fa-solid fa-user-plus"></i> + नया परिवार सदस्य जोड़ें
+            </button>
+          `;
+          container.appendChild(emptyCard);
+        } else {
+          familyList.forEach(m => {
+            container.appendChild(createMemberCardItem(m));
+          });
+        }
+      }
     }
 
     function openMemberProfileModal(memberId) {
@@ -7042,6 +7124,8 @@
         finalTag = "संचालक";
       }
 
+      const category = document.getElementById("memCategory")?.value || "family";
+
       try {
         const payload = {
           name,
@@ -7051,6 +7135,7 @@
           dob: dob || null,
           anniversary: anniversary || null,
           tag: finalTag,
+          memberCategory: category,
           updatedAt: new Date()
         };
 
@@ -7084,6 +7169,9 @@
       if (document.getElementById("memTag")) {
         document.getElementById("memTag").value = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) ? "संचालक" : "");
       }
+      if (document.getElementById("memCategory")) {
+        document.getElementById("memCategory").value = m.memberCategory || "core";
+      }
 
       document.getElementById("formTitle").innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:#2563eb;"></i> सदस्य विवरण संपादित करें`;
       document.getElementById("saveMemberBtn").innerHTML = `<i class="fa-solid fa-check"></i> अपडेट सहेजें`;
@@ -7102,10 +7190,29 @@
       if (document.getElementById("memTag")) {
         document.getElementById("memTag").value = "";
       }
+      if (document.getElementById("memCategory")) {
+        document.getElementById("memCategory").value = "family";
+      }
 
       document.getElementById("formTitle").innerHTML = `<i class="fa-solid fa-user-plus" style="color:#2563eb;"></i> नया सदस्य जोड़ें`;
       document.getElementById("saveMemberBtn").innerHTML = `<i class="fa-solid fa-floppy-disk"></i> सुरक्षित करें`;
       document.getElementById("cancelEditBtn").style.display = "none";
+    }
+
+    function openAddFamilyMemberModal() {
+      resetMemberForm();
+      if (document.getElementById("memCategory")) {
+        document.getElementById("memCategory").value = "family";
+      }
+      const titleEl = document.getElementById("formTitle");
+      if (titleEl) {
+        titleEl.innerHTML = `<i class="fa-solid fa-user-plus" style="color:#059669;"></i> परिवार सदस्य जोड़ें`;
+      }
+      switchTab('form');
+      setTimeout(() => {
+        const nameInput = document.getElementById("memName");
+        if (nameInput) nameInput.focus();
+      }, 150);
     }
 
     function promptDeleteMember(id, name) {
@@ -7695,13 +7802,13 @@
       // Calculate totals
       membersList.forEach(m => {
         const octIsPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
-        const novIsPaid = m.paidThisAmavasya ?? (m.novemberAmavasya?.isPaid ?? (m.paymentStatus === 'paid'));
+        const novIsPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
         if (octIsPaid) octPaidCount++;
         if (novIsPaid) novPaidCount++;
       });
 
       if (octCountEl) octCountEl.innerText = `${octPaidCount} सदस्य जमा`;
-      if (novCountEl) novCountEl.innerText = `${novPaidCount} सदस्य जमा`;
+      if (novCountEl) novCountEl.innerText = `${novPaidCount} सदस्य जमा (8 नव॰ आगामी)`;
 
       // Logged in member personal card
       if (personalCard) {
@@ -7709,11 +7816,11 @@
         if (myMember) {
           personalCard.style.display = "block";
           const octPaid = myMember.octoberAmavasya?.isPaid ?? (myMember.octoberPaid === true);
-          const novPaid = myMember.paidThisAmavasya ?? (myMember.novemberAmavasya?.isPaid ?? (myMember.paymentStatus === 'paid'));
-          const octAmt = octPaid ? (myMember.octoberAmavasya?.amount || 100) : 0;
-          const novAmt = novPaid ? (myMember.novemberAmavasya?.amount || 100) : 0;
+          const novPaid = (myMember.novemberAmavasya && myMember.novemberAmavasya.isPaid === true);
+          const octAmt = octPaid ? (Number(myMember.octoberAmavasya?.amount) || 50) : 0;
+          const novAmt = novPaid ? (Number(myMember.novemberAmavasya?.amount) || 100) : 0;
           const extraAmt = Number(myMember.extraContribution || 0);
-          const totalAmt = octAmt + novAmt + extraAmt;
+          const totalAmt = octAmt + (novPaid ? novAmt : 0) + extraAmt;
 
           personalCard.innerHTML = `
             <div style="background:linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(29, 78, 216, 0.04) 100%); border:1.5px solid #93c5fd; border-radius:14px; padding:12px;">
@@ -7760,11 +7867,11 @@
 
       filtered.forEach(m => {
         const octPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
-        const novPaid = m.paidThisAmavasya ?? (m.novemberAmavasya?.isPaid ?? (m.paymentStatus === 'paid'));
-        const octAmt = octPaid ? (m.octoberAmavasya?.amount || 100) : 0;
-        const novAmt = novPaid ? (m.novemberAmavasya?.amount || 100) : 0;
+        const novPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
+        const octAmt = octPaid ? (Number(m.octoberAmavasya?.amount) || 50) : 0;
+        const novAmt = novPaid ? (Number(m.novemberAmavasya?.amount) || 100) : 0;
         const extraAmt = Number(m.extraContribution || 0);
-        const totalAmt = octAmt + novAmt + extraAmt;
+        const totalAmt = octAmt + (novPaid ? novAmt : 0) + extraAmt;
 
         const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : "");
         let tagBadge = "";
@@ -7852,7 +7959,7 @@
       document.getElementById("editOctDate").value = m.octoberAmavasya?.date || "";
 
       // Populate November
-      const novPaid = m.paidThisAmavasya ?? (m.novemberAmavasya?.isPaid ?? (m.paymentStatus === 'paid'));
+      const novPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
       document.getElementById("editNovStatus").value = novPaid ? "paid" : "due";
       document.getElementById("editNovAmount").value = m.novemberAmavasya?.amount ?? (novPaid ? 100 : 100);
       document.getElementById("editNovDate").value = m.novemberAmavasya?.date || m.lastPaymentDate || "";
@@ -9830,13 +9937,37 @@
     let currentNotificationFilter = 'all';
     let appOpenRecorded = false;
 
+    // 👤 Lookup photo dynamically from membersList by name or phone
+    function getMemberPhotoByNameOrPhone(name, phone) {
+      if (!name && !phone) return null;
+      if (typeof membersList === "undefined" || !Array.isArray(membersList)) return null;
+      const cleanPhone = phone ? phone.replace(/\D/g, '').slice(-10) : "";
+      const cleanName = (name || '').replace(/^🟢\s*/, '').replace(/\s*ने ऐप खोला$/, '').trim();
+      const found = membersList.find(m => {
+        if (cleanPhone && m.phone && m.phone.replace(/\D/g, '').endsWith(cleanPhone)) return true;
+        if (cleanName && m.name && (m.name.trim() === cleanName || m.name.includes(cleanName) || cleanName.includes(m.name))) return true;
+        return false;
+      });
+      return found ? (found.photoUrl || null) : null;
+    }
+
     // 👤 Get currently identified active user
     function getCurrentAppUser() {
       if (isAdmin) {
+        let adminPhoto = null;
+        if (typeof membersList !== "undefined" && Array.isArray(membersList)) {
+          const revant = membersList.find(m => (m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")));
+          if (revant && revant.photoUrl) {
+            adminPhoto = revant.photoUrl;
+          }
+        }
+        if (!adminPhoto) {
+          adminPhoto = localStorage.getItem("myMemberPhoto") || localStorage.getItem("adminPhotoUrl") || null;
+        }
         return {
           name: "रेवंतराम भाटी",
           phone: SANCHALAK_PHONE,
-          photoUrl: null,
+          photoUrl: adminPhoto,
           role: "🚩 संचालक",
           isGuest: false
         };
@@ -9870,7 +10001,7 @@
         return {
           name: savedName,
           phone: "",
-          photoUrl: null,
+          photoUrl: getMemberPhotoByNameOrPhone(savedName, null),
           role: "सदस्य",
           isGuest: false
         };
@@ -9919,8 +10050,8 @@
       const now = Date.now();
       const lastRecorded = Number(localStorage.getItem("lastAppOpenRecordTime") || 0);
 
-      // Debounce: don't record if opened within the last 15 minutes on the same device
-      if (now - lastRecorded < 15 * 60 * 1000) {
+      // Debounce: don't record if opened within the last 2 minutes on the same device
+      if (now - lastRecorded < 2 * 60 * 1000) {
         appOpenRecorded = true;
         return;
       }
@@ -9929,6 +10060,7 @@
       localStorage.setItem("lastAppOpenRecordTime", now.toString());
 
       const user = getCurrentAppUser();
+      const resolvedPhoto = user.photoUrl || getMemberPhotoByNameOrPhone(user.name, user.phone);
       const timeStr = new Date(now).toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
       const dateStr = new Date(now).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short' });
 
@@ -9938,7 +10070,7 @@
         type: "app_open",
         sender: user.name,
         senderPhone: user.phone || "",
-        senderPhoto: user.photoUrl || null,
+        senderPhoto: resolvedPhoto || null,
         senderRole: user.role,
         timestamp: now,
         createdAt: new Date()
@@ -9950,7 +10082,7 @@
           await db.collection("app_open_logs").add({
             name: user.name,
             phone: user.phone || "",
-            photoUrl: user.photoUrl || null,
+            photoUrl: resolvedPhoto || null,
             role: user.role,
             timestamp: now,
             createdAt: new Date()
@@ -10082,15 +10214,35 @@
       const guestPrompt = document.getElementById("guestIdentityPrompt");
 
       // 1. App Opens analytics
+      const currentUser = getCurrentAppUser();
       const appOpensList = notificationHistoryList.filter(n => n.type === 'app_open');
       if (opensCountBadge) opensCountBadge.innerText = appOpensList.length;
 
       // Calculate unique openers for Live Presence banner
       const uniqueOpenersMap = new Map();
+
+      // Ensure active viewer is immediately shown if recognized
+      if (currentUser && currentUser.name && !currentUser.isGuest) {
+        const userPhoto = currentUser.photoUrl || getMemberPhotoByNameOrPhone(currentUser.name, currentUser.phone);
+        uniqueOpenersMap.set(currentUser.name, {
+          type: 'app_open',
+          sender: currentUser.name,
+          senderPhone: currentUser.phone || "",
+          senderPhoto: userPhoto || null,
+          timestamp: Date.now()
+        });
+      }
+
       appOpensList.forEach(item => {
         const rawName = (item.sender || item.title || 'अतिथि').replace(/^🟢\s*/, '').replace(/\s*ने ऐप खोला$/, '').trim();
+        const photo = item.senderPhoto || getMemberPhotoByNameOrPhone(rawName, item.senderPhone);
         if (!uniqueOpenersMap.has(rawName)) {
-          uniqueOpenersMap.set(rawName, item);
+          uniqueOpenersMap.set(rawName, { ...item, sender: rawName, senderPhoto: photo });
+        } else {
+          const existing = uniqueOpenersMap.get(rawName);
+          if (!existing.senderPhoto && photo) {
+            existing.senderPhoto = photo;
+          }
         }
       });
 
@@ -10099,7 +10251,8 @@
       const todayCount = appOpensList.filter(n => (n.timestamp || 0) >= todayStart.getTime()).length;
 
       if (summaryBadge) {
-        summaryBadge.innerText = todayCount > 0 ? `आज ${todayCount} बार ऐप खुला` : `${uniqueOpenersMap.size} सदस्य उपस्थित`;
+        const presentCount = uniqueOpenersMap.size;
+        summaryBadge.innerText = `${presentCount} सदस्य उपस्थित (${todayCount > 0 ? `आज ${todayCount} बार ऐप खुला` : 'लाइव सक्रिय'})`;
       }
 
       // Render horizontal Live Presence Strip
@@ -10113,12 +10266,13 @@
             const initial = name.charAt(0);
             const timeAgo = formatRelativeTime(item.timestamp);
             const isToday = (item.timestamp || 0) >= todayStart.getTime();
+            const photo = item.senderPhoto || getMemberPhotoByNameOrPhone(name, item.senderPhone);
 
             return `
               <div style="display:flex; flex-direction:column; align-items:center; min-width:62px; max-width:72px; text-align:center; flex-shrink:0;">
-                <div style="position:relative; width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; box-shadow:0 2px 6px rgba(16,185,129,0.3); border:2px solid white;">
-                  ${item.senderPhoto ? `<img src="${item.senderPhoto}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : `<span>${initial}</span>`}
-                  <span style="position:absolute; bottom:-1px; right:-1px; width:10px; height:10px; background:${isToday ? '#22c55e' : '#94a3b8'}; border-radius:50%; border:2px solid white;"></span>
+                <div style="position:relative; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; box-shadow:0 2px 6px rgba(16,185,129,0.3); border:2px solid white; overflow:hidden;">
+                  ${photo ? `<img src="${photo}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : `<span>${initial}</span>`}
+                  <span style="position:absolute; bottom:0px; right:0px; width:10px; height:10px; background:${isToday ? '#22c55e' : '#94a3b8'}; border-radius:50%; border:2px solid white;"></span>
                 </div>
                 <div style="font-size:10px; font-weight:700; color:#064e3b; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${escapeHtml(name)}</div>
                 <div style="font-size:8.5px; color:#047857; white-space:nowrap;">${timeAgo}</div>
@@ -10129,7 +10283,6 @@
       }
 
       // Guest check
-      const currentUser = getCurrentAppUser();
       if (guestPrompt) {
         guestPrompt.style.display = currentUser.isGuest ? "flex" : "none";
       }
@@ -10166,11 +10319,17 @@
         let iconHtml = '<i class="fa-solid fa-bell" style="color:#2563eb;"></i>';
         let bgTag = '#dbeafe';
         let badgeHtml = '';
+        let photoHtml = null;
 
         if (item.type === 'app_open') {
           iconHtml = '<i class="fa-solid fa-mobile-screen-button" style="color:#059669;"></i>';
           bgTag = '#d1fae5';
           badgeHtml = '<span style="background:#d1fae5; color:#065f46; font-size:9.5px; padding:2px 7px; border-radius:6px; font-weight:800; border:1px solid #a7f3d0;">🟢 ऐप खोला</span>';
+          const openerName = (item.sender || item.title || '').replace(/^🟢\s*/, '').replace(/\s*ने ऐप खोला$/, '').trim();
+          const openerPhoto = item.senderPhoto || getMemberPhotoByNameOrPhone(openerName, item.senderPhone);
+          if (openerPhoto) {
+            photoHtml = `<img src="${openerPhoto}" style="width:100%; height:100%; object-fit:cover; border-radius:9px;">`;
+          }
         } else if (item.type === 'expense') {
           iconHtml = '<i class="fa-solid fa-receipt" style="color:#dc2626;"></i>';
           bgTag = '#fee2e2';
@@ -10191,8 +10350,8 @@
         card.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
             <div style="display:flex; align-items:flex-start; gap:8px;">
-              <div style="width:30px; height:30px; border-radius:9px; background:${bgTag}; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px; margin-top:2px;">
-                ${iconHtml}
+              <div style="width:32px; height:32px; border-radius:9px; background:${bgTag}; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px; margin-top:2px; overflow:hidden;">
+                ${photoHtml || iconHtml}
               </div>
               <div>
                 <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
