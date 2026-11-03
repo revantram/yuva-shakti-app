@@ -2763,7 +2763,15 @@
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:12px; color:var(--text-muted); flex-wrap:wrap; gap:8px;">
-        <span id="memberCountText" style="font-weight:700;">कुल सदस्य: 0</span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span id="memberCountText" style="font-weight:700;">कुल सदस्य: 0</span>
+          <!-- 🟢 चक्रदार LIVE सिंबल (क्लिक करने पर लाइव उपस्थिति पॉपअप) -->
+          <button id="livePresenceHeaderBtn" onclick="openLivePresenceModal()" style="background:linear-gradient(135deg, #ecfdf5, #d1fae5); border:1.5px solid #10b981; color:#047857; font-weight:800; border-radius:20px; padding:3px 10px; display:inline-flex; align-items:center; gap:5px; cursor:pointer; font-size:11px; box-shadow:0 2px 6px rgba(16,185,129,0.25);" title="लाइव उपस्थिति देखें">
+            <span style="display:inline-block; width:7px; height:7px; background:#10b981; border-radius:50%; box-shadow:0 0 0 2px rgba(16,185,129,0.4); animation:livePulse 1.5s infinite;"></span>
+            <span>LIVE</span>
+            <span id="liveActiveCountBadge" style="background:#059669; color:white; font-size:9.5px; padding:1px 6px; border-radius:10px; font-weight:800;">0</span>
+          </button>
+        </div>
         <div style="display:flex; gap:6px;">
           <button onclick="openAddFamilyMemberModal()" style="background:linear-gradient(135deg, #059669, #047857); border:none; color:white; font-weight:800; cursor:pointer; font-size:11.5px; padding:6px 12px; border-radius:10px; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 6px rgba(5,150,105,0.25);">
             <i class="fa-solid fa-user-plus"></i> <span>+ परिवार सदस्य जोड़ें</span>
@@ -3145,7 +3153,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v4.5.4
+            APK v4.5.5
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -3173,7 +3181,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.5.4 (बिल्ड कोड: 40)
+              v4.5.5 (बिल्ड कोड: 41)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -3337,7 +3345,24 @@
         <div id="adminUpiControlBox" style="display: none;"></div>
       </div>
 
-      <!-- 4. संचालक नियंत्रण (Admin Settings - केवल रेवंतराम भाटी के लिए) -->
+      <!-- संचालक कोड सत्यापन (Admin Unlock with Code 992942) -->
+      <div class="card ios-glass-card" id="adminUnlockBox" style="display:none; border:1.5px dashed #f59e0b; background:#fffbeb; margin-bottom:12px; padding:14px; border-radius:18px;">
+        <div style="font-weight:800; font-size:13.5px; color:#9a3412; display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+          <i class="fa-solid fa-lock" style="color:#d97706;"></i>
+          <span>संचालक मोड अनलॉक करें</span>
+        </div>
+        <p style="font-size:11.5px; color:#78350f; margin-bottom:10px; line-height:1.4;">
+          संचालक रेवंतराम भाटी (8696663615 / revantrambhati@gmail.com) अपने 6-अंकीय गुप्त कोड से एडमिन शक्तियां सक्षम करें।
+        </p>
+        <div style="display:flex; gap:8px;">
+          <input type="password" id="adminSecretCodeInput" placeholder="कोड दर्ज करें (992942)" maxlength="6" inputmode="numeric" style="flex:1; border:1px solid #fdba74; border-radius:10px; padding:8px 12px; font-size:13px; font-weight:700;">
+          <button onclick="verifyAdminSecretCode()" style="background:linear-gradient(135deg, #d97706, #b45309); color:white; border:none; padding:8px 16px; border-radius:10px; font-size:12.5px; font-weight:800; cursor:pointer;">
+            अनलॉक
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. संचालक नियंत्रण (Admin Settings - केवल रेवंतराम भाटी के लिए कोड सत्यापन उपरांत) -->
       <div class="card ios-glass-card" id="adminSettingsCard" style="display:none; border:1px solid rgba(217, 119, 6, 0.35); background:linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(245, 158, 11, 0.02) 100%);">
         <div class="card-title">
           <span style="display:flex; align-items:center; gap:8px;">
@@ -3349,9 +3374,14 @@
           <span class="badge" style="background:linear-gradient(135deg, #d97706, #b45309); color:white; font-size:11px; padding:2px 8px; border-radius:6px;">संचालक: रेवंतराम भाटी</span>
         </div>
         <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
-          आप संचालक (रेवंतराम भाटी) के रूप में लॉगिन हैं। आप ग्रुप की PhonePe / UPI ID बदल सकते हैं एवं सभी सदस्यों के पद / टैग प्रबंधित कर सकते हैं।
+          आप संचालक (रेवंतराम भाटी) के रूप में पूर्ण एडमिन शक्तियों के साथ सक्रिय हैं।
         </p>
         <div style="display:flex; flex-direction:column; gap:8px;">
+          <!-- 🛡️ पेंडिंग गेस्ट अप्रूवल डैशबोर्ड बटन -->
+          <button class="btn-main" onclick="openAdminApprovalModal()" style="background:linear-gradient(135deg, #1e40af, #2563eb); border-radius:14px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user-shield"></i> <span>पेंडिंग गेस्ट अप्रूवल डैशबोर्ड</span></span>
+            <span id="adminPendingGuestsBadge" style="background:#ffffff; color:#1e40af; font-weight:800; font-size:11px; padding:2px 8px; border-radius:10px;">0</span>
+          </button>
           <button class="btn-main" onclick="sendDueReminderToAllPending()" style="background:linear-gradient(135deg, #dc2626, #b91c1c); border-radius:14px;">
             <i class="fa-solid fa-bell"></i> <span>सभी बकायादारों को 1-क्लिक में रिमाइंडर भेजें</span>
           </button>
@@ -3505,27 +3535,209 @@
     </div>
   </div>
 
-  <!-- Login Modal -->
-  <div class="modal-overlay" id="loginModal">
-    <div class="modal-content">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 style="font-size:16px; font-weight:700;"><i class="fa-solid fa-key" style="color:#2563eb;"></i> सदस्य व्यक्तिगत लॉगिन</h3>
-        <button onclick="closeLoginModal()" style="border:none; background:none; font-size:18px; color:#64748b; cursor:pointer;">✕</button>
+  <!-- 🔐 Google Sign-In & Login Modal -->
+  <div class="modal-overlay" id="loginModal" style="display:none; z-index:1100;">
+    <div class="modal-content ios-glass-card" style="max-width:400px; padding:24px 20px; border-radius:26px; text-align:center;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:36px; height:36px; border-radius:12px; background:linear-gradient(135deg, #1e40af, #3b82f6); color:white; display:flex; align-items:center; justify-content:center; font-size:16px;">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h3 style="margin:0; font-size:16.5px; font-weight:800; color:var(--text-main);">सुरक्षित लॉगिन</h3>
+        </div>
+        <button onclick="closeLoginModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
       </div>
-      <p style="font-size:12px; color:#64748b; margin-bottom:14px;">अपने 10-अंकों के मोबाइल नंबर और पिन/कोड से लॉगिन करें। संचालक महोदय अपने नंबर व कोड (992942) से सीधे संचालक मोड में लॉगिन होंगे।</p>
-      
-      <div class="form-group">
-        <label>रजिस्टर्ड 10 अंकों का मोबाइल नंबर</label>
-        <input type="tel" id="loginUserPhone" placeholder="उदा. 8696663615" maxlength="10">
-      </div>
-      <div class="form-group">
-        <label>गुप्त पिन / संचालक कोड (Secret PIN)</label>
-        <input type="password" id="loginUserPin" placeholder="••••••" maxlength="6" inputmode="numeric">
-      </div>
-      
-      <button class="btn-main" onclick="processMemberLogin()" style="margin-top:14px;">
-        <i class="fa-solid fa-right-to-bracket"></i> लॉगिन करें
+
+      <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:20px; line-height:1.5;">
+        युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) के डिजिटल पासबुक एवं रिकॉर्ड्स में प्रवेश हेतु अपने गूगल खाते से लॉगिन करें।
+      </p>
+
+      <!-- 🟢 Primary: Sign In with Google Button -->
+      <button onclick="handleGoogleSignInClick()" class="btn-google-signin" style="width:100%; padding:13px; border-radius:14px; border:1.5px solid #dadce0; background:#ffffff; color:#3c4043; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; gap:12px; box-shadow:0 3px 10px rgba(0,0,0,0.08); cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;">
+        <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <span>Sign in with Google</span>
       </button>
+
+      <div style="display:flex; align-items:center; margin:18px 0; gap:10px;">
+        <div style="flex:1; height:1px; background:rgba(0,0,0,0.1);"></div>
+        <span style="font-size:11px; color:#94a3b8; font-weight:700;">अथवा मोबाइल नंबर से</span>
+        <div style="flex:1; height:1px; background:rgba(0,0,0,0.1);"></div>
+      </div>
+
+      <!-- Quick Mobile Direct Login -->
+      <div style="text-align:left;">
+        <div class="form-group" style="margin-bottom:10px;">
+          <label style="font-size:11.5px; font-weight:700; color:var(--text-main);">10 अंकों का मोबाइल नंबर</label>
+          <input type="tel" id="directLoginPhone" placeholder="उदा. 8696663615" maxlength="10" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:12px; font-size:13px; font-weight:700;">
+        </div>
+        <button class="btn-main" onclick="processDirectMobileLogin()" style="width:100%; padding:11px; border-radius:12px; font-weight:700; font-size:13px; background:linear-gradient(135deg, #1e40af, #2563eb);">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i> मोबाइल से प्रवेश करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📲 Google Onboarding: Mobile Number Verification Modal -->
+  <div class="modal-overlay" id="googleMobileOnboardingModal" style="display:none; z-index:1150;">
+    <div class="modal-content ios-glass-card" style="max-width:420px; padding:22px 18px; border-radius:26px; text-align:left;">
+      <div style="text-align:center; margin-bottom:14px;">
+        <div id="onboardingUserAvatar" style="width:62px; height:62px; margin:0 auto 10px; border-radius:50%; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:800; overflow:hidden; border:3px solid #bfdbfe; box-shadow:0 4px 12px rgba(37,99,235,0.25);">
+          <span>भा</span>
+        </div>
+        <div style="font-size:11px; font-weight:700; color:#1d4ed8; background:#dbeafe; padding:2px 10px; border-radius:12px; display:inline-block; margin-bottom:4px;">
+          गूगल खाता सत्यापित ✅
+        </div>
+        <div id="onboardingUserEmail" style="font-size:12px; color:#64748b; font-weight:600;">user@gmail.com</div>
+      </div>
+
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin-bottom:14px; font-size:12px; color:#475569; line-height:1.5;">
+        <i class="fa-solid fa-circle-info" style="color:#2563eb;"></i> कृपया अपना 10-अंकीय मोबाइल नंबर दर्ज करें ताकि हम ग्रुप की अधिकृत सदस्य सूची में आपका रिकॉर्ड सत्यापित कर सकें।
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-size:12px; font-weight:700;">आपका पूरा नाम (गूगल से प्राप्त, आवश्यकतानुसार बदलें):</label>
+        <input type="text" id="onboardingFullName" placeholder="पूरा नाम दर्ज करें" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:12px; font-size:13px; font-weight:700;">
+      </div>
+
+      <div class="form-group" style="margin-bottom:16px;">
+        <label style="font-size:12px; font-weight:700;">10 अंकों का मोबाइल नंबर (Mobile Number):</label>
+        <input type="tel" id="onboardingPhoneNumber" placeholder="उदा. 9876543210" maxlength="10" inputmode="numeric" style="width:100%; padding:11px 12px; border:1.5px solid #2563eb; border-radius:12px; font-size:14px; font-weight:800; letter-spacing:0.5px;">
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button onclick="cancelGoogleOnboarding()" style="flex:1; padding:11px; border-radius:12px; border:1px solid #cbd5e1; background:white; font-weight:700; font-size:12.5px; color:#475569; cursor:pointer;">रद्द करें</button>
+        <button onclick="submitGoogleMobileOnboarding()" class="btn-main" style="flex:1.8; padding:12px; border-radius:12px; font-weight:800; font-size:13px; background:linear-gradient(135deg, #16a34a, #15803d); box-shadow:0 4px 12px rgba(22,163,74,0.3);">
+          सत्यापित करें एवं आगे बढ़ें <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🏠 गेस्ट रूम (Guest Room / Restricted View) -->
+  <div class="modal-overlay" id="guestRoomModal" style="display:none; z-index:1200;">
+    <div class="modal-content ios-glass-card" style="max-width:440px; padding:24px 20px; border-radius:28px; text-align:center;">
+      <div style="width:68px; height:68px; margin:0 auto 12px; border-radius:24px; background:linear-gradient(135deg, #f59e0b, #d97706); display:flex; align-items:center; justify-content:center; color:white; font-size:30px; box-shadow:0 10px 24px rgba(245, 158, 11, 0.35);">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </div>
+
+      <span style="font-size:11px; font-weight:800; color:#b45309; background:#fef3c7; border:1px solid #fde68a; padding:3px 12px; border-radius:20px; display:inline-block; margin-bottom:8px;">
+        ⏳ गेस्ट रूम • एडमिन अप्रूवल पेंडिंग
+      </span>
+
+      <h3 id="guestRoomGreeting" style="margin:0 0 6px; font-size:18px; font-weight:800; color:#78350f;">
+        नमस्ते अतिथि जी!
+      </h3>
+
+      <div style="background:#fffbeb; border:1.5px solid #fde68a; border-radius:18px; padding:16px; margin:14px 0; text-align:left;">
+        <div style="font-size:13px; font-weight:800; color:#9a3412; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span>आपकी जानकारी एडमिन के पास भेजी जा चुकी है</span>
+        </div>
+        <p style="font-size:12px; color:#78350f; line-height:1.6; margin:0 0 10px;">
+          कृपया संचालक / एडमिन द्वारा आपके विवरण (नाम व मोबाइल नंबर) के सत्यापन एवं अप्रूवल का इंतज़ार करें। अप्रूवल मिलते ही ग्रुप की सभी पासबुक व सुविधाएं स्वतः अनलॉक हो जाएंगी।
+        </p>
+
+        <div style="background:white; border-radius:12px; padding:10px 12px; font-size:12px; color:#334155; display:flex; flex-direction:column; gap:6px; border:1px solid #fed7aa;">
+          <div><strong>नाम:</strong> <span id="guestDisplayFullName">-</span></div>
+          <div><strong>मोबाइल नंबर:</strong> <span id="guestDisplayPhone">-</span></div>
+          <div><strong>जीमेल:</strong> <span id="guestDisplayEmail">-</span></div>
+          <div><strong>स्थिति:</strong> <span style="color:#d97706; font-weight:800;">🟡 सत्यापन प्रतीक्षित (Under Review)</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:9px;">
+        <a id="guestWhatsAppAdminLink" href="https://wa.me/918696663615?text=नमस्ते%20एडमिन%20जी,%20मैंने%20युवा%20शक्ति%20ऐप%20पर%20रजिस्टर%20किया%20है।%20कृपया%20मेरी%20प्रोफाइल%20स्वीकृत%20करें।" target="_blank" class="btn-main" style="background:linear-gradient(135deg, #25d366, #16a34a); border-radius:14px; text-decoration:none; padding:12px; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-brands fa-whatsapp" style="font-size:18px;"></i> एडमिन से व्हाट्सएप पर संपर्क करें
+        </a>
+        <button onclick="refreshGuestApprovalStatus()" class="btn-main" style="background:linear-gradient(135deg, #1e40af, #2563eb); border-radius:14px; padding:11px; font-size:12.5px; font-weight:700;">
+          <i class="fa-solid fa-rotate"></i> स्थिति पुनः जांचें (Refresh Status)
+        </button>
+        <button onclick="logoutMember()" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#475569; padding:10px; border-radius:14px; font-size:12px; font-weight:700; cursor:pointer;">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> लॉगआउट करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🟢 Live Presence & App Open Timeline Modal -->
+  <div class="modal-overlay" id="livePresenceModal" style="display:none; z-index:1120;">
+    <div class="modal-content ios-glass-card" style="max-width:440px; padding:22px 18px; border-radius:28px; text-align:left; max-height:88vh; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="display:inline-block; width:10px; height:10px; background:#10b981; border-radius:50%; box-shadow:0 0 0 3px rgba(16,185,129,0.3); animation:livePulse 1.5s infinite;"></span>
+          <h3 style="margin:0; font-size:16px; font-weight:800; color:#064e3b;">सदस्यों की लाइव उपस्थिति</h3>
+        </div>
+        <button onclick="closeLivePresenceModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:28px; height:28px; font-size:13px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+      </div>
+
+      <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:14px; padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; font-weight:700; color:#047857;" id="livePresenceSummaryText">उपस्थित सदस्य लोड हो रहे हैं...</span>
+        <span class="badge" style="background:#059669; color:white; font-size:10px; padding:2px 8px; border-radius:10px;" id="livePresenceTotalBadge">0</span>
+      </div>
+
+      <div id="livePresenceFullList" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding-right:2px;">
+        <div style="text-align:center; padding:24px; color:#64748b; font-size:12px;">लोड हो रहा है...</div>
+      </div>
+
+      <button onclick="closeLivePresenceModal()" class="btn-main" style="margin-top:12px; width:100%; border-radius:14px; padding:10px; background:#059669;">
+        बंद करें (Close)
+      </button>
+    </div>
+  </div>
+
+  <!-- 🛡️ Admin Pending Guests Approval Modal -->
+  <div class="modal-overlay" id="adminApprovalModal" style="display:none; z-index:1150;">
+    <div class="modal-content ios-glass-card" style="max-width:460px; padding:22px 18px; border-radius:28px; text-align:left; max-height:90vh; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg, #1e40af, #2563eb); color:white; display:flex; align-items:center; justify-content:center; font-size:16px;">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div>
+            <h3 style="margin:0; font-size:15.5px; font-weight:800; color:var(--text-main);">गेस्ट अप्रूवल डैशबोर्ड</h3>
+            <div style="font-size:11px; color:var(--text-muted);">नए अनुरोधों की समीक्षा व स्वीकृति</div>
+          </div>
+        </div>
+        <button onclick="closeAdminApprovalModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:28px; height:28px; font-size:13px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+      </div>
+
+      <div id="adminPendingGuestsList" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding-right:2px;">
+        <div style="text-align:center; padding:30px; color:#64748b; font-size:12px;">पेंडिंग अनुरोध लोड हो रहे हैं...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✏️ Edit Guest Details Modal (Admin) -->
+  <div class="modal-overlay" id="editGuestDetailsModal" style="display:none; z-index:1160;">
+    <div class="modal-content ios-glass-card" style="max-width:400px; padding:20px; border-radius:24px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:8px;">
+        <h3 style="margin:0; font-size:15px; font-weight:800; color:#1e40af;"><i class="fa-solid fa-user-pen"></i> सदस्य विवरण सुधारें</h3>
+        <button onclick="closeEditGuestModal()" style="border:none; background:none; font-size:16px; color:#64748b; cursor:pointer;">✕</button>
+      </div>
+
+      <input type="hidden" id="editGuestDocId">
+      <div class="form-group" style="margin-bottom:10px;">
+        <label style="font-size:11.5px; font-weight:700;">सदस्य का नाम</label>
+        <input type="text" id="editGuestNameInput" style="width:100%; padding:9px 12px; border:1px solid #cbd5e1; border-radius:10px; font-size:13px; font-weight:700;">
+      </div>
+      <div class="form-group" style="margin-bottom:10px;">
+        <label style="font-size:11.5px; font-weight:700;">10-अंकीय मोबाइल नंबर</label>
+        <input type="tel" id="editGuestPhoneInput" maxlength="10" style="width:100%; padding:9px 12px; border:1px solid #cbd5e1; border-radius:10px; font-size:13px; font-weight:700;">
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label style="font-size:11.5px; font-weight:700;">सदस्य श्रेणी (Category)</label>
+        <select id="editGuestCategorySelect" style="width:100%; padding:9px 12px; border:1px solid #cbd5e1; border-radius:10px; font-size:13px; font-weight:700; background:white;">
+          <option value="core">🚩 मुख्य ग्रुप सदस्य (अंशदाता)</option>
+          <option value="family">👨‍👩‍👧‍👦 परिवार सदस्य</option>
+        </select>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button onclick="closeEditGuestModal()" style="flex:1; padding:10px; border-radius:10px; border:1px solid #cbd5e1; background:white; font-size:12px; font-weight:700; color:#475569; cursor:pointer;">रद्द करें</button>
+        <button onclick="saveAndApproveGuestDetails()" class="btn-main" style="flex:1.5; padding:10px; border-radius:10px; font-size:12px; font-weight:800; background:linear-gradient(135deg, #16a34a, #15803d);">
+          <i class="fa-solid fa-check"></i> सेव व अप्रूव करें
+        </button>
+      </div>
     </div>
   </div>
 
@@ -3540,7 +3752,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.5.4 (बिल्ड कोड: 40)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.5.5 (बिल्ड कोड: 41)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -4322,32 +4534,6 @@
         </button>
       </div>
 
-      <!-- 🟢 Live App Open Presence Banner (किस-किस ने ऐप खोला) -->
-      <div style="background:linear-gradient(135deg, rgba(236, 253, 245, 0.95), rgba(209, 250, 229, 0.85)); border:1.5px solid #6ee7b7; border-radius:18px; padding:12px; margin-bottom:12px; box-shadow:0 4px 12px rgba(16, 185, 129, 0.08);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <div style="font-weight:800; font-size:12.5px; color:#065f46; display:flex; align-items:center; gap:6px;">
-            <span style="display:inline-block; width:8px; height:8px; background:#10b981; border-radius:50%; box-shadow:0 0 0 3px rgba(16,185,129,0.3);"></span>
-            <span>🟢 किस-किस ने ऐप खोला (ऐप उपस्थिति)</span>
-          </div>
-          <span id="appOpenSummaryBadge" style="font-size:10px; background:#d1fae5; color:#047857; font-weight:800; padding:2px 8px; border-radius:10px;">
-            लोड हो रहा है...
-          </span>
-        </div>
-
-        <!-- Recent Openers Horizontal Strip -->
-        <div id="recentAppOpenersList" style="display:flex; gap:8px; overflow-x:auto; padding:4px 0 6px; -webkit-overflow-scrolling:touch;">
-          <div style="font-size:11px; color:#047857;">सक्रिय सदस्य लोड हो रहे हैं...</div>
-        </div>
-
-        <!-- Identity check: If guest, quick button to choose name -->
-        <div id="guestIdentityPrompt" style="display:none; margin-top:6px; padding-top:6px; border-top:1px dashed #a7f3d0; justify-content:space-between; align-items:center;">
-          <span style="font-size:10.5px; color:#047857;">अपनी उपस्थिति अपने नाम से दर्ज करें:</span>
-          <button onclick="openSetMyNameModal()" style="background:#059669; color:white; border:none; padding:3px 8px; border-radius:8px; font-size:10.5px; font-weight:700; cursor:pointer;">
-            <i class="fa-solid fa-user-check"></i> अपना नाम चुनें
-          </button>
-        </div>
-      </div>
-
       <!-- Segmented Filter Tabs -->
       <div style="display:flex; gap:6px; margin-bottom:10px;">
         <button id="notifFilterAll" onclick="setNotificationFilter('all')" style="flex:1; padding:6px 4px; font-size:11px; font-weight:700; border-radius:10px; text-align:center; border:none; cursor:pointer; background:#2563eb; color:white; transition:all 0.15s;">
@@ -4581,7 +4767,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "4.5.4";
+    const APP_VERSION = "4.5.5";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -4600,16 +4786,25 @@
     }
     const db = firebase.firestore();
 
-    // 3. State Management
+    // 3. State Management & Role-Based Access Control (RBAC)
     const SANCHALAK_PHONE = "8696663615";
     const SANCHALAK_CODE = "992942";
+    const SANCHALAK_EMAIL = "revantrambhati@gmail.com";
     let loggedInMemberPhone = localStorage.getItem("loggedInMemberPhone") || null;
+    let userRole = localStorage.getItem("userRole") || "guest"; // 'admin' | 'member' | 'guest'
+    let isUserVerified = localStorage.getItem("isUserVerified") === "true";
+    let currentGoogleAuthUser = null;
+    let pendingGuestsList = [];
     let isAdmin = false;
-    // संचालक (रेवंतराम भाटी - 8696663615) के वैध सत्र में ही संचालक मोड सक्रिय रहेगा
+    // संचालक (रेवंतराम भाटी - 8696663615 / revantrambhati@gmail.com) के वैध सत्र में ही संचालक मोड सक्रिय रहेगा
     if (localStorage.getItem("isAdminSession") === "true") {
       isAdmin = true;
+      userRole = "admin";
+      isUserVerified = true;
       loggedInMemberPhone = SANCHALAK_PHONE;
       localStorage.setItem("loggedInMemberPhone", SANCHALAK_PHONE);
+      localStorage.setItem("userRole", "admin");
+      localStorage.setItem("isUserVerified", "true");
     } else if (loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE)) {
       isAdmin = false;
     }
@@ -5228,14 +5423,724 @@
       }, 3200);
     }
 
-    // 7. Modals Management
+    // 7. Modals & Authentication Management
     function openLoginModal() {
-      document.getElementById("loginModal").style.display = "flex";
-      document.getElementById("loginUserPhone").focus();
+      const modal = document.getElementById("loginModal");
+      if (modal) modal.style.display = "flex";
+      const directInput = document.getElementById("directLoginPhone");
+      if (directInput) {
+        directInput.value = "";
+        directInput.focus();
+      }
     }
 
     function closeLoginModal() {
-      document.getElementById("loginModal").style.display = "none";
+      const modal = document.getElementById("loginModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    // 🌐 Google Sign-In Handler
+    async function handleGoogleSignInClick() {
+      try {
+        showToast("गूगल लॉगिन शुरू हो रहा है...", "info");
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        
+        let result = null;
+        try {
+          result = await firebase.auth().signInWithPopup(provider);
+        } catch (popupErr) {
+          console.warn("Popup signIn failed, trying redirect or alternate:", popupErr);
+          throw popupErr;
+        }
+
+        const user = result.user;
+        if (!user) throw new Error("गूगल खाता सत्यापित नहीं हो सका।");
+
+        currentGoogleAuthUser = user;
+        const email = (user.email || "").trim().toLowerCase();
+        const googleUid = user.uid;
+        const displayName = (user.displayName || "").trim();
+        const photoURL = user.photoURL || "";
+
+        // Case A: संचालक रेवंतराम भाटी (revantrambhati@gmail.com)
+        if (email === SANCHALAK_EMAIL.toLowerCase()) {
+          isAdmin = true;
+          userRole = "admin";
+          isUserVerified = true;
+          loggedInMemberPhone = SANCHALAK_PHONE;
+          localStorage.setItem("isAdminSession", "true");
+          localStorage.setItem("userRole", "admin");
+          localStorage.setItem("isUserVerified", "true");
+          localStorage.setItem("loggedInMemberPhone", SANCHALAK_PHONE);
+          if (photoURL) localStorage.setItem("myMemberPhoto", photoURL);
+
+          closeLoginModal();
+          showToast("नमस्ते रेवंतराम जी भाटी! संचालक (Admin) गूगल से सत्यापित।", "success");
+          updateAuthUI();
+          appOpenRecorded = false;
+          setTimeout(recordAppOpenEvent, 400);
+          return;
+        }
+
+        // Case B: Look up in existing members list by googleUid, email, or name
+        const memberByUid = membersList.find(m => (m.googleUid && m.googleUid === googleUid) || (m.email && m.email.toLowerCase() === email));
+        if (memberByUid) {
+          const cleanPhone = (memberByUid.phone || "").replace(/\D/g, '').slice(-10);
+          loggedInMemberPhone = cleanPhone;
+          userRole = cleanPhone.endsWith(SANCHALAK_PHONE) ? "admin" : "member";
+          isUserVerified = true;
+          localStorage.setItem("loggedInMemberPhone", cleanPhone);
+          localStorage.setItem("userRole", userRole);
+          localStorage.setItem("isUserVerified", "true");
+          if (userRole === "admin") {
+            isAdmin = true;
+            localStorage.setItem("isAdminSession", "true");
+          } else {
+            isAdmin = false;
+            localStorage.removeItem("isAdminSession");
+          }
+          if (photoURL && !memberByUid.photoUrl) {
+            try {
+              await db.collection("members").doc(memberByUid.id).update({ photoUrl: photoURL, googleUid: googleUid });
+            } catch(e){}
+          }
+          closeLoginModal();
+          showToast(`स्वागत है, ${memberByUid.name}! सदस्य खाता सत्यापित हुआ।`, "success");
+          updateAuthUI();
+          appOpenRecorded = false;
+          setTimeout(recordAppOpenEvent, 400);
+
+          const welcomeKey = "welcomeSeen_" + cleanPhone;
+          if (!localStorage.getItem(welcomeKey)) {
+            setTimeout(() => openFirstTimeWelcomeModal(memberByUid.name, cleanPhone), 350);
+          }
+          return;
+        }
+
+        // Case C: Look up in Firestore 'users' collection (registered guests / approved members)
+        const userDocRef = db.collection("users").doc(googleUid);
+        const userDocSnap = await userDocRef.get();
+        if (userDocSnap.exists) {
+          const userData = userDocSnap.data();
+          if (userData.role === "member" || userData.isVerified === true) {
+            const cleanPhone = (userData.phoneNumber || "").replace(/\D/g, '').slice(-10);
+            loggedInMemberPhone = cleanPhone;
+            userRole = "member";
+            isUserVerified = true;
+            isAdmin = false;
+            localStorage.setItem("loggedInMemberPhone", cleanPhone);
+            localStorage.setItem("userRole", "member");
+            localStorage.setItem("isUserVerified", "true");
+            localStorage.removeItem("isAdminSession");
+            closeLoginModal();
+            showToast(`स्वागत है, ${userData.fullName}! आपकी प्रोफ़ाइल स्वीकृत है।`, "success");
+            updateAuthUI();
+            appOpenRecorded = false;
+            setTimeout(recordAppOpenEvent, 400);
+            return;
+          } else {
+            // Still in Guest Room (Pending Admin Approval)
+            userRole = "guest";
+            isUserVerified = false;
+            localStorage.setItem("userRole", "guest");
+            localStorage.setItem("isUserVerified", "false");
+            closeLoginModal();
+            openGuestRoomModal(userData);
+            return;
+          }
+        }
+
+        // Case D: New User -> Proceed to Mobile Number Onboarding Step
+        closeLoginModal();
+        openGoogleMobileOnboardingModal({
+          uid: googleUid,
+          email: email,
+          displayName: displayName,
+          photoURL: photoURL
+        });
+
+      } catch (err) {
+        console.error("Google login error:", err);
+        showToast("गूगल लॉगिन त्रुटि: " + (err.message || "पुनः प्रयास करें"), "error");
+      }
+    }
+
+    // 📲 Google Mobile Onboarding Modal
+    function openGoogleMobileOnboardingModal(user) {
+      currentGoogleAuthUser = user;
+      const modal = document.getElementById("googleMobileOnboardingModal");
+      const avatarEl = document.getElementById("onboardingUserAvatar");
+      const emailEl = document.getElementById("onboardingUserEmail");
+      const nameInput = document.getElementById("onboardingFullName");
+      const phoneInput = document.getElementById("onboardingPhoneNumber");
+
+      if (avatarEl) {
+        if (user.photoURL) {
+          avatarEl.innerHTML = `<img src="${user.photoURL}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+        } else {
+          const initChar = (user.displayName || 'भा').trim().charAt(0);
+          avatarEl.innerHTML = `<span>${initChar}</span>`;
+        }
+      }
+      if (emailEl) emailEl.innerText = user.email || "";
+      if (nameInput) nameInput.value = user.displayName || "";
+      if (phoneInput) {
+        phoneInput.value = "";
+        setTimeout(() => phoneInput.focus(), 300);
+      }
+
+      if (modal) modal.style.display = "flex";
+    }
+
+    function cancelGoogleOnboarding() {
+      const modal = document.getElementById("googleMobileOnboardingModal");
+      if (modal) modal.style.display = "none";
+      currentGoogleAuthUser = null;
+    }
+
+    async function submitGoogleMobileOnboarding() {
+      if (!currentGoogleAuthUser) {
+        showToast("कृपया पहले गूगल से लॉगिन करें।", "warning");
+        return;
+      }
+
+      const name = (document.getElementById("onboardingFullName")?.value || "").trim();
+      const rawPhone = (document.getElementById("onboardingPhoneNumber")?.value || "").trim().replace(/\D/g, '');
+
+      if (!name) {
+        showToast("कृपया अपना पूरा नाम दर्ज करें।", "warning");
+        return;
+      }
+      if (rawPhone.length !== 10) {
+        showToast("कृपया ठीक 10 अंकों का वैध मोबाइल नंबर दर्ज करें।", "warning");
+        return;
+      }
+
+      const uid = currentGoogleAuthUser.uid;
+      const email = currentGoogleAuthUser.email || "";
+      const photoURL = currentGoogleAuthUser.photoURL || null;
+
+      // 🔍 Database Verification against pre-registered members
+      const matchingMember = membersList.find(m => m.phone && m.phone.replace(/\D/g, '').endsWith(rawPhone));
+
+      if (matchingMember) {
+        // CASE 1: अधिकृत सदस्य (Authorized Member Found)
+        try {
+          await db.collection("members").doc(matchingMember.id).update({
+            googleUid: uid,
+            email: email,
+            photoUrl: photoURL || matchingMember.photoUrl || null,
+            role: "member",
+            isVerified: true,
+            linkedAt: new Date().toISOString()
+          });
+
+          await db.collection("users").doc(uid).set({
+            uid: uid,
+            email: email,
+            fullName: name || matchingMember.name,
+            phoneNumber: rawPhone,
+            photoUrl: photoURL || null,
+            role: rawPhone.endsWith(SANCHALAK_PHONE) ? "admin" : "member",
+            isVerified: true,
+            status: "approved",
+            createdAt: new Date().toISOString()
+          }, { merge: true });
+
+          loggedInMemberPhone = rawPhone;
+          userRole = rawPhone.endsWith(SANCHALAK_PHONE) ? "admin" : "member";
+          isUserVerified = true;
+          if (userRole === "admin") {
+            isAdmin = true;
+            localStorage.setItem("isAdminSession", "true");
+          } else {
+            isAdmin = false;
+            localStorage.removeItem("isAdminSession");
+          }
+          localStorage.setItem("loggedInMemberPhone", rawPhone);
+          localStorage.setItem("userRole", userRole);
+          localStorage.setItem("isUserVerified", "true");
+
+          cancelGoogleOnboarding();
+          showToast(`सत्यापन सफल! स्वागत है, ${matchingMember.name}!`, "success");
+          updateAuthUI();
+          appOpenRecorded = false;
+          setTimeout(recordAppOpenEvent, 400);
+
+          const welcomeKey = "welcomeSeen_" + rawPhone;
+          if (!localStorage.getItem(welcomeKey)) {
+            setTimeout(() => openFirstTimeWelcomeModal(matchingMember.name, rawPhone), 350);
+          }
+        } catch (err) {
+          console.error("Link member error:", err);
+          showToast("सत्यापन सहेजने में त्रुटि: " + err.message, "error");
+        }
+      } else {
+        // CASE 2: नया यूजर / गैर-पंजीकृत (Guest / Unregistered User)
+        try {
+          const guestPayload = {
+            uid: uid,
+            email: email,
+            fullName: name,
+            phoneNumber: rawPhone,
+            photoUrl: photoURL,
+            role: "guest",
+            isVerified: false,
+            status: "pending",
+            createdAt: new Date().toISOString()
+          };
+
+          await db.collection("users").doc(uid).set(guestPayload);
+
+          // Add notification for Admin
+          addNotificationRecord({
+            title: `🟡 नया गेस्ट रजिस्ट्रेशन: ${name}`,
+            message: `${name} (मोबाइल: ${rawPhone}, ईमेल: ${email}) ने ग्रुप में शामिल होने हेतु आवेदन किया है। समीक्षा कर स्वीकृति दें।`,
+            type: "general",
+            sender: name
+          });
+
+          userRole = "guest";
+          isUserVerified = false;
+          localStorage.setItem("userRole", "guest");
+          localStorage.setItem("isUserVerified", "false");
+
+          cancelGoogleOnboarding();
+          openGuestRoomModal(guestPayload);
+          showToast("आपकी जानकारी एडमिन के पास भेजी जा चुकी है।", "info");
+        } catch (err) {
+          console.error("Save guest user error:", err);
+          showToast("गेस्ट अनुरोध सहेजने में त्रुटि: " + err.message, "error");
+        }
+      }
+    }
+
+    // 🏠 गेस्ट रूम (Guest Room / Restricted View)
+    function openGuestRoomModal(userData) {
+      const modal = document.getElementById("guestRoomModal");
+      if (!modal) return;
+      const greetingEl = document.getElementById("guestRoomGreeting");
+      const nameEl = document.getElementById("guestDisplayFullName");
+      const phoneEl = document.getElementById("guestDisplayPhone");
+      const emailEl = document.getElementById("guestDisplayEmail");
+      const waLink = document.getElementById("guestWhatsAppAdminLink");
+
+      const fullName = userData.fullName || "अतिथि सदस्य";
+      const phone = userData.phoneNumber || "-";
+      const email = userData.email || "-";
+
+      if (greetingEl) greetingEl.innerText = `नमस्ते ${fullName} जी!`;
+      if (nameEl) nameEl.innerText = fullName;
+      if (phoneEl) phoneEl.innerText = phone;
+      if (emailEl) emailEl.innerText = email;
+
+      if (waLink) {
+        const text = encodeURIComponent(`नमस्ते संचालक रेवंतराम जी,\nमैंने युवा शक्ति ग्रुप ऐप पर रजिस्टर किया है:\n• नाम: ${fullName}\n• मोबाइल: ${phone}\n• ईमेल: ${email}\nकृपया मेरी प्रोफ़ाइल को अधिकृत सदस्य के रूप में स्वीकृत करें।`);
+        waLink.href = `https://wa.me/918696663615?text=${text}`;
+      }
+
+      modal.style.display = "flex";
+    }
+
+    function closeGuestRoomModal() {
+      const modal = document.getElementById("guestRoomModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    async function refreshGuestApprovalStatus() {
+      const user = firebase.auth().currentUser || currentGoogleAuthUser;
+      if (!user) {
+        showToast("सत्यापन हेतु गूगल खाता कनेक्ट नहीं है।", "warning");
+        return;
+      }
+      showToast("स्थिति की जांच की जा रही है...", "info");
+      try {
+        const docSnap = await db.collection("users").doc(user.uid).get();
+        if (docSnap.exists) {
+          const data = docSnap.data();
+          if (data.role === "member" || data.isVerified === true) {
+            userRole = "member";
+            isUserVerified = true;
+            loggedInMemberPhone = (data.phoneNumber || "").replace(/\D/g, '').slice(-10);
+            localStorage.setItem("loggedInMemberPhone", loggedInMemberPhone);
+            localStorage.setItem("userRole", "member");
+            localStorage.setItem("isUserVerified", "true");
+            closeGuestRoomModal();
+            showToast(`बधाई हो! आपकी प्रोफ़ाइल स्वीकृत हो चुकी है। ग्रुप में स्वागत है!`, "success");
+            updateAuthUI();
+            appOpenRecorded = false;
+            setTimeout(recordAppOpenEvent, 400);
+          } else {
+            showToast("🟡 आपकी प्रोफ़ाइल अभी भी समीक्षाधीन है। कृपया एडमिन द्वारा स्वीकृति की प्रतीक्षा करें।", "warning");
+          }
+        }
+      } catch (err) {
+        showToast("जांच में त्रुटि: " + err.message, "error");
+      }
+    }
+
+    // 📱 Direct Mobile Login Fallback
+    async function processDirectMobileLogin() {
+      const phoneInput = (document.getElementById("directLoginPhone")?.value || "").trim().replace(/\D/g, '');
+      if (phoneInput.length !== 10) {
+        showToast("कृपया ठीक 10 अंकों का वैध मोबाइल नंबर दर्ज करें।", "warning");
+        return;
+      }
+
+      // Check Sanchalak
+      if (phoneInput.endsWith(SANCHALAK_PHONE)) {
+        loggedInMemberPhone = phoneInput;
+        localStorage.setItem("loggedInMemberPhone", phoneInput);
+        closeLoginModal();
+        showToast("नमस्ते रेवंतराम जी! संचालक शक्तियां अनलॉक करने हेतु सेटिंग्स में गुप्त कोड (992942) दर्ज करें।", "info");
+        updateAuthUI();
+        appOpenRecorded = false;
+        setTimeout(recordAppOpenEvent, 400);
+        return;
+      }
+
+      const member = membersList.find(m => m.phone && m.phone.replace(/\D/g, '').endsWith(phoneInput));
+      if (member) {
+        loggedInMemberPhone = phoneInput;
+        userRole = "member";
+        isUserVerified = true;
+        isAdmin = false;
+        localStorage.setItem("loggedInMemberPhone", phoneInput);
+        localStorage.setItem("userRole", "member");
+        localStorage.setItem("isUserVerified", "true");
+        localStorage.removeItem("isAdminSession");
+
+        closeLoginModal();
+        showToast(`स्वागत है, ${member.name}! लॉगिन सफल।`, "success");
+        updateAuthUI();
+        appOpenRecorded = false;
+        setTimeout(recordAppOpenEvent, 400);
+
+        const welcomeKey = "welcomeSeen_" + phoneInput;
+        if (!localStorage.getItem(welcomeKey)) {
+          setTimeout(() => openFirstTimeWelcomeModal(member.name, phoneInput), 350);
+        }
+      } else {
+        showToast("यह नंबर ग्रुप में दर्ज नहीं है। कृपया 'Continue with Google' से लॉगिन करें ताकि आपका आवेदन एडमिन को भेजा जा सके।", "warning");
+      }
+    }
+
+    // 🔐 संचालक कोड सत्यापन (Admin Master Access: Phone 8696663615 & revantrambhati@gmail.com with Code 992942)
+    function verifyAdminSecretCode() {
+      const inputCode = (document.getElementById("adminSecretCodeInput")?.value || "").trim();
+      if (!inputCode) {
+        showToast("कृपया 6-अंकीय संचालक कोड दर्ज करें।", "warning");
+        return;
+      }
+
+      const currentGoogleEmail = (firebase.auth().currentUser?.email || "").toLowerCase();
+      const isAuthorizedPhone = loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE);
+      const isAuthorizedEmail = currentGoogleEmail === SANCHALAK_EMAIL.toLowerCase();
+
+      // Master Access strictly tied to phone 8696663615 or revantrambhati@gmail.com
+      if (!isAuthorizedPhone && !isAuthorizedEmail) {
+        showToast("❌ अस्वीकृत: संचालक अधिकार केवल अधिकृत नंबर (8696663615 / revantrambhati@gmail.com) के लिए सुरक्षित हैं!", "error");
+        return;
+      }
+
+      if (inputCode === SANCHALAK_CODE) {
+        isAdmin = true;
+        userRole = "admin";
+        isUserVerified = true;
+        loggedInMemberPhone = SANCHALAK_PHONE;
+        localStorage.setItem("isAdminSession", "true");
+        localStorage.setItem("loggedInMemberPhone", SANCHALAK_PHONE);
+        localStorage.setItem("userRole", "admin");
+        localStorage.setItem("isUserVerified", "true");
+
+        const unlockBox = document.getElementById("adminUnlockBox");
+        if (unlockBox) unlockBox.style.display = "none";
+        const settingsCard = document.getElementById("adminSettingsCard");
+        if (settingsCard) settingsCard.style.display = "block";
+
+        showToast("👑 संचालक (Admin) शक्तियां सफलतापूर्वक अनलॉक हुईं!", "success");
+        updateAuthUI();
+        renderAdminPendingGuests();
+      } else {
+        showToast("गलत गुप्त कोड! कृपया सही 6-अंकीय कोड (992942) दर्ज करें।", "error");
+      }
+    }
+
+    // 🛡️ Admin Pending Guests Approval Panel
+    function openAdminApprovalModal() {
+      const modal = document.getElementById("adminApprovalModal");
+      if (modal) modal.style.display = "flex";
+      renderAdminPendingGuests();
+    }
+
+    function closeAdminApprovalModal() {
+      const modal = document.getElementById("adminApprovalModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function renderAdminPendingGuests() {
+      const container = document.getElementById("adminPendingGuestsList");
+      const badge = document.getElementById("adminPendingGuestsBadge");
+      if (badge) badge.innerText = pendingGuestsList.length;
+      if (!container) return;
+
+      if (pendingGuestsList.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:36px 16px; color:#64748b;">
+            <i class="fa-solid fa-circle-check" style="font-size:36px; color:#10b981; margin-bottom:10px;"></i>
+            <div style="font-size:14px; font-weight:800; color:#0f172a;">कोई पेंडिंग अनुरोध नहीं है!</div>
+            <div style="font-size:12px; margin-top:4px;">सभी नए यूज़र्स स्वीकृत हैं अथवा कोई नया आवेदन प्रतीक्षित नहीं है।</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = pendingGuestsList.map(guest => {
+        const name = escapeHtml(guest.fullName || "अतिथि सदस्य");
+        const phone = escapeHtml(guest.phoneNumber || "दर्ज नहीं");
+        const email = escapeHtml(guest.email || "दर्ज नहीं");
+        const photo = guest.photoUrl || null;
+        const initChar = name.charAt(0);
+        const dateStr = guest.createdAt ? new Date(guest.createdAt).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "";
+
+        return `
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; padding:14px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+              <div style="width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg, #3b82f6, #1d4ed8); color:white; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; flex-shrink:0; overflow:hidden; border:2px solid #bfdbfe;">
+                ${photo ? `<img src="${photo}" style="width:100%; height:100%; object-fit:cover;">` : `<span>${initChar}</span>`}
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:14px; font-weight:800; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${name}</div>
+                <div style="font-size:11.5px; color:#16a34a; font-weight:700;"><i class="fa-solid fa-phone"></i> +91 ${phone}</div>
+                <div style="font-size:11px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><i class="fa-solid fa-envelope"></i> ${email}</div>
+                ${dateStr ? `<div style="font-size:10px; color:#94a3b8; margin-top:2px;">आवेदन तिथि: ${dateStr}</div>` : ''}
+              </div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button onclick="openEditGuestModal('${guest.id}')" style="flex:1; padding:8px 10px; border-radius:10px; border:1px solid #cbd5e1; background:#f8fafc; color:#334155; font-size:11.5px; font-weight:700; cursor:pointer;">
+                <i class="fa-solid fa-pen"></i> विवरण बदलें
+              </button>
+              <button onclick="approveGuestUser('${guest.id}')" style="flex:1.4; padding:8px 10px; border-radius:10px; border:none; background:linear-gradient(135deg, #16a34a, #15803d); color:white; font-size:11.5px; font-weight:800; cursor:pointer; box-shadow:0 2px 6px rgba(22,163,74,0.3);">
+                <i class="fa-solid fa-check"></i> स्वीकृत करें
+              </button>
+              <button onclick="rejectGuestUser('${guest.id}')" style="flex:0.8; padding:8px 10px; border-radius:10px; border:1px solid #fecaca; background:#fef2f2; color:#dc2626; font-size:11.5px; font-weight:700; cursor:pointer;">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openEditGuestModal(guestId) {
+      const guest = pendingGuestsList.find(g => g.id === guestId);
+      if (!guest) return;
+      document.getElementById("editGuestDocId").value = guest.id;
+      document.getElementById("editGuestNameInput").value = guest.fullName || "";
+      document.getElementById("editGuestPhoneInput").value = guest.phoneNumber || "";
+      document.getElementById("editGuestCategorySelect").value = "family";
+      const modal = document.getElementById("editGuestDetailsModal");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeEditGuestModal() {
+      const modal = document.getElementById("editGuestDetailsModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    async function saveAndApproveGuestDetails() {
+      const docId = document.getElementById("editGuestDocId")?.value;
+      const guest = pendingGuestsList.find(g => g.id === docId);
+      if (!guest) return;
+
+      const newName = (document.getElementById("editGuestNameInput")?.value || "").trim();
+      const newPhone = (document.getElementById("editGuestPhoneInput")?.value || "").trim().replace(/\D/g, '');
+      const category = document.getElementById("editGuestCategorySelect")?.value || "family";
+
+      if (!newName || newPhone.length !== 10) {
+        showToast("कृपया वैध नाम और 10-अंकीय मोबाइल नंबर दर्ज करें।", "warning");
+        return;
+      }
+
+      try {
+        // 1. Add to members collection
+        await db.collection("members").add({
+          name: newName,
+          phone: newPhone,
+          whatsapp: "91" + newPhone,
+          memberCategory: category,
+          tag: category === "core" ? "सदस्य" : "परिवार सदस्य",
+          photoUrl: guest.photoUrl || null,
+          email: guest.email || "",
+          googleUid: guest.uid || docId,
+          role: "member",
+          isVerified: true,
+          addedBy: "8696663615",
+          editCount: 0,
+          createdAt: new Date().toISOString()
+        });
+
+        // 2. Update users document to approved
+        await db.collection("users").doc(docId).update({
+          fullName: newName,
+          phoneNumber: newPhone,
+          role: "member",
+          isVerified: true,
+          status: "approved",
+          approvedAt: new Date().toISOString()
+        });
+
+        closeEditGuestModal();
+        showToast(`सदस्य ${newName} को सफलतापूर्वक स्वीकृत व ग्रुप में जोड़ा गया!`, "success");
+      } catch (err) {
+        showToast("स्वीकृति में त्रुटि: " + err.message, "error");
+      }
+    }
+
+    async function approveGuestUser(guestId) {
+      const guest = pendingGuestsList.find(g => g.id === guestId);
+      if (!guest) return;
+
+      try {
+        const phone = (guest.phoneNumber || "").replace(/\D/g, '').slice(-10);
+        await db.collection("members").add({
+          name: guest.fullName || "सदस्य",
+          phone: phone,
+          whatsapp: "91" + phone,
+          memberCategory: "family",
+          tag: "परिवार सदस्य",
+          photoUrl: guest.photoUrl || null,
+          email: guest.email || "",
+          googleUid: guest.uid || guestId,
+          role: "member",
+          isVerified: true,
+          addedBy: "8696663615",
+          editCount: 0,
+          createdAt: new Date().toISOString()
+        });
+
+        await db.collection("users").doc(guestId).update({
+          role: "member",
+          isVerified: true,
+          status: "approved",
+          approvedAt: new Date().toISOString()
+        });
+
+        showToast(`${guest.fullName} को सदस्य के रूप में स्वीकृत किया गया!`, "success");
+      } catch (err) {
+        showToast("स्वीकृति में त्रुटि: " + err.message, "error");
+      }
+    }
+
+    async function rejectGuestUser(guestId) {
+      showConfirmDialog("अनुरोध अस्वीकार", "क्या आप वाकई इस गेस्ट अनुरोध को हटाना चाहते हैं?", async () => {
+        try {
+          await db.collection("users").doc(guestId).delete();
+          showToast("गेस्ट अनुरोध हटा दिया गया।", "info");
+        } catch (err) {
+          showToast("हटाने में त्रुटि: " + err.message, "error");
+        }
+      });
+    }
+
+    // 🟢 Live Presence & App Open Timeline Modal
+    function openLivePresenceModal() {
+      const modal = document.getElementById("livePresenceModal");
+      if (modal) modal.style.display = "flex";
+      renderLivePresenceModal();
+    }
+
+    function closeLivePresenceModal() {
+      const modal = document.getElementById("livePresenceModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function renderLivePresenceModal() {
+      const container = document.getElementById("livePresenceFullList");
+      const summaryEl = document.getElementById("livePresenceSummaryText");
+      const totalBadge = document.getElementById("livePresenceTotalBadge");
+      const headerLiveBadge = document.getElementById("liveActiveCountBadge");
+      if (!container) return;
+
+      const currentUser = getCurrentAppUser();
+      const appOpensList = notificationHistoryList.filter(n => n.type === 'app_open');
+      const uniqueOpenersMap = new Map();
+
+      if (currentUser && currentUser.name && !currentUser.isGuest) {
+        const userPhoto = currentUser.photoUrl || getMemberPhotoByNameOrPhone(currentUser.name, currentUser.phone);
+        uniqueOpenersMap.set(currentUser.name, {
+          sender: currentUser.name,
+          senderPhone: currentUser.phone || "",
+          senderPhoto: userPhoto || null,
+          senderRole: currentUser.role || "सदस्य",
+          timestamp: Date.now()
+        });
+      }
+
+      appOpensList.forEach(item => {
+        const rawName = (item.sender || item.title || 'अतिथि').replace(/^🟢\s*/, '').replace(/\s*ने ऐप खोला$/, '').trim();
+        const photo = item.senderPhoto || getMemberPhotoByNameOrPhone(rawName, item.senderPhone);
+        const existing = uniqueOpenersMap.get(rawName);
+        if (!existing || (item.timestamp || 0) > (existing.timestamp || 0)) {
+          uniqueOpenersMap.set(rawName, { ...item, sender: rawName, senderPhoto: photo });
+        }
+      });
+
+      const list = Array.from(uniqueOpenersMap.values()).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      if (totalBadge) totalBadge.innerText = list.length;
+      if (headerLiveBadge) headerLiveBadge.innerText = list.length;
+      if (summaryEl) {
+        summaryEl.innerText = `${list.length} सदस्य ऐप में सक्रिय / उपस्थित हैं`;
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:32px 14px; color:#64748b;">
+            <i class="fa-solid fa-users" style="font-size:30px; color:#cbd5e1; margin-bottom:8px;"></i>
+            <div style="font-size:13px; font-weight:700;">अभी तक कोई लाइव उपस्थिति दर्ज नहीं हुई है।</div>
+            <div style="font-size:11.5px; margin-top:4px;">जैसे ही सदस्य ऐप खोलेंगे, उनकी समयवार सूची यहाँ दिखाई देगी।</div>
+          </div>
+        `;
+        return;
+      }
+
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+
+      container.innerHTML = list.map(item => {
+        const name = (item.sender || 'सदस्य').replace(/^🟢\s*/, '').replace(/\s*ने ऐप खोला$/, '').trim();
+        const initial = name.charAt(0);
+        const timeAgo = formatRelativeTime(item.timestamp);
+        const timeFormatted = item.timestamp ? new Date(item.timestamp).toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) : '';
+        const dateFormatted = item.timestamp ? new Date(item.timestamp).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short' }) : '';
+        const isToday = (item.timestamp || 0) >= todayStart.getTime();
+        const photo = item.senderPhoto || getMemberPhotoByNameOrPhone(name, item.senderPhone);
+        const phone = item.senderPhone ? `+91 ${item.senderPhone}` : '';
+        const role = item.senderRole || ((item.senderPhone && item.senderPhone.endsWith(SANCHALAK_PHONE)) ? '🚩 संचालक' : 'सदस्य');
+
+        return `
+          <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+            <div style="position:relative; width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; flex-shrink:0; border:2px solid #a7f3d0; overflow:hidden;">
+              ${photo ? `<img src="${photo}" style="width:100%; height:100%; object-fit:cover;">` : `<span>${initial}</span>`}
+              <span style="position:absolute; bottom:1px; right:1px; width:11px; height:11px; background:${isToday ? '#22c55e' : '#94a3b8'}; border-radius:50%; border:2px solid white;"></span>
+            </div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
+                <div style="font-size:13.5px; font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(name)}</div>
+                <span style="font-size:10px; font-weight:800; padding:2px 7px; border-radius:8px; background:${isToday ? '#dcfce7' : '#f1f5f9'}; color:${isToday ? '#15803d' : '#64748b'}; white-space:nowrap;">
+                  ${isToday ? '🟢 सक्रिय' : 'हाल ही में'}
+                </span>
+              </div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px; display:flex; align-items:center; justify-content:space-between;">
+                <span><i class="fa-solid fa-clock" style="color:#10b981;"></i> ${dateFormatted ? dateFormatted + ', ' : ''}${timeFormatted} (${timeAgo})</span>
+                ${phone ? `<span style="font-size:10.5px; color:#94a3b8;">${phone}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function showConfirmDialog(title, message, onConfirm) {
@@ -5299,10 +6204,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 40)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 41)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 40)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 41)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -5417,7 +6322,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 40)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 41)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -5428,7 +6333,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 40)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 41)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -5602,9 +6507,19 @@
       const userPhone = document.getElementById("settingsUserPhone");
       const authActionBox = document.getElementById("settingsAuthActionBox");
       const adminSettingsCard = document.getElementById("adminSettingsCard");
+      const adminUnlockBox = document.getElementById("adminUnlockBox");
+      const currentGoogleEmail = (firebase.auth().currentUser?.email || "").toLowerCase();
+      const isAuthorizedAdminUser = (loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE)) || (currentGoogleEmail === SANCHALAK_EMAIL.toLowerCase());
 
       if (adminSettingsCard) {
         adminSettingsCard.style.display = isAdmin ? "block" : "none";
+      }
+      if (adminUnlockBox) {
+        adminUnlockBox.style.display = (isAuthorizedAdminUser && !isAdmin) ? "block" : "none";
+      }
+      const pendingBadge = document.getElementById("adminPendingGuestsBadge");
+      if (pendingBadge) {
+        pendingBadge.innerText = pendingGuestsList.length;
       }
 
       const duesBar = document.getElementById("adminDuesReminderBar");
@@ -6756,9 +7671,9 @@
       }
     }
 
-    // ✅ पहली बार ऐप इंस्टॉल/खोलने पर और लॉगिन के बाद एक बार स्वागत मैसेज दिखाएं
+    // ✅ पहली बार ऐप इंस्टॉल/खोलने पर (v4.5.5) और लॉगिन के बाद एक बार स्वागत मैसेज दिखाएं
     function checkFirstTimeWelcomeOnAppOpen() {
-      const isFreshInstall = !localStorage.getItem("appInstallWelcomeSeen");
+      const isFreshInstall = !localStorage.getItem("welcomeSeen_v4.5.5");
       const savedPhone = localStorage.getItem("loggedInMemberPhone");
       const isMemberFirstWelcome = savedPhone && !localStorage.getItem("welcomeSeen_" + savedPhone);
 
@@ -6790,6 +7705,7 @@
     }
 
     function acknowledgeWelcomeModal() {
+      localStorage.setItem("welcomeSeen_v4.5.5", "true");
       localStorage.setItem("appInstallWelcomeSeen", "true");
       if (currentWelcomePhone) {
         localStorage.setItem("welcomeSeen_" + currentWelcomePhone, "true");
@@ -6811,8 +7727,22 @@
     function logoutMember() {
       localStorage.removeItem("loggedInMemberPhone");
       localStorage.removeItem("isAdminSession");
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("isUserVerified");
       loggedInMemberPhone = null;
       isAdmin = false;
+      userRole = "guest";
+      isUserVerified = false;
+      currentGoogleAuthUser = null;
+      try {
+        if (typeof firebase !== "undefined" && firebase.auth) {
+          firebase.auth().signOut();
+        }
+      } catch (e) {}
+
+      const guestModal = document.getElementById("guestRoomModal");
+      if (guestModal) guestModal.style.display = "none";
+
       showToast("आप सफलतापूर्वक लॉगआउट हो गए हैं।", "info");
       updateAuthUI();
     }
@@ -6900,6 +7830,10 @@
       renderCalendar();
       updateAuthUI();
       checkAndShowTodayCelebrations();
+      if (!window.__welcomeChecked) {
+        window.__welcomeChecked = true;
+        setTimeout(checkFirstTimeWelcomeOnAppOpen, 600);
+      }
       if (!appOpenRecorded) {
         setTimeout(recordAppOpenEvent, 1000);
       }
@@ -6912,6 +7846,23 @@
         </div>
       `;
     });
+
+    // 👥 Firestore Realtime Listener for Pending Guests (Admin Approval)
+    try {
+      db.collection("users").where("role", "==", "guest").onSnapshot((snapshot) => {
+        pendingGuestsList = [];
+        snapshot.forEach(docSnap => {
+          pendingGuestsList.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        const badge = document.getElementById("adminPendingGuestsBadge");
+        if (badge) badge.innerText = pendingGuestsList.length;
+        if (document.getElementById("adminApprovalModal")?.style.display === "flex") {
+          renderAdminPendingGuests();
+        }
+      }, (error) => {
+        console.warn("Pending guests listener error:", error);
+      });
+    } catch (e) {}
 
     db.collection("ledger").onSnapshot((snapshot) => {
       transactions = [];
@@ -7312,7 +8263,9 @@
       currentProfileModalMemberId = memberId;
 
       const isSelf = loggedInMemberPhone && m.phone && m.phone.endsWith(loggedInMemberPhone);
-      const canEdit = isAdmin || isSelf;
+      const isAddedByMe = loggedInMemberPhone && m.addedBy && m.addedBy.replace(/\D/g, '').endsWith(loggedInMemberPhone);
+      const canEditAdded = isAddedByMe && (m.editCount || 0) < 2;
+      const canEdit = isAdmin || isSelf || canEditAdded;
 
       const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : "");
       let tagHtml = "";
@@ -7732,10 +8685,34 @@
         };
 
         if (editId) {
+          const existing = membersList.find(x => x.id === editId);
+          if (existing && !isAdmin) {
+            const isSelf = loggedInMemberPhone && existing.phone && existing.phone.replace(/\D/g, '').endsWith(loggedInMemberPhone);
+            const isAddedByMe = loggedInMemberPhone && existing.addedBy && existing.addedBy.replace(/\D/g, '').endsWith(loggedInMemberPhone);
+            
+            if (!isSelf && !isAddedByMe) {
+              showToast("अनुमति अस्वीकृत: आप केवल अपनी या अपने द्वारा जोड़े गए सदस्य की प्रोफ़ाइल संपादित कर सकते हैं।", "error");
+              return;
+            }
+
+            if (isAddedByMe && !isSelf) {
+              const count = existing.editCount || 0;
+              if (count >= 2) {
+                showToast("आपने इस सदस्य का विवरण 2 बार संपादित कर लिया है। अब केवल व्यवस्थापक (रेवंतराम जी) ही सुधार कर सकते हैं।", "warning");
+                return;
+              }
+              payload.editCount = count + 1;
+            }
+            // Non-admin cannot modify tag
+            payload.tag = existing.tag || "";
+          }
+
           await db.collection("members").doc(editId).update(payload);
           showToast(`सदस्य ${name} की जानकारी सफलतापूर्वक अपडेट हुई!`, "success");
         } else {
           payload.createdAt = new Date();
+          payload.addedBy = loggedInMemberPhone || "8696663615";
+          payload.editCount = 0;
           await db.collection("members").add(payload);
           showToast(`नया सदस्य ${name} सफलतापूर्वक जुड़ गया!`, "success");
         }
@@ -7752,6 +8729,19 @@
     function editMember(id) {
       const m = membersList.find(x => x.id === id);
       if (!m) return;
+
+      if (!isAdmin) {
+        const isSelf = loggedInMemberPhone && m.phone && m.phone.replace(/\D/g, '').endsWith(loggedInMemberPhone);
+        const isAddedByMe = loggedInMemberPhone && m.addedBy && m.addedBy.replace(/\D/g, '').endsWith(loggedInMemberPhone);
+        if (!isSelf && !isAddedByMe) {
+          showToast("अनुमति अस्वीकृत: आप केवल अपनी या अपने द्वारा जोड़े गए सदस्य की प्रोफ़ाइल संपादित कर सकते हैं।", "error");
+          return;
+        }
+        if (isAddedByMe && !isSelf && (m.editCount || 0) >= 2) {
+          showToast("आपने इस सदस्य का विवरण 2 बार संपादित कर लिया है। अब केवल व्यवस्थापक (रेवंतराम जी) ही सुधार कर सकते हैं।", "warning");
+          return;
+        }
+      }
 
       document.getElementById("editDocId").value = m.id;
       document.getElementById("memName").value = m.name || "";
@@ -10896,8 +11886,28 @@
           });
           updateNotificationBadge();
           renderNotificationCenterList();
+          updateLiveHeaderBadge();
+          if (document.getElementById("livePresenceModal")?.style.display === "flex") {
+            renderLivePresenceModal();
+          }
         }, err => console.log("Notification listener error:", err));
       } catch (e) {}
+    }
+
+    function updateLiveHeaderBadge() {
+      const headerLiveBadge = document.getElementById("liveActiveCountBadge");
+      if (!headerLiveBadge) return;
+      const appOpensList = notificationHistoryList.filter(n => n.type === 'app_open');
+      const uniqueNames = new Set();
+      const currentUser = getCurrentAppUser();
+      if (currentUser && currentUser.name && !currentUser.isGuest) {
+        uniqueNames.add(currentUser.name);
+      }
+      appOpensList.forEach(item => {
+        const rawName = (item.sender || item.title || 'अतिथि').replace(/^🟢\s*/, '').replace(/\s*ने ऐप खोला$/, '').trim();
+        if (rawName) uniqueNames.add(rawName);
+      });
+      headerLiveBadge.innerText = uniqueNames.size || 0;
     }
 
     function updateNotificationBadge() {

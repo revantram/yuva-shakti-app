@@ -154,6 +154,14 @@ public class MainActivity extends Activity {
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setSupportMultipleWindows(true);
 
+        // Google Sign-In & OAuth compatibility in WebView
+        String defaultUa = settings.getUserAgentString();
+        String cleanUa = defaultUa.replace("; wv", "").replaceAll("Version/\\d+\\.\\d+\\s*", "");
+        settings.setUserAgentString(cleanUa);
+        try {
+            android.webkit.CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+        } catch (Exception ignored) {}
+
         mWebView.addJavascriptInterface(new WebAppInterface(), "AndroidApp");
 
         mWebView.setDownloadListener(new DownloadListener() {
