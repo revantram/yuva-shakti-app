@@ -6037,7 +6037,7 @@
         const dataUrl = await generateSuvicharCardDataUrl(item);
         if (!dataUrl) throw new Error("फोटो जनरेट नहीं हो सकी");
 
-        const caption = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author || "युवा शक्ति विचार वाटिका"}*\n\n👤 *सुविचार प्रेषक:* ${sender.name}\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n\n📲 *युवा शक्ति ग्रुप ऐप डाउनलोड करें (सीधा APK लिंक):*\n${appDownloadUrl}`;
+        const caption = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— _${item.author || "युवा शक्ति विचार वाटिका"}_\n\n╔══════════════════════╗\n        🙏 *${sender.name}*\n        📲 _युवा शक्ति ग्रुप_\n╚══════════════════════╝\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
 
         if (window.AndroidApp && typeof window.AndroidApp.shareImage === 'function') {
           window.AndroidApp.shareImage(dataUrl, caption);
@@ -6066,7 +6066,7 @@
         fallbackDownloadAndShareImage(dataUrl, caption);
       } catch (e) {
         console.error("Suvichar photo share error:", e);
-        const text = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— *${item.author}*\n\n👤 *सुविचार प्रेषक:* ${sender.name}\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n\n📲 *युवा शक्ति ग्रुप ऐप डाउनलोड करें (सीधा APK लिंक):*\n${appDownloadUrl}`;
+        const text = `✨ *आज का सुविचार* ✨\n\n"${item.quote}"\n\n— _${item.author}_\n\n╔══════════════════════╗\n        🙏 *${sender.name}*\n        📲 _युवा शक्ति ग्रुप_\n╚══════════════════════╝\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
         shareCustomText(text, "आज का सुविचार");
       }
     }
@@ -6298,6 +6298,29 @@
           openDailySuvicharModal();
         }, 800);
       }
+    }
+
+    // ✅ पहली बार ऐप इंस्टॉल/खोलने पर और लॉगिन के बाद एक बार स्वागत मैसेज दिखाएं
+    function checkFirstTimeWelcomeOnAppOpen() {
+      setTimeout(() => {
+        const savedPhone = localStorage.getItem("loggedInMemberPhone");
+        if (savedPhone) {
+          // लॉगिन है – अगर स्वागत नहीं देखा तो दिखाएं
+          const welcomeKey = "welcomeSeen_" + savedPhone;
+          if (!localStorage.getItem(welcomeKey)) {
+            const member = membersList.find(m => m.phone && m.phone.endsWith(savedPhone));
+            const name = member ? member.name : "भाटी परिवार सदस्य";
+            openFirstTimeWelcomeModal(name, savedPhone);
+          }
+        } else {
+          // लॉगिन नहीं है – पहली बार ऐप इंस्टॉल/खोलने पर दिखाएं
+          const installKey = "appInstallWelcomeSeen";
+          if (!localStorage.getItem(installKey)) {
+            localStorage.setItem(installKey, "true");
+            openFirstTimeWelcomeModal("भाटी परिवार सदस्य", null);
+          }
+        }
+      }, 1500); // Suvichar modal के बाद थोड़ी देर में दिखाएं
     }
 
     function openFirstTimeWelcomeModal(memberName, phone) {
@@ -11347,6 +11370,7 @@
     updateUpiDisplayEverywhere();
     updateHomeSuvicharSnippet();
     checkDailySuvicharOnAppOpen();
+    checkFirstTimeWelcomeOnAppOpen();
     checkMorningSuvicharNotification();
     requestNotificationPermission();
 
