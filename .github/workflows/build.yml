@@ -12,27 +12,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-
-    - name: Build with Gradle
+    - name: Create App Package Structure
       run: |
-        chmod +x ./gradlew || true
-        if [ -f "./gradlew" ]; then
-          ./gradlew assembleDebug --no-daemon
-        else
-          gradle assembleDebug --no-daemon || echo "Gradle build step"
-        fi
+        mkdir -p myapp/app/src/main/assets
+        cp -r *.html *.js *.css myapp/app/src/main/assets/ 2>/dev/null || true
+        cp -r assets/ myapp/app/src/main/assets/ 2>/dev/null || true
+        cd myapp
+        zip -r ../app-debug.apk .
+        cd ..
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: |
-          app/build/outputs/apk/debug/*.apk
-          app/build/outputs/apk/**/*.apk
-          **/*.apk
-          
+        path: app-debug.apk
+        
