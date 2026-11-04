@@ -18,10 +18,17 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Build with Gradle
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Build Debug APK with Gradle
       run: |
         chmod +x ./gradlew || true
-        gradle assembleDebug --no-daemon || ./gradlew assembleDebug --no-daemon || true
+        if [ -f "./gradlew" ]; then
+          ./gradlew assembleDebug --no-daemon
+        else
+          gradle assembleDebug --no-daemon
+        fi
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
@@ -29,6 +36,6 @@ jobs:
         name: app-debug
         path: |
           app/build/outputs/apk/debug/*.apk
-          build/outputs/apk/debug/*.apk
+          app/build/outputs/apk/**/*.apk
           **/*.apk
           
