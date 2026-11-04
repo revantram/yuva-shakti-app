@@ -100,35 +100,10 @@ fun PendingDepositDialog(
                         isSaving = true
                         coroutineScope.launch {
                             withContext(Dispatchers.IO) {
-                                val currentTime: Long = System.currentTimeMillis()
-                                val statusCode: Int = 0
                                 val deposit = PendingDepositEntity(
                                     memberId = memberNameText.trim().ifEmpty { "1" },
                                     memberName = memberNameText.trim().ifEmpty { "सदस्य" },
                                     amount = amountVal,
                                     month = "November",
                                     year = 2026,
-                                    notes = noteText,
-                                    paymentDate = currentTime,
-                                    status = statusCode
-                                )
-                                pendingDao.insertAll(listOf(deposit))
-                            }
-                            isSaving = false
-                            onDismiss()
-                        }
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = SaffronGold),
-                enabled = !isSaving
-            ) {
-                Text(if (isSaving) "सेव हो रहा है..." else "सुरक्षित करें")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("रद्द करें", color = DeepNavy)
-            }
-        }
-    )
-}
+                                    notes =
