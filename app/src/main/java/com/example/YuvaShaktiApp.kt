@@ -1,57 +1,101 @@
 package com.example
 
-import android.app.Application
-import android.util.Log
-import com.example.util.NotificationHelper
-import com.google.firebase.FirebaseApp
-import java.io.File
-import java.io.PrintWriter
-import java.io.StringWriter
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 
-class YuvaShaktiApp : Application() {
-    companion object {
-        private const val TAG = "YuvaShaktiApp"
+class MainActivity : ComponentActivity() {
+
+    private lateinit var webView: WebView
+    private var fileUploadCallback: ValueCallback<Array<Uri>>? = null
+
+    private val filePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val data = result.data
+        val uris = WebChromeClient.FileChooserParams.parseResult(result.resultCode, data)
+        fileUploadCallback?.onReceiveValue(uris)
+        fileUploadCallback = null
     }
 
-    override fun onCreate() {
-        super.onCreate()
+    @SuppressLint("SetJavaScriptEnabled")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        // 1. Global uncaught crash logger
-        val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
-        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            try {
-                val sw = StringWriter()
-                throwable.printStackTrace(PrintWriter(sw))
-                val stackTrace = sw.toString()
-                Log.e(TAG, "FATAL CRASH on thread ${thread.name}: ${throwable.message}\n$stackTrace")
+        webView = WebView(this).apply {
+            settings.apply {
+                javaScriptEnabled = true
+                domStorageEnabled = true
+                databaseEnabled = true
+                allowFileAccess = true
+                allowContentAccess = true
+                useWideViewPort = true
+                loadWithOverviewMode = true
+                cacheMode = WebSettings.LOAD_DEFAULT
+                mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+            }
 
-                try {
-                    val crashFile = File("/sdcard/Download/yuva_shakti_crash.txt")
-                    crashFile.writeText("CRASH on thread ${thread.name}:\nError: ${throwable.message}\n\nStack Trace:\n$stackTrace")
-                } catch (_: Throwable) {}
+            webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                    if (url == null) return false
+                    // UPI Apps (PhonePe, GPay, Paytm) व WhatsApp लिंक को बाहर ऐप में खोलने के लिए
+                    if (url.startsWith("upi://") || url.startsWith("whatsapp://") || 
+                        url.startsWith("phonepe://") || url.startsWith("gpay://") ||
+                        url.startsWith("intent://") || url.startsWith("tel:") || url.startsWith("mailto:")) {
+                        try {
+                            val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+                            startActivity(intent)
+                            return true
+                        } catch (e: Exception) {
+                            return true
+                        }
+                    }
+                    return false
+                }
+            }
 
-                try {
-                    val internalFile = File(filesDir, "crash.txt")
-                    internalFile.writeText("CRASH on thread ${thread.name}:\nError: ${throwable.message}\n\nStack Trace:\n$stackTrace")
-                } catch (_: Throwable) {}
-            } catch (_: Throwable) {}
+            webChromeClient = object : WebChromeClient() {
+                // फ़ोटो या फ़ाइल अपलोड पिकर सपोर्ट
+                override fun onShowFileChooser(
+                    webView: WebView?,
+                    filePathCallback: ValueCallback<Array<Uri>>?,
+                    fileChooserParams: FileChooserParams?
+                ): Boolean {
+                    fileUploadCallback?.onReceiveValue(null)
+                    fileUploadCallback = filePathCallback
+                    val intent = fileChooserParams?.createIntent() ?: Intent(Intent.ACTION_GET_CONTENT).apply {
+                        type = "*/*"
+                    }
+                    filePickerLauncher.launch(intent)
+                    return true
+                }
+            }
 
-            defaultHandler?.uncaughtException(thread, throwable)
+            // Assets फ़ोल्डर में मौजूद index.html सीधे चलेगी
+            loadUrl("file:///android_asset/index.html")
         }
 
-        // 2. Safely initialize FirebaseApp
-        try {
-            FirebaseApp.initializeApp(this)
-            Log.d(TAG, "FirebaseApp initialized successfully")
-        } catch (t: Throwable) {
-            Log.e(TAG, "FirebaseApp initialization error", t)
-        }
+        setContentView(webView)
 
-        // 3. Pre-create notification channels safely
-        try {
-            NotificationHelper.createNotificationChannel(this)
-        } catch (t: Throwable) {
-            Log.e(TAG, "Notification channel pre-creation error", t)
-        }
+        // बैक बटन नेविगेशन
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (webView.canGoBack()) {
+                    webView.goBack()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 }
