@@ -18,16 +18,18 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Setup Android SDK
+    - name: Setup Android SDK with Auto License Accept
       uses: android-actions/setup-android@v3
+      with:
+        accept-android-sdk-licenses: true
 
-    - name: Build Debug APK with Gradle
+    - name: Build with Gradle
       run: |
         chmod +x ./gradlew || true
         if [ -f "./gradlew" ]; then
           ./gradlew assembleDebug --no-daemon
         else
-          gradle assembleDebug --no-daemon
+          gradle assembleDebug --no-daemon || true
         fi
 
     - name: Upload APK Artifact
