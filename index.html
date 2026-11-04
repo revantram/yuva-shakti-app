@@ -6117,6 +6117,20 @@
         }
       });
 
+      // Ensure all members are listed even if they haven't opened the app recently
+      if (Array.isArray(membersList)) {
+        membersList.forEach(m => {
+          if (!uniqueOpenersMap.has(m.name)) {
+            uniqueOpenersMap.set(m.name, {
+              sender: m.name,
+              senderPhone: m.phone || "",
+              senderPhoto: m.photo || null,
+              senderRole: m.role || "सदस्य",
+              timestamp: null
+            });
+          }
+        });
+      }
       const list = Array.from(uniqueOpenersMap.values()).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
       const liveNowCount = list.filter(item => (Date.now() - (item.timestamp || 0)) < LIVE_WINDOW_MS).length;
 

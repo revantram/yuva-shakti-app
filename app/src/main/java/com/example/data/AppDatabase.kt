@@ -18,13 +18,15 @@ import kotlinx.coroutines.launch
         ExpenseEntity::class,
         PaymentRequestEntity::class,
         EventGalleryEntity::class,
-        LoanRequestEntity::class
+        LoanRequestEntity::class,
+        PendingDepositEntity::class
     ],
     version = 9,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun memberDao(): MemberDao
+    abstract fun pendingDepositDao(): PendingDepositDao
 
     companion object {
         @Volatile
