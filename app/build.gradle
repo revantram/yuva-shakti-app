@@ -1,0 +1,7 @@
+defaultConfig {
+    applicationId "com.yuvashaktigroup.app"
+    minSdk 24
+    targetSdk 34
+    versionCode 43
+    versionName "4.5.7"
+}
