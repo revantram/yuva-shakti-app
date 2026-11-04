@@ -18,17 +18,14 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Build APK with Gradle
+    - name: Build APK with Gradle Wrapper
       run: |
-        chmod +x gradlew || true
-        ./gradlew assembleDebug || gradle assembleDebug || echo "Gradle build attempted"
+        chmod +x ./gradlew
+        ./gradlew assembleRelease --no-daemon
 
-    - name: Find and Upload APK
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: app-debug
-        path: |
-          app/build/outputs/apk/**/*.apk
-          build/outputs/apk/**/*.apk
-          **/*.apk
-          
+        name: app-release
+        path: app/build/outputs/apk/release/*.apk
+        
