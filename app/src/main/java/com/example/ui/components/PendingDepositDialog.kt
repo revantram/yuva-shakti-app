@@ -101,14 +101,14 @@ fun PendingDepositDialog(
                         coroutineScope.launch {
                             withContext(Dispatchers.IO) {
                                 val deposit = PendingDepositEntity(
-                                    memberId = memberNameText.trim(),
+                                    memberId = memberNameText.trim().ifEmpty { "1" },
                                     memberName = memberNameText.trim().ifEmpty { "सदस्य" },
                                     amount = amountVal,
                                     month = "November",
                                     year = 2026,
                                     notes = noteText,
-                                    paymentDate = System.currentTimeMillis(),
-                                    status = 0
+                                    paymentDate = System.currentTimeMillis().toString(),
+                                    status = "PENDING"
                                 )
                                 pendingDao.insertAll(listOf(deposit))
                             }
