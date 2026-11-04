@@ -100,6 +100,8 @@ fun PendingDepositDialog(
                         isSaving = true
                         coroutineScope.launch {
                             withContext(Dispatchers.IO) {
+                                val currentTime: Long = System.currentTimeMillis()
+                                val statusCode: Int = 0
                                 val deposit = PendingDepositEntity(
                                     memberId = memberNameText.trim().ifEmpty { "1" },
                                     memberName = memberNameText.trim().ifEmpty { "सदस्य" },
@@ -107,8 +109,8 @@ fun PendingDepositDialog(
                                     month = "November",
                                     year = 2026,
                                     notes = noteText,
-                                    paymentDate = System.currentTimeMillis().toString(),
-                                    status = "PENDING"
+                                    paymentDate = currentTime,
+                                    status = statusCode
                                 )
                                 pendingDao.insertAll(listOf(deposit))
                             }
