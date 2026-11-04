@@ -495,55 +495,6 @@
     </div>
   </div>
 
-  <!-- B. नया ऋण आवेदन मोडल (Loan Request Modal) -->
-  <div id="newLoanModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4><i class="fa-solid fa-hand-holding-heart"></i> सहायता ऋण अनुरोध दर्ज करें</h4>
-        <button class="close-btn" data-close="newLoanModal">&times;</button>
-      </div>
-      <form id="newLoanForm" class="modal-form">
-        <div class="form-group">
-          <label for="loanApplicantName">आवेदक सदस्य का नाम *</label>
-          <input type="text" id="loanApplicantName" required placeholder="पूरा नाम दर्ज करें" class="form-input">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="loanMemberCode">सदस्य कोड (उदा. YS-05) *</label>
-            <input type="text" id="loanMemberCode" required placeholder="YS-01" class="form-input">
-          </div>
-          <div class="form-group">
-            <label for="loanAmount">आवश्यक ऋण राशि (₹) *</label>
-            <input type="number" id="loanAmount" required min="500" step="100" placeholder="उदा. 5000" class="form-input">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="loanDuration">लौटाने की अवधि *</label>
-            <select id="loanDuration" class="form-input">
-              <option value="1 माह">1 माह</option>
-              <option value="2 माह">2 माह</option>
-              <option value="3 माह">3 माह</option>
-              <option value="6 माह">6 माह</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="loanPhone">मोबाइल नंबर *</label>
-            <input type="tel" id="loanPhone" required placeholder="10 अंकों का मोबाइल" class="form-input">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="loanPurpose">ऋण लेने का उद्देश्य / आवश्यकता *</label>
-          <textarea id="loanPurpose" rows="3" required placeholder="कारण स्पष्ट लिखें (उदा. चिकित्सा, पढ़ाई, कृषि या घरेलू जरूरत)" class="form-input"></textarea>
-        </div>
-        <div class="form-actions">
-          <button type="button" class="btn secondary-btn" data-close="newLoanModal">रद्द करें</button>
-          <button type="submit" class="btn primary-btn"><i class="fa-solid fa-paper-plane"></i> आवेदन प्रस्तुत करें</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <!-- D. सदस्य प्रबंधन मोडल (Manage Members Modal) -->
   <div id="manageMembersModal" class="modal-overlay" style="display: none;">
     <div class="modal-content modal-lg">
