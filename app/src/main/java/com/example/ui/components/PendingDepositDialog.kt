@@ -54,4 +54,70 @@ fun PendingDepositDialog(
     val pendingDao = remember { db.pendingDepositDao() }
 
     var amountText by remember { mutableStateOf("") }
-    var noteText by remember { mutableState
+    var noteText by remember { mutableStateOf("") }
+    var isSaving by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "लंबित जमा विवरण (Pending Deposits)",
+                color = DeepNavy
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                OutlinedTextField(
+                    value = amountText,
+                    onValueChange = { amountText = it },
+                    label = { Text("राशि (Amount)") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = noteText,
+                    onValueChange = { noteText = it },
+                    label = { Text("विवरण / नोट (Notes)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val amountVal = amountText.toDoubleOrNull() ?: 0.0
+                    if (amountVal > 0 && !isSaving) {
+                        isSaving = true
+                        coroutineScope.launch {
+                            withContext(Dispatchers.IO) {
+                                val deposit = PendingDepositEntity(
+                                    amount = amountVal,
+                                    notes = noteText,
+                                    paymentDate = System.currentTimeMillis().toString(),
+                                    status = "PENDING"
+                                )
+                                pendingDao.insertAll(listOf(deposit))
+                            }
+                            isSaving = false
+                            onDismiss()
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = SaffronGold),
+                enabled = !isSaving
+            ) {
+                Text(if (isSaving) "सेव हो रहा है..." else "सुरक्षित करें")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("रद्द करें", color = DeepNavy)
+            }
+        }
+    )
+}
