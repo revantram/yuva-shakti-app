@@ -107,8 +107,8 @@ fun PendingDepositDialog(
                                     month = "November",
                                     year = 2026,
                                     notes = noteText,
-                                    paymentDate = System.currentTimeMillis().toString(),
-                                    status = "PENDING"
+                                    paymentDate = System.currentTimeMillis(),
+                                    status = 0
                                 )
                                 pendingDao.insertAll(listOf(deposit))
                             }
