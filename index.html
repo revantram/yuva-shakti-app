@@ -7952,7 +7952,7 @@
       const novAmavasyaDate = "2026-11-08";
       const hasNovAmavasyaPassed = todayStr > novAmavasyaDate;
       const novPaid = (member.novemberAmavasya && member.novemberAmavasya.isPaid === true);
-      const novAmount = novPaid ? (Number(member.novemberAmavasya?.amount) || 100) : 0;
+      const novAmount = novPaid ? (Number(member.novemberAmavasya?.amount) || 0) : 0;
 
       // Extra contribution & ledger sum
       const extraAmount = Number(member.extraContribution || 0);
@@ -9378,7 +9378,8 @@
         if (!m.novemberAmavasya) m.novemberAmavasya = {};
         m.novemberAmavasya.isPaid = true;
         m.novemberAmavasya.status = 'paid';
-        m.novemberAmavasya.amount = m.novemberAmavasya.amount || 100;
+        // Amount 0 रखो - एडमिन बाद में एडिट करके सही राशि डालेगा
+        if (!m.novemberAmavasya.amount) m.novemberAmavasya.amount = 0;
         m.novemberAmavasya.date = m.lastPaymentDate;
       } else {
         if (m.novemberAmavasya) {
@@ -9395,7 +9396,7 @@
           paidThisAmavasya: willBePaid,
           paymentStatus: willBePaid ? 'paid' : 'due',
           lastPaymentDate: m.lastPaymentDate || null,
-          novemberAmavasya: m.novemberAmavasya || { isPaid: willBePaid, status: willBePaid ? 'paid' : 'due', amount: 100 },
+          novemberAmavasya: m.novemberAmavasya || { isPaid: willBePaid, status: willBePaid ? 'paid' : 'due', amount: 0 },
           updatedAt: new Date()
         });
 
