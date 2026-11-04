@@ -16,8 +16,8 @@ android {
     applicationId = "com.aistudio.yuvashakti.bhtfnd"
     minSdk = 24
     targetSdk = 35
-            versionCode = 43
-        versionName = "v4.6.0"
+    versionCode = 43
+    versionName = "4.6.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
