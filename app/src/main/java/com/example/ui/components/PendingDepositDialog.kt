@@ -31,8 +31,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.data.AppDatabase
-import com.example.data.MemberEntity
-import com.example.data.PendingDepositDao
 import com.example.data.PendingDepositEntity
 import com.example.ui.theme.DeepNavy
 import com.example.ui.theme.SaffronGold
@@ -42,7 +40,6 @@ import kotlinx.coroutines.withContext
 
 /**
  * Dialog for entering pending November deposit entries for members.
- * Admin can edit fields and persist them safely via coroutine scope.
  */
 @Composable
 fun PendingDepositDialog(
@@ -53,6 +50,7 @@ fun PendingDepositDialog(
     val db = remember { AppDatabase.getInstance(context) }
     val pendingDao = remember { db.pendingDepositDao() }
 
+    var memberNameText by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("") }
     var noteText by remember { mutableStateOf("") }
     var isSaving by remember { mutableStateOf(false) }
@@ -72,6 +70,13 @@ fun PendingDepositDialog(
                     .padding(vertical = 4.dp)
             ) {
                 OutlinedTextField(
+                    value = memberNameText,
+                    onValueChange = { memberNameText = it },
+                    label = { Text("सदस्य का नाम (Member Name)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
                     value = amountText,
                     onValueChange = { amountText = it },
                     label = { Text("राशि (Amount)") },
@@ -90,13 +95,17 @@ fun PendingDepositDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    val amountVal = amountText.toDoubleOrNull() ?: 0.0
+                    val amountVal = amountText.toIntOrNull() ?: 0
                     if (amountVal > 0 && !isSaving) {
                         isSaving = true
                         coroutineScope.launch {
                             withContext(Dispatchers.IO) {
                                 val deposit = PendingDepositEntity(
+                                    memberId = memberNameText.trim(),
+                                    memberName = memberNameText.trim().ifEmpty { "सदस्य" },
                                     amount = amountVal,
+                                    month = "November",
+                                    year = 2026,
                                     notes = noteText,
                                     paymentDate = System.currentTimeMillis().toString(),
                                     status = "PENDING"
