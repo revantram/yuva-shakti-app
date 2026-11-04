@@ -23,8 +23,12 @@ jobs:
         chmod +x gradlew || true
         ./gradlew assembleDebug || gradle assembleDebug || echo "Gradle build attempted"
 
-    - name: Upload APK Artifact
+    - name: Find and Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: |
+          app/build/outputs/apk/**/*.apk
+          build/outputs/apk/**/*.apk
+          **/*.apk
+          
