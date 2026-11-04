@@ -1183,4 +1183,311 @@ if (shareReceiptBtn) {
     window.open(url, '_blank');
   });
 }
+// ================= वंशावली (Family Tree) डेटा व लॉजिक =================
+
+// वंशावली का संपूर्ण डेटा (पीढ़ी 2 से पीढ़ी 6)
+const vanshavaliData = [
+    {
+        id: "head-1",
+        name: "बुधाराम जी",
+        spouseName: "राधा देवी",
+        gender: "male",
+        generation: 2,
+        children: [
+            {
+                id: "gen3-1",
+                name: "केवल राम जी भाटी",
+                spouseName: "कमली देवी",
+                gender: "male",
+                generation: 3,
+                parentId: "head-1",
+                children: [
+                    {
+                        id: "gen4-1",
+                        name: "रूपाराम जी भाटी",
+                        spouseName: "शारदा देवी",
+                        gender: "male",
+                        generation: 4,
+                        parentId: "gen3-1",
+                        children: [
+                            {
+                                id: "gen5-1",
+                                name: "रेवंतराम भाटी",
+                                spouseName: "पुष्पा देवी",
+                                gender: "male",
+                                generation: 5,
+                                parentId: "gen4-1",
+                                children: [
+                                    {
+                                        id: "gen6-1",
+                                        name: "ऋतिक भाटी",
+                                        spouseName: "",
+                                        gender: "male",
+                                        generation: 6,
+                                        parentId: "gen5-1",
+                                        children: []
+                                    }
+                                ]
+                            },
+                            {
+                                id: "gen5-2",
+                                name: "सुभाष भाटी",
+                                spouseName: "",
+                                gender: "male",
+                                generation: 5,
+                                parentId: "gen4-1",
+                                children: []
+                            }
+                        ]
+                    },
+                    {
+                        id: "gen4-2",
+                        name: "शौकीन राम जी भाटी",
+                        spouseName: "गलकू देवी",
+                        gender: "male",
+                        generation: 4,
+                        parentId: "gen3-1",
+                        children: []
+                    },
+                    {
+                        id: "gen4-3",
+                        name: "मोतीराम जी भाटी",
+                        spouseName: "साबू देवी",
+                        gender: "male",
+                        generation: 4,
+                        parentId: "gen3-1",
+                        children: []
+                    },
+                    {
+                        id: "gen4-4",
+                        name: "संजय भाटी",
+                        spouseName: "निरमा (संगीता)",
+                        gender: "male",
+                        generation: 4,
+                        parentId: "gen3-1",
+                        children: []
+                    },
+                    {
+                        id: "gen4-5",
+                        name: "सुमन",
+                        spouseName: "",
+                        gender: "female",
+                        generation: 4,
+                        parentId: "gen3-1",
+                        children: []
+                    }
+                ]
+            },
+            {
+                id: "gen3-2",
+                name: "केसाराम जी",
+                spouseName: "सांपत देवी",
+                gender: "male",
+                generation: 3,
+                parentId: "head-1",
+                children: []
+            }
+        ]
+    },
+    {
+        id: "head-2",
+        name: "रामू राम जी",
+        spouseName: "—",
+        gender: "male",
+        generation: 2,
+        children: []
+    },
+    {
+        id: "head-3",
+        name: "देबू जी",
+        spouseName: "—",
+        gender: "male",
+        generation: 2,
+        children: []
+    },
+    {
+        id: "head-4",
+        name: "नेनाराम जी",
+        spouseName: "—",
+        gender: "male",
+        generation: 2,
+        children: []
+    },
+    {
+        id: "head-5",
+        name: "राजूराम जी",
+        spouseName: "—",
+        gender: "male",
+        generation: 2,
+        children: []
+    }
+];
+
+let vanshavaliStack = [];
+
+// सदस्य आईडी से खोजना
+function findVanshavaliMember(id, list = vanshavaliData) {
+    for (let m of list) {
+        if (m.id === id) return m;
+        if (m.children && m.children.length > 0) {
+            let found = findVanshavaliMember(id, m.children);
+            if (found) return found;
+        }
+    }
+    return null;
+}
+
+// वंशावली रेंडर करना
+function renderVanshavaliView() {
+    const breadcrumb = document.getElementById("vanshavali-breadcrumb");
+    const hazariDiagram = document.getElementById("hazari-diagram");
+    const parentHeader = document.getElementById("branch-parent-header");
+    const listTitle = document.getElementById("branch-list-title");
+    const cardsList = document.getElementById("vanshavali-cards-list");
+
+    if (!cardsList) return;
+    cardsList.innerHTML = "";
+
+    // ब्रेडक्रम्ब अपडेट
+    if (breadcrumb) {
+        breadcrumb.innerHTML = `<span class="breadcrumb-item ${vanshavaliStack.length === 0 ? 'active' : ''}" onclick="resetVanshavali()">मूल वृक्ष</span>`;
+        let path = [];
+        vanshavaliStack.forEach((id, idx) => {
+            path.push(id);
+            const m = findVanshavaliMember(id);
+            const isLast = idx === vanshavaliStack.length - 1;
+            const targetPath = [...path];
+            breadcrumb.innerHTML += ` <span>&gt;</span> <span class="breadcrumb-item ${isLast ? 'active' : ''}" onclick="jumpVanshavali(['${targetPath.join("','")}'])">${m ? m.name : 'शाखा'}</span>`;
+        });
+    }
+
+    if (vanshavaliStack.length === 0) {
+        // रूट व्यू (हजारी जी का स्थिर डायग्राम + 5 परिवार)
+        if (hazariDiagram) hazariDiagram.style.display = "block";
+        if (parentHeader) parentHeader.style.display = "none";
+        if (listTitle) listTitle.innerText = "5 मुख्य परिवार (पीढ़ी 2)";
+
+        vanshavaliData.forEach(head => {
+            cardsList.appendChild(createVanshavaliCard(head));
+        });
+    } else {
+        // ड्रिलडाउन शाखा दृश्य
+        if (hazariDiagram) hazariDiagram.style.display = "none";
+        const currentId = vanshavaliStack[vanshavaliStack.length - 1];
+        const parentMember = findVanshavaliMember(currentId);
+
+        if (!parentMember) {
+            resetVanshavali();
+            return;
+        }
+
+        if (parentHeader) {
+            parentHeader.style.display = "block";
+            parentHeader.innerHTML = `
+                <div style="background: #eff6ff; border-left: 4px solid #2563eb; padding: 10px 14px; border-radius: 8px;">
+                    <div style="font-size: 11px; font-weight: bold; color: #1d4ed8;">वर्तमान परिवार शाखा (पीढ़ी ${parentMember.generation})</div>
+                    <div style="font-size: 15px; font-weight: bold; color: #1e3a8a; margin-top: 2px;">
+                        [ ${parentMember.name} + ${parentMember.spouseName || 'धर्मपत्नी'} ]
+                    </div>
+                </div>
+            `;
+        }
+
+        if (listTitle) listTitle.innerText = `संतानें (पीढ़ी ${parentMember.generation + 1})`;
+
+        if (!parentMember.children || parentMember.children.length === 0) {
+            cardsList.innerHTML = `<div style="text-align: center; color: #64748b; padding: 25px 0; font-size: 13px;">इस शाखा में अभी आगे कोई सदस्य दर्ज नहीं है।</div>`;
+        } else {
+            parentMember.children.forEach(child => {
+                if (child.gender === "female") {
+                    cardsList.appendChild(createDaughterVanshavaliCard(child));
+                } else {
+                    cardsList.appendChild(createVanshavaliCard(child));
+                }
+            });
+        }
+    }
+}
+
+// दंपति कार्ड [ पति + पत्नी ]
+function createVanshavaliCard(member) {
+    const card = document.createElement("div");
+    card.className = "couple-bracket-card";
+    const childrenCount = (member.children || []).length;
+
+    card.innerHTML = `
+        <div class="couple-header">
+            <span class="gen-badge">पीढ़ी ${member.generation}</span>
+            <span style="font-size: 12px; font-weight: bold; color: #2563eb;">${childrenCount} संतानें (खोलें) &gt;</span>
+        </div>
+        <div class="couple-row">
+            <div class="member-cell">
+                <i class="fa-solid fa-circle-user" style="font-size: 32px; color: #64748b;"></i>
+                <div>
+                    <div style="font-size: 10px; font-weight: bold; color: #d97706;">पति</div>
+                    <div style="font-size: 14px; font-weight: bold; color: #1e293b;">${member.name}</div>
+                </div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="member-cell" style="text-align: right; flex-direction: row-reverse;">
+                <i class="fa-solid fa-circle-user" style="font-size: 32px; color: #db2777;"></i>
+                <div>
+                    <div style="font-size: 10px; font-weight: bold; color: #db2777;">पत्नी</div>
+                    <div style="font-size: 14px; font-weight: bold; color: #1e293b;">${member.spouseName || '—'}</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    card.onclick = () => {
+        vanshavaliStack.push(member.id);
+        renderVanshavaliView();
+    };
+
+    return card;
+}
+
+// पुत्री कार्ड
+function createDaughterVanshavaliCard(member) {
+    const card = document.createElement("div");
+    card.style.cssText = "background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;";
+    card.innerHTML = `
+        <i class="fa-solid fa-circle-user" style="font-size: 28px; color: #e11d48;"></i>
+        <div>
+            <div style="font-size: 10px; font-weight: bold; color: #e11d48;">पुत्री (पीढ़ी ${member.generation})</div>
+            <div style="font-size: 14px; font-weight: bold; color: #881337;">${member.name}</div>
+        </div>
+    `;
+    return card;
+}
+
+function resetVanshavali() {
+    vanshavaliStack = [];
+    renderVanshavaliView();
+}
+
+function jumpVanshavali(pathArray) {
+    vanshavaliStack = pathArray;
+    renderVanshavaliView();
+}
+
+// बॉटम डॉक बटन से जोड़ना
+document.addEventListener("DOMContentLoaded", () => {
+    const dockButtons = document.querySelectorAll(".ios-dock-btn");
+    dockButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const targetTab = btn.getAttribute("data-tab");
+            if (targetTab === "tab-vanshavali") {
+                document.querySelectorAll(".tab-pane").forEach(pane => pane.style.display = "none");
+                const vSection = document.getElementById("tab-vanshavali");
+                if (vSection) vSection.style.display = "block";
+
+                dockButtons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                renderVanshavaliView();
+            }
+        });
+    });
+});
 
