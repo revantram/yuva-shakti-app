@@ -1058,5 +1058,122 @@ body {
     opacity: 0.8;
   }
 }
+/* ================= वंशावली (Family Tree) स्टाइल्स ================= */
+.vanshavali-container {
+    padding: 12px;
+    padding-bottom: 80px;
+}
+.diagram-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+    text-align: center;
+}
+.root-box {
+    display: inline-block;
+    background: #fef3c7;
+    border: 2px solid #d97706;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-weight: bold;
+    color: #78350f;
+}
+.arrow-down {
+    color: #d97706;
+    font-size: 20px;
+    margin: 6px 0;
+}
+.five-sons-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 6px 2px;
+    white-space: nowrap;
+}
+.son-pill {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    flex-shrink: 0;
+}
+.son-pill.highlight {
+    background: #fff7ed;
+    border-color: #f97316;
+    color: #c2410c;
+}
+.couple-bracket-card {
+    background: #ffffff;
+    border: 2px solid #f59e0b;
+    border-radius: 14px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.12);
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+.couple-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #fef3c7;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+}
+.gen-badge {
+    background: #d97706;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+.couple-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.member-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.plus-sign {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #f59e0b;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+.breadcrumb-bar {
+    background: #9a3412;
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.breadcrumb-item {
+    cursor: pointer;
+    color: #fed7aa;
+}
+.breadcrumb-item.active {
+    font-weight: bold;
+    color: #ffffff;
+}
 
 
