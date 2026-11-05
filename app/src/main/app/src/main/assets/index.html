@@ -42,7 +42,7 @@
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
-      padding-bottom: 105px;
+      padding-bottom: 115px;
       min-height: 100vh;
       line-height: 1.5;
     }
@@ -122,6 +122,14 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.03);
     }
 
+    .member-item, .expense-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
     /* iOS 18 Liquid Glass Floating Dock Navigation Bar */
     .nav-bar {
       position: fixed;
@@ -188,50 +196,147 @@
   </header>
 
   <div class="container">
-    <!-- 1. सदस्य डायरेक्टरी टैब -->
+    
+    <!-- 1. सदस्य डायरेक्टरी टैब (Members View) -->
     <div id="viewMembers" class="section-view active-view">
       <div class="banner-box">
         <div style="font-size: 13px; font-weight: 700; color: #ea580c;"><i class="fa-solid fa-quote-left"></i> आज का सुविचार</div>
         <div style="font-size: 12.5px; color: #334155; margin-top: 2px;">संगठन में ही शक्ति है, मिलजुलकर आगे बढ़ें।</div>
       </div>
+      
       <div class="card">
-        <h3>युवा शक्ति ग्रुप - सदस्य एवं वंशावली सूची</h3>
-        <p style="font-size:13px; color:#64748b; margin-top:8px;">यहाँ परिवार के सभी सदस्यों की सूची और वंशावली रिकॉर्ड उपलब्ध है।</p>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 style="font-size:15px;">युवा शक्ति ग्रुप (मुख्य कार्यकारिणी)</h3>
+          <span style="font-size:11px; background:#eff6ff; color:#2563eb; padding:3px 8px; border-radius:10px; font-weight:700;">12 सदस्य[span_9](start_span)[span_9](end_span)[span_10](start_span)[span_10](end_span)</span>
+        </div>
+        
+        <div class="member-item">
+          <div>
+            <div style="font-weight:700; font-size:14px;">रेवंतराम भाटी <span style="font-size:10px; background:#f59e0b; color:white; padding:2px 6px; border-radius:6px;">संचालक[span_11](start_span)[span_11](end_span)</span></div>
+            <div style="font-size:12px; color:#64748b;"><i class="fa-solid fa-phone"></i> 8696663615[span_12](start_span)[span_12](end_span)</div>
+          </div>
+          <span style="color:#16a34a; font-size:12px; font-weight:600;"><i class="fa-solid fa-circle-check"></i> जमा</span>
+        </div>
+
+        <div class="member-item">
+          <div>
+            <div style="font-weight:700; font-size:14px;">संजय भाटी <span style="font-size:10px; background:#3b82f6; color:white; padding:2px 6px; border-radius:6px;">उप-संचालक[span_13](start_span)[span_13](end_span)</span></div>
+            <div style="font-size:12px; color:#64748b;"><i class="fa-solid fa-phone"></i> 6375314729[span_14](start_span)[span_14](end_span)</div>
+          </div>
+          <span style="color:#16a34a; font-size:12px; font-weight:600;"><i class="fa-solid fa-circle-check"></i> जमा</span>
+        </div>
+
+        <div class="member-item" style="border-bottom:none;">
+          <div>
+            <div style="font-weight:700; font-size:14px;">नेताराम भाटी <span style="font-size:10px; background:#8b5cf6; color:white; padding:2px 6px; border-radius:6px;">कोषाध्यक्ष[span_15](start_span)[span_15](end_span)</span></div>
+            <div style="font-size:12px; color:#64748b;"><i class="fa-solid fa-phone"></i> 7850983600[span_16](start_span)[span_16](end_span)</div>
+          </div>
+          <span style="color:#16a34a; font-size:12px; font-weight:600;"><i class="fa-solid fa-circle-check"></i> जमा</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:15px; margin-bottom:10px;">भाटी परिवार के अन्य सदस्य</h3>
+        <div class="member-item">
+          <div>
+            <div style="font-weight:700; font-size:14px;">रूपाराम भाटी जी</div>
+            <div style="font-size:11px; color:#047857; background:#d1fae5; padding:2px 6px; border-radius:6px; display:inline-block; margin-top:2px;">खींवसर विधानसभा क्षेत्र बावरी समाज अध्यक्ष[span_17](start_span)[span_17](end_span)</div>
+          </div>
+        </div>
+        <div class="member-item">
+          <div>
+            <div style="font-weight:700; font-size:14px;">बीरबल राम भाटी</div>
+            <div style="font-size:11px; color:#047857; background:#d1fae5; padding:2px 6px; border-radius:6px; display:inline-block; margin-top:2px;">वार्ड नंबर 1 पार्षद कुचेरा[span_18](start_span)[span_18](end_span)</div>
+          </div>
+        </div>
+        <div class="member-item" style="border-bottom:none;">
+          <div>
+            <div style="font-weight:700; font-size:14px;">मुकेश भाटी</div>
+            <div style="font-size:11px; color:#047857; background:#d1fae5; padding:2px 6px; border-radius:6px; display:inline-block; margin-top:2px;">पशु परिचर[span_19](start_span)[span_19](end_span)</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 2. खर्च टैब -->
+    <!-- 2. खर्च टैब (Expenses View) -->
     <div id="viewExpenses" class="section-view">
       <div class="card">
-        <h3>बही-खाता एवं खर्च पासबुक</h3>
-        <p style="font-size:13px; color:#64748b; margin-top:8px;">सामग्री व व्यवस्था व्यय विवरण यहाँ देखें।</p>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:12px; color:#64748b;">उपलब्ध कुल कोष</div>
+            <div style="font-size:18px; font-weight:800; color:#16a34a;">₹1,965[span_20](start_span)[span_20](end_span)</div>
+          </div>
+          <div>
+            <div style="font-size:12px; color:#64748b; text-align:right;">कुल खर्च</div>
+            <div style="font-size:18px; font-weight:800; color:#dc2626;">₹15,210[span_21](start_span)[span_21](end_span)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:15px; margin-bottom:8px;">गणेश विसर्जन का खर्च (39 मद)[span_22](start_span)[span_22](end_span)</h3>
+        <div class="expense-row"><span>1. फेरिया[span_23](start_span)[span_23](end_span)</span> <b>₹220[span_24](start_span)[span_24](end_span)</b></div>
+        <div class="expense-row"><span>2. घी[span_25](start_span)[span_25](end_span)</span> <b>₹250[span_26](start_span)[span_26](end_span)</b></div>
+        <div class="expense-row"><span>3. केला[span_27](start_span)[span_27](end_span)</span> <b>₹100[span_28](start_span)[span_28](end_span)</b></div>
+        <div class="expense-row"><span>4. सिक्कोरा[span_29](start_span)[span_29](end_span)</span> <b>₹50[span_30](start_span)[span_30](end_span)</b></div>
+        <div class="expense-row"><span>5. नमकीन[span_31](start_span)[span_31](end_span)</span> <b>₹100[span_32](start_span)[span_32](end_span)</b></div>
+        <div class="expense-row" style="border-bottom:none;"><span>6. तेल[span_33](start_span)[span_33](end_span)</span> <b>₹120[span_34](start_span)[span_34](end_span)</b></div>
       </div>
     </div>
 
-    <!-- 3. पंचांग टैब -->
+    <!-- 3. पंचांग टैब (Calendar View) -->
     <div id="viewCalendar" class="section-view">
       <div class="card">
-        <h3>वैदिक पंचांग व आगामी उत्सव</h3>
-        <p style="font-size:13px; color:#64748b; margin-top:8px;">नवंबर 2026 कैलेंडर और पर्व सूची उपलब्ध है।</p>
+        <h3 style="font-size:15px; margin-bottom:6px;">नवंबर 2026 (November) - वैदिक पंचांग[span_35](start_span)[span_35](end_span)</h3>
+        <p style="font-size:13px; color:#64748b;">कार्तिक - मार्गशीर्ष • वि. संवत 2083[span_36](start_span)[span_36](end_span)</p>
+        <div style="margin-top:12px; background:#f8fafc; padding:10px; border-radius:12px;">
+          <div style="font-weight:700; color:#ea580c; font-size:13px;"><i class="fa-solid fa-calendar-days"></i> आगामी प्रमुख पर्व[span_37](start_span)[span_37](end_span):</div>
+          <div style="font-size:12.5px; margin-top:4px;">• धनतेरस (धनत्रयोदशी) - 06/11/2026[span_38](start_span)[span_38](end_span)</div>
+          <div style="font-size:12.5px; margin-top:2px;">• नरक चतुर्दशी (रूप चौदस) - 07/11/2026[span_39](start_span)[span_39](end_span)</div>
+          <div style="font-size:12.5px; margin-top:2px;">• दीपावली महापर्व - 08/11/2026[span_40](start_span)[span_40](end_span)[span_41](start_span)[span_41](end_span)</div>
+        </div>
       </div>
     </div>
 
-    <!-- 4. जमा राशि टैब -->
+    <!-- 4. जमा राशि टैब (Contributions View) -->
     <div id="viewContributions" class="section-view">
       <div class="card">
-        <h3>मासिक अंशदान विवरण</h3>
-        <p style="font-size:13px; color:#64748b; margin-top:8px;">सदस्य अंशदान एवं जमा राशि रिकॉर्ड।</p>
+        <h3 style="font-size:15px; margin-bottom:6px;">सदस्य अंशदान एवं जमा राशि (नवंबर)[span_42](start_span)[span_42](end_span)</h3>
+        <p style="font-size:12px; color:#64748b; margin-bottom:10px;">मासिक अमावास्या सहयोग विवरण • कुचेरा[span_43](start_span)[span_43](end_span)</p>
+        
+        <div class="member-item">
+          <div>
+            <div style="font-weight:700; font-size:14px;">रेवंतराम भाटी (संचालक)[span_44](start_span)[span_44](end_span)</div>
+            <div style="font-size:11px; color:#64748b;">अक्टूबर: ₹50 जमा | 8 नवंबर: आगामी[span_45](start_span)[span_45](end_span)</div>
+          </div>
+          <b>₹50[span_46](start_span)[span_46](end_span)</b>
+        </div>
+
+        <div class="member-item">
+          <div>
+            <div style="font-weight:700; font-size:14px;">संजय भाटी (उप-संचालक)[span_47](start_span)[span_47](end_span)</div>
+            <div style="font-size:11px; color:#64748b;">अक्टूबर: ₹110 जमा | 8 नवंबर: आगामी[span_48](start_span)[span_48](end_span)</div>
+          </div>
+          <b>₹110[span_49](start_span)[span_49](end_span)</b>
+        </div>
       </div>
     </div>
 
-    <!-- 5. सेटिंग्स टैब -->
+    <!-- 5. सेटिंग्स टैब (Settings & Developer View) -->
     <div id="viewSettings" class="section-view">
       <div class="card">
-        <h3>ऐप सेटिंग्स व डेवलपर विकल्प (v4.6.0)</h3>
-        <p style="font-size:12px; color:#64748b; margin-top:6px;">संचालक: रेवंतराम भाटी</p>
-        <p style="font-size:12px; color:#64748b; margin-top:4px;">मोबाइल: +91 8696663615</p>
+        <h3 style="font-size:15px; margin-bottom:8px;">डेवलपर ऑप्शन एवं अपडेट (v4.6.0)[span_50](start_span)[span_50](end_span)</h3>
+        <div style="font-size:13px; color:#334155; line-height:1.6;">
+          <div><b>मुख्य डेवलपर व संचालक:</b> रेवंतराम भाटी[span_51](start_span)[span_51](end_span)</div>
+          <div><b>डेवलपर मोबाइल:</b> +91 8696663615[span_52](start_span)[span_52](end_span)</div>
+          <div><b>क्लाउड डेटाबेस:</b> Firebase Firestore कनेक्टेड[span_53](start_span)[span_53](end_span)</div>
+        </div>
+        <div style="margin-top:12px; background:#f0fdf4; padding:10px; border-radius:10px; border:1px solid #bbf7d0; font-size:12px; color:#166534;">
+          <i class="fa-solid fa-circle-check"></i> संचालक नियंत्रण (Admin Mode) पूर्ण रूप से सक्रिय है[span_54](start_span)[span_54](end_span)।
+        </div>
       </div>
     </div>
+
   </div>
 
   <!-- Bottom Navigation Bar -->
