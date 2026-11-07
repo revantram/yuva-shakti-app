@@ -62,13 +62,15 @@
       line-height: 1.5;
     }
 
-    /* 🌟 Header - iOS 18 Liquid Glass Vivid Royal Blue Floating Capsule */
+    /* 🌟 Master Header - iOS 18 Liquid Glass Vivid Royal Blue Floating Capsule (Light & Dark) */
     header,
-    #mainAppHeader {
-      background: linear-gradient(135deg, rgba(30, 64, 175, 0.92) 0%, rgba(37, 99, 235, 0.96) 50%, rgba(29, 78, 216, 0.92) 100%) !important;
+    #mainAppHeader,
+    body.dark-theme header,
+    body.dark-theme #mainAppHeader {
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.95) 0%, rgba(37, 99, 235, 0.92) 50%, rgba(29, 78, 216, 0.95) 100%) !important;
       backdrop-filter: blur(36px) saturate(220%) !important;
       -webkit-backdrop-filter: blur(36px) saturate(220%) !important;
-      border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.48) !important;
       border-radius: 24px !important;
       margin: 8px 10px 10px 10px !important;
       padding: 9px 14px !important;
@@ -1649,12 +1651,7 @@
       --text-muted: #94a3b8;
       --border-color: #1e293b;
     }
-    body.dark-theme header {
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.88) 100%);
-      border-bottom: 1.5px solid rgba(255, 255, 255, 0.20);
-      outline: 1px solid rgba(59, 130, 246, 0.35);
-      color: white;
-    }
+    /* body.dark-theme header inherits iOS 18 Vivid Royal Blue */
     body.dark-theme .header-center-info h1 {
       color: #f8fafc !important;
     }
@@ -2854,15 +2851,7 @@
     /* ==========================================================================
        🌟 iPhone / iOS Liquid Glass (Glassmorphism) & WCAG AAA Contrast Overrides
        ========================================================================== */
-    /* 1. Top App Header Bar (Dark Frosted Glass) */
-    header, #mainAppHeader {
-      background: rgba(15, 23, 42, 0.82) !important;
-      backdrop-filter: blur(20px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
-      border-radius: 20px !important;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28) !important;
-    }
+    /* 1. Top App Header Bar now unified under iOS 18 Vivid Royal Blue */
     #mainAppHeader h1, #mainAppHeader .header-title, #mainAppHeader span, #mainAppHeader p {
       color: #FFFFFF !important;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
@@ -3060,6 +3049,166 @@
       font-size: 8.5px !important;
       padding: 1px 4px !important;
       border-radius: 6px !important;
+    }
+
+
+    /* ==========================================================================
+       🌟 Premium Apple iOS Style Member List Items & Haptic-like Micro-interactions
+       ========================================================================== */
+    .member-card,
+    .member-card-compact {
+      background: rgba(255, 255, 255, 0.92) !important;
+      backdrop-filter: blur(18px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+      border: 1px solid rgba(226, 232, 240, 0.8) !important;
+      border-radius: 16px !important;
+      padding: 11px 14px !important;
+      margin-bottom: 8px !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      cursor: pointer !important;
+      -webkit-tap-highlight-color: transparent !important;
+      user-select: none !important;
+      transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1),
+                  background-color 0.15s ease,
+                  box-shadow 0.15s ease !important;
+    }
+
+    /* ⚡ Smooth iOS 'Press-in' Micro-interaction (scale 0.98 + dim) */
+    .member-card:active,
+    .member-card-compact:active {
+      transform: scale(0.98) !important;
+      background-color: rgba(241, 245, 249, 0.85) !important;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02) !important;
+    }
+
+    /* 👤 iOS Contacts Style Perfect Circular Avatar with Subtle Border */
+    .avatar,
+    .member-card .avatar {
+      width: 44px !important;
+      height: 44px !important;
+      min-width: 44px !important;
+      border-radius: 50% !important;
+      border: 1.5px solid rgba(0, 0, 0, 0.06) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+      object-fit: cover !important;
+      overflow: hidden !important;
+      background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%) !important;
+      color: #334155 !important;
+      font-size: 16px !important;
+      font-weight: 800 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+    }
+    .member-card .avatar img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      border-radius: 50% !important;
+    }
+
+    /* 🏷️ iOS Pill-Style Minimal & Soft Role Badges */
+    .member-tag-badge {
+      border-radius: 9999px !important;
+      padding: 2px 8.5px !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 3.5px !important;
+      line-height: 1.2 !important;
+    }
+    .member-tag-badge.sanchalak {
+      background: rgba(254, 243, 199, 0.75) !important;
+      color: #92400e !important;
+      border: 1px solid rgba(253, 230, 138, 0.85) !important;
+    }
+    .member-tag-badge.family {
+      background: rgba(236, 253, 245, 0.75) !important;
+      color: #065f46 !important;
+      border: 1px solid rgba(167, 243, 208, 0.85) !important;
+    }
+    .member-tag-badge.other {
+      background: rgba(241, 245, 249, 0.8) !important;
+      color: #475569 !important;
+      border: 1px solid rgba(203, 213, 225, 0.7) !important;
+    }
+
+    /* 💳 iOS Pill-Style Soft Paid / Unpaid Badges */
+    .badge-status-paid {
+      font-size: 10.5px !important;
+      font-weight: 700 !important;
+      background: rgba(220, 252, 231, 0.75) !important;
+      color: #15803d !important;
+      border: 1px solid rgba(187, 247, 208, 0.9) !important;
+      padding: 2px 9px !important;
+      border-radius: 9999px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 3.5px !important;
+      line-height: 1.2 !important;
+    }
+    .badge-status-unpaid {
+      font-size: 10.5px !important;
+      font-weight: 700 !important;
+      background: rgba(254, 226, 226, 0.75) !important;
+      color: #b91c1c !important;
+      border: 1px solid rgba(254, 202, 202, 0.9) !important;
+      padding: 2px 9px !important;
+      border-radius: 9999px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 3.5px !important;
+      line-height: 1.2 !important;
+    }
+    .self-badge {
+      background: rgba(238, 242, 255, 0.85) !important;
+      color: #4338ca !important;
+      border: 1px solid rgba(199, 210, 254, 0.85) !important;
+      padding: 2px 8px !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      border-radius: 9999px !important;
+    }
+
+    /* ❯ iOS Chevron Right Icon (Grey Tone) */
+    .ios-chevron-wrap {
+      color: #94a3b8 !important;
+      font-size: 13px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 4px 6px !important;
+      transition: transform 0.15s ease, color 0.15s ease !important;
+    }
+    .member-card:active .ios-chevron-wrap {
+      transform: translateX(1.5px) !important;
+      color: #64748b !important;
+    }
+
+    /* 🌙 Dark Mode Support for iOS Member Card */
+    body.dark-theme .member-card,
+    body.dark-theme .member-card-compact {
+      background: rgba(30, 41, 59, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25) !important;
+    }
+    body.dark-theme .member-card:active,
+    body.dark-theme .member-card-compact:active {
+      background-color: rgba(51, 65, 85, 0.8) !important;
+    }
+    body.dark-theme .avatar,
+    body.dark-theme .member-card .avatar {
+      background: linear-gradient(135deg, #334155 0%, #1e293b 100%) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      color: #cbd5e1 !important;
+    }
+    body.dark-theme .ios-chevron-wrap {
+      color: #64748b !important;
     }
 
   </style>
@@ -3738,7 +3887,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.1.5
+            APK v5.1.6
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -3765,7 +3914,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.5 (बिल्ड कोड: 515)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.6 (बिल्ड कोड: 516)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4346,7 +4495,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.5 (बिल्ड कोड: 515)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.6 (बिल्ड कोड: 516)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5381,7 +5530,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.1.5";
+    const APP_VERSION = "5.1.6";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -6919,10 +7068,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 515)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 516)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 515)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 516)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7037,7 +7186,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 515)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 516)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7048,7 +7197,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 515)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 516)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -8591,27 +8740,27 @@
       }
     }
 
-    // ✅ पहली बार ऐप इंस्टॉल/खोलने पर (v4.5.6) और लॉगिन के बाद एक बार स्वागत मैसेज दिखाएं
+    // ✅ केवल पहली बार ऐप खोलने पर 1 बार स्वागत मैसेज दिखाएं, उसके बाद कभी नहीं
     function checkFirstTimeWelcomeOnAppOpen() {
-      const isFreshInstall = !localStorage.getItem("welcomeSeen_v5.1.5");
-      const savedPhone = localStorage.getItem("loggedInMemberPhone");
-      const isMemberFirstWelcome = savedPhone && !localStorage.getItem("welcomeSeen_" + savedPhone);
-
-      if (isFreshInstall || isMemberFirstWelcome) {
-        // प्रथम स्वागत संदेश पहले दिखाएं (कोई टकराव नहीं)
-        setTimeout(() => {
-          if (savedPhone) {
-            const member = membersList.find(m => m.phone && m.phone.endsWith(savedPhone));
-            const name = member ? member.name : "भाटी परिवार सदस्य";
-            openFirstTimeWelcomeModal(name, savedPhone);
-          } else {
-            openFirstTimeWelcomeModal("भाटी परिवार सदस्य", null);
-          }
-        }, 600);
-      } else {
-        // स्वागत पहले ही देखा जा चुका है, आज का दैनिक सुविचार दिखाएं (यदि आज नहीं देखा)
-        checkDailySuvicharOnAppOpen();
+      if (localStorage.getItem("appWelcomeSeenEver") === "true" ||
+          localStorage.getItem("appInstallWelcomeSeen") === "true" ||
+          localStorage.getItem("welcomeSeen_v5.1.5") === "true" ||
+          localStorage.getItem("welcomeSeen_v5.1.6") === "true") {
+        // स्वागत पहले ही देखा जा चुका है, कभी दोबारा न दिखाएं
+        return;
       }
+
+      // प्रथम बार स्वागत संदेश केवल एक बार दिखाएं
+      setTimeout(() => {
+        const savedPhone = localStorage.getItem("loggedInMemberPhone");
+        if (savedPhone) {
+          const member = membersList.find(m => m.phone && m.phone.endsWith(savedPhone));
+          const name = member ? member.name : "भाटी परिवार सदस्य";
+          openFirstTimeWelcomeModal(name, savedPhone);
+        } else {
+          openFirstTimeWelcomeModal("भाटी परिवार सदस्य", null);
+        }
+      }, 700);
     }
 
     function openFirstTimeWelcomeModal(memberName, phone) {
@@ -8625,18 +8774,14 @@
     }
 
     function acknowledgeWelcomeModal() {
-      localStorage.setItem("welcomeSeen_v5.1.5", "true");
+      localStorage.setItem("appWelcomeSeenEver", "true");
       localStorage.setItem("appInstallWelcomeSeen", "true");
+      localStorage.setItem("welcomeSeen_v5.1.6", "true");
       if (currentWelcomePhone) {
         localStorage.setItem("welcomeSeen_" + currentWelcomePhone, "true");
       }
       const modal = document.getElementById("firstTimeWelcomeModal");
       if (modal) modal.style.display = "none";
-
-      // स्वागत संदेश बंद होने के बाद आज का सुविचार दिखाएं (यदि आज नहीं देखा है)
-      setTimeout(() => {
-        checkDailySuvicharOnAppOpen();
-      }, 400);
     }
 
     function openAppObjectiveModal() {
@@ -9988,7 +10133,7 @@
         if (memberTag === "संचालक") {
           tagBadgeHtml = `<span class="member-tag-badge sanchalak"><i class="fa-solid fa-crown"></i> संचालक</span>`;
         } else if (isFamily) {
-          tagBadgeHtml = `<span class="member-tag-badge family" style="background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;"><i class="fa-solid fa-people-roof"></i> ${escapeHtml(m.tag || 'परिवार सदस्य')}</span>`;
+          tagBadgeHtml = `<span class="member-tag-badge family"><i class="fa-solid fa-people-roof"></i> ${escapeHtml(m.tag || 'परिवार सदस्य')}</span>`;
         } else if (memberTag) {
           tagBadgeHtml = `<span class="member-tag-badge other">${escapeHtml(memberTag)}</span>`;
         }
@@ -10006,7 +10151,6 @@
         let familyDeleteBtn = "";
 
         if (isFamily) {
-          // परिवार के सदस्यों द्वारा कोई सहयोग राशि नहीं दी जाएगी: जमा व बाकी पूरी तरह हटाएं!
           statusBadgeHtml = "";
           quickReminderBtn = "";
           if (isAdmin) {
@@ -10032,25 +10176,24 @@
         }
 
         card.innerHTML = `
-          <div class="member-info">
+          <div class="member-info" style="display:flex; align-items:center; gap:12px; flex:1; min-width:0;">
             <div class="avatar">${avatarHtml}</div>
-            <div class="member-details">
+            <div class="member-details" style="flex:1; min-width:0;">
               <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                <strong style="font-size:15px; color:var(--text-main);">${escapeHtml(m.name)}</strong>
+                <strong style="font-size:15px; font-weight:700; color:var(--text-main);">${escapeHtml(m.name)}</strong>
                 ${tagBadgeHtml}
                 ${statusBadgeHtml}
                 ${quickReminderBtn}
                 ${isSelf ? `<span class="self-badge">${currentLang === 'en' ? 'You' : 'आप'}</span>` : ''}
               </div>
-              <div class="member-subtext">
+              <div class="member-subtext" style="font-size:12px; color:var(--text-muted); margin-top:2px;">
                 <span>📱 ${escapeHtml(m.phone)}</span>
               </div>
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
+          <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
             ${familyDeleteBtn}
-            <div style="color:#94a3b8; font-size:13px; display:flex; align-items:center; gap:4px; padding-left:2px;">
-              <span style="font-size:11px; color:#64748b;">${currentLang === 'en' ? 'Profile' : 'प्रोफाइल'}</span>
+            <div class="ios-chevron-wrap">
               <i class="fa-solid fa-chevron-right"></i>
             </div>
           </div>
@@ -13146,8 +13289,8 @@
       const hasCelebration = bdaysToday.length > 0 || annivsToday.length > 0 || festivalToday || amavasyaToday || nationalDayToday;
       if (!hasCelebration) return;
 
-      const lastDismissed = sessionStorage.getItem("todayCelebrationDismissed");
-      if (lastDismissed === todayDateStr) return;
+      const lastDismissed = localStorage.getItem("todayCelebrationDismissed_" + todayDateStr) || sessionStorage.getItem("todayCelebrationDismissed");
+      if (lastDismissed === "true" || lastDismissed === todayDateStr) return;
 
       const contentBox = document.getElementById("todayCelebContent");
       if (!contentBox) return;
@@ -13293,6 +13436,7 @@
       const monthStr = String(now.getMonth() + 1).padStart(2, '0');
       const dayStr = String(now.getDate()).padStart(2, '0');
       const todayDateStr = `${now.getFullYear()}-${monthStr}-${dayStr}`;
+      localStorage.setItem("todayCelebrationDismissed_" + todayDateStr, "true");
       sessionStorage.setItem("todayCelebrationDismissed", todayDateStr);
       document.getElementById("todayCelebrationModal").style.display = "none";
     }
@@ -14821,7 +14965,7 @@
     updateSettingsUI();
     updateUpiDisplayEverywhere();
     updateHomeSuvicharSnippet();
-    checkFirstTimeWelcomeOnAppOpen();
+    // First time welcome handled cleanly after member list loads
     checkMorningSuvicharNotification();
     requestNotificationPermission();
 
