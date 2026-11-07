@@ -3212,47 +3212,83 @@
     }
 
 
-    /* 💊 Full Round Capsule Container for Role/Designation Brackets */
-    .rounded-pill-bracket {
+    /* 💊 Full Round Capsule for Role/Designation (No brackets) */
+    .rounded-pill-badge {
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
-      gap: 3px !important;
+      gap: 4px !important;
       border-radius: 9999px !important;
-      padding: 3px 12px !important;
+      padding: 3px 11px !important;
       background: #F1F5F9 !important;
       border: 1px solid rgba(0, 0, 0, 0.08) !important;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+      color: #1E293B !important;
+      font-weight: 600 !important;
+      font-size: 11.5px !important;
+      letter-spacing: 0.1px !important;
       line-height: 1.2 !important;
       vertical-align: middle !important;
       user-select: none !important;
       white-space: nowrap !important;
     }
-    .rounded-pill-bracket .bracket-symbol {
-      color: #94A3B8 !important;
-      font-weight: 500 !important;
-      font-size: 12px !important;
-      line-height: 1 !important;
-    }
-    .rounded-pill-bracket .role-text {
-      color: #1E293B !important;
-      font-weight: 600 !important;
-      font-size: 11.5px !important;
-      letter-spacing: 0.1px !important;
-      line-height: 1 !important;
+    .rounded-pill-badge.sanchalak {
+      background: rgba(254, 243, 199, 0.8) !important;
+      color: #92400e !important;
+      border: 1px solid rgba(253, 230, 138, 0.9) !important;
     }
 
-    /* Dark Mode Support for Rounded Pill Bracket */
-    body.dark-theme .rounded-pill-bracket {
+    /* 🎨 Aesthetic Member Name Styling (Member List Card) */
+    .member-name-aesthetic {
+      font-size: 16px !important;
+      font-weight: 800 !important;
+      color: #0F172A !important;
+      background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(238, 242, 255, 0.85) 100%) !important;
+      padding: 2px 10px !important;
+      border-radius: 10px !important;
+      border: 1px solid rgba(226, 232, 240, 0.9) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      letter-spacing: -0.2px !important;
+    }
+
+    /* 🌟 Aesthetic Member Name Banner (Profile Modal) */
+    .profile-name-aesthetic {
+      font-size: 20px !important;
+      font-weight: 800 !important;
+      color: #0F172A !important;
+      background: linear-gradient(135deg, rgba(241, 245, 249, 0.95) 0%, rgba(224, 231, 255, 0.85) 50%, rgba(243, 244, 246, 0.95) 100%) !important;
+      padding: 6px 20px !important;
+      border-radius: 9999px !important;
+      border: 1.2px solid rgba(199, 210, 254, 0.85) !important;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+      display: inline-block !important;
+      letter-spacing: -0.3px !important;
+      margin: 0 0 4px 0 !important;
+    }
+
+    /* Dark Mode Support for Pill Badge and Aesthetic Name */
+    body.dark-theme .rounded-pill-badge {
       background: rgba(51, 65, 85, 0.6) !important;
       border-color: rgba(255, 255, 255, 0.1) !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-    }
-    body.dark-theme .rounded-pill-bracket .bracket-symbol {
-      color: #64748B !important;
-    }
-    body.dark-theme .rounded-pill-bracket .role-text {
       color: #F1F5F9 !important;
+    }
+    body.dark-theme .rounded-pill-badge.sanchalak {
+      background: rgba(146, 64, 14, 0.3) !important;
+      color: #fde68a !important;
+      border-color: rgba(245, 158, 11, 0.4) !important;
+    }
+    body.dark-theme .member-name-aesthetic {
+      color: #F8FAFC !important;
+      background: linear-gradient(135deg, rgba(51, 65, 85, 0.7) 0%, rgba(30, 41, 59, 0.8) 100%) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    body.dark-theme .profile-name-aesthetic {
+      color: #F8FAFC !important;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(30, 58, 138, 0.5) 100%) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
     }
 
   </style>
@@ -3931,7 +3967,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.1.7
+            APK v5.1.8
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -3958,7 +3994,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.7 (बिल्ड कोड: 517)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.8 (बिल्ड कोड: 518)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4539,7 +4575,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.7 (बिल्ड कोड: 517)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.8 (बिल्ड कोड: 518)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -4670,7 +4706,9 @@
       </div>
 
       <!-- Name & Subtitle -->
-      <h3 style="font-size:18px; font-weight:800; color:var(--text-main); margin-bottom:2px;" id="profileModalName">सदस्य का नाम</h3>
+      <div style="margin-bottom:6px; display:inline-block;">
+        <h3 class="profile-name-aesthetic" id="profileModalName">सदस्य का नाम</h3>
+      </div>
       <div style="font-size:12px; color:#64748b; font-weight:600; margin-bottom:4px;">🚩 भाटी परिवार • कुचेरा</div>
       <div id="profileModalRoleTag" style="margin-bottom:14px; min-height:22px;"></div>
 
@@ -5574,7 +5612,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.1.7";
+    const APP_VERSION = "5.1.8";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7112,10 +7150,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 517)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 518)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 517)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 518)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7230,7 +7268,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 517)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 518)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7241,7 +7279,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 517)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 518)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -10174,14 +10212,10 @@
 
         const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : (isFamily ? "परिवार सदस्य" : ""));
         let tagBadgeHtml = "";
-        if (memberTag) {
-          tagBadgeHtml = `
-            <div class="rounded-pill-bracket">
-              <span class="bracket-symbol">(</span>
-              <span class="role-text">${escapeHtml(memberTag)}</span>
-              <span class="bracket-symbol">)</span>
-            </div>
-          `;
+        if (memberTag === "संचालक") {
+          tagBadgeHtml = `<span class="rounded-pill-badge sanchalak"><i class="fa-solid fa-crown" style="color:#d97706; margin-right:2px;"></i> संचालक</span>`;
+        } else if (memberTag) {
+          tagBadgeHtml = `<span class="rounded-pill-badge">${escapeHtml(memberTag)}</span>`;
         }
 
         const card = document.createElement("div");
@@ -10226,10 +10260,10 @@
           <div class="member-info" style="display:flex; align-items:center; gap:12px; flex:1; min-width:0;">
             <div class="avatar">${avatarHtml}</div>
             
-            <!-- बीच (Center): बड़े अक्षरों में सदस्य का नाम (17px, bold) + राउंड कोष्ठक कैप्सूल -->
+            <!-- बीच (Center): एस्थेटिक बैकग्राउंड में नाम + बिना () के राउंड कैप्सूल पद -->
             <div class="member-details" style="flex:1; min-width:0;">
               <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                <strong style="font-size:17px; font-weight:700; color:var(--text-main); letter-spacing:-0.2px;">${escapeHtml(m.name)}</strong>
+                <span class="member-name-aesthetic">${escapeHtml(m.name)}</span>
                 ${tagBadgeHtml}
                 ${isSelf ? `<span class="self-badge">${currentLang === 'en' ? 'You' : 'आप'}</span>` : ''}
               </div>
@@ -10334,9 +10368,9 @@
       const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : "");
       let tagHtml = "";
       if (memberTag === "संचालक") {
-        tagHtml = `<span class="member-tag-badge sanchalak"><i class="fa-solid fa-crown"></i> संचालक</span>`;
+        tagHtml = `<span class="rounded-pill-badge sanchalak"><i class="fa-solid fa-crown" style="color:#d97706; margin-right:3px;"></i> संचालक</span>`;
       } else if (memberTag) {
-        tagHtml = `<span class="member-tag-badge other">${memberTag}</span>`;
+        tagHtml = `<span class="rounded-pill-badge">${escapeHtml(memberTag)}</span>`;
       }
 
       document.getElementById("profileModalName").innerText = m.name || "सदस्य";
@@ -10497,47 +10531,48 @@
           contribBox.style.display = "none";
         } else {
           contribBox.style.display = "block";
-          const todayStr = new Date().toISOString().split('T')[0];
-          const hasNovPassed = todayStr > "2026-11-08";
           const octPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
           const octAmt = octPaid ? (Number(m.octoberAmavasya?.amount) || 50) : 0;
+          const novPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
+          const novAmt = novPaid ? (Number(m.novemberAmavasya?.amount) || 100) : 0;
           const extraAmt = Number(m.extraContribution || 0);
 
-          if (hasNovPassed) {
-            // November Amavasya has passed! Show both months
-            const novPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
-            const novAmt = novPaid ? (Number(m.novemberAmavasya?.amount) || 100) : 0;
-            const totalAmt = octAmt + (novPaid ? novAmt : 0) + extraAmt;
-            contribBox.innerHTML = `
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <span style="font-size:12.5px; font-weight:800; color:#1e40af;"><i class="fa-solid fa-file-invoice-dollar"></i> सहयोग राशि (अंशदान)</span>
-                <span style="font-size:12px; font-weight:900; color:#047857; background:#dcfce7; padding:2px 8px; border-radius:6px;">कुल: ₹${totalAmt.toLocaleString('en-IN')}</span>
-              </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:11px;">
-                <div style="background:white; padding:6px 8px; border-radius:8px; border:1px solid #bfdbfe; display:flex; justify-content:space-between;">
-                  <span style="color:#64748b;">अक्टूबर:</span>
-                  <strong style="color:${octPaid ? '#16a34a' : '#dc2626'};">${octPaid ? `₹${octAmt} (जमा)` : 'बाकी'}</strong>
-                </div>
-                <div style="background:white; padding:6px 8px; border-radius:8px; border:1px solid #bfdbfe; display:flex; justify-content:space-between;">
-                  <span style="color:#64748b;">8 नवंबर:</span>
-                  <strong style="color:${novPaid ? '#16a34a' : '#dc2626'};">${novPaid ? `₹${novAmt} (जमा)` : 'बाकी'}</strong>
-                </div>
-              </div>
-            `;
-          } else {
-            // November Amavasya has NOT passed yet! Show only October Amavasya and clear total
-            const totalAmt = octAmt + extraAmt;
-            contribBox.innerHTML = `
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <span style="font-size:12.5px; font-weight:800; color:#1e40af;"><i class="fa-solid fa-file-invoice-dollar"></i> सहयोग राशि (अंशदान)</span>
-                <span style="font-size:12.5px; font-weight:900; color:#047857; background:#dcfce7; padding:2px 8px; border-radius:6px;">कुल जमा: ₹${totalAmt.toLocaleString('en-IN')}</span>
-              </div>
-              <div style="background:white; padding:7px 10px; border-radius:8px; border:1px solid #bfdbfe; display:flex; justify-content:space-between; align-items:center; font-size:11.5px;">
-                <span style="color:#475569; font-weight:600;"><i class="fa-solid fa-moon" style="color:#d97706;"></i> अक्टूबर अमावस्या अंशदान:</span>
-                <strong style="color:${octPaid ? '#16a34a' : '#dc2626'}; font-size:12px;">${octPaid ? `₹${octAmt} (जमा ✅)` : 'बाकी'}</strong>
-              </div>
-            `;
+          let totalCalculated = (octPaid ? octAmt : 0) + (novPaid ? novAmt : 0) + extraAmt;
+          if (m.amavasyaPay && typeof m.amavasyaPay === "object") {
+            Object.entries(m.amavasyaPay).forEach(([k, rec]) => {
+              if (k !== "2026-10" && k !== "2026-11" && rec && rec.isPaid) {
+                totalCalculated += (Number(rec.amount) || 100);
+              }
+            });
           }
+          const grandTotal = Math.max(totalCalculated, Number(m.lifetimeContribution) || 0);
+
+          contribBox.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:13px; font-weight:800; color:#1e40af; display:inline-flex; align-items:center; gap:5px;">
+                <i class="fa-solid fa-file-invoice-dollar" style="color:#2563eb;"></i> <span>सहयोग राशि (अंशदान)</span>
+              </span>
+              <span style="font-size:12.5px; font-weight:900; color:#047857; background:#dcfce7; border:1px solid #bbf7d0; padding:3px 10px; border-radius:9999px; box-shadow:0 1px 3px rgba(16,185,129,0.15);">
+                कुल जमा: ₹${grandTotal.toLocaleString('en-IN')}
+              </span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:11.5px;">
+              <div style="background:white; padding:8px 10px; border-radius:10px; border:1px solid #bfdbfe; box-shadow:0 1px 3px rgba(37,99,235,0.04); display:flex; flex-direction:column; gap:2px;">
+                <span style="color:#64748b; font-size:10.5px; font-weight:600;"><i class="fa-solid fa-moon" style="color:#d97706;"></i> अक्टूबर अमावस्या:</span>
+                <strong style="color:${octPaid ? '#16a34a' : '#dc2626'}; font-size:12.5px;">${octPaid ? `₹${octAmt} (जमा ✅)` : 'बाकी ❌'}</strong>
+              </div>
+              <div style="background:white; padding:8px 10px; border-radius:10px; border:1px solid #bfdbfe; box-shadow:0 1px 3px rgba(37,99,235,0.04); display:flex; flex-direction:column; gap:2px;">
+                <span style="color:#64748b; font-size:10.5px; font-weight:600;"><i class="fa-solid fa-calendar-check" style="color:#2563eb;"></i> 8 नवंबर (कार्तिक):</span>
+                <strong style="color:${novPaid ? '#16a34a' : '#dc2626'}; font-size:12.5px;">${novPaid ? `₹${novAmt} (जमा ✅)` : 'बाकी ❌'}</strong>
+              </div>
+            </div>
+            ${extraAmt > 0 ? `
+              <div style="margin-top:6px; background:#f0fdf4; padding:6px 10px; border-radius:8px; border:1px solid #bbf7d0; display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+                <span style="color:#166534; font-weight:700;"><i class="fa-solid fa-gift"></i> अतिरिक्त ऐच्छिक सहयोग:</span>
+                <strong style="color:#15803d; font-size:12px;">₹${extraAmt} (जमा ✅)</strong>
+              </div>
+            ` : ''}
+          `;
         }
       }
 
