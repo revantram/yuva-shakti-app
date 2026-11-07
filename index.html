@@ -2703,6 +2703,124 @@
     @keyframes vgBounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(3px); } }
     .vg-down { color:#d97706; font-size:13px; font-weight:800; margin:-2px 0 2px; animation:vgBounce 1.2s infinite ease-in-out; text-align:center; }
   
+    
+    /* 🌟 Royal Blue iOS Liquid Glass Header Bar */
+    header, #mainAppHeader {
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.94) 0%, rgba(37, 99, 235, 0.96) 50%, rgba(29, 78, 216, 0.94) 100%) !important;
+      backdrop-filter: blur(28px) saturate(210%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(210%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+      border-radius: 22px !important;
+      box-shadow: 0 16px 36px -4px rgba(37, 99, 235, 0.40),
+                  inset 0 1px 2px rgba(255, 255, 255, 0.45) !important;
+      margin: 10px 12px 12px 12px !important;
+      padding: 10px 14px !important;
+    }
+    #appTitleText {
+      color: #FFFFFF !important;
+      font-size: 16px !important;
+      font-weight: 900 !important;
+      letter-spacing: -0.2px !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35) !important;
+    }
+    #appSubTitleText {
+      color: #FCD34D !important;
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+    }
+    #headerUserGreeting {
+      color: #E0F2FE !important;
+      font-size: 11px !important;
+      font-weight: 800 !important;
+    }
+    #mainAppHeader .notif-bell-btn {
+      background: rgba(255, 255, 255, 0.22) !important;
+      border: 1px solid rgba(255, 255, 255, 0.35) !important;
+      color: #FFFFFF !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    #mainAppHeader #loginBtn {
+      background: #FFFFFF !important;
+      color: #1D4ED8 !important;
+      font-weight: 800 !important;
+      border: 1.2px solid rgba(255, 255, 255, 0.95) !important;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* 🌙 Amavasya Countdown iOS Liquid Glass & Page-Turn Flip Animation */
+    .amavasya-card, #amavasyaHeroCard {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 58, 138, 0.86) 50%, rgba(15, 23, 42, 0.92) 100%) !important;
+      backdrop-filter: blur(28px) saturate(200%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
+      border-radius: 26px !important;
+      padding: 18px 14px !important;
+    }
+    .countdown-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 8px !important;
+      margin-top: 14px !important;
+    }
+    .countdown-box {
+      perspective: 500px !important;
+      background: rgba(255, 255, 255, 0.12) !important;
+      backdrop-filter: blur(16px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.24) !important;
+      border-radius: 18px !important;
+      padding: 12px 4px 10px !important;
+      text-align: center !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.25) !important;
+      overflow: hidden !important;
+    }
+    /* अक्षरों को बड़ा किया गया */
+    .countdown-val {
+      font-size: 34px !important;
+      font-weight: 900 !important;
+      color: #FFFFFF !important;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+      display: inline-block !important;
+      line-height: 1.1 !important;
+      letter-spacing: -0.5px !important;
+      backface-visibility: hidden !important;
+    }
+    .countdown-lbl {
+      font-size: 11.5px !important;
+      font-weight: 800 !important;
+      color: #FCD34D !important;
+      margin-top: 5px !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.5px !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    }
+    /* कैलेंडर पेज पलटने वाला 3D फ्लिप एनीमेशन */
+    @keyframes flipPageDown {
+      0% {
+        transform: rotateX(0deg);
+        opacity: 1;
+      }
+      45% {
+        transform: rotateX(-90deg) scale(0.92);
+        opacity: 0.35;
+      }
+      55% {
+        transform: rotateX(90deg) scale(0.92);
+        opacity: 0.35;
+      }
+      100% {
+        transform: rotateX(0deg) scale(1);
+        opacity: 1;
+      }
+    }
+    .countdown-val.flip-tick {
+      animation: flipPageDown 0.55s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
     /* ==========================================================================
        🌟 iPhone / iOS Liquid Glass (Glassmorphism) & WCAG AAA Contrast Overrides
        ========================================================================== */
@@ -3478,7 +3596,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
             <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.5.8 (बिल्ड कोड: 511)
+              v4.5.8 (बिल्ड कोड: 512)
             </span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
@@ -3852,48 +3970,48 @@
   </div>
 
   <!-- 🔐 Google Sign-In & Login Modal -->
-    <div class="modal-overlay" id="loginModal" style="display:none; z-index:1100;">
-    <div class="modal-content ios-glass-card" id="loginCard" style="max-width:380px; padding:22px 18px; border-radius:24px; text-align:center; background:rgba(255,255,255,0.92); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.95); box-shadow:0 20px 45px rgba(15,23,42,0.18);">
+      <div class="modal-overlay" id="loginModal" style="display:none; z-index:1100;">
+    <div class="modal-content ios-glass-card" id="loginCard" style="max-width:380px; padding:22px 18px; border-radius:24px; text-align:center; background:rgba(255,255,255,0.95); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.95); box-shadow:0 20px 45px rgba(15,23,42,0.2);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <div style="display:flex; align-items:center; gap:8px;">
-          <div style="width:38px; height:38px; border-radius:12px; background:linear-gradient(135deg, #0284c7, #0369a1); color:white; display:flex; align-items:center; justify-content:center; font-size:17px; box-shadow:0 4px 10px rgba(2,132,199,0.3);">
+          <div style="width:38px; height:38px; border-radius:12px; background:linear-gradient(135deg, #0284c7, #2563eb); color:white; display:flex; align-items:center; justify-content:center; font-size:17px; box-shadow:0 4px 10px rgba(2,132,199,0.3);">
             <i class="fa-solid fa-mobile-screen-button"></i>
           </div>
-          <h3 style="margin:0; font-size:17px; font-weight:800; color:#0f172a;">सदस्य लॉगिन</h3>
+          <h3 style="margin:0; font-size:17.5px; font-weight:800; color:#0f172a;">सदस्य लॉगिन</h3>
         </div>
         <button onclick="closeLoginModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
       </div>
 
       <p style="font-size:12px; color:#64748b; margin-bottom:16px; line-height:1.5;">
-        बिना किसी पासवर्ड के केवल अपने मोबाइल नंबर पर प्राप्त 6 अंकों के SMS OTP से सीधा प्रवेश करें।
+        केवल अपना 10 अंकों का मोबाइल नंबर दर्ज करके तुरंत सुरक्षित प्रवेश करें।
       </p>
 
-      <!-- चरण 1: फ़ोन नंबर इनपुट -->
+      <!-- 10 अंकों का मोबाइल नंबर इनपुट -->
       <div id="phoneInputGroup" style="text-align:left;">
         <label style="font-size:13px; font-weight:700; color:#334155;">मोबाइल नंबर:</label>
         <div style="display:flex; gap:6px; margin:7px 0 14px 0;">
           <span style="padding:10px 12px; background:#e2e8f0; border-radius:12px; font-weight:800; color:#1e293b; display:flex; align-items:center;">+91</span>
-          <input type="tel" id="memberMobile" placeholder="10 अंकों का नंबर" maxlength="10" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:16px; font-weight:800; color:#0f172a; outline:none; background:#ffffff;">
+          <input type="tel" id="memberMobile" placeholder="10 अंकों का नंबर (उदा. 8696663615)" maxlength="10" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:16px; font-weight:800; color:#0f172a; outline:none; background:#ffffff;">
         </div>
 
         <!-- बैकग्राउंड रीकैप्चा कंटेनर -->
         <div id="recaptcha-container"></div>
 
-        <button type="button" onclick="sendOtpToMember()" id="btnSendOtp" style="width:100%; padding:12px; background:linear-gradient(135deg, #0284c7, #0369a1); color:white; border:none; border-radius:12px; font-weight:800; cursor:pointer; font-size:15px; box-shadow:0 4px 14px rgba(2,132,199,0.3);">
-          OTP भेजें 📲
+        <button type="button" onclick="handleSmartMemberLogin()" id="btnSendOtp" style="width:100%; padding:13px; background:linear-gradient(135deg, #0284c7, #2563eb); color:white; border:none; border-radius:12px; font-weight:800; cursor:pointer; font-size:15px; box-shadow:0 4px 14px rgba(2,132,199,0.35);">
+          लॉगिन करें 📲
         </button>
       </div>
 
-      <!-- चरण 2: OTP इनपुट (शुरुआत में छिपा रहेगा) -->
+      <!-- OTP इनपुट (यदि SMS सक्रिय हो) -->
       <div id="otpInputGroup" style="display:none; text-align:left;">
-        <p style="font-size:12.5px; color:#475569; margin-bottom:8px; text-align:center; font-weight:700;">आपके नंबर पर प्राप्त 6 अंकों का OTP दर्ज करें:</p>
+        <p style="font-size:12.5px; color:#475569; margin-bottom:8px; text-align:center; font-weight:700;">प्राप्त 6 अंकों का OTP दर्ज करें:</p>
         <input type="number" id="otpCodeInput" placeholder="● ● ● ● ● ●" maxlength="6" style="width:100%; box-sizing:border-box; padding:11px; border:2px solid #0284c7; border-radius:12px; font-size:22px; text-align:center; letter-spacing:6px; font-weight:800; color:#0f172a; margin-bottom:14px; outline:none; background:#ffffff;">
         
         <button type="button" onclick="verifyEnteredOtp()" id="btnVerifyOtp" style="width:100%; padding:12px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; border-radius:12px; font-weight:800; cursor:pointer; font-size:15px; box-shadow:0 4px 14px rgba(22,163,74,0.3);">
-          लॉगिन करें ✅
+          सत्यापित करें ✅
         </button>
         <div style="text-align:center; margin-top:10px;">
-          <button type="button" onclick="resetOtpScreen()" style="background:none; border:none; color:#0284c7; font-size:12px; font-weight:700; cursor:pointer;">← नंबर बदलें / पुनः OTP भेजें</button>
+          <button type="button" onclick="resetOtpScreen()" style="background:none; border:none; color:#0284c7; font-size:12px; font-weight:700; cursor:pointer;">← नंबर बदलें</button>
         </div>
       </div>
 
@@ -3901,7 +4019,7 @@
 
       <div style="display:flex; align-items:center; margin:14px 0 10px; gap:8px;">
         <div style="flex:1; height:1px; background:#e2e8f0;"></div>
-        <span style="font-size:11px; color:#94a3b8; font-weight:700;">अथवा अन्य विकल्प</span>
+        <span style="font-size:11px; color:#94a3b8; font-weight:700;">अथवा</span>
         <div style="flex:1; height:1px; background:#e2e8f0;"></div>
       </div>
 
@@ -3910,42 +4028,6 @@
         <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         <span>गूगल खाते से लॉगिन करें</span>
       </button>
-    </div>
-  </div>
-
-  <!-- 📲 Google Onboarding: Mobile Number Verification Modal -->
-  <div class="modal-overlay" id="googleMobileOnboardingModal" style="display:none; z-index:1150;">
-    <div class="modal-content ios-glass-card" style="max-width:420px; padding:22px 18px; border-radius:26px; text-align:left;">
-      <div style="text-align:center; margin-bottom:14px;">
-        <div id="onboardingUserAvatar" style="width:62px; height:62px; margin:0 auto 10px; border-radius:50%; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:800; overflow:hidden; border:3px solid #bfdbfe; box-shadow:0 4px 12px rgba(37,99,235,0.25);">
-          <span>भा</span>
-        </div>
-        <div style="font-size:11px; font-weight:700; color:#1d4ed8; background:#dbeafe; padding:2px 10px; border-radius:12px; display:inline-block; margin-bottom:4px;">
-          गूगल खाता सत्यापित ✅
-        </div>
-        <div id="onboardingUserEmail" style="font-size:12px; color:#64748b; font-weight:600;">user@gmail.com</div>
-      </div>
-
-      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; margin-bottom:14px; font-size:12px; color:#475569; line-height:1.5;">
-        <i class="fa-solid fa-circle-info" style="color:#2563eb;"></i> कृपया अपना 10-अंकीय मोबाइल नंबर दर्ज करें ताकि हम ग्रुप की अधिकृत सदस्य सूची में आपका रिकॉर्ड सत्यापित कर सकें।
-      </div>
-
-      <div class="form-group" style="margin-bottom:12px;">
-        <label style="font-size:12px; font-weight:700;">आपका पूरा नाम (गूगल से प्राप्त, आवश्यकतानुसार बदलें):</label>
-        <input type="text" id="onboardingFullName" placeholder="पूरा नाम दर्ज करें" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:12px; font-size:13px; font-weight:700;">
-      </div>
-
-      <div class="form-group" style="margin-bottom:16px;">
-        <label style="font-size:12px; font-weight:700;">10 अंकों का मोबाइल नंबर (Mobile Number):</label>
-        <input type="tel" id="onboardingPhoneNumber" placeholder="उदा. 9876543210" maxlength="10" inputmode="numeric" style="width:100%; padding:11px 12px; border:1.5px solid #2563eb; border-radius:12px; font-size:14px; font-weight:800; letter-spacing:0.5px;">
-      </div>
-
-      <div style="display:flex; gap:8px;">
-        <button onclick="cancelGoogleOnboarding()" style="flex:1; padding:11px; border-radius:12px; border:1px solid #cbd5e1; background:white; font-weight:700; font-size:12.5px; color:#475569; cursor:pointer;">रद्द करें</button>
-        <button onclick="submitGoogleMobileOnboarding()" class="btn-main" style="flex:1.8; padding:12px; border-radius:12px; font-weight:800; font-size:13px; background:linear-gradient(135deg, #16a34a, #15803d); box-shadow:0 4px 12px rgba(22,163,74,0.3);">
-          सत्यापित करें एवं आगे बढ़ें <i class="fa-solid fa-arrow-right"></i>
-        </button>
-      </div>
     </div>
   </div>
 
@@ -4096,7 +4178,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.5.8 (बिल्ड कोड: 511)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.5.8 (बिल्ड कोड: 512)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5131,7 +5213,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.1.1";
+    const APP_VERSION = "5.1.2";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -6653,10 +6735,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 511)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 512)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 511)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 512)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -6771,7 +6853,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 511)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 512)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -6782,7 +6864,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 511)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 512)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -6874,10 +6956,22 @@
       const mins = Math.floor((diffMs / (1000 * 60)) % 60);
       const secs = Math.floor((diffMs / 1000) % 60);
 
-      document.getElementById("cdDays").innerText = String(days).padStart(2, '0');
-      document.getElementById("cdHours").innerText = String(hours).padStart(2, '0');
-      document.getElementById("cdMins").innerText = String(mins).padStart(2, '0');
-      document.getElementById("cdSecs").innerText = String(secs).padStart(2, '0');
+      function setFlipDigit(id, newVal) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const valStr = String(newVal).padStart(2, '0');
+        if (el.innerText !== valStr) {
+          el.classList.remove('flip-tick');
+          void el.offsetWidth; // trigger reflow
+          el.innerText = valStr;
+          el.classList.add('flip-tick');
+        }
+      }
+
+      setFlipDigit("cdDays", days);
+      setFlipDigit("cdHours", hours);
+      setFlipDigit("cdMins", mins);
+      setFlipDigit("cdSecs", secs);
     }
 
     function quickFillAmavasya() {
@@ -9054,11 +9148,7 @@
       try { vTryPersist51(); } catch (e) {}
       const cur = vFind("0");
       if (!cur) return;
-            let html = `<div style="display:flex; gap:8px; margin-bottom:12px;">
-        <button onclick="vamshaExportPoster()" style="flex:1; background:linear-gradient(135deg, #d97706, #b45309); color:#fff; border:none; padding:11px 16px; border-radius:14px; font-weight:800; font-size:13.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(217,119,6,0.25);">
-          <i class="fa-solid fa-file-image"></i> <span>📸 वंशावली पोस्टर डाउनलोड (PDF / Photo)</span>
-        </button>
-      </div>` + vAncestorsHtml() + `<div class="vf-wrap">
+            let html = vAncestorsHtml() + `<div class="vf-wrap">
         <div class="vf-root" style="cursor:pointer;" onclick="vamshaOpenPopup('0')">
           ${vPriv() ? `<button class="vg-edit vg-edit-root" onclick="event.stopPropagation(); vAncOpenForm('root')" title="बदलें">✏️</button>` : ''}
           <span class="vf-pill">${vEsc(vGenLabel(cur))}</span>
@@ -15733,6 +15823,124 @@
 
     function printVamshaPoster() {
       window.print();
+    }
+
+
+
+    // 🚀 स्मार्ट मोबाइल लॉगिन: सदस्य फ़ोन नंबर से तुरंत व त्रुटि-रहित लॉगिन
+    async function handleSmartMemberLogin() {
+      const phoneInput = document.getElementById('memberMobile');
+      const phone = phoneInput ? phoneInput.value.trim().replace(/\D/g, '').slice(-10) : '';
+      const statusEl = document.getElementById('otpStatusMessage');
+      const btnSend = document.getElementById('btnSendOtp');
+
+      if (phone.length !== 10) {
+        if (statusEl) {
+          statusEl.innerText = 'कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!';
+          statusEl.style.color = '#dc2626';
+        }
+        return;
+      }
+
+      if (statusEl) {
+        statusEl.innerText = 'पहचान सत्यापित हो रही है...';
+        statusEl.style.color = '#0284c7';
+      }
+
+      // 1. यदि संचालक (रेवंतराम भाटी 8696663615) का नंबर है
+      const SANCHALAK_NUM = "8696663615";
+      if (phone === SANCHALAK_NUM) {
+        loggedInMemberPhone = phone;
+        localStorage.setItem("loggedInMemberPhone", phone);
+        const appUser = {
+          name: "रेवंतराम भाटी",
+          phone: phone,
+          photoUrl: null,
+          role: "संचालक / Admin",
+          uid: "admin_" + phone,
+          isGuest: false
+        };
+        localStorage.setItem("currentAppUser", JSON.stringify(appUser));
+        if (statusEl) {
+          statusEl.innerText = 'नमस्ते रेवंतराम जी! स्वागत है 🎉';
+          statusEl.style.color = '#16a34a';
+        }
+        showToast("नमस्ते रेवंतराम जी! लॉगिन सफल हुआ 🎉", "success");
+        setTimeout(() => {
+          closeLoginModal();
+          updateAuthUI();
+          if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
+          if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
+        }, 700);
+        return;
+      }
+
+      // 2. ग्रुप सदस्य सूची में खोजें
+      const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
+        const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
+        return p && p === phone;
+      });
+
+      if (matched) {
+        loggedInMemberPhone = phone;
+        userRole = "member";
+        isUserVerified = true;
+        localStorage.setItem("loggedInMemberPhone", phone);
+        localStorage.setItem("userRole", "member");
+        localStorage.setItem("isUserVerified", "true");
+
+        const appUser = {
+          name: matched.name,
+          phone: phone,
+          photoUrl: matched.photo || null,
+          role: matched.role || 'सदस्य',
+          uid: "member_" + phone,
+          isGuest: false
+        };
+        localStorage.setItem("currentAppUser", JSON.stringify(appUser));
+
+        if (statusEl) {
+          statusEl.innerText = `स्वागत है, ${matched.name}! लॉगिन सफल ✅`;
+          statusEl.style.color = '#16a34a';
+        }
+        showToast(`स्वागत है ${matched.name}! लॉगिन सफल हुआ 🎉`, "success");
+
+        setTimeout(() => {
+          closeLoginModal();
+          updateAuthUI();
+          if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
+          if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
+        }, 700);
+        return;
+      }
+
+      // 3. यदि नया नंबर है तो Firebase SMS OTP का प्रयास करें
+      if (statusEl) {
+        statusEl.innerText = 'SMS OTP भेजा जा रहा है...';
+        statusEl.style.color = '#d97706';
+      }
+      try {
+        await sendOtpToMember();
+      } catch (err) {
+        // यदि Firebase WebView में ब्लॉक हो तो गेस्ट/नया सदस्य के रूप में प्रवेश दें
+        const appUser = {
+          name: `सदस्य (${phone})`,
+          phone: phone,
+          photoUrl: null,
+          role: 'सदस्य',
+          uid: "user_" + phone,
+          isGuest: false
+        };
+        localStorage.setItem("currentAppUser", JSON.stringify(appUser));
+        loggedInMemberPhone = phone;
+        localStorage.setItem("loggedInMemberPhone", phone);
+        showToast(`स्वागत है! लॉगिन सफल हुआ ✅`, "success");
+        setTimeout(() => {
+          closeLoginModal();
+          updateAuthUI();
+          if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
+        }, 700);
+      }
     }
 
 </script>
