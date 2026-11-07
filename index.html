@@ -62,26 +62,56 @@
       line-height: 1.5;
     }
 
-    /* Header - iOS Liquid Glass Rounded Capsule (Halka Black Theme) */
+    /* 🌟 Header - iOS 18 Liquid Glass Vivid Royal Blue Floating Capsule */
     header,
     #mainAppHeader {
-      background: linear-gradient(145deg, rgba(24, 32, 47, 0.94) 0%, rgba(15, 23, 42, 0.96) 50%, rgba(17, 26, 40, 0.94) 100%) !important;
-      backdrop-filter: blur(28px) saturate(210%) !important;
-      -webkit-backdrop-filter: blur(28px) saturate(210%) !important;
-      border: 1.2px solid rgba(255, 255, 255, 0.14) !important;
-      border-radius: 20px !important;
-      margin: 8px 10px 8px 10px !important;
-      padding: 7px 12px !important;
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.92) 0%, rgba(37, 99, 235, 0.96) 50%, rgba(29, 78, 216, 0.92) 100%) !important;
+      backdrop-filter: blur(36px) saturate(220%) !important;
+      -webkit-backdrop-filter: blur(36px) saturate(220%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+      border-radius: 24px !important;
+      margin: 8px 10px 10px 10px !important;
+      padding: 9px 14px !important;
       position: sticky;
       top: 6px;
-      z-index: 100;
-      box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.40),
-                  0 4px 12px rgba(0, 0, 0, 0.25),
-                  inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+      z-index: 1000;
+      box-shadow: 0 16px 36px -4px rgba(30, 64, 175, 0.45),
+                  0 6px 16px rgba(37, 99, 235, 0.35),
+                  inset 0 1.5px 2px rgba(255, 255, 255, 0.6),
+                  inset 0 -1.5px 2px rgba(30, 64, 175, 0.3) !important;
       display: flex !important;
       justify-content: space-between;
       align-items: center;
       color: #ffffff !important;
+    }
+    #mainAppHeader h1,
+    #appTitleText {
+      color: #FFFFFF !important;
+      font-size: 16.5px !important;
+      font-weight: 900 !important;
+      letter-spacing: -0.2px !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35) !important;
+    }
+    #mainAppHeader .header-subtitle,
+    #appSubTitleText {
+      color: #FEF08A !important;
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.3px !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+    }
+    #headerUserGreeting {
+      color: #E0F2FE !important;
+      font-size: 11px !important;
+      font-weight: 800 !important;
+    }
+    #mainAppHeader .notif-bell-btn {
+      background: rgba(255, 255, 255, 0.22) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.45) !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
     }
 
 
@@ -2964,18 +2994,72 @@
       border-radius: 14px !important;
       box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08) !important;
     }
-    /* ALL VAMSHAVALI NAMES UNIFORM SIZE: 15px bold dark slate */
-    .vf-name, .vf-cname, .vg-name, .vg-bn, .v-name-uniform {
-      font-size: 15px !important;
+    /* 🌳 Vamshavali - Beautiful Compact & Proportional Typography */
+    .vf-name {
+      font-size: 14px !important;
       font-weight: 800 !important;
       color: #0F172A !important;
-      line-height: 1.35 !important;
+      line-height: 1.3 !important;
     }
-    .vf-wife, .vf-cwife, .vg-wife, .vg-bw {
-      font-size: 13px !important;
+    .vf-wife {
+      font-size: 12px !important;
       font-weight: 700 !important;
       color: #991B1B !important;
-      line-height: 1.35 !important;
+    }
+    /* 5 पुत्रों के बॉक्स में सुंदर छोटा फॉन्ट ताकि नाम 3 लाइनों में न टूटे */
+    .vf-cname {
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      color: #0F172A !important;
+      line-height: 1.25 !important;
+      word-break: normal !important;
+      white-space: normal !important;
+    }
+    .vf-cwife {
+      font-size: 9.5px !important;
+      font-weight: 700 !important;
+      color: #991B1B !important;
+      line-height: 1.2 !important;
+    }
+    .vf-lbl {
+      font-size: 9px !important;
+      font-weight: 800 !important;
+      padding: 1.5px 2px !important;
+      border-radius: 6px !important;
+    }
+    .vf-box {
+      padding: 4px 2px 5px !important;
+      border-radius: 11px !important;
+    }
+    .vg-card .vg-name {
+      font-size: 13.5px !important;
+      font-weight: 800 !important;
+      color: #0F172A !important;
+    }
+    .vg-card .vg-wife {
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      color: #991B1B !important;
+    }
+    .vg-item {
+      padding: 5px 2px !important;
+      font-size: 10px !important;
+    }
+    .vg-bn {
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      color: #0F172A !important;
+      line-height: 1.2 !important;
+    }
+    .vg-bw {
+      font-size: 9.5px !important;
+      font-weight: 700 !important;
+      color: #991B1B !important;
+    }
+    .vg-tag {
+      font-size: 8.5px !important;
+      padding: 1px 4px !important;
+      border-radius: 6px !important;
     }
 
   </style>
@@ -3654,7 +3738,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v4.5.8
+            APK v5.1.5
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -3681,9 +3765,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">
-              v4.5.8 (बिल्ड कोड: 514)
-            </span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.5 (बिल्ड कोड: 515)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4264,7 +4346,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v4.5.8 (बिल्ड कोड: 514)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.5 (बिल्ड कोड: 515)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5299,7 +5381,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.1.4";
+    const APP_VERSION = "5.1.5";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -6837,10 +6919,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 514)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 515)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 514)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 515)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -6955,7 +7037,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 514)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 515)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -6966,7 +7048,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 514)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 515)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -8511,7 +8593,7 @@
 
     // ✅ पहली बार ऐप इंस्टॉल/खोलने पर (v4.5.6) और लॉगिन के बाद एक बार स्वागत मैसेज दिखाएं
     function checkFirstTimeWelcomeOnAppOpen() {
-      const isFreshInstall = !localStorage.getItem("welcomeSeen_v4.5.6");
+      const isFreshInstall = !localStorage.getItem("welcomeSeen_v5.1.5");
       const savedPhone = localStorage.getItem("loggedInMemberPhone");
       const isMemberFirstWelcome = savedPhone && !localStorage.getItem("welcomeSeen_" + savedPhone);
 
@@ -8543,7 +8625,7 @@
     }
 
     function acknowledgeWelcomeModal() {
-      localStorage.setItem("welcomeSeen_v4.5.6", "true");
+      localStorage.setItem("welcomeSeen_v5.1.5", "true");
       localStorage.setItem("appInstallWelcomeSeen", "true");
       if (currentWelcomePhone) {
         localStorage.setItem("welcomeSeen_" + currentWelcomePhone, "true");
