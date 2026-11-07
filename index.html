@@ -3087,9 +3087,9 @@
     /* 👤 iOS Contacts Style Perfect Circular Avatar with Subtle Border */
     .avatar,
     .member-card .avatar {
-      width: 44px !important;
-      height: 44px !important;
-      min-width: 44px !important;
+      width: 48px !important;
+      height: 48px !important;
+      min-width: 48px !important;
       border-radius: 50% !important;
       border: 1.5px solid rgba(0, 0, 0, 0.06) !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
@@ -3209,6 +3209,50 @@
     }
     body.dark-theme .ios-chevron-wrap {
       color: #64748b !important;
+    }
+
+
+    /* 💊 Full Round Capsule Container for Role/Designation Brackets */
+    .rounded-pill-bracket {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 3px !important;
+      border-radius: 9999px !important;
+      padding: 3px 12px !important;
+      background: #F1F5F9 !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+      line-height: 1.2 !important;
+      vertical-align: middle !important;
+      user-select: none !important;
+      white-space: nowrap !important;
+    }
+    .rounded-pill-bracket .bracket-symbol {
+      color: #94A3B8 !important;
+      font-weight: 500 !important;
+      font-size: 12px !important;
+      line-height: 1 !important;
+    }
+    .rounded-pill-bracket .role-text {
+      color: #1E293B !important;
+      font-weight: 600 !important;
+      font-size: 11.5px !important;
+      letter-spacing: 0.1px !important;
+      line-height: 1 !important;
+    }
+
+    /* Dark Mode Support for Rounded Pill Bracket */
+    body.dark-theme .rounded-pill-bracket {
+      background: rgba(51, 65, 85, 0.6) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+    }
+    body.dark-theme .rounded-pill-bracket .bracket-symbol {
+      color: #64748B !important;
+    }
+    body.dark-theme .rounded-pill-bracket .role-text {
+      color: #F1F5F9 !important;
     }
 
   </style>
@@ -3887,7 +3931,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.1.6
+            APK v5.1.7
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -3914,7 +3958,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.6 (बिल्ड कोड: 516)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.7 (बिल्ड कोड: 517)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4495,7 +4539,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.6 (बिल्ड कोड: 516)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.7 (बिल्ड कोड: 517)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5530,7 +5574,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.1.6";
+    const APP_VERSION = "5.1.7";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7068,10 +7112,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 516)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 517)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 516)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 517)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7186,7 +7230,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 516)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 517)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7197,7 +7241,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 516)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 517)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -10130,12 +10174,14 @@
 
         const memberTag = m.tag || ((m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || (m.name && m.name.includes("रेवंतराम")) ? "संचालक" : (isFamily ? "परिवार सदस्य" : ""));
         let tagBadgeHtml = "";
-        if (memberTag === "संचालक") {
-          tagBadgeHtml = `<span class="member-tag-badge sanchalak"><i class="fa-solid fa-crown"></i> संचालक</span>`;
-        } else if (isFamily) {
-          tagBadgeHtml = `<span class="member-tag-badge family"><i class="fa-solid fa-people-roof"></i> ${escapeHtml(m.tag || 'परिवार सदस्य')}</span>`;
-        } else if (memberTag) {
-          tagBadgeHtml = `<span class="member-tag-badge other">${escapeHtml(memberTag)}</span>`;
+        if (memberTag) {
+          tagBadgeHtml = `
+            <div class="rounded-pill-bracket">
+              <span class="bracket-symbol">(</span>
+              <span class="role-text">${escapeHtml(memberTag)}</span>
+              <span class="bracket-symbol">)</span>
+            </div>
+          `;
         }
 
         const card = document.createElement("div");
@@ -10176,22 +10222,27 @@
         }
 
         card.innerHTML = `
+          <!-- बाएँ (Left): गोल सदस्य फोटो (48px) -->
           <div class="member-info" style="display:flex; align-items:center; gap:12px; flex:1; min-width:0;">
             <div class="avatar">${avatarHtml}</div>
+            
+            <!-- बीच (Center): बड़े अक्षरों में सदस्य का नाम (17px, bold) + राउंड कोष्ठक कैप्सूल -->
             <div class="member-details" style="flex:1; min-width:0;">
               <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                <strong style="font-size:15px; font-weight:700; color:var(--text-main);">${escapeHtml(m.name)}</strong>
+                <strong style="font-size:17px; font-weight:700; color:var(--text-main); letter-spacing:-0.2px;">${escapeHtml(m.name)}</strong>
                 ${tagBadgeHtml}
-                ${statusBadgeHtml}
-                ${quickReminderBtn}
                 ${isSelf ? `<span class="self-badge">${currentLang === 'en' ? 'You' : 'आप'}</span>` : ''}
               </div>
-              <div class="member-subtext" style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+              <div class="member-subtext" style="font-size:12px; color:var(--text-muted); margin-top:3px;">
                 <span>📱 ${escapeHtml(m.phone)}</span>
               </div>
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+          
+          <!-- दाएँ (Right): टॉगल और ऐरो बटन -->
+          <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+            ${statusBadgeHtml}
+            ${quickReminderBtn}
             ${familyDeleteBtn}
             <div class="ios-chevron-wrap">
               <i class="fa-solid fa-chevron-right"></i>
