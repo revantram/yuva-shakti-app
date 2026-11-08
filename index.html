@@ -3800,6 +3800,14 @@
     <!-- 3. हिंदू कैलेंडर व उत्सव टैब -->
     <div id="viewCalendar" class="section-view">
       
+      <!-- 🎨 Dedicated Occasion Poster Maker Action Banner -->
+      <div style="margin-bottom:12px;">
+        <button type="button" onclick="openOccasionPosterMaker()" style="width:100%; border:none; background:linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%); color:white; padding:12px 14px; border-radius:16px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 6px 18px rgba(234,88,12,0.28); cursor:pointer;">
+          <i class="fa-solid fa-wand-magic-sparkles" style="font-size:15px; color:#fef08a;"></i>
+          <span>🎨 त्यौहार / जन्मदिन / पुण्यतिथि पोस्टर बनाएं (Create Poster)</span>
+        </button>
+      </div>
+
       <!-- 🚩  iPhone Liquid Glass Hindu Month Calendar Box -->
       <div class="ios-liquid-calendar-box" id="hinduCalendarCard">
         <div class="calendar-nav-header">
@@ -3982,7 +3990,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.1.8
+            APK v5.1.9
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4009,7 +4017,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.8 (बिल्ड कोड: 518)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.9 (बिल्ड कोड: 519)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4381,6 +4389,96 @@
     </div>
   </div>
 
+  <!-- 🎨 Custom Occasion & Tribute Poster Maker Modal -->
+  <div class="modal-overlay" id="occasionPosterMakerModal" style="display:none; z-index:1120;" onclick="if(event.target===this) closeOccasionPosterMaker()">
+    <div class="modal-content ios-glass-card" style="max-width:440px; width:92%; max-height:90vh; overflow-y:auto; padding:20px; border-radius:24px; text-align:left; background:rgba(255,255,255,0.96); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.9); box-shadow:0 20px 45px rgba(15,23,42,0.25);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:36px; height:36px; border-radius:12px; background:linear-gradient(135deg, #f97316, #ea580c); color:white; display:flex; align-items:center; justify-content:center; font-size:16px; box-shadow:0 4px 10px rgba(234,88,12,0.3);">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <div>
+            <h3 style="margin:0; font-size:16.5px; font-weight:800; color:#0f172a;">पोस्टर मेकर (Poster Studio)</h3>
+            <div style="font-size:11px; color:#64748b;">फोटो, नाम व पद सहित डिजिटल पोस्टर</div>
+          </div>
+        </div>
+        <button onclick="closeOccasionPosterMaker()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+      </div>
+
+      <!-- Occasion Type Selector Pills -->
+      <label style="font-size:12px; font-weight:700; color:#334155; margin-bottom:6px; display:block;">अवसर चुनें (Select Occasion):</label>
+      <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; margin-bottom:14px;">
+        <button type="button" class="poster-type-pill active" id="ptypeBtn_festival" onclick="selectPosterType('festival')" style="border:1.5px solid #fdba74; background:#fff7ed; color:#c2410c; padding:8px 10px; border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <span>🪔</span> <span>पावन पर्व / त्यौहार</span>
+        </button>
+        <button type="button" class="poster-type-pill" id="ptypeBtn_birthday" onclick="selectPosterType('birthday')" style="border:1.5px solid rgba(0,0,0,0.08); background:#f8fafc; color:#475569; padding:8px 10px; border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <span>🎂</span> <span>जन्मदिन (Birthday)</span>
+        </button>
+        <button type="button" class="poster-type-pill" id="ptypeBtn_anniversary" onclick="selectPosterType('anniversary')" style="border:1.5px solid rgba(0,0,0,0.08); background:#f8fafc; color:#475569; padding:8px 10px; border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <span>💍</span> <span>विवाह वर्षगांठ</span>
+        </button>
+        <button type="button" class="poster-type-pill" id="ptypeBtn_punyatithi" onclick="selectPosterType('punyatithi')" style="border:1.5px solid rgba(0,0,0,0.08); background:#f8fafc; color:#475569; padding:8px 10px; border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <span>🕊️</span> <span>पुण्यतिथि / श्रद्धांजलि</span>
+        </button>
+      </div>
+
+      <!-- Form Inputs -->
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:14px;">
+        <div>
+          <label id="lblPosterTargetName" style="font-size:12px; font-weight:700; color:#334155; margin-bottom:4px; display:block;">त्यौहार का नाम:</label>
+          <input type="text" id="inpPosterTargetName" placeholder="उदा. दीपावली महापर्व या सदस्य का नाम" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13px; font-family:inherit;">
+        </div>
+
+        <div id="rowPosterSub" style="display:block;">
+          <label id="lblPosterSub" style="font-size:12px; font-weight:700; color:#334155; margin-bottom:4px; display:block;">तिथि / उपशीर्षक (वैकल्पिक):</label>
+          <input type="text" id="inpPosterSub" placeholder="उदा. कार्तिक कृष्ण पक्ष अमावस्या" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13px; font-family:inherit;">
+        </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:700; color:#334155; margin-bottom:4px; display:block;">संदेश / श्लोक / मंगलकामनाएं:</label>
+          <textarea id="inpPosterWish" rows="3" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:12px; border:1px solid #cbd5e1; font-size:12.5px; font-family:inherit; line-height:1.5; resize:vertical;"></textarea>
+        </div>
+
+        <!-- Sender preview card inside form -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:10px 12px; display:flex; align-items:center; gap:10px;">
+          <div id="posterMakerSenderAvatar" style="width:40px; height:40px; border-radius:50%; background:#ea580c; color:white; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; overflow:hidden; flex-shrink:0;">भा</div>
+          <div style="flex:1; min-width:0;">
+            <div style="font-size:10.5px; color:#64748b; font-weight:600;" id="posterMakerSenderLabel">💐 शुभकामना प्रेषक (आपकी फोटो व नाम):</div>
+            <div id="posterMakerSenderName" style="font-size:13px; font-weight:800; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">रेवंतराम भाटी</div>
+          </div>
+          <span style="font-size:11px; background:#eff6ff; color:#2563eb; padding:3px 8px; border-radius:6px; font-weight:700;">ऑटो</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn-main" onclick="submitOccasionPosterMaker()" style="width:100%; background:linear-gradient(135deg, #16a34a, #15803d); border-radius:14px; padding:12px; font-size:14px; font-weight:800; box-shadow:0 4px 14px rgba(22,163,74,0.3); display:flex; align-items:center; justify-content:center; gap:8px;">
+        <i class="fa-solid fa-image"></i> <span>📸 पोस्टर बनाएं व व्हाट्सएप पर भेजें</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 🖼️ Poster Preview & Share Modal -->
+  <div class="modal-overlay" id="posterPreviewModal" style="display:none; z-index:1130;" onclick="if(event.target===this) closePosterPreviewModal()">
+    <div class="modal-content ios-glass-card" style="max-width:440px; width:92%; max-height:92vh; overflow-y:auto; padding:18px; border-radius:24px; text-align:center; background:rgba(255,255,255,0.96); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.9); box-shadow:0 24px 50px rgba(15,23,42,0.3);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h4 style="margin:0; font-size:16px; font-weight:800; color:#0f172a;" id="posterPreviewTitle">✨ तैयार पोस्टर (Ready Poster)</h4>
+        <button onclick="closePosterPreviewModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.15); margin-bottom:14px; background:#f1f5f9; max-height:55vh;">
+        <img id="posterPreviewImg" src="" alt="Poster" style="width:100%; height:auto; display:block; object-fit:contain; max-height:55vh;">
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button id="btnPosterShareWhatsApp" class="btn-main" onclick="sharePosterFromPreviewModal()" style="width:100%; background:linear-gradient(135deg, #16a34a, #15803d); border-radius:14px; padding:11px; font-size:13.5px; font-weight:800; box-shadow:0 4px 12px rgba(22,163,74,0.3); display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-brands fa-whatsapp" style="font-size:17px;"></i> <span>व्हाट्सएप पर शेयर करें (Share Poster)</span>
+        </button>
+        <button onclick="downloadPosterFromPreviewModal()" style="width:100%; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:14px; padding:10px; font-size:13px; font-weight:700; color:#334155; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-solid fa-download"></i> <span>गैलरी में सेव करें (Download)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- 🔐 Google Sign-In & Login Modal -->
       <div class="modal-overlay" id="loginModal" style="display:none; z-index:1100;">
     <div class="modal-content ios-glass-card" id="loginCard" style="max-width:380px; padding:22px 18px; border-radius:24px; text-align:center; background:rgba(255,255,255,0.95); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.95); box-shadow:0 20px 45px rgba(15,23,42,0.2);">
@@ -4590,7 +4688,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.8 (बिल्ड कोड: 518)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.9 (बिल्ड कोड: 519)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5441,7 +5539,7 @@
 
       <div style="display:flex; flex-direction:column; gap:8px;">
         <button id="dayCelebBtnGroupShare" class="btn-main" style="background:linear-gradient(135deg, #16a34a, #15803d); border-radius:14px; padding:11px; font-size:13px; font-weight:800; box-shadow:0 4px 12px rgba(22, 163, 74, 0.3); display:flex; align-items:center; justify-content:center; gap:8px;">
-          <i class="fa-brands fa-whatsapp" style="font-size:16px;"></i> <span>व्हाट्सएप पर शेयर करें (Share to WhatsApp)</span>
+          <i class="fa-solid fa-image" style="font-size:16px;"></i> <span>व्हाट्सएप पर पोस्टर शेयर करें (Share Poster)</span>
         </button>
         <button type="button" onclick="closeDayCelebrationModal()" style="background:rgba(0,0,0,0.06); border:none; padding:9px; border-radius:14px; font-weight:700; font-size:12px; cursor:pointer; color:var(--text-color);">
           बंद करें
@@ -5627,7 +5725,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.1.8";
+    const APP_VERSION = "5.1.9";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7165,10 +7263,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 518)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 519)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 518)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 519)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7283,7 +7381,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 518)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 519)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7294,7 +7392,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 518)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 519)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -9548,6 +9646,7 @@
         <div style="text-align:right; flex-shrink:0;">
           <div style="font-size:11px; font-weight:800; color:${pal[3]};">${n ? n + ' संतान ›' : 'खोलें ›'}</div>
           <div style="display:flex; gap:5px; justify-content:flex-end; margin-top:4px;" onclick="event.stopPropagation()">
+            ${vIsDeceased(ch) ? `<button onclick="openOccasionPosterMaker('punyatithi', { name: '${vEsc(ch.name)}' })" title="श्रद्धांजलि पोस्टर" style="${VB} padding:5px 8px; background:#f1f5f9; color:#334155;">🕊️</button>` : `<button onclick="openOccasionPosterMaker('birthday', { name: '${vEsc(ch.name)}' })" title="जन्मदिन पोस्टर" style="${VB} padding:5px 8px; background:#fef3c7; color:#b45309;">🎂</button>`}
             ${(vCanDetails(ch) && !vCanEdit(ch)) ? `<button onclick="vamshaOpenDetailsForm('${vEsc(ch.id)}')" style="${VB} padding:5px 8px; background:#ede9fe; color:#6d28d9;">📷</button>` : ''}
             ${vCanEdit(ch) ? `<button onclick="vamshaOpenForm('edit','${vEsc(ch.id)}')" style="${VB} padding:5px 8px; background:#dbeafe; color:#1d4ed8;">✏️</button>` : ''}
             ${vCanDelete(ch) ? `<button onclick="vamshaDelete('${vEsc(ch.id)}')" style="${VB} padding:5px 8px; background:#fee2e2; color:#b91c1c;">🗑️</button>` : ''}
@@ -9558,6 +9657,11 @@
 
     function vActionsHtml(p) {
       let h = `<div style="display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 4px; align-items:center;">`;
+      if (vIsDeceased(p)) {
+        h += `<button onclick="openOccasionPosterMaker('punyatithi', { name: '${vEsc(p.name)}' })" style="${VB} background:#475569; color:#fff;">🕊️ श्रद्धांजलि पोस्टर</button>`;
+      } else {
+        h += `<button onclick="openOccasionPosterMaker('birthday', { name: '${vEsc(p.name)}' })" style="${VB} background:#f59e0b; color:#fff;">🎂 जन्मदिन पोस्टर</button>`;
+      }
       if (!vIsFemale(p)) {
         h += vCanAdd()
           ? `<button onclick="vamshaOpenForm('add','${vEsc(p.id)}')" style="${VB} background:#16a34a; color:#fff;">➕ संतान जोड़ें</button>`
@@ -13196,6 +13300,45 @@
 
       let eventsHtml = "";
 
+      // Check Punyatithis on this date
+      const punyatithis = [];
+      try {
+        const tree = (typeof vamshaFamilyData !== 'undefined' && Array.isArray(vamshaFamilyData)) ? vamshaFamilyData : [];
+        tree.forEach(p => {
+          if (p && p.dod) {
+            const clean = String(p.dod).trim().replace(/\//g, '-');
+            const parts = clean.split('-');
+            let match = false;
+            if (parts.length === 3) {
+              match = (parts[1].padStart(2, '0') === monthStr && parts[2].padStart(2, '0') === dayStr);
+            } else if (parts.length === 2) {
+              match = (parts[0].padStart(2, '0') === monthStr && parts[1].padStart(2, '0') === dayStr);
+            }
+            if (match) punyatithis.push(p);
+          }
+        });
+      } catch (e) {}
+
+      if (punyatithis.length > 0) {
+        punyatithis.forEach(p => {
+          eventsHtml += `
+            <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; margin-bottom:8px;">
+              <div style="font-weight:700; color:#1e293b; font-size:13px;">
+                🕊️ ${vEsc(p.name)} की पावन पुण्यतिथि
+              </div>
+              <div style="font-size:11px; color:#64748b; margin-top:2px;">
+                स्मृति दिवस • शत-शत नमन एवं भावभीनी श्रद्धांजलि
+              </div>
+              <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+                <button onclick="shareOccasionPoster('punyatithi', { name: '${vEsc(p.name)}' })" style="background:#475569; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-image"></i> 🕊️ श्रद्धांजलि पोस्टर शेयर
+                </button>
+              </div>
+            </div>
+          `;
+        });
+      }
+
       if (amavasya) {
         eventsHtml += `
           <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px; margin-bottom:8px;">
@@ -13206,11 +13349,11 @@
               ${amavasya.desc || 'सत्संग, अंशदान एवं पितृ तर्पण दिवस'}
             </div>
             <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
-              <button onclick="openPhonePeModal('अंशदान - ' + '${amavasya.name}')" class="btn-quick-phonepe" style="padding:5px 10px; font-size:11px;">
-                <i class="fa-solid fa-mobile-screen-button"></i> PhonePe अंशदान
+              <button onclick="shareOccasionPoster('festival', { name: '${amavasya.name}', sub: 'अमावस्या सत्संग व अंशदान पर्व' })" style="background:#16a34a; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-solid fa-image"></i> 🌑 अमावस्या पोस्टर शेयर
               </button>
-              <button onclick="sendFestivalGreeting('${amavasya.name}', '${amavasya.name} की हार्दिक शुभकामनाएं! सत्संग व सेवा भाव से जीवन सुखमय रहे।', 'group')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
-                <i class="fa-brands fa-whatsapp"></i> ग्रुप में शेयर करें
+              <button onclick="openPhonePeModal('अंशदान - ' + '${amavasya.name}')" class="btn-quick-phonepe" style="padding:6px 10px; font-size:11px;">
+                <i class="fa-solid fa-mobile-screen-button"></i> PhonePe अंशदान
               </button>
             </div>
           </div>
@@ -13236,11 +13379,8 @@
                 "${festival.wish}"
               </div>
               <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
-                <button onclick="sendFestivalGreeting('${festival.name}', '${(festival.wish || '').replace(/'/g, "\\'")}', 'group')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
-                  <i class="fa-brands fa-whatsapp"></i> ग्रुप में शेयर
-                </button>
-                <button onclick="sendFestivalGreeting('${festival.name}', '${(festival.wish || '').replace(/'/g, "\\'")}', 'direct')" style="background:#0284c7; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
-                  <i class="fa-solid fa-share-nodes"></i> सीधे भेजें
+                <button onclick="shareOccasionPoster('festival', { name: '${festival.name}', wish: '${(festival.wish || '').replace(/'/g, "\\'")}', sub: '${(festival.tithi || '').replace(/'/g, "\\'")}' })" style="background:#16a34a; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-image"></i> 🪔 त्यौहार पोस्टर शेयर करें
                 </button>
               </div>
             ` : ''}
@@ -13260,8 +13400,8 @@
               ${nationalDay.wish}
             </div>
             <div style="margin-top:8px;">
-              <button onclick="sendFestivalGreeting('${nationalDay.name}', '${(nationalDay.wish || '').replace(/'/g, "\\'")}', 'group')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer;">
-                <i class="fa-brands fa-whatsapp"></i> शुभकामनाएं शेयर करें
+              <button onclick="shareOccasionPoster('national', { name: '${nationalDay.name}', wish: '${(nationalDay.wish || '').replace(/'/g, "\\'")}' })" style="background:#16a34a; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-solid fa-image"></i> 🇮🇳 राष्ट्रीय पोस्टर शेयर करें
               </button>
             </div>
           </div>
@@ -13279,13 +13419,13 @@
                 युवा शक्ति ग्रुप (भाटी परिवार) की ओर से हार्दिक शुभकामनाएं!
               </div>
               <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
-                <button onclick="shareMemberWish('birthday', '${mem.name}', '${mem.whatsapp || mem.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                  <i class="fa-brands fa-whatsapp"></i> व्यक्तिगत बधाई
+                <button onclick="shareMemberWish('birthday', '${mem.name}', '${mem.whatsapp || mem.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-image"></i> बधाई पोस्टर
                 </button>
-                <button onclick="shareMemberWish('birthday', '${mem.name}', '${mem.whatsapp || mem.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                  <i class="fa-solid fa-users"></i> ग्रुप में शेयर
+                <button onclick="shareMemberWish('birthday', '${mem.name}', '${mem.whatsapp || mem.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-image"></i> ग्रुप पोस्टर
                 </button>
-                <a href="tel:${mem.phone}" style="background:#475569; color:white; text-decoration:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; display:inline-flex; align-items:center; gap:4px;">
+                <a href="tel:${mem.phone}" style="background:#475569; color:white; text-decoration:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; display:inline-flex; align-items:center; gap:4px;">
                   <i class="fa-solid fa-phone"></i> कॉल
                 </a>
               </div>
@@ -13305,11 +13445,11 @@
                 सुखी एवं मंगलमय दांपत्य जीवन की अनंत शुभकामनाएं!
               </div>
               <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
-                <button onclick="shareMemberWish('anniversary', '${mem.name}', '${mem.whatsapp || mem.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                  <i class="fa-brands fa-whatsapp"></i> व्यक्तिगत बधाई
+                <button onclick="shareMemberWish('anniversary', '${mem.name}', '${mem.whatsapp || mem.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-image"></i> बधाई पोस्टर
                 </button>
-                <button onclick="shareMemberWish('anniversary', '${mem.name}', '${mem.whatsapp || mem.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:5px 10px; border-radius:6px; font-weight:600; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                  <i class="fa-solid fa-users"></i> ग्रुप में शेयर
+                <button onclick="shareMemberWish('anniversary', '${mem.name}', '${mem.whatsapp || mem.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-image"></i> ग्रुप पोस्टर
                 </button>
               </div>
             </div>
@@ -13339,39 +13479,757 @@
       `;
     }
 
+    // =========================================================================
+    // 🎨 DEDICATED OCCASION & TRIBUTE POSTER GENERATOR ENGINE (त्यौहार, जन्मदिन, सालगिरह, पुण्यतिथि)
+    // =========================================================================
+
+    function wrapCanvasText(ctx, text, maxWidth) {
+      if (!text) return [];
+      const paras = String(text).split('\n');
+      const lines = [];
+      for (const para of paras) {
+        const trimmed = para.trim();
+        if (!trimmed) {
+          lines.push('');
+          continue;
+        }
+        const words = trimmed.split(/\s+/);
+        let cur = '';
+        for (let i = 0; i < words.length; i++) {
+          const test = cur ? (cur + ' ' + words[i]) : words[i];
+          if (ctx.measureText(test).width > maxWidth && i > 0) {
+            lines.push(cur);
+            cur = words[i];
+          } else {
+            cur = test;
+          }
+        }
+        if (cur) lines.push(cur);
+      }
+      return lines;
+    }
+
+    async function generateOccasionCardDataUrl(type, data = {}) {
+      try {
+        await document.fonts.ready;
+      } catch (e) {}
+
+      const width = 1200;
+      const totalHeight = 1500;
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = totalHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
+      // 1. Resolve Sender Details
+      const sender = getSuvicharSender();
+      let senderImg = null;
+      if (sender.photoUrl) {
+        try {
+          senderImg = await loadImagePromise(sender.photoUrl);
+        } catch (e) {
+          console.warn("Could not load sender photo for occasion poster:", e);
+        }
+      }
+
+      // 2. Resolve Target Name & Details
+      const rawName = data.name || (type === 'festival' ? "दीपावली महापर्व" : (type === 'punyatithi' ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य"));
+      const cleanName = rawName.replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').replace(/ की पुण्यतिथि/g, '').trim();
+
+      // Determine Category Type
+      const isFestival = (type === 'festival' || type === 'amavasya' || type === 'national');
+      const isBirthday = (type === 'birthday' || type === 'bday');
+      const isAnniversary = (type === 'anniversary' || type === 'anniv');
+      const isPunyatithi = (type === 'punyatithi' || type === 'shraddhanjali' || type === 'smriti');
+
+      // 3. Resolve Wish Text
+      let wishText = data.wish || "";
+      if (!wishText) {
+        if (isFestival) {
+          wishText = `${cleanName} के पावन अवसर पर आपके जीवन में सुख, शांति, समृद्धि एवं उत्तम स्वास्थ्य का संचार हो। समस्त भाटी परिवार की ओर से हार्दिक मंगलकामनाएं!`;
+        } else if (isBirthday) {
+          wishText = "परमपिता परमेश्वर से प्रार्थना है कि आपका जीवन उत्तम स्वास्थ्य, सुख-समृद्धि, दीर्घायु एवं निरंतर सफलता से आलोकित रहे। आपका प्रत्येक क्षण खुशियों और नई ऊर्जा से परिपूर्ण हो!\n\nसमस्त भाटी परिवार की ओर से आपको जन्मदिन की अनंत शुभकामनाएं!";
+        } else if (isAnniversary) {
+          wishText = "आपका दांपत्य जीवन सदैव अटूट प्रेम, आपसी विश्वास, सुख-समृद्धि एवं ईश्वर के असीम आशीर्वाद से महकता रहे। दांपत्य जीवन के यह सुनहरे वर्ष यूं ही खुशियों व मधुर स्मृतियों से सजे रहें।\n\nसमस्त भाटी परिवार की ओर से विवाह वर्षगांठ की हार्दिक बधाई!";
+        } else if (isPunyatithi) {
+          wishText = "आपकी पावन स्मृतियां, उच्च आदर्श, संस्कार और स्नेह सदैव हमारे अंतःकरण में जीवित रहेंगे। आपके दिखाए सत्पथ पर चलना ही हमारी सच्ची श्रद्धांजलि है।\n\nईश्वर से विनम्र प्रार्थना है कि दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति एवं मोक्ष प्रदान करें।\n\nॐ शांतिः शांतिः शांतिः 🙏";
+        }
+      }
+
+      // 4. Resolve Icons & Color Themes
+      let theme = {
+        outerBg1: "#fffbeb", outerBg2: "#fef3c7", outerBg3: "#ffedd5",
+        cardBg1: "#ffffff", cardBg2: "#fffdfa", cardBg3: "#fff7ed",
+        cardBorder: "#fdba74", cardShadow: "rgba(234, 88, 12, 0.16)",
+        headerLeftBg: "#fef3c7", headerLeftBorder: "#fde68a", headerLeftText: "#b45309",
+        headerRightBg: "#fff7ed", headerRightBorder: "#fed7aa", headerRightText: "#9a3412",
+        iconSquircle1: "#f97316", iconSquircle2: "#ea580c",
+        iconShadow: "rgba(234, 88, 12, 0.35)", iconChar: "🪔",
+        categoryTag: "✨ पावन पर्व एवं उत्सव ✨", categoryColor: "#b45309",
+        heroBannerBg1: "#fef3c7", heroBannerBg2: "#fde68a", heroBannerBorder: "#f59e0b", heroBannerText: "#78350f",
+        heroTitle: `✨ ${cleanName} ✨`,
+        subText: data.sub || "पावन हिंदू पर्व • समस्त परिवार हेतु मंगलकामनाएं", subColor: "#ea580c",
+        wishBoxBorder: "#fde68a", wishBoxShadow: "rgba(245, 158, 11, 0.08)",
+        wishBoxHeader: "“ पावन शुभकामना संदेश “", wishBoxHeaderColor: "#b45309",
+        senderBoxBg1: "#fff7ed", senderBoxBg2: "#ffedd5", senderBoxBorder: "#fed7aa",
+        senderLabel: "💐 सप्रेम शुभकामना प्रेषक:", senderLabelColor: "#9a3412",
+        senderBadgeBg1: "#fef3c7", senderBadgeBg2: "#fde68a", senderBadgeBorder: "#f59e0b", senderBadgeText: "#431407",
+        senderSubColor: "#ea580c",
+        footerTagline: "🪔 धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन 🪔", footerTaglineColor: "#9a3412"
+      };
+
+      if (isFestival) {
+        let fIcon = "🪔";
+        const fn = cleanName.toLowerCase();
+        if (fn.includes("शिव") || fn.includes("महाशिवरात्रि")) fIcon = "🕉️";
+        else if (fn.includes("होली") || fn.includes("धुलंडी")) fIcon = "🎨";
+        else if (fn.includes("राम") || fn.includes("दशहरा") || fn.includes("विजयादशमी")) fIcon = "🏹";
+        else if (fn.includes("कृष्ण") || fn.includes("जन्माष्टमी")) fIcon = "🦚";
+        else if (fn.includes("गणेश")) fIcon = "🐘";
+        else if (fn.includes("नवरात्रि") || fn.includes("दुर्गा")) fIcon = "🌸";
+        else if (fn.includes("अमावस्या")) fIcon = "🌑";
+        else if (fn.includes("तिरंगा") || fn.includes("स्वतंत्रता") || fn.includes("गणतंत्र") || fn.includes("राष्ट्रीय")) fIcon = "🇮🇳";
+        else if (fn.includes("दीपावली") || fn.includes("दिवाली")) fIcon = "🪔";
+        theme.iconChar = fIcon;
+        theme.heroTitle = `✨ ${cleanName} ✨`;
+        theme.subText = data.sub || "पावन पर्व • समस्त परिवार हेतु हार्दिक मंगलकामनाएं";
+      } else if (isBirthday) {
+        theme.outerBg1 = "#fefce8"; theme.outerBg2 = "#fef08a"; theme.outerBg3 = "#fde047";
+        theme.cardBg1 = "#ffffff"; theme.cardBg2 = "#fffdf5"; theme.cardBg3 = "#fefce8";
+        theme.cardBorder = "#f59e0b"; theme.cardShadow = "rgba(245, 158, 11, 0.2)";
+        theme.headerLeftBg = "#fef3c7"; theme.headerLeftBorder = "#fde68a"; theme.headerLeftText = "#b45309";
+        theme.iconSquircle1 = "#f59e0b"; theme.iconSquircle2 = "#d97706";
+        theme.iconShadow = "rgba(245, 158, 11, 0.4)"; theme.iconChar = "🎂";
+        theme.categoryTag = "✨ जन्मदिवस की हार्दिक शुभकामनाएं ✨"; theme.categoryColor = "#b45309";
+        theme.heroBannerBg1 = "#fef3c7"; theme.heroBannerBg2 = "#fde68a"; theme.heroBannerBorder = "#d97706"; theme.heroBannerText = "#451a03";
+        theme.heroTitle = `✨ ${cleanName} जी ✨`;
+        theme.subText = "ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु एवं अपार खुशियां प्रदान करें"; theme.subColor = "#854d0e";
+        theme.wishBoxBorder = "#fde68a"; theme.wishBoxHeader = "🎉 जन्मदिवस मंगलकामनाएं 🎉"; theme.wishBoxHeaderColor = "#b45309";
+        theme.senderLabel = "💐 शुभकामना प्रेषक:";
+      } else if (isAnniversary) {
+        theme.outerBg1 = "#fff1f2"; theme.outerBg2 = "#ffe4e6"; theme.outerBg3 = "#fecdd3";
+        theme.cardBg1 = "#ffffff"; theme.cardBg2 = "#fff5f5"; theme.cardBg3 = "#fff1f2";
+        theme.cardBorder = "#fb7185"; theme.cardShadow = "rgba(225, 29, 72, 0.16)";
+        theme.headerLeftBg = "#ffe4e6"; theme.headerLeftBorder = "#fecdd3"; theme.headerLeftText = "#9f1239";
+        theme.iconSquircle1 = "#e11d48"; theme.iconSquircle2 = "#be123c";
+        theme.iconShadow = "rgba(225, 29, 72, 0.35)"; theme.iconChar = "💍";
+        theme.categoryTag = "✨ वैवाहिक वर्षगांठ की हार्दिक बधाई ✨"; theme.categoryColor = "#9f1239";
+        theme.heroBannerBg1 = "#ffe4e6"; theme.heroBannerBg2 = "#fecdd3"; theme.heroBannerBorder = "#e11d48"; theme.heroBannerText = "#881337";
+        theme.heroTitle = `✨ ${cleanName} जी ✨`;
+        theme.subText = "सुखी, समृद्ध एवं मंगलमय दांपत्य जीवन की अनंत मंगलकामनाएं"; theme.subColor = "#9f1239";
+        theme.wishBoxBorder = "#fecdd3"; theme.wishBoxHeader = "💖 दांपत्य जीवन मंगलकामनाएं 💖"; theme.wishBoxHeaderColor = "#9f1239";
+        theme.senderBoxBg1 = "#fff1f2"; theme.senderBoxBg2 = "#ffe4e6"; theme.senderBoxBorder = "#fecdd3";
+        theme.senderLabel = "💐 मंगलकामना प्रेषक:"; theme.senderLabelColor = "#9f1239";
+        theme.senderBadgeBg1 = "#ffe4e6"; theme.senderBadgeBg2 = "#fecdd3"; theme.senderBadgeBorder = "#fb7185"; theme.senderBadgeText = "#881337";
+        theme.senderSubColor = "#be123c";
+      } else if (isPunyatithi) {
+        theme.outerBg1 = "#f8fafc"; theme.outerBg2 = "#f1f5f9"; theme.outerBg3 = "#e2e8f0";
+        theme.cardBg1 = "#ffffff"; theme.cardBg2 = "#f8fafc"; theme.cardBg3 = "#f1f5f9";
+        theme.cardBorder = "#94a3b8"; theme.cardShadow = "rgba(100, 116, 139, 0.18)";
+        theme.headerLeftBg = "#e2e8f0"; theme.headerLeftBorder = "#cbd5e1"; theme.headerLeftText = "#334155";
+        theme.iconSquircle1 = "#64748b"; theme.iconSquircle2 = "#475569";
+        theme.iconShadow = "rgba(71, 85, 105, 0.3)"; theme.iconChar = "🕊️";
+        theme.categoryTag = "🕊️ भावभीनी श्रद्धांजलि व शत-शत नमन 🕊️"; theme.categoryColor = "#1e293b";
+        theme.heroBannerBg1 = "#ffffff"; theme.heroBannerBg2 = "#f1f5f9"; theme.heroBannerBorder = "#64748b"; theme.heroBannerText = "#0f172a";
+        theme.heroTitle = `पूज्य ${cleanName} जी`;
+        theme.subText = "आपकी पावन स्मृतियां एवं संस्कार सदैव हमारे अंतःकरण में अमर रहेंगे"; theme.subColor = "#475569";
+        theme.wishBoxBorder = "#cbd5e1"; theme.wishBoxHeader = "🙏 श्रद्धांजलि एवं शत-शत नमन 🙏"; theme.wishBoxHeaderColor = "#334155";
+        theme.senderBoxBg1 = "#f8fafc"; theme.senderBoxBg2 = "#f1f5f9"; theme.senderBoxBorder = "#cbd5e1";
+        theme.senderLabel = "🙏 सादर श्रद्धांजलि प्रेषक:"; theme.senderLabelColor = "#334155";
+        theme.senderBadgeBg1 = "#ffffff"; theme.senderBadgeBg2 = "#f1f5f9"; theme.senderBadgeBorder = "#94a3b8"; theme.senderBadgeText = "#0f172a";
+        theme.senderSubColor = "#475569";
+        theme.footerTagline = "🕊️ दिवंगत पुण्यात्मा को अश्रुपूर्ण श्रद्धांजलि • शत-शत नमन 🕊️"; theme.footerTaglineColor = "#334155";
+      }
+
+      // Step 5: Render Canvas Layers
+      // 1. Overall Outer Gradient
+      const outGrad = ctx.createLinearGradient(0, 0, width, totalHeight);
+      outGrad.addColorStop(0, theme.outerBg1);
+      outGrad.addColorStop(0.5, theme.outerBg2);
+      outGrad.addColorStop(1, theme.outerBg3);
+      ctx.fillStyle = outGrad;
+      ctx.fillRect(0, 0, width, totalHeight);
+
+      // Ambient decorative watermark rings
+      ctx.save();
+      ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+      ctx.beginPath();
+      ctx.arc(140, 160, 260, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(width - 140, totalHeight - 200, 320, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 2. Main Inset Card
+      const cardMargin = 40;
+      const cardW = width - (cardMargin * 2); // 1120px
+      const cardH = totalHeight - (cardMargin * 2); // 1420px
+
+      ctx.save();
+      ctx.shadowColor = theme.cardShadow;
+      ctx.shadowBlur = 36;
+      ctx.shadowOffsetY = 14;
+      const cardGrad = ctx.createLinearGradient(cardMargin, cardMargin, cardMargin, cardMargin + cardH);
+      cardGrad.addColorStop(0, theme.cardBg1);
+      cardGrad.addColorStop(0.7, theme.cardBg2);
+      cardGrad.addColorStop(1, theme.cardBg3);
+      ctx.fillStyle = cardGrad;
+      canvasRoundRect(ctx, cardMargin, cardMargin, cardW, cardH, 44, true, false);
+      ctx.restore();
+
+      // Card border
+      ctx.strokeStyle = theme.cardBorder;
+      ctx.lineWidth = 3.5;
+      canvasRoundRect(ctx, cardMargin, cardMargin, cardW, cardH, 44, false, true);
+
+      // 3. Top Header Bar (Left: Date/Category pill, Right: Group branding pill)
+      const topHeaderY = cardMargin + 25;
+      const topHeaderH = 62;
+      const todayDateFormatted = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      // Left Pill
+      const leftPillW = 380;
+      const leftPillX = cardMargin + 32;
+      ctx.save();
+      ctx.fillStyle = theme.headerLeftBg;
+      canvasRoundRect(ctx, leftPillX, topHeaderY, leftPillW, topHeaderH, 31, true, false);
+      ctx.strokeStyle = theme.headerLeftBorder;
+      ctx.lineWidth = 2.5;
+      canvasRoundRect(ctx, leftPillX, topHeaderY, leftPillW, topHeaderH, 31, false, true);
+      ctx.fillStyle = theme.headerLeftText;
+      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const leftPillText = isPunyatithi ? "🕊️ पावन स्मृति दिवस" : (isBirthday ? "🎂 जन्मदिवस विशेष" : (isAnniversary ? "💍 वैवाहिक वर्षगांठ" : `☀️ ${todayDateFormatted}`));
+      ctx.fillText(leftPillText, leftPillX + leftPillW / 2, topHeaderY + topHeaderH / 2);
+      ctx.restore();
+
+      // Right Pill (Group Branding)
+      const rightPillW = 440;
+      const rightPillX = cardMargin + cardW - rightPillW - 32;
+      ctx.save();
+      ctx.fillStyle = theme.headerRightBg;
+      canvasRoundRect(ctx, rightPillX, topHeaderY, rightPillW, topHeaderH, 31, true, false);
+      ctx.strokeStyle = theme.headerRightBorder;
+      ctx.lineWidth = 2;
+      canvasRoundRect(ctx, rightPillX, topHeaderY, rightPillW, topHeaderH, 31, false, true);
+      ctx.fillStyle = theme.headerRightText;
+      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("🚩 युवा शक्ति ग्रुप (कुचेरा)", rightPillX + rightPillW / 2, topHeaderY + topHeaderH / 2);
+      ctx.restore();
+
+      // 4. Center Squircle Icon
+      const sqSize = 104;
+      const sqY = topHeaderY + topHeaderH + 24;
+      const sqX = (width - sqSize) / 2;
+
+      ctx.save();
+      ctx.shadowColor = theme.iconShadow;
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 8;
+      const sqGrad = ctx.createLinearGradient(sqX, sqY, sqX + sqSize, sqY + sqSize);
+      sqGrad.addColorStop(0, theme.iconSquircle1);
+      sqGrad.addColorStop(1, theme.iconSquircle2);
+      ctx.fillStyle = sqGrad;
+      canvasRoundRect(ctx, sqX, sqY, sqSize, sqSize, 32, true, false);
+      ctx.restore();
+
+      ctx.font = "56px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(theme.iconChar, sqX + sqSize / 2, sqY + sqSize / 2 + 2);
+
+      // 5. Category Banner Tag
+      const catTagY = sqY + sqSize + 24;
+      ctx.fillStyle = theme.categoryColor;
+      ctx.font = "bold 32px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(theme.categoryTag, width / 2, catTagY);
+
+      // 6. Hero Name Banner (Distinctive elevated pill)
+      const heroBannerY = catTagY + 26;
+      const heroBannerH = 92;
+      ctx.font = "bold 52px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      const nameMetrics = ctx.measureText(theme.heroTitle);
+      const heroBannerW = Math.min(1040, Math.max(500, nameMetrics.width + 80));
+      const heroBannerX = (width - heroBannerW) / 2;
+
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.08)";
+      ctx.shadowBlur = 20;
+      ctx.shadowOffsetY = 6;
+      const heroGrad = ctx.createLinearGradient(heroBannerX, heroBannerY, heroBannerX + heroBannerW, heroBannerY + heroBannerH);
+      heroGrad.addColorStop(0, theme.heroBannerBg1);
+      heroGrad.addColorStop(1, theme.heroBannerBg2);
+      ctx.fillStyle = heroGrad;
+      canvasRoundRect(ctx, heroBannerX, heroBannerY, heroBannerW, heroBannerH, 26, true, false);
+      ctx.restore();
+
+      ctx.strokeStyle = theme.heroBannerBorder;
+      ctx.lineWidth = 3.5;
+      canvasRoundRect(ctx, heroBannerX, heroBannerY, heroBannerW, heroBannerH, 26, false, true);
+
+      // Render Hero Name
+      ctx.fillStyle = theme.heroBannerText;
+      let nameFontSize = 52;
+      if (nameMetrics.width > heroBannerW - 40) nameFontSize = 42;
+      ctx.font = `bold ${nameFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(theme.heroTitle, width / 2, heroBannerY + heroBannerH / 2);
+
+      // 7. Subtitle / Tagline below hero
+      const subY = heroBannerY + heroBannerH + 26;
+      ctx.fillStyle = theme.subColor;
+      ctx.font = "600 24px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(theme.subText, width / 2, subY);
+
+      // 8. Frosted White Inner Wish Box
+      const wishBoxY = subY + 22;
+      const wishBoxW = 1040;
+      const wishBoxX = (width - wishBoxW) / 2;
+      const senderBoxY = 1110;
+      const wishBoxH = senderBoxY - wishBoxY - 26;
+
+      ctx.save();
+      ctx.shadowColor = theme.wishBoxShadow;
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 8;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+      canvasRoundRect(ctx, wishBoxX, wishBoxY, wishBoxW, wishBoxH, 34, true, false);
+      ctx.restore();
+
+      ctx.strokeStyle = theme.wishBoxBorder;
+      ctx.lineWidth = 3;
+      canvasRoundRect(ctx, wishBoxX, wishBoxY, wishBoxW, wishBoxH, 34, false, true);
+
+      // Header of Wish Box
+      const wishBoxHeaderY = wishBoxY + 36;
+      ctx.fillStyle = theme.wishBoxHeaderColor;
+      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(theme.wishBoxHeader, width / 2, wishBoxHeaderY);
+
+      // Dotted Divider inside Wish Box
+      ctx.save();
+      ctx.strokeStyle = theme.wishBoxBorder;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([10, 8]);
+      ctx.beginPath();
+      ctx.moveTo(wishBoxX + 60, wishBoxHeaderY + 24);
+      ctx.lineTo(wishBoxX + wishBoxW - 60, wishBoxHeaderY + 24);
+      ctx.stroke();
+      ctx.restore();
+
+      // Wrap and Render Wish Text
+      let wishFontSize = 33;
+      if (wishText.length > 200) wishFontSize = 29;
+      if (wishText.length > 320) wishFontSize = 26;
+      ctx.font = `600 ${wishFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
+      const wishLines = wrapCanvasText(ctx, wishText, wishBoxW - 120);
+      const lineHeight = Math.round(wishFontSize * 1.55);
+      const wishTextStartY = wishBoxHeaderY + 54;
+      let curWishY = wishTextStartY;
+      ctx.fillStyle = "#1e293b";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      for (const line of wishLines) {
+        if (curWishY + lineHeight > wishBoxY + wishBoxH - 50) break;
+        ctx.fillText(line, width / 2, curWishY);
+        curWishY += lineHeight;
+      }
+
+      // Group Subtext at bottom of Wish Box
+      ctx.fillStyle = theme.subColor;
+      ctx.font = "bold 24px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+      ctx.fillText("— समस्त युवा शक्ति ग्रुप परिवार (भाटी परिवार • कुचेरा) —", width / 2, wishBoxY + wishBoxH - 18);
+
+      // 9. 📸 SENDER SECTION (भेजने वाले का नाम और फोटो - Bottom Container)
+      const senderBoxH = 210;
+      const senderBoxW = 1040;
+      const senderBoxX = (width - senderBoxW) / 2;
+
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.08)";
+      ctx.shadowBlur = 20;
+      ctx.shadowOffsetY = 8;
+      const senderGrad = ctx.createLinearGradient(senderBoxX, senderBoxY, senderBoxX + senderBoxW, senderBoxY + senderBoxH);
+      senderGrad.addColorStop(0, theme.senderBoxBg1);
+      senderGrad.addColorStop(1, theme.senderBoxBg2);
+      ctx.fillStyle = senderGrad;
+      canvasRoundRect(ctx, senderBoxX, senderBoxY, senderBoxW, senderBoxH, 34, true, false);
+      ctx.restore();
+
+      ctx.strokeStyle = theme.senderBoxBorder;
+      ctx.lineWidth = 3;
+      canvasRoundRect(ctx, senderBoxX, senderBoxY, senderBoxW, senderBoxH, 34, false, true);
+
+      // Sender Circular Avatar (Left)
+      const avRadius = 72;
+      const avCx = senderBoxX + 45 + avRadius;
+      const avCy = senderBoxY + senderBoxH / 2;
+
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
+      ctx.shadowBlur = 14;
+      ctx.shadowOffsetY = 5;
+      ctx.strokeStyle = theme.senderBadgeBorder;
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.arc(avCx, avCy, avRadius + 2, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      if (senderImg) {
+        drawClippedCircleImage(ctx, senderImg, avCx, avCy, avRadius);
+      } else {
+        ctx.save();
+        const avGrad = ctx.createLinearGradient(avCx - avRadius, avCy - avRadius, avCx + avRadius, avCy + avRadius);
+        avGrad.addColorStop(0, theme.iconSquircle1);
+        avGrad.addColorStop(1, theme.iconSquircle2);
+        ctx.fillStyle = avGrad;
+        ctx.beginPath();
+        ctx.arc(avCx, avCy, avRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 64px 'Noto Sans Devanagari', 'Inter', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        const initial = (sender.name || 'भा').trim().charAt(0);
+        ctx.fillText(initial, avCx, avCy);
+        ctx.restore();
+      }
+
+      // Sender Text (Right of avatar)
+      const textLeft = avCx + avRadius + 38;
+      ctx.textAlign = "left";
+
+      // Line 1: Sender Label
+      ctx.fillStyle = theme.senderLabelColor;
+      ctx.font = "bold 23px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textBaseline = "top";
+      ctx.fillText(theme.senderLabel, textLeft, senderBoxY + 28);
+
+      // Line 2: Sender Name inside distinct badge
+      const sName = sender.name || "रेवंतराम भाटी";
+      const nameBadgeY = senderBoxY + 62;
+      const nameBadgeH = 72;
+
+      ctx.font = "bold 44px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      const sNameMetrics = ctx.measureText(`✨ ${sName} ✨`);
+      const nameBadgeW = Math.max(380, sNameMetrics.width + 48);
+
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.1)";
+      ctx.shadowBlur = 14;
+      ctx.shadowOffsetY = 4;
+      const nameBadgeGrad = ctx.createLinearGradient(textLeft, nameBadgeY, textLeft + nameBadgeW, nameBadgeY + nameBadgeH);
+      nameBadgeGrad.addColorStop(0, theme.senderBadgeBg1);
+      nameBadgeGrad.addColorStop(1, theme.senderBadgeBg2);
+      ctx.fillStyle = nameBadgeGrad;
+      canvasRoundRect(ctx, textLeft, nameBadgeY, nameBadgeW, nameBadgeH, 22, true, false);
+      ctx.restore();
+
+      ctx.strokeStyle = theme.senderBadgeBorder;
+      ctx.lineWidth = 3;
+      canvasRoundRect(ctx, textLeft, nameBadgeY, nameBadgeW, nameBadgeH, 22, false, true);
+
+      ctx.fillStyle = theme.senderBadgeText;
+      ctx.font = "bold 44px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(`✨ ${sName} ✨`, textLeft + nameBadgeW / 2, nameBadgeY + nameBadgeH / 2);
+
+      // Line 3: Sender Role & Group
+      ctx.textAlign = "left";
+      ctx.fillStyle = theme.senderSubColor;
+      ctx.font = "bold 23px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textBaseline = "top";
+      ctx.fillText(sender.role || "🚩 भाटी परिवार • कुचेरा (युवा शक्ति ग्रुप)", textLeft, senderBoxY + 150);
+
+      // 10. Footer Section: Motto & App Download Pill
+      const footerY1 = 1358;
+      ctx.fillStyle = theme.footerTaglineColor;
+      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(theme.footerTagline, width / 2, footerY1);
+
+      // App Download Pill
+      const appBadgeY = footerY1 + 30;
+      const appBadgeH = 64;
+      const appBadgeW = 940;
+      const appBadgeX = (width - appBadgeW) / 2;
+
+      ctx.save();
+      ctx.shadowColor = "rgba(30, 58, 138, 0.22)";
+      ctx.shadowBlur = 18;
+      ctx.shadowOffsetY = 6;
+      const appGrad = ctx.createLinearGradient(appBadgeX, appBadgeY, appBadgeX + appBadgeW, appBadgeY + appBadgeH);
+      appGrad.addColorStop(0, "#1e3a8a");
+      appGrad.addColorStop(0.5, "#0369a1");
+      appGrad.addColorStop(1, "#0284c7");
+      ctx.fillStyle = appGrad;
+      canvasRoundRect(ctx, appBadgeX, appBadgeY, appBadgeW, appBadgeH, 32, true, false);
+      ctx.restore();
+
+      ctx.strokeStyle = "rgba(254, 215, 170, 0.8)";
+      ctx.lineWidth = 2.5;
+      canvasRoundRect(ctx, appBadgeX, appBadgeY, appBadgeW, appBadgeH, 32, false, true);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 25px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("📲 युवा शक्ति ऐप डाउनलोड करें • bit.ly/yuva-shakti-app (भाटी परिवार)", width / 2, appBadgeY + appBadgeH / 2);
+
+      try {
+        return canvas.toDataURL("image/jpeg", 0.98);
+      } catch (err) {
+        console.warn("Canvas toDataURL fallback:", err);
+        return canvas.toDataURL();
+      }
+    }
+
+    let currentPosterDataUrl = null;
+    let currentPosterCaption = "";
+
+    async function shareOccasionPoster(type, data = {}) {
+      showToast("🎨 सुंदर पोस्टर तैयार हो रहा है...", "info");
+      try {
+        const dataUrl = await generateOccasionCardDataUrl(type, data);
+        if (!dataUrl) throw new Error("पोस्टर जनरेट नहीं हो सका");
+
+        const rawName = data.name || (type === 'festival' ? "दीपावली महापर्व" : (type === 'punyatithi' ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य"));
+        const cleanName = rawName.replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').replace(/ की पुण्यतिथि/g, '').trim();
+        const sender = getSuvicharSender();
+        const appDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
+
+        let caption = "";
+        if (type === 'festival' || type === 'amavasya' || type === 'national') {
+          caption = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n✨ *${cleanName}* ✨\n${data.sub ? `_(${data.sub})_\n` : ''}\n${data.wish || 'पावन पर्व की आप सभी को हार्दिक शुभकामनाएं!'}\n\n╭──────────────────────────╮\n   ✨ *${sender.name}* ✨\n   🚩 _${sender.role || 'शुभकामना प्रेषक • युवा शक्ति ग्रुप'}_\n╰──────────────────────────╯\n\n🪔 *धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन*\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
+        } else if (type === 'birthday' || type === 'bday') {
+          caption = `🎂 *जन्मदिन की अनंत शुभकामनाएं!* 🎂\n\nआदरणीय *${cleanName} जी*,\nयुवा शक्ति ग्रुप (भाटी परिवार कुचेरा) की ओर से आपको जन्मदिन की अनंत मंगलकामनाएं! ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु एवं अपार खुशियां प्रदान करें। 💐🎉\n\n╭──────────────────────────╮\n   ✨ *${sender.name}* ✨\n   🚩 _${sender.role || 'शुभकामना प्रेषक • युवा शक्ति ग्रुप'}_\n╰──────────────────────────╯\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
+        } else if (type === 'anniversary' || type === 'anniv') {
+          caption = `💍 *विवाह वर्षगांठ की हार्दिक बधाई!* 💍\n\nआदरणीय *${cleanName} जी*,\nदांपत्य जीवन की वर्षगांठ पर समस्त भाटी परिवार की ओर से हार्दिक बधाई! आपका जीवन प्रेम, विश्वास और खुशियों से परिपूर्ण रहे। 💐💖\n\n╭──────────────────────────╮\n   ✨ *${sender.name}* ✨\n   🚩 _${sender.role || 'मंगलकामना प्रेषक • युवा शक्ति ग्रुप'}_\n╰──────────────────────────╯\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
+        } else if (type === 'punyatithi' || type === 'shraddhanjali' || type === 'smriti') {
+          caption = `🕊️ *पावन पुण्यतिथि पर शत-शत नमन* 🕊️\n\nपूज्य *${cleanName} जी* की पावन पुण्यतिथि पर विनम्र श्रद्धांजलि एवं शत-शत नमन।\n\nआपकी पावन स्मृतियां, उच्च संस्कार और आशीर्वाद सदैव हमारे अंतःकरण में अमर रहेंगे। ईश्वर दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति प्रदान करें।\nॐ शांतिः शांतिः शांतिः 🙏\n\n╭──────────────────────────╮\n   ✨ *${sender.name}* ✨\n   🚩 _${sender.role || 'श्रद्धांजलि प्रेषक • युवा शक्ति ग्रुप'}_\n╰──────────────────────────╯\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*`;
+        }
+
+        currentPosterDataUrl = dataUrl;
+        currentPosterCaption = caption;
+
+        // 1. Android Native shareImage
+        if (window.AndroidApp && typeof window.AndroidApp.shareImage === 'function') {
+          window.AndroidApp.shareImage(dataUrl, caption);
+          showToast("✅ पोस्टर तैयार! व्हाट्सएप में साझा करें।", "success");
+          return;
+        }
+
+        // 2. Web Share API (Safari iOS, Chrome)
+        if (navigator.share && navigator.canShare) {
+          try {
+            const res = await fetch(dataUrl);
+            const blob = await res.blob();
+            const file = new File([blob], `YuvaShakti_${type}_${Date.now()}.jpg`, { type: 'image/jpeg' });
+            if (navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                files: [file],
+                title: "युवा शक्ति ग्रुप पोस्टर",
+                text: caption
+              });
+              return;
+            }
+          } catch (e) {
+            console.warn("Web Share API canceled or unsupported, falling back to preview:", e);
+          }
+        }
+
+        // 3. Fallback: Open Poster Preview & Download Modal
+        openPosterPreviewModal(dataUrl, caption, type);
+      } catch (err) {
+        console.error("Poster creation error:", err);
+        showToast("पोस्टर तैयार करने में समस्या आई: " + err.message, "error");
+      }
+    }
+
+    function openPosterPreviewModal(dataUrl, caption, type) {
+      currentPosterDataUrl = dataUrl;
+      currentPosterCaption = caption || "";
+      const modal = document.getElementById("posterPreviewModal");
+      const img = document.getElementById("posterPreviewImg");
+      const title = document.getElementById("posterPreviewTitle");
+      if (img) img.src = dataUrl;
+      if (title) {
+        title.innerText = (type === 'punyatithi') ? "🕊️ तैयार श्रद्धांजलि पोस्टर" : "✨ तैयार शुभकामना पोस्टर";
+      }
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closePosterPreviewModal() {
+      const modal = document.getElementById("posterPreviewModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function downloadPosterFromPreviewModal() {
+      if (!currentPosterDataUrl) return;
+      const link = document.createElement("a");
+      link.href = currentPosterDataUrl;
+      link.download = `Yuva_Shakti_Poster_${Date.now()}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("💾 पोस्टर फोटो डाउनलोड हो गई है!", "success");
+    }
+
+    function sharePosterFromPreviewModal() {
+      if (!currentPosterDataUrl) return;
+      if (window.AndroidApp && typeof window.AndroidApp.shareImage === 'function') {
+        window.AndroidApp.shareImage(currentPosterDataUrl, currentPosterCaption);
+        return;
+      }
+      downloadPosterFromPreviewModal();
+      setTimeout(() => {
+        openWhatsAppUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(currentPosterCaption)}`);
+      }, 700);
+    }
+
+    let currentSelectedPosterType = "festival";
+
+    function openOccasionPosterMaker(defaultType = "festival", defaultData = {}) {
+      currentSelectedPosterType = defaultType;
+      const modal = document.getElementById("occasionPosterMakerModal");
+      selectPosterType(defaultType);
+
+      const inpName = document.getElementById("inpPosterTargetName");
+      const inpSub = document.getElementById("inpPosterSub");
+      const inpWish = document.getElementById("inpPosterWish");
+
+      if (inpName) inpName.value = defaultData.name || "";
+      if (inpSub) inpSub.value = defaultData.sub || "";
+      if (inpWish) inpWish.value = defaultData.wish || "";
+
+      updatePosterMakerSenderPreview();
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeOccasionPosterMaker() {
+      const modal = document.getElementById("occasionPosterMakerModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function selectPosterType(type) {
+      currentSelectedPosterType = type;
+      const ptypes = ["festival", "birthday", "anniversary", "punyatithi"];
+      ptypes.forEach(t => {
+        const btn = document.getElementById(`ptypeBtn_${t}`);
+        if (!btn) return;
+        if (t === type) {
+          btn.style.border = (type === 'punyatithi') ? "1.5px solid #64748b" : (type === 'anniversary' ? "1.5px solid #fb7185" : "1.5px solid #fdba74");
+          btn.style.background = (type === 'punyatithi') ? "#f1f5f9" : (type === 'anniversary' ? "#fff1f2" : "#fff7ed");
+          btn.style.color = (type === 'punyatithi') ? "#1e293b" : (type === 'anniversary' ? "#9f1239" : "#c2410c");
+        } else {
+          btn.style.border = "1.5px solid rgba(0,0,0,0.08)";
+          btn.style.background = "#f8fafc";
+          btn.style.color = "#475569";
+        }
+      });
+
+      const lblName = document.getElementById("lblPosterTargetName");
+      const inpName = document.getElementById("inpPosterTargetName");
+      const lblSub = document.getElementById("lblPosterSub");
+      const inpSub = document.getElementById("inpPosterSub");
+      const inpWish = document.getElementById("inpPosterWish");
+      const sLabel = document.getElementById("posterMakerSenderLabel");
+
+      if (type === "festival") {
+        if (lblName) lblName.innerText = "त्यौहार / पर्व का नाम:";
+        if (inpName) inpName.placeholder = "उदा. दीपावली महापर्व, रामनवमी, होली";
+        if (lblSub) lblSub.innerText = "तिथि / उपशीर्षक (वैकल्पिक):";
+        if (inpSub) inpSub.placeholder = "उदा. कार्तिक कृष्ण पक्ष अमावस्या";
+        if (inpWish && !inpWish.value) inpWish.value = "इस पावन पर्व पर मां लक्ष्मी और भगवान श्री गणेश की कृपा से आपके जीवन में सुख, शांति, समृद्धि और उत्तम स्वास्थ्य का वास हो।";
+        if (sLabel) sLabel.innerText = "💐 शुभकामना प्रेषक (आपकी फोटो व नाम):";
+      } else if (type === "birthday") {
+        if (lblName) lblName.innerText = "सदस्य का नाम (जिसका जन्मदिन है):";
+        if (inpName) inpName.placeholder = "उदा. रेवंतराम भाटी";
+        if (lblSub) lblSub.innerText = "शुभकामना उपशीर्षक (वैकल्पिक):";
+        if (inpSub) inpSub.placeholder = "उदा. उत्तम स्वास्थ्य व दीर्घायु की मंगलकामनाएं";
+        if (inpWish && !inpWish.value) inpWish.value = "परमपिता परमेश्वर से विनम्र प्रार्थना है कि आपका जीवन उत्तम स्वास्थ्य, सुख-समृद्धि, दीर्घायु एवं निरंतर सफलता से आलोकित रहे। आपका प्रत्येक क्षण खुशियों से परिपूर्ण हो!";
+        if (sLabel) sLabel.innerText = "💐 शुभकामना प्रेषक (आपकी फोटो व नाम):";
+      } else if (type === "anniversary") {
+        if (lblName) lblName.innerText = "दम्पति / सदस्य का नाम:";
+        if (inpName) inpName.placeholder = "उदा. श्री एवं श्रीमती रेवंतराम भाटी";
+        if (lblSub) lblSub.innerText = "उपशीर्षक (वैकल्पिक):";
+        if (inpSub) inpSub.placeholder = "उदा. सुखी व मंगलमय दांपत्य जीवन";
+        if (inpWish && !inpWish.value) inpWish.value = "आपका दांपत्य जीवन सदैव अटूट प्रेम, आपसी विश्वास, सुख-समृद्धि एवं ईश्वर के असीम आशीर्वाद से महकता रहे। वैवाहिक वर्षगांठ की अनंत मंगलकामनाएं!";
+        if (sLabel) sLabel.innerText = "💐 मंगलकामना प्रेषक (आपकी फोटो व नाम):";
+      } else if (type === "punyatithi") {
+        if (lblName) lblName.innerText = "दिवंगत पूज्य का नाम (स्व.):";
+        if (inpName) inpName.placeholder = "उदा. स्व. श्री बुधाराम जी भाटी";
+        if (lblSub) lblSub.innerText = "स्मृति उपशीर्षक (वैकल्पिक):";
+        if (inpSub) inpSub.placeholder = "उदा. पावन पुण्यतिथि • सादर नमन";
+        if (inpWish && !inpWish.value) inpWish.value = "आपकी पावन स्मृतियां, उच्च आदर्श, संस्कार और स्नेह सदैव हमारे अंतःकरण में जीवित रहेंगे। ईश्वर दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति प्रदान करें। ॐ शांतिः 🙏";
+        if (sLabel) sLabel.innerText = "🙏 सादर श्रद्धांजलि प्रेषक (आपकी फोटो व नाम):";
+      }
+    }
+
+    function updatePosterMakerSenderPreview() {
+      const sender = getSuvicharSender();
+      const nameEl = document.getElementById("posterMakerSenderName");
+      const avEl = document.getElementById("posterMakerSenderAvatar");
+      if (nameEl) nameEl.innerText = `${sender.name} (${sender.role || 'सदस्य'})`;
+      if (avEl) {
+        if (sender.photoUrl) {
+          avEl.innerHTML = `<img src="${sender.photoUrl}" style="width:100%; height:100%; object-fit:cover;">`;
+        } else {
+          avEl.innerText = (sender.name || 'भा').trim().charAt(0);
+        }
+      }
+    }
+
+    async function submitOccasionPosterMaker() {
+      const inpName = document.getElementById("inpPosterTargetName");
+      const inpSub = document.getElementById("inpPosterSub");
+      const inpWish = document.getElementById("inpPosterWish");
+
+      const name = inpName ? inpName.value.trim() : "";
+      if (!name) {
+        showToast("कृपया नाम अवश्य दर्ज करें!", "warning");
+        if (inpName) inpName.focus();
+        return;
+      }
+
+      const sub = inpSub ? inpSub.value.trim() : "";
+      const wish = inpWish ? inpWish.value.trim() : "";
+
+      closeOccasionPosterMaker();
+      await shareOccasionPoster(currentSelectedPosterType, {
+        name: name,
+        sub: sub,
+        wish: wish
+      });
+    }
+
+    // 🚀 Redirection of Legacy Share Handlers to Occasion Poster Engine (No Text Sharing)
     function shareFestivalWish(festivalName, wish, mode = 'group') {
-      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n*${festivalName}*\n\n${wish}\n\n📲 युवा शक्ति ऐप डाउनलोड करें:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh`;
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      openWhatsAppUrl(url);
+      shareOccasionPoster('festival', { name: festivalName, wish: wish, mode: mode });
     }
 
     function shareMemberWish(type, name, phone, mode = 'personal') {
-      const cleanPhone = (phone || '').replace(/\D/g, '');
-      const fullPhone = cleanPhone.startsWith('91') ? cleanPhone : ('91' + cleanPhone);
-      const cleanName = (name || '').replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').trim();
-
-      let text = "";
-      if (type === 'birthday') {
-        if (mode === 'group') {
-          text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n🎉 आज हमारे ग्रुप के आदरणीय सदस्य *${cleanName} जी* का *जन्मदिन* है!\n\nसमस्त भाटी परिवार की ओर से आपको जन्मदिन की अनंत कोटि शुभकामनाएं एवं मंगलकामनाएं! 🎂💐 ईश्वर आपको उत्तम स्वास्थ्य, सुख-समृद्धि एवं दीर्घायु प्रदान करें।\n\n🚩 *युवा शक्ति ग्रुप*`;
-        } else {
-          text = `🎂 *जन्मदिन की अनंत शुभकामनाएं!* 🎂\n\nआदरणीय *${cleanName} जी*,\nयुवा शक्ति ग्रुप (भाटी परिवार कुचेरा) की ओर से आपको जन्मदिन की हार्दिक शुभकामनाएं! ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु और अपार खुशियां प्रदान करें। 💐🎉\n\n🚩 *युवा शक्ति ग्रुप*`;
-        }
-      } else {
-        if (mode === 'group') {
-          text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n💍 आज हमारे ग्रुप के आदरणीय सदस्य *${cleanName} जी* की *विवाह वर्षगांठ* है!\n\nसमस्त भाटी परिवार की ओर से सुखी एवं मंगलमय दांपत्य जीवन की अनंत शुभकामनाएं! 💐\n\n🚩 *युवा शक्ति ग्रुप*`;
-        } else {
-          text = `💍 *विवाह वर्षगांठ की हार्दिक बधाई!* 💍\n\nआदरणीय *${cleanName} जी*,\nआपको विवाह वर्षगांठ की हार्दिक मंगलकामनाएं! आपका दांपत्य जीवन सदैव प्रेम, विश्वास और खुशियों से परिपूर्ण रहे। 💐\n\n🚩 *युवा शक्ति ग्रुप*`;
-        }
-      }
-
-      if (mode === 'group' || !cleanPhone) {
-        const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-        openWhatsAppUrl(url);
-      } else {
-        const url = `https://wa.me/${fullPhone}?text=${encodeURIComponent(text)}`;
-        openWhatsAppUrl(url);
-      }
+      shareOccasionPoster(type, { name: name, phone: phone, mode: mode });
     }
 
     function checkAndShowTodayCelebrations() {
@@ -13387,7 +14245,26 @@
       const amavasyaToday = AMAVASYA_LIST.find(a => a.date === todayDateStr);
       const nationalDayToday = GREGORIAN_DAYS.find(g => g.date === mmdd);
 
-      const hasCelebration = bdaysToday.length > 0 || annivsToday.length > 0 || festivalToday || amavasyaToday || nationalDayToday;
+      // Check Punyatithis / Smriti Diwas today
+      let punyatithisToday = [];
+      try {
+        const tree = (typeof vamshaFamilyData !== 'undefined' && Array.isArray(vamshaFamilyData)) ? vamshaFamilyData : [];
+        tree.forEach(p => {
+          if (p && p.dod) {
+            const clean = String(p.dod).trim().replace(/\//g, '-');
+            const parts = clean.split('-');
+            let match = false;
+            if (parts.length === 3) {
+              match = (parts[1].padStart(2, '0') === monthStr && parts[2].padStart(2, '0') === dayStr);
+            } else if (parts.length === 2) {
+              match = (parts[0].padStart(2, '0') === monthStr && parts[1].padStart(2, '0') === dayStr);
+            }
+            if (match) punyatithisToday.push(p);
+          }
+        });
+      } catch (e) {}
+
+      const hasCelebration = bdaysToday.length > 0 || annivsToday.length > 0 || punyatithisToday.length > 0 || festivalToday || amavasyaToday || nationalDayToday;
       if (!hasCelebration) return;
 
       const lastDismissed = localStorage.getItem("todayCelebrationDismissed_" + todayDateStr) || sessionStorage.getItem("todayCelebrationDismissed");
@@ -13411,10 +14288,10 @@
               </div>
               <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
                 <button onclick="shareMemberWish('birthday', '${m.name}', '${m.whatsapp || m.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                  <i class="fa-brands fa-whatsapp"></i> व्यक्तिगत बधाई
+                  <i class="fa-solid fa-image"></i> बधाई पोस्टर
                 </button>
                 <button onclick="shareMemberWish('birthday', '${m.name}', '${m.whatsapp || m.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                  <i class="fa-solid fa-users"></i> ग्रुप में शेयर
+                  <i class="fa-solid fa-image"></i> ग्रुप पोस्टर
                 </button>
                 <a href="tel:${m.phone}" style="background:#475569; color:white; text-decoration:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; display:inline-flex; align-items:center; gap:4px;">
                   <i class="fa-solid fa-phone"></i> कॉल
@@ -13438,10 +14315,31 @@
               </div>
               <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
                 <button onclick="shareMemberWish('anniversary', '${m.name}', '${m.whatsapp || m.phone}', 'personal')" style="background:#16a34a; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                  <i class="fa-brands fa-whatsapp"></i> व्यक्तिगत बधाई
+                  <i class="fa-solid fa-image"></i> बधाई पोस्टर
                 </button>
                 <button onclick="shareMemberWish('anniversary', '${m.name}', '${m.whatsapp || m.phone}', 'group')" style="background:#0284c7; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                  <i class="fa-solid fa-users"></i> ग्रुप में शेयर
+                  <i class="fa-solid fa-image"></i> ग्रुप पोस्टर
+                </button>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      if (punyatithisToday.length > 0) {
+        punyatithisToday.forEach(p => {
+          html += `
+            <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:10px; text-align:left;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:24px;">🕊️</span>
+                <div>
+                  <strong style="color:#1e293b; font-size:14px;">${p.name} की पावन पुण्यतिथि</strong>
+                  <div style="font-size:11px; color:#64748b;">स्मृति दिवस • शत-शत नमन एवं भावभीनी श्रद्धांजलि</div>
+                </div>
+              </div>
+              <div style="margin-top:8px;">
+                <button onclick="shareOccasionPoster('punyatithi', { name: '${vEsc(p.name)}' })" style="background:#475569; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-image"></i> 🕊️ श्रद्धांजलि पोस्टर शेयर करें
                 </button>
               </div>
             </div>
@@ -13463,8 +14361,8 @@
               "${festivalToday.wish}"
             </div>
             <div style="margin-top:8px;">
-              <button onclick="sendFestivalGreeting('${festivalToday.name}', '${(festivalToday.wish || '').replace(/'/g, "\\'")}', 'group')" style="background:#16a34a; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                <i class="fa-brands fa-whatsapp"></i> व्हाट्सएप पर शुभकामनाएं भेजें
+              <button onclick="shareOccasionPoster('festival', { name: '${festivalToday.name}', wish: '${(festivalToday.wish || '').replace(/'/g, "\\'")}', sub: '${(festivalToday.tithi || '').replace(/'/g, "\\'")}' })" style="background:#16a34a; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-solid fa-image"></i> 🪔 त्यौहार पोस्टर शेयर करें
               </button>
             </div>
           </div>
@@ -13481,7 +14379,10 @@
                 <div style="font-size:11px; color:#3b82f6;">मासिक सत्संग एवं अंशदान दिवस</div>
               </div>
             </div>
-            <div style="margin-top:8px; display:flex; gap:6px;">
+            <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
+              <button onclick="shareOccasionPoster('festival', { name: '${amavasyaToday.name}', sub: 'मासिक अमावस्या सत्संग व अंशदान दिवस' })" style="background:#16a34a; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-solid fa-image"></i> 🌑 अमावस्या पोस्टर शेयर
+              </button>
               <button onclick="closeTodayCelebrationModal(); openPhonePeModal('अंशदान - ' + '${amavasyaToday.name}')" class="btn-quick-phonepe" style="padding:6px 10px; font-size:11px;">
                 <i class="fa-solid fa-mobile-screen-button"></i> PhonePe अंशदान
               </button>
@@ -13503,8 +14404,8 @@
               </div>
             </div>
             <div style="margin-top:8px;">
-              <button onclick="sendFestivalGreeting('${nationalDayToday.name}', '${(nationalDayToday.wish || '').replace(/'/g, "\\'")}', 'group')" style="background:#16a34a; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                <i class="fa-brands fa-whatsapp"></i> शुभकामनाएं शेयर करें
+              <button onclick="shareOccasionPoster('national', { name: '${nationalDayToday.name}', wish: '${(nationalDayToday.wish || '').replace(/'/g, "\\'")}' })" style="background:#16a34a; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-solid fa-image"></i> 🇮🇳 राष्ट्रीय पोस्टर शेयर करें
               </button>
             </div>
           </div>
@@ -13517,10 +14418,10 @@
       try {
         if (window.AndroidApp && typeof window.AndroidApp.postNotification === 'function') {
           let notifTitle = "🚩 युवा शक्ति ग्रुप - आज का विशेष दिन";
-          let notifMsg = "आज के उत्सव एवं सदस्यों की शुभकामनाएं ऐप में देखें";
+          let notifMsg = "आज के उत्सव एवं सदस्यों के डिजिटल पोस्टर ऐप में देखें";
           if (bdaysToday.length > 0) {
             notifTitle = `🎂 जन्मदिन की शुभकामनाएं: ${bdaysToday[0].name}`;
-            notifMsg = "युवा शक्ति ग्रुप की ओर से हार्दिक बधाई! व्हाट्सएप पर संदेश भेजें।";
+            notifMsg = "युवा शक्ति ग्रुप की ओर से हार्दिक बधाई! पोस्टर साझा करें।";
           } else if (festivalToday) {
             notifTitle = `🚩 ${festivalToday.name}`;
             notifMsg = festivalToday.wish;
@@ -13689,24 +14590,24 @@
               ${ev.category === 'birthday' ? `
                 <div style="display:flex; gap:4px;">
                   <button class="btn-wish" onclick="sendGreeting('birthday', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'personal')">
-                    <i class="fa-brands fa-whatsapp"></i> बधाई
+                    <i class="fa-solid fa-image"></i> बधाई
                   </button>
-                  <button class="btn-wish" style="background:#0284c7; padding:4px 7px;" onclick="sendGreeting('birthday', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'group')" title="ग्रुप में शेयर">
+                  <button class="btn-wish" style="background:#0284c7; padding:4px 7px;" onclick="sendGreeting('birthday', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'group')" title="ग्रुप पोस्टर">
                     <i class="fa-solid fa-users"></i>
                   </button>
                 </div>
               ` : (ev.category === 'anniversary' ? `
                 <div style="display:flex; gap:4px;">
                   <button class="btn-wish" onclick="sendGreeting('anniversary', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'personal')">
-                    <i class="fa-brands fa-whatsapp"></i> बधाई
+                    <i class="fa-solid fa-image"></i> बधाई
                   </button>
-                  <button class="btn-wish" style="background:#0284c7; padding:4px 7px;" onclick="sendGreeting('anniversary', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'group')" title="ग्रुप में शेयर">
+                  <button class="btn-wish" style="background:#0284c7; padding:4px 7px;" onclick="sendGreeting('anniversary', '${(ev.name || '').replace(/'/g, "\\'")}', '${ev.phone || ''}', 'group')" title="ग्रुप पोस्टर">
                     <i class="fa-solid fa-users"></i>
                   </button>
                 </div>
               ` : `
                 <button class="btn-wish" style="background:#ea580c;" onclick="sendFestivalGreeting('${(ev.name || '').replace(/'/g, "\\'")}', '${(ev.wish || '').replace(/'/g, "\\'")}', 'group')">
-                  <i class="fa-brands fa-whatsapp"></i> शेयर
+                  <i class="fa-solid fa-image"></i> पोस्टर
                 </button>
               `)}
             </div>
@@ -13757,14 +14658,12 @@
 
     function sendGreeting(type, name, phone, mode = 'personal') {
       const cleanName = (name || '').replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').trim();
-      shareMemberWish(type, cleanName, phone, mode);
+      shareOccasionPoster(type, { name: cleanName, phone: phone, mode: mode });
     }
 
     function sendFestivalGreeting(festivalName, customWish, mode = 'group') {
       const wish = customWish || `युवा शक्ति ग्रुप की ओर से आप सभी को ${festivalName} की हार्दिक शुभकामनाएं एवं बधाई!`;
-      const text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n✨ *${festivalName}* ✨\n\n${wish}\n\n📲 युवा शक्ति ऐप डाउनलोड करें:\nhttps://github.com/revantram/yuva-shakti-app/releases/latest/download/YuvaShaktiGroup.apk\n💬 व्हाट्सएप ग्रुप:\nhttps://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh\n\n_सप्रेम - युवा शक्ति ग्रुप परिवार_`;
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      openWhatsAppUrl(url);
+      shareOccasionPoster('festival', { name: festivalName, wish: wish, mode: mode });
     }
 
     function formatDisplayDate(dateStr) {
@@ -13838,7 +14737,26 @@
         return clean.endsWith(`-${monthStr}-${dayStr}`);
       });
 
-      if (!festival && !amavasya && !nationalDay && bdays.length === 0 && annivs.length === 0) {
+      // Check Punyatithis on this date
+      const punyatithis = [];
+      try {
+        const tree = (typeof vamshaFamilyData !== 'undefined' && Array.isArray(vamshaFamilyData)) ? vamshaFamilyData : [];
+        tree.forEach(p => {
+          if (p && p.dod) {
+            const clean = String(p.dod).trim().replace(/\//g, '-');
+            const parts = clean.split('-');
+            let match = false;
+            if (parts.length === 3) {
+              match = (parts[1].padStart(2, '0') === monthStr && parts[2].padStart(2, '0') === dayStr);
+            } else if (parts.length === 2) {
+              match = (parts[0].padStart(2, '0') === monthStr && parts[1].padStart(2, '0') === dayStr);
+            }
+            if (match) punyatithis.push(p);
+          }
+        });
+      } catch (e) {}
+
+      if (!festival && !amavasya && !nationalDay && bdays.length === 0 && annivs.length === 0 && punyatithis.length === 0) {
         return;
       }
 
@@ -13852,8 +14770,12 @@
       let icon = "🪔";
       let title = "शुभकामनाएं";
       let wish = "";
+      let category = "festival";
+      let subTitle = "";
 
       if (festival) {
+        category = "festival";
+        subTitle = festival.tithi || "";
         const fName = (festival.name || "").toLowerCase();
         if (fName.includes("दीपावली") || fName.includes("दिवाली") || fName.includes("धनतेरस") || fName.includes("रूप चौदस") || fName.includes("देव दीपावली")) {
           icon = "🪔";
@@ -13879,20 +14801,31 @@
         title = `${festival.name} की हार्दिक शुभकामनाएं!`;
         wish = festival.wish || `${festival.name} के पावन पर्व पर आप सभी के जीवन में सुख, शांति व समृद्धि की मंगलकामनाएं।`;
       } else if (amavasya) {
+        category = "festival";
         icon = "🌑";
         title = `${amavasya.name} की हार्दिक शुभकामनाएं!`;
+        subTitle = "मासिक अमावस्या सत्संग व अंशदान पर्व";
         wish = `${amavasya.name} सत्संग व पूजा के पावन अवसर पर युवा शक्ति ग्रुप की ओर से हार्दिक मंगलकामनाएं।`;
       } else if (bdays.length > 0) {
+        category = "birthday";
         icon = "🎂";
         const names = bdays.map(b => b.name).join(", ");
-        title = `जन्मदिन की अनंत शुभकामनाएं! 🎂`;
+        title = `${names} का जन्मदिन`;
         wish = `${names} जी को युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा) की ओर से जन्मदिन की अनंत मंगलकामनाएं! ईश्वर आपको दीर्घायु, उत्तम स्वास्थ्य व खुशियां प्रदान करें।`;
       } else if (annivs.length > 0) {
+        category = "anniversary";
         icon = "💍";
         const names = annivs.map(a => a.name).join(", ");
-        title = `विवाह वर्षगांठ की हार्दिक बधाई! 💍`;
+        title = `${names} की विवाह वर्षगांठ`;
         wish = `${names} जी को दांपत्य जीवन की वर्षगांठ पर हार्दिक बधाई! आपका जीवन प्रेम, विश्वास और खुशियों से परिपूर्ण रहे।`;
+      } else if (punyatithis.length > 0) {
+        category = "punyatithi";
+        icon = "🕊️";
+        const names = punyatithis.map(p => p.name).join(", ");
+        title = `पूज्य ${names} की पावन पुण्यतिथि`;
+        wish = `पूज्य ${names} जी की पुण्यतिथि पर विनम्र श्रद्धांजलि एवं शत-शत नमन। ईश्वर दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति प्रदान करें। ॐ शांतिः 🙏`;
       } else if (nationalDay) {
+        category = "national";
         const isTiranga = (nationalDay.date === "01-26" || nationalDay.date === "08-15");
         icon = isTiranga ? "🇮🇳" : (nationalDay.icon || "🌟");
         title = `${nationalDay.name} की हार्दिक बधाई!`;
@@ -13906,7 +14839,7 @@
 
       if (btnGroupShare) {
         btnGroupShare.onclick = () => {
-          sendFestivalGreeting(title, wish, "group");
+          shareOccasionPoster(category, { name: (festival ? festival.name : title), wish: wish, sub: subTitle });
         };
       }
 
@@ -15786,10 +16719,8 @@
     }
     async function ysShareWish(idx) {
       const c = window.ysCelebs[idx]; if (!c) return;
-      try { await document.fonts.load("bold 40px 'Noto Sans Devanagari'"); } catch (e) {}
       const bd = c.type === "bday";
-      const cap = ysTrHtml(`🚩 *युवा शक्ति ग्रुप* 🚩\n\n${bd ? "🎂" : "💐"} *${c.name} जी*\n${bd ? "जन्मदिन की हार्दिक शुभकामनाएँ" : "विवाह वर्षगांठ की हार्दिक शुभकामनाएँ"}!\n\nसमस्त युवा शक्ति ग्रुप परिवार की ओर से 🙏\n— रेवंतराम भाटी (मुख्य संचालक)`);
-      ysShareDataUrl(ysWishCardUrl(c.name, c.type), cap, `Wish_${idx}.jpg`);
+      shareOccasionPoster(bd ? 'birthday' : 'anniversary', { name: c.name, phone: c.phone });
     }
     function ysOpenCelebs() {
       window.ysCelebs = ysCelebsToday();
