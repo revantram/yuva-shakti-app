@@ -3522,6 +3522,30 @@
         </div>
       </div>
 
+      <!-- 📸 परिवार की यादें / फोटो गैलरी (कार्तिक अमावस्या काउंटडाउन के ठीक नीचे कोष्टक) -->
+      <div onclick="openDedicatedGalleryPage()" class="card ios-glass-card" style="cursor:pointer; margin-bottom:12px; background:linear-gradient(135deg, rgba(238, 242, 255, 0.96) 0%, rgba(224, 231, 255, 0.90) 100%); border:1.5px solid rgba(99, 102, 241, 0.35); border-radius:18px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 6px 18px rgba(99, 102, 241, 0.12); transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.15s ease; -webkit-tap-highlight-color:transparent;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:42px; height:42px; border-radius:13px; background:linear-gradient(135deg, #4f46e5, #3730a3); color:white; display:flex; align-items:center; justify-content:center; font-size:19px; box-shadow:0 4px 12px rgba(79, 70, 229, 0.32); flex-shrink:0;">
+            <i class="fa-solid fa-camera-retro"></i>
+          </div>
+          <div>
+            <div style="font-weight:800; font-size:14px; color:#1e1b4b; display:flex; align-items:center; gap:6px;">
+              <span>परिवार की यादें</span>
+              <span id="homeMemoriesCountBadge" style="font-size:10px; background:#e0e7ff; color:#3730a3; border:1px solid #c7d2fe; padding:2px 7px; border-radius:10px; font-weight:800;">🖼️ फोटो गैलरी</span>
+            </div>
+            <div style="font-size:11px; color:#4338ca; margin-top:2px; font-weight:500;">
+              भाटी परिवार के पावन उत्सव, यात्राएं व संस्मरण (देखें, डाउनलोड व शेयर करें)
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+          <span style="font-size:11.5px; font-weight:800; color:#4f46e5;">खोलें</span>
+          <div style="width:26px; height:26px; border-radius:50%; background:#e0e7ff; display:flex; align-items:center; justify-content:center;">
+            <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#4f46e5;"></i>
+          </div>
+        </div>
+      </div>
+
       <!-- 💳 अपना बकाया अभी भुगतान करें Box (PhonePe & Google Pay Quick Pay) -->
       <div class="ios-glass-card" style="margin-bottom:12px; background:linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(240, 247, 255, 0.90) 100%); border:1.5px solid rgba(37, 99, 235, 0.22); border-radius:18px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 6px 18px rgba(37, 99, 235, 0.08);">
         <div style="display:flex; align-items:center; gap:8px;">
@@ -3946,11 +3970,7 @@
         <i class="fa-solid fa-book-open"></i> डिजिटल पासबुक (PDF / प्रिंट)
       </button>
       <div class="ys-grid">
-        <button class="ys-tool" onclick="openPaymentRequestModal()">💳 भुगतान किया?<br><span style="font-weight:600; font-size:10.5px;">UTR / स्क्रीनशॉट भेजें</span></button>
-        <button class="ys-tool" onclick="ysOpenPolls()">🗳️ वोटिंग / सर्वे</button>
-        <button class="ys-tool" onclick="ysOpenGallery()">🖼️ फोटो गैलरी</button>
         <button class="ys-tool" onclick="ysOpenCelebs()">🎂 आज के शुभ अवसर</button>
-        <button class="ys-tool" id="ysLangBtn" onclick="ysToggleLang()">🌐 भाषा: हिंदी</button>
         <button class="ys-tool ysAdminOnly" style="display:none;" onclick="openPendingRequestsModal()">🧾 भुगतान जाँच-सूची</button>
         <button class="ys-tool ysAdminOnly" style="display:none;" onclick="ysOpenMonthCard()">📊 मासिक हिसाब कार्ड</button>
         <button class="ys-tool ysAdminOnly" style="display:none;" onclick="ysOpenBudgetEdit()">💰 बजट तय करें</button>
@@ -3990,7 +4010,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.2.0
+            APK v5.2.1
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4017,7 +4037,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.0 (बिल्ड कोड: 520)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.1 (बिल्ड कोड: 521)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4688,7 +4708,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.0 (बिल्ड कोड: 520)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.1 (बिल्ड कोड: 521)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5719,13 +5739,203 @@
           </button>
         </div>
       </div>
+  <!-- ========================================================================= -->
+  <!-- 📸 समर्पित परिवार फोटो गैलरी पेज (Dedicated Photo Gallery Page View) -->
+  <!-- ========================================================================= -->
+  <div id="dedicatedGalleryPage" style="display:none; position:fixed; inset:0; z-index:1150; background:#f8fafc; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
+    
+    <!-- Top Sticky Apple iOS Header Bar -->
+    <div style="position:sticky; top:0; z-index:100; background:rgba(255, 255, 255, 0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(0, 0, 0, 0.08); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.03);">
+      <button onclick="closeDedicatedGalleryPage()" style="border:none; background:rgba(0,0,0,0.06); color:#0f172a; padding:7px 12px; border-radius:12px; font-weight:700; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
+      </button>
+      <div style="text-align:center;">
+        <h3 style="margin:0; font-size:15.5px; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>📸 परिवार की यादें</span>
+        </h3>
+        <span id="galHeaderSubtext" style="font-size:11px; color:#64748b; font-weight:600;">भाटी परिवार • कुचेरा</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <button id="galAdminAddBtn" onclick="openUploadPhotoModal()" class="ysAdminOnly" style="display:none; border:none; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:7px 12px; border-radius:12px; font-weight:800; font-size:12px; cursor:pointer; box-shadow:0 3px 8px rgba(37,99,235,0.28); display:inline-flex; align-items:center; gap:5px;">
+          <i class="fa-solid fa-plus"></i> <span>फोटो जोड़ें</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Gallery Content Body -->
+    <div style="padding:14px 16px 80px 16px; max-width:960px; margin:0 auto; width:100%; box-sizing:border-box;">
+
+      <!-- Banner Info Card -->
+      <div class="ios-glass-card" style="margin-bottom:14px; background:linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%); color:white; border-radius:18px; padding:16px 18px; box-shadow:0 8px 24px rgba(3, 105, 161, 0.22); position:relative; overflow:hidden;">
+        <div style="position:relative; z-index:2; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <div style="font-size:11px; color:#bae6fd; font-weight:800; text-transform:uppercase; letter-spacing:0.8px;">🚩 युवा शक्ति ग्रुप डिजिटल एल्बम</div>
+            <h2 style="margin:3px 0 4px 0; font-size:18px; font-weight:800; color:#ffffff;">भाटी परिवार पावन संस्मरण व उत्सव</h2>
+            <p style="margin:0; font-size:12px; color:#e0f2fe; line-height:1.4;">सभी सदस्य यहाँ से पावन उत्सवों, यात्राओं व बैठकों की फोटो देख व डाउनलोड कर सकते हैं।</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button onclick="openCreateFolderModal()" class="ysAdminOnly" style="display:none; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:white; padding:7px 12px; border-radius:12px; font-weight:700; font-size:11.5px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; backdrop-filter:blur(10px);">
+              <i class="fa-solid fa-folder-plus"></i> <span>नया फोल्डर</span>
+            </button>
+            <button onclick="openUploadPhotoModal()" class="ysAdminOnly" style="display:none; background:#fbbf24; border:none; color:#78350f; padding:7px 13px; border-radius:12px; font-weight:800; font-size:11.5px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; box-shadow:0 3px 10px rgba(0,0,0,0.15);">
+              <i class="fa-solid fa-cloud-arrow-up"></i> <span>फोटो अपलोड</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div style="position:relative; margin-bottom:12px;">
+        <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:13px;"></i>
+        <input type="text" id="galSearchInput" oninput="renderDedicatedGallery()" placeholder="फोटो शीर्षक या फोल्डर नाम से खोजें..." style="width:100%; box-sizing:border-box; padding:10px 14px 10px 38px; border-radius:14px; border:1px solid rgba(0,0,0,0.08); background:rgba(255,255,255,0.95); font-size:13px; color:#0f172a; outline:none; box-shadow:0 2px 8px rgba(0,0,0,0.02);">
+      </div>
+
+      <!-- Horizontal Folder / Album Pills Tabs -->
+      <div style="margin-bottom:14px; overflow-x:auto; white-space:nowrap; padding-bottom:6px; display:flex; gap:8px; scrollbar-width:none; -webkit-overflow-scrolling:touch;" id="galFolderPillsContainer">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Current Folder Info & Count Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:0 2px;">
+        <div style="font-weight:800; font-size:13.5px; color:#1e293b; display:flex; align-items:center; gap:6px;">
+          <span id="galCurrentFolderName">📁 सभी फोटो</span>
+          <span id="galCurrentFolderCount" style="font-size:11px; background:#e2e8f0; color:#475569; padding:2px 8px; border-radius:12px; font-weight:700;">0 फोटो</span>
+        </div>
+        <div id="galFolderAdminActions" style="display:none; gap:6px;">
+          <!-- Admin actions for active custom folder -->
+        </div>
+      </div>
+
+      <!-- Photo Grid -->
+      <div id="galPhotosGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px;">
+        <div style="grid-column:1/-1; text-align:center; padding:30px; color:#64748b;">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size:24px; color:#2563eb;"></i>
+          <div style="margin-top:8px; font-size:12.5px; font-weight:600;">फोटो लोड हो रही हैं...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 📸 फोटो अपलोड मोडल (Upload Photo Modal) -->
+  <div class="modal-overlay" id="galUploadModal" style="display:none; z-index:1210;" onclick="if(event.target===this) closeUploadPhotoModal()">
+    <div class="modal-content ios-glass-card" style="max-width:440px; width:92%; max-height:90vh; overflow-y:auto; padding:20px; border-radius:24px; text-align:left; background:rgba(255,255,255,0.98); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.9); box-shadow:0 20px 45px rgba(15,23,42,0.25);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:36px; height:36px; border-radius:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; display:flex; align-items:center; justify-content:center; font-size:16px; box-shadow:0 4px 10px rgba(37,99,235,0.3);">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div>
+            <h3 style="margin:0; font-size:16px; font-weight:800; color:#0f172a;">गैलरी में फोटो जोड़ें</h3>
+            <div style="font-size:11px; color:#64748b;">शीर्षक, फोल्डर व फोटो चुनें</div>
+          </div>
+        </div>
+        <button onclick="closeUploadPhotoModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">📁 एल्बम / फोल्डर चुनें:</label>
+          <select id="galUploadFolderSelect" onchange="handleGalFolderSelectChange()" style="width:100%; box-sizing:border-box; padding:10px; border-radius:12px; border:1px solid #cbd5e1; background:white; font-size:13px; font-weight:700; color:#1e293b;">
+            <!-- Options populated dynamically -->
+          </select>
+        </div>
+
+        <div id="galUploadCustomFolderBox" style="display:none;">
+          <label style="font-size:12px; font-weight:700; color:#2563eb; display:block; margin-bottom:5px;">➕ नए फोल्डर का नाम:</label>
+          <input type="text" id="galUploadCustomFolderInput" placeholder="उदा. हरिद्वार यात्रा 2026" style="width:100%; box-sizing:border-box; padding:10px; border-radius:12px; border:1.5px solid #3b82f6; background:#eff6ff; font-size:13px; color:#1e3a8a; font-weight:700;">
+        </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">📝 फोटो का शीर्षक / विवरण:</label>
+          <input type="text" id="galUploadTitleInput" placeholder="उदा. गणेश विसर्जन आरती व शोभायात्रा" style="width:100%; box-sizing:border-box; padding:10px; border-radius:12px; border:1px solid #cbd5e1; background:white; font-size:13px; color:#1e293b;">
+        </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">🖼️ फोटो फ़ाइल चुनें:</label>
+          <input type="file" id="galUploadFileInput" accept="image/*" onchange="handleGalUploadFilePreview(event)" style="width:100%; box-sizing:border-box; padding:8px; border-radius:12px; border:1.5px dashed #94a3b8; background:#f8fafc; font-size:12px; cursor:pointer;">
+        </div>
+
+        <!-- Image Preview Container -->
+        <div id="galUploadPreviewContainer" style="display:none; text-align:center; padding:10px; background:#f1f5f9; border-radius:14px;">
+          <img id="galUploadPreviewImg" src="" style="max-height:160px; max-width:100%; border-radius:10px; object-fit:contain; box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:8px;">
+          <button id="galUploadSubmitBtn" onclick="uploadGalleryPhotoSubmit()" style="flex:1; border:none; background:linear-gradient(135deg, #16a34a, #15803d); color:white; padding:12px; border-radius:14px; font-weight:800; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 4px 12px rgba(22,163,74,0.3);">
+            <i class="fa-solid fa-cloud-arrow-up"></i> <span>अपलोड करें</span>
+          </button>
+          <button onclick="closeUploadPhotoModal()" style="border:1px solid #cbd5e1; background:white; color:#64748b; padding:12px 18px; border-radius:14px; font-weight:700; font-size:13px; cursor:pointer;">
+            रद्द करें
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📁 नया फोल्डर मोडल (Create New Folder Modal) -->
+  <div class="modal-overlay" id="galNewFolderModal" style="display:none; z-index:1220;" onclick="if(event.target===this) closeCreateFolderModal()">
+    <div class="modal-content ios-glass-card" style="max-width:380px; width:90%; padding:20px; border-radius:24px; text-align:left; background:rgba(255,255,255,0.98); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.9); box-shadow:0 20px 45px rgba(15,23,42,0.25);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:8px;">
+        <h3 style="margin:0; font-size:15px; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-folder-plus" style="color:#2563eb;"></i> <span>नया एल्बम / फोल्डर</span>
+        </h3>
+        <button onclick="closeCreateFolderModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:28px; height:28px; font-size:13px; color:#64748b; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">फोल्डर का नाम:</label>
+        <input type="text" id="galNewFolderNameInput" placeholder="उदा. हरिद्वार यात्रा 2026" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:12px; border:1.5px solid #cbd5e1; background:white; font-size:13px; color:#0f172a; font-weight:700;">
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button onclick="saveNewGalFolder()" style="flex:1; border:none; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:11px; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer;">
+          बनाएं
+        </button>
+        <button onclick="closeCreateFolderModal()" style="border:1px solid #cbd5e1; background:white; color:#64748b; padding:11px 16px; border-radius:12px; font-weight:700; font-size:13px; cursor:pointer;">
+          रद्द करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🖼️ फुलस्क्रीन फोटो व्यूअर / लाइटबॉक्स (Fullscreen Photo Lightbox Modal) -->
+  <div id="galLightboxModal" style="display:none; position:fixed; inset:0; z-index:1250; background:rgba(0,0,0,0.94); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); flex-direction:column; justify-content:space-between; padding:16px; box-sizing:border-box;" onclick="if(event.target===this) closeGalLightbox()">
+    <!-- Top Bar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; z-index:10; padding:4px 0;">
+      <button onclick="closeGalLightbox()" style="border:none; background:rgba(255,255,255,0.18); color:white; border-radius:50%; width:38px; height:38px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+        ✕
+      </button>
+      <div style="text-align:center; color:white; max-width:70%;">
+        <div id="galLightboxTitle" style="font-weight:800; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">फोटो शीर्षक</div>
+        <div id="galLightboxSub" style="font-size:11px; color:#cbd5e1;">फोल्डर • तिथि</div>
+      </div>
+      <div style="width:38px;"></div>
+    </div>
+
+    <!-- Center Photo Container -->
+    <div style="flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:12px 0;">
+      <img id="galLightboxImg" src="" style="max-height:80vh; max-width:96vw; object-fit:contain; border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,0.6);">
+    </div>
+
+    <!-- Bottom Actions Bar -->
+    <div style="display:flex; justify-content:center; align-items:center; gap:10px; z-index:10; padding:8px 0;" onclick="event.stopPropagation();">
+      <button onclick="downloadGalleryPhoto(currentLightboxPhotoId)" style="border:none; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:11px 20px; border-radius:14px; font-weight:800; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 4px 14px rgba(37,99,235,0.35);">
+        <i class="fa-solid fa-download"></i> <span>डाउनलोड करें</span>
+      </button>
+      <button onclick="shareGalleryPhoto(currentLightboxPhotoId)" style="border:none; background:#16a34a; color:white; padding:11px 18px; border-radius:14px; font-weight:800; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 4px 14px rgba(22,163,74,0.35);">
+        <i class="fa-brands fa-whatsapp"></i> <span>शेयर</span>
+      </button>
+      <button id="galLightboxDeleteBtn" onclick="deleteGalleryPhoto(currentLightboxPhotoId)" class="ysAdminOnly" style="display:none; border:none; background:#dc2626; color:white; padding:11px 16px; border-radius:14px; font-weight:800; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
     </div>
   </div>
 
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.2.0";
+    const APP_VERSION = "5.2.1";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7263,10 +7473,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 520)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 521)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 520)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 521)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7381,7 +7591,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 520)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 521)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7392,7 +7602,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 520)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 521)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -16778,33 +16988,532 @@
     async function ysTogglePoll(id, open) { if (canFin()) try { await db.collection("polls").doc(id).update({ active: !!open }); } catch (e) { showToast("त्रुटि: " + e.message, "error"); } }
     function ysDeletePoll(id) { if (!canFin()) return; showConfirmDialog("सर्वे हटाएं?", "यह सर्वे और उसके वोट हमेशा के लिए हट जाएँगे।", async () => { try { await db.collection("polls").doc(id).delete(); ysAudit("🗑️ सर्वे हटाया", id); } catch (e) { showToast("त्रुटि: " + e.message, "error"); } }); }
 
-    // ---------- 12. फोटो गैलरी ----------
-    window.ysGallery = [];
-    async function ysOpenGallery() {
-      ysModal("ysGalModal", "🖼️ परिवार फोटो गैलरी", `${canFin() ? `<div style="padding:10px; border:1.5px dashed #94a3b8; border-radius:12px; margin-bottom:10px;"><input id="ysGalTitle" class="ys-in" placeholder="फोटो का शीर्षक (उदा. गणेश विसर्जन 2026)"><input type="file" id="ysGalFile" accept="image/*" class="ys-in"><button class="ys-btn" style="width:100%; background:#2563eb;" onclick="ysGalUpload()">⬆️ फोटो जोड़ें</button></div>` : ""}<div id="ysGalGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">लोड हो रहा है...</div>`);
+    // =========================================================================
+    // 📸 समर्पित परिवार फोटो गैलरी इंजन (DEDICATED PHOTO GALLERY & ALBUM ENGINE)
+    // =========================================================================
+    window.galPhotos = [];
+    window.galFolders = ["पावन उत्सव", "पारिवारिक बैठकें", "यात्राएं व संस्मरण", "स्मृतियां"];
+    window.galActiveFolder = "all";
+    let currentLightboxPhotoId = null;
+
+    function refreshGalFoldersList() {
+      const distinct = new Set(window.galFolders);
+      window.galPhotos.forEach(p => {
+        if (p.folder && typeof p.folder === 'string' && p.folder.trim()) {
+          distinct.add(p.folder.trim());
+        }
+      });
+      window.galFolders = Array.from(distinct);
+    }
+
+    // Realtime Firestore Listener for Photos
+    try {
+      db.collection("gallery").orderBy("at", "desc").onSnapshot(s => {
+        window.galPhotos = [];
+        s.forEach(d => window.galPhotos.push(Object.assign({ id: d.id }, d.data())));
+        window.ysGallery = window.galPhotos; // backward compatibility
+        refreshGalFoldersList();
+        renderDedicatedGallery();
+        updateHomeGalleryBadge();
+      }, err => {
+        console.warn("Gallery sync warning:", err);
+      });
+    } catch (e) {
+      console.warn("Could not attach gallery snapshot listener:", e);
+    }
+
+    // Realtime Listener for Custom Folders
+    try {
+      db.collection("settings").doc("galleryFolders").onSnapshot(s => {
+        if (s.exists && s.data() && Array.isArray(s.data().folders)) {
+          s.data().folders.forEach(f => {
+            if (f && !window.galFolders.includes(f)) window.galFolders.push(f);
+          });
+          refreshGalFoldersList();
+          renderGalFolderPills();
+        }
+      }, () => {});
+    } catch (e) {}
+
+    function updateHomeGalleryBadge() {
+      const badge = document.getElementById("homeMemoriesCountBadge");
+      if (badge) {
+        const count = window.galPhotos ? window.galPhotos.length : 0;
+        badge.innerText = `🖼️ ${count} फोटो`;
+      }
+    }
+
+    function openDedicatedGalleryPage() {
+      const page = document.getElementById("dedicatedGalleryPage");
+      if (!page) return;
+      page.style.display = "flex";
+      document.body.style.overflow = "hidden";
+      refreshGalFoldersList();
+      renderDedicatedGallery();
+
+      // Show admin action buttons if canFin()
+      const adminAddBtn = document.getElementById("galAdminAddBtn");
+      if (adminAddBtn) {
+        adminAddBtn.style.display = canFin() ? "inline-flex" : "none";
+      }
+    }
+
+    function closeDedicatedGalleryPage() {
+      const page = document.getElementById("dedicatedGalleryPage");
+      if (!page) return;
+      page.style.display = "none";
+      document.body.style.overflow = "";
+    }
+
+    function setGalActiveFolder(folderName) {
+      window.galActiveFolder = folderName;
+      renderDedicatedGallery();
+    }
+
+    function renderGalFolderPills() {
+      const container = document.getElementById("galFolderPillsContainer");
+      if (!container) return;
+
+      const totalPhotos = window.galPhotos.length;
+      let html = `
+        <button onclick="setGalActiveFolder('all')" style="border:none; border-radius:20px; padding:6px 14px; font-weight:800; font-size:12px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.15s ease; ${window.galActiveFolder === 'all' ? 'background:#1e3a8a; color:white; box-shadow:0 3px 8px rgba(30,58,138,0.3);' : 'background:#e2e8f0; color:#334155;'}">
+          <span>📁 सभी फोटो</span>
+          <span style="font-size:10.5px; opacity:0.85;">(${totalPhotos})</span>
+        </button>
+      `;
+
+      window.galFolders.forEach(folder => {
+        const count = window.galPhotos.filter(p => (p.folder || "पावन उत्सव") === folder).length;
+        const isActive = (window.galActiveFolder === folder);
+        html += `
+          <button onclick="setGalActiveFolder('${escapeHtml(folder)}')" style="border:none; border-radius:20px; padding:6px 14px; font-weight:800; font-size:12px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.15s ease; ${isActive ? 'background:#0284c7; color:white; box-shadow:0 3px 8px rgba(2,132,199,0.3);' : 'background:#e2e8f0; color:#334155;'}">
+            <span>${escapeHtml(folder)}</span>
+            <span style="font-size:10.5px; opacity:0.85;">(${count})</span>
+          </button>
+        `;
+      });
+
+      if (canFin()) {
+        html += `
+          <button onclick="openCreateFolderModal()" style="border:1.5px dashed #0284c7; background:rgba(2,132,199,0.08); color:#0284c7; border-radius:20px; padding:5px 12px; font-weight:800; font-size:12px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+            <i class="fa-solid fa-plus"></i> <span>नया फोल्डर</span>
+          </button>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function renderDedicatedGallery() {
+      renderGalFolderPills();
+
+      const searchInput = document.getElementById("galSearchInput");
+      const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
+
+      let filtered = window.galPhotos.slice();
+
+      // Folder filter
+      if (window.galActiveFolder !== "all") {
+        filtered = filtered.filter(p => (p.folder || "पावन उत्सव") === window.galActiveFolder);
+      }
+
+      // Search query filter
+      if (query) {
+        filtered = filtered.filter(p => {
+          const t = (p.title || "").toLowerCase();
+          const f = (p.folder || "").toLowerCase();
+          const b = (p.by || "").toLowerCase();
+          return t.includes(query) || f.includes(query) || b.includes(query);
+        });
+      }
+
+      // Update current folder header
+      const nameEl = document.getElementById("galCurrentFolderName");
+      const countEl = document.getElementById("galCurrentFolderCount");
+      if (nameEl) {
+        nameEl.innerText = window.galActiveFolder === "all" ? "📁 सभी फोटो" : `📁 ${window.galActiveFolder}`;
+      }
+      if (countEl) {
+        countEl.innerText = `${filtered.length} फोटो`;
+      }
+
+      // Admin actions for active folder
+      const folderActions = document.getElementById("galFolderAdminActions");
+      if (folderActions) {
+        if (canFin() && window.galActiveFolder !== "all") {
+          folderActions.style.display = "flex";
+          folderActions.innerHTML = `
+            <button onclick="deleteCurrentGalFolder('${escapeHtml(window.galActiveFolder)}')" style="border:none; background:#fee2e2; color:#b91c1c; padding:4px 8px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+              <i class="fa-solid fa-trash-can"></i> <span>फोल्डर हटाएं</span>
+            </button>
+          `;
+        } else {
+          folderActions.style.display = "none";
+        }
+      }
+
+      const grid = document.getElementById("galPhotosGrid");
+      if (!grid) return;
+
+      if (!filtered.length) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; padding:40px 16px; text-align:center; background:white; border-radius:18px; border:1px dashed #cbd5e1;">
+            <div style="font-size:36px; margin-bottom:8px;">🖼️</div>
+            <div style="font-size:14px; font-weight:800; color:#334155;">कोई फोटो नहीं मिली</div>
+            <div style="font-size:11.5px; color:#64748b; margin-top:4px;">${query ? 'खोज के अनुसार कोई परिणाम नहीं मिला।' : 'इस फोल्डर में अभी कोई फोटो नहीं जोड़ी गई है।'}</div>
+            ${canFin() ? `
+              <button onclick="openUploadPhotoModal()" style="margin-top:14px; border:none; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:9px 16px; border-radius:12px; font-weight:800; font-size:12.5px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                <i class="fa-solid fa-cloud-arrow-up"></i> <span>पहली फोटो जोड़ें</span>
+              </button>
+            ` : ''}
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        let dateStr = "";
+        if (p.at) {
+          try {
+            dateStr = new Date(p.at).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+          } catch (e) {
+            dateStr = "";
+          }
+        }
+        const titleSafe = escapeHtml(p.title || "परिवार संस्मरण");
+        const folderSafe = escapeHtml(p.folder || "पावन उत्सव");
+        const uploaderSafe = escapeHtml(p.by || "सदस्य");
+
+        return `
+          <div class="gal-photo-card" onclick="openGalLightbox('${p.id}')" style="background:#ffffff; border-radius:16px; overflow:hidden; border:1px solid rgba(0,0,0,0.06); box-shadow:0 3px 12px rgba(0,0,0,0.04); display:flex; flex-direction:column; cursor:pointer; position:relative; transition:transform 0.15s ease, box-shadow 0.15s ease;">
+            <div style="position:relative; width:100%; height:160px; background:#f1f5f9; overflow:hidden;">
+              <img src="${p.img}" alt="${titleSafe}" loading="lazy" style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s ease;">
+              <span style="position:absolute; top:8px; left:8px; background:rgba(15,23,42,0.75); backdrop-filter:blur(6px); color:#ffffff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; max-width:85%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                ${folderSafe}
+              </span>
+            </div>
+            <div style="padding:10px 10px 8px 10px; display:flex; flex-direction:column; flex:1; justify-content:space-between;">
+              <div>
+                <div style="font-weight:800; font-size:12.5px; color:#0f172a; line-height:1.3; margin-bottom:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                  ${titleSafe}
+                </div>
+                <div style="font-size:10.5px; color:#64748b;">
+                  ${dateStr ? dateStr + ' • ' : ''}${uploaderSafe}
+                </div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px; padding-top:6px; border-top:1px solid #f1f5f9;" onclick="event.stopPropagation();">
+                <button onclick="downloadGalleryPhoto('${p.id}', event)" title="डाउनलोड करें" style="flex:1; border:none; background:#eff6ff; color:#1d4ed8; padding:6px 4px; border-radius:8px; font-weight:700; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:4px;">
+                  <i class="fa-solid fa-download"></i> <span>डाउनलोड</span>
+                </button>
+                <button onclick="shareGalleryPhoto('${p.id}', event)" title="व्हाट्सएप पर शेयर करें" style="border:none; background:#f0fdf4; color:#16a34a; padding:6px 8px; border-radius:8px; font-weight:700; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </button>
+                ${canFin() ? `
+                  <button onclick="deleteGalleryPhoto('${p.id}', event)" title="हटाएं" style="border:none; background:#fef2f2; color:#dc2626; padding:6px 8px; border-radius:8px; font-weight:700; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // Lightbox Modal
+    function openGalLightbox(photoId) {
+      const photo = window.galPhotos.find(p => p.id === photoId);
+      if (!photo) return;
+      currentLightboxPhotoId = photoId;
+
+      const modal = document.getElementById("galLightboxModal");
+      const img = document.getElementById("galLightboxImg");
+      const title = document.getElementById("galLightboxTitle");
+      const sub = document.getElementById("galLightboxSub");
+      const delBtn = document.getElementById("galLightboxDeleteBtn");
+
+      if (img) img.src = photo.img;
+      if (title) title.innerText = photo.title || "परिवार संस्मरण";
+      if (sub) {
+        let dStr = photo.at ? new Date(photo.at).toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : "";
+        sub.innerText = `${photo.folder || "पावन उत्सव"}${dStr ? " • " + dStr : ""}${photo.by ? " • प्रेषक: " + photo.by : ""}`;
+      }
+      if (delBtn) {
+        delBtn.style.display = canFin() ? "inline-flex" : "none";
+      }
+
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeGalLightbox() {
+      const modal = document.getElementById("galLightboxModal");
+      if (modal) modal.style.display = "none";
+      currentLightboxPhotoId = null;
+    }
+
+    // Download photo
+    async function downloadGalleryPhoto(id, e) {
+      if (e) e.stopPropagation();
+      const photo = window.galPhotos.find(p => p.id === id);
+      if (!photo || !photo.img) {
+        showToast("फोटो उपलब्ध नहीं है", "warning");
+        return;
+      }
+
+      const cleanTitle = (photo.title || "Yuva_Shakti_Photo")
+        .replace(/[^a-zA-Z0-9\u0900-\u097F_\- ]/g, '')
+        .trim()
+        .replace(/\s+/g, '_') || "Yuva_Shakti_Photo";
+      const filename = `${cleanTitle}_${Date.now()}.jpg`;
+
+      showToast("💾 फोटो डाउनलोड हो रही है...", "info");
+
+      // 1. Android Native download interface
+      if (window.AndroidApp && typeof window.AndroidApp.downloadImage === "function") {
+        window.AndroidApp.downloadImage(photo.img, filename);
+        return;
+      }
+
+      // 2. Standard browser / iOS download
       try {
-        const s = await db.collection("gallery").orderBy("at", "desc").limit(30).get();
-        window.ysGallery = []; s.forEach(d => window.ysGallery.push(Object.assign({ id: d.id }, d.data())));
-        ysRenderGallery();
-      } catch (e) { document.getElementById("ysGalGrid").innerText = "त्रुटि: " + e.message; }
+        const link = document.createElement("a");
+        link.href = photo.img;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast("✅ फोटो डाउनलोड हो गई है!", "success");
+      } catch (err) {
+        console.warn("Direct download error, opening image:", err);
+        window.open(photo.img, "_blank");
+      }
     }
-    function ysRenderGallery() {
-      const g = document.getElementById("ysGalGrid"); if (!g) return;
-      g.innerHTML = window.ysGallery.length ? window.ysGallery.map((x, i) => `<div style="position:relative;"><img src="${x.img}" onclick="ysViewGal(${i})" style="width:100%; height:120px; object-fit:cover; border-radius:10px; cursor:pointer;"><div style="font-size:11px; font-weight:700; padding:2px 2px;">${escapeHtml(x.title || "")}</div>${canFin() ? `<button onclick="ysGalDelete('${x.id}')" style="position:absolute; top:4px; right:4px; border:none; background:rgba(220,38,38,.9); color:#fff; border-radius:50%; width:24px; height:24px; cursor:pointer;">🗑</button>` : ""}</div>`).join("") : '<div style="grid-column:1/-1; padding:16px; text-align:center; color:#64748b;">अभी कोई फोटो नहीं है।</div>';
+
+    // Share photo on WhatsApp
+    async function shareGalleryPhoto(id, e) {
+      if (e) e.stopPropagation();
+      const photo = window.galPhotos.find(p => p.id === id);
+      if (!photo || !photo.img) return;
+
+      const title = photo.title || "परिवार की यादें";
+      const folder = photo.folder || "पावन उत्सव";
+      const caption = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n📸 *${title}*\n📁 एल्बम: ${folder}\n\n📲 *युवा शक्ति ऐप डाउनलोड करें:* https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
+
+      if (window.AndroidApp && typeof window.AndroidApp.shareImage === "function") {
+        window.AndroidApp.shareImage(photo.img, caption);
+        return;
+      }
+
+      ysShareDataUrl(photo.img, caption, `YuvaShakti_${title}.jpg`);
     }
-    function ysViewGal(i) { const x = window.ysGallery[i]; if (x) ysModal("ysImgView", escapeHtml(x.title || "फोटो"), `<img src="${x.img}" style="width:100%; border-radius:12px;">`); }
-    async function ysGalUpload() {
+
+    // Delete photo (Admin only)
+    function deleteGalleryPhoto(id, e) {
+      if (e) e.stopPropagation();
+      if (!canFin()) {
+        showToast("फोटो हटाने की अनुमति केवल संचालक को है।", "warning");
+        return;
+      }
+      const photo = window.galPhotos.find(p => p.id === id);
+      const title = photo ? (photo.title || "यह फोटो") : "यह फोटो";
+
+      showConfirmDialog("फोटो हटाएं?", `क्या आप "${title}" को गैलरी से हटाना चाहते हैं?`, async () => {
+        try {
+          await db.collection("gallery").doc(id).delete();
+          ysAudit("🗑️ गैलरी फोटो हटाई", title);
+          showToast("✅ फोटो सफलतापूर्वक हटा दी गई!", "success");
+          if (document.getElementById("galLightboxModal")?.style.display === "flex") {
+            closeGalLightbox();
+          }
+        } catch (err) {
+          showToast("हटाने में त्रुटि: " + err.message, "error");
+        }
+      });
+    }
+
+    // Delete custom folder
+    function deleteCurrentGalFolder(folderName) {
       if (!canFin()) return;
-      const f = document.getElementById("ysGalFile").files[0]; if (!f) { showToast("कृपया फोटो चुनें।", "warning"); return; }
-      try {
-        showToast("फोटो अपलोड हो रही है...", "info");
-        const img = await ysCompressImage(f, 1000, 0.7, 230000);
-        await db.collection("gallery").add({ title: document.getElementById("ysGalTitle").value.trim(), img, by: ysByName(), at: Date.now() });
-        ysAudit("🖼️ गैलरी में फोटो जोड़ी", document.getElementById("ysGalTitle").value.trim());
-        showToast("✅ फोटो जुड़ गई!", "success"); ysOpenGallery();
-      } catch (e) { showToast("त्रुटि: " + e.message, "error"); }
+      if (folderName === "all" || folderName === "पावन उत्सव") {
+        showToast("यह मुख्य फोल्डर नहीं हटाया जा सकता।", "warning");
+        return;
+      }
+      showConfirmDialog("फोल्डर हटाएं?", `क्या आप फोल्डर "${folderName}" को हटाना चाहते हैं? (इसकी फोटो अन्य में दिखाई देंगी)`, async () => {
+        window.galFolders = window.galFolders.filter(f => f !== folderName);
+        try {
+          await db.collection("settings").doc("galleryFolders").set({ folders: window.galFolders }, { merge: true });
+          ysAudit("🗑️ गैलरी फोल्डर हटाया", folderName);
+          showToast("✅ फोल्डर हटा दिया गया!", "success");
+          window.galActiveFolder = "all";
+          renderDedicatedGallery();
+        } catch (e) {
+          showToast("त्रुटि: " + e.message, "error");
+        }
+      });
     }
-    function ysGalDelete(id) { if (!canFin()) return; showConfirmDialog("फोटो हटाएं?", "यह फोटो गैलरी से हट जाएगी।", async () => { try { await db.collection("gallery").doc(id).delete(); ysAudit("🗑️ गैलरी फोटो हटाई", id); ysOpenGallery(); } catch (e) { showToast("त्रुटि: " + e.message, "error"); } }); }
+
+    // Upload Photo Modal Handling
+    function openUploadPhotoModal() {
+      if (!canFin()) {
+        showToast("फोटो अपलोड करने की अनुमति केवल संचालक को है।", "warning");
+        return;
+      }
+      const select = document.getElementById("galUploadFolderSelect");
+      if (select) {
+        let options = window.galFolders.map(f => `<option value="${escapeHtml(f)}" ${window.galActiveFolder === f ? 'selected' : ''}>${escapeHtml(f)}</option>`).join("");
+        options += `<option value="__new__">➕ नया फोल्डर बनाएं...</option>`;
+        select.innerHTML = options;
+      }
+      const customBox = document.getElementById("galUploadCustomFolderBox");
+      if (customBox) customBox.style.display = "none";
+
+      const titleInp = document.getElementById("galUploadTitleInput");
+      if (titleInp) titleInp.value = "";
+
+      const fileInp = document.getElementById("galUploadFileInput");
+      if (fileInp) fileInp.value = "";
+
+      const previewContainer = document.getElementById("galUploadPreviewContainer");
+      if (previewContainer) previewContainer.style.display = "none";
+
+      const modal = document.getElementById("galUploadModal");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeUploadPhotoModal() {
+      const modal = document.getElementById("galUploadModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function handleGalFolderSelectChange() {
+      const select = document.getElementById("galUploadFolderSelect");
+      const customBox = document.getElementById("galUploadCustomFolderBox");
+      if (select && customBox) {
+        customBox.style.display = select.value === "__new__" ? "block" : "none";
+      }
+    }
+
+    function handleGalUploadFilePreview(event) {
+      const file = event.target.files[0];
+      const container = document.getElementById("galUploadPreviewContainer");
+      const img = document.getElementById("galUploadPreviewImg");
+      const titleInp = document.getElementById("galUploadTitleInput");
+
+      if (file) {
+        if (titleInp && !titleInp.value) {
+          titleInp.value = file.name.replace(/\.[^/.]+$/, "").replace(/[_\-]/g, " ");
+        }
+        const reader = new FileReader();
+        reader.onload = e => {
+          if (img) img.src = e.target.result;
+          if (container) container.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        if (container) container.style.display = "none";
+      }
+    }
+
+    async function uploadGalleryPhotoSubmit() {
+      if (!canFin()) {
+        showToast("फोटो अपलोड करने की अनुमति केवल संचालक को है।", "warning");
+        return;
+      }
+      const fileInput = document.getElementById("galUploadFileInput");
+      const file = fileInput.files[0];
+      if (!file) {
+        showToast("कृपया एक फोटो चुनें।", "warning");
+        return;
+      }
+
+      let folder = document.getElementById("galUploadFolderSelect").value;
+      if (folder === "__new__") {
+        folder = document.getElementById("galUploadCustomFolderInput").value.trim() || "सामान्य";
+        if (!window.galFolders.includes(folder)) {
+          window.galFolders.push(folder);
+          db.collection("settings").doc("galleryFolders").set({ folders: window.galFolders }, { merge: true }).catch(() => {});
+        }
+      }
+
+      const title = document.getElementById("galUploadTitleInput").value.trim() || file.name.replace(/\.[^/.]+$/, "");
+      const btn = document.getElementById("galUploadSubmitBtn");
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> अपलोड हो रहा है...`;
+      }
+
+      try {
+        showToast("🖼️ फोटो तैयार की जा रही है...", "info");
+        const compressedImg = await ysCompressImage(file, 1400, 0.82, 420000);
+        const sender = getSuvicharSender();
+
+        await db.collection("gallery").add({
+          title: title,
+          folder: folder,
+          img: compressedImg,
+          by: sender.name || ysByName() || "संचालक",
+          at: Date.now()
+        });
+
+        ysAudit("🖼️ गैलरी में फोटो जोड़ी", `${title} (${folder})`);
+        showToast("✅ फोटो सफलतापूर्वक गैलरी में जुड़ गई!", "success");
+        closeUploadPhotoModal();
+        window.galActiveFolder = folder;
+        renderDedicatedGallery();
+      } catch (err) {
+        showToast("अपलोड में त्रुटि: " + err.message, "error");
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> अपलोड करें`;
+        }
+      }
+    }
+
+    // Create New Folder Modal Handling
+    function openCreateFolderModal() {
+      if (!canFin()) {
+        showToast("फोल्डर बनाने की अनुमति केवल संचालक को है।", "warning");
+        return;
+      }
+      const inp = document.getElementById("galNewFolderNameInput");
+      if (inp) inp.value = "";
+      const modal = document.getElementById("galNewFolderModal");
+      if (modal) modal.style.display = "flex";
+    }
+
+    function closeCreateFolderModal() {
+      const modal = document.getElementById("galNewFolderModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    async function saveNewGalFolder() {
+      if (!canFin()) return;
+      const inp = document.getElementById("galNewFolderNameInput");
+      const name = inp ? inp.value.trim() : "";
+      if (!name) {
+        showToast("कृपया फोल्डर का नाम लिखें।", "warning");
+        return;
+      }
+      if (!window.galFolders.includes(name)) {
+        window.galFolders.push(name);
+        try {
+          await db.collection("settings").doc("galleryFolders").set({ folders: window.galFolders }, { merge: true });
+          ysAudit("📁 नया गैलरी फोल्डर बनाया", name);
+          showToast(`✅ फोल्डर "${name}" बन गया!`, "success");
+        } catch (err) {
+          console.warn("Folder save error:", err);
+        }
+      }
+      window.galActiveFolder = name;
+      closeCreateFolderModal();
+      renderDedicatedGallery();
+    }
+
+    // Legacy fallback redirect
+    function ysOpenGallery() {
+      openDedicatedGalleryPage();
+    }
 
     // ---------- 13. पिन रीसेट ----------
     function ysResetPin(memberId) {

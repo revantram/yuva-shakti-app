@@ -69,6 +69,11 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
+        public void downloadImage(String base64Data, String filename) {
+            saveImageDirectlyToGallery(base64Data, filename);
+        }
+
+        @JavascriptInterface
         public void printLedgerPdf() {
             printLedgerReport();
         }
@@ -606,6 +611,48 @@ public class MainActivity extends Activity {
                 }
             }
         });
+    }
+
+    public void saveImageDirectlyToGallery(final String base64Data, final String filename) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String cleanBase64 = base64Data;
+                    if (cleanBase64.contains(",")) {
+                        cleanBase64 = cleanBase64.substring(cleanBase64.indexOf(",") + 1);
+                    }
+                    byte[] imageBytes = Base64.decode(cleanBase64, Base64.DEFAULT);
+                    File picturesDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "YuvaShakti");
+                    if (!picturesDir.exists()) {
+                        picturesDir.mkdirs();
+                    }
+                    String fname = (filename != null && !filename.trim().isEmpty()) ? filename : ("photo_" + System.currentTimeMillis() + ".jpg");
+                    if (!fname.toLowerCase().endsWith(".jpg") && !fname.toLowerCase().endsWith(".jpeg") && !fname.toLowerCase().endsWith(".png")) {
+                        fname = fname + ".jpg";
+                    }
+                    File imageFile = new File(picturesDir, fname);
+                    FileOutputStream fos = new FileOutputStream(imageFile);
+                    fos.write(imageBytes);
+                    fos.flush();
+                    fos.close();
+                    MediaScannerConnection.scanFile(MainActivity.this, new String[]{imageFile.getAbsolutePath()}, new String[]{"image/jpeg"}, null);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "✅ फोटो आपकी गैलरी (Pictures/YuvaShakti) में सेव हो गई!", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (final Exception e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "फोटो सेव करने में त्रुटि: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     public void printLedgerReport() {
