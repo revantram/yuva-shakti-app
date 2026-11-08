@@ -3990,7 +3990,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.1.9
+            APK v5.2.0
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4017,7 +4017,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.1.9 (बिल्ड कोड: 519)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.0 (बिल्ड कोड: 520)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4688,7 +4688,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.1.9 (बिल्ड कोड: 519)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.0 (बिल्ड कोड: 520)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5725,7 +5725,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.1.9";
+    const APP_VERSION = "5.2.0";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7263,10 +7263,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 519)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 520)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 519)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 520)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7381,7 +7381,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 519)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 520)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7392,7 +7392,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 519)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 520)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -13515,15 +13515,6 @@
       } catch (e) {}
 
       const width = 1200;
-      const totalHeight = 1500;
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = totalHeight;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return null;
-
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
 
       // 1. Resolve Sender Details
       const sender = getSuvicharSender();
@@ -13559,6 +13550,7 @@
           wishText = "आपकी पावन स्मृतियां, उच्च आदर्श, संस्कार और स्नेह सदैव हमारे अंतःकरण में जीवित रहेंगे। आपके दिखाए सत्पथ पर चलना ही हमारी सच्ची श्रद्धांजलि है।\n\nईश्वर से विनम्र प्रार्थना है कि दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति एवं मोक्ष प्रदान करें।\n\nॐ शांतिः शांतिः शांतिः 🙏";
         }
       }
+      wishText = wishText.replace(/\n{3,}/g, '\n\n').trim();
 
       // 4. Resolve Icons & Color Themes
       let theme = {
@@ -13645,7 +13637,72 @@
         theme.footerTagline = "🕊️ दिवंगत पुण्यात्मा को अश्रुपूर्ण श्रद्धांजलि • शत-शत नमन 🕊️"; theme.footerTaglineColor = "#334155";
       }
 
-      // Step 5: Render Canvas Layers
+      // Step 5: Dynamic Content-Aware Dimension Calculations
+      const measureCanvas = document.createElement("canvas");
+      const measureCtx = measureCanvas.getContext("2d");
+
+      let wishFontSize = 33;
+      if (wishText.length > 200) wishFontSize = 29;
+      if (wishText.length > 320) wishFontSize = 26;
+      measureCtx.font = `600 ${wishFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
+
+      const wishBoxW = 1040;
+      const wishLines = wrapCanvasText(measureCtx, wishText, wishBoxW - 140);
+      const lineHeight = Math.round(wishFontSize * 1.55);
+
+      const cardMargin = 40;
+      const cardW = width - (cardMargin * 2); // 1120px
+
+      const topHeaderY = cardMargin + 25; // 65
+      const topHeaderH = 62;
+
+      const sqSize = 104;
+      const sqY = topHeaderY + topHeaderH + 24; // 151
+      const sqX = (width - sqSize) / 2;
+
+      const catTagY = sqY + sqSize + 24; // 279
+
+      const heroBannerY = catTagY + 24; // 303
+      const heroBannerH = 92;
+
+      const subY = heroBannerY + heroBannerH + 24; // 419
+
+      const wishBoxY = subY + 20; // 439
+      const wishBoxX = (width - wishBoxW) / 2;
+
+      const wishBoxHeaderY = wishBoxY + 36;
+      const wishTextStartY = wishBoxHeaderY + 48;
+      const wishTextH = wishLines.length * lineHeight;
+      const wishTextEndY = wishTextStartY + wishTextH;
+      const wishTaglineY = wishTextEndY + 36;
+      const wishBoxH = (wishTaglineY + 28) - wishBoxY;
+
+      const senderBoxY = wishBoxY + wishBoxH + 26;
+      const senderBoxH = 210;
+      const senderBoxW = 1040;
+      const senderBoxX = (width - senderBoxW) / 2;
+
+      const cardBottom = senderBoxY + senderBoxH + 34;
+      const cardH = cardBottom - cardMargin;
+
+      const footerY1 = cardBottom + 32;
+      const appBadgeY = footerY1 + 26;
+      const appBadgeH = 64;
+      const appBadgeW = 940;
+      const appBadgeX = (width - appBadgeW) / 2;
+
+      const totalHeight = appBadgeY + appBadgeH + 42;
+
+      // Step 6: Render Canvas
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = totalHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
       // 1. Overall Outer Gradient
       const outGrad = ctx.createLinearGradient(0, 0, width, totalHeight);
       outGrad.addColorStop(0, theme.outerBg1);
@@ -13666,10 +13723,6 @@
       ctx.restore();
 
       // 2. Main Inset Card
-      const cardMargin = 40;
-      const cardW = width - (cardMargin * 2); // 1120px
-      const cardH = totalHeight - (cardMargin * 2); // 1420px
-
       ctx.save();
       ctx.shadowColor = theme.cardShadow;
       ctx.shadowBlur = 36;
@@ -13687,9 +13740,7 @@
       ctx.lineWidth = 3.5;
       canvasRoundRect(ctx, cardMargin, cardMargin, cardW, cardH, 44, false, true);
 
-      // 3. Top Header Bar (Left: Date/Category pill, Right: Group branding pill)
-      const topHeaderY = cardMargin + 25;
-      const topHeaderH = 62;
+      // 3. Top Header Bar
       const todayDateFormatted = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
       // Left Pill
@@ -13726,10 +13777,6 @@
       ctx.restore();
 
       // 4. Center Squircle Icon
-      const sqSize = 104;
-      const sqY = topHeaderY + topHeaderH + 24;
-      const sqX = (width - sqSize) / 2;
-
       ctx.save();
       ctx.shadowColor = theme.iconShadow;
       ctx.shadowBlur = 24;
@@ -13747,16 +13794,13 @@
       ctx.fillText(theme.iconChar, sqX + sqSize / 2, sqY + sqSize / 2 + 2);
 
       // 5. Category Banner Tag
-      const catTagY = sqY + sqSize + 24;
       ctx.fillStyle = theme.categoryColor;
       ctx.font = "bold 32px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(theme.categoryTag, width / 2, catTagY);
 
-      // 6. Hero Name Banner (Distinctive elevated pill)
-      const heroBannerY = catTagY + 26;
-      const heroBannerH = 92;
+      // 6. Hero Name Banner
       ctx.font = "bold 52px 'Noto Sans Devanagari', 'Inter', sans-serif";
       const nameMetrics = ctx.measureText(theme.heroTitle);
       const heroBannerW = Math.min(1040, Math.max(500, nameMetrics.width + 80));
@@ -13787,20 +13831,13 @@
       ctx.fillText(theme.heroTitle, width / 2, heroBannerY + heroBannerH / 2);
 
       // 7. Subtitle / Tagline below hero
-      const subY = heroBannerY + heroBannerH + 26;
       ctx.fillStyle = theme.subColor;
       ctx.font = "600 24px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(theme.subText, width / 2, subY);
 
-      // 8. Frosted White Inner Wish Box
-      const wishBoxY = subY + 22;
-      const wishBoxW = 1040;
-      const wishBoxX = (width - wishBoxW) / 2;
-      const senderBoxY = 1110;
-      const wishBoxH = senderBoxY - wishBoxY - 26;
-
+      // 8. Frosted White Inner Wish Box (Dynamic Height - Zero Blank Space!)
       ctx.save();
       ctx.shadowColor = theme.wishBoxShadow;
       ctx.shadowBlur = 24;
@@ -13814,7 +13851,6 @@
       canvasRoundRect(ctx, wishBoxX, wishBoxY, wishBoxW, wishBoxH, 34, false, true);
 
       // Header of Wish Box
-      const wishBoxHeaderY = wishBoxY + 36;
       ctx.fillStyle = theme.wishBoxHeaderColor;
       ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
@@ -13827,41 +13863,30 @@
       ctx.lineWidth = 2;
       ctx.setLineDash([10, 8]);
       ctx.beginPath();
-      ctx.moveTo(wishBoxX + 60, wishBoxHeaderY + 24);
-      ctx.lineTo(wishBoxX + wishBoxW - 60, wishBoxHeaderY + 24);
+      ctx.moveTo(wishBoxX + 60, wishBoxHeaderY + 22);
+      ctx.lineTo(wishBoxX + wishBoxW - 60, wishBoxHeaderY + 22);
       ctx.stroke();
       ctx.restore();
 
-      // Wrap and Render Wish Text
-      let wishFontSize = 33;
-      if (wishText.length > 200) wishFontSize = 29;
-      if (wishText.length > 320) wishFontSize = 26;
+      // Render Wish Text Line by Line
       ctx.font = `600 ${wishFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
-      const wishLines = wrapCanvasText(ctx, wishText, wishBoxW - 120);
-      const lineHeight = Math.round(wishFontSize * 1.55);
-      const wishTextStartY = wishBoxHeaderY + 54;
-      let curWishY = wishTextStartY;
       ctx.fillStyle = "#1e293b";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
+      let curWishY = wishTextStartY;
       for (const line of wishLines) {
-        if (curWishY + lineHeight > wishBoxY + wishBoxH - 50) break;
-        ctx.fillText(line, width / 2, curWishY);
+        if (line) ctx.fillText(line, width / 2, curWishY);
         curWishY += lineHeight;
       }
 
-      // Group Subtext at bottom of Wish Box
+      // Group Subtext inside Wish Box (snug below text)
       ctx.fillStyle = theme.subColor;
-      ctx.font = "bold 24px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.font = "bold 23px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
-      ctx.textBaseline = "bottom";
-      ctx.fillText("— समस्त युवा शक्ति ग्रुप परिवार (भाटी परिवार • कुचेरा) —", width / 2, wishBoxY + wishBoxH - 18);
+      ctx.textBaseline = "middle";
+      ctx.fillText("— समस्त युवा शक्ति ग्रुप परिवार (भाटी परिवार • कुचेरा) —", width / 2, wishTaglineY);
 
       // 9. 📸 SENDER SECTION (भेजने वाले का नाम और फोटो - Bottom Container)
-      const senderBoxH = 210;
-      const senderBoxW = 1040;
-      const senderBoxX = (width - senderBoxW) / 2;
-
       ctx.save();
       ctx.shadowColor = "rgba(0, 0, 0, 0.08)";
       ctx.shadowBlur = 20;
@@ -13961,7 +13986,6 @@
       ctx.fillText(sender.role || "🚩 भाटी परिवार • कुचेरा (युवा शक्ति ग्रुप)", textLeft, senderBoxY + 150);
 
       // 10. Footer Section: Motto & App Download Pill
-      const footerY1 = 1358;
       ctx.fillStyle = theme.footerTaglineColor;
       ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
@@ -13969,11 +13993,6 @@
       ctx.fillText(theme.footerTagline, width / 2, footerY1);
 
       // App Download Pill
-      const appBadgeY = footerY1 + 30;
-      const appBadgeH = 64;
-      const appBadgeW = 940;
-      const appBadgeX = (width - appBadgeW) / 2;
-
       ctx.save();
       ctx.shadowColor = "rgba(30, 58, 138, 0.22)";
       ctx.shadowBlur = 18;
