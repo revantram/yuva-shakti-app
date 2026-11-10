@@ -9,6 +9,8 @@ mkdir -p "${BUILD_DIR}/assets"
 cp "${PROJECT_DIR}/index.html" "${BUILD_DIR}/assets/index.html"
 cp "${PROJECT_DIR}/payment-methods.html" "${BUILD_DIR}/assets/payment-methods.html" 2>/dev/null || true
 cp "${PROJECT_DIR}/cash-counter.html" "${BUILD_DIR}/assets/cash-counter.html" 2>/dev/null || true
+mkdir -p "${BUILD_DIR}/assets/notes"
+cp -r "${PROJECT_DIR}/assets/notes/"* "${BUILD_DIR}/assets/notes/" 2>/dev/null || true
 cp "${PROJECT_DIR}/ic_launcher.png" "${BUILD_DIR}/assets/ic_launcher.png" 2>/dev/null || true
 cp "${PROJECT_DIR}/android/AndroidManifest.xml" "${BUILD_DIR}/AndroidManifest.xml"
 cp -r "${PROJECT_DIR}/android/src/"* "${BUILD_DIR}/src/"
