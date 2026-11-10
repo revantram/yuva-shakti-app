@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cash Counter - रोकड़ गणना | युवा शक्ति ग्रुप</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#065f46">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, sans-serif; }
+    body { background: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; }
+    .header { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0, 0, 0, 0.08); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+    .back-btn { border: none; background: rgba(0,0,0,0.06); color: #0f172a; padding: 7px 12px; border-radius: 12px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+    .reset-btn { border: none; background: #fee2e2; color: #b91c1c; padding: 7px 12px; border-radius: 12px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .container { padding: 16px 16px 90px 16px; max-width: 640px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 14px; }
+    .card { background: white; border-radius: 20px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+    .step-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #cbd5e1; background: white; color: #334155; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .step-btn:active { background: #e2e8f0; }
+    .denom-input { width: 62px; height: 32px; text-align: center; border-radius: 8px; border: 1.5px solid #cbd5e1; font-weight: 800; font-size: 14px; color: #0f172a; outline: none; background: white; }
+    .denom-input:focus { border-color: #059669; }
+    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,0.92); color: white; padding: 10px 18px; border-radius: 30px; font-size: 13px; font-weight: 700; display: none; z-index: 1000; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <div class="header">
+    <a href="index.html" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
+    </a>
+    <div style="text-align:center;">
+      <h3 style="margin:0; font-size:15.5px; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:center; gap:6px;">
+        <span>💵 Cash Counter</span>
+      </h3>
+      <span style="font-size:11px; color:#64748b; font-weight:600;">रोकड़ / करेंसी नोट गणना</span>
+    </div>
+    <button onclick="resetAll()" class="reset-btn">
+      <i class="fa-solid fa-rotate-right"></i> <span>रिसेट</span>
+    </button>
+  </div>
+
+  <div class="container">
+    <!-- Summary Grand Total Card -->
+    <div class="card" style="background:linear-gradient(135deg, #065f46 0%, #047857 100%); color:white; padding:18px 20px; box-shadow:0 12px 28px rgba(4,120,87,0.25); position:relative; overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:#a7f3d0; font-weight:800; text-transform:uppercase; letter-spacing:0.8px;">कुल रोकड़ राशि (Grand Total)</span>
+        <span id="totalNotesBadge" style="background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); padding:4px 10px; border-radius:12px; font-size:11.5px; font-weight:800; backdrop-filter:blur(6px);">कुल नोट: 0</span>
+      </div>
+      <div style="margin:8px 0; font-size:32px; font-weight:900; letter-spacing:-0.5px; display:flex; align-items:baseline; gap:4px;">
+        <span style="font-size:24px; font-weight:700;">₹</span>
+        <span id="grandTotalDisplay">0</span>
+      </div>
+      <!-- Words Display -->
+      <div style="border-top:1px solid rgba(255,255,255,0.18); padding-top:8px; margin-top:8px;">
+        <div id="wordsHindi" style="font-size:12.5px; font-weight:700; color:#ffffff; line-height:1.4;">शून्य रुपये मात्र</div>
+        <div id="wordsEnglish" style="font-size:11px; color:#d1fae5; font-style:italic; margin-top:2px;">Zero Rupees Only</div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex; gap:8px; margin-top:14px;">
+        <button onclick="shareWA()" style="flex:1; border:none; background:#ffffff; color:#065f46; padding:10px; border-radius:12px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+          <i class="fa-brands fa-whatsapp" style="font-size:15px; color:#16a34a;"></i> <span>व्हाट्सएप पर शेयर करें</span>
+        </button>
+        <button onclick="copySummary()" style="border:none; background:rgba(255,255,255,0.22); color:white; padding:10px 14px; border-radius:12px; font-weight:700; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:4px;">
+          <i class="fa-regular fa-copy"></i> <span>कॉपी</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Denominations Table -->
+    <div class="card" style="padding:14px 16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; margin-bottom:10px; border-bottom:1px solid #f1f5f9; font-size:11.5px; font-weight:800; color:#64748b;">
+        <span>मुद्रा / नोट</span>
+        <span style="text-align:center;">संख्या (नोट्स)</span>
+        <span style="text-align:right;">कुल मूल्य (₹)</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <!-- ₹500 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+          <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #64748b, #475569); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹500</div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="step-btn" onclick="step(500, -1)">−</button>
+            <input type="number" id="in_500" value="0" min="0" oninput="calc()" class="denom-input">
+            <button class="step-btn" onclick="step(500, 1)">+</button>
+          </div>
+          <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="row_500">0</span></div>
+        </div>
+
+        <!-- ₹200 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+          <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #ea580c, #c2410c); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹200</div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="step-btn" onclick="step(200, -1)">−</button>
+            <input type="number" id="in_200" value="0" min="0" oninput="calc()" class="denom-input">
+            <button class="step-btn" onclick="step(200, 1)">+</button>
+          </div>
+          <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="row_200">0</span></div>
+        </div>
+
+        <!-- ₹100 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+          <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #4f46e5, #3730a3); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹100</div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="step-btn" onclick="step(100, -1)">−</button>
+            <input type="number" id="in_100" value="0" min="0" oninput="calc()" class="denom-input">
+            <button class="step-btn" onclick="step(100, 1)">+</button>
+          </div>
+          <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="row_100">0</span></div>
+        </div>
+
+        <!-- ₹50 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+          <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #0284c7, #0369a1); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹50</div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="step-btn" onclick="step(50, -1)">−</button>
+            <input type="number" id="in_50" value="0" min="0" oninput="calc()" class="denom-input">
+            <button class="step-btn" onclick="step(50, 1)">+</button>
+          </div>
+          <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="row_50">0</span></div>
+        </div>
+
+        <!-- ₹20 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+          <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #ca8a04, #a16207); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹20</div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="step-btn" onclick="step(20, -1)">−</button>
+            <input type="number" id="in_20" value="0" min="0" oninput="calc()" class="denom-input">
+            <button class="step-btn" onclick="step(20, 1)">+</button>
+          </div>
+          <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="row_20">0</span></div>
+        </div>
+
+        <!-- ₹10 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+          <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #78350f, #451a03); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹10</div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="step-btn" onclick="step(10, -1)">−</button>
+            <input type="number" id="in_10" value="0" min="0" oninput="calc()" class="denom-input">
+            <button class="step-btn" onclick="step(10, 1)">+</button>
+          </div>
+          <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="row_10">0</span></div>
+        </div>
+
+        <!-- ₹5 -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+          <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #15803d, #166534); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹5</div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button class="step-btn" onclick="step(5, -1)">−</button>
+            <input type="number" id="in_5" value="0" min="0" oninput="calc()" class="denom-input">
+            <button class="step-btn" onclick="step(5, 1)">+</button>
+          </div>
+          <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="row_5">0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    const DENOMS = [500, 200, 100, 50, 20, 10, 5];
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 2500);
+    }
+
+    function step(denom, change) {
+      const el = document.getElementById(`in_${denom}`);
+      let v = parseInt(el.value, 10) || 0;
+      v = Math.max(0, v + change);
+      el.value = v;
+      calc();
+    }
+
+    function calc() {
+      let total = 0;
+      let notes = 0;
+
+      DENOMS.forEach(d => {
+        const cnt = parseInt(document.getElementById(`in_${d}`).value, 10) || 0;
+        const sub = d * cnt;
+        total += sub;
+        notes += cnt;
+        document.getElementById(`row_${d}`).innerText = sub.toLocaleString('en-IN');
+      });
+
+      document.getElementById("grandTotalDisplay").innerText = total.toLocaleString('en-IN');
+      document.getElementById("totalNotesBadge").innerText = `कुल नोट: ${notes.toLocaleString('en-IN')}`;
+      document.getElementById("wordsHindi").innerText = numToWordsHindi(total);
+      document.getElementById("wordsEnglish").innerText = numToWordsEnglish(total);
+    }
+
+    function resetAll() {
+      DENOMS.forEach(d => { document.getElementById(`in_${d}`).value = 0; });
+      calc();
+      showToast("🔄 रिसेट हो गया");
+    }
+
+    function numToWordsHindi(num) {
+      if (!num || num <= 0) return "शून्य रुपये मात्र";
+      const ones = ["", "एक", "दो", "तीन", "चार", "पाँच", "छह", "सात", "आठ", "नौ", "दस",
+        "ग्यारह", "बारह", "तेरह", "चौदह", "पंद्रह", "सोलह", "सत्रह", "अठारह", "उन्नीस", "बीस",
+        "इक्कीस", "बाईस", "तेईस", "चौबीस", "पच्चीस", "छब्बीस", "सत्ताईस", "अट्ठाइस", "उनतीस", "तीस",
+        "इकत्तीस", "बत्तीस", "तैंतीस", "चौंतीस", "पैंतीस", "छत्तीस", "सैंतीस", "अड़तीस", "उनतालीस", "चालीस",
+        "इकतालीस", "बयालीस", "तैंतालीस", "चवालीस", "पैंतालीस", "छियालीस", "सैंतालीस", "अड़तालीस", "उनचास", "पचास",
+        "इक्यावन", "बावन", "तिरेपन", "चौवन", "पचपन", "छप्पन", "सत्तावन", "अट्ठावन", "उनसठ", "साठ",
+        "इकसठ", "बासठ", "तिरेसठ", "चौंसठ", "पैंसठ", "छियासठ", "सरसठ", "अड़सठ", "उनहत्तर", "सत्तर",
+        "इकहत्तर", "बहत्तर", "तिहत्तर", "चौहत्तर", "पचहत्तर", "छिहत्तर", "सतहत्तर", "अठहत्तर", "उन्नासी", "अस्सी",
+        "इक्यासी", "बयासी", "तिरासी", "चौरासी", "पचासी", "छियासी", "सत्तासी", "अट्ठासी", "नवासी", "नब्बे",
+        "इक्यानवे", "बानवे", "तिरानवे", "चौरानवे", "पंचानवे", "छियानवे", "सत्तानवे", "अट्ठानवे", "निन्यानवे"];
+
+      let words = "";
+      const cr = Math.floor(num / 10000000); num %= 10000000;
+      const lk = Math.floor(num / 100000); num %= 100000;
+      const th = Math.floor(num / 1000); num %= 1000;
+      const hu = Math.floor(num / 100); num %= 100;
+      const rem = num;
+
+      if (cr > 0) words += (ones[cr] || cr) + " करोड़ ";
+      if (lk > 0) words += (ones[lk] || lk) + " लाख ";
+      if (th > 0) words += (ones[th] || th) + " हजार ";
+      if (hu > 0) words += (ones[hu] || hu) + " सौ ";
+      if (rem > 0) words += (ones[rem] || rem) + " ";
+      return words.trim() + " रुपये मात्र";
+    }
+
+    function numToWordsEnglish(num) {
+      if (!num || num <= 0) return "Zero Rupees Only";
+      const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+      const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+      function inWords(n) {
+        if (n < 20) return a[n];
+        const digit = n % 10;
+        return b[Math.floor(n / 10)] + (digit ? " " + a[digit] : "");
+      }
+      let str = "";
+      const cr = Math.floor(num / 10000000); num %= 10000000;
+      const lk = Math.floor(num / 100000); num %= 100000;
+      const th = Math.floor(num / 1000); num %= 1000;
+      const hu = Math.floor(num / 100); num %= 100;
+      const rem = num;
+      if (cr > 0) str += inWords(cr) + " Crore ";
+      if (lk > 0) str += inWords(lk) + " Lakh ";
+      if (th > 0) str += inWords(th) + " Thousand ";
+      if (hu > 0) str += inWords(hu) + " Hundred ";
+      if (rem > 0) str += inWords(rem) + " ";
+      return str.trim() + " Rupees Only";
+    }
+
+    function getSummary() {
+      let lines = [];
+      let total = 0;
+      let notes = 0;
+      DENOMS.forEach(d => {
+        const cnt = parseInt(document.getElementById(`in_${d}`).value, 10) || 0;
+        if (cnt > 0) {
+          const sub = d * cnt;
+          total += sub;
+          notes += cnt;
+          lines.push(`₹${d} × ${cnt} = ₹${sub.toLocaleString('en-IN')}`);
+        }
+      });
+      const today = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      return `💵 *युवा शक्ति ग्रुप • कैश काउंटर (रोकड़ गणना)* 💵\n📅 दिनांक: ${today}\n━━━━━━━━━━━━━━━━━━━━\n${lines.length ? lines.join('\n') : 'कोई नोट दर्ज नहीं'}\n━━━━━━━━━━━━━━━━━━━━\n🔢 *कुल नोट / सिक्के:* ${notes}\n💰 *कुल रोकड़ राशि:* ₹${total.toLocaleString('en-IN')}/-\n📝 *शब्दों में:* ${numToWordsHindi(total)}\n(${numToWordsEnglish(total)})\n━━━━━━━━━━━━━━━━━━━━\nयुवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)`;
+    }
+
+    function shareWA() {
+      const txt = getSummary();
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`, "_blank");
+    }
+
+    function copySummary() {
+      const txt = getSummary();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(() => showToast("✅ विवरण कॉपी हो गया!"));
+      } else {
+        showToast("कॉपी समर्थित नहीं है");
+      }
+    }
+  </script>
+</body>
+</html>

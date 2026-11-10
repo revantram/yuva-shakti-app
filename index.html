@@ -2969,6 +2969,15 @@
       -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
       border: 1px solid rgba(255, 255, 255, 0.9) !important;
       box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
+    .quick-action-icon-card {
+      transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease !important;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .quick-action-icon-card:active {
+      transform: scale(0.96) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     }
     #remainingBalanceAmount, #totalExpenseAmount, #netBalance, #statCurrentMonthTotal, #statPrevMonthTotal {
       color: #0F172A !important;
@@ -3546,26 +3555,31 @@
         </div>
       </div>
 
-      <!-- 💳 अपना बकाया अभी भुगतान करें Box (PhonePe & Google Pay Quick Pay) -->
-      <div class="ios-glass-card" style="margin-bottom:12px; background:linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(240, 247, 255, 0.90) 100%); border:1.5px solid rgba(37, 99, 235, 0.22); border-radius:18px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 6px 18px rgba(37, 99, 235, 0.08);">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <div style="width:34px; height:34px; border-radius:11px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; display:flex; align-items:center; justify-content:center; font-size:15px; box-shadow:0 3px 8px rgba(22,163,74,0.3); flex-shrink:0;">
-            <i class="fa-solid fa-wallet"></i>
-          </div>
-          <div>
-            <strong style="font-size:13px; color:var(--text-main); display:block; line-height:1.2;">अपना बकाया अभी भुगतान करें</strong>
-            <span style="font-size:10.5px; color:var(--text-muted);">सीधे UPI द्वारा सुरक्षित भुगतान</span>
+      <!-- 💳 Quick 2-Column Action Cards: [UPI Payment] & [Cash Counter] -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+        <!-- Left Card: UPI Payment Quick Access (Minimal Icon-Only) -->
+        <div onclick="openDedicatedPaymentPage()" class="card ios-glass-card quick-action-icon-card" style="cursor:pointer; height:68px; margin:0; padding:0; border-radius:18px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 247, 255, 0.92) 100%) !important; border:1.5px solid rgba(37, 99, 235, 0.22) !important; box-shadow:0 6px 18px rgba(37, 99, 235, 0.08) !important; transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease; -webkit-tap-highlight-color:transparent; position:relative; overflow:hidden;" title="UPI भुगतान (UPI Payment)">
+          <div style="display:flex; align-items:center; justify-content:center;">
+            <svg width="86" height="34" viewBox="0 0 115 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+              <text x="2" y="33" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-style="italic" font-size="34" fill="#1e293b" letter-spacing="-1">UPI</text>
+              <!-- Saffron Triangle Arrow -->
+              <path d="M72 10 L88 22 L72 34 Z" fill="#f97316" />
+              <!-- Green Triangle Arrow -->
+              <path d="M86 10 L102 22 L86 34 Z" fill="#16a34a" />
+            </svg>
           </div>
         </div>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <!-- PhonePe Button -->
-          <button onclick="payViaApp('phonepe')" style="background:#5f259f; color:white; border:none; padding:7px 11px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 3px 8px rgba(95,37,159,0.3);">
-            <i class="fa-solid fa-mobile-screen-button"></i> <span>PhonePe</span>
-          </button>
-          <!-- Google Pay Button -->
-          <button onclick="payViaApp('gpay')" style="background:#ffffff; color:#1f2937; border:1.5px solid #cbd5e1; padding:7px 11px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 3px 8px rgba(0,0,0,0.06);">
-            <i class="fa-brands fa-google-pay" style="font-size:16px; color:#4285f4;"></i> <span>GPay</span>
-          </button>
+
+        <!-- Right Card: Cash Counter / Calculator Quick Access (Minimal Icon-Only) -->
+        <div onclick="openDedicatedCashCounterPage()" class="card ios-glass-card quick-action-icon-card" style="cursor:pointer; height:68px; margin:0; padding:0; border-radius:18px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 253, 244, 0.92) 100%) !important; border:1.5px solid rgba(22, 163, 74, 0.22) !important; box-shadow:0 6px 18px rgba(22, 163, 74, 0.08) !important; transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease; -webkit-tap-highlight-color:transparent; position:relative; overflow:hidden;" title="रोकड़ गणना (Cash Counter)">
+          <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
+            <div style="width:36px; height:36px; border-radius:11px; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 3px 8px rgba(16,185,129,0.3);">
+              <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+            <div style="width:36px; height:36px; border-radius:11px; background:linear-gradient(135deg, #0284c7, #0369a1); color:white; display:flex; align-items:center; justify-content:center; font-size:17px; box-shadow:0 3px 8px rgba(2,132,199,0.3);">
+              <i class="fa-solid fa-calculator"></i>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -4010,7 +4024,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.2.2
+            APK v5.2.3
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4037,7 +4051,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.2 (बिल्ड कोड: 522)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.3 (बिल्ड कोड: 523)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4708,7 +4722,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.2 (बिल्ड कोड: 522)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.3 (बिल्ड कोड: 523)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5935,10 +5949,290 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- 💳 समर्पित UPI भुगतान पेज (Dedicated UPI Payment Page View) -->
+  <!-- ========================================================================= -->
+  <div id="dedicatedPaymentPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:#f8fafc; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
+    <!-- Top Sticky Apple iOS Header Bar -->
+    <div style="position:sticky; top:0; z-index:100; background:rgba(255, 255, 255, 0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(0, 0, 0, 0.08); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.03);">
+      <button onclick="closeDedicatedPaymentPage()" style="border:none; background:rgba(0,0,0,0.06); color:#0f172a; padding:7px 12px; border-radius:12px; font-weight:700; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
+      </button>
+      <div style="text-align:center;">
+        <h3 style="margin:0; font-size:15.5px; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>💳 UPI भुगतान (Payment)</span>
+        </h3>
+        <span style="font-size:11px; color:#64748b; font-weight:600;">सुरक्षित ऑनलाइन अंशदान</span>
+      </div>
+      <div style="width:60px;"></div>
+    </div>
+
+    <!-- Payment Body Content -->
+    <div style="padding:16px 16px 80px 16px; max-width:600px; margin:0 auto; width:100%; box-sizing:border-box; display:flex; flex-direction:column; gap:14px;">
+      <!-- Receiver Card -->
+      <div class="ios-glass-card" style="background:linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%) !important; color:white; border-radius:20px; padding:18px 20px; box-shadow:0 10px 25px rgba(3,105,161,0.22) !important; position:relative; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <div style="font-size:11px; color:#bae6fd; font-weight:800; text-transform:uppercase; letter-spacing:0.8px;">🚩 आधिकारिक ग्रुप खाता</div>
+            <h2 style="margin:4px 0 2px 0; font-size:18px; font-weight:800; color:#ffffff;">Yuva Shakti Bhati Parivar</h2>
+            <div style="font-size:12.5px; color:#e0f2fe; margin-top:4px;">युवा शक्ति ग्रुप • कुचेरा</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); border-radius:12px; padding:6px 10px; font-size:11px; font-weight:800; display:flex; align-items:center; gap:5px; backdrop-filter:blur(8px);">
+            <i class="fa-solid fa-shield-halved" style="color:#4ade80;"></i> <span>सुरक्षित UPI</span>
+          </div>
+        </div>
+
+        <div style="margin-top:14px; background:rgba(0,0,0,0.18); border-radius:12px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:10.5px; color:#cbd5e1; font-weight:600;">UPI ID:</div>
+            <div style="font-size:13.5px; font-weight:800; color:#ffffff; letter-spacing:0.3px;" id="dedicatedUpiIdText">7850983600@ibl</div>
+          </div>
+          <button onclick="copyUpiId('7850983600@ibl')" style="border:none; background:rgba(255,255,255,0.25); color:white; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px;">
+            <i class="fa-regular fa-copy"></i> <span>कॉपी करें</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Amount Selector Card -->
+      <div class="ios-glass-card" style="background:#ffffff !important; border-radius:20px; padding:16px 18px; border:1px solid rgba(0,0,0,0.08) !important; box-shadow:0 4px 14px rgba(0,0,0,0.04) !important;">
+        <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:8px;">
+          <i class="fa-solid fa-indian-rupee-sign" style="color:#2563eb;"></i> भुगतान राशि चुनें अथवा लिखें:
+        </label>
+        
+        <!-- Preset Amount Pills -->
+        <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+          <button type="button" class="pay-amount-pill active" onclick="setDedicatedPayAmount(100, this)" style="border:1.5px solid #2563eb; background:#eff6ff; color:#1d4ed8; padding:8px 14px; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer;">₹100 (मासिक)</button>
+          <button type="button" class="pay-amount-pill" onclick="setDedicatedPayAmount(200, this)" style="border:1.5px solid #e2e8f0; background:#f8fafc; color:#334155; padding:8px 14px; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer;">₹200</button>
+          <button type="button" class="pay-amount-pill" onclick="setDedicatedPayAmount(500, this)" style="border:1.5px solid #e2e8f0; background:#f8fafc; color:#334155; padding:8px 14px; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer;">₹500</button>
+          <button type="button" class="pay-amount-pill" onclick="setDedicatedPayAmount(1000, this)" style="border:1.5px solid #e2e8f0; background:#f8fafc; color:#334155; padding:8px 14px; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer;">₹1000</button>
+        </div>
+
+        <!-- Custom Input -->
+        <div style="position:relative; margin-bottom:10px;">
+          <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-weight:800; font-size:18px; color:#2563eb;">₹</span>
+          <input type="number" id="dedicatedPayAmountInput" value="100" min="1" placeholder="राशि लिखें" style="width:100%; box-sizing:border-box; padding:12px 14px 12px 34px; border-radius:14px; border:1.5px solid #cbd5e1; font-size:18px; font-weight:800; color:#0f172a; outline:none; background:white;">
+        </div>
+
+        <!-- Note Input -->
+        <input type="text" id="dedicatedPayNoteInput" placeholder="विवरण (उदा. अंशदान - रेवंतराम भाटी)" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:12px; border:1px solid #e2e8f0; font-size:12.5px; color:#334155; outline:none; background:white;">
+      </div>
+
+      <!-- Payment App Selection Buttons -->
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="font-size:12.5px; font-weight:800; color:#1e293b; padding:0 2px;">
+          ऐप चुनें और तुरंत भुगतान करें:
+        </div>
+
+        <!-- PhonePe Button -->
+        <div onclick="initiateDedicatedPay('phonepe')" class="quick-action-icon-card" style="cursor:pointer; background:linear-gradient(135deg, #5f259f 0%, #4a154b 100%); color:white; border-radius:18px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 6px 18px rgba(95,37,159,0.3);">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:44px; height:44px; border-radius:14px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:22px;">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+            <div>
+              <div style="font-size:16px; font-weight:800;">PhonePe</div>
+              <div style="font-size:11.5px; color:#e9d5ff;">PhonePe ऐप द्वारा 1-टैप में भुगतान करें</div>
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,0.22); border-radius:10px; padding:6px 12px; font-size:12px; font-weight:800; display:flex; align-items:center; gap:4px;">
+            <span>भुगतान करें</span> <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+          </div>
+        </div>
+
+        <!-- Google Pay Button -->
+        <div onclick="initiateDedicatedPay('gpay')" class="quick-action-icon-card" style="cursor:pointer; background:#ffffff; color:#1e293b; border-radius:18px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; border:1.5px solid #cbd5e1; box-shadow:0 4px 14px rgba(0,0,0,0.05);">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:44px; height:44px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; font-size:24px;">
+              <i class="fa-brands fa-google-pay" style="color:#4285f4;"></i>
+            </div>
+            <div>
+              <div style="font-size:16px; font-weight:800;">Google Pay (GPay)</div>
+              <div style="font-size:11.5px; color:#64748b;">Google Pay ऐप द्वारा सुरक्षित भुगतान</div>
+            </div>
+          </div>
+          <div style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; border-radius:10px; padding:6px 12px; font-size:12px; font-weight:800; display:flex; align-items:center; gap:4px;">
+            <span>भुगतान करें</span> <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+          </div>
+        </div>
+
+        <!-- Any Other UPI App Button -->
+        <div onclick="initiateDedicatedPay('other')" class="quick-action-icon-card" style="cursor:pointer; background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color:white; border-radius:18px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 6px 18px rgba(15,23,42,0.2);">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:44px; height:44px; border-radius:14px; background:rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:19px;">
+              <i class="fa-solid fa-qrcode"></i>
+            </div>
+            <div>
+              <div style="font-size:15px; font-weight:800;">अन्य UPI ऐप्स (Paytm / BHIM / Cred)</div>
+              <div style="font-size:11.5px; color:#94a3b8;">फोन में स्थापित किसी भी UPI ऐप से भुगतान करें</div>
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,0.18); border-radius:10px; padding:6px 12px; font-size:12px; font-weight:800; display:flex; align-items:center; gap:4px;">
+            <span>खोलें</span> <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- WhatsApp Confirmation Card -->
+      <div class="ios-glass-card" style="background:#f0fdf4 !important; border:1px solid #bbf7d0 !important; border-radius:18px; padding:14px 16px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <i class="fa-brands fa-whatsapp" style="font-size:24px; color:#16a34a;"></i>
+          <div>
+            <div style="font-size:13px; font-weight:800; color:#166534;">भुगतान के बाद पुष्टि करें</div>
+            <div style="font-size:11px; color:#15803d;">स्क्रीनशॉट अथवा UTR नंबर व्हाट्सएप पर भेजें</div>
+          </div>
+        </div>
+        <button onclick="sendPaymentProofWhatsApp()" style="border:none; background:#16a34a; color:white; padding:8px 12px; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer;">
+          भेजें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 💵 समर्पित रोकड़ गणना / Cash Counter पेज (Dedicated Cash Counter Page View) -->
+  <!-- ========================================================================= -->
+  <div id="dedicatedCashCounterPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:#f8fafc; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
+    <!-- Top Sticky Apple iOS Header Bar -->
+    <div style="position:sticky; top:0; z-index:100; background:rgba(255, 255, 255, 0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(0, 0, 0, 0.08); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.03);">
+      <button onclick="closeDedicatedCashCounterPage()" style="border:none; background:rgba(0,0,0,0.06); color:#0f172a; padding:7px 12px; border-radius:12px; font-weight:700; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
+      </button>
+      <div style="text-align:center;">
+        <h3 style="margin:0; font-size:15.5px; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>💵 Cash Counter</span>
+        </h3>
+        <span style="font-size:11px; color:#64748b; font-weight:600;">रोकड़ / करेंसी नोट गणना</span>
+      </div>
+      <button onclick="resetCashCounter()" style="border:none; background:#fee2e2; color:#b91c1c; padding:7px 12px; border-radius:12px; font-weight:800; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:4px;">
+        <i class="fa-solid fa-rotate-right"></i> <span>रिसेट</span>
+      </button>
+    </div>
+
+    <!-- Cash Counter Body -->
+    <div style="padding:16px 16px 90px 16px; max-width:640px; margin:0 auto; width:100%; box-sizing:border-box; display:flex; flex-direction:column; gap:14px;">
+
+      <!-- Summary Grand Total Card -->
+      <div class="ios-glass-card" style="background:linear-gradient(135deg, #065f46 0%, #047857 100%) !important; color:white; border-radius:22px; padding:18px 20px; box-shadow:0 12px 28px rgba(4,120,87,0.25) !important; position:relative; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px; color:#a7f3d0; font-weight:800; text-transform:uppercase; letter-spacing:0.8px;">कुल रोकड़ राशि (Grand Total)</span>
+          <span id="cashTotalNotesBadge" style="background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); padding:4px 10px; border-radius:12px; font-size:11.5px; font-weight:800; backdrop-filter:blur(6px);">कुल नोट: 0</span>
+        </div>
+        <div style="margin:8px 0; font-size:32px; font-weight:900; letter-spacing:-0.5px; display:flex; align-items:baseline; gap:4px;">
+          <span style="font-size:24px; font-weight:700;">₹</span>
+          <span id="cashGrandTotalDisplay">0</span>
+        </div>
+        <!-- Number to Words -->
+        <div style="border-top:1px solid rgba(255,255,255,0.18); padding-top:8px; margin-top:8px;">
+          <div id="cashWordsHindiDisplay" style="font-size:12.5px; font-weight:700; color:#ffffff; line-height:1.4;">शून्य रुपये मात्र</div>
+          <div id="cashWordsEnglishDisplay" style="font-size:11px; color:#d1fae5; font-style:italic; margin-top:2px;">Zero Rupees Only</div>
+        </div>
+
+        <!-- Action Buttons inside Summary -->
+        <div style="display:flex; gap:8px; margin-top:14px;">
+          <button onclick="shareCashCounterToWA()" style="flex:1; border:none; background:#ffffff; color:#065f46; padding:10px; border-radius:12px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+            <i class="fa-brands fa-whatsapp" style="font-size:15px; color:#16a34a;"></i> <span>व्हाट्सएप पर शेयर करें</span>
+          </button>
+          <button onclick="copyCashCounterSummary()" style="border:none; background:rgba(255,255,255,0.22); color:white; padding:10px 14px; border-radius:12px; font-weight:700; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:4px;">
+            <i class="fa-regular fa-copy"></i> <span>कॉपी</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Denominations Table -->
+      <div class="ios-glass-card" style="background:#ffffff !important; border-radius:20px; padding:14px 16px; border:1px solid rgba(0,0,0,0.08) !important; box-shadow:0 4px 14px rgba(0,0,0,0.03) !important;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; margin-bottom:10px; border-bottom:1px solid #f1f5f9; font-size:11.5px; font-weight:800; color:#64748b;">
+          <span>मुद्रा / नोट</span>
+          <span style="text-align:center;">संख्या (नोट्स)</span>
+          <span style="text-align:right;">कुल मूल्य (₹)</span>
+        </div>
+
+        <!-- 7 Denominations: 500, 200, 100, 50, 20, 10, 5 -->
+        <div id="cashDenominationsList" style="display:flex; flex-direction:column; gap:10px;">
+          <!-- ₹500 -->
+          <div class="cash-row" style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #64748b, #475569); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹500</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button type="button" onclick="stepCashDenom(500, -1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">−</button>
+              <input type="number" id="cashInput_500" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:32px; text-align:center; border-radius:8px; border:1.5px solid #cbd5e1; font-weight:800; font-size:14px; color:#0f172a; outline:none; background:white;">
+              <button type="button" onclick="stepCashDenom(500, 1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+            </div>
+            <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="cashRowTotal_500">0</span></div>
+          </div>
+
+          <!-- ₹200 -->
+          <div class="cash-row" style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #ea580c, #c2410c); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹200</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button type="button" onclick="stepCashDenom(200, -1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">−</button>
+              <input type="number" id="cashInput_200" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:32px; text-align:center; border-radius:8px; border:1.5px solid #cbd5e1; font-weight:800; font-size:14px; color:#0f172a; outline:none; background:white;">
+              <button type="button" onclick="stepCashDenom(200, 1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+            </div>
+            <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="cashRowTotal_200">0</span></div>
+          </div>
+
+          <!-- ₹100 -->
+          <div class="cash-row" style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #4f46e5, #3730a3); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹100</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button type="button" onclick="stepCashDenom(100, -1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">−</button>
+              <input type="number" id="cashInput_100" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:32px; text-align:center; border-radius:8px; border:1.5px solid #cbd5e1; font-weight:800; font-size:14px; color:#0f172a; outline:none; background:white;">
+              <button type="button" onclick="stepCashDenom(100, 1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+            </div>
+            <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="cashRowTotal_100">0</span></div>
+          </div>
+
+          <!-- ₹50 -->
+          <div class="cash-row" style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #0284c7, #0369a1); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹50</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button type="button" onclick="stepCashDenom(50, -1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">−</button>
+              <input type="number" id="cashInput_50" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:32px; text-align:center; border-radius:8px; border:1.5px solid #cbd5e1; font-weight:800; font-size:14px; color:#0f172a; outline:none; background:white;">
+              <button type="button" onclick="stepCashDenom(50, 1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+            </div>
+            <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="cashRowTotal_50">0</span></div>
+          </div>
+
+          <!-- ₹20 -->
+          <div class="cash-row" style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #ca8a04, #a16207); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹20</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button type="button" onclick="stepCashDenom(20, -1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">−</button>
+              <input type="number" id="cashInput_20" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:32px; text-align:center; border-radius:8px; border:1.5px solid #cbd5e1; font-weight:800; font-size:14px; color:#0f172a; outline:none; background:white;">
+              <button type="button" onclick="stepCashDenom(20, 1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+            </div>
+            <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="cashRowTotal_20">0</span></div>
+          </div>
+
+          <!-- ₹10 -->
+          <div class="cash-row" style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #78350f, #451a03); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹10</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button type="button" onclick="stepCashDenom(10, -1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">−</button>
+              <input type="number" id="cashInput_10" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:32px; text-align:center; border-radius:8px; border:1.5px solid #cbd5e1; font-weight:800; font-size:14px; color:#0f172a; outline:none; background:white;">
+              <button type="button" onclick="stepCashDenom(10, 1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+            </div>
+            <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="cashRowTotal_10">0</span></div>
+          </div>
+
+          <!-- ₹5 -->
+          <div class="cash-row" style="display:flex; align-items:center; justify-content:space-between; padding:8px 8px; border-radius:14px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <div style="width:72px; padding:7px 0; border-radius:10px; background:linear-gradient(135deg, #15803d, #166534); color:white; font-weight:900; font-size:13.5px; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.12); flex-shrink:0;">₹5</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button type="button" onclick="stepCashDenom(5, -1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">−</button>
+              <input type="number" id="cashInput_5" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:32px; text-align:center; border-radius:8px; border:1.5px solid #cbd5e1; font-weight:800; font-size:14px; color:#0f172a; outline:none; background:white;">
+              <button type="button" onclick="stepCashDenom(5, 1)" style="width:32px; height:32px; border-radius:8px; border:1px solid #cbd5e1; background:white; color:#334155; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+            </div>
+            <div style="width:85px; text-align:right; font-weight:800; font-size:13.5px; color:#0f172a; flex-shrink:0;">₹<span id="cashRowTotal_5">0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.2.2";
+    const APP_VERSION = "5.2.3";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7476,10 +7770,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 522)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 523)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 522)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 523)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7594,7 +7888,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 522)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 523)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7605,7 +7899,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 522)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 523)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -14945,6 +15239,304 @@
         window.location.href = `upi://pay?${upiQuery}`;
       }
     }
+
+    // =========================================================================
+    // 💳 Dedicated UPI Payment Page Functions
+    // =========================================================================
+    function openDedicatedPaymentPage() {
+      const page = document.getElementById("dedicatedPaymentPage");
+      if (!page) {
+        window.location.href = "payment-methods.html";
+        return;
+      }
+      page.style.display = "flex";
+
+      // Pre-fill member note if logged in
+      try {
+        const noteInput = document.getElementById("dedicatedPayNoteInput");
+        if (noteInput && !noteInput.value) {
+          let selfName = "";
+          if (typeof loggedInMemberPhone !== "undefined" && loggedInMemberPhone && Array.isArray(membersList)) {
+            const self = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+            if (self) selfName = self.name;
+          }
+          noteInput.value = selfName ? `अंशदान - ${selfName}` : "अमावस्या अंशदान";
+        }
+      } catch (e) {}
+    }
+    window.openDedicatedPaymentPage = openDedicatedPaymentPage;
+
+    function closeDedicatedPaymentPage() {
+      const page = document.getElementById("dedicatedPaymentPage");
+      if (page) page.style.display = "none";
+    }
+    window.closeDedicatedPaymentPage = closeDedicatedPaymentPage;
+
+    function setDedicatedPayAmount(amt, btn) {
+      const input = document.getElementById("dedicatedPayAmountInput");
+      if (input) input.value = amt;
+      document.querySelectorAll(".pay-amount-pill").forEach(p => {
+        p.style.border = "1.5px solid #e2e8f0";
+        p.style.background = "#f8fafc";
+        p.style.color = "#334155";
+      });
+      if (btn) {
+        btn.style.border = "1.5px solid #2563eb";
+        btn.style.background = "#eff6ff";
+        btn.style.color = "#1d4ed8";
+      }
+    }
+    window.setDedicatedPayAmount = setDedicatedPayAmount;
+
+    function initiateDedicatedPay(app) {
+      const amtInput = document.getElementById("dedicatedPayAmountInput");
+      const amt = (amtInput && parseFloat(amtInput.value) > 0) ? parseFloat(amtInput.value) : 100;
+      const noteInput = document.getElementById("dedicatedPayNoteInput");
+      const note = (noteInput && noteInput.value.trim()) ? noteInput.value.trim() : "अमावस्या अंशदान";
+
+      const upiId = currentUpiId || "7850983600@ibl";
+      const upiName = currentUpiName || "Yuva Shakti Bhati Parivar";
+      const upiQuery = `pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(upiName)}&am=${amt}&cu=INR&tn=${encodeURIComponent(note)}`;
+
+      showToast(`🚀 ${app === 'phonepe' ? 'PhonePe' : (app === 'gpay' ? 'Google Pay' : 'UPI')} भुगतान शुरू हो रहा है...`, "info");
+
+      if (app === 'phonepe') {
+        const phonepeUrl = `phonepe://pay?${upiQuery}`;
+        try {
+          window.location.href = phonepeUrl;
+          setTimeout(() => { window.location.href = `upi://pay?${upiQuery}`; }, 800);
+        } catch (e) {
+          window.location.href = `upi://pay?${upiQuery}`;
+        }
+      } else if (app === 'gpay') {
+        const gpayUrl = `gpay://upi/pay?${upiQuery}`;
+        try {
+          window.location.href = gpayUrl;
+          setTimeout(() => { window.location.href = `upi://pay?${upiQuery}`; }, 800);
+        } catch (e) {
+          window.location.href = `upi://pay?${upiQuery}`;
+        }
+      } else {
+        window.location.href = `upi://pay?${upiQuery}`;
+      }
+    }
+    window.initiateDedicatedPay = initiateDedicatedPay;
+
+    function copyUpiId(id) {
+      const upi = id || currentUpiId || "7850983600@ibl";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(upi).then(() => {
+          showToast(`✅ UPI ID कॉपी हो गई: ${upi}`, "success");
+        }).catch(() => {
+          showToast(`UPI ID: ${upi}`, "info");
+        });
+      } else {
+        showToast(`UPI ID: ${upi}`, "info");
+      }
+    }
+    window.copyUpiId = copyUpiId;
+
+    function sendPaymentProofWhatsApp() {
+      const amtInput = document.getElementById("dedicatedPayAmountInput");
+      const amt = (amtInput && amtInput.value) ? amtInput.value : "100";
+      let selfName = "";
+      if (typeof loggedInMemberPhone !== "undefined" && loggedInMemberPhone && Array.isArray(membersList)) {
+        const self = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
+        if (self) selfName = self.name;
+      }
+      const msg = `🚩 *युवा शक्ति ग्रुप अंशदान पुष्टि* 🚩\n\nप्रणाम रेवंतराम जी,\nमैंने ₹${amt}/- का अंशदान UPI द्वारा भेज दिया है।\n${selfName ? `सदस्य नाम: ${selfName}\n` : ''}कृपया भुगतान की पुष्टि कर रसीद/खाते में अपडेट करें।\nधन्यवाद!`;
+      const url = `https://wa.me/918696663615?text=${encodeURIComponent(msg)}`;
+      if (typeof openWhatsAppUrl === "function") openWhatsAppUrl(url);
+      else window.open(url, "_blank");
+    }
+    window.sendPaymentProofWhatsApp = sendPaymentProofWhatsApp;
+
+    // =========================================================================
+    // 💵 Dedicated Cash Counter / Currency Calculator Logic
+    // =========================================================================
+    const CASH_DENOMS = [500, 200, 100, 50, 20, 10, 5];
+
+    function openDedicatedCashCounterPage() {
+      const page = document.getElementById("dedicatedCashCounterPage");
+      if (!page) {
+        window.location.href = "cash-counter.html";
+        return;
+      }
+      page.style.display = "flex";
+      calculateCashTotal();
+    }
+    window.openDedicatedCashCounterPage = openDedicatedCashCounterPage;
+
+    function closeDedicatedCashCounterPage() {
+      const page = document.getElementById("dedicatedCashCounterPage");
+      if (page) page.style.display = "none";
+    }
+    window.closeDedicatedCashCounterPage = closeDedicatedCashCounterPage;
+
+    function stepCashDenom(denom, change) {
+      const input = document.getElementById(`cashInput_${denom}`);
+      if (!input) return;
+      let val = parseInt(input.value, 10) || 0;
+      val = Math.max(0, val + change);
+      input.value = val;
+      calculateCashTotal();
+    }
+    window.stepCashDenom = stepCashDenom;
+
+    function calculateCashTotal() {
+      let grandTotal = 0;
+      let totalNotes = 0;
+
+      CASH_DENOMS.forEach(denom => {
+        const input = document.getElementById(`cashInput_${denom}`);
+        const count = input ? (parseInt(input.value, 10) || 0) : 0;
+        const rowTotal = denom * count;
+        grandTotal += rowTotal;
+        totalNotes += count;
+
+        const rowTotalEl = document.getElementById(`cashRowTotal_${denom}`);
+        if (rowTotalEl) {
+          rowTotalEl.innerText = rowTotal.toLocaleString('en-IN');
+        }
+      });
+
+      const grandTotalDisplay = document.getElementById("cashGrandTotalDisplay");
+      if (grandTotalDisplay) {
+        grandTotalDisplay.innerText = grandTotal.toLocaleString('en-IN');
+      }
+
+      const totalNotesBadge = document.getElementById("cashTotalNotesBadge");
+      if (totalNotesBadge) {
+        totalNotesBadge.innerText = `कुल नोट: ${totalNotes.toLocaleString('en-IN')}`;
+      }
+
+      const wordsHindiDisplay = document.getElementById("cashWordsHindiDisplay");
+      if (wordsHindiDisplay) {
+        wordsHindiDisplay.innerText = numToWordsHindi(grandTotal);
+      }
+
+      const wordsEnglishDisplay = document.getElementById("cashWordsEnglishDisplay");
+      if (wordsEnglishDisplay) {
+        wordsEnglishDisplay.innerText = numToWordsEnglish(grandTotal);
+      }
+    }
+    window.calculateCashTotal = calculateCashTotal;
+
+    function resetCashCounter() {
+      CASH_DENOMS.forEach(denom => {
+        const input = document.getElementById(`cashInput_${denom}`);
+        if (input) input.value = 0;
+      });
+      calculateCashTotal();
+      showToast("🔄 कैश काउंटर रिसेट हो गया।", "info");
+    }
+    window.resetCashCounter = resetCashCounter;
+
+    function numToWordsHindi(num) {
+      if (!num || num <= 0) return "शून्य रुपये मात्र";
+      const ones = ["", "एक", "दो", "तीन", "चार", "पाँच", "छह", "सात", "आठ", "नौ", "दस",
+        "ग्यारह", "बारह", "तेरह", "चौदह", "पंद्रह", "सोलह", "सत्रह", "अठारह", "उन्नीस", "बीस",
+        "इक्कीस", "बाईस", "तेईस", "चौबीस", "पच्चीस", "छब्बीस", "सत्ताईस", "अट्ठाइस", "उनतीस", "तीस",
+        "इकत्तीस", "बत्तीस", "तैंतीस", "चौंतीस", "पैंतीस", "छत्तीस", "सैंतीस", "अड़तीस", "उनतालीस", "चालीस",
+        "इकतालीस", "बयालीस", "तैंतालीस", "चवालीस", "पैंतालीस", "छियालीस", "सैंतालीस", "अड़तालीस", "उनचास", "पचास",
+        "इक्यावन", "बावन", "तिरेपन", "चौवन", "पचपन", "छप्पन", "सत्तावन", "अट्ठावन", "उनसठ", "साठ",
+        "इकसठ", "बासठ", "तिरेसठ", "चौंसठ", "पैंसठ", "छियासठ", "सरसठ", "अड़सठ", "उनहत्तर", "सत्तर",
+        "इकहत्तर", "बहत्तर", "तिहत्तर", "चौहत्तर", "पचहत्तर", "छिहत्तर", "सतहत्तर", "अठहत्तर", "उन्नासी", "अस्सी",
+        "इक्यासी", "बयासी", "तिरासी", "चौरासी", "पचासी", "छियासी", "सत्तासी", "अट्ठासी", "नवासी", "नब्बे",
+        "इक्यानवे", "बानवे", "तिरानवे", "चौरानवे", "पंचानवे", "छियानवे", "सत्तानवे", "अट्ठानवे", "निन्यानवे"];
+
+      let words = "";
+      const cr = Math.floor(num / 10000000);
+      num %= 10000000;
+      const lk = Math.floor(num / 100000);
+      num %= 100000;
+      const th = Math.floor(num / 1000);
+      num %= 1000;
+      const hu = Math.floor(num / 100);
+      num %= 100;
+      const rem = num;
+
+      if (cr > 0) words += (ones[cr] || cr) + " करोड़ ";
+      if (lk > 0) words += (ones[lk] || lk) + " लाख ";
+      if (th > 0) words += (ones[th] || th) + " हजार ";
+      if (hu > 0) words += (ones[hu] || hu) + " सौ ";
+      if (rem > 0) words += (ones[rem] || rem) + " ";
+
+      return words.trim() + " रुपये मात्र";
+    }
+
+    function numToWordsEnglish(num) {
+      if (!num || num <= 0) return "Zero Rupees Only";
+      const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+      const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+      function inWords(n) {
+        if (n < 20) return a[n];
+        const digit = n % 10;
+        return b[Math.floor(n / 10)] + (digit ? " " + a[digit] : "");
+      }
+
+      let str = "";
+      const cr = Math.floor(num / 10000000);
+      num %= 10000000;
+      const lk = Math.floor(num / 100000);
+      num %= 100000;
+      const th = Math.floor(num / 1000);
+      num %= 1000;
+      const hu = Math.floor(num / 100);
+      num %= 100;
+      const rem = num;
+
+      if (cr > 0) str += inWords(cr) + " Crore ";
+      if (lk > 0) str += inWords(lk) + " Lakh ";
+      if (th > 0) str += inWords(th) + " Thousand ";
+      if (hu > 0) str += inWords(hu) + " Hundred ";
+      if (rem > 0) str += inWords(rem) + " ";
+
+      return str.trim() + " Rupees Only";
+    }
+
+    function generateCashSummaryText() {
+      let lines = [];
+      let grandTotal = 0;
+      let totalNotes = 0;
+
+      CASH_DENOMS.forEach(denom => {
+        const input = document.getElementById(`cashInput_${denom}`);
+        const count = input ? (parseInt(input.value, 10) || 0) : 0;
+        if (count > 0) {
+          const rowTotal = denom * count;
+          grandTotal += rowTotal;
+          totalNotes += count;
+          lines.push(`₹${denom} × ${count} = ₹${rowTotal.toLocaleString('en-IN')}`);
+        }
+      });
+
+      const todayStr = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      return `💵 *युवा शक्ति ग्रुप • कैश काउंटर (रोकड़ गणना)* 💵\n📅 दिनांक: ${todayStr}\n━━━━━━━━━━━━━━━━━━━━\n${lines.length ? lines.join('\n') : 'कोई नोट दर्ज नहीं'}\n━━━━━━━━━━━━━━━━━━━━\n🔢 *कुल नोट / सिक्के:* ${totalNotes}\n💰 *कुल रोकड़ राशि:* ₹${grandTotal.toLocaleString('en-IN')}/-\n📝 *शब्दों में:* ${numToWordsHindi(grandTotal)}\n(${numToWordsEnglish(grandTotal)})\n━━━━━━━━━━━━━━━━━━━━\nयुवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)`;
+    }
+
+    function shareCashCounterToWA() {
+      const summary = generateCashSummaryText();
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(summary)}`;
+      if (typeof openWhatsAppUrl === "function") openWhatsAppUrl(url);
+      else window.open(url, "_blank");
+    }
+    window.shareCashCounterToWA = shareCashCounterToWA;
+
+    function copyCashCounterSummary() {
+      const summary = generateCashSummaryText();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(summary).then(() => {
+          showToast("✅ कैश गणना विवरण कॉपी हो गया!", "success");
+        }).catch(() => {
+          showToast("कॉपी नहीं हो सका", "error");
+        });
+      } else {
+        showToast("कॉपी समर्थित नहीं है", "info");
+      }
+    }
+    window.copyCashCounterSummary = copyCashCounterSummary;
 
     // 🎉 Day Celebration Modal Functions (तारीख क्लिक पर उत्सव व बधाई पॉपअप)
     function openDayCelebrationModal(dateStr) {
