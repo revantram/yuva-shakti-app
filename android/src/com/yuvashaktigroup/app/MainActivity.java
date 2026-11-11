@@ -142,35 +142,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         checkAndRequestNotificationPermission();
 
-        // Android 13+ (API 33+) Predictive & Edge Back Gesture Support
-        if (Build.VERSION.SDK_INT >= 33) {
-            try {
-                Object dispatcher = getClass().getMethod("getOnBackInvokedDispatcher").invoke(this);
-                Class<?> callbackClass = Class.forName("android.window.OnBackInvokedCallback");
-                java.lang.reflect.InvocationHandler handler = new java.lang.reflect.InvocationHandler() {
-                    @Override
-                    public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) throws Throwable {
-                        if ("onBackInvoked".equals(method.getName())) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    handleBackNavigation();
-                                }
-                            });
-                        }
-                        return null;
-                    }
-                };
-                Object proxyCallback = java.lang.reflect.Proxy.newProxyInstance(
-                    callbackClass.getClassLoader(),
-                    new Class<?>[]{callbackClass},
-                    handler
-                );
-                dispatcher.getClass().getMethod("registerOnBackInvokedCallback", int.class, callbackClass)
-                    .invoke(dispatcher, 0, proxyCallback);
-            } catch (Throwable ignored) {}
-        }
-
         mWebView = new WebView(this);
         setContentView(mWebView);
 

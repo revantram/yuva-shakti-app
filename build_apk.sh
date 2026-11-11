@@ -17,8 +17,12 @@ cp "${PROJECT_DIR}/android/AndroidManifest.xml" "${BUILD_DIR}/AndroidManifest.xm
 cp -r "${PROJECT_DIR}/android/src/"* "${BUILD_DIR}/src/"
 cp -r "${PROJECT_DIR}/android/res/"* "${BUILD_DIR}/res/"
 
-echo "==> 📦 Compiling resources with AAPT2..."
+echo "==> 🧹 Cleaning build directory..."
 cd "${BUILD_DIR}"
+rm -rf bin/classes bin/dex gen bin/base.apk res.zip
+mkdir -p bin/classes bin/dex gen
+
+echo "==> 📦 Compiling resources with AAPT2..."
 aapt2 compile --dir res -o res.zip
 aapt2 link -I android.jar --manifest AndroidManifest.xml -o bin/base.apk -A assets --java gen res.zip
 
