@@ -154,8 +154,8 @@ public class MainActivity extends Activity {
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
         settings.setSupportZoom(false);
-        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        mWebView.clearCache(true);
+        settings.setBuiltInZoomControls(false);
+        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setSupportMultipleWindows(true);
 
@@ -1011,30 +1011,34 @@ public class MainActivity extends Activity {
 
     private void handleBackNavigation() {
         if (mWebView != null) {
-            mWebView.evaluateJavascript("(function(){ try { if (typeof window.handleAppBackAction === 'function') { return window.handleAppBackAction() ? 'true' : 'false'; } } catch(e){} return 'false'; })();", new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {
-                    boolean handled = "true".equalsIgnoreCase(value) || "\"true\"".equalsIgnoreCase(value);
-                    if (!handled) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mWebView != null && mWebView.canGoBack()) {
-                                    mWebView.goBack();
-                                    return;
+            try {
+                mWebView.evaluateJavascript("(function(){ try { if (typeof window.handleAppBackAction === 'function') { return window.handleAppBackAction() ? 'true' : 'false'; } } catch(e){} return 'false'; })();", new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        boolean handled = "true".equalsIgnoreCase(value) || "\"true\"".equalsIgnoreCase(value);
+                        if (!handled) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (isFinishing() || (Build.VERSION.SDK_INT >= 17 && isDestroyed())) return;
+                                    if (mWebView != null && mWebView.canGoBack()) {
+                                        mWebView.goBack();
+                                        return;
+                                    }
+                                    handleExitBackPress();
                                 }
-                                handleExitBackPress();
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            });
-            return;
+                });
+                return;
+            } catch (Exception ignored) {}
         }
         handleExitBackPress();
     }
 
     private void handleExitBackPress() {
+        if (isFinishing() || (Build.VERSION.SDK_INT >= 17 && isDestroyed())) return;
         long currentTime = System.currentTimeMillis();
         if (currentTime - mLastBackPressTime < 2000) {
             finish();

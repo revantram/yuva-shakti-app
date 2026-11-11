@@ -30,7 +30,7 @@ echo "==> ☕ Compiling Java sources..."
 javac --release 8 -cp android.jar:gen -d bin/classes src/com/yuvashaktigroup/app/*.java gen/com/yuvashaktigroup/app/R.java
 
 echo "==> ⚡ Converting to Dalvik Executable (DEX)..."
-d8 --lib android.jar --output bin/dex/ bin/classes/com/yuvashaktigroup/app/*.class
+find bin/classes -name "*.class" | xargs d8 --lib android.jar --output bin/dex/
 
 echo "==> 📁 Packaging classes.dex..."
 cd bin/dex
