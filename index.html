@@ -26,7 +26,7 @@
   <!-- Google Fonts: Inter & Noto Sans Devanagari -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- Firebase Classic Compatibility Scripts -->
@@ -3263,20 +3263,24 @@
       border: 1px solid rgba(253, 230, 138, 0.9) !important;
     }
 
-    /* 🎨 Aesthetic Prominently Highlighted & Ultra-Bold Member Name */
+    /* 🎨 Aesthetic Prominently Highlighted, Deep Black & Ultra-Bold Member Name */
     .member-name-aesthetic {
-      font-size: 17px !important;
+      font-size: 17.5px !important;
       font-weight: 900 !important;
-      color: #0f172a !important;
+      color: #000000 !important; /* गहरा काला (Deep Solid Jet Black) */
       background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
-      padding: 3px 12px !important;
+      padding: 4px 13px !important;
       border-radius: 12px !important;
-      border: 1.5px solid #f59e0b !important;
-      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+      border: 1.8px solid #d97706 !important;
+      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
       display: inline-flex !important;
       align-items: center !important;
       letter-spacing: -0.2px !important;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+      line-height: 1.25 !important;
+      text-shadow: 0 0 0.5px rgba(0, 0, 0, 0.35) !important;
+      font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      -webkit-font-smoothing: antialiased !important;
+      text-rendering: optimizeLegibility !important;
     }
 
     /* 🌟 Aesthetic Member Name Banner (Profile Modal) */
@@ -3307,11 +3311,14 @@
     }
     body.dark-theme .member-name-aesthetic {
       color: #fef08a !important;
+      font-size: 17.5px !important;
       font-weight: 900 !important;
-      background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(180, 83, 9, 0.35) 100%) !important;
-      border: 1.5px solid rgba(245, 158, 11, 0.6) !important;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+      background: linear-gradient(135deg, rgba(217, 119, 6, 0.35) 0%, rgba(180, 83, 9, 0.45) 100%) !important;
+      border: 1.8px solid rgba(245, 158, 11, 0.75) !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+      font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      -webkit-font-smoothing: antialiased !important;
     }
     body.dark-theme .profile-name-aesthetic {
       color: #F8FAFC !important;
@@ -4010,7 +4017,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.2.5
+            APK v5.2.6
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4037,7 +4044,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.5 (बिल्ड कोड: 525)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.6 (बिल्ड कोड: 526)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4708,7 +4715,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.5 (बिल्ड कोड: 525)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.6 (बिल्ड कोड: 526)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6230,7 +6237,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.2.5";
+    const APP_VERSION = "5.2.6";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7768,10 +7775,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 525)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 526)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 525)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 526)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7886,7 +7893,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 525)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 526)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7897,7 +7904,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 525)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 526)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
