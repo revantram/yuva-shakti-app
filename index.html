@@ -4017,7 +4017,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.2.8
+            APK v5.2.9
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4044,7 +4044,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.8 (बिल्ड कोड: 528)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.9 (बिल्ड कोड: 529)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4715,7 +4715,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.8 (बिल्ड कोड: 528)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.9 (बिल्ड कोड: 529)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6237,7 +6237,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.2.8";
+    const APP_VERSION = "5.2.9";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7775,10 +7775,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 528)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 529)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 528)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 529)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7893,7 +7893,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 528)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 529)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7904,7 +7904,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 528)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 529)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -10476,7 +10476,9 @@
 
     startVamshaSync();
 
-    function switchTab(tabName, el) {
+    window.appNavHistory = ['members'];
+
+    function switchTab(tabName, el, isBackAction = false) {
       document.querySelectorAll('.section-view').forEach(s => s.classList.remove('active-view'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
@@ -10512,6 +10514,19 @@
       if (el) {
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
+      }
+
+      // Track tab history for back gestures
+      if (!isBackAction && tabName !== 'form') {
+        const norm = (tabName === 'ledger' || tabName === 'expenses') ? 'expenses' : tabName;
+        if (norm === 'members') {
+          window.appNavHistory = ['members'];
+        } else {
+          if (!window.appNavHistory) window.appNavHistory = ['members'];
+          if (window.appNavHistory[window.appNavHistory.length - 1] !== norm) {
+            window.appNavHistory.push(norm);
+          }
+        }
       }
 
       // Show top header branding across ALL tabs (होम/सदस्य, खर्च, पंचांग, नया सदस्य, सेटिंग) as requested
@@ -19232,6 +19247,147 @@
       checkInitialAuthState();
       setTimeout(initAuthGateListener, 500);
     });
+
+    // =========================================================================
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.2.9)
+    //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
+    // =========================================================================
+
+    window.modalCloseHandlers = {
+      'languageModal': () => typeof closeLanguageModal === 'function' && closeLanguageModal(),
+      'themeModal': () => typeof closeThemeModal === 'function' && closeThemeModal(),
+      'todayCelebrationModal': () => typeof closeTodayCelebrationModal === 'function' && closeTodayCelebrationModal(),
+      'occasionPosterMakerModal': () => typeof closeOccasionPosterMaker === 'function' && closeOccasionPosterMaker(),
+      'posterPreviewModal': () => typeof closePosterPreviewModal === 'function' && closePosterPreviewModal(),
+      'loginModal': () => typeof closeLoginModal === 'function' && closeLoginModal(),
+      'guestRoomModal': () => typeof closeGuestRoomModal === 'function' && closeGuestRoomModal(),
+      'livePresenceModal': () => typeof closeLivePresenceModal === 'function' && closeLivePresenceModal(),
+      'adminApprovalModal': () => typeof closeAdminApprovalModal === 'function' && closeAdminApprovalModal(),
+      'editGuestDetailsModal': () => typeof closeEditGuestModal === 'function' && closeEditGuestModal(),
+      'updateModal': () => {
+        const modal = document.getElementById('updateModal');
+        if (modal && modal.getAttribute('data-mandatory') === 'true') return false;
+        if (typeof closeUpdateModal === 'function') closeUpdateModal();
+      },
+      'phonepeModal': () => typeof closePhonePeModal === 'function' && closePhonePeModal(),
+      'confirmModal': () => typeof closeConfirmModal === 'function' && closeConfirmModal(false),
+      'memberProfileModal': () => typeof closeMemberProfileModal === 'function' && closeMemberProfileModal(),
+      'dailySuvicharModal': () => typeof closeDailySuvicharModal === 'function' && closeDailySuvicharModal(),
+      'firstTimeWelcomeModal': () => {
+        const el = document.getElementById('firstTimeWelcomeModal');
+        if (el) el.style.display = 'none';
+      },
+      'expenseModal': () => typeof closeExpenseModal === 'function' && closeExpenseModal(),
+      'adminContributionModal': () => typeof closeAdminContributionModal === 'function' && closeAdminContributionModal(),
+      'paymentRequestModal': () => typeof closePaymentRequestModal === 'function' && closePaymentRequestModal(),
+      'pendingRequestsModal': () => typeof closePendingRequestsModal === 'function' && closePendingRequestsModal(),
+      'pastMonthContribModal': () => typeof closePastMonthContribModal === 'function' && closePastMonthContribModal(),
+      'memberDueReminderModal': () => typeof closeDueReminderModal === 'function' && closeDueReminderModal(),
+      'amavasyaEveModal': () => typeof closeAmavasyaEveModal === 'function' && closeAmavasyaEveModal(),
+      'adminDueBroadcastModal': () => typeof closeAdminDueBroadcastModal === 'function' && closeAdminDueBroadcastModal(),
+      'notificationCenterModal': () => typeof closeNotificationCenterModal === 'function' && closeNotificationCenterModal(),
+      'dayCelebrationModal': () => typeof closeDayCelebrationModal === 'function' && closeDayCelebrationModal(),
+      'memberFormModal': () => typeof resetMemberForm === 'function' && resetMemberForm(),
+      'adminEditMemberContributionModal': () => typeof closeAdminEditContributionModal === 'function' && closeAdminEditContributionModal(),
+      'galLightboxModal': () => typeof closeGalLightbox === 'function' && closeGalLightbox(),
+      'galUploadModal': () => typeof closeUploadPhotoModal === 'function' && closeUploadPhotoModal(),
+      'galNewFolderModal': () => typeof closeCreateFolderModal === 'function' && closeCreateFolderModal(),
+      'vamshaPosterModal': () => typeof closeVamshaPosterModal === 'function' && closeVamshaPosterModal(),
+      'passbookOverlay': () => typeof closePassbook === 'function' && closePassbook(),
+      'setMyNameModal': () => {
+        const el = document.getElementById('setMyNameModal');
+        if (el) el.remove();
+      }
+    };
+
+    window.handleAppBackAction = function() {
+      try {
+        // 1. Close any visible modal, bottom sheet, or full-screen overlay
+        const openModals = Array.from(document.querySelectorAll('.modal-overlay, .modal-bottom-sheet, [id$="Modal"], [id$="Overlay"]')).filter(el => {
+          if (!el) return false;
+          if (el.id === 'updateModal' && el.getAttribute('data-mandatory') === 'true') return false;
+          const style = window.getComputedStyle(el);
+          return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+        });
+
+        if (openModals.length > 0) {
+          const topModal = openModals[openModals.length - 1];
+          const modalId = topModal.id;
+
+          if (modalId && window.modalCloseHandlers && typeof window.modalCloseHandlers[modalId] === 'function') {
+            window.modalCloseHandlers[modalId]();
+            return true;
+          }
+
+          const closeBtn = topModal.querySelector('button[onclick*="close"], button[onclick*="reset"], button[onclick*="hide"], button.close, .btn-close');
+          if (closeBtn) {
+            closeBtn.click();
+            return true;
+          }
+
+          topModal.style.display = 'none';
+          return true;
+        }
+
+        // 2. Navigate back through tab history
+        if (window.appNavHistory && window.appNavHistory.length > 1) {
+          window.appNavHistory.pop(); // Remove current tab
+          const prevTab = window.appNavHistory[window.appNavHistory.length - 1];
+          switchTab(prevTab, null, true);
+          return true;
+        }
+
+        // 3. Fallback: if we are not on the root Home tab (viewMembers), return to Home
+        const currentActive = document.querySelector('.section-view.active-view');
+        if (currentActive && currentActive.id !== 'viewMembers') {
+          switchTab('members', null, true);
+          window.appNavHistory = ['members'];
+          return true;
+        }
+
+        // 4. Already on root Home page with nothing open -> return false to let Android show exit toast
+        return false;
+      } catch (err) {
+        console.error("handleAppBackAction error:", err);
+        return false;
+      }
+    };
+
+    // In-app touch swipe-back gesture (Swipe right from left edge to go back)
+    (function setupInAppEdgeSwipeBack() {
+      let startX = 0;
+      let startY = 0;
+      let startTime = 0;
+      let isEdgeSwipe = false;
+
+      window.addEventListener('touchstart', function(e) {
+        if (!e.touches || e.touches.length !== 1) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        startTime = Date.now();
+        // Allow gesture if touch starts within 45px of screen edge
+        isEdgeSwipe = (startX <= 45);
+      }, { passive: true });
+
+      window.addEventListener('touchend', function(e) {
+        if (!isEdgeSwipe || !e.changedTouches || e.changedTouches.length === 0) return;
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const elapsed = Date.now() - startTime;
+
+        if (dx >= 50 && Math.abs(dy) <= 60 && elapsed <= 600 && dx > Math.abs(dy) * 1.1) {
+          if (typeof window.handleAppBackAction === 'function') {
+            const handled = window.handleAppBackAction();
+            if (handled && window.navigator && window.navigator.vibrate) {
+              try { window.navigator.vibrate(25); } catch (_) {}
+            }
+          }
+        }
+        isEdgeSwipe = false;
+      }, { passive: true });
+    })();
 
 </script>
 

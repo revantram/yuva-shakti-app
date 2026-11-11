@@ -142,6 +142,35 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         checkAndRequestNotificationPermission();
 
+        // Android 13+ (API 33+) Predictive & Edge Back Gesture Support
+        if (Build.VERSION.SDK_INT >= 33) {
+            try {
+                Object dispatcher = getClass().getMethod("getOnBackInvokedDispatcher").invoke(this);
+                Class<?> callbackClass = Class.forName("android.window.OnBackInvokedCallback");
+                java.lang.reflect.InvocationHandler handler = new java.lang.reflect.InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) throws Throwable {
+                        if ("onBackInvoked".equals(method.getName())) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    handleBackNavigation();
+                                }
+                            });
+                        }
+                        return null;
+                    }
+                };
+                Object proxyCallback = java.lang.reflect.Proxy.newProxyInstance(
+                    callbackClass.getClassLoader(),
+                    new Class<?>[]{callbackClass},
+                    handler
+                );
+                dispatcher.getClass().getMethod("registerOnBackInvokedCallback", int.class, callbackClass)
+                    .invoke(dispatcher, 0, proxyCallback);
+            } catch (Throwable ignored) {}
+        }
+
         mWebView = new WebView(this);
         setContentView(mWebView);
 
@@ -1006,14 +1035,38 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (mWebView != null && mWebView.canGoBack()) {
-            mWebView.goBack();
+        handleBackNavigation();
+    }
+
+    private void handleBackNavigation() {
+        if (mWebView != null) {
+            mWebView.evaluateJavascript("(function(){ try { if (typeof window.handleAppBackAction === 'function') { return window.handleAppBackAction() ? 'true' : 'false'; } } catch(e){} return 'false'; })();", new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    boolean handled = "true".equalsIgnoreCase(value) || "\"true\"".equalsIgnoreCase(value);
+                    if (!handled) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mWebView != null && mWebView.canGoBack()) {
+                                    mWebView.goBack();
+                                    return;
+                                }
+                                handleExitBackPress();
+                            }
+                        });
+                    }
+                }
+            });
             return;
         }
+        handleExitBackPress();
+    }
 
+    private void handleExitBackPress() {
         long currentTime = System.currentTimeMillis();
         if (currentTime - mLastBackPressTime < 2000) {
-            super.onBackPressed();
+            finish();
         } else {
             mLastBackPressTime = currentTime;
             Toast.makeText(this, "बाहर निकलने के लिए पुनः बैक बटन दबाएं", Toast.LENGTH_SHORT).show();
