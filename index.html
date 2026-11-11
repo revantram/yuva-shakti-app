@@ -4017,7 +4017,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.3.2
+            APK v5.3.3
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4044,7 +4044,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.2 (बिल्ड कोड: 532)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.3 (बिल्ड कोड: 533)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4060,6 +4060,22 @@
       <div class="card ios-glass-card" style="padding: 6px 12px; border-radius: 20px; margin-bottom: 14px;">
         <div style="display: flex; flex-direction: column;">
           
+          <!-- 1. 👑 एडमिन कंट्रोल (Admin Control) -->
+          <div class="settings-list-item" onclick="openAdminControlModal()" style="padding: 12px 6px; border-bottom: 1.5px solid #fde68a; cursor: pointer; background: linear-gradient(135deg, rgba(254, 243, 199, 0.55), rgba(255, 251, 235, 0.45)); border-radius: 14px; margin-bottom: 8px;">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile" style="width: 34px; height: 34px; font-size: 15px; border-radius: 10px; background: linear-gradient(135deg, #d97706, #b45309); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 8px rgba(217, 119, 6, 0.35);">
+                <i class="fa-solid fa-crown"></i>
+              </div>
+              <div>
+                <div style="font-weight: 800; font-size: 14.5px; color: #92400e;">एडमिन कंट्रोल (Admin Control)</div>
+                <div style="font-size: 11px; color: var(--text-muted);" id="adminControlSubText">एडमिन पासवर्ड डालकर नियंत्रण प्राप्त करें</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge" id="adminControlBadge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a; font-weight:800;">पासवर्ड सुरक्षित</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
 
           <!-- 2. APK Send (व्हाट्सएप पर सीधी ऐप भेजें) -->
           <div class="settings-list-item" onclick="shareAppDirectly()" style="padding: 10px 4px; border-bottom: 1px solid var(--border-color); cursor: pointer;">
@@ -4565,6 +4581,13 @@
         <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         <span>गूगल खाते से लॉगिन करें</span>
       </button>
+
+      <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #e2e8f0;">
+        <button type="button" onclick="closeLoginModal(); openAdminControlModal();" style="width:100%; padding:9px; border-radius:10px; border:1px solid #fde68a; background:#fffbeb; color:#92400e; font-weight:800; font-size:12.5px; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer;">
+          <i class="fa-solid fa-crown" style="color:#d97706;"></i>
+          <span>एडमिन पासवर्ड लॉगिन</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -4670,6 +4693,164 @@
     </div>
   </div>
 
+  <!-- 👑 एडमिन कंट्रोल सेंटर / पासवर्ड सत्यापन मोडल -->
+  <div class="modal-overlay" id="adminControlModal" style="display:none; z-index:1140;" onclick="if(event.target===this) closeAdminControlModal()">
+    <div class="modal-content ios-glass-card" style="max-width:400px; padding:22px 18px; border-radius:24px; text-align:center; background:rgba(255,255,255,0.97); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.95); box-shadow:0 20px 45px rgba(15,23,42,0.22);">
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:38px; height:38px; border-radius:12px; background:linear-gradient(135deg, #d97706, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:17px; box-shadow:0 4px 10px rgba(217,119,6,0.35);">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <div style="text-align:left;">
+            <h3 style="margin:0; font-size:16.5px; font-weight:800; color:#0f172a;">एडमिन कंट्रोल (Admin Control)</h3>
+            <span style="font-size:11px; color:#64748b; font-weight:600;" id="adminModalSubHeader">पासवर्ड सत्यापन आवश्यक</span>
+          </div>
+        </div>
+        <button onclick="closeAdminControlModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+      </div>
+
+      <!-- State A: Not Admin -> Enter Password -->
+      <div id="adminControlLoginView" style="display:block; text-align:left;">
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:14px; padding:11px 13px; margin-bottom:14px;">
+          <div style="font-size:12px; font-weight:700; color:#92400e; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-shield-halved"></i> <span>एडमिन सुरक्षा सत्यापन</span>
+          </div>
+          <div style="font-size:11px; color:#b45309; margin-top:3px; line-height:1.4;">
+            एडमिन शक्तियां (सदस्य प्रबंधन, बही-खाता, सूचना बोर्ड, आदि) सक्षम करने के लिए अपना गुप्त एडमिन पासवर्ड दर्ज करें।
+          </div>
+        </div>
+
+        <label style="font-size:12.5px; font-weight:700; color:#334155;">एडमिन पासवर्ड:</label>
+        <div style="position:relative; margin:6px 0 16px 0;">
+          <input type="password" id="adminControlPasswordInput" placeholder="एडमिन पासवर्ड दर्ज करें" autocomplete="current-password" style="width:100%; box-sizing:border-box; padding:11px 40px 11px 12px; border:1.5px solid #fdba74; border-radius:12px; font-size:15px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
+          <button type="button" onclick="togglePasswordVisibility('adminControlPasswordInput', this)" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); border:none; background:none; color:#94a3b8; font-size:15px; cursor:pointer; padding:6px;">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+
+        <button type="button" onclick="submitAdminControlLogin()" style="width:100%; padding:12px; background:linear-gradient(135deg, #d97706, #b45309); color:white; border:none; border-radius:12px; font-weight:800; cursor:pointer; font-size:14px; box-shadow:0 4px 14px rgba(217,119,6,0.35);">
+          एडमिन अनलॉक करें 👑
+        </button>
+      </div>
+
+      <!-- State B: Already Admin -> Control Dashboard -->
+      <div id="adminControlDashboardView" style="display:none; text-align:left;">
+        <div style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-radius:14px; padding:12px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:13px; font-weight:800; color:#065f46; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-circle-check"></i> <span>एडमिन मोड सक्रिय (Active)</span>
+            </div>
+            <div style="font-size:11px; color:#047857; margin-top:2px;">आपके पास संपूर्ण एडमिन अधिकार उपलब्ध हैं।</div>
+          </div>
+          <span style="background:#10b981; color:white; font-size:10.5px; font-weight:800; padding:3px 8px; border-radius:6px;">सक्रिय</span>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <!-- पासवर्ड बदलें (Change Password) -->
+          <button type="button" onclick="openAdminChangePasswordModal()" style="width:100%; padding:11px 14px; background:#eff6ff; border:1.5px solid #bfdbfe; color:#1d4ed8; border-radius:12px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
+            <span style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-key" style="color:#2563eb;"></i> <span>एडमिन पासवर्ड बदलें (Change Password)</span>
+            </span>
+            <i class="fa-solid fa-chevron-right" style="font-size:11px; opacity:0.6;"></i>
+          </button>
+
+          <!-- पेंडिंग गेस्ट अप्रूवल डैशबोर्ड -->
+          <button type="button" onclick="closeAdminControlModal(); openAdminApprovalModal();" style="width:100%; padding:11px 14px; background:#f8fafc; border:1px solid #e2e8f0; color:#334155; border-radius:12px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
+            <span style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-user-shield" style="color:#0284c7;"></i> <span>पेंडिंग गेस्ट अप्रूवल</span>
+            </span>
+            <span id="adminCtrlPendingBadge" style="background:#0284c7; color:white; font-size:10.5px; font-weight:800; padding:2px 7px; border-radius:10px;">0</span>
+          </button>
+
+          <!-- परिवार सूचना बोर्ड -->
+          <button type="button" onclick="closeAdminControlModal(); focusNoticeBoard();" style="width:100%; padding:11px 14px; background:#f8fafc; border:1px solid #e2e8f0; color:#334155; border-radius:12px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
+            <span style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-bullhorn" style="color:#d97706;"></i> <span>सूचना बोर्ड प्रकाशित करें</span>
+            </span>
+            <i class="fa-solid fa-chevron-right" style="font-size:11px; opacity:0.6;"></i>
+          </button>
+
+          <!-- बकाया अंशदान रिमाइंडर -->
+          <button type="button" onclick="closeAdminControlModal(); sendDueReminderToAllPending();" style="width:100%; padding:11px 14px; background:#f8fafc; border:1px solid #e2e8f0; color:#334155; border-radius:12px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
+            <span style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-bell" style="color:#dc2626;"></i> <span>सभी बकायादारों को रिमाइंडर भेजें</span>
+            </span>
+            <i class="fa-solid fa-chevron-right" style="font-size:11px; opacity:0.6;"></i>
+          </button>
+
+          <!-- PhonePe / UPI ID बदलें -->
+          <button type="button" onclick="closeAdminControlModal(); promptChangeUpiId();" style="width:100%; padding:11px 14px; background:#f8fafc; border:1px solid #e2e8f0; color:#334155; border-radius:12px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
+            <span style="display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-wallet" style="color:#7c3aed;"></i> <span>PhonePe / UPI खाता बदलें</span>
+            </span>
+            <i class="fa-solid fa-chevron-right" style="font-size:11px; opacity:0.6;"></i>
+          </button>
+
+          <!-- एडमिन मोड से बाहर निकलें -->
+          <button type="button" onclick="exitAdminControlMode()" style="width:100%; margin-top:6px; padding:11px; background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; border-radius:12px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer;">
+            <i class="fa-solid fa-right-from-bracket"></i> <span>एडमिन मोड से बाहर निकलें</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 🔑 एडमिन पासवर्ड बदलें मोडल (Change Admin Password Modal) -->
+  <div class="modal-overlay" id="adminChangePasswordModal" style="display:none; z-index:1150;" onclick="if(event.target===this) closeAdminChangePasswordModal()">
+    <div class="modal-content ios-glass-card" style="max-width:390px; padding:22px 18px; border-radius:24px; text-align:center; background:rgba(255,255,255,0.97); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.95); box-shadow:0 20px 45px rgba(15,23,42,0.22);">
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:36px; height:36px; border-radius:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; display:flex; align-items:center; justify-content:center; font-size:16px; box-shadow:0 4px 10px rgba(37,99,235,0.3);">
+            <i class="fa-solid fa-key"></i>
+          </div>
+          <h3 style="margin:0; font-size:16px; font-weight:800; color:#0f172a;">एडमिन पासवर्ड बदलें</h3>
+        </div>
+        <button onclick="closeAdminChangePasswordModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+      </div>
+
+      <p style="font-size:11.5px; color:#64748b; margin-bottom:14px; text-align:left; line-height:1.4;">
+        नया एडमिन पासवर्ड सुरक्षित रूप से अपडेट करें। नया पासवर्ड सेट होते ही भविष्य में इसी पासवर्ड से एडमिन कंट्रोल खुलेगा।
+      </p>
+
+      <div style="text-align:left;">
+        <!-- 1. वर्तमान पासवर्ड -->
+        <label style="font-size:12px; font-weight:700; color:#334155;">वर्तमान पासवर्ड (Current Password):</label>
+        <div style="position:relative; margin:5px 0 10px 0;">
+          <input type="password" id="adminOldPassInput" placeholder="मौजूदा पासवर्ड दर्ज करें" style="width:100%; box-sizing:border-box; padding:10px 38px 10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
+          <button type="button" onclick="togglePasswordVisibility('adminOldPassInput', this)" style="position:absolute; right:6px; top:50%; transform:translateY(-50%); border:none; background:none; color:#94a3b8; font-size:14px; cursor:pointer; padding:6px;">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+
+        <!-- 2. नया पासवर्ड -->
+        <label style="font-size:12px; font-weight:700; color:#334155;">नया पासवर्ड (New Password):</label>
+        <div style="position:relative; margin:5px 0 10px 0;">
+          <input type="password" id="adminNewPassInput" placeholder="नया पासवर्ड दर्ज करें (न्यूनतम 4 अक्षर/अंक)" style="width:100%; box-sizing:border-box; padding:10px 38px 10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
+          <button type="button" onclick="togglePasswordVisibility('adminNewPassInput', this)" style="position:absolute; right:6px; top:50%; transform:translateY(-50%); border:none; background:none; color:#94a3b8; font-size:14px; cursor:pointer; padding:6px;">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+
+        <!-- 3. पुष्टि पासवर्ड -->
+        <label style="font-size:12px; font-weight:700; color:#334155;">नया पासवर्ड पुनः दर्ज करें (Confirm Password):</label>
+        <div style="position:relative; margin:5px 0 16px 0;">
+          <input type="password" id="adminConfirmPassInput" placeholder="नया पासवर्ड दोबारा लिखें" style="width:100%; box-sizing:border-box; padding:10px 38px 10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
+          <button type="button" onclick="togglePasswordVisibility('adminConfirmPassInput', this)" style="position:absolute; right:6px; top:50%; transform:translateY(-50%); border:none; background:none; color:#94a3b8; font-size:14px; cursor:pointer; padding:6px;">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+
+        <button type="button" onclick="submitChangeAdminPassword()" style="width:100%; padding:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; border:none; border-radius:12px; font-weight:800; cursor:pointer; font-size:14px; box-shadow:0 4px 14px rgba(37,99,235,0.35);">
+          पासवर्ड सुरक्षित सेव करें 💾
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ✏️ Edit Guest Details Modal (Admin) -->
   <div class="modal-overlay" id="editGuestDetailsModal" style="display:none; z-index:1160;">
     <div class="modal-content ios-glass-card" style="max-width:400px; padding:20px; border-radius:24px; text-align:left;">
@@ -4715,7 +4896,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.2 (बिल्ड कोड: 532)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.3 (बिल्ड कोड: 533)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6237,7 +6418,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.3.2";
+    const APP_VERSION = "5.3.3";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -6260,7 +6441,10 @@
 
     // 3. State Management & Role-Based Access Control (RBAC)
     const SANCHALAK_PHONE = "8696663615";
-    const SANCHALAK_CODE_HASH = "2f970388cf4a2131f236856c97aa43f3357c661a26d5417ba894b48ec367c63c";
+    // Cryptographically hashed default master password (never exposed in plaintext)
+    const DEFAULT_ADMIN_PASSWORD_HASH = "6ab0679e282a78055b9144a83e481fb8cdffafb2641fb79ac6496b222b996ed0";
+    let currentAdminPasswordHash = localStorage.getItem("adminCustomPasswordHash") || DEFAULT_ADMIN_PASSWORD_HASH;
+
     // Pure-JS SHA-256 (works even where crypto.subtle is unavailable)
     function ysSha256(s){
       function r(n,x){return (x>>>n)|(x<<(32-n));}
@@ -6289,7 +6473,31 @@
       }
       return H.map(v=>('00000000'+(v>>>0).toString(16)).slice(-8)).join('');
     }
-    function ysIsAdminCode(code){ return ysSha256(String(code||"").trim()) === SANCHALAK_CODE_HASH; }
+
+    function ysVerifyAdminPassword(plainPassword){
+      if(!plainPassword) return false;
+      const hash = ysSha256(String(plainPassword).trim());
+      const activeHash = localStorage.getItem("adminCustomPasswordHash") || currentAdminPasswordHash || DEFAULT_ADMIN_PASSWORD_HASH;
+      return hash === activeHash;
+    }
+    function ysIsAdminCode(code){ return ysVerifyAdminPassword(code); }
+
+    function syncAdminPasswordHashFromCloud(){
+      try {
+        if (typeof db !== "undefined" && db) {
+          db.collection("settings").doc("admin_auth").onSnapshot(doc => {
+            if (doc && doc.exists) {
+              const d = doc.data();
+              if (d && d.passwordHash) {
+                currentAdminPasswordHash = d.passwordHash;
+                localStorage.setItem("adminCustomPasswordHash", d.passwordHash);
+              }
+            }
+          }, err => console.log("admin_auth sync note:", err));
+        }
+      } catch (e) {}
+    }
+    setTimeout(syncAdminPasswordHashFromCloud, 1000);
     const DEFAULT_ADMIN_PIN = "0000";
     // Firestore data sanitizer: neutralise HTML/JS-injection characters in every string field read from the DB
     (function(){
@@ -7372,31 +7580,173 @@
       }
     }
 
-    // 🔐 संचालक कोड सत्यापन (Admin Master Access: Phone 8696663615 & revantrambhati@gmail.com with Code ******)
-    function verifyAdminSecretCode() {
-      const inputCode = (document.getElementById("adminSecretCodeInput")?.value || "").trim();
-      if (!inputCode) {
-        showToast("कृपया 6-अंकीय संचालक कोड दर्ज करें।", "warning");
+    // 👁️ Password Field Visibility Toggle
+    function togglePasswordVisibility(inputId, btnEl) {
+      const inp = document.getElementById(inputId);
+      if (!inp) return;
+      const isPass = inp.type === "password";
+      inp.type = isPass ? "text" : "password";
+      if (btnEl) {
+        btnEl.innerHTML = isPass ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+      }
+    }
+
+    // 👑 एडमिन कंट्रोल सेंटर (Admin Control Center & Verification)
+    function openAdminControlModal() {
+      const modal = document.getElementById("adminControlModal");
+      if (!modal) return;
+      const loginView = document.getElementById("adminControlLoginView");
+      const dashView = document.getElementById("adminControlDashboardView");
+      const subHead = document.getElementById("adminModalSubHeader");
+      const inp = document.getElementById("adminControlPasswordInput");
+      if (inp) inp.value = "";
+
+      if (isAdmin) {
+        if (loginView) loginView.style.display = "none";
+        if (dashView) dashView.style.display = "block";
+        if (subHead) subHead.innerText = "एडमिन मोड सक्रिय • पूर्ण नियंत्रण";
+        const ctrlBadge = document.getElementById("adminCtrlPendingBadge");
+        if (ctrlBadge) ctrlBadge.innerText = (pendingGuestsList || []).length;
+      } else {
+        if (loginView) loginView.style.display = "block";
+        if (dashView) dashView.style.display = "none";
+        if (subHead) subHead.innerText = "पासवर्ड सत्यापन आवश्यक";
+      }
+      modal.style.display = "flex";
+      if (!isAdmin && inp) setTimeout(() => inp.focus(), 150);
+    }
+
+    function closeAdminControlModal() {
+      const modal = document.getElementById("adminControlModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function submitAdminControlLogin() {
+      const inp = document.getElementById("adminControlPasswordInput");
+      const pass = (inp ? inp.value : "").trim();
+      if (!pass) {
+        showToast("कृपया एडमिन पासवर्ड दर्ज करें।", "warning");
         return;
       }
-
-      const currentGoogleEmail = (firebase.auth().currentUser?.email || "").toLowerCase();
-      const isAuthorizedPhone = loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE);
-      const isAuthorizedEmail = currentGoogleEmail === SANCHALAK_EMAIL.toLowerCase();
-
-      // Master Access strictly tied to phone 8696663615 or revantrambhati@gmail.com
-      if (!isAuthorizedPhone && !isAuthorizedEmail) {
-        showToast("❌ अस्वीकृत: संचालक अधिकार केवल अधिकृत नंबर (8696663615 / revantrambhati@gmail.com) के लिए सुरक्षित हैं!", "error");
-        return;
-      }
-
-      if (ysIsAdminCode(inputCode)) {
+      if (ysVerifyAdminPassword(pass)) {
         isAdmin = true;
         userRole = "admin";
         isUserVerified = true;
-        loggedInMemberPhone = SANCHALAK_PHONE;
+        if (!loggedInMemberPhone) {
+          loggedInMemberPhone = SANCHALAK_PHONE;
+          localStorage.setItem("loggedInMemberPhone", SANCHALAK_PHONE);
+        }
         localStorage.setItem("isAdminSession", "true");
-        localStorage.setItem("loggedInMemberPhone", SANCHALAK_PHONE);
+        localStorage.setItem("userRole", "admin");
+        localStorage.setItem("isUserVerified", "true");
+
+        showToast("👑 एडमिन कंट्रोल सफलतापूर्वक अनलॉक हुआ!", "success");
+        closeAdminControlModal();
+        updateAuthUI();
+      } else {
+        showToast("❌ गलत एडमिन पासवर्ड! कृपया सही पासवर्ड दर्ज करें।", "error");
+      }
+    }
+
+    // 🔑 एडमिन पासवर्ड बदलें (Change Admin Password Modal & Logic)
+    function openAdminChangePasswordModal() {
+      closeAdminControlModal();
+      const modal = document.getElementById("adminChangePasswordModal");
+      if (!modal) return;
+      ["adminOldPassInput", "adminNewPassInput", "adminConfirmPassInput"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+      modal.style.display = "flex";
+      setTimeout(() => {
+        const firstInp = document.getElementById("adminOldPassInput");
+        if (firstInp) firstInp.focus();
+      }, 150);
+    }
+
+    function closeAdminChangePasswordModal() {
+      const modal = document.getElementById("adminChangePasswordModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    async function submitChangeAdminPassword() {
+      const oldPass = (document.getElementById("adminOldPassInput")?.value || "").trim();
+      const newPass = (document.getElementById("adminNewPassInput")?.value || "").trim();
+      const confirmPass = (document.getElementById("adminConfirmPassInput")?.value || "").trim();
+
+      if (!oldPass) {
+        showToast("कृपया वर्तमान पासवर्ड दर्ज करें।", "warning");
+        return;
+      }
+      if (!ysVerifyAdminPassword(oldPass)) {
+        showToast("❌ वर्तमान पासवर्ड गलत है!", "error");
+        return;
+      }
+      if (!newPass || newPass.length < 4) {
+        showToast("नया पासवर्ड कम से कम 4 अक्षरों/अंकों का होना चाहिए।", "warning");
+        return;
+      }
+      if (newPass !== confirmPass) {
+        showToast("नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते!", "warning");
+        return;
+      }
+
+      const newHash = ysSha256(newPass);
+      currentAdminPasswordHash = newHash;
+      localStorage.setItem("adminCustomPasswordHash", newHash);
+
+      try {
+        if (typeof db !== "undefined" && db) {
+          await db.collection("settings").doc("admin_auth").set({
+            passwordHash: newHash,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        }
+      } catch (err) {
+        console.warn("Could not sync admin_auth to Firestore:", err);
+      }
+
+      showToast("✅ एडमिन पासवर्ड सफलतापूर्वक बदल दिया गया है!", "success");
+      closeAdminChangePasswordModal();
+      openAdminControlModal();
+    }
+
+    function exitAdminControlMode() {
+      isAdmin = false;
+      localStorage.removeItem("isAdminSession");
+      showToast("एडमिन मोड बंद कर दिया गया है।", "info");
+      closeAdminControlModal();
+      updateAuthUI();
+    }
+
+    function focusNoticeBoard() {
+      switchTab("settings");
+      setTimeout(() => {
+        const el = document.getElementById("noticeAdminInput");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          el.focus();
+        }
+      }, 200);
+    }
+
+    // 🔐 संचालक कोड सत्यापन (Admin Unlock from Settings card)
+    function verifyAdminSecretCode() {
+      const inputCode = (document.getElementById("adminSecretCodeInput")?.value || "").trim();
+      if (!inputCode) {
+        showToast("कृपया एडमिन पासवर्ड दर्ज करें।", "warning");
+        return;
+      }
+
+      if (ysVerifyAdminPassword(inputCode)) {
+        isAdmin = true;
+        userRole = "admin";
+        isUserVerified = true;
+        if (!loggedInMemberPhone) {
+          loggedInMemberPhone = SANCHALAK_PHONE;
+          localStorage.setItem("loggedInMemberPhone", SANCHALAK_PHONE);
+        }
+        localStorage.setItem("isAdminSession", "true");
         localStorage.setItem("userRole", "admin");
         localStorage.setItem("isUserVerified", "true");
 
@@ -7405,11 +7755,11 @@
         const settingsCard = document.getElementById("adminSettingsCard");
         if (settingsCard) settingsCard.style.display = "block";
 
-        showToast("👑 संचालक (Admin) शक्तियां सफलतापूर्वक अनलॉक हुईं!", "success");
+        showToast("👑 एडमिन शक्तियां सफलतापूर्वक अनलॉक हुईं!", "success");
         updateAuthUI();
         renderAdminPendingGuests();
       } else {
-        showToast("गलत गुप्त कोड! कृपया सही 6-अंकीय कोड दर्ज करें।", "error");
+        showToast("❌ गलत एडमिन पासवर्ड! कृपया सही पासवर्ड दर्ज करें।", "error");
       }
     }
 
@@ -7775,10 +8125,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 532)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 533)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 532)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 533)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7893,7 +8243,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 532)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 533)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7904,7 +8254,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 532)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 533)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -8101,6 +8451,25 @@
       if (adminUnlockBox) {
         adminUnlockBox.style.display = (isAuthorizedAdminUser && !isAdmin) ? "block" : "none";
       }
+
+      const ctrlBadge = document.getElementById("adminControlBadge");
+      const ctrlSub = document.getElementById("adminControlSubText");
+      if (ctrlBadge && ctrlSub) {
+        if (isAdmin) {
+          ctrlBadge.innerText = "👑 सक्रिय (Active)";
+          ctrlBadge.style.background = "#dcfce7";
+          ctrlBadge.style.color = "#15803d";
+          ctrlBadge.style.border = "1px solid #86efac";
+          ctrlSub.innerText = "एडमिन मोड सक्रिय • कंट्रोल सेंटर खोलें";
+        } else {
+          ctrlBadge.innerText = "पासवर्ड सुरक्षित";
+          ctrlBadge.style.background = "#fef3c7";
+          ctrlBadge.style.color = "#92400e";
+          ctrlBadge.style.border = "1px solid #fde68a";
+          ctrlSub.innerText = "एडमिन पासवर्ड डालकर नियंत्रण प्राप्त करें";
+        }
+      }
+
       const pendingBadge = document.getElementById("adminPendingGuestsBadge");
       if (pendingBadge) {
         pendingBadge.innerText = pendingGuestsList.length;
@@ -19249,7 +19618,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.2)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.3)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
@@ -19263,6 +19632,8 @@
       'guestRoomModal': () => typeof closeGuestRoomModal === 'function' && closeGuestRoomModal(),
       'livePresenceModal': () => typeof closeLivePresenceModal === 'function' && closeLivePresenceModal(),
       'adminApprovalModal': () => typeof closeAdminApprovalModal === 'function' && closeAdminApprovalModal(),
+      'adminControlModal': () => typeof closeAdminControlModal === 'function' && closeAdminControlModal(),
+      'adminChangePasswordModal': () => typeof closeAdminChangePasswordModal === 'function' && closeAdminChangePasswordModal(),
       'editGuestDetailsModal': () => typeof closeEditGuestModal === 'function' && closeEditGuestModal(),
       'updateModal': () => {
         const modal = document.getElementById('updateModal');
