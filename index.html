@@ -33,6 +33,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="notes_data.js"></script>
   <style>
     :root {
       --primary: #007aff;
@@ -3262,19 +3263,20 @@
       border: 1px solid rgba(253, 230, 138, 0.9) !important;
     }
 
-    /* 🎨 Aesthetic Bold Member Name Styling (Member List Card) */
+    /* 🎨 Aesthetic Prominently Highlighted & Ultra-Bold Member Name */
     .member-name-aesthetic {
-      font-size: 16.5px !important;
+      font-size: 17px !important;
       font-weight: 900 !important;
-      color: #020617 !important;
-      background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(238, 242, 255, 0.85) 100%) !important;
-      padding: 3px 10px !important;
-      border-radius: 10px !important;
-      border: 1.2px solid rgba(203, 213, 225, 0.9) !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+      color: #0f172a !important;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+      padding: 3px 12px !important;
+      border-radius: 12px !important;
+      border: 1.5px solid #f59e0b !important;
+      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
       display: inline-flex !important;
       align-items: center !important;
-      letter-spacing: -0.3px !important;
+      letter-spacing: -0.2px !important;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) !important;
     }
 
     /* 🌟 Aesthetic Member Name Banner (Profile Modal) */
@@ -3304,10 +3306,12 @@
       border-color: rgba(245, 158, 11, 0.4) !important;
     }
     body.dark-theme .member-name-aesthetic {
-      color: #FFFFFF !important;
+      color: #fef08a !important;
       font-weight: 900 !important;
-      background: linear-gradient(135deg, rgba(51, 65, 85, 0.8) 0%, rgba(30, 41, 59, 0.9) 100%) !important;
-      border-color: rgba(255, 255, 255, 0.15) !important;
+      background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(180, 83, 9, 0.35) 100%) !important;
+      border: 1.5px solid rgba(245, 158, 11, 0.6) !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
     }
     body.dark-theme .profile-name-aesthetic {
       color: #F8FAFC !important;
@@ -4006,7 +4010,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.2.4
+            APK v5.2.5
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4033,7 +4037,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.4 (बिल्ड कोड: 524)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.2.5 (बिल्ड कोड: 525)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4704,7 +4708,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.4 (बिल्ड कोड: 524)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.2.5 (बिल्ड कोड: 525)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6073,19 +6077,19 @@
   <!-- ========================================================================= -->
   <!-- 💵 समर्पित रोकड़ गणना / Cash Counter पेज (Dedicated Cash Counter Page View) -->
   <!-- ========================================================================= -->
-  <div id="dedicatedCashCounterPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:#12181F; color:#F1F5F9; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
-    <!-- Top Sticky Modern Dark Header Bar -->
-    <div style="position:sticky; top:0; z-index:100; background:rgba(18, 24, 31, 0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(255, 255, 255, 0.08); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 20px rgba(0, 0, 0, 0.4);">
-      <button onclick="closeDedicatedCashCounterPage()" style="border:1px solid rgba(255, 255, 255, 0.12); background:rgba(255, 255, 255, 0.06); color:#F1F5F9; padding:8px 14px; border-radius:12px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+  <div id="dedicatedCashCounterPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:#f8fafc; color:#0f172a; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
+    <!-- Top Sticky Header Bar (Clean White) -->
+    <div style="position:sticky; top:0; z-index:100; background:rgba(255, 255, 255, 0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid #e2e8f0; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 12px rgba(0, 0, 0, 0.04);">
+      <button onclick="closeDedicatedCashCounterPage()" style="border:1px solid #cbd5e1; background:#f1f5f9; color:#0f172a; padding:8px 14px; border-radius:12px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:6px;">
         <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
       </button>
       <div style="text-align:center;">
-        <h3 style="margin:0; font-size:16px; font-weight:800; color:#ffffff; display:flex; align-items:center; justify-content:center; gap:6px;">
+        <h3 style="margin:0; font-size:16px; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:center; gap:6px;">
           <span>💵 Cash Counter</span>
         </h3>
-        <span style="font-size:11px; color:#94a3b8; font-weight:600;">रोकड़ / करेंसी नोट गणना</span>
+        <span style="font-size:11px; color:#64748b; font-weight:600;">रोकड़ / करेंसी नोट गणना</span>
       </div>
-      <button onclick="resetCashCounter()" style="border:1px solid rgba(239, 68, 68, 0.35); background:rgba(239, 68, 68, 0.15); color:#fca5a5; padding:8px 14px; border-radius:12px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+      <button onclick="resetCashCounter()" style="border:1px solid #fecaca; background:#fee2e2; color:#b91c1c; padding:8px 14px; border-radius:12px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
         <i class="fa-solid fa-rotate-right"></i> <span>रिसेट</span>
       </button>
     </div>
@@ -6094,12 +6098,12 @@
     <div style="padding:16px 14px 90px 14px; max-width:600px; margin:0 auto; width:100%; box-sizing:border-box; display:flex; flex-direction:column; gap:14px;">
 
       <!-- Summary Grand Total Emerald Panel -->
-      <div style="background:linear-gradient(145deg, #064e3b 0%, #065f46 55%, #022c22 100%) !important; border:1.5px solid rgba(52, 211, 153, 0.35) !important; border-radius:22px; padding:18px 20px; box-shadow:0 14px 32px rgba(6, 78, 59, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important; position:relative; overflow:hidden;">
+      <div style="background:linear-gradient(135deg, #065f46 0%, #047857 60%, #064e3b 100%) !important; border:1.5px solid rgba(52, 211, 153, 0.35) !important; border-radius:22px; padding:18px 20px; box-shadow:0 12px 28px rgba(4, 120, 87, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important; position:relative; overflow:hidden;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:12px; color:#6ee7b7; font-weight:800; text-transform:uppercase; letter-spacing:0.8px;">कुल रोकड़ राशि (GRAND TOTAL)</span>
-          <span id="cashTotalNotesBadge" style="background:rgba(245, 158, 11, 0.18); border:1px solid rgba(245, 158, 11, 0.45); color:#fbbf24; padding:4px 12px; border-radius:9999px; font-size:12px; font-weight:800; letter-spacing:0.2px; box-shadow:0 2px 8px rgba(0, 0, 0, 0.25);">कुल नोट: 0</span>
+          <span style="font-size:12px; color:#a7f3d0; font-weight:800; text-transform:uppercase; letter-spacing:0.8px;">कुल रोकड़ राशि (GRAND TOTAL)</span>
+          <span id="cashTotalNotesBadge" style="background:rgba(255, 255, 255, 0.2); border:1px solid rgba(255, 255, 255, 0.35); color:#ffffff; padding:4px 12px; border-radius:9999px; font-size:12px; font-weight:800; letter-spacing:0.2px; box-shadow:0 2px 6px rgba(0, 0, 0, 0.15);">कुल नोट: 0</span>
         </div>
-        <div style="margin:10px 0 6px 0; font-size:38px; font-weight:900; letter-spacing:-0.5px; display:flex; align-items:baseline; gap:6px; color:#ffffff; text-shadow:0 2px 10px rgba(0, 0, 0, 0.3);">
+        <div style="margin:10px 0 6px 0; font-size:38px; font-weight:900; letter-spacing:-0.5px; display:flex; align-items:baseline; gap:6px; color:#ffffff; text-shadow:0 2px 8px rgba(0, 0, 0, 0.2);">
           <span style="font-size:26px; font-weight:700; color:#a7f3d0;">₹</span>
           <span id="cashGrandTotalDisplay">0</span>
         </div>
@@ -6111,113 +6115,113 @@
 
         <!-- Action Buttons inside Summary -->
         <div style="display:flex; gap:10px; margin-top:14px;">
-          <button onclick="shareCashCounterToWA()" style="flex:1; border:none; background:#ffffff; color:#064e3b; padding:12px; border-radius:14px; font-weight:900; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(0,0,0,0.25);">
+          <button onclick="shareCashCounterToWA()" style="flex:1; border:none; background:#ffffff; color:#065f46; padding:12px; border-radius:14px; font-weight:900; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(0,0,0,0.18);">
             <i class="fa-brands fa-whatsapp" style="font-size:18px; color:#16a34a;"></i> <span>WhatsApp पर शेयर करें</span>
           </button>
-          <button onclick="copyCashCounterSummary()" style="border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.3); color:#f1f5f9; padding:12px 18px; border-radius:14px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <button onclick="copyCashCounterSummary()" style="border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.18); color:#ffffff; padding:12px 18px; border-radius:14px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
             <i class="fa-regular fa-copy"></i> <span>कॉपी</span>
           </button>
         </div>
       </div>
 
       <!-- Denominations Table Header -->
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:0 6px; font-size:11.5px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:0 6px; font-size:11.5px; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">
         <span>मुद्रा / नोट</span>
         <span style="text-align:center;">संख्या (नोट्स)</span>
         <span style="text-align:right;">कुल मूल्य (₹)</span>
       </div>
 
-      <!-- 7 Denominations: 500, 200, 100, 50, 20, 10, 5 with oversized controls -->
+      <!-- 7 Denominations: 500, 200, 100, 50, 20, 10, 5 (Clean White Cards) -->
       <div id="cashDenominationsList" style="display:flex; flex-direction:column; gap:10px;">
         <!-- ₹500 -->
-        <div class="cash-row" style="background:rgba(22, 31, 43, 0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1.2px solid rgba(255, 255, 255, 0.09); border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 16px rgba(0, 0, 0, 0.28);">
-          <div style="width:86px; height:38px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1px solid rgba(255, 255, 255, 0.18); box-shadow:0 3px 8px rgba(0, 0, 0, 0.4); background:#1e293b; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/notes/note_500.png" alt="₹500" style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="cash-row" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 14px rgba(0, 0, 0, 0.04);">
+          <div style="width:90px; height:42px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1.5px solid #cbd5e1; box-shadow:0 2px 6px rgba(0, 0, 0, 0.08); background:#f8fafc; display:flex; align-items:center; justify-content:center;">
+            <img id="cashNoteImg_500" alt="₹500" style="width:100%; height:100%; object-fit:cover; display:block;">
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-            <button type="button" onclick="stepCashDenom(500, -1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">−</button>
-            <input type="number" id="cashInput_500" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2px solid #cbd5e1; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.15);">
-            <button type="button" onclick="stepCashDenom(500, 1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">+</button>
+            <button type="button" onclick="stepCashDenom(500, -1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">−</button>
+            <input type="number" id="cashInput_500" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2.2px solid #059669; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <button type="button" onclick="stepCashDenom(500, 1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">+</button>
           </div>
-          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#ffffff; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_500">0</span></div>
+          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#0f172a; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_500">0</span></div>
         </div>
 
         <!-- ₹200 -->
-        <div class="cash-row" style="background:rgba(22, 31, 43, 0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1.2px solid rgba(255, 255, 255, 0.09); border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 16px rgba(0, 0, 0, 0.28);">
-          <div style="width:86px; height:38px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1px solid rgba(255, 255, 255, 0.18); box-shadow:0 3px 8px rgba(0, 0, 0, 0.4); background:#1e293b; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/notes/note_200.png" alt="₹200" style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="cash-row" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 14px rgba(0, 0, 0, 0.04);">
+          <div style="width:90px; height:42px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1.5px solid #cbd5e1; box-shadow:0 2px 6px rgba(0, 0, 0, 0.08); background:#f8fafc; display:flex; align-items:center; justify-content:center;">
+            <img id="cashNoteImg_200" alt="₹200" style="width:100%; height:100%; object-fit:cover; display:block;">
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-            <button type="button" onclick="stepCashDenom(200, -1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">−</button>
-            <input type="number" id="cashInput_200" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2px solid #cbd5e1; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.15);">
-            <button type="button" onclick="stepCashDenom(200, 1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">+</button>
+            <button type="button" onclick="stepCashDenom(200, -1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">−</button>
+            <input type="number" id="cashInput_200" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2.2px solid #059669; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <button type="button" onclick="stepCashDenom(200, 1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">+</button>
           </div>
-          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#ffffff; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_200">0</span></div>
+          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#0f172a; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_200">0</span></div>
         </div>
 
         <!-- ₹100 -->
-        <div class="cash-row" style="background:rgba(22, 31, 43, 0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1.2px solid rgba(255, 255, 255, 0.09); border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 16px rgba(0, 0, 0, 0.28);">
-          <div style="width:86px; height:38px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1px solid rgba(255, 255, 255, 0.18); box-shadow:0 3px 8px rgba(0, 0, 0, 0.4); background:#1e293b; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/notes/note_100.png" alt="₹100" style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="cash-row" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 14px rgba(0, 0, 0, 0.04);">
+          <div style="width:90px; height:42px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1.5px solid #cbd5e1; box-shadow:0 2px 6px rgba(0, 0, 0, 0.08); background:#f8fafc; display:flex; align-items:center; justify-content:center;">
+            <img id="cashNoteImg_100" alt="₹100" style="width:100%; height:100%; object-fit:cover; display:block;">
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-            <button type="button" onclick="stepCashDenom(100, -1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">−</button>
-            <input type="number" id="cashInput_100" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2px solid #cbd5e1; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.15);">
-            <button type="button" onclick="stepCashDenom(100, 1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">+</button>
+            <button type="button" onclick="stepCashDenom(100, -1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">−</button>
+            <input type="number" id="cashInput_100" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2.2px solid #059669; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <button type="button" onclick="stepCashDenom(100, 1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">+</button>
           </div>
-          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#ffffff; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_100">0</span></div>
+          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#0f172a; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_100">0</span></div>
         </div>
 
         <!-- ₹50 -->
-        <div class="cash-row" style="background:rgba(22, 31, 43, 0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1.2px solid rgba(255, 255, 255, 0.09); border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 16px rgba(0, 0, 0, 0.28);">
-          <div style="width:86px; height:38px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1px solid rgba(255, 255, 255, 0.18); box-shadow:0 3px 8px rgba(0, 0, 0, 0.4); background:#1e293b; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/notes/note_50.png" alt="₹50" style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="cash-row" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 14px rgba(0, 0, 0, 0.04);">
+          <div style="width:90px; height:42px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1.5px solid #cbd5e1; box-shadow:0 2px 6px rgba(0, 0, 0, 0.08); background:#f8fafc; display:flex; align-items:center; justify-content:center;">
+            <img id="cashNoteImg_50" alt="₹50" style="width:100%; height:100%; object-fit:cover; display:block;">
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-            <button type="button" onclick="stepCashDenom(50, -1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">−</button>
-            <input type="number" id="cashInput_50" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2px solid #cbd5e1; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.15);">
-            <button type="button" onclick="stepCashDenom(50, 1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">+</button>
+            <button type="button" onclick="stepCashDenom(50, -1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">−</button>
+            <input type="number" id="cashInput_50" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2.2px solid #059669; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <button type="button" onclick="stepCashDenom(50, 1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">+</button>
           </div>
-          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#ffffff; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_50">0</span></div>
+          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#0f172a; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_50">0</span></div>
         </div>
 
         <!-- ₹20 -->
-        <div class="cash-row" style="background:rgba(22, 31, 43, 0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1.2px solid rgba(255, 255, 255, 0.09); border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 16px rgba(0, 0, 0, 0.28);">
-          <div style="width:86px; height:38px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1px solid rgba(255, 255, 255, 0.18); box-shadow:0 3px 8px rgba(0, 0, 0, 0.4); background:#1e293b; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/notes/note_20.png" alt="₹20" style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="cash-row" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 14px rgba(0, 0, 0, 0.04);">
+          <div style="width:90px; height:42px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1.5px solid #cbd5e1; box-shadow:0 2px 6px rgba(0, 0, 0, 0.08); background:#f8fafc; display:flex; align-items:center; justify-content:center;">
+            <img id="cashNoteImg_20" alt="₹20" style="width:100%; height:100%; object-fit:cover; display:block;">
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-            <button type="button" onclick="stepCashDenom(20, -1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">−</button>
-            <input type="number" id="cashInput_20" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2px solid #cbd5e1; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.15);">
-            <button type="button" onclick="stepCashDenom(20, 1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">+</button>
+            <button type="button" onclick="stepCashDenom(20, -1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">−</button>
+            <input type="number" id="cashInput_20" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2.2px solid #059669; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <button type="button" onclick="stepCashDenom(20, 1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">+</button>
           </div>
-          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#ffffff; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_20">0</span></div>
+          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#0f172a; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_20">0</span></div>
         </div>
 
         <!-- ₹10 -->
-        <div class="cash-row" style="background:rgba(22, 31, 43, 0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1.2px solid rgba(255, 255, 255, 0.09); border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 16px rgba(0, 0, 0, 0.28);">
-          <div style="width:86px; height:38px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1px solid rgba(255, 255, 255, 0.18); box-shadow:0 3px 8px rgba(0, 0, 0, 0.4); background:#1e293b; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/notes/note_10.png" alt="₹10" style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="cash-row" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 14px rgba(0, 0, 0, 0.04);">
+          <div style="width:90px; height:42px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1.5px solid #cbd5e1; box-shadow:0 2px 6px rgba(0, 0, 0, 0.08); background:#f8fafc; display:flex; align-items:center; justify-content:center;">
+            <img id="cashNoteImg_10" alt="₹10" style="width:100%; height:100%; object-fit:cover; display:block;">
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-            <button type="button" onclick="stepCashDenom(10, -1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">−</button>
-            <input type="number" id="cashInput_10" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2px solid #cbd5e1; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.15);">
-            <button type="button" onclick="stepCashDenom(10, 1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">+</button>
+            <button type="button" onclick="stepCashDenom(10, -1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">−</button>
+            <input type="number" id="cashInput_10" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2.2px solid #059669; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <button type="button" onclick="stepCashDenom(10, 1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">+</button>
           </div>
-          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#ffffff; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_10">0</span></div>
+          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#0f172a; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_10">0</span></div>
         </div>
 
         <!-- ₹5 -->
-        <div class="cash-row" style="background:rgba(22, 31, 43, 0.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1.2px solid rgba(255, 255, 255, 0.09); border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 16px rgba(0, 0, 0, 0.28);">
-          <div style="width:86px; height:38px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1px solid rgba(255, 255, 255, 0.18); box-shadow:0 3px 8px rgba(0, 0, 0, 0.4); background:#1e293b; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/notes/note_5.png" alt="₹5" style="width:100%; height:100%; object-fit:cover; display:block;">
+        <div class="cash-row" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:20px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 4px 14px rgba(0, 0, 0, 0.04);">
+          <div style="width:90px; height:42px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1.5px solid #cbd5e1; box-shadow:0 2px 6px rgba(0, 0, 0, 0.08); background:#f8fafc; display:flex; align-items:center; justify-content:center;">
+            <img id="cashNoteImg_5" alt="₹5" style="width:100%; height:100%; object-fit:cover; display:block;">
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-            <button type="button" onclick="stepCashDenom(5, -1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">−</button>
-            <input type="number" id="cashInput_5" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2px solid #cbd5e1; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.15);">
-            <button type="button" onclick="stepCashDenom(5, 1)" style="width:50px; height:50px; min-width:50px; min-height:50px; border-radius:50%; border:1.5px solid rgba(255, 255, 255, 0.18); background:radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%); color:#ffffff; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2); touch-action:manipulation; user-select:none;">+</button>
+            <button type="button" onclick="stepCashDenom(5, -1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">−</button>
+            <input type="number" id="cashInput_5" value="0" min="0" oninput="calculateCashTotal()" style="width:62px; height:48px; border-radius:12px; background:#ffffff; color:#0f172a; font-size:22px; font-weight:900; text-align:center; border:2.2px solid #059669; outline:none; box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <button type="button" onclick="stepCashDenom(5, 1)" style="width:48px; height:48px; min-width:48px; min-height:48px; border-radius:50%; border:1.8px solid #cbd5e1; background:#f1f5f9; color:#0f172a; font-size:24px; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0, 0, 0, 0.06); touch-action:manipulation; user-select:none;">+</button>
           </div>
-          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#ffffff; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_5">0</span></div>
+          <div style="min-width:78px; text-align:right; font-weight:900; font-size:17px; color:#0f172a; flex-shrink:0; letter-spacing:-0.3px;">₹<span id="cashRowTotal_5">0</span></div>
         </div>
       </div>
     </div>
@@ -6226,7 +6230,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.2.4";
+    const APP_VERSION = "5.2.5";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7764,10 +7768,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 524)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 525)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 524)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 525)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -7882,7 +7886,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 524)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 525)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -7893,7 +7897,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 524)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 525)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -15350,16 +15354,40 @@
     // =========================================================================
     const CASH_DENOMS = [500, 200, 100, 50, 20, 10, 5];
 
+    function initCashNoteImages() {
+      CASH_DENOMS.forEach(d => {
+        const el = document.getElementById(`cashNoteImg_${d}`);
+        if (el) {
+          if (window.NOTE_IMAGES && window.NOTE_IMAGES[d]) {
+            el.src = window.NOTE_IMAGES[d];
+          } else {
+            el.src = `notes/note_${d}.webp`;
+            el.onerror = function() {
+              this.src = `assets/notes/note_${d}.webp`;
+            };
+          }
+        }
+      });
+    }
+    window.initCashNoteImages = initCashNoteImages;
+
     function openDedicatedCashCounterPage() {
       const page = document.getElementById("dedicatedCashCounterPage");
       if (!page) {
         window.location.href = "cash-counter.html";
         return;
       }
+      initCashNoteImages();
       page.style.display = "flex";
       calculateCashTotal();
     }
     window.openDedicatedCashCounterPage = openDedicatedCashCounterPage;
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initCashNoteImages);
+    } else {
+      setTimeout(initCashNoteImages, 100);
+    }
 
     function closeDedicatedCashCounterPage() {
       const page = document.getElementById("dedicatedCashCounterPage");

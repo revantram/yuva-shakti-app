@@ -6,20 +6,21 @@
   <title>Cash Counter - रोकड़ गणना | युवा शक्ति ग्रुप</title>
   
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#12181F">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#ffffff">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="notes_data.js"></script>
   
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     
     body {
-      background: #12181F;
-      color: #F1F5F9;
+      background: #f8fafc;
+      color: #0f172a;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -27,25 +28,25 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Top Navigation Header */
+    /* Top Sticky Header Bar (Clean White) */
     .header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(18, 24, 31, 0.92);
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid #e2e8f0;
       padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
     }
     .back-btn {
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.06);
-      color: #F1F5F9;
+      border: 1px solid #cbd5e1;
+      background: #f1f5f9;
+      color: #0f172a;
       padding: 8px 14px;
       border-radius: 12px;
       font-weight: 700;
@@ -59,12 +60,12 @@
     }
     .back-btn:active {
       transform: scale(0.95);
-      background: rgba(255, 255, 255, 0.12);
+      background: #e2e8f0;
     }
     .reset-btn {
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      background: rgba(239, 68, 68, 0.15);
-      color: #fca5a5;
+      border: 1px solid #fecaca;
+      background: #fee2e2;
+      color: #b91c1c;
       padding: 8px 14px;
       border-radius: 12px;
       font-weight: 800;
@@ -77,7 +78,7 @@
     }
     .reset-btn:active {
       transform: scale(0.95);
-      background: rgba(239, 68, 68, 0.28);
+      background: #fca5a5;
     }
 
     .container {
@@ -92,31 +93,31 @@
 
     /* Grand Total Emerald Panel */
     .grand-total-card {
-      background: linear-gradient(145deg, #064e3b 0%, #065f46 55%, #022c22 100%);
+      background: linear-gradient(135deg, #065f46 0%, #047857 60%, #064e3b 100%);
       border: 1.5px solid rgba(52, 211, 153, 0.35);
       border-radius: 22px;
       padding: 18px 20px;
-      box-shadow: 0 14px 32px rgba(6, 78, 59, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      box-shadow: 0 12px 28px rgba(4, 120, 87, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25);
       position: relative;
       overflow: hidden;
     }
     .total-title {
       font-size: 12px;
-      color: #6ee7b7;
+      color: #a7f3d0;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.8px;
     }
     .notes-count-badge {
-      background: rgba(245, 158, 11, 0.18);
-      border: 1px solid rgba(245, 158, 11, 0.45);
-      color: #fbbf24;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #ffffff;
       padding: 4px 12px;
       border-radius: 9999px;
       font-size: 12px;
       font-weight: 800;
       letter-spacing: 0.2px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
     .grand-amount-wrap {
       margin: 10px 0 6px 0;
@@ -127,40 +128,37 @@
       align-items: baseline;
       gap: 6px;
       color: #ffffff;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
-    /* Giant Counter Row Card */
+    /* Giant Counter Row Card (Clean White) */
     .counter-row {
-      background: rgba(22, 31, 43, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1.2px solid rgba(255, 255, 255, 0.09);
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
       border-radius: 20px;
       padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    .counter-row:hover,
     .counter-row:focus-within {
-      border-color: rgba(52, 211, 153, 0.35);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      border-color: #059669;
+      box-shadow: 0 6px 18px rgba(5, 150, 105, 0.12);
     }
 
-    /* Miniature Banknote Graphic */
+    /* Miniature Banknote Graphic Container */
     .note-thumb-wrap {
-      width: 86px;
-      height: 38px;
+      width: 90px;
+      height: 42px;
       border-radius: 8px;
       overflow: hidden;
       flex-shrink: 0;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-      background: #1e293b;
+      border: 1.5px solid #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      background: #f8fafc;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -180,32 +178,32 @@
       flex-shrink: 0;
     }
     .giant-step-btn {
-      width: 50px;
-      height: 50px;
-      min-width: 50px;
-      min-height: 50px;
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      min-height: 48px;
       border-radius: 50%;
-      border: 1.5px solid rgba(255, 255, 255, 0.18);
-      background: radial-gradient(circle at 35% 35%, #2a374a 0%, #151e2b 100%);
-      color: #ffffff;
+      border: 1.8px solid #cbd5e1;
+      background: #f1f5f9;
+      color: #0f172a;
       font-size: 24px;
       font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
       transition: transform 0.1s ease, background 0.1s ease, box-shadow 0.1s ease;
       touch-action: manipulation;
       user-select: none;
     }
     .giant-step-btn:active {
       transform: scale(0.92);
-      background: #334155;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      background: #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
-    /* High-contrast White Quantity Box */
+    /* High-contrast White Quantity Box with Emerald Border */
     .quantity-box {
       width: 62px;
       height: 48px;
@@ -215,14 +213,14 @@
       font-size: 22px;
       font-weight: 900;
       text-align: center;
-      border: 2px solid #cbd5e1;
+      border: 2.2px solid #059669;
       outline: none;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.15);
-      transition: border-color 0.15s ease;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(0, 0, 0, 0.04);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
     .quantity-box:focus {
-      border-color: #10b981;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+      border-color: #047857;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
     }
 
     /* Right Calculated Total */
@@ -231,7 +229,7 @@
       text-align: right;
       font-weight: 900;
       font-size: 17px;
-      color: #ffffff;
+      color: #0f172a;
       flex-shrink: 0;
       letter-spacing: -0.3px;
     }
@@ -244,7 +242,7 @@
       padding: 0 6px;
       font-size: 11.5px;
       font-weight: 800;
-      color: #94a3b8;
+      color: #64748b;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -263,13 +261,13 @@
       font-weight: 700;
       display: none;
       z-index: 1000;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
     }
 
     @media (max-width: 380px) {
-      .note-thumb-wrap { width: 72px; height: 34px; }
-      .giant-step-btn { width: 44px; height: 44px; min-width: 44px; min-height: 44px; font-size: 20px; }
-      .quantity-box { width: 54px; height: 44px; font-size: 20px; }
+      .note-thumb-wrap { width: 75px; height: 36px; }
+      .giant-step-btn { width: 42px; height: 42px; min-width: 42px; min-height: 42px; font-size: 20px; }
+      .quantity-box { width: 54px; height: 42px; font-size: 20px; }
       .row-total-val { font-size: 15px; min-width: 66px; }
       .grand-amount-wrap { font-size: 32px; }
     }
@@ -283,10 +281,10 @@
       <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
     </a>
     <div style="text-align:center;">
-      <h3 style="margin:0; font-size:16px; font-weight:800; color:#ffffff; display:flex; align-items:center; justify-content:center; gap:6px;">
+      <h3 style="margin:0; font-size:16px; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:center; gap:6px;">
         <span>💵 Cash Counter</span>
       </h3>
-      <span style="font-size:11px; color:#94a3b8; font-weight:600;">रोकड़ / करेंसी नोट गणना</span>
+      <span style="font-size:11px; color:#64748b; font-weight:600;">रोकड़ / करेंसी नोट गणना</span>
     </div>
     <button onclick="resetAll()" class="reset-btn">
       <i class="fa-solid fa-rotate-right"></i> <span>रिसेट</span>
@@ -313,10 +311,10 @@
 
       <!-- Action Buttons -->
       <div style="display:flex; gap:10px; margin-top:14px;">
-        <button onclick="shareWA()" style="flex:1; border:none; background:#ffffff; color:#064e3b; padding:12px; border-radius:14px; font-weight:900; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(0,0,0,0.25);">
+        <button onclick="shareWA()" style="flex:1; border:none; background:#ffffff; color:#065f46; padding:12px; border-radius:14px; font-weight:900; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(0,0,0,0.18);">
           <i class="fa-brands fa-whatsapp" style="font-size:18px; color:#16a34a;"></i> <span>WhatsApp पर शेयर करें</span>
         </button>
-        <button onclick="copySummary()" style="border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.3); color:#f1f5f9; padding:12px 18px; border-radius:14px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <button onclick="copySummary()" style="border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.18); color:#ffffff; padding:12px 18px; border-radius:14px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
           <i class="fa-regular fa-copy"></i> <span>कॉपी</span>
         </button>
       </div>
@@ -329,13 +327,13 @@
       <span style="text-align:right;">कुल मूल्य (₹)</span>
     </div>
 
-    <!-- Giant Counter Rows -->
+    <!-- Giant Counter Rows (White Cards) -->
     <div style="display:flex; flex-direction:column; gap:10px;">
 
       <!-- ₹500 -->
       <div class="counter-row">
         <div class="note-thumb-wrap">
-          <img src="assets/notes/note_500.png" alt="₹500" class="banknote-img" id="img_500">
+          <img id="img_500" alt="₹500" class="banknote-img">
         </div>
         <div class="controls-wrap">
           <button type="button" class="giant-step-btn" onclick="step(500, -1)">−</button>
@@ -348,7 +346,7 @@
       <!-- ₹200 -->
       <div class="counter-row">
         <div class="note-thumb-wrap">
-          <img src="assets/notes/note_200.png" alt="₹200" class="banknote-img" id="img_200">
+          <img id="img_200" alt="₹200" class="banknote-img">
         </div>
         <div class="controls-wrap">
           <button type="button" class="giant-step-btn" onclick="step(200, -1)">−</button>
@@ -361,7 +359,7 @@
       <!-- ₹100 -->
       <div class="counter-row">
         <div class="note-thumb-wrap">
-          <img src="assets/notes/note_100.png" alt="₹100" class="banknote-img" id="img_100">
+          <img id="img_100" alt="₹100" class="banknote-img">
         </div>
         <div class="controls-wrap">
           <button type="button" class="giant-step-btn" onclick="step(100, -1)">−</button>
@@ -374,7 +372,7 @@
       <!-- ₹50 -->
       <div class="counter-row">
         <div class="note-thumb-wrap">
-          <img src="assets/notes/note_50.png" alt="₹50" class="banknote-img" id="img_50">
+          <img id="img_50" alt="₹50" class="banknote-img">
         </div>
         <div class="controls-wrap">
           <button type="button" class="giant-step-btn" onclick="step(50, -1)">−</button>
@@ -387,7 +385,7 @@
       <!-- ₹20 -->
       <div class="counter-row">
         <div class="note-thumb-wrap">
-          <img src="assets/notes/note_20.png" alt="₹20" class="banknote-img" id="img_20">
+          <img id="img_20" alt="₹20" class="banknote-img">
         </div>
         <div class="controls-wrap">
           <button type="button" class="giant-step-btn" onclick="step(20, -1)">−</button>
@@ -400,7 +398,7 @@
       <!-- ₹10 -->
       <div class="counter-row">
         <div class="note-thumb-wrap">
-          <img src="assets/notes/note_10.png" alt="₹10" class="banknote-img" id="img_10">
+          <img id="img_10" alt="₹10" class="banknote-img">
         </div>
         <div class="controls-wrap">
           <button type="button" class="giant-step-btn" onclick="step(10, -1)">−</button>
@@ -413,7 +411,7 @@
       <!-- ₹5 -->
       <div class="counter-row">
         <div class="note-thumb-wrap">
-          <img src="assets/notes/note_5.png" alt="₹5" class="banknote-img" id="img_5">
+          <img id="img_5" alt="₹5" class="banknote-img">
         </div>
         <div class="controls-wrap">
           <button type="button" class="giant-step-btn" onclick="step(5, -1)">−</button>
@@ -430,6 +428,29 @@
 
   <script>
     const DENOMS = [500, 200, 100, 50, 20, 10, 5];
+
+    // Populate images from window.NOTE_IMAGES or fallback
+    function initNoteImages() {
+      DENOMS.forEach(d => {
+        const el = document.getElementById(`img_${d}`);
+        if (el) {
+          if (window.NOTE_IMAGES && window.NOTE_IMAGES[d]) {
+            el.src = window.NOTE_IMAGES[d];
+          } else {
+            el.src = `notes/note_${d}.webp`;
+            el.onerror = function() {
+              this.src = `assets/notes/note_${d}.webp`;
+            };
+          }
+        }
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initNoteImages);
+    } else {
+      initNoteImages();
+    }
 
     function showToast(msg) {
       const t = document.getElementById("toast");
