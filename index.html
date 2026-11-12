@@ -3358,44 +3358,11 @@
         ग्रुप रिकॉर्ड्स, बही-खाता व वंशावली देखने हेतु कृपया अपना सत्यापन करें।
       </p>
 
-      <!-- 📱 Direct Inline Mobile Number & OTP Box (No Extra Button or Window) -->
-      <div id="inlinePhoneOtpContainer" style="text-align:left; margin-bottom:16px;">
-        
-        <!-- 1. Mobile Number Input -->
-        <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
-          मोबाइल नंबर दर्ज करें:
-        </label>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <span style="padding:10px 12px; background:#f1f5f9; border:1.5px solid #cbd5e1; border-radius:12px; font-weight:800; color:#334155; font-size:14px;">+91</span>
-          <input type="tel" id="inlineMobileInput" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none;">
+      <!-- Official Phone.email Button -->
+      <div style="margin: 10px 0 18px; display:flex; flex-direction:column; align-items:center;">
+        <div class="pe_signin_button" data-client-id="11651953884975814719">
+          <script src="https://www.phone.email/sign_in_button_v1.js" async></script>
         </div>
-
-        <!-- 2. Mobile Number ke bilkul niche Chhota Button -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-          <span id="inlineOtpTimerText" style="font-size:11px; color:#64748b; font-weight:600;">SMS द्वारा OTP प्राप्त करें</span>
-          <button type="button" id="btnInlineSendOtp" onclick="sendInlinePhoneEmailOtp()" style="padding:7px 14px; background:linear-gradient(135deg,#02BD7E,#059669); color:#ffffff; border:none; border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; box-shadow:0 3px 8px rgba(2,189,126,0.28);">
-            📩 OTP भेजें
-          </button>
-        </div>
-
-        <!-- 3. Niche OTP Box (Hamesha visible ya OTP bhejte hi active) -->
-        <div style="margin-top:14px; padding-top:12px; border-top:1px dashed #e2e8f0;">
-          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
-            OTP दर्ज करें:
-          </label>
-          <div style="display:flex; gap:8px;">
-            <input type="tel" id="inlineOtpInput" maxlength="6" inputmode="numeric" placeholder="OTP कोड डालें" style="flex:1; padding:10px 12px; border:1.5px solid #93c5fd; border-radius:12px; font-size:15px; font-weight:800; letter-spacing:3px; text-align:center; color:#0f172a; outline:none;">
-            <button type="button" id="btnInlineVerifyOtp" onclick="verifyInlinePhoneEmailOtp()" style="padding:10px 16px; background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#ffffff; border:none; border-radius:12px; font-size:13px; font-weight:800; cursor:pointer; white-space:nowrap; box-shadow:0 3px 10px rgba(37,99,235,0.3);">
-              खोलें ➔
-            </button>
-          </div>
-        </div>
-
-        <!-- Embedded in-card fallback if Phone.email restricts direct API via CORS -->
-        <div id="inlinePeFallbackFrameContainer" style="display:none; margin-top:12px; width:100%; border-radius:14px; overflow:hidden; border:1px solid #e2e8f0;"></div>
-
-        <!-- Hidden background iframe for Phone.email silent OTP processing -->
-        <iframe id="peSilentAuthFrame" src="" style="display:none; width:0; height:0; border:none;"></iframe>
       </div>
 
       <!-- Divider -->
@@ -4025,7 +3992,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.4.3
+            APK v5.4.4
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4052,7 +4019,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.3 (बिल्ड कोड: 543)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.4 (बिल्ड कोड: 544)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4894,7 +4861,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.3 (बिल्ड कोड: 543)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.4 (बिल्ड कोड: 544)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6416,7 +6383,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.4.3";
+    const APP_VERSION = "5.4.4";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -19667,271 +19634,108 @@
     }
 
     // ==========================================================================
-    // 📱 DIRECT INLINE PHONE.EMAIL OTP HANDLER (NO EXTRA BUTTON OR POPUP)
+    // 📱 OFFICIAL PHONE.EMAIL VERIFICATION HANDLER
     // ==========================================================================
-    const PE_CLIENT_ID = "11651953884975814719";
-    let peAuthSessionToken = "";
+    async function finalizePhoneLogin(phoneRaw) {
+      let cleanPhone10 = String(phoneRaw || "").replace(/\D/g, "");
+      if (cleanPhone10.length > 10) cleanPhone10 = cleanPhone10.slice(-10);
 
-    // 1. Mobile number ke niche chhote button par click karne par OTP bhejna
-    async function sendInlinePhoneEmailOtp() {
-      const phoneInp = document.getElementById("inlineMobileInput");
-      const phone10 = (phoneInp ? phoneInp.value : "").replace(/\D/g, "").slice(-10);
-      const statusEl = document.getElementById("authGateStatusMessage");
-      const btn = document.getElementById("btnInlineSendOtp");
-
-      if (phone10.length !== 10) {
-        if (statusEl) {
-          statusEl.style.color = "#dc2626";
-          statusEl.textContent = "⚠️ कृपया सही 10-अंकीय मोबाइल नंबर दर्ज करें।";
-        }
-        if (phoneInp) phoneInp.focus();
+      if (cleanPhone10.length !== 10) {
+        alert("सत्यापित मोबाइल नंबर प्राप्त नहीं हो सका।");
         return;
       }
 
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "भेज रहे हैं...";
-      }
-      if (statusEl) {
-        statusEl.style.color = "#2563eb";
-        statusEl.textContent = "OTP भेजा जा रहा है, कृपया प्रतीक्षा करें...";
-      }
-
-      try {
-        // Phone.email API se direct OTP trigger karna
-        const response = await fetch("https://auth.phone.email/api/send-otp", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            client_id: PE_CLIENT_ID,
-            country_code: "+91",
-            phone_no: phone10
-          })
-        });
-
-        const result = await response.json();
-
-        if (response.ok && (result.status === "success" || result.success || result.token)) {
-          peAuthSessionToken = result.token || result.session_id || "";
-          if (statusEl) {
-            statusEl.style.color = "#059669";
-            statusEl.textContent = "✅ OTP आपके मोबाइल पर भेज दिया गया है! नीचे OTP डालें।";
-          }
-          const otpInp = document.getElementById("inlineOtpInput");
-          if (otpInp) otpInp.focus();
-          startInlineOtpResendTimer();
-        } else {
-          throw new Error(result.message || "OTP भेजने में समस्या आई।");
-        }
-      } catch (err) {
-        console.warn("Direct Send OTP notice, checking fallback:", err);
-        // Fallback: Agar CORS ya direct API restriction aaye, toh bina alag window khole isi card ke andar auth.phone.email embed karein
-        const fallbackBox = document.getElementById("inlinePeFallbackFrameContainer");
-        if (fallbackBox) {
-          fallbackBox.style.display = "block";
-          fallbackBox.innerHTML = `
-            <div style="padding:10px; background:#eff6ff; border-bottom:1px solid #bfdbfe; font-size:12px; font-weight:700; color:#1e40af; display:flex; align-items:center; justify-content:space-between;">
-              <span>📱 त्वरित OTP सत्यापन</span>
-              <button type="button" onclick="document.getElementById('inlinePeFallbackFrameContainer').style.display='none'" style="border:none; background:transparent; font-size:12px; color:#64748b; cursor:pointer;">✕</button>
-            </div>
-            <iframe src="https://auth.phone.email/log-in?client_id=${PE_CLIENT_ID}&phone_no=${encodeURIComponent(phone10)}" style="width:100%; height:260px; border:none; border-radius:0 0 14px 14px; background:#fff;"></iframe>
-          `;
-          if (statusEl) {
-            statusEl.style.color = "#0284c7";
-            statusEl.textContent = "नीचे दिए गए बॉक्स में OTP सत्यापित करें 👇";
-          }
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "📩 पुनः OTP भेजें";
-          }
-        } else {
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "📩 पुनः OTP भेजें";
-          }
-          if (statusEl) {
-            statusEl.style.color = "#dc2626";
-            statusEl.textContent = "त्रुटि: " + err.message;
-          }
-        }
-      }
-    }
-
-    // 2. Niche OTP dalkar 'खोलें' dabane par verify karke app open karna
-    async function verifyInlinePhoneEmailOtp() {
-      const phoneInp = document.getElementById("inlineMobileInput");
-      const phone10 = (phoneInp ? phoneInp.value : "").replace(/\D/g, "").slice(-10);
-      const otpInp = document.getElementById("inlineOtpInput");
-      const otpCode = (otpInp ? otpInp.value : "").replace(/\D/g, "");
-      const statusEl = document.getElementById("authGateStatusMessage");
-      const btn = document.getElementById("btnInlineVerifyOtp");
-
-      if (phone10.length !== 10) {
-        if (statusEl) { statusEl.style.color = "#dc2626"; statusEl.textContent = "⚠️ पहले 10-अंकीय मोबाइल नंबर दर्ज करें।"; }
-        if (phoneInp) phoneInp.focus();
-        return;
-      }
-      if (otpCode.length < 4) {
-        if (statusEl) { statusEl.style.color = "#dc2626"; statusEl.textContent = "⚠️ कृपया प्राप्त OTP कोड दर्ज करें।"; }
-        if (otpInp) otpInp.focus();
-        return;
-      }
-
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "जांच रहे हैं...";
-      }
-
-      try {
-        const response = await fetch("https://auth.phone.email/api/verify-otp", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            client_id: PE_CLIENT_ID,
-            country_code: "+91",
-            phone_no: phone10,
-            otp: otpCode,
-            token: peAuthSessionToken
-          })
-        });
-
-        const result = await response.json();
-
-        if (response.ok && (result.status === "success" || result.success || result.user_json_url)) {
-          if (typeof showToast === "function") showToast("✅ सत्यापन सफल! स्वागत है।", "success");
-          completePhoneEmailVerification(phone10);
-        } else {
-          throw new Error(result.message || "गलत OTP! कृपया सही OTP डालें।");
-        }
-      } catch (err) {
-        if (btn) {
-          btn.disabled = false;
-          btn.textContent = "खोलें ➔";
-        }
-        if (statusEl) {
-          statusEl.style.color = "#dc2626";
-          statusEl.textContent = "❌ " + err.message;
-        }
-      }
-    }
-
-    function startInlineOtpResendTimer() {
-      const btn = document.getElementById("btnInlineSendOtp");
-      const timerTxt = document.getElementById("inlineOtpTimerText");
-      let sec = 30;
-      const interval = setInterval(() => {
-        sec--;
-        if (timerTxt) timerTxt.textContent = `पुनः भेजने हेतु ${sec} सेकंड प्रतीक्षा करें`;
-        if (sec <= 0) {
-          clearInterval(interval);
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "📩 पुनः OTP भेजें";
-          }
-          if (timerTxt) timerTxt.textContent = "OTP प्राप्त नहीं हुआ? पुनः भेजें";
-        }
-      }, 1000);
-    }
-
-    // ==========================================================================
-    // 📱 PHONE.EMAIL OTP VERIFICATION LISTENER (LOGIN LOOP FIX)
-    // ==========================================================================
-    function completePhoneEmailVerification(rawPhoneInput) {
-      let cleanPhone10 = String(rawPhoneInput || "").replace(/\D/g, "");
-      if (cleanPhone10.length > 10) {
-        cleanPhone10 = cleanPhone10.slice(-10);
-      }
-
-      if (cleanPhone10.length < 10) return;
-
-      // 1. मोबाइल नंबर और सत्यापन स्थिति सेव करें
+      // 1. Session Save karein
       localStorage.setItem("loggedInMemberPhone", cleanPhone10);
       localStorage.setItem("isUserVerified", "true");
       localStorage.setItem("ysg_logged_in", "true");
       localStorage.setItem("ysg_user_phone", cleanPhone10);
-      if (typeof loggedInMemberPhone !== "undefined") loggedInMemberPhone = cleanPhone10;
-      if (typeof isUserVerified !== "undefined") isUserVerified = true;
+      loggedInMemberPhone = cleanPhone10;
+      isUserVerified = true;
 
-      // 2. संचालक (8696663615) की जांच करें
-      const SANCHALAK_NUM = "8696663615";
-      if ((typeof SANCHALAK_PHONE !== "undefined" && cleanPhone10 === SANCHALAK_PHONE) || cleanPhone10 === SANCHALAK_NUM) {
+      // 2. Sanchalak (8696663615) Role Check
+      if (cleanPhone10 === "8696663615") {
         localStorage.setItem("userRole", "admin");
         localStorage.setItem("isAdminSession", "true");
-        if (typeof userRole !== "undefined") userRole = "admin";
-        if (typeof isAdmin !== "undefined") isAdmin = true;
+        userRole = "admin";
+        isAdmin = true;
       } else {
         localStorage.setItem("userRole", "member");
-        localStorage.removeItem("isAdminSession");
-        if (typeof userRole !== "undefined") userRole = "member";
-        if (typeof isAdmin !== "undefined") isAdmin = false;
+        userRole = "member";
       }
 
-      // 3. लॉगिन स्क्रीन और मोडल छिपाएं
-      const gateScreen = document.getElementById("appAuthGateScreen");
-      if (gateScreen) {
-        gateScreen.style.display = "none";
-        gateScreen.style.opacity = "0";
-        gateScreen.style.pointerEvents = "none";
-      }
+      // 3. Login Screen Hide karein
+      const gate = document.getElementById("appAuthGateScreen");
+      if (gate) gate.style.display = "none";
 
-      const loginModal = document.getElementById("loginModal");
-      if (loginModal) loginModal.style.display = "none";
+      const modal = document.getElementById("loginModal");
+      if (modal) modal.style.display = "none";
 
-      if (typeof closeLoginModal === "function") closeLoginModal();
-      if (typeof hideAuthGateScreen === "function") hideAuthGateScreen();
-
-      // 4. डैशबोर्ड लोड या पेज रीलोड करें
-      if (typeof updateAuthUI === "function") {
-        updateAuthUI();
-      }
+      // 4. Dashboard load karein
+      if (typeof updateAuthUI === "function") updateAuthUI();
       window.location.reload();
     }
 
-    // 1. Phone.email के मुख्य callback फ़ंक्शन को पकड़ें
-    window.phoneEmailListener = function(userObj) {
-      if (userObj && userObj.user_phone_number) {
-        completePhoneEmailVerification(userObj.user_phone_number);
-      } else if (userObj && userObj.user_json_url) {
-        fetch(userObj.user_json_url)
-          .then(res => res.json())
-          .then(json => {
-            if (json && json.user_phone_number) {
-              completePhoneEmailVerification(json.user_phone_number);
-            }
-          })
-          .catch(err => console.error("Phone.email callback JSON error:", err));
+    // Phone.email Official Callback Function (Must be in global window scope)
+    window.phoneEmailListener = async function(userObj) {
+      try {
+        if (userObj && userObj.user_phone_number) {
+          await finalizePhoneLogin(userObj.user_phone_number);
+        } else if (userObj && userObj.user_json_url) {
+          const response = await fetch(userObj.user_json_url);
+          const data = await response.json();
+          if (data && data.user_phone_number) {
+            await finalizePhoneLogin(data.user_phone_number);
+          }
+        }
+      } catch (err) {
+        console.error("Phone.email Verification Error:", err);
+        alert("लॉगिन त्रुटि: " + err.message);
       }
     };
     var phoneEmailListener = window.phoneEmailListener;
 
-    // 2. Popup/Window से आने वाले postMessage को भी पकड़ें (Android WebView/APK के लिए ज़रूरी)
+    // WebView / PostMessage Support (Window callback for Android WebView)
     window.addEventListener("message", async function(event) {
-      let data = event.data || {};
-      if (typeof data === "string") {
-        try { data = JSON.parse(data); } catch(e) {}
-      }
-      if (data && data.user_phone_number) {
-        completePhoneEmailVerification(data.user_phone_number);
-      } else if (data && data.user_json_url) {
-        try {
-          const res = await fetch(data.user_json_url);
-          const json = await res.json();
-          if (json && json.user_phone_number) {
-            completePhoneEmailVerification(json.user_phone_number);
-          }
-        } catch (err) {
-          console.error("Phone.email JSON fetch error:", err);
+      try {
+        let data = event.data || {};
+        if (typeof data === "string") {
+          try { data = JSON.parse(data); } catch(e) {}
         }
+        if (data && (data.user_phone_number || data.user_json_url)) {
+          window.phoneEmailListener(data);
+        }
+      } catch (err) {
+        console.error("Message listener notice:", err);
       }
     });
 
-    // 3. पेज लोड/रीलोड होते ही चेक करें कि यूजर पहले से वेरिफाइड है या नहीं
-    window.addEventListener("DOMContentLoaded", function() {
+    // Page load hote hi check karein ki user pehle se verified hai ya nahi
+    (function checkExistingSessionOnBoot() {
       if (localStorage.getItem("isUserVerified") === "true" && localStorage.getItem("loggedInMemberPhone")) {
-        const gateScreen = document.getElementById("appAuthGateScreen");
-        if (gateScreen) gateScreen.style.display = "none";
+        window.addEventListener("DOMContentLoaded", function() {
+          const gate = document.getElementById("appAuthGateScreen");
+          if (gate) gate.style.display = "none";
+        });
       }
-    });
+      try {
+        const urlParams = new URLSearchParams(window.location.search || window.location.hash.replace(/^#\/?/, '?'));
+        const userJsonUrl = urlParams.get('user_json_url');
+        const userPhone = urlParams.get('user_phone_number') || urlParams.get('phone_no');
+        if (userPhone) {
+          finalizePhoneLogin(userPhone);
+        } else if (userJsonUrl) {
+          fetch(userJsonUrl)
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.user_phone_number) {
+                finalizePhoneLogin(data.user_phone_number);
+              }
+            })
+            .catch(err => console.error("URL user_json_url fetch error:", err));
+        }
+      } catch (e) {}
+    })();
 
     function setupAuthGateRecaptcha() {
       if (!authGateRecaptchaVerifier && typeof firebase !== "undefined" && firebase.auth) {
@@ -20350,29 +20154,10 @@
       document.body.style.overflow = "";
       checkInitialAuthState();
       setTimeout(initAuthGateListener, 500);
-
-      const mobInp = document.getElementById("inlineMobileInput");
-      if (mobInp) {
-        mobInp.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            sendInlinePhoneEmailOtp();
-          }
-        });
-      }
-      const otpInp = document.getElementById("inlineOtpInput");
-      if (otpInp) {
-        otpInp.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            verifyInlinePhoneEmailOtp();
-          }
-        });
-      }
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.3)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.4)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
