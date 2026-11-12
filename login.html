@@ -117,6 +117,8 @@
         localStorage.setItem("userRole", cleanPhone === "8696663615" ? "admin" : "member");
         if (cleanPhone === "8696663615") {
           localStorage.setItem("isAdminSession", "true");
+        } else {
+          localStorage.removeItem("isAdminSession");
         }
 
         const appUser = {

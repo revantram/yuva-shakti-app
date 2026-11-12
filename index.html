@@ -3358,68 +3358,10 @@
         ग्रुप रिकॉर्ड्स, बही-खाता व वंशावली देखने हेतु कृपया अपना सत्यापन करें।
       </p>
 
-      <!-- विकल्प 1: मोबाइल नंबर से लॉगिन -->
-      <div id="authGatePhoneGroup" style="text-align:left;">
-        <label style="font-size:12.5px; font-weight:700; color:#334155; display:block; margin-bottom:6px;">10 अंकों का मोबाइल नंबर:</label>
-        <div style="display:flex; gap:6px; margin-bottom:14px;">
-          <span style="padding:10px 12px; background:#E2E8F0; border-radius:12px; font-weight:800; color:#1E293B; display:flex; align-items:center; font-size:14px;">+91</span>
-          <input type="tel" id="authGateMobileInput" oninput="onAuthGateMobileInput(this.value)" placeholder="उदा. 8696663615" maxlength="10" style="flex:1; padding:11px 12px; border:1.5px solid #CBD5E1; border-radius:12px; font-size:16px; font-weight:800; color:#0F172A; outline:none; background:#FFFFFF;">
-        </div>
-
-        <!-- Invisible reCAPTCHA container -->
-        <div id="authGateRecaptchaContainer"></div>
-
-        <!-- Sanchalak Admin Password Step (केवल 8696663615 के लिए) -->
-        <div id="authGateAdminPassGroup" style="display:none; text-align:left; background:#eff6ff; border:1.5px solid #93c5fd; border-radius:14px; padding:12px; margin-bottom:12px;">
-          <div style="font-size:12px; font-weight:800; color:#1e40af; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-user-shield"></i> <span>संचालक एडमिन पासवर्ड:</span>
-          </div>
-          <div style="position:relative; margin-bottom:10px;">
-            <input type="password" id="authGateAdminPasswordInput" placeholder="एडमिन पासवर्ड दर्ज करें..." style="width:100%; box-sizing:border-box; padding:10px 42px 10px 12px; border:1.5px solid #3b82f6; border-radius:10px; font-size:15px; font-weight:700; outline:none; background:#ffffff;">
-            <button type="button" onclick="togglePasswordVisibility('authGateAdminPasswordInput', this)" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#2563eb; font-size:14px; cursor:pointer;">👁️</button>
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button type="button" onclick="submitAuthGateAdminLogin(true)" style="flex:1; padding:10px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; border-radius:10px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
-              <i class="fa-solid fa-shield-check"></i> एडमिन लॉगिन 🛡️
-            </button>
-            <button type="button" onclick="submitAuthGateAdminLogin(false)" style="padding:10px 12px; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer;">
-              सामान्य सदस्य
-            </button>
-          </div>
-        </div>
-
-        <button type="button" onclick="handleAuthGateSendOtp()" id="btnAuthGateSendOtp" style="width:100%; padding:13px; background:linear-gradient(135deg, #0284C7, #2563EB); color:#FFFFFF; border:none; border-radius:14px; font-weight:800; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(37,99,235,0.35); transition:transform 0.15s, opacity 0.2s;">
-          <i class="fa-solid fa-paper-plane"></i>
-          <span id="btnAuthGateSendOtpText">OTP भेजें 📲</span>
-        </button>
-      </div>
-
-      <!-- चरण 2: 6 अंकों का OTP इनपुट (शुरुआत में छिपा रहेगा) -->
-      <div id="authGateOtpGroup" style="display:none; text-align:left;">
-        <div style="font-size:12.5px; color:#475569; margin-bottom:8px; text-align:center; font-weight:700;">
-          मोबाइल पर भेजा गया 6 अंकों का OTP दर्ज करें:
-        </div>
-        <input type="number" id="authGateOtpInput" placeholder="● ● ● ● ● ●" maxlength="6" style="width:100%; box-sizing:border-box; padding:12px; border:2px solid #2563EB; border-radius:14px; font-size:24px; text-align:center; letter-spacing:8px; font-weight:900; color:#0F172A; margin-bottom:14px; outline:none; background:#FFFFFF;">
-        
-        <button type="button" onclick="handleAuthGateVerifyOtp()" id="btnAuthGateVerifyOtp" style="width:100%; padding:13px; background:linear-gradient(135deg, #16A34A, #15803D); color:#FFFFFF; border:none; border-radius:14px; font-weight:800; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(22,163,74,0.35); transition:transform 0.15s, opacity 0.2s;">
-          <i class="fa-solid fa-circle-check"></i>
-          <span id="btnAuthGateVerifyOtpText">OTP सत्यापित करें ✅</span>
-        </button>
-
-        <div style="text-align:center; margin-top:10px;">
-          <button type="button" onclick="resetAuthGateToPhone()" style="background:none; border:none; color:#2563EB; font-size:12px; font-weight:800; cursor:pointer;">
-            ← मोबाइल नंबर बदलें / पुनः भेजें
-          </button>
-        </div>
-      </div>
-
-      <!-- Status message -->
-      <p id="authGateStatusMessage" style="font-size:12px; text-align:center; margin-top:12px; font-weight:700; min-height:18px;"></p>
-
-      <!-- Phone.email साइन-इन बटन (त्वरित OTP) -->
-      <div style="margin: 14px 0 10px; display:flex; flex-direction:column; align-items:center;">
-        <div style="font-size:11.5px; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; gap:5px;">
-          <i class="fa-solid fa-mobile-retro" style="color:#02BD7E;"></i>
+      <!-- विकल्प 1: Phone.email साइन-इन बटन (त्वरित मोबाइल OTP) -->
+      <div style="margin: 0 0 16px; display:flex; flex-direction:column; align-items:center;">
+        <div style="font-size:12px; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-mobile-retro" style="color:#02BD7E; font-size:14px;"></i>
           <span>Phone.email से त्वरित मोबाइल OTP:</span>
         </div>
         <div class="pe_signin_button" data-client-id="11651953884975814719">
@@ -3428,7 +3370,7 @@
       </div>
 
       <!-- Divider -->
-      <div style="display:flex; align-items:center; margin:16px 0 14px; gap:10px;">
+      <div style="display:flex; align-items:center; margin:16px 0; gap:10px;">
         <div style="flex:1; height:1px; background:#E2E8F0;"></div>
         <span style="font-size:11px; color:#94A3B8; font-weight:800; text-transform:uppercase;">अथवा</span>
         <div style="flex:1; height:1px; background:#E2E8F0;"></div>
@@ -3439,6 +3381,8 @@
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         <span>गूगल खाते से लॉगिन करें</span>
       </button>
+
+      <p id="authGateStatusMessage" style="font-size:12px; text-align:center; margin-top:12px; font-weight:700; min-height:14px;"></p>
     </div>
 
     <div style="font-size:11px; color:rgba(255,255,255,0.6); margin-top:16px;">
@@ -4052,7 +3996,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.3.7
+            APK v5.3.8
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4079,7 +4023,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.7 (बिल्ड कोड: 537)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.8 (बिल्ड कोड: 538)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4570,89 +4514,34 @@
         <button onclick="closeLoginModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
       </div>
 
-      <p style="font-size:12px; color:#64748b; margin-bottom:16px; line-height:1.5;">
-        केवल अपना 10 अंकों का मोबाइल नंबर दर्ज करके तुरंत सुरक्षित प्रवेश करें।
+      <p style="font-size:12px; color:#64748B; margin-bottom:18px; line-height:1.45;">
+        ग्रुप रिकॉर्ड्स, बही-खाता व वंशावली देखने हेतु कृपया लॉगिन करें।
       </p>
 
-      <!-- 10 अंकों का मोबाइल नंबर इनपुट -->
-      <div id="phoneInputGroup" style="text-align:left;">
-        <label style="font-size:13px; font-weight:700; color:#334155;">मोबाइल नंबर:</label>
-        <div style="display:flex; gap:6px; margin:7px 0 14px 0;">
-          <span style="padding:10px 12px; background:#e2e8f0; border-radius:12px; font-weight:800; color:#1e293b; display:flex; align-items:center;">+91</span>
-          <input type="tel" id="memberMobile" oninput="onMemberMobileInput(this.value)" placeholder="10 अंकों का नंबर (उदा. 8696663615)" maxlength="10" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:16px; font-weight:800; color:#0f172a; outline:none; background:#ffffff;">
-        </div>
-
-        <!-- बैकग्राउंड रीकैप्चा कंटेनर -->
-        <div id="recaptcha-container"></div>
-
-        <!-- Sanchalak Admin Password Step (केवल 8696663615 के लिए) -->
-        <div id="loginModalAdminPassGroup" style="display:none; text-align:left; background:#eff6ff; border:1.5px solid #93c5fd; border-radius:14px; padding:12px; margin-bottom:12px;">
-          <div style="font-size:12px; font-weight:800; color:#1e40af; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-user-shield"></i> <span>संचालक एडमिन पासवर्ड:</span>
-          </div>
-          <div style="position:relative; margin-bottom:10px;">
-            <input type="password" id="loginModalAdminPasswordInput" placeholder="एडमिन पासवर्ड दर्ज करें..." style="width:100%; box-sizing:border-box; padding:10px 42px 10px 12px; border:1.5px solid #3b82f6; border-radius:10px; font-size:15px; font-weight:700; outline:none; background:#ffffff;">
-            <button type="button" onclick="togglePasswordVisibility('loginModalAdminPasswordInput', this)" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#2563eb; font-size:14px; cursor:pointer;">👁️</button>
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button type="button" onclick="submitLoginModalAdminLogin(true)" style="flex:1; padding:10px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; border-radius:10px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
-              <i class="fa-solid fa-shield-check"></i> एडमिन लॉगिन 🛡️
-            </button>
-            <button type="button" onclick="submitLoginModalAdminLogin(false)" style="padding:10px 12px; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer;">
-              सामान्य सदस्य
-            </button>
-          </div>
-        </div>
-
-        <button type="button" onclick="handleSmartMemberLogin()" id="btnSendOtp" style="width:100%; padding:13px; background:linear-gradient(135deg, #0284c7, #2563eb); color:white; border:none; border-radius:12px; font-weight:800; cursor:pointer; font-size:15px; box-shadow:0 4px 14px rgba(2,132,199,0.35);">
-          लॉगिन करें 📲
-        </button>
-      </div>
-
-      <!-- OTP इनपुट (यदि SMS सक्रिय हो) -->
-      <div id="otpInputGroup" style="display:none; text-align:left;">
-        <p style="font-size:12.5px; color:#475569; margin-bottom:8px; text-align:center; font-weight:700;">प्राप्त 6 अंकों का OTP दर्ज करें:</p>
-        <input type="number" id="otpCodeInput" placeholder="● ● ● ● ● ●" maxlength="6" style="width:100%; box-sizing:border-box; padding:11px; border:2px solid #0284c7; border-radius:12px; font-size:22px; text-align:center; letter-spacing:6px; font-weight:800; color:#0f172a; margin-bottom:14px; outline:none; background:#ffffff;">
-        
-        <button type="button" onclick="verifyEnteredOtp()" id="btnVerifyOtp" style="width:100%; padding:12px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; border-radius:12px; font-weight:800; cursor:pointer; font-size:15px; box-shadow:0 4px 14px rgba(22,163,74,0.3);">
-          सत्यापित करें ✅
-        </button>
-        <div style="text-align:center; margin-top:10px;">
-          <button type="button" onclick="resetOtpScreen()" style="background:none; border:none; color:#0284c7; font-size:12px; font-weight:700; cursor:pointer;">← नंबर बदलें</button>
-        </div>
-      </div>
-
-      <p id="otpStatusMessage" style="font-size:12.5px; text-align:center; margin-top:10px; font-weight:700; min-height:18px;"></p>
-
-      <!-- Phone.email साइन-इन बटन (त्वरित OTP) -->
-      <div style="margin: 12px 0 10px; display:flex; flex-direction:column; align-items:center;">
-        <div style="font-size:11.5px; font-weight:700; color:#334155; margin-bottom:6px; display:flex; align-items:center; gap:5px;">
-          <i class="fa-solid fa-mobile-retro" style="color:#02BD7E;"></i>
-          <span>Phone.email OTP से त्वरित लॉगिन:</span>
+      <!-- विकल्प 1: Phone.email साइन-इन बटन (त्वरित मोबाइल OTP) -->
+      <div style="margin: 0 0 16px; display:flex; flex-direction:column; align-items:center;">
+        <div style="font-size:12px; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-mobile-retro" style="color:#02BD7E; font-size:14px;"></i>
+          <span>Phone.email से त्वरित मोबाइल OTP:</span>
         </div>
         <div class="pe_signin_button" data-client-id="11651953884975814719">
           <script src="https://www.phone.email/sign_in_button_v1.js" async></script>
         </div>
       </div>
 
-      <div style="display:flex; align-items:center; margin:14px 0 10px; gap:8px;">
+      <div style="display:flex; align-items:center; margin:16px 0; gap:8px;">
         <div style="flex:1; height:1px; background:#e2e8f0;"></div>
-        <span style="font-size:11px; color:#94a3b8; font-weight:700;">अथवा</span>
+        <span style="font-size:11px; color:#94a3b8; font-weight:800; text-transform:uppercase;">अथवा</span>
         <div style="flex:1; height:1px; background:#e2e8f0;"></div>
       </div>
 
-      <!-- Google Sign In -->
-      <button type="button" onclick="handleGoogleSignInClick()" class="btn-google-signin" style="width:100%; padding:10px; border-radius:12px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.04);">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      <!-- विकल्प 2: Google Sign In -->
+      <button type="button" onclick="handleGoogleSignInClick()" class="btn-google-signin" style="width:100%; padding:12px; border-radius:14px; border:1.5px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:800; font-size:13.5px; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.06); transition:transform 0.15s, opacity 0.2s;">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         <span>गूगल खाते से लॉगिन करें</span>
       </button>
 
-      <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #e2e8f0;">
-        <button type="button" onclick="closeLoginModal(); openAdminControlModal();" style="width:100%; padding:9px; border-radius:10px; border:1px solid #fde68a; background:#fffbeb; color:#92400e; font-weight:800; font-size:12.5px; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer;">
-          <i class="fa-solid fa-crown" style="color:#d97706;"></i>
-          <span>एडमिन पासवर्ड लॉगिन</span>
-        </button>
-      </div>
+      <p id="otpStatusMessage" style="font-size:12px; text-align:center; margin-top:12px; font-weight:700; min-height:14px;"></p>
     </div>
   </div>
 
@@ -4961,7 +4850,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.7 (बिल्ड कोड: 537)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.8 (बिल्ड कोड: 538)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6483,7 +6372,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.3.7";
+    const APP_VERSION = "5.3.8";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -19576,49 +19465,56 @@
       }
     }
 
-    function completeUserLogin(userData, wantAdmin = false) {
+    function completeUserLogin(userData) {
       const phone = userData.phone ? String(userData.phone).replace(/\D/g, '').slice(-10) : "";
+      const email = (userData.email || "").trim().toLowerCase();
       const SANCHALAK_PHONE = "8696663615";
-      const isSanchalak = phone === SANCHALAK_PHONE;
-      const enableAdmin = isSanchalak && (wantAdmin === true || (userData.role === "admin" && wantAdmin !== false));
+      const SANCHALAK_EMAIL = "revantrambhati@gmail.com";
+
+      // Super Admin Rule: Phone ends with 8696663615 OR Email is revantrambhati@gmail.com
+      const isSuperAdmin = (phone === SANCHALAK_PHONE) || (email === SANCHALAK_EMAIL);
 
       const appUser = {
-        name: userData.name || (isSanchalak ? "रेवंतराम भाटी" : "सदस्य"),
-        phone: phone,
-        email: userData.email || "",
+        name: isSuperAdmin ? "रेवंतराम भाटी" : (userData.name || "सदस्य"),
+        phone: phone || (isSuperAdmin ? SANCHALAK_PHONE : ""),
+        email: email || (isSuperAdmin ? SANCHALAK_EMAIL : ""),
         photoUrl: userData.photo || null,
-        role: enableAdmin ? "संचालक / Admin" : (userData.role === "admin" && !enableAdmin ? "सदस्य" : (userData.role || "सदस्य")),
-        uid: userData.uid || ("user_" + Date.now()),
+        role: isSuperAdmin ? "संचालक / Admin" : "सदस्य",
+        uid: userData.uid || (isSuperAdmin ? "admin_8696663615" : "user_" + Date.now()),
         isGuest: false
       };
 
       localStorage.setItem("currentAppUser", JSON.stringify(appUser));
-      if (phone) localStorage.setItem("loggedInMemberPhone", phone);
+      if (appUser.phone) localStorage.setItem("loggedInMemberPhone", appUser.phone);
       localStorage.setItem("isUserVerified", "true");
-      localStorage.setItem("userRole", enableAdmin ? "admin" : "member");
-      if (enableAdmin) {
+      localStorage.setItem("userRole", isSuperAdmin ? "admin" : "member");
+
+      if (isSuperAdmin) {
         localStorage.setItem("isAdminSession", "true");
+        isAdmin = true;
+        userRole = "admin";
       } else {
         localStorage.removeItem("isAdminSession");
+        isAdmin = false;
+        userRole = "member";
       }
 
-      loggedInMemberPhone = phone;
-      isAdmin = enableAdmin;
-      userRole = enableAdmin ? "admin" : "member";
+      loggedInMemberPhone = appUser.phone;
       isUserVerified = true;
 
       try {
         if (userData.uid && typeof db !== "undefined") {
           db.collection("users").doc(userData.uid).set({
             name: appUser.name,
-            phone: phone,
+            phone: appUser.phone,
+            role: appUser.role,
             lastLogin: new Date(),
             updatedAt: new Date()
           }, { merge: true });
         }
       } catch (e) {}
 
-      showToast(enableAdmin ? `नमस्ते रेवंतराम जी! एडमिन कंट्रोल सक्रिय हुआ 🎉` : `स्वागत है ${appUser.name}! लॉगिन सफल हुआ ✅`, "success");
+      showToast(isSuperAdmin ? `नमस्ते रेवंतराम जी! संचालक (Admin Mode) सक्रिय हुआ 🎉` : `स्वागत है ${appUser.name}! सदस्य लॉगिन सफल हुआ ✅`, "success");
 
       setTimeout(() => {
         hideAuthGateScreen();
@@ -19653,37 +19549,30 @@
           localStorage.setItem("isUserVerified", "true");
 
           const SANCHALAK_NUM = "8696663615";
-          const isSanchalak = cleanPhone === SANCHALAK_NUM;
+          const isSuperAdmin = cleanPhone === SANCHALAK_NUM;
 
           const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
             const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
             return p && p === cleanPhone;
           });
 
-          if (isSanchalak) {
-            const pass = prompt("नमस्ते रेवंतराम जी! एडमिन कंट्रोल हेतु पासवर्ड दर्ज करें (सामान्य सदस्य मोड के लिए कैंसिल करें):");
-            const wantAdmin = pass && typeof ysVerifyAdminPassword === "function" && ysVerifyAdminPassword(pass.trim());
+          if (isSuperAdmin) {
+            // नियम 1 व 2: मुख्य संचालक (8696663615) स्वतः Admin Mode में खुले
             completeUserLogin({
               name: "रेवंतराम भाटी",
               phone: cleanPhone,
-              role: wantAdmin ? "admin" : "member",
+              role: "admin",
               uid: "admin_" + cleanPhone
-            }, wantAdmin);
-          } else if (matched) {
-            completeUserLogin({
-              name: matched.name,
-              phone: cleanPhone,
-              photo: matched.photo || null,
-              role: matched.role || 'सदस्य',
-              uid: "member_" + cleanPhone
-            }, false);
+            });
           } else {
+            // नियम 3: अन्य कोई भी नंबर केवल सामान्य सदस्य (Member Mode) में ही खुले
             completeUserLogin({
-              name: `सदस्य (${cleanPhone})`,
+              name: matched ? matched.name : `सदस्य (${cleanPhone})`,
               phone: cleanPhone,
-              role: 'सदस्य',
-              uid: "user_" + cleanPhone
-            }, false);
+              photo: matched ? matched.photo : null,
+              role: "member",
+              uid: "member_" + cleanPhone
+            });
           }
 
           closeLoginModal();
@@ -20017,13 +19906,11 @@
               return (rawPhone && p === rawPhone) || (m.email && m.email.toLowerCase() === email);
             });
 
-            const hasAdminSession = isSanchalak && localStorage.getItem("isAdminSession") === "true";
-
             const appUser = {
               name: isSanchalak ? "रेवंतराम भाटी" : (matched ? matched.name : (user.displayName || "सदस्य")),
-              phone: rawPhone || (matched ? matched.phone : ""),
+              phone: rawPhone || (isSanchalak ? SANCHALAK_PHONE : (matched ? matched.phone : "")),
               photoUrl: user.photoURL || (matched ? matched.photo : null),
-              role: hasAdminSession ? "संचालक / Admin" : (matched ? (matched.role || "सदस्य") : "सदस्य"),
+              role: isSanchalak ? "संचालक / Admin" : (matched ? (matched.role || "सदस्य") : "सदस्य"),
               uid: user.uid,
               isGuest: false
             };
@@ -20031,8 +19918,18 @@
             localStorage.setItem("currentAppUser", JSON.stringify(appUser));
             if (appUser.phone) localStorage.setItem("loggedInMemberPhone", appUser.phone);
             localStorage.setItem("isUserVerified", "true");
-            localStorage.setItem("userRole", hasAdminSession ? "admin" : "member");
-            isAdmin = hasAdminSession;
+
+            if (isSanchalak) {
+              localStorage.setItem("isAdminSession", "true");
+              localStorage.setItem("userRole", "admin");
+              isAdmin = true;
+              userRole = "admin";
+            } else {
+              localStorage.removeItem("isAdminSession");
+              localStorage.setItem("userRole", "member");
+              isAdmin = false;
+              userRole = "member";
+            }
 
             hideAuthGateScreen();
             updateAuthUI();
@@ -20056,7 +19953,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.7)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.8)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
