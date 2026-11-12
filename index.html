@@ -19560,11 +19560,26 @@
     let fbConfirmationResult = null;
 
     function initFirebaseRecaptcha() {
-      if (!window.fbRecaptchaVerifier && typeof firebase !== "undefined" && firebase.auth) {
+      if (!window.fbRecaptchaVerifier) {
+        // Android APK (WebView) में auth/internal-error से बचने के लिए 'normal' reCAPTCHA
         window.fbRecaptchaVerifier = new firebase.auth.RecaptchaVerifier("fb-recaptcha-container", {
-          size: "invisible",
-          callback: function() {}
+          size: "normal",
+          callback: function(response) {
+            // reCAPTCHA वेरिफाई होते ही स्थिति अपडेट करें
+            const statusEl = document.getElementById("authGateStatusMessage");
+            if (statusEl) {
+              statusEl.style.color = "#059669";
+              statusEl.textContent = "✅ सुरक्षा जांच पूरी! अब OTP भेजा जा रहा है...";
+            }
+          },
+          "expired-callback": function() {
+            if (window.fbRecaptchaVerifier) {
+              window.fbRecaptchaVerifier.clear();
+              window.fbRecaptchaVerifier = null;
+            }
+          }
         });
+        window.fbRecaptchaVerifier.render();
       }
     }
 
