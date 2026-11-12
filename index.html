@@ -3996,7 +3996,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.3.9
+            APK v5.4.0
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4023,7 +4023,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.9 (बिल्ड कोड: 539)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.0 (बिल्ड कोड: 540)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4867,7 +4867,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.9 (बिल्ड कोड: 539)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.0 (बिल्ड कोड: 540)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6389,7 +6389,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.3.9";
+    const APP_VERSION = "5.4.0";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -9929,10 +9929,15 @@
     }
 
     function logoutMember() {
+      localStorage.removeItem("ysg_logged_in");
+      localStorage.removeItem("ysg_user_phone");
       localStorage.removeItem("loggedInMemberPhone");
       localStorage.removeItem("isAdminSession");
       localStorage.removeItem("userRole");
       localStorage.removeItem("isUserVerified");
+      localStorage.removeItem("currentAppUser");
+      localStorage.removeItem("userPhone");
+      localStorage.removeItem("isLoggedIn");
       loggedInMemberPhone = null;
       isAdmin = false;
       userRole = "guest";
@@ -19587,7 +19592,11 @@
       };
 
       localStorage.setItem("currentAppUser", JSON.stringify(appUser));
-      if (appUser.phone) localStorage.setItem("loggedInMemberPhone", appUser.phone);
+      localStorage.setItem("ysg_logged_in", "true");
+      if (appUser.phone) {
+        localStorage.setItem("loggedInMemberPhone", appUser.phone);
+        localStorage.setItem("ysg_user_phone", appUser.phone);
+      }
       localStorage.setItem("isUserVerified", "true");
       localStorage.setItem("userRole", isSuperAdmin ? "admin" : "member");
 
@@ -19630,65 +19639,84 @@
     //  📲 Phone.email OTP Listener (Client ID: 11651953884975814719)
     // =========================================================================
     function phoneEmailListener(userObj) {
-      if (!userObj || !userObj.user_json_url) {
+      if (!userObj) {
         console.error("Phone.email: invalid userObj", userObj);
         return;
       }
-      var user_json_url = userObj.user_json_url;
 
-      fetch(user_json_url)
-        .then(response => response.json())
-        .then(data => {
-          const countryCode = data.user_country_code || "+91";
-          const phoneNumber = data.user_phone_number || "";
-          const fullNumber = countryCode + phoneNumber;
-          const cleanPhone = String(phoneNumber || fullNumber).replace(/\D/g, '').slice(-10);
+      // 1. User ka verified phone number aur JSON URL nikalna
+      const directPhone = userObj.user_phone_number || "";
+      const directCode = userObj.user_country_code || "+91";
+      const user_json_url = userObj.user_json_url;
 
-          // लोकल स्टोरेज में सेव करें ताकि बार-बार लॉगिन न करना पड़े
-          localStorage.setItem("userPhone", fullNumber);
-          localStorage.setItem("isLoggedIn", "true");
-          localStorage.setItem("loggedInMemberPhone", cleanPhone);
-          localStorage.setItem("isUserVerified", "true");
+      function processPhoneLogin(phoneNumber, countryCode) {
+        const fullNumber = (countryCode || "+91") + phoneNumber;
+        const cleanPhone = String(phoneNumber || fullNumber).replace(/\D/g, '').slice(-10);
 
-          const SANCHALAK_NUM = "8696663615";
-          const isSuperAdmin = cleanPhone === SANCHALAK_NUM;
+        console.log("Verified Number:", cleanPhone);
 
-          const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
-            const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
-            return p && p === cleanPhone;
-          });
+        // 2. Login session save karein taaki wapas login page par na aaye
+        localStorage.setItem("ysg_logged_in", "true");
+        localStorage.setItem("ysg_user_phone", cleanPhone);
+        localStorage.setItem("userPhone", fullNumber);
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("loggedInMemberPhone", cleanPhone);
+        localStorage.setItem("isUserVerified", "true");
 
-          if (isSuperAdmin) {
-            // नियम 1 व 2: मुख्य संचालक (8696663615) स्वतः Admin Mode में खुले
-            completeUserLogin({
-              name: "रेवंतराम भाटी",
-              phone: cleanPhone,
-              role: "admin",
-              uid: "admin_" + cleanPhone
-            });
-          } else {
-            // नियम 3: अन्य कोई भी नंबर केवल सामान्य सदस्य (Member Mode) में ही खुले
-            completeUserLogin({
-              name: matched ? matched.name : `सदस्य (${cleanPhone})`,
-              phone: cleanPhone,
-              photo: matched ? matched.photo : null,
-              role: "member",
-              uid: "member_" + cleanPhone
-            });
-          }
+        const SANCHALAK_NUM = "8696663615";
+        const isSuperAdmin = cleanPhone === SANCHALAK_NUM;
 
-          closeLoginModal();
-          hideAuthGateScreen();
-          updateAuthUI();
-          if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
-          if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
-
-          alert("सफलतापूर्वक लॉगिन हुआ! नंबर: " + fullNumber);
-        })
-        .catch(err => {
-          console.error("Phone.email एरर:", err);
-          showToast("OTP डेटा प्राप्त करने में समस्या आई। कृपया पुनः प्रयास करें।", "error");
+        const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
+          const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
+          return p && p === cleanPhone;
         });
+
+        if (isSuperAdmin) {
+          // नियम 1 व 2: मुख्य संचालक (8696663615) स्वतः Admin Mode में खुले
+          completeUserLogin({
+            name: "रेवंतराम भाटी",
+            phone: cleanPhone,
+            role: "admin",
+            uid: "admin_" + cleanPhone
+          });
+        } else {
+          // नियम 3: अन्य कोई भी नंबर केवल सामान्य सदस्य (Member Mode) में ही खुले
+          completeUserLogin({
+            name: matched ? matched.name : `सदस्य (${cleanPhone})`,
+            phone: cleanPhone,
+            photo: matched ? matched.photo : null,
+            role: "member",
+            uid: "member_" + cleanPhone
+          });
+        }
+
+        // 3. Login screen chhupayein
+        closeLoginModal();
+        hideAuthGateScreen();
+        updateAuthUI();
+        if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
+        if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
+
+        alert("सफलतापूर्वक लॉगिन हुआ! नंबर: " + fullNumber);
+      }
+
+      if (directPhone) {
+        processPhoneLogin(directPhone, directCode);
+      } else if (user_json_url) {
+        fetch(user_json_url)
+          .then(response => response.json())
+          .then(data => {
+            const countryCode = data.user_country_code || "+91";
+            const phoneNumber = data.user_phone_number || "";
+            processPhoneLogin(phoneNumber, countryCode);
+          })
+          .catch(err => {
+            console.error("Phone.email एरर:", err);
+            showToast("OTP डेटा प्राप्त करने में समस्या आई। कृपया पुनः प्रयास करें।", "error");
+          });
+      } else {
+        console.error("Phone.email: invalid userObj format", userObj);
+      }
     }
     window.phoneEmailListener = phoneEmailListener;
 
@@ -20001,10 +20029,27 @@
     }
 
     function checkInitialAuthState() {
+      const isYsgLoggedIn = localStorage.getItem("ysg_logged_in") === "true";
       const cachedUserStr = localStorage.getItem("currentAppUser");
-      const cachedPhone = localStorage.getItem("loggedInMemberPhone");
-      if (cachedUserStr || cachedPhone) {
+      const cachedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
+
+      if (isYsgLoggedIn || cachedUserStr || cachedPhone) {
         hideAuthGateScreen();
+        const phone = cachedPhone ? String(cachedPhone).replace(/\D/g, '').slice(-10) : "";
+        const SANCHALAK_PHONE = "8696663615";
+        const isSuperAdmin = (phone === SANCHALAK_PHONE) || (localStorage.getItem("isAdminSession") === "true");
+        if (isSuperAdmin) {
+          isAdmin = true;
+          userRole = "admin";
+          localStorage.setItem("isAdminSession", "true");
+          localStorage.setItem("userRole", "admin");
+        } else {
+          isAdmin = false;
+          userRole = localStorage.getItem("userRole") || "member";
+          localStorage.removeItem("isAdminSession");
+        }
+        updateAuthUI();
+        if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
       } else {
         showAuthGateScreen();
       }
@@ -20035,7 +20080,11 @@
             };
 
             localStorage.setItem("currentAppUser", JSON.stringify(appUser));
-            if (appUser.phone) localStorage.setItem("loggedInMemberPhone", appUser.phone);
+            localStorage.setItem("ysg_logged_in", "true");
+            if (appUser.phone) {
+              localStorage.setItem("loggedInMemberPhone", appUser.phone);
+              localStorage.setItem("ysg_user_phone", appUser.phone);
+            }
             localStorage.setItem("isUserVerified", "true");
 
             if (isSanchalak) {
@@ -20054,9 +20103,29 @@
             updateAuthUI();
             if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
           } else {
+            // Firebase user is null (e.g. Phone.email session) - check ysg_logged_in
+            const isYsgLoggedIn = localStorage.getItem("ysg_logged_in") === "true";
             const cachedUserStr = localStorage.getItem("currentAppUser");
-            const cachedPhone = localStorage.getItem("loggedInMemberPhone");
-            if (!cachedUserStr && !cachedPhone) {
+            const cachedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
+
+            if (isYsgLoggedIn || cachedUserStr || cachedPhone) {
+              hideAuthGateScreen();
+              const phone = cachedPhone ? String(cachedPhone).replace(/\D/g, '').slice(-10) : "";
+              const SANCHALAK_PHONE = "8696663615";
+              const isSuperAdmin = (phone === SANCHALAK_PHONE) || (localStorage.getItem("isAdminSession") === "true");
+              if (isSuperAdmin) {
+                isAdmin = true;
+                userRole = "admin";
+                localStorage.setItem("isAdminSession", "true");
+                localStorage.setItem("userRole", "admin");
+              } else {
+                isAdmin = false;
+                userRole = localStorage.getItem("userRole") || "member";
+                localStorage.removeItem("isAdminSession");
+              }
+              updateAuthUI();
+              if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
+            } else {
               showAuthGateScreen();
             }
           }
@@ -20072,7 +20141,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.9)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.0)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
