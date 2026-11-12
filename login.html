@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>मोबाइल नंबर लॉगिन | युवा शक्ति ग्रुप</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 22px;
+      padding: 35px 25px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .logo-box {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 12px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    h2 { margin: 0 0 4px; font-size: 22px; font-weight: 800; color: #ffffff; }
+    .sub-head { margin: 0 0 10px; font-size: 13px; font-weight: 700; color: #fcd34d; }
+    p.sub { margin: 0 0 25px; font-size: 13px; color: #94a3b8; }
+    .back-btn {
+      margin-top: 22px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      padding: 9px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="glass-card">
+  <div class="logo-box">
+    <img src="ic_launcher.png" alt="युवा शक्ति ग्रुप" onerror="this.style.display='none'; document.getElementById('fbIcon').style.display='block';">
+    <i id="fbIcon" class="fa-solid fa-people-roof" style="display:none; color:white; font-size:26px;"></i>
+  </div>
+  <h2>ऐप लॉगिन</h2>
+  <div class="sub-head">युवा शक्ति ग्रुप • भाटी परिवार</div>
+  <p class="sub">मोबाइल नंबर से OTP वेरिफाई करें</p>
+
+  <!-- Phone.email साइन-इन बटन -->
+  <div class="pe_signin_button" data-client-id="11651953884975814719">
+    <script src="https://www.phone.email/sign_in_button_v1.js" async></script>
+  </div>
+
+  <div>
+    <a href="index.html" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i> मुख्य ऐप पर जाएं
+    </a>
+  </div>
+</div>
+
+<script>
+  // जैसे ही यूजर का नंबर सफलतापूर्वक वेरिफाई होगा, यह फंक्शन अपने आप चलेगा
+  function phoneEmailListener(userObj) {
+    var user_json_url = userObj.user_json_url;
+
+    // इस URL से यूजर का मोबाइल नंबर प्राप्त करें
+    fetch(user_json_url)
+      .then(response => response.json())
+      .then(data => {
+        const countryCode = data.user_country_code || "+91";   // जैसे +91
+        const phoneNumber = data.user_phone_number || ""; // मोबाइल नंबर
+        const fullNumber = countryCode + phoneNumber;
+        const cleanPhone = String(phoneNumber || fullNumber).replace(/\D/g, '').slice(-10);
+
+        // लोकल स्टोरेज में सेव करें ताकि बार-बार लॉगिन न करना पड़े
+        localStorage.setItem("userPhone", fullNumber);
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("loggedInMemberPhone", cleanPhone);
+        localStorage.setItem("isUserVerified", "true");
+        localStorage.setItem("userRole", cleanPhone === "8696663615" ? "admin" : "member");
+        if (cleanPhone === "8696663615") {
+          localStorage.setItem("isAdminSession", "true");
+        }
+
+        const appUser = {
+          name: cleanPhone === "8696663615" ? "रेवंतराम भाटी" : `सदस्य (${cleanPhone})`,
+          phone: cleanPhone,
+          role: cleanPhone === "8696663615" ? "admin" : "member",
+          uid: "pe_" + cleanPhone,
+          isGuest: false
+        };
+        localStorage.setItem("currentAppUser", JSON.stringify(appUser));
+
+        alert("सफलतापूर्वक लॉगिन हुआ! नंबर: " + fullNumber);
+
+        // ऐप के मुख्य पेज पर भेजें
+        window.location.href = "index.html";
+      })
+      .catch(err => {
+        console.error("एरर:", err);
+        alert("डेटा प्राप्त करने में समस्या आई। कृपया पुनः प्रयास करें।");
+      });
+  }
+</script>
+
+</body>
+</html>

@@ -181,18 +181,54 @@ public class MainActivity extends Activity {
             public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, android.os.Message resultMsg) {
                 WebView.HitTestResult result = view.getHitTestResult();
                 String data = result != null ? result.getExtra() : null;
-                if (data != null) {
-                    if (data.endsWith(".apk") || data.contains("/releases/download/")) {
-                        downloadAndInstallApk(data);
-                        return false;
-                    }
-                    try {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(data));
-                        startActivity(browserIntent);
-                    } catch (Exception ignored) {}
+                if (data != null && (data.endsWith(".apk") || data.contains("/releases/download/"))) {
+                    downloadAndInstallApk(data);
                     return false;
                 }
-                return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg);
+
+                // Popup dialog for OAuth & Phone.email Sign-In
+                try {
+                    final android.app.Dialog popupDialog = new android.app.Dialog(MainActivity.this, android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+                    WebView popupWebView = new WebView(MainActivity.this);
+                    WebSettings pSettings = popupWebView.getSettings();
+                    pSettings.setJavaScriptEnabled(true);
+                    pSettings.setDomStorageEnabled(true);
+                    pSettings.setDatabaseEnabled(true);
+                    pSettings.setSupportMultipleWindows(true);
+                    pSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+                    String defaultUa = pSettings.getUserAgentString();
+                    String cleanUa = defaultUa.replace("; wv", "").replaceAll("Version/\\d+\\.\\d+\\s*", "");
+                    pSettings.setUserAgentString(cleanUa);
+                    try {
+                        android.webkit.CookieManager.getInstance().setAcceptThirdPartyCookies(popupWebView, true);
+                    } catch (Exception ignored) {}
+
+                    popupWebView.setWebChromeClient(new WebChromeClient() {
+                        @Override
+                        public void onCloseWindow(WebView window) {
+                            if (popupDialog.isShowing()) {
+                                popupDialog.dismiss();
+                            }
+                        }
+                    });
+
+                    popupWebView.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                            return false;
+                        }
+                    });
+
+                    popupDialog.setContentView(popupWebView);
+                    popupDialog.show();
+
+                    WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                    transport.setWebView(popupWebView);
+                    resultMsg.sendToTarget();
+                    return true;
+                } catch (Exception e) {
+                    return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg);
+                }
             }
 
             @Override

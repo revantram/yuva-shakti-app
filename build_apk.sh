@@ -7,6 +7,7 @@ BUILD_DIR="/data/user/0/com.termux/files/home/.gemini/antigravity-cli/scratch/yu
 echo "==> 🔄 Updating assets & sources..."
 mkdir -p "${BUILD_DIR}/assets"
 cp "${PROJECT_DIR}/index.html" "${BUILD_DIR}/assets/index.html"
+cp "${PROJECT_DIR}/login.html" "${BUILD_DIR}/assets/login.html" 2>/dev/null || true
 cp "${PROJECT_DIR}/payment-methods.html" "${BUILD_DIR}/assets/payment-methods.html" 2>/dev/null || true
 cp "${PROJECT_DIR}/cash-counter.html" "${BUILD_DIR}/assets/cash-counter.html" 2>/dev/null || true
 cp "${PROJECT_DIR}/notes_data.js" "${BUILD_DIR}/assets/notes_data.js" 2>/dev/null || true

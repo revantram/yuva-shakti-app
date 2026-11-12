@@ -3416,6 +3416,17 @@
       <!-- Status message -->
       <p id="authGateStatusMessage" style="font-size:12px; text-align:center; margin-top:12px; font-weight:700; min-height:18px;"></p>
 
+      <!-- Phone.email साइन-इन बटन (त्वरित OTP) -->
+      <div style="margin: 14px 0 10px; display:flex; flex-direction:column; align-items:center;">
+        <div style="font-size:11.5px; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; gap:5px;">
+          <i class="fa-solid fa-mobile-retro" style="color:#02BD7E;"></i>
+          <span>Phone.email से त्वरित मोबाइल OTP:</span>
+        </div>
+        <div class="pe_signin_button" data-client-id="11651953884975814719">
+          <script src="https://www.phone.email/sign_in_button_v1.js" async></script>
+        </div>
+      </div>
+
       <!-- Divider -->
       <div style="display:flex; align-items:center; margin:16px 0 14px; gap:10px;">
         <div style="flex:1; height:1px; background:#E2E8F0;"></div>
@@ -4041,7 +4052,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.3.6
+            APK v5.3.7
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4068,7 +4079,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.6 (बिल्ड कोड: 536)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.7 (बिल्ड कोड: 537)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4613,6 +4624,17 @@
 
       <p id="otpStatusMessage" style="font-size:12.5px; text-align:center; margin-top:10px; font-weight:700; min-height:18px;"></p>
 
+      <!-- Phone.email साइन-इन बटन (त्वरित OTP) -->
+      <div style="margin: 12px 0 10px; display:flex; flex-direction:column; align-items:center;">
+        <div style="font-size:11.5px; font-weight:700; color:#334155; margin-bottom:6px; display:flex; align-items:center; gap:5px;">
+          <i class="fa-solid fa-mobile-retro" style="color:#02BD7E;"></i>
+          <span>Phone.email OTP से त्वरित लॉगिन:</span>
+        </div>
+        <div class="pe_signin_button" data-client-id="11651953884975814719">
+          <script src="https://www.phone.email/sign_in_button_v1.js" async></script>
+        </div>
+      </div>
+
       <div style="display:flex; align-items:center; margin:14px 0 10px; gap:8px;">
         <div style="flex:1; height:1px; background:#e2e8f0;"></div>
         <span style="font-size:11px; color:#94a3b8; font-weight:700;">अथवा</span>
@@ -4939,7 +4961,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.6 (बिल्ड कोड: 536)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.7 (बिल्ड कोड: 537)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6461,7 +6483,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.3.6";
+    const APP_VERSION = "5.3.7";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -19606,6 +19628,79 @@
       }, 500);
     }
 
+    // =========================================================================
+    //  📲 Phone.email OTP Listener (Client ID: 11651953884975814719)
+    // =========================================================================
+    function phoneEmailListener(userObj) {
+      if (!userObj || !userObj.user_json_url) {
+        console.error("Phone.email: invalid userObj", userObj);
+        return;
+      }
+      var user_json_url = userObj.user_json_url;
+
+      fetch(user_json_url)
+        .then(response => response.json())
+        .then(data => {
+          const countryCode = data.user_country_code || "+91";
+          const phoneNumber = data.user_phone_number || "";
+          const fullNumber = countryCode + phoneNumber;
+          const cleanPhone = String(phoneNumber || fullNumber).replace(/\D/g, '').slice(-10);
+
+          // लोकल स्टोरेज में सेव करें ताकि बार-बार लॉगिन न करना पड़े
+          localStorage.setItem("userPhone", fullNumber);
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("loggedInMemberPhone", cleanPhone);
+          localStorage.setItem("isUserVerified", "true");
+
+          const SANCHALAK_NUM = "8696663615";
+          const isSanchalak = cleanPhone === SANCHALAK_NUM;
+
+          const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
+            const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
+            return p && p === cleanPhone;
+          });
+
+          if (isSanchalak) {
+            const pass = prompt("नमस्ते रेवंतराम जी! एडमिन कंट्रोल हेतु पासवर्ड दर्ज करें (सामान्य सदस्य मोड के लिए कैंसिल करें):");
+            const wantAdmin = pass && typeof ysVerifyAdminPassword === "function" && ysVerifyAdminPassword(pass.trim());
+            completeUserLogin({
+              name: "रेवंतराम भाटी",
+              phone: cleanPhone,
+              role: wantAdmin ? "admin" : "member",
+              uid: "admin_" + cleanPhone
+            }, wantAdmin);
+          } else if (matched) {
+            completeUserLogin({
+              name: matched.name,
+              phone: cleanPhone,
+              photo: matched.photo || null,
+              role: matched.role || 'सदस्य',
+              uid: "member_" + cleanPhone
+            }, false);
+          } else {
+            completeUserLogin({
+              name: `सदस्य (${cleanPhone})`,
+              phone: cleanPhone,
+              role: 'सदस्य',
+              uid: "user_" + cleanPhone
+            }, false);
+          }
+
+          closeLoginModal();
+          hideAuthGateScreen();
+          updateAuthUI();
+          if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
+          if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
+
+          alert("सफलतापूर्वक लॉगिन हुआ! नंबर: " + fullNumber);
+        })
+        .catch(err => {
+          console.error("Phone.email एरर:", err);
+          showToast("OTP डेटा प्राप्त करने में समस्या आई। कृपया पुनः प्रयास करें।", "error");
+        });
+    }
+    window.phoneEmailListener = phoneEmailListener;
+
     function setupAuthGateRecaptcha() {
       if (!authGateRecaptchaVerifier) {
         try {
@@ -19961,7 +20056,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.6)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.7)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
