@@ -4025,7 +4025,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.4.2
+            APK v5.4.3
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4052,7 +4052,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.2 (बिल्ड कोड: 542)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.3 (बिल्ड कोड: 543)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4894,7 +4894,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.2 (बिल्ड कोड: 542)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.3 (बिल्ड कोड: 543)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6416,7 +6416,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.4.2";
+    const APP_VERSION = "5.4.3";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -19798,62 +19798,8 @@
         const result = await response.json();
 
         if (response.ok && (result.status === "success" || result.success || result.user_json_url)) {
-          // Login Session Save karna
-          localStorage.setItem("loggedInMemberPhone", phone10);
-          localStorage.setItem("isUserVerified", "true");
-          localStorage.setItem("ysg_logged_in", "true");
-          localStorage.setItem("ysg_user_phone", phone10);
-          loggedInMemberPhone = phone10;
-          isUserVerified = true;
-
-          const SANCHALAK_NUM = "8696663615";
-          const isSanchalak = (typeof SANCHALAK_PHONE !== "undefined" && phone10 === SANCHALAK_PHONE) || phone10 === SANCHALAK_NUM;
-
-          if (isSanchalak) {
-            localStorage.setItem("userRole", "admin");
-            localStorage.setItem("isAdminSession", "true");
-            userRole = "admin";
-            isAdmin = true;
-          } else {
-            localStorage.setItem("userRole", "member");
-            localStorage.removeItem("isAdminSession");
-            userRole = "member";
-            isAdmin = false;
-          }
-
-          // Login screen hata kar seedha app kholna
-          const gate = document.getElementById("appAuthGateScreen");
-          if (gate) {
-            gate.style.display = "none";
-            gate.style.opacity = "0";
-            gate.style.pointerEvents = "none";
-          }
-          const modal = document.getElementById("loginModal");
-          if (modal) modal.style.display = "none";
-
-          if (typeof closeLoginModal === "function") closeLoginModal();
-          if (typeof hideAuthGateScreen === "function") hideAuthGateScreen();
-
           if (typeof showToast === "function") showToast("✅ सत्यापन सफल! स्वागत है।", "success");
-
-          if (typeof completeUserLogin === "function") {
-            const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
-              const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
-              return p && p === phone10;
-            });
-            completeUserLogin({
-              name: isSanchalak ? "रेवंतराम भाटी" : (matched ? matched.name : `सदस्य (${phone10})`),
-              phone: phone10,
-              photo: matched ? matched.photo : null,
-              role: isSanchalak ? "admin" : "member",
-              uid: isSanchalak ? "admin_" + phone10 : "member_" + phone10
-            });
-          } else if (typeof updateAuthUI === "function") {
-            updateAuthUI();
-            if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
-          } else {
-            window.location.reload();
-          }
+          completePhoneEmailVerification(phone10);
         } else {
           throw new Error(result.message || "गलत OTP! कृपया सही OTP डालें।");
         }
@@ -19888,133 +19834,107 @@
     }
 
     // ==========================================================================
-    // 📱 PHONE.EMAIL OTP VERIFICATION HANDLER (FIX FOR LOGIN LOOP)
+    // 📱 PHONE.EMAIL OTP VERIFICATION LISTENER (LOGIN LOOP FIX)
     // ==========================================================================
+    function completePhoneEmailVerification(rawPhoneInput) {
+      let cleanPhone10 = String(rawPhoneInput || "").replace(/\D/g, "");
+      if (cleanPhone10.length > 10) {
+        cleanPhone10 = cleanPhone10.slice(-10);
+      }
+
+      if (cleanPhone10.length < 10) return;
+
+      // 1. मोबाइल नंबर और सत्यापन स्थिति सेव करें
+      localStorage.setItem("loggedInMemberPhone", cleanPhone10);
+      localStorage.setItem("isUserVerified", "true");
+      localStorage.setItem("ysg_logged_in", "true");
+      localStorage.setItem("ysg_user_phone", cleanPhone10);
+      if (typeof loggedInMemberPhone !== "undefined") loggedInMemberPhone = cleanPhone10;
+      if (typeof isUserVerified !== "undefined") isUserVerified = true;
+
+      // 2. संचालक (8696663615) की जांच करें
+      const SANCHALAK_NUM = "8696663615";
+      if ((typeof SANCHALAK_PHONE !== "undefined" && cleanPhone10 === SANCHALAK_PHONE) || cleanPhone10 === SANCHALAK_NUM) {
+        localStorage.setItem("userRole", "admin");
+        localStorage.setItem("isAdminSession", "true");
+        if (typeof userRole !== "undefined") userRole = "admin";
+        if (typeof isAdmin !== "undefined") isAdmin = true;
+      } else {
+        localStorage.setItem("userRole", "member");
+        localStorage.removeItem("isAdminSession");
+        if (typeof userRole !== "undefined") userRole = "member";
+        if (typeof isAdmin !== "undefined") isAdmin = false;
+      }
+
+      // 3. लॉगिन स्क्रीन और मोडल छिपाएं
+      const gateScreen = document.getElementById("appAuthGateScreen");
+      if (gateScreen) {
+        gateScreen.style.display = "none";
+        gateScreen.style.opacity = "0";
+        gateScreen.style.pointerEvents = "none";
+      }
+
+      const loginModal = document.getElementById("loginModal");
+      if (loginModal) loginModal.style.display = "none";
+
+      if (typeof closeLoginModal === "function") closeLoginModal();
+      if (typeof hideAuthGateScreen === "function") hideAuthGateScreen();
+
+      // 4. डैशबोर्ड लोड या पेज रीलोड करें
+      if (typeof updateAuthUI === "function") {
+        updateAuthUI();
+      }
+      window.location.reload();
+    }
+
+    // 1. Phone.email के मुख्य callback फ़ंक्शन को पकड़ें
     window.phoneEmailListener = function(userObj) {
-      try {
-        if (!userObj || !userObj.user_phone_number) {
-          if (userObj && userObj.user_json_url) {
-            fetch(userObj.user_json_url)
-              .then(res => res.json())
-              .then(data => {
-                window.phoneEmailListener({
-                  user_phone_number: data.user_phone_number,
-                  user_country_code: data.user_country_code,
-                  user_json_url: userObj.user_json_url
-                });
-              })
-              .catch(err => {
-                console.error("Phone.email fetch error:", err);
-                alert("डेटा प्राप्त करने में समस्या आई।");
-              });
-            return;
-          }
-          alert("मोबाइल नंबर प्राप्त नहीं हुआ। कृपया पुनः प्रयास करें।");
-          return;
-        }
-
-        // 1. 10-digit clean mobile number nikalna
-        let rawPhone = String(userObj.user_phone_number).replace(/\D/g, "");
-        let cleanPhone10 = rawPhone.length > 10 ? rawPhone.slice(-10) : rawPhone;
-
-        if (cleanPhone10.length < 10) {
-          alert("अमान्य मोबाइल नंबर। कृपया सही नंबर से सत्यापन करें।");
-          return;
-        }
-
-        // 2. Session save karna taaki page refresh par wapas login screen na aaye
-        localStorage.setItem("loggedInMemberPhone", cleanPhone10);
-        localStorage.setItem("isUserVerified", "true");
-        localStorage.setItem("ysg_logged_in", "true");
-        localStorage.setItem("ysg_user_phone", cleanPhone10);
-        if (typeof loggedInMemberPhone !== "undefined") loggedInMemberPhone = cleanPhone10;
-        if (typeof isUserVerified !== "undefined") isUserVerified = true;
-
-        // 3. Sanchalak (8696663615) check
-        const SANCHALAK_NUM = "8696663615";
-        const isSanchalak = (typeof SANCHALAK_PHONE !== "undefined" && cleanPhone10 === SANCHALAK_PHONE) || cleanPhone10 === SANCHALAK_NUM;
-        if (isSanchalak) {
-          localStorage.setItem("userRole", "admin");
-          localStorage.setItem("isAdminSession", "true");
-          userRole = "admin";
-          isAdmin = true;
-        } else {
-          localStorage.setItem("userRole", "member");
-          localStorage.removeItem("isAdminSession");
-          userRole = "member";
-          isAdmin = false;
-        }
-
-        // 4. Auth Gate aur Login Modal band karna
-        const gateScreen = document.getElementById("appAuthGateScreen");
-        if (gateScreen) {
-          gateScreen.style.display = "none";
-          gateScreen.style.opacity = "0";
-          gateScreen.style.pointerEvents = "none";
-        }
-
-        const loginModal = document.getElementById("loginModal");
-        if (loginModal) {
-          loginModal.style.display = "none";
-        }
-
-        if (typeof closeLoginModal === "function") closeLoginModal();
-        if (typeof hideAuthGateScreen === "function") hideAuthGateScreen();
-
-        // 5. Status message update aur existing app initialization call karna
-        if (typeof showToast === "function") {
-          showToast("✅ मोबाइल नंबर सत्यापित हो गया!", "success");
-        }
-
-        // App ke existing member check / UI refresh functions chalana
-        if (typeof checkMemberAccessAndRoute === "function") {
-          checkMemberAccessAndRoute(cleanPhone10);
-        } else if (typeof verifyMemberFromFirestore === "function") {
-          verifyMemberFromFirestore(cleanPhone10);
-        } else if (typeof completeUserLogin === "function") {
-          const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
-            const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
-            return p && p === cleanPhone10;
-          });
-          completeUserLogin({
-            name: isSanchalak ? "रेवंतराम भाटी" : (matched ? matched.name : `सदस्य (${cleanPhone10})`),
-            phone: cleanPhone10,
-            photo: matched ? matched.photo : null,
-            role: isSanchalak ? "admin" : "member",
-            uid: isSanchalak ? "admin_" + cleanPhone10 : "member_" + cleanPhone10
-          });
-        } else if (typeof updateAuthUI === "function") {
-          updateAuthUI();
-          if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
-        } else {
-          window.location.reload();
-        }
-      } catch (err) {
-        console.error("Phone.email Listener Error:", err);
-        alert("लॉगिन सत्यापन में त्रुटि: " + err.message);
+      if (userObj && userObj.user_phone_number) {
+        completePhoneEmailVerification(userObj.user_phone_number);
+      } else if (userObj && userObj.user_json_url) {
+        fetch(userObj.user_json_url)
+          .then(res => res.json())
+          .then(json => {
+            if (json && json.user_phone_number) {
+              completePhoneEmailVerification(json.user_phone_number);
+            }
+          })
+          .catch(err => console.error("Phone.email callback JSON error:", err));
       }
     };
     var phoneEmailListener = window.phoneEmailListener;
 
-    // 📩 Phone.email Global Message Listener (for popup window callback)
-    window.addEventListener("message", function(event) {
-      try {
-        if (!event) return;
-        const origin = event.origin || "";
-        if (origin.includes("phone.email") || (event.data && event.data.user_json_url)) {
-          let data = event.data;
-          if (typeof data === "string") {
-            try { data = JSON.parse(data); } catch(e){}
+    // 2. Popup/Window से आने वाले postMessage को भी पकड़ें (Android WebView/APK के लिए ज़रूरी)
+    window.addEventListener("message", async function(event) {
+      let data = event.data || {};
+      if (typeof data === "string") {
+        try { data = JSON.parse(data); } catch(e) {}
+      }
+      if (data && data.user_phone_number) {
+        completePhoneEmailVerification(data.user_phone_number);
+      } else if (data && data.user_json_url) {
+        try {
+          const res = await fetch(data.user_json_url);
+          const json = await res.json();
+          if (json && json.user_phone_number) {
+            completePhoneEmailVerification(json.user_phone_number);
           }
-          if (data && data.user_json_url && typeof phoneEmailListener === "function") {
-            phoneEmailListener(data);
-          }
+        } catch (err) {
+          console.error("Phone.email JSON fetch error:", err);
         }
-      } catch(err) {
-        console.warn("Phone.email message listener notice:", err);
       }
     });
-      if (!authGateRecaptchaVerifier) {
+
+    // 3. पेज लोड/रीलोड होते ही चेक करें कि यूजर पहले से वेरिफाइड है या नहीं
+    window.addEventListener("DOMContentLoaded", function() {
+      if (localStorage.getItem("isUserVerified") === "true" && localStorage.getItem("loggedInMemberPhone")) {
+        const gateScreen = document.getElementById("appAuthGateScreen");
+        if (gateScreen) gateScreen.style.display = "none";
+      }
+    });
+
+    function setupAuthGateRecaptcha() {
+      if (!authGateRecaptchaVerifier && typeof firebase !== "undefined" && firebase.auth) {
         try {
           authGateRecaptchaVerifier = new firebase.auth.RecaptchaVerifier('authGateRecaptchaContainer', {
             size: 'invisible',
@@ -20452,7 +20372,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.2)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.3)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
