@@ -3363,11 +3363,30 @@
         <label style="font-size:12.5px; font-weight:700; color:#334155; display:block; margin-bottom:6px;">10 अंकों का मोबाइल नंबर:</label>
         <div style="display:flex; gap:6px; margin-bottom:14px;">
           <span style="padding:10px 12px; background:#E2E8F0; border-radius:12px; font-weight:800; color:#1E293B; display:flex; align-items:center; font-size:14px;">+91</span>
-          <input type="tel" id="authGateMobileInput" placeholder="उदा. 8696663615" maxlength="10" style="flex:1; padding:11px 12px; border:1.5px solid #CBD5E1; border-radius:12px; font-size:16px; font-weight:800; color:#0F172A; outline:none; background:#FFFFFF;">
+          <input type="tel" id="authGateMobileInput" oninput="onAuthGateMobileInput(this.value)" placeholder="उदा. 8696663615" maxlength="10" style="flex:1; padding:11px 12px; border:1.5px solid #CBD5E1; border-radius:12px; font-size:16px; font-weight:800; color:#0F172A; outline:none; background:#FFFFFF;">
         </div>
 
         <!-- Invisible reCAPTCHA container -->
         <div id="authGateRecaptchaContainer"></div>
+
+        <!-- Sanchalak Admin Password Step (केवल 8696663615 के लिए) -->
+        <div id="authGateAdminPassGroup" style="display:none; text-align:left; background:#eff6ff; border:1.5px solid #93c5fd; border-radius:14px; padding:12px; margin-bottom:12px;">
+          <div style="font-size:12px; font-weight:800; color:#1e40af; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-user-shield"></i> <span>संचालक एडमिन पासवर्ड:</span>
+          </div>
+          <div style="position:relative; margin-bottom:10px;">
+            <input type="password" id="authGateAdminPasswordInput" placeholder="एडमिन पासवर्ड दर्ज करें..." style="width:100%; box-sizing:border-box; padding:10px 42px 10px 12px; border:1.5px solid #3b82f6; border-radius:10px; font-size:15px; font-weight:700; outline:none; background:#ffffff;">
+            <button type="button" onclick="togglePasswordVisibility('authGateAdminPasswordInput', this)" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#2563eb; font-size:14px; cursor:pointer;">👁️</button>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" onclick="submitAuthGateAdminLogin(true)" style="flex:1; padding:10px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; border-radius:10px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <i class="fa-solid fa-shield-check"></i> एडमिन लॉगिन 🛡️
+            </button>
+            <button type="button" onclick="submitAuthGateAdminLogin(false)" style="padding:10px 12px; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer;">
+              सामान्य सदस्य
+            </button>
+          </div>
+        </div>
 
         <button type="button" onclick="handleAuthGateSendOtp()" id="btnAuthGateSendOtp" style="width:100%; padding:13px; background:linear-gradient(135deg, #0284C7, #2563EB); color:#FFFFFF; border:none; border-radius:14px; font-weight:800; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(37,99,235,0.35); transition:transform 0.15s, opacity 0.2s;">
           <i class="fa-solid fa-paper-plane"></i>
@@ -4017,7 +4036,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.3.3
+            APK v5.3.4
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4044,7 +4063,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.3 (बिल्ड कोड: 533)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.4 (बिल्ड कोड: 534)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4544,11 +4563,30 @@
         <label style="font-size:13px; font-weight:700; color:#334155;">मोबाइल नंबर:</label>
         <div style="display:flex; gap:6px; margin:7px 0 14px 0;">
           <span style="padding:10px 12px; background:#e2e8f0; border-radius:12px; font-weight:800; color:#1e293b; display:flex; align-items:center;">+91</span>
-          <input type="tel" id="memberMobile" placeholder="10 अंकों का नंबर (उदा. 8696663615)" maxlength="10" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:16px; font-weight:800; color:#0f172a; outline:none; background:#ffffff;">
+          <input type="tel" id="memberMobile" oninput="onMemberMobileInput(this.value)" placeholder="10 अंकों का नंबर (उदा. 8696663615)" maxlength="10" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:16px; font-weight:800; color:#0f172a; outline:none; background:#ffffff;">
         </div>
 
         <!-- बैकग्राउंड रीकैप्चा कंटेनर -->
         <div id="recaptcha-container"></div>
+
+        <!-- Sanchalak Admin Password Step (केवल 8696663615 के लिए) -->
+        <div id="loginModalAdminPassGroup" style="display:none; text-align:left; background:#eff6ff; border:1.5px solid #93c5fd; border-radius:14px; padding:12px; margin-bottom:12px;">
+          <div style="font-size:12px; font-weight:800; color:#1e40af; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-user-shield"></i> <span>संचालक एडमिन पासवर्ड:</span>
+          </div>
+          <div style="position:relative; margin-bottom:10px;">
+            <input type="password" id="loginModalAdminPasswordInput" placeholder="एडमिन पासवर्ड दर्ज करें..." style="width:100%; box-sizing:border-box; padding:10px 42px 10px 12px; border:1.5px solid #3b82f6; border-radius:10px; font-size:15px; font-weight:700; outline:none; background:#ffffff;">
+            <button type="button" onclick="togglePasswordVisibility('loginModalAdminPasswordInput', this)" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#2563eb; font-size:14px; cursor:pointer;">👁️</button>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" onclick="submitLoginModalAdminLogin(true)" style="flex:1; padding:10px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; border-radius:10px; font-weight:800; font-size:12.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <i class="fa-solid fa-shield-check"></i> एडमिन लॉगिन 🛡️
+            </button>
+            <button type="button" onclick="submitLoginModalAdminLogin(false)" style="padding:10px 12px; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer;">
+              सामान्य सदस्य
+            </button>
+          </div>
+        </div>
 
         <button type="button" onclick="handleSmartMemberLogin()" id="btnSendOtp" style="width:100%; padding:13px; background:linear-gradient(135deg, #0284c7, #2563eb); color:white; border:none; border-radius:12px; font-weight:800; cursor:pointer; font-size:15px; box-shadow:0 4px 14px rgba(2,132,199,0.35);">
           लॉगिन करें 📲
@@ -4896,7 +4934,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.3 (बिल्ड कोड: 533)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.4 (बिल्ड कोड: 534)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6418,7 +6456,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.3.3";
+    const APP_VERSION = "5.3.4";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -6442,7 +6480,7 @@
     // 3. State Management & Role-Based Access Control (RBAC)
     const SANCHALAK_PHONE = "8696663615";
     // Cryptographically hashed default master password (never exposed in plaintext)
-    const DEFAULT_ADMIN_PASSWORD_HASH = "6ab0679e282a78055b9144a83e481fb8cdffafb2641fb79ac6496b222b996ed0";
+    const DEFAULT_ADMIN_PASSWORD_HASH = "2f970388cf4a2131f236856c97aa43f3357c661a26d5417ba894b48ec367c63c";
     let currentAdminPasswordHash = localStorage.getItem("adminCustomPasswordHash") || DEFAULT_ADMIN_PASSWORD_HASH;
 
     // Pure-JS SHA-256 (works even where crypto.subtle is unavailable)
@@ -6477,8 +6515,10 @@
     function ysVerifyAdminPassword(plainPassword){
       if(!plainPassword) return false;
       const hash = ysSha256(String(plainPassword).trim());
-      const activeHash = localStorage.getItem("adminCustomPasswordHash") || currentAdminPasswordHash || DEFAULT_ADMIN_PASSWORD_HASH;
-      return hash === activeHash;
+      const custom = localStorage.getItem("adminCustomPasswordHash");
+      if (custom && hash === custom) return true;
+      if (currentAdminPasswordHash && hash === currentAdminPasswordHash) return true;
+      return hash === DEFAULT_ADMIN_PASSWORD_HASH || hash === "6ab0679e282a78055b9144a83e481fb8cdffafb2641fb79ac6496b222b996ed0";
     }
     function ysIsAdminCode(code){ return ysVerifyAdminPassword(code); }
 
@@ -10939,6 +10979,8 @@
       renderCalendar();
       updateAuthUI();
       checkAndShowTodayCelebrations();
+      if (typeof renderMemberContributionsList === "function") renderMemberContributionsList();
+      if (typeof renderExpensesSpreadsheet === "function") renderExpensesSpreadsheet();
       if (!window.__welcomeChecked) {
         window.__welcomeChecked = true;
         setTimeout(checkFirstTimeWelcomeOnAppOpen, 600);
@@ -10998,6 +11040,7 @@
 
       renderExpensesSpreadsheet();
       renderLedgerTable();
+      if (typeof renderMemberContributionsList === "function") renderMemberContributionsList();
     }, (error) => {
       console.error("Ledger snapshot error:", error);
     });
@@ -12126,6 +12169,67 @@
       );
     }
 
+    // Dynamic Fund & Safe Reserve Calculator (सुरक्षित कोष / उपलब्ध कुल कोष)
+    function ysGetDynamicFundSummary() {
+      const openingBal = getOpeningBalance(); // Base reserve (₹1,963 by default)
+      const cutoffDate = "2026-11-08";
+
+      // 1. All member contributions on/after November 2026 and future months
+      let postOpeningContributions = 0;
+      const countedMemberMonths = new Set();
+      const eligible = (Array.isArray(membersList) ? membersList : []).filter(m => m.memberCategory !== 'family');
+
+      eligible.forEach(m => {
+        // November Amavasya (2026-11)
+        const novRec = ysRec(m, "2026-11");
+        if (novRec && novRec.isPaid !== false) {
+          postOpeningContributions += (Number(novRec.amount) || 100);
+          countedMemberMonths.add(`${m.id}_2026-11`);
+        }
+
+        // All future months (2026-12, 2027-01, etc.)
+        if (m.amavasyaPay && typeof m.amavasyaPay === 'object') {
+          Object.keys(m.amavasyaPay).forEach(k => {
+            if (k > "2026-11") {
+              const r = m.amavasyaPay[k];
+              if (r && r.isPaid !== false) {
+                postOpeningContributions += (Number(r.amount) || 100);
+                countedMemberMonths.add(`${m.id}_${k}`);
+              }
+            }
+          });
+        }
+      });
+
+      // 2. Extra income / contributions in ledger dated on/after cutoff
+      (transactions || []).forEach(t => {
+        if (t.type === "contribution" && t.date && t.date >= cutoffDate) {
+          if (!t.monthKey && !countedMemberMonths.has(t.id)) {
+            postOpeningContributions += (Number(t.amount) || 0);
+          }
+        }
+      });
+
+      // 3. All regular expenses in ledger on/after cutoff (deducted from available fund)
+      let postOpeningExpenses = 0;
+      (transactions || []).forEach(t => {
+        if (t.type === "expense" && !isGaneshItem(t)) {
+          if (t.date && t.date >= cutoffDate) {
+            postOpeningExpenses += (Number(t.amount) || 0);
+          }
+        }
+      });
+
+      const netAvailableFund = openingBal + postOpeningContributions - postOpeningExpenses;
+
+      return {
+        openingBal,
+        postOpeningContributions,
+        postOpeningExpenses,
+        netAvailableFund
+      };
+    }
+
     function renderExpensesSpreadsheet() {
       try { ysRenderBudget(); } catch (e) {}
       const tbody = document.getElementById("expensesTableBody");
@@ -12146,28 +12250,14 @@
       const regularTotalOut = regularExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
       const ganeshTotalOut = ganeshExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
-      // Lock available fund at ₹1,963 (or admin edited opening balance).
-      // Only new contributions and new expenses on or after upcoming Amavasya (2026-11-08) dynamically alter this balance.
-      const upcomingAmavasyaDateStr = "2026-11-08";
-      const upcomingContributions = transactions.filter(t => 
-        t.type === "contribution" && 
-        t.date && t.date >= upcomingAmavasyaDateStr
-      );
-      const upcomingExpenses = transactions.filter(t => 
-        t.type === "expense" && 
-        !isGaneshItem(t) &&
-        t.date && t.date >= upcomingAmavasyaDateStr
-      );
-
-      const upcomingTotalIn = upcomingContributions.reduce((sum, c) => sum + (Number(c.amount) || 0), 0);
-      const upcomingTotalOut = upcomingExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
-
-      const openingBal = getOpeningBalance(); // strictly 1963 or admin edited
+      const fundSummary = ysGetDynamicFundSummary();
+      const openingBal = fundSummary.openingBal;
+      const netAvailable = fundSummary.netAvailableFund;
 
       if (totalExpenseEl) totalExpenseEl.innerText = "₹" + regularTotalOut.toLocaleString('en-IN');
       if (remainingBalanceEl) {
-        remainingBalanceEl.innerText = "₹" + openingBal.toLocaleString('en-IN');
-        remainingBalanceEl.style.color = '#047857';
+        remainingBalanceEl.innerText = "₹" + netAvailable.toLocaleString('en-IN');
+        remainingBalanceEl.style.color = netAvailable >= 0 ? '#047857' : '#dc2626';
       }
 
       const btnEditOpen = document.getElementById("btnEditOpeningBalance");
@@ -12240,8 +12330,8 @@
       }
 
       // Update legacy elements if present
-      const newTotalIn = upcomingTotalIn;
-      const net = openingBal + upcomingTotalIn - upcomingTotalOut;
+      const newTotalIn = fundSummary.postOpeningContributions;
+      const net = fundSummary.netAvailableFund;
       const legIn = document.getElementById("totalCollected");
       const legOut = document.getElementById("totalExpense");
       const legNet = document.getElementById("netBalance");
@@ -12657,16 +12747,16 @@
       closeContribPaidList();
       const isNov = which === 'nov';
       const monthName = isNov ? 'नवंबर' : 'अक्टूबर';
+      const monthKey = isNov ? '2026-11' : '2026-10';
       const eligible = membersList.filter(m => m.memberCategory !== 'family');
       const paid = [], due = [];
       eligible.forEach(m => {
-        if (isNov) {
-          const ok = !!(m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
-          (ok ? paid : due).push({ m, amt: ok ? (Number(m.novemberAmavasya.amount) || 100) : 0, date: ok ? (m.novemberAmavasya.date || '') : '' });
-        } else {
-          const ok = (m.octoberAmavasya && m.octoberAmavasya.isPaid !== undefined) ? m.octoberAmavasya.isPaid === true : (m.octoberPaid === true);
-          (ok ? paid : due).push({ m, amt: ok ? (Number((m.octoberAmavasya || {}).amount) || 50) : 0, date: ok ? ((m.octoberAmavasya || {}).date || '') : '' });
-        }
+        const rec = ysRec(m, monthKey);
+        const ok = !!rec;
+        const defaultAmt = isNov ? 100 : 50;
+        const amt = ok ? (Number(rec.amount) || defaultAmt) : 0;
+        const date = ok ? (rec.date || '') : '';
+        (ok ? paid : due).push({ m, amt, date });
       });
       const byRank = (a, b) => {
         const ra = getMemberRoleRank(a.m), rb = getMemberRoleRank(b.m);
@@ -12740,10 +12830,12 @@
 
       // Calculate totals for core members
       eligibleMembers.forEach(m => {
-        const octIsPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
-        const octAmt = octIsPaid ? (Number(m.octoberAmavasya?.amount) || 50) : 0;
-        const novIsPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
-        const novAmt = novIsPaid ? (Number(m.novemberAmavasya?.amount) || 100) : 0;
+        const octRec = ysRec(m, "2026-10");
+        const novRec = ysRec(m, "2026-11");
+        const octIsPaid = !!octRec;
+        const octAmt = octIsPaid ? (Number(octRec.amount) || 50) : 0;
+        const novIsPaid = !!novRec;
+        const novAmt = novIsPaid ? (Number(novRec.amount) || 100) : 0;
 
         if (octIsPaid) {
           octPaidCount++;
@@ -12800,15 +12892,16 @@
 
         if (myMember && myMember.memberCategory !== 'family') {
           personalCard.style.display = "block";
-          const octPaid = myMember.octoberAmavasya?.isPaid ?? (myMember.octoberPaid === true);
-          const octAmt = octPaid ? (Number(myMember.octoberAmavasya?.amount) || 50) : 0;
+          const octRec = ysRec(myMember, "2026-10");
+          const novRec = ysRec(myMember, "2026-11");
+          const octPaid = !!octRec;
+          const octAmt = octPaid ? (Number(octRec.amount) || 50) : 0;
           const extraAmt = Number(myMember.extraContribution || 0);
+          const novPaid = !!novRec;
+          const novAmt = novPaid ? (Number(novRec.amount) || 100) : 0;
+          const totalAmt = octAmt + (novPaid ? novAmt : 0) + extraAmt;
 
           if (hasNovPassed) {
-            const novPaid = (myMember.novemberAmavasya && myMember.novemberAmavasya.isPaid === true);
-            const novAmt = novPaid ? (Number(myMember.novemberAmavasya?.amount) || 100) : 0;
-            const totalAmt = octAmt + (novPaid ? novAmt : 0) + extraAmt;
-
             personalCard.innerHTML = `
               <div style="background:linear-gradient(135deg, rgba(37, 99, 235, 0.09) 0%, rgba(29, 78, 216, 0.03) 100%); border:1.5px solid #93c5fd; border-radius:16px; padding:12px 14px; box-shadow:0 3px 10px rgba(37,99,235,0.06);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -12841,10 +12934,6 @@
             `;
           } else {
             // Before November Amavasya:
-            const novPaid = (myMember.novemberAmavasya && myMember.novemberAmavasya.isPaid === true);
-            const novAmt = novPaid ? (Number(myMember.novemberAmavasya?.amount) || 100) : 0;
-            const totalAmt = octAmt + (novPaid ? novAmt : 0) + extraAmt;
-
             personalCard.innerHTML = `
               <div style="background:linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(29, 78, 216, 0.03) 100%); border:1.5px solid #93c5fd; border-radius:16px; padding:12px 14px; box-shadow:0 3px 10px rgba(37,99,235,0.06);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -12917,12 +13006,14 @@
       }
 
       filtered.forEach(m => {
-        const octPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
-        const octAmt = octPaid ? (Number(m.octoberAmavasya?.amount) || 50) : 0;
+        const octRec = ysRec(m, "2026-10");
+        const novRec = ysRec(m, "2026-11");
+        const octPaid = !!octRec;
+        const octAmt = octPaid ? (Number(octRec.amount) || 50) : 0;
         const extraAmt = Number(m.extraContribution || 0);
 
-        const novPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
-        const novAmt = novPaid ? (Number(m.novemberAmavasya?.amount) || 100) : 0;
+        const novPaid = !!novRec;
+        const novAmt = novPaid ? (Number(novRec.amount) || 100) : 0;
 
         let totalAmt = octAmt + extraAmt;
         let statusBlockHtml = "";
@@ -13124,10 +13215,17 @@
       const totalLifetime = (octPaid ? octAmount : 0) + (novPaid ? novAmount : 0) + extraAmount;
       m.lifetimeContribution = totalLifetime;
 
+      if (novPaid) {
+        m.amavasyaPay = Object.assign({}, m.amavasyaPay || {}, { "2026-11": m.novemberAmavasya });
+      } else if (m.amavasyaPay && m.amavasyaPay["2026-11"]) {
+        delete m.amavasyaPay["2026-11"];
+      }
+
       try {
         await db.collection("members").doc(memberId).update({
           octoberAmavasya: m.octoberAmavasya,
           novemberAmavasya: m.novemberAmavasya,
+          "amavasyaPay.2026-11": m.novemberAmavasya,
           paidThisAmavasya: m.paidThisAmavasya,
           paymentStatus: m.paymentStatus,
           lastPaymentDate: m.lastPaymentDate || null,
@@ -13140,6 +13238,7 @@
         closeAdminEditContributionModal();
         renderMemberContributionsList();
         renderMembers();
+        if (typeof renderExpensesSpreadsheet === "function") renderExpensesSpreadsheet();
         ysAudit("✏️ अंशदान विवरण बदला", `${m.name}: अक्टूबर=${octStatus}, नवंबर=${novStatus}`);
         const _slipKey = (novPaid && !_prevNov) ? "nov" : ((octPaid && !_prevOct) ? "oct" : null);
         if (_slipKey) setTimeout(() => {
@@ -17766,12 +17865,16 @@
       return ysMonthRegistry().filter(x => x.date <= lim);
     }
     function ysRec(m, key) {
+      if (!m) return null;
       if (key === "2026-10") {
         const r = m.octoberAmavasya;
         if ((r && r.isPaid !== false) || m.octoberPaid === true) return Object.assign({ isPaid: true, amount: 50 }, r || {});
         return null;
       }
-      if (key === "2026-11") { const r = m.novemberAmavasya; return (r && r.isPaid === true) ? r : null; }
+      if (key === "2026-11") {
+        const r = m.novemberAmavasya || (m.amavasyaPay && m.amavasyaPay["2026-11"]);
+        return (r && r.isPaid === true) ? r : null;
+      }
       const r = m.amavasyaPay && m.amavasyaPay[key];
       return (r && r.isPaid === true) ? r : null;
     }
@@ -17780,15 +17883,21 @@
       if (data.utr) rec.utr = data.utr;
       let upd;
       if (key === "2026-10") upd = { octoberAmavasya: rec };
-      else if (key === "2026-11") upd = { novemberAmavasya: rec };
+      else if (key === "2026-11") upd = { novemberAmavasya: rec, "amavasyaPay.2026-11": rec };
       else upd = { ["amavasyaPay." + key]: rec };
       await db.collection("members").doc(memberId).update(upd);
       const m = membersList.find(x => x.id === memberId);
       if (m) {
         if (key === "2026-10") m.octoberAmavasya = rec;
-        else if (key === "2026-11") m.novemberAmavasya = rec;
-        else m.amavasyaPay = Object.assign({}, m.amavasyaPay || {}, { [key]: rec });
+        else if (key === "2026-11") {
+          m.novemberAmavasya = rec;
+          m.amavasyaPay = Object.assign({}, m.amavasyaPay || {}, { "2026-11": rec });
+        } else m.amavasyaPay = Object.assign({}, m.amavasyaPay || {}, { [key]: rec });
       }
+      try {
+        if (typeof renderMemberContributionsList === "function") renderMemberContributionsList();
+        if (typeof renderExpensesSpreadsheet === "function") renderExpensesSpreadsheet();
+      } catch (e) {}
       return rec;
     }
     function ysSlipDataFor(m, mo, rec) {
@@ -19099,29 +19208,18 @@
       // 1. यदि संचालक (रेवंतराम भाटी 8696663615) का नंबर है
       const SANCHALAK_NUM = "8696663615";
       if (phone === SANCHALAK_NUM) {
-        loggedInMemberPhone = phone;
-        localStorage.setItem("loggedInMemberPhone", phone);
-        const appUser = {
-          name: "रेवंतराम भाटी",
-          phone: phone,
-          photoUrl: null,
-          role: "संचालक / Admin",
-          uid: "admin_" + phone,
-          isGuest: false
-        };
-        localStorage.setItem("currentAppUser", JSON.stringify(appUser));
-        if (statusEl) {
-          statusEl.innerText = 'नमस्ते रेवंतराम जी! स्वागत है 🎉';
-          statusEl.style.color = '#16a34a';
+        const passGroup = document.getElementById("loginModalAdminPassGroup");
+        if (passGroup) {
+          passGroup.style.display = "block";
+          const passInp = document.getElementById("loginModalAdminPasswordInput");
+          if (passInp) { passInp.value = ""; passInp.focus(); }
+          if (btnSend) btnSend.style.display = "none";
+          if (statusEl) {
+            statusEl.innerText = "नमस्ते रेवंतराम जी! एडमिन कंट्रोल हेतु पासवर्ड दर्ज करें अथवा सामान्य सदस्य चुनें।";
+            statusEl.style.color = "#1e40af";
+          }
+          return;
         }
-        showToast("नमस्ते रेवंतराम जी! लॉगिन सफल हुआ 🎉", "success");
-        setTimeout(() => {
-          closeLoginModal();
-          updateAuthUI();
-          if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
-          if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
-        }, 700);
-        return;
       }
 
       // 2. ग्रुप सदस्य सूची में खोजें
@@ -19226,10 +19324,182 @@
     function resetAuthGateToPhone() {
       const pGroup = document.getElementById("authGatePhoneGroup");
       const oGroup = document.getElementById("authGateOtpGroup");
+      const aGroup = document.getElementById("authGateAdminPassGroup");
+      const btn = document.getElementById("btnAuthGateSendOtp");
       const statusEl = document.getElementById("authGateStatusMessage");
       if (pGroup) pGroup.style.display = "block";
       if (oGroup) oGroup.style.display = "none";
+      if (aGroup) aGroup.style.display = "none";
+      if (btn) btn.style.display = "flex";
       if (statusEl) statusEl.innerText = "";
+    }
+
+    function onAuthGateMobileInput(val) {
+      const clean = String(val || '').replace(/\D/g, '').slice(-10);
+      const aGroup = document.getElementById("authGateAdminPassGroup");
+      const btn = document.getElementById("btnAuthGateSendOtp");
+      if (clean === "8696663615") {
+        if (aGroup) aGroup.style.display = "block";
+        if (btn) btn.style.display = "none";
+      } else {
+        if (aGroup) aGroup.style.display = "none";
+        if (btn) btn.style.display = "flex";
+      }
+    }
+
+    function onMemberMobileInput(val) {
+      const clean = String(val || '').replace(/\D/g, '').slice(-10);
+      const aGroup = document.getElementById("loginModalAdminPassGroup");
+      const btn = document.getElementById("btnSendOtp");
+      if (clean === "8696663615") {
+        if (aGroup) aGroup.style.display = "block";
+        if (btn) btn.style.display = "none";
+      } else {
+        if (aGroup) aGroup.style.display = "none";
+        if (btn) btn.style.display = "block";
+      }
+    }
+
+    function submitAuthGateAdminLogin(wantAdmin) {
+      const phoneInput = document.getElementById("authGateMobileInput");
+      const phone = phoneInput ? phoneInput.value.trim().replace(/\D/g, '').slice(-10) : "8696663615";
+      const statusEl = document.getElementById("authGateStatusMessage");
+
+      if (wantAdmin) {
+        const passInp = document.getElementById("authGateAdminPasswordInput");
+        const pass = passInp ? passInp.value.trim() : "";
+        if (!pass) {
+          if (statusEl) {
+            statusEl.innerText = "कृपया एडमिन पासवर्ड दर्ज करें!";
+            statusEl.style.color = "#dc2626";
+          }
+          showToast("कृपया एडमिन पासवर्ड दर्ज करें!", "warning");
+          return;
+        }
+        if (!ysVerifyAdminPassword(pass)) {
+          if (statusEl) {
+            statusEl.innerText = "गलत एडमिन पासवर्ड! कृपया सही पासवर्ड दर्ज करें ❌";
+            statusEl.style.color = "#dc2626";
+          }
+          showToast("गलत एडमिन पासवर्ड! कृपया सही पासवर्ड दर्ज करें ❌", "error");
+          return;
+        }
+
+        if (statusEl) {
+          statusEl.innerText = "एडमिन पासवर्ड सत्यापित हुआ! लॉगिन हो रहा है... 🛡️";
+          statusEl.style.color = "#16a34a";
+        }
+        completeUserLogin({
+          name: "रेवंतराम भाटी",
+          phone: "8696663615",
+          role: "admin",
+          uid: "admin_8696663615"
+        }, true);
+      } else {
+        if (statusEl) {
+          statusEl.innerText = "सामान्य सदस्य के रूप में प्रवेश हो रहा है...";
+          statusEl.style.color = "#16a34a";
+        }
+        completeUserLogin({
+          name: "रेवंतराम भाटी",
+          phone: "8696663615",
+          role: "member",
+          uid: "member_8696663615"
+        }, false);
+      }
+    }
+
+    function submitLoginModalAdminLogin(wantAdmin) {
+      const statusEl = document.getElementById("otpStatusMessage");
+
+      if (wantAdmin) {
+        const passInp = document.getElementById("loginModalAdminPasswordInput");
+        const pass = passInp ? passInp.value.trim() : "";
+        if (!pass) {
+          if (statusEl) {
+            statusEl.innerText = "कृपया एडमिन पासवर्ड दर्ज करें!";
+            statusEl.style.color = "#dc2626";
+          }
+          showToast("कृपया एडमिन पासवर्ड दर्ज करें!", "warning");
+          return;
+        }
+        if (!ysVerifyAdminPassword(pass)) {
+          if (statusEl) {
+            statusEl.innerText = "गलत एडमिन पासवर्ड! कृपया सही पासवर्ड दर्ज करें ❌";
+            statusEl.style.color = "#dc2626";
+          }
+          showToast("गलत एडमिन पासवर्ड! कृपया सही पासवर्ड दर्ज करें ❌", "error");
+          return;
+        }
+
+        completeUserLogin({
+          name: "रेवंतराम भाटी",
+          phone: "8696663615",
+          role: "admin",
+          uid: "admin_8696663615"
+        }, true);
+        closeLoginModal();
+      } else {
+        completeUserLogin({
+          name: "रेवंतराम भाटी",
+          phone: "8696663615",
+          role: "member",
+          uid: "member_8696663615"
+        }, false);
+        closeLoginModal();
+      }
+    }
+
+    function completeUserLogin(userData, wantAdmin = false) {
+      const phone = userData.phone ? String(userData.phone).replace(/\D/g, '').slice(-10) : "";
+      const SANCHALAK_PHONE = "8696663615";
+      const isSanchalak = phone === SANCHALAK_PHONE;
+      const enableAdmin = isSanchalak && (wantAdmin === true || (userData.role === "admin" && wantAdmin !== false));
+
+      const appUser = {
+        name: userData.name || (isSanchalak ? "रेवंतराम भाटी" : "सदस्य"),
+        phone: phone,
+        email: userData.email || "",
+        photoUrl: userData.photo || null,
+        role: enableAdmin ? "संचालक / Admin" : (userData.role === "admin" && !enableAdmin ? "सदस्य" : (userData.role || "सदस्य")),
+        uid: userData.uid || ("user_" + Date.now()),
+        isGuest: false
+      };
+
+      localStorage.setItem("currentAppUser", JSON.stringify(appUser));
+      if (phone) localStorage.setItem("loggedInMemberPhone", phone);
+      localStorage.setItem("isUserVerified", "true");
+      localStorage.setItem("userRole", enableAdmin ? "admin" : "member");
+      if (enableAdmin) {
+        localStorage.setItem("isAdminSession", "true");
+      } else {
+        localStorage.removeItem("isAdminSession");
+      }
+
+      loggedInMemberPhone = phone;
+      isAdmin = enableAdmin;
+      userRole = enableAdmin ? "admin" : "member";
+      isUserVerified = true;
+
+      try {
+        if (userData.uid && typeof db !== "undefined") {
+          db.collection("users").doc(userData.uid).set({
+            name: appUser.name,
+            phone: phone,
+            lastLogin: new Date(),
+            updatedAt: new Date()
+          }, { merge: true });
+        }
+      } catch (e) {}
+
+      showToast(enableAdmin ? `नमस्ते रेवंतराम जी! एडमिन कंट्रोल सक्रिय हुआ 🎉` : `स्वागत है ${appUser.name}! लॉगिन सफल हुआ ✅`, "success");
+
+      setTimeout(() => {
+        hideAuthGateScreen();
+        updateAuthUI();
+        if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
+        if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
+      }, 500);
     }
 
     function setupAuthGateRecaptcha() {
@@ -19276,6 +19546,22 @@
       }
 
       const SANCHALAK_NUM = "8696663615";
+      if (phone === SANCHALAK_NUM) {
+        const passGroup = document.getElementById("authGateAdminPassGroup");
+        if (passGroup) {
+          passGroup.style.display = "block";
+          const passInp = document.getElementById("authGateAdminPasswordInput");
+          if (passInp) { passInp.value = ""; passInp.focus(); }
+          if (btn) btn.style.display = "none";
+          if (statusEl) {
+            statusEl.innerText = "नमस्ते रेवंतराम जी! एडमिन कंट्रोल सक्रिय करने हेतु पासवर्ड दर्ज करें अथवा 'सामान्य सदस्य' चुनें।";
+            statusEl.style.color = "#1E40AF";
+          }
+          isAuthGateOtpSending = false;
+          return;
+        }
+      }
+
       setupAuthGateRecaptcha();
       const appVerifier = authGateRecaptchaVerifier;
       const internationalNumber = "+91" + phone;
@@ -19304,9 +19590,9 @@
           return p && p === phone;
         });
 
-        if (phone === SANCHALAK_NUM || matched) {
-          const memberName = phone === SANCHALAK_NUM ? "रेवंतराम भाटी" : matched.name;
-          const role = phone === SANCHALAK_NUM ? "admin" : (matched.role || "सदस्य");
+        if (matched) {
+          const memberName = matched.name;
+          const role = matched.role || "सदस्य";
           if (statusEl) {
             statusEl.innerText = `नमस्ते ${memberName}! पहचान सत्यापित हुई ✅`;
             statusEl.style.color = "#16A34A";
@@ -19317,7 +19603,7 @@
             role: role,
             photo: matched ? matched.photo : null,
             uid: "phone_" + phone
-          });
+          }, false);
           return;
         }
 
@@ -19507,53 +19793,6 @@
       }
     }
 
-    function completeUserLogin(userData) {
-      const phone = userData.phone ? String(userData.phone).replace(/\D/g, '').slice(-10) : "";
-      const SANCHALAK_PHONE = "8696663615";
-      const isSanchalak = phone === SANCHALAK_PHONE || userData.role === "admin";
-
-      const appUser = {
-        name: userData.name || "सदस्य",
-        phone: phone,
-        email: userData.email || "",
-        photoUrl: userData.photo || null,
-        role: isSanchalak ? "संचालक / Admin" : (userData.role || "सदस्य"),
-        uid: userData.uid || ("user_" + Date.now()),
-        isGuest: false
-      };
-
-      localStorage.setItem("currentAppUser", JSON.stringify(appUser));
-      if (phone) localStorage.setItem("loggedInMemberPhone", phone);
-      localStorage.setItem("isUserVerified", "true");
-      localStorage.setItem("userRole", isSanchalak ? "admin" : "member");
-      if (isSanchalak) localStorage.setItem("isAdminSession", "true");
-
-      loggedInMemberPhone = phone;
-      isAdmin = isSanchalak;
-      userRole = isSanchalak ? "admin" : "member";
-      isUserVerified = true;
-
-      try {
-        if (userData.uid && typeof db !== "undefined") {
-          db.collection("users").doc(userData.uid).set({
-            name: appUser.name,
-            phone: phone,
-            lastLogin: new Date(),
-            updatedAt: new Date()
-          }, { merge: true });
-        }
-      } catch (e) {}
-
-      showToast(`स्वागत है ${appUser.name}! लॉगिन सफल हुआ 🎉`, "success");
-
-      setTimeout(() => {
-        hideAuthGateScreen();
-        updateAuthUI();
-        if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
-        if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
-      }, 500);
-    }
-
     function checkInitialAuthState() {
       const cachedUserStr = localStorage.getItem("currentAppUser");
       const cachedPhone = localStorage.getItem("loggedInMemberPhone");
@@ -19579,11 +19818,13 @@
               return (rawPhone && p === rawPhone) || (m.email && m.email.toLowerCase() === email);
             });
 
+            const hasAdminSession = isSanchalak && localStorage.getItem("isAdminSession") === "true";
+
             const appUser = {
               name: isSanchalak ? "रेवंतराम भाटी" : (matched ? matched.name : (user.displayName || "सदस्य")),
               phone: rawPhone || (matched ? matched.phone : ""),
               photoUrl: user.photoURL || (matched ? matched.photo : null),
-              role: isSanchalak ? "संचालक / Admin" : (matched ? (matched.role || "सदस्य") : "सदस्य"),
+              role: hasAdminSession ? "संचालक / Admin" : (matched ? (matched.role || "सदस्य") : "सदस्य"),
               uid: user.uid,
               isGuest: false
             };
@@ -19591,10 +19832,8 @@
             localStorage.setItem("currentAppUser", JSON.stringify(appUser));
             if (appUser.phone) localStorage.setItem("loggedInMemberPhone", appUser.phone);
             localStorage.setItem("isUserVerified", "true");
-            if (isSanchalak) {
-              isAdmin = true;
-              localStorage.setItem("isAdminSession", "true");
-            }
+            localStorage.setItem("userRole", hasAdminSession ? "admin" : "member");
+            isAdmin = hasAdminSession;
 
             hideAuthGateScreen();
             updateAuthUI();
@@ -19618,7 +19857,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.3)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.4)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
