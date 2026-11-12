@@ -3358,11 +3358,39 @@
         ग्रुप रिकॉर्ड्स, बही-खाता व वंशावली देखने हेतु कृपया अपना सत्यापन करें।
       </p>
 
-      <!-- Official Phone.email Button -->
-      <div style="margin: 10px 0 18px; display:flex; flex-direction:column; align-items:center;">
-        <div class="pe_signin_button" data-client-id="11651953884975814719">
-          <script src="https://www.phone.email/sign_in_button_v1.js" async></script>
+      <!-- 📱 Firebase Direct In-App Mobile OTP Box -->
+      <div id="fbDirectOtpContainer" style="text-align:left; margin-bottom:16px;">
+        <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
+          मोबाइल नंबर दर्ज करें:
+        </label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="padding:10px 12px; background:#f1f5f9; border:1.5px solid #cbd5e1; border-radius:12px; font-weight:800; color:#334155; font-size:14px;">+91</span>
+          <input type="tel" id="fbMobileInput" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none;">
         </div>
+
+        <!-- मोबाइल नंबर के ठीक नीचे छोटा OTP भेजें बटन -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+          <span id="fbOtpTimerText" style="font-size:11px; color:#64748b; font-weight:600;">SMS द्वारा OTP प्राप्त करें</span>
+          <button type="button" id="btnFbSendOtp" onclick="sendFirebaseDirectOtp()" style="padding:7px 14px; background:linear-gradient(135deg,#059669,#047857); color:#ffffff; border:none; border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; box-shadow:0 3px 8px rgba(5,150,105,0.28);">
+            📩 OTP भेजें
+          </button>
+        </div>
+
+        <!-- नीचे OTP डालने और खोलने का बॉक्स -->
+        <div style="margin-top:14px; padding-top:12px; border-top:1px dashed #e2e8f0;">
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
+            OTP दर्ज करें:
+          </label>
+          <div style="display:flex; gap:8px;">
+            <input type="tel" id="fbOtpInput" maxlength="6" inputmode="numeric" placeholder="6-अंकों का OTP" style="flex:1; padding:10px 12px; border:1.5px solid #93c5fd; border-radius:12px; font-size:15px; font-weight:800; letter-spacing:3px; text-align:center; color:#0f172a; outline:none;">
+            <button type="button" id="btnFbVerifyOtp" onclick="verifyFirebaseDirectOtp()" style="padding:10px 16px; background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#ffffff; border:none; border-radius:12px; font-size:13px; font-weight:800; cursor:pointer; white-space:nowrap; box-shadow:0 3px 10px rgba(37,99,235,0.3);">
+              खोलें ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- Invisible reCAPTCHA Container -->
+        <div id="fb-recaptcha-container"></div>
       </div>
 
       <!-- Divider -->
@@ -3992,7 +4020,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.4.4
+            APK v5.4.5
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4019,7 +4047,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.4 (बिल्ड कोड: 544)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.5 (बिल्ड कोड: 545)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4514,31 +4542,10 @@
         ग्रुप रिकॉर्ड्स, बही-खाता व वंशावली देखने हेतु कृपया लॉगिन करें।
       </p>
 
-      <!-- विकल्प 1: Phone.email साइन-इन बटन (त्वरित मोबाइल OTP) -->
-      <div id="loginModalPeSection" style="margin: 0 0 16px; display:flex; flex-direction:column; align-items:center;">
-        <div style="font-size:12px; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-          <i class="fa-solid fa-mobile-retro" style="color:#02BD7E; font-size:14px;"></i>
-          <span>Phone.email से त्वरित मोबाइल OTP:</span>
-        </div>
-        <div id="loginModalPeContainer" style="width:100%; display:flex; justify-content:center; align-items:center; min-height:44px;">
-          <div class="pe_signin_button" id="loginModalPeBtn" data-client-id="11651953884975814719"></div>
-        </div>
-        <!-- फॉलबैक / पुनः प्रयास बॉक्स (Fallback / Retry UI) -->
-        <div id="loginModalPeFallback" style="display:none; width:100%; margin-top:8px; flex-direction:column; align-items:center; gap:6px;">
-          <div style="font-size:11.5px; color:#b45309; background:#fef3c7; border:1px solid #fde68a; padding:6px 10px; border-radius:10px; display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>OTP बटन लोड होने में देरी हुई</span>
-          </div>
-          <div style="display:flex; gap:8px; margin-top:4px; flex-wrap:wrap; justify-content:center;">
-            <button type="button" onclick="loadLoginModalPhoneEmail(true)" style="background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; font-size:12px; font-weight:700; padding:6px 12px; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-              <i class="fa-solid fa-rotate-right"></i> पुनः प्रयास करें
-            </button>
-            <button type="button" onclick="openDirectPhoneEmailAuth()" style="background:#02BD7E; border:none; color:white; font-size:12px; font-weight:700; padding:6px 12px; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 2px 6px rgba(2,189,126,0.3);">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> सीधा OTP खोलें
-            </button>
-          </div>
-        </div>
-      </div>
+      <!-- विकल्प 1: मोबाइल OTP से लॉगिन करें -->
+      <button type="button" onclick="closeLoginModal(); showAuthGateScreen();" class="btn-main" style="width:100%; border-radius:14px; padding:12px; margin-bottom:12px; background:linear-gradient(135deg, #059669, #047857); color:white; font-weight:800; font-size:13.5px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 3px 8px rgba(5,150,105,0.28);">
+        <i class="fa-solid fa-mobile-screen"></i> <span>मोबाइल OTP से लॉगिन करें</span>
+      </button>
 
       <div style="display:flex; align-items:center; margin:16px 0; gap:8px;">
         <div style="flex:1; height:1px; background:#e2e8f0;"></div>
@@ -4861,7 +4868,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.4 (बिल्ड कोड: 544)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.5 (बिल्ड कोड: 545)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6383,7 +6390,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.4.4";
+    const APP_VERSION = "5.4.5";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7117,109 +7124,23 @@
     }
 
     // 7. Modals & Authentication Management
-    let loginModalPeTimer = null;
-
-    function openDirectPhoneEmailAuth() {
-      const clientId = "11651953884975814719";
-      const currUrl = window.location.href;
-      const authUrl = `https://auth.phone.email/sign-in?client_id=${clientId}&auth_type=8&origin=${encodeURIComponent(currUrl)}`;
-      const top = Math.max(0, (screen.height - 560) / 2);
-      const left = Math.max(0, (screen.width - 500) / 2);
-      window.open(authUrl, 'peLoginWindow', `toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=560,top=${top},left=${left}`);
-    }
-
-    function loadLoginModalPhoneEmail(forceReload = false) {
-      const container = document.getElementById("loginModalPeContainer");
-      const fallback = document.getElementById("loginModalPeFallback");
-      if (!container) return;
-
-      if (loginModalPeTimer) {
-        clearTimeout(loginModalPeTimer);
-        loginModalPeTimer = null;
-      }
-
-      if (fallback) fallback.style.display = "none";
-
-      // Prevent earlier appAuthGateScreen from grabbing document.querySelector('.pe_signin_button')
-      const gateScreen = document.getElementById("appAuthGateScreen");
-      if (gateScreen && gateScreen.style.display === "none") {
-        const gateDiv = gateScreen.querySelector('.pe_signin_button');
-        if (gateDiv) {
-          gateDiv.classList.remove('pe_signin_button');
-          gateDiv.classList.add('pe_signin_button_gate');
-        }
-      }
-
-      // 1. Clear container completely as requested
-      container.innerHTML = "";
-
-      // 2. Re-create .pe_signin_button element with valid data-client-id
-      const peDiv = document.createElement("div");
-      peDiv.className = "pe_signin_button";
-      peDiv.id = "loginModalPeBtn";
-      peDiv.setAttribute("data-client-id", "11651953884975814719");
-      peDiv.style.minHeight = "44px";
-      peDiv.style.display = "flex";
-      peDiv.style.justifyContent = "center";
-      peDiv.style.alignItems = "center";
-      container.appendChild(peDiv);
-
-      // 3. Dynamically inject sign_in_button_v1.js script (clean old dynamic scripts first)
-      const oldDynamicScripts = document.querySelectorAll('script[data-pe-dynamic="true"]');
-      oldDynamicScripts.forEach(s => s.remove());
-      const script = document.createElement("script");
-      script.src = "https://www.phone.email/sign_in_button_v1.js?ts=" + Date.now();
-      script.async = true;
-      script.setAttribute("data-pe-dynamic", "true");
-      script.onerror = function() {
-        console.warn("Phone.email sign_in_button_v1.js script load failed");
-        if (fallback) fallback.style.display = "flex";
-      };
-      container.appendChild(script);
-
-      // 4. Fallback check: verify after 2 seconds if button rendered
-      loginModalPeTimer = setTimeout(() => {
-        const hasContent = peDiv && (
-          peDiv.querySelector('button') !== null ||
-          peDiv.querySelector('iframe') !== null ||
-          peDiv.querySelector('a') !== null ||
-          (peDiv.children.length > 0 && peDiv.innerText.trim().length > 0)
-        );
-
-        if (!hasContent) {
-          console.warn("Phone.email button remained unrendered after 2s, showing fallback");
-          if (fallback) fallback.style.display = "flex";
-        } else {
-          if (fallback) fallback.style.display = "none";
-        }
-      }, 2000);
-    }
-
     function openLoginModal() {
       const modal = document.getElementById("loginModal");
       if (modal) modal.style.display = "flex";
-      loadLoginModalPhoneEmail(true);
     }
 
-    function openOtpLoginModal() { openLoginModal(); }
+    function openOtpLoginModal() {
+      closeLoginModal();
+      showAuthGateScreen();
+    }
+
     // "क्या यह आप हैं?" -> पहचान सीधे न मानें; लॉगिन मोडल खोलकर नंबर भर दें (पिन/गूगल सत्यापन ज़रूरी)
     function selectMemberAsSelf(m) {
       if (!m) return;
       openLoginModal();
     }
+
     function closeLoginModal() {
-      if (loginModalPeTimer) {
-        clearTimeout(loginModalPeTimer);
-        loginModalPeTimer = null;
-      }
-      const gateScreen = document.getElementById("appAuthGateScreen");
-      if (gateScreen) {
-        const gateDiv = gateScreen.querySelector('.pe_signin_button_gate');
-        if (gateDiv) {
-          gateDiv.classList.remove('pe_signin_button_gate');
-          gateDiv.classList.add('pe_signin_button');
-        }
-      }
       const modal = document.getElementById("loginModal");
       if (modal) modal.style.display = "none";
     }
@@ -8175,10 +8096,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 533)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 545)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 533)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 545)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -8293,7 +8214,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 533)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 545)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -8304,7 +8225,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 533)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 545)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -19634,81 +19555,140 @@
     }
 
     // ==========================================================================
-    // 📱 OFFICIAL PHONE.EMAIL VERIFICATION HANDLER
+    // 📱 FIREBASE DIRECT IN-APP MOBILE OTP SYSTEM
     // ==========================================================================
-    async function finalizePhoneLogin(phoneRaw) {
-      let cleanPhone10 = String(phoneRaw || "").replace(/\D/g, "");
-      if (cleanPhone10.length > 10) cleanPhone10 = cleanPhone10.slice(-10);
+    let fbConfirmationResult = null;
 
-      if (cleanPhone10.length !== 10) {
-        alert("सत्यापित मोबाइल नंबर प्राप्त नहीं हो सका।");
+    function initFirebaseRecaptcha() {
+      if (!window.fbRecaptchaVerifier && typeof firebase !== "undefined" && firebase.auth) {
+        window.fbRecaptchaVerifier = new firebase.auth.RecaptchaVerifier("fb-recaptcha-container", {
+          size: "invisible",
+          callback: function() {}
+        });
+      }
+    }
+
+    function sendFirebaseDirectOtp() {
+      const phoneInput = document.getElementById("fbMobileInput");
+      const phone10 = (phoneInput ? phoneInput.value : "").replace(/\D/g, "").slice(-10);
+      const statusEl = document.getElementById("authGateStatusMessage");
+      const btn = document.getElementById("btnFbSendOtp");
+
+      if (phone10.length !== 10) {
+        if (statusEl) {
+          statusEl.style.color = "#dc2626";
+          statusEl.textContent = "⚠️ कृपया सही 10-अंकीय मोबाइल नंबर दर्ज करें।";
+        }
         return;
       }
 
-      // 1. Session Save karein
-      localStorage.setItem("loggedInMemberPhone", cleanPhone10);
-      localStorage.setItem("isUserVerified", "true");
-      localStorage.setItem("ysg_logged_in", "true");
-      localStorage.setItem("ysg_user_phone", cleanPhone10);
-      loggedInMemberPhone = cleanPhone10;
-      isUserVerified = true;
-
-      // 2. Sanchalak (8696663615) Role Check
-      if (cleanPhone10 === "8696663615") {
-        localStorage.setItem("userRole", "admin");
-        localStorage.setItem("isAdminSession", "true");
-        userRole = "admin";
-        isAdmin = true;
-      } else {
-        localStorage.setItem("userRole", "member");
-        userRole = "member";
+      btn.disabled = true;
+      btn.textContent = "भेज रहे हैं...";
+      if (statusEl) {
+        statusEl.style.color = "#2563eb";
+        statusEl.textContent = "OTP भेजा जा रहा है, कृपया प्रतीक्षा करें...";
       }
 
-      // 3. Login Screen Hide karein
-      const gate = document.getElementById("appAuthGateScreen");
-      if (gate) gate.style.display = "none";
+      initFirebaseRecaptcha();
 
-      const modal = document.getElementById("loginModal");
-      if (modal) modal.style.display = "none";
-
-      // 4. Dashboard load karein
-      if (typeof updateAuthUI === "function") updateAuthUI();
-      window.location.reload();
+      firebase.auth().signInWithPhoneNumber("+91" + phone10, window.fbRecaptchaVerifier)
+        .then(function(confirmationResult) {
+          fbConfirmationResult = confirmationResult;
+          if (statusEl) {
+            statusEl.style.color = "#059669";
+            statusEl.textContent = "✅ OTP भेज दिया गया है! नीचे 6-अंकों का कोड दर्ज करें।";
+          }
+          const otpInp = document.getElementById("fbOtpInput");
+          if (otpInp) otpInp.focus();
+          
+          let sec = 30;
+          const timerTxt = document.getElementById("fbOtpTimerText");
+          const timer = setInterval(() => {
+            sec--;
+            if (timerTxt) timerTxt.textContent = `पुनः भेजने हेतु ${sec} सेकंड रुकें`;
+            if (sec <= 0) {
+              clearInterval(timer);
+              btn.disabled = false;
+              btn.textContent = "📩 पुनः OTP भेजें";
+              if (timerTxt) timerTxt.textContent = "OTP नहीं मिला? पुनः भेजें";
+            }
+          }, 1000);
+        })
+        .catch(function(error) {
+          console.error("Firebase OTP Error:", error);
+          btn.disabled = false;
+          btn.textContent = "📩 OTP भेजें";
+          if (window.fbRecaptchaVerifier) {
+            try { window.fbRecaptchaVerifier.clear(); } catch(e){}
+            window.fbRecaptchaVerifier = null;
+          }
+          if (statusEl) {
+            statusEl.style.color = "#dc2626";
+            statusEl.textContent = "❌ त्रुटि: " + error.message;
+          }
+        });
     }
 
-    // Phone.email Official Callback Function (Must be in global window scope)
-    window.phoneEmailListener = async function(userObj) {
-      try {
-        if (userObj && userObj.user_phone_number) {
-          await finalizePhoneLogin(userObj.user_phone_number);
-        } else if (userObj && userObj.user_json_url) {
-          const response = await fetch(userObj.user_json_url);
-          const data = await response.json();
-          if (data && data.user_phone_number) {
-            await finalizePhoneLogin(data.user_phone_number);
-          }
-        }
-      } catch (err) {
-        console.error("Phone.email Verification Error:", err);
-        alert("लॉगिन त्रुटि: " + err.message);
-      }
-    };
-    var phoneEmailListener = window.phoneEmailListener;
+    function verifyFirebaseDirectOtp() {
+      const phoneInput = document.getElementById("fbMobileInput");
+      const phone10 = (phoneInput ? phoneInput.value : "").replace(/\D/g, "").slice(-10);
+      const otpInput = document.getElementById("fbOtpInput");
+      const otpCode = (otpInput ? otpInput.value : "").replace(/\D/g, "");
+      const statusEl = document.getElementById("authGateStatusMessage");
+      const btn = document.getElementById("btnFbVerifyOtp");
 
-    // WebView / PostMessage Support (Window callback for Android WebView)
-    window.addEventListener("message", async function(event) {
-      try {
-        let data = event.data || {};
-        if (typeof data === "string") {
-          try { data = JSON.parse(data); } catch(e) {}
+      if (!fbConfirmationResult || otpCode.length !== 6) {
+        if (statusEl) {
+          statusEl.style.color = "#dc2626";
+          statusEl.textContent = "⚠️ कृपया 6-अंकों का सही OTP दर्ज करें।";
         }
-        if (data && (data.user_phone_number || data.user_json_url)) {
-          window.phoneEmailListener(data);
-        }
-      } catch (err) {
-        console.error("Message listener notice:", err);
+        return;
       }
-    });
+
+      btn.disabled = true;
+      btn.textContent = "सत्यापित हो रहा है...";
+
+      fbConfirmationResult.confirm(otpCode)
+        .then(function() {
+          localStorage.setItem("loggedInMemberPhone", phone10);
+          localStorage.setItem("isUserVerified", "true");
+          localStorage.setItem("ysg_logged_in", "true");
+          localStorage.setItem("ysg_user_phone", phone10);
+          loggedInMemberPhone = phone10;
+          isUserVerified = true;
+
+          if (phone10 === "8696663615") {
+            localStorage.setItem("userRole", "admin");
+            localStorage.setItem("isAdminSession", "true");
+            userRole = "admin";
+            isAdmin = true;
+          } else {
+            localStorage.setItem("userRole", "member");
+            userRole = "member";
+          }
+
+          const gate = document.getElementById("appAuthGateScreen");
+          if (gate) gate.style.display = "none";
+          const modal = document.getElementById("loginModal");
+          if (modal) modal.style.display = "none";
+
+          if (typeof showToast === "function") showToast("✅ सत्यापन सफल! स्वागत है।", "success");
+          if (typeof updateAuthUI === "function") {
+            updateAuthUI();
+          } else {
+            window.location.reload();
+          }
+        })
+        .catch(function(err) {
+          console.error("Firebase OTP verify error:", err);
+          btn.disabled = false;
+          btn.textContent = "खोलें ➔";
+          if (statusEl) {
+            statusEl.style.color = "#dc2626";
+            statusEl.textContent = "❌ गलत OTP! कृपया सही कोड डालें।";
+          }
+        });
+    }
 
     // Page load hote hi check karein ki user pehle se verified hai ya nahi
     (function checkExistingSessionOnBoot() {
@@ -19718,23 +19698,6 @@
           if (gate) gate.style.display = "none";
         });
       }
-      try {
-        const urlParams = new URLSearchParams(window.location.search || window.location.hash.replace(/^#\/?/, '?'));
-        const userJsonUrl = urlParams.get('user_json_url');
-        const userPhone = urlParams.get('user_phone_number') || urlParams.get('phone_no');
-        if (userPhone) {
-          finalizePhoneLogin(userPhone);
-        } else if (userJsonUrl) {
-          fetch(userJsonUrl)
-            .then(res => res.json())
-            .then(data => {
-              if (data && data.user_phone_number) {
-                finalizePhoneLogin(data.user_phone_number);
-              }
-            })
-            .catch(err => console.error("URL user_json_url fetch error:", err));
-        }
-      } catch (e) {}
     })();
 
     function setupAuthGateRecaptcha() {
@@ -20154,10 +20117,29 @@
       document.body.style.overflow = "";
       checkInitialAuthState();
       setTimeout(initAuthGateListener, 500);
+
+      const mobInp = document.getElementById("fbMobileInput");
+      if (mobInp) {
+        mobInp.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            sendFirebaseDirectOtp();
+          }
+        });
+      }
+      const otpInp = document.getElementById("fbOtpInput");
+      if (otpInp) {
+        otpInp.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            verifyFirebaseDirectOtp();
+          }
+        });
+      }
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.4)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.5)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
