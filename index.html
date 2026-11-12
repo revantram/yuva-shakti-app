@@ -3996,7 +3996,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.4.0
+            APK v5.4.1
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4023,7 +4023,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.0 (बिल्ड कोड: 540)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.1 (बिल्ड कोड: 541)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4525,9 +4525,7 @@
           <span>Phone.email से त्वरित मोबाइल OTP:</span>
         </div>
         <div id="loginModalPeContainer" style="width:100%; display:flex; justify-content:center; align-items:center; min-height:44px;">
-          <div class="pe_signin_button" id="loginModalPeBtn" data-client-id="11651953884975814719">
-            <script src="https://www.phone.email/sign_in_button_v1.js" async></script>
-          </div>
+          <div class="pe_signin_button" id="loginModalPeBtn" data-client-id="11651953884975814719"></div>
         </div>
         <!-- फॉलबैक / पुनः प्रयास बॉक्स (Fallback / Retry UI) -->
         <div id="loginModalPeFallback" style="display:none; width:100%; margin-top:8px; flex-direction:column; align-items:center; gap:6px;">
@@ -4867,7 +4865,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.0 (बिल्ड कोड: 540)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.1 (बिल्ड कोड: 541)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6389,7 +6387,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.4.0";
+    const APP_VERSION = "5.4.1";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7170,10 +7168,13 @@
       peDiv.style.alignItems = "center";
       container.appendChild(peDiv);
 
-      // 3. Dynamically inject sign_in_button_v1.js script
+      // 3. Dynamically inject sign_in_button_v1.js script (clean old dynamic scripts first)
+      const oldDynamicScripts = document.querySelectorAll('script[data-pe-dynamic="true"]');
+      oldDynamicScripts.forEach(s => s.remove());
       const script = document.createElement("script");
       script.src = "https://www.phone.email/sign_in_button_v1.js?ts=" + Date.now();
       script.async = true;
+      script.setAttribute("data-pe-dynamic", "true");
       script.onerror = function() {
         console.warn("Phone.email sign_in_button_v1.js script load failed");
         if (fallback) fallback.style.display = "flex";
@@ -19419,6 +19420,12 @@
     let isAuthGateGoogleSigningIn = false;
 
     function showAuthGateScreen() {
+      const isVerified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
+      const savedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
+      if (isVerified || savedPhone) {
+        hideAuthGateScreen();
+        return;
+      }
       const gate = document.getElementById("appAuthGateScreen");
       if (gate) {
         gate.style.display = "flex";
@@ -19635,90 +19642,114 @@
       }, 500);
     }
 
-    // =========================================================================
-    //  📲 Phone.email OTP Listener (Client ID: 11651953884975814719)
-    // =========================================================================
-    function phoneEmailListener(userObj) {
-      if (!userObj) {
-        console.error("Phone.email: invalid userObj", userObj);
-        return;
-      }
-
-      // 1. User ka verified phone number aur JSON URL nikalna
-      const directPhone = userObj.user_phone_number || "";
-      const directCode = userObj.user_country_code || "+91";
-      const user_json_url = userObj.user_json_url;
-
-      function processPhoneLogin(phoneNumber, countryCode) {
-        const fullNumber = (countryCode || "+91") + phoneNumber;
-        const cleanPhone = String(phoneNumber || fullNumber).replace(/\D/g, '').slice(-10);
-
-        console.log("Verified Number:", cleanPhone);
-
-        // 2. Login session save karein taaki wapas login page par na aaye
-        localStorage.setItem("ysg_logged_in", "true");
-        localStorage.setItem("ysg_user_phone", cleanPhone);
-        localStorage.setItem("userPhone", fullNumber);
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("loggedInMemberPhone", cleanPhone);
-        localStorage.setItem("isUserVerified", "true");
-
-        const SANCHALAK_NUM = "8696663615";
-        const isSuperAdmin = cleanPhone === SANCHALAK_NUM;
-
-        const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
-          const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
-          return p && p === cleanPhone;
-        });
-
-        if (isSuperAdmin) {
-          // नियम 1 व 2: मुख्य संचालक (8696663615) स्वतः Admin Mode में खुले
-          completeUserLogin({
-            name: "रेवंतराम भाटी",
-            phone: cleanPhone,
-            role: "admin",
-            uid: "admin_" + cleanPhone
-          });
-        } else {
-          // नियम 3: अन्य कोई भी नंबर केवल सामान्य सदस्य (Member Mode) में ही खुले
-          completeUserLogin({
-            name: matched ? matched.name : `सदस्य (${cleanPhone})`,
-            phone: cleanPhone,
-            photo: matched ? matched.photo : null,
-            role: "member",
-            uid: "member_" + cleanPhone
-          });
+    // ==========================================================================
+    // 📱 PHONE.EMAIL OTP VERIFICATION HANDLER (FIX FOR LOGIN LOOP)
+    // ==========================================================================
+    window.phoneEmailListener = function(userObj) {
+      try {
+        if (!userObj || !userObj.user_phone_number) {
+          if (userObj && userObj.user_json_url) {
+            fetch(userObj.user_json_url)
+              .then(res => res.json())
+              .then(data => {
+                window.phoneEmailListener({
+                  user_phone_number: data.user_phone_number,
+                  user_country_code: data.user_country_code,
+                  user_json_url: userObj.user_json_url
+                });
+              })
+              .catch(err => {
+                console.error("Phone.email fetch error:", err);
+                alert("डेटा प्राप्त करने में समस्या आई।");
+              });
+            return;
+          }
+          alert("मोबाइल नंबर प्राप्त नहीं हुआ। कृपया पुनः प्रयास करें।");
+          return;
         }
 
-        // 3. Login screen chhupayein
-        closeLoginModal();
-        hideAuthGateScreen();
-        updateAuthUI();
-        if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
-        if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
+        // 1. 10-digit clean mobile number nikalna
+        let rawPhone = String(userObj.user_phone_number).replace(/\D/g, "");
+        let cleanPhone10 = rawPhone.length > 10 ? rawPhone.slice(-10) : rawPhone;
 
-        alert("सफलतापूर्वक लॉगिन हुआ! नंबर: " + fullNumber);
-      }
+        if (cleanPhone10.length < 10) {
+          alert("अमान्य मोबाइल नंबर। कृपया सही नंबर से सत्यापन करें।");
+          return;
+        }
 
-      if (directPhone) {
-        processPhoneLogin(directPhone, directCode);
-      } else if (user_json_url) {
-        fetch(user_json_url)
-          .then(response => response.json())
-          .then(data => {
-            const countryCode = data.user_country_code || "+91";
-            const phoneNumber = data.user_phone_number || "";
-            processPhoneLogin(phoneNumber, countryCode);
-          })
-          .catch(err => {
-            console.error("Phone.email एरर:", err);
-            showToast("OTP डेटा प्राप्त करने में समस्या आई। कृपया पुनः प्रयास करें।", "error");
+        // 2. Session save karna taaki page refresh par wapas login screen na aaye
+        localStorage.setItem("loggedInMemberPhone", cleanPhone10);
+        localStorage.setItem("isUserVerified", "true");
+        localStorage.setItem("ysg_logged_in", "true");
+        localStorage.setItem("ysg_user_phone", cleanPhone10);
+        if (typeof loggedInMemberPhone !== "undefined") loggedInMemberPhone = cleanPhone10;
+        if (typeof isUserVerified !== "undefined") isUserVerified = true;
+
+        // 3. Sanchalak (8696663615) check
+        const SANCHALAK_NUM = "8696663615";
+        const isSanchalak = (typeof SANCHALAK_PHONE !== "undefined" && cleanPhone10 === SANCHALAK_PHONE) || cleanPhone10 === SANCHALAK_NUM;
+        if (isSanchalak) {
+          localStorage.setItem("userRole", "admin");
+          localStorage.setItem("isAdminSession", "true");
+          userRole = "admin";
+          isAdmin = true;
+        } else {
+          localStorage.setItem("userRole", "member");
+          localStorage.removeItem("isAdminSession");
+          userRole = "member";
+          isAdmin = false;
+        }
+
+        // 4. Auth Gate aur Login Modal band karna
+        const gateScreen = document.getElementById("appAuthGateScreen");
+        if (gateScreen) {
+          gateScreen.style.display = "none";
+          gateScreen.style.opacity = "0";
+          gateScreen.style.pointerEvents = "none";
+        }
+
+        const loginModal = document.getElementById("loginModal");
+        if (loginModal) {
+          loginModal.style.display = "none";
+        }
+
+        if (typeof closeLoginModal === "function") closeLoginModal();
+        if (typeof hideAuthGateScreen === "function") hideAuthGateScreen();
+
+        // 5. Status message update aur existing app initialization call karna
+        if (typeof showToast === "function") {
+          showToast("✅ मोबाइल नंबर सत्यापित हो गया!", "success");
+        }
+
+        // App ke existing member check / UI refresh functions chalana
+        if (typeof checkMemberAccessAndRoute === "function") {
+          checkMemberAccessAndRoute(cleanPhone10);
+        } else if (typeof verifyMemberFromFirestore === "function") {
+          verifyMemberFromFirestore(cleanPhone10);
+        } else if (typeof completeUserLogin === "function") {
+          const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
+            const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
+            return p && p === cleanPhone10;
           });
-      } else {
-        console.error("Phone.email: invalid userObj format", userObj);
+          completeUserLogin({
+            name: isSanchalak ? "रेवंतराम भाटी" : (matched ? matched.name : `सदस्य (${cleanPhone10})`),
+            phone: cleanPhone10,
+            photo: matched ? matched.photo : null,
+            role: isSanchalak ? "admin" : "member",
+            uid: isSanchalak ? "admin_" + cleanPhone10 : "member_" + cleanPhone10
+          });
+        } else if (typeof updateAuthUI === "function") {
+          updateAuthUI();
+          if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
+        } else {
+          window.location.reload();
+        }
+      } catch (err) {
+        console.error("Phone.email Listener Error:", err);
+        alert("लॉगिन सत्यापन में त्रुटि: " + err.message);
       }
-    }
-    window.phoneEmailListener = phoneEmailListener;
+    };
+    var phoneEmailListener = window.phoneEmailListener;
 
     // 📩 Phone.email Global Message Listener (for popup window callback)
     window.addEventListener("message", function(event) {
@@ -20029,12 +20060,14 @@
     }
 
     function checkInitialAuthState() {
-      const isYsgLoggedIn = localStorage.getItem("ysg_logged_in") === "true";
+      const isUserVerified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
       const cachedUserStr = localStorage.getItem("currentAppUser");
       const cachedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
 
-      if (isYsgLoggedIn || cachedUserStr || cachedPhone) {
+      if (isUserVerified || cachedUserStr || cachedPhone) {
         hideAuthGateScreen();
+        const gateScreen = document.getElementById("appAuthGateScreen");
+        if (gateScreen) gateScreen.style.display = "none";
         const phone = cachedPhone ? String(cachedPhone).replace(/\D/g, '').slice(-10) : "";
         const SANCHALAK_PHONE = "8696663615";
         const isSuperAdmin = (phone === SANCHALAK_PHONE) || (localStorage.getItem("isAdminSession") === "true");
@@ -20100,16 +20133,20 @@
             }
 
             hideAuthGateScreen();
+            const gateScreen = document.getElementById("appAuthGateScreen");
+            if (gateScreen) gateScreen.style.display = "none";
             updateAuthUI();
             if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
           } else {
-            // Firebase user is null (e.g. Phone.email session) - check ysg_logged_in
-            const isYsgLoggedIn = localStorage.getItem("ysg_logged_in") === "true";
+            // Firebase user is null (e.g. Phone.email session) - check isUserVerified & cached session
+            const isUserVerified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
             const cachedUserStr = localStorage.getItem("currentAppUser");
             const cachedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
 
-            if (isYsgLoggedIn || cachedUserStr || cachedPhone) {
+            if (isUserVerified || cachedUserStr || cachedPhone) {
               hideAuthGateScreen();
+              const gateScreen = document.getElementById("appAuthGateScreen");
+              if (gateScreen) gateScreen.style.display = "none";
               const phone = cachedPhone ? String(cachedPhone).replace(/\D/g, '').slice(-10) : "";
               const SANCHALAK_PHONE = "8696663615";
               const isSuperAdmin = (phone === SANCHALAK_PHONE) || (localStorage.getItem("isAdminSession") === "true");
@@ -20133,6 +20170,16 @@
       }
     }
 
+    // Page load hote hi agar user pehle se verified hai toh Auth Gate chhupayein
+    window.addEventListener("DOMContentLoaded", function() {
+      const verified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
+      const savedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
+      if (verified && savedPhone) {
+        const gateScreen = document.getElementById("appAuthGateScreen");
+        if (gateScreen) gateScreen.style.display = "none";
+      }
+    });
+
     // Call on load
     document.addEventListener("DOMContentLoaded", () => {
       document.body.style.overflow = "";
@@ -20141,7 +20188,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.0)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.1)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
