@@ -3647,15 +3647,15 @@
       <!-- Top Dual Balance Cards: Left Side: उपलब्ध कुल कोष | Right Side: कुल खर्च -->
       <div class="expense-hero-container" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
         <!-- Left Side: उपलब्ध कुल कोष (संपादन योग्य) -->
-        <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(5, 150, 105, 0.05) 100%); border:1px solid rgba(16, 185, 129, 0.3); border-radius:18px; padding:14px 10px; text-align:center; box-shadow:0 4px 16px rgba(16,185,129,0.08); position:relative;">
-          <div style="font-size:12.5px; font-weight:700; color:#059669; display:flex; align-items:center; justify-content:center; gap:5px; margin-bottom:6px;">
+        <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(5, 150, 105, 0.05) 100%); border:1px solid rgba(16, 185, 129, 0.3); border-radius:18px; padding:12px 10px; text-align:center; box-shadow:0 4px 16px rgba(16,185,129,0.08); position:relative;">
+          <div style="font-size:12px; font-weight:700; color:#059669; display:flex; align-items:center; justify-content:center; gap:5px; margin-bottom:4px;">
             <span>उपलब्ध कुल कोष</span>
-            <button id="btnEditOpeningBalance" onclick="promptEditOpeningBalance()" style="display:none; background:rgba(5,150,105,0.18); border:none; border-radius:50%; width:22px; height:22px; color:#047857; font-size:11px; cursor:pointer;" title="उपलब्ध कुल कोष बदलें (Admin)">
+            <button id="btnEditOpeningBalance" onclick="promptEditOpeningBalance()" style="background:rgba(5,150,105,0.18); border:none; border-radius:50%; width:22px; height:22px; color:#047857; font-size:11px; cursor:pointer;" title="उपलब्ध कुल कोष बदलें (Admin)">
               <i class="fa-solid fa-pen"></i>
             </button>
           </div>
-          <div id="remainingBalanceAmount" style="font-size:22px; font-weight:900; color:#047857; letter-spacing:-0.5px;">₹1,963</div>
-          <div style="font-size:10px; color:#059669; margin-top:3px; font-weight:600;">सुरक्षित कोष शेष</div>
+          <div id="remainingBalanceAmount" style="font-size:22px; font-weight:900; color:#047857; letter-spacing:-0.5px;">₹3,205</div>
+          <div id="fundBreakdownSubtext" style="font-size:9.5px; color:#047857; margin-top:3px; font-weight:700; line-height:1.3;">सुरक्षित शेष ₹665 + विसर्जन शेष ₹1,190 + जमा ₹1,350</div>
         </div>
 
         <!-- Right Side: कुल खर्च -->
@@ -3786,9 +3786,14 @@
       </div>
 
       <!-- Member Read-Only Notice (Visible when !isAdmin) -->
-      <div id="expenseReadOnlyNotice" class="ios-glass-card" style="display:flex; align-items:center; gap:10px; padding:10px 12px; margin-bottom:12px; background:rgba(37, 99, 235, 0.08); border:1px solid rgba(37, 99, 235, 0.2); border-radius:14px; font-size:11px; color:var(--text-color);">
-        <i class="fa-solid fa-shield-halved" style="color:#2563eb; font-size:16px; flex-shrink:0;"></i>
-        <div><strong>व्यवस्थापक नियंत्रण:</strong> केवल संचालक / व्यवस्थापक खर्च व सामग्री जोड़/बदल सकते हैं। सदस्य सभी खर्चों की तालिका व शेष राशि देख सकते हैं।</div>
+      <div id="expenseReadOnlyNotice" class="ios-glass-card" style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; margin-bottom:12px; background:rgba(37, 99, 235, 0.08); border:1px solid rgba(37, 99, 235, 0.2); border-radius:14px; font-size:11px; color:var(--text-color);">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-shield-halved" style="color:#2563eb; font-size:16px; flex-shrink:0;"></i>
+          <div><strong>व्यवस्थापक नियंत्रण:</strong> केवल संचालक / व्यवस्थापक खर्च व सामग्री जोड़/बदल सकते हैं।</div>
+        </div>
+        <button onclick="promptUnlockAdminFromExpense()" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; border:none; padding:7px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:5px; box-shadow:0 2px 8px rgba(37,99,235,0.3);">
+          <i class="fa-solid fa-key"></i> एडमिन अनलॉक
+        </button>
       </div>
 
       <!-- Quick Action Tools (Share WA, PDF) -->
@@ -4036,7 +4041,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.3.5
+            APK v5.3.6
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4063,7 +4068,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.5 (बिल्ड कोड: 535)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.6 (बिल्ड कोड: 536)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4934,7 +4939,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.5 (बिल्ड कोड: 535)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.6 (बिल्ड कोड: 536)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6456,7 +6461,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.3.5";
+    const APP_VERSION = "5.3.6";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -8443,8 +8448,18 @@
       // Update header user greeting (in bracket) under header subtitle: (रेवंतराम भाटी) or (अतिथि • पहचान चुनें)
       const headerUserGreeting = document.getElementById("headerUserGreeting");
       if (headerUserGreeting) {
-        headerUserGreeting.innerText = currentUserName ? `(${currentUserName})` : `(अतिथि • पहचान चुनें)`;
-        headerUserGreeting.title = currentUserName ? `पहचान: ${currentUserName} (टैप करके बदलें)` : `टैप करके अपनी सदस्य पहचान चुनें`;
+        if (currentUserName) {
+          if (!isAdmin && (loggedInMemberPhone?.endsWith(SANCHALAK_PHONE) || currentUserName.includes("रेवंतराम"))) {
+            headerUserGreeting.innerHTML = `(${currentUserName} • <span style="text-decoration:underline; font-weight:800; color:#38bdf8; cursor:pointer;" onclick="event.stopPropagation(); promptUnlockAdminFromExpense();">🔐 एडमिन अनलॉक</span>)`;
+            headerUserGreeting.title = "एडमिन पासवर्ड दर्ज करके संचालक नियंत्रण अनलॉक करें";
+          } else {
+            headerUserGreeting.innerText = `(${currentUserName})`;
+            headerUserGreeting.title = `पहचान: ${currentUserName}`;
+          }
+        } else {
+          headerUserGreeting.innerText = `(अतिथि • पहचान चुनें)`;
+          headerUserGreeting.title = `टैप करके अपनी सदस्य पहचान चुनें`;
+        }
       }
 
       // Remove / hide adminNotice orange strip completely as requested
@@ -12171,7 +12186,8 @@
 
     // Dynamic Fund & Safe Reserve Calculator (सुरक्षित कोष / उपलब्ध कुल कोष)
     function ysGetDynamicFundSummary() {
-      const openingBal = getOpeningBalance(); // Base reserve (₹1,963 by default)
+      let openingBal = getOpeningBalance(); // Base reserve (₹665 by default)
+      const ganeshRemaining = getGaneshRemaining(); // Ganesh Visarjan remaining (₹1,190 by default)
       const cutoffDate = "2026-11-08";
 
       // 1. All member contributions on/after November 2026 and future months
@@ -12220,24 +12236,12 @@
         }
       });
 
-      // Auto-adjust if base was directly set to 3205 in previous build
-      if (openingBal === 3205 && localStorage.getItem("ys_target_fund_migrated_3205") !== "true") {
-        openingBal = 3205 - postOpeningContributions + postOpeningExpenses;
-        localStorage.setItem("initial_opening_balance", openingBal);
-        localStorage.setItem("ys_target_fund_migrated_3205", "true");
-        try {
-          db.collection("settings").doc("finance").set({ 
-            openingBalance: openingBal, 
-            targetAvailableFund: 3205,
-            updatedAt: new Date() 
-          }, { merge: true });
-        } catch (e) {}
-      }
-
-      const netAvailableFund = openingBal + postOpeningContributions - postOpeningExpenses;
+      // Formula: Base opening (₹665) + Ganesh remaining (₹1,190) + Monthly contributions (₹1,350) - Expenses = ₹3,205
+      const netAvailableFund = openingBal + ganeshRemaining + postOpeningContributions - postOpeningExpenses;
 
       return {
         openingBal,
+        ganeshRemaining,
         postOpeningContributions,
         postOpeningExpenses,
         netAvailableFund
@@ -12266,6 +12270,7 @@
 
       const fundSummary = ysGetDynamicFundSummary();
       const openingBal = fundSummary.openingBal;
+      const ganeshRemaining = fundSummary.ganeshRemaining;
       const netAvailable = fundSummary.netAvailableFund;
 
       if (totalExpenseEl) totalExpenseEl.innerText = "₹" + regularTotalOut.toLocaleString('en-IN');
@@ -12274,8 +12279,13 @@
         remainingBalanceEl.style.color = netAvailable >= 0 ? '#047857' : '#dc2626';
       }
 
+      const fundBreakdownSubtext = document.getElementById("fundBreakdownSubtext");
+      if (fundBreakdownSubtext) {
+        fundBreakdownSubtext.innerText = `सुरक्षित शेष ₹${openingBal.toLocaleString('en-IN')} + विसर्जन शेष ₹${ganeshRemaining.toLocaleString('en-IN')} + जमा ₹${fundSummary.postOpeningContributions.toLocaleString('en-IN')}`;
+      }
+
       const btnEditOpen = document.getElementById("btnEditOpeningBalance");
-      if (btnEditOpen) btnEditOpen.style.display = canFin() ? "inline-flex" : "none";
+      if (btnEditOpen) btnEditOpen.style.display = "inline-flex";
 
       // Render Ganesh Visarjan 3 Stat Metrics & Sub-Table
       const ganeshStatExpense = document.getElementById("ganeshStatExpense");
@@ -12289,7 +12299,6 @@
       const ganeshExpense = ganeshExpenses.length > 0
         ? ganeshExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0)
         : getGaneshExpense(); // default 14640
-      const ganeshRemaining = getGaneshRemaining(); // default 1190
 
       if (ganeshStatIncome) ganeshStatIncome.innerText = "₹" + ganeshIncome.toLocaleString('en-IN');
       if (ganeshStatExpense) ganeshStatExpense.innerText = "₹" + ganeshExpense.toLocaleString('en-IN');
@@ -12297,9 +12306,9 @@
         ganeshStatRemaining.innerText = "₹" + ganeshRemaining.toLocaleString('en-IN');
         ganeshStatRemaining.style.color = ganeshRemaining >= 0 ? '#16a34a' : '#dc2626';
       }
-      if (btnEditGaneshInc) btnEditGaneshInc.style.display = canFin() ? "inline-block" : "none";
-      if (btnEditGaneshExp) btnEditGaneshExp.style.display = canFin() ? "inline-block" : "none";
-      if (btnEditGaneshRem) btnEditGaneshRem.style.display = canFin() ? "inline-block" : "none";
+      if (btnEditGaneshInc) btnEditGaneshInc.style.display = "inline-block";
+      if (btnEditGaneshExp) btnEditGaneshExp.style.display = "inline-block";
+      if (btnEditGaneshRem) btnEditGaneshRem.style.display = "inline-block";
 
       const ganeshTotalBadge = document.getElementById("ganeshTotalBadge");
       const ganeshTotalFooter = document.getElementById("ganeshTotalFooter");
@@ -12309,7 +12318,7 @@
       const tdGaneshFooterAction = document.getElementById("tdGaneshFooterAction");
       const ganeshTbody = document.getElementById("ganeshExpensesTableBody");
 
-      if (ganeshTotalBadge) ganeshTotalBadge.innerText = "₹" + ganeshTotalOut.toLocaleString('en-IN');
+      if (ganeshTotalBadge) ganeshTotalBadge.innerText = "बचे: ₹" + ganeshRemaining.toLocaleString('en-IN');
       if (ganeshTotalFooter) ganeshTotalFooter.innerText = "₹" + ganeshTotalOut.toLocaleString('en-IN');
       if (ganeshItemCount) ganeshItemCount.innerText = `${ganeshExpenses.length} मद`;
       if (btnAddGanesh) btnAddGanesh.style.display = canFin() ? "inline-flex" : "none";
@@ -12460,25 +12469,50 @@
 
     function getOpeningBalance() {
       const val = localStorage.getItem("initial_opening_balance");
-      if (val === "2463" || val === "2163" || val === "3063") {
-        localStorage.setItem("initial_opening_balance", "1963");
-        return 1963;
+      if (val === "2463" || val === "2163" || val === "3063" || val === "1963" || val === "3205" || val === "1855") {
+        localStorage.setItem("initial_opening_balance", "665");
+        return 665;
       }
       if (val !== null && !isNaN(Number(val))) {
         return Number(val);
       }
-      localStorage.setItem("initial_opening_balance", "1963");
-      return 1963;
+      localStorage.setItem("initial_opening_balance", "665");
+      return 665;
+    }
+
+    async function promptUnlockAdminFromExpense() {
+      const pass = prompt("संचालक (Admin) 6-अंकों का पासवर्ड दर्ज करें:");
+      if (!pass) return;
+      if (typeof ysVerifyAdminPassword === "function" && ysVerifyAdminPassword(pass.trim())) {
+        isAdmin = true;
+        sessionStorage.setItem("isAdminSession", "true");
+        localStorage.setItem("isAdminSession", "true");
+        showToast("एडमिन मोड सफलतापूर्वक अनलॉक हुआ! अब आप खर्च व कोष बदल सकते हैं।", "success");
+        updateAuthUI();
+        renderExpensesSpreadsheet();
+      } else {
+        showToast("गलत पासवर्ड! कृपया सही पासवर्ड दर्ज करें।", "error");
+      }
     }
 
     async function promptEditOpeningBalance() {
       if (!canFin()) {
-        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
-        return;
+        const pass = prompt("उपलब्ध कुल कोष बदलने के लिए संचालक (Admin) पासवर्ड दर्ज करें:");
+        if (!pass) return;
+        if (typeof ysVerifyAdminPassword === "function" && ysVerifyAdminPassword(pass.trim())) {
+          isAdmin = true;
+          sessionStorage.setItem("isAdminSession", "true");
+          localStorage.setItem("isAdminSession", "true");
+          updateAuthUI();
+          showToast("एडमिन मोड सक्रिय हुआ!", "success");
+        } else {
+          showToast("गलत पासवर्ड! केवल संचालक ही कोष बदल सकते हैं।", "error");
+          return;
+        }
       }
       const fundSummary = ysGetDynamicFundSummary();
       const current = fundSummary.netAvailableFund;
-      const input = prompt("उपलब्ध कुल कोष (सुरक्षित कोष) राशि दर्ज करें:", current);
+      const input = prompt("उपलब्ध कुल कोष राशि दर्ज करें (वर्तमान: ₹" + current.toLocaleString('en-IN') + "):", current);
       if (input === null) return;
       const targetFund = Number(input);
       if (isNaN(targetFund) || targetFund < 0) {
@@ -12486,10 +12520,9 @@
         return;
       }
 
-      // Base opening is calculated so that: base + contributions - expenses = targetFund
-      const baseOpening = targetFund - fundSummary.postOpeningContributions + fundSummary.postOpeningExpenses;
+      // Base opening is calculated so that: base + ganeshRemaining + contributions - expenses = targetFund
+      const baseOpening = targetFund - fundSummary.ganeshRemaining - fundSummary.postOpeningContributions + fundSummary.postOpeningExpenses;
       localStorage.setItem("initial_opening_balance", baseOpening);
-      localStorage.setItem("ys_target_fund_migrated_3205", "true");
 
       try {
         await db.collection("settings").doc("finance").set({ 
@@ -12530,8 +12563,17 @@
 
     async function promptEditGaneshIncome() {
       if (!canFin()) {
-        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
-        return;
+        const pass = prompt("आय बदलने के लिए संचालक (Admin) पासवर्ड दर्ज करें:");
+        if (!pass) return;
+        if (typeof ysVerifyAdminPassword === "function" && ysVerifyAdminPassword(pass.trim())) {
+          isAdmin = true;
+          sessionStorage.setItem("isAdminSession", "true");
+          localStorage.setItem("isAdminSession", "true");
+          updateAuthUI();
+        } else {
+          showToast("गलत पासवर्ड!", "error");
+          return;
+        }
       }
       const current = getGaneshIncome();
       const input = prompt("1. गणेश विसर्जन कुल आय (चंदा व आरती) दर्ज करें:", current);
@@ -12560,8 +12602,17 @@
 
     async function promptEditGaneshExpense() {
       if (!canFin()) {
-        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
-        return;
+        const pass = prompt("विसर्जन खर्च बदलने के लिए संचालक (Admin) पासवर्ड दर्ज करें:");
+        if (!pass) return;
+        if (typeof ysVerifyAdminPassword === "function" && ysVerifyAdminPassword(pass.trim())) {
+          isAdmin = true;
+          sessionStorage.setItem("isAdminSession", "true");
+          localStorage.setItem("isAdminSession", "true");
+          updateAuthUI();
+        } else {
+          showToast("गलत पासवर्ड!", "error");
+          return;
+        }
       }
       const current = getGaneshExpense();
       const input = prompt("2. कुल गणेश विसर्जन खर्च दर्ज करें:", current);
@@ -12590,8 +12641,17 @@
 
     async function promptEditGaneshRemaining() {
       if (!canFin()) {
-        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
-        return;
+        const pass = prompt("विसर्जन शेष बदलने के लिए संचालक (Admin) पासवर्ड दर्ज करें:");
+        if (!pass) return;
+        if (typeof ysVerifyAdminPassword === "function" && ysVerifyAdminPassword(pass.trim())) {
+          isAdmin = true;
+          sessionStorage.setItem("isAdminSession", "true");
+          localStorage.setItem("isAdminSession", "true");
+          updateAuthUI();
+        } else {
+          showToast("गलत पासवर्ड!", "error");
+          return;
+        }
       }
       const current = getGaneshRemaining();
       const input = prompt("3. गणेश विसर्जन बाकी बचे पैसे दर्ज करें:", current);
@@ -13554,8 +13614,18 @@
 
     function openExpenseModal(editIdOrPreset = null) {
       if (!canFin()) {
-        showToast("यह सुविधा केवल व्यवस्थापक (Admin) के लिए है।", "warning");
-        return;
+        const pass = prompt("खर्च जोड़ने / बदलने के लिए संचालक (Admin) पासवर्ड दर्ज करें:");
+        if (!pass) return;
+        if (typeof ysVerifyAdminPassword === "function" && ysVerifyAdminPassword(pass.trim())) {
+          isAdmin = true;
+          sessionStorage.setItem("isAdminSession", "true");
+          localStorage.setItem("isAdminSession", "true");
+          updateAuthUI();
+          showToast("एडमिन मोड सक्रिय हुआ!", "success");
+        } else {
+          showToast("गलत पासवर्ड! केवल संचालक ही खर्च जोड़ या बदल सकते हैं।", "error");
+          return;
+        }
       }
       window.ysBillData = null; { const _bf = document.getElementById("expenseBillFile"); if (_bf) _bf.value = ""; const _bp = document.getElementById("expenseBillPreview"); if (_bp) _bp.innerHTML = ""; }
       const modal = document.getElementById("expenseModal");
@@ -13685,8 +13755,18 @@
 
     function promptDeleteExpense(id) {
       if (!canFin()) {
-        showToast("यह अधिकार केवल व्यवस्थापक के पास है।", "error");
-        return;
+        const pass = prompt("खर्च हटाने के लिए संचालक (Admin) पासवर्ड दर्ज करें:");
+        if (!pass) return;
+        if (typeof ysVerifyAdminPassword === "function" && ysVerifyAdminPassword(pass.trim())) {
+          isAdmin = true;
+          sessionStorage.setItem("isAdminSession", "true");
+          localStorage.setItem("isAdminSession", "true");
+          updateAuthUI();
+          showToast("एडमिन मोड सक्रिय हुआ!", "success");
+        } else {
+          showToast("गलत पासवर्ड! केवल संचालक ही खर्च हटा सकते हैं।", "error");
+          return;
+        }
       }
       showConfirmDialog(
         "खर्च हटाएं",
@@ -19881,7 +19961,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.5)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.6)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
