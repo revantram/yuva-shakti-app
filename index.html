@@ -3996,7 +3996,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.3.8
+            APK v5.3.9
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4023,7 +4023,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.8 (बिल्ड कोड: 538)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.3.9 (बिल्ड कोड: 539)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4519,13 +4519,30 @@
       </p>
 
       <!-- विकल्प 1: Phone.email साइन-इन बटन (त्वरित मोबाइल OTP) -->
-      <div style="margin: 0 0 16px; display:flex; flex-direction:column; align-items:center;">
+      <div id="loginModalPeSection" style="margin: 0 0 16px; display:flex; flex-direction:column; align-items:center;">
         <div style="font-size:12px; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
           <i class="fa-solid fa-mobile-retro" style="color:#02BD7E; font-size:14px;"></i>
           <span>Phone.email से त्वरित मोबाइल OTP:</span>
         </div>
-        <div class="pe_signin_button" data-client-id="11651953884975814719">
-          <script src="https://www.phone.email/sign_in_button_v1.js" async></script>
+        <div id="loginModalPeContainer" style="width:100%; display:flex; justify-content:center; align-items:center; min-height:44px;">
+          <div class="pe_signin_button" id="loginModalPeBtn" data-client-id="11651953884975814719">
+            <script src="https://www.phone.email/sign_in_button_v1.js" async></script>
+          </div>
+        </div>
+        <!-- फॉलबैक / पुनः प्रयास बॉक्स (Fallback / Retry UI) -->
+        <div id="loginModalPeFallback" style="display:none; width:100%; margin-top:8px; flex-direction:column; align-items:center; gap:6px;">
+          <div style="font-size:11.5px; color:#b45309; background:#fef3c7; border:1px solid #fde68a; padding:6px 10px; border-radius:10px; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>OTP बटन लोड होने में देरी हुई</span>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:4px; flex-wrap:wrap; justify-content:center;">
+            <button type="button" onclick="loadLoginModalPhoneEmail(true)" style="background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; font-size:12px; font-weight:700; padding:6px 12px; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+              <i class="fa-solid fa-rotate-right"></i> पुनः प्रयास करें
+            </button>
+            <button type="button" onclick="openDirectPhoneEmailAuth()" style="background:#02BD7E; border:none; color:white; font-size:12px; font-weight:700; padding:6px 12px; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 2px 6px rgba(2,189,126,0.3);">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> सीधा OTP खोलें
+            </button>
+          </div>
         </div>
       </div>
 
@@ -4850,7 +4867,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.8 (बिल्ड कोड: 538)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.3.9 (बिल्ड कोड: 539)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6372,7 +6389,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.3.8";
+    const APP_VERSION = "5.3.9";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7106,14 +7123,85 @@
     }
 
     // 7. Modals & Authentication Management
+    let loginModalPeTimer = null;
+
+    function openDirectPhoneEmailAuth() {
+      const clientId = "11651953884975814719";
+      const currUrl = window.location.href;
+      const authUrl = `https://auth.phone.email/sign-in?client_id=${clientId}&auth_type=8&origin=${encodeURIComponent(currUrl)}`;
+      const top = Math.max(0, (screen.height - 560) / 2);
+      const left = Math.max(0, (screen.width - 500) / 2);
+      window.open(authUrl, 'peLoginWindow', `toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=560,top=${top},left=${left}`);
+    }
+
+    function loadLoginModalPhoneEmail(forceReload = false) {
+      const container = document.getElementById("loginModalPeContainer");
+      const fallback = document.getElementById("loginModalPeFallback");
+      if (!container) return;
+
+      if (loginModalPeTimer) {
+        clearTimeout(loginModalPeTimer);
+        loginModalPeTimer = null;
+      }
+
+      if (fallback) fallback.style.display = "none";
+
+      // Prevent earlier appAuthGateScreen from grabbing document.querySelector('.pe_signin_button')
+      const gateScreen = document.getElementById("appAuthGateScreen");
+      if (gateScreen && gateScreen.style.display === "none") {
+        const gateDiv = gateScreen.querySelector('.pe_signin_button');
+        if (gateDiv) {
+          gateDiv.classList.remove('pe_signin_button');
+          gateDiv.classList.add('pe_signin_button_gate');
+        }
+      }
+
+      // 1. Clear container completely as requested
+      container.innerHTML = "";
+
+      // 2. Re-create .pe_signin_button element with valid data-client-id
+      const peDiv = document.createElement("div");
+      peDiv.className = "pe_signin_button";
+      peDiv.id = "loginModalPeBtn";
+      peDiv.setAttribute("data-client-id", "11651953884975814719");
+      peDiv.style.minHeight = "44px";
+      peDiv.style.display = "flex";
+      peDiv.style.justifyContent = "center";
+      peDiv.style.alignItems = "center";
+      container.appendChild(peDiv);
+
+      // 3. Dynamically inject sign_in_button_v1.js script
+      const script = document.createElement("script");
+      script.src = "https://www.phone.email/sign_in_button_v1.js?ts=" + Date.now();
+      script.async = true;
+      script.onerror = function() {
+        console.warn("Phone.email sign_in_button_v1.js script load failed");
+        if (fallback) fallback.style.display = "flex";
+      };
+      container.appendChild(script);
+
+      // 4. Fallback check: verify after 2 seconds if button rendered
+      loginModalPeTimer = setTimeout(() => {
+        const hasContent = peDiv && (
+          peDiv.querySelector('button') !== null ||
+          peDiv.querySelector('iframe') !== null ||
+          peDiv.querySelector('a') !== null ||
+          (peDiv.children.length > 0 && peDiv.innerText.trim().length > 0)
+        );
+
+        if (!hasContent) {
+          console.warn("Phone.email button remained unrendered after 2s, showing fallback");
+          if (fallback) fallback.style.display = "flex";
+        } else {
+          if (fallback) fallback.style.display = "none";
+        }
+      }, 2000);
+    }
+
     function openLoginModal() {
       const modal = document.getElementById("loginModal");
       if (modal) modal.style.display = "flex";
-      const directInput = document.getElementById("directLoginPhone");
-      if (directInput) {
-        directInput.value = "";
-        directInput.focus();
-      }
+      loadLoginModalPhoneEmail(true);
     }
 
     function openOtpLoginModal() { openLoginModal(); }
@@ -7121,11 +7209,20 @@
     function selectMemberAsSelf(m) {
       if (!m) return;
       openLoginModal();
-      const inp = document.getElementById("directLoginPhone");
-      if (inp && m.phone) inp.value = String(m.phone).replace(/\D/g, '').slice(-10);
-      showToast("कृपया अपना पिन दर्ज करके लॉगिन करें।", "info");
     }
     function closeLoginModal() {
+      if (loginModalPeTimer) {
+        clearTimeout(loginModalPeTimer);
+        loginModalPeTimer = null;
+      }
+      const gateScreen = document.getElementById("appAuthGateScreen");
+      if (gateScreen) {
+        const gateDiv = gateScreen.querySelector('.pe_signin_button_gate');
+        if (gateDiv) {
+          gateDiv.classList.remove('pe_signin_button_gate');
+          gateDiv.classList.add('pe_signin_button');
+        }
+      }
       const modal = document.getElementById("loginModal");
       if (modal) modal.style.display = "none";
     }
@@ -19322,6 +19419,11 @@
         gate.style.display = "flex";
         gate.style.opacity = "1";
         gate.style.pointerEvents = "auto";
+        const gateDiv = gate.querySelector('.pe_signin_button_gate');
+        if (gateDiv) {
+          gateDiv.classList.remove('pe_signin_button_gate');
+          gateDiv.classList.add('pe_signin_button');
+        }
       }
     }
 
@@ -19590,7 +19692,24 @@
     }
     window.phoneEmailListener = phoneEmailListener;
 
-    function setupAuthGateRecaptcha() {
+    // 📩 Phone.email Global Message Listener (for popup window callback)
+    window.addEventListener("message", function(event) {
+      try {
+        if (!event) return;
+        const origin = event.origin || "";
+        if (origin.includes("phone.email") || (event.data && event.data.user_json_url)) {
+          let data = event.data;
+          if (typeof data === "string") {
+            try { data = JSON.parse(data); } catch(e){}
+          }
+          if (data && data.user_json_url && typeof phoneEmailListener === "function") {
+            phoneEmailListener(data);
+          }
+        }
+      } catch(err) {
+        console.warn("Phone.email message listener notice:", err);
+      }
+    });
       if (!authGateRecaptchaVerifier) {
         try {
           authGateRecaptchaVerifier = new firebase.auth.RecaptchaVerifier('authGateRecaptchaContainer', {
@@ -19953,7 +20072,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.8)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.3.9)
     //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
     // =========================================================================
 
