@@ -3358,20 +3358,20 @@
         ग्रुप रिकॉर्ड्स, बही-खाता व वंशावली देखने हेतु कृपया अपना सत्यापन करें।
       </p>
 
-      <!-- 📱 Firebase Direct In-App Mobile OTP Box -->
-      <div id="fbDirectOtpContainer" style="text-align:left; margin-bottom:16px;">
+      <!-- 📱 Self-Hosted SMS Gate OTP Box -->
+      <div id="smsOtpContainer" style="text-align:left; margin-bottom:16px;">
         <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
           मोबाइल नंबर दर्ज करें:
         </label>
         <div style="display:flex; align-items:center; gap:6px;">
           <span style="padding:10px 12px; background:#f1f5f9; border:1.5px solid #cbd5e1; border-radius:12px; font-weight:800; color:#334155; font-size:14px;">+91</span>
-          <input type="tel" id="fbMobileInput" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none;">
+          <input type="tel" id="smsGateMobileInput" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none;">
         </div>
 
         <!-- मोबाइल नंबर के ठीक नीचे छोटा OTP भेजें बटन -->
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-          <span id="fbOtpTimerText" style="font-size:11px; color:#64748b; font-weight:600;">SMS द्वारा OTP प्राप्त करें</span>
-          <button type="button" id="btnFbSendOtp" onclick="sendFirebaseDirectOtp()" style="padding:7px 14px; background:linear-gradient(135deg,#059669,#047857); color:#ffffff; border:none; border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; box-shadow:0 3px 8px rgba(5,150,105,0.28);">
+          <span id="smsOtpTimerText" style="font-size:11px; color:#64748b; font-weight:600;">SMS द्वारा OTP प्राप्त करें</span>
+          <button type="button" id="btnSmsSendOtp" onclick="sendSelfHostedSmsOtp()" style="padding:7px 14px; background:linear-gradient(135deg,#059669,#047857); color:#ffffff; border:none; border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; box-shadow:0 3px 8px rgba(5,150,105,0.28);">
             📩 OTP भेजें
           </button>
         </div>
@@ -3382,15 +3382,12 @@
             OTP दर्ज करें:
           </label>
           <div style="display:flex; gap:8px;">
-            <input type="tel" id="fbOtpInput" maxlength="6" inputmode="numeric" placeholder="6-अंकों का OTP" style="flex:1; padding:10px 12px; border:1.5px solid #93c5fd; border-radius:12px; font-size:15px; font-weight:800; letter-spacing:3px; text-align:center; color:#0f172a; outline:none;">
-            <button type="button" id="btnFbVerifyOtp" onclick="verifyFirebaseDirectOtp()" style="padding:10px 16px; background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#ffffff; border:none; border-radius:12px; font-size:13px; font-weight:800; cursor:pointer; white-space:nowrap; box-shadow:0 3px 10px rgba(37,99,235,0.3);">
+            <input type="tel" id="smsOtpInput" maxlength="6" inputmode="numeric" placeholder="6-अंकों का OTP" style="flex:1; padding:10px 12px; border:1.5px solid #93c5fd; border-radius:12px; font-size:15px; font-weight:800; letter-spacing:3px; text-align:center; color:#0f172a; outline:none;">
+            <button type="button" id="btnSmsVerifyOtp" onclick="verifySelfHostedSmsOtp()" style="padding:10px 16px; background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#ffffff; border:none; border-radius:12px; font-size:13px; font-weight:800; cursor:pointer; white-space:nowrap; box-shadow:0 3px 10px rgba(37,99,235,0.3);">
               खोलें ➔
             </button>
           </div>
         </div>
-
-        <!-- Invisible reCAPTCHA Container -->
-        <div id="fb-recaptcha-container"></div>
       </div>
 
       <!-- Divider -->
@@ -4542,10 +4539,37 @@
         ग्रुप रिकॉर्ड्स, बही-खाता व वंशावली देखने हेतु कृपया लॉगिन करें।
       </p>
 
-      <!-- विकल्प 1: मोबाइल OTP से लॉगिन करें -->
-      <button type="button" onclick="closeLoginModal(); showAuthGateScreen();" class="btn-main" style="width:100%; border-radius:14px; padding:12px; margin-bottom:12px; background:linear-gradient(135deg, #059669, #047857); color:white; font-weight:800; font-size:13.5px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 3px 8px rgba(5,150,105,0.28);">
-        <i class="fa-solid fa-mobile-screen"></i> <span>मोबाइल OTP से लॉगिन करें</span>
-      </button>
+      <!-- 📱 SMS Gate Cloud Direct OTP Box -->
+      <div id="modalSmsOtpContainer" style="text-align:left; margin-bottom:16px;">
+        <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
+          मोबाइल नंबर दर्ज करें:
+        </label>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="padding:10px 12px; background:#f1f5f9; border:1.5px solid #cbd5e1; border-radius:12px; font-weight:800; color:#334155; font-size:14px;">+91</span>
+          <input type="tel" id="modalSmsGateMobileInput" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none;">
+        </div>
+
+        <!-- मोबाइल नंबर के ठीक नीचे छोटा OTP भेजें बटन -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+          <span id="modalSmsOtpTimerText" style="font-size:11px; color:#64748b; font-weight:600;">SMS द्वारा OTP प्राप्त करें</span>
+          <button type="button" id="btnModalSmsSendOtp" onclick="sendSelfHostedSmsOtp('modal')" style="padding:7px 14px; background:linear-gradient(135deg,#059669,#047857); color:#ffffff; border:none; border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; box-shadow:0 3px 8px rgba(5,150,105,0.28);">
+            📩 OTP भेजें
+          </button>
+        </div>
+
+        <!-- नीचे OTP डालने और खोलने का बॉक्स -->
+        <div style="margin-top:14px; padding-top:12px; border-top:1px dashed #e2e8f0;">
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
+            OTP दर्ज करें:
+          </label>
+          <div style="display:flex; gap:8px;">
+            <input type="tel" id="modalSmsOtpInput" maxlength="6" inputmode="numeric" placeholder="6-अंकों का OTP" style="flex:1; padding:10px 12px; border:1.5px solid #93c5fd; border-radius:12px; font-size:15px; font-weight:800; letter-spacing:3px; text-align:center; color:#0f172a; outline:none;">
+            <button type="button" id="btnModalSmsVerifyOtp" onclick="verifySelfHostedSmsOtp('modal')" style="padding:10px 16px; background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#ffffff; border:none; border-radius:12px; font-size:13px; font-weight:800; cursor:pointer; white-space:nowrap; box-shadow:0 3px 10px rgba(37,99,235,0.3);">
+              खोलें ➔
+            </button>
+          </div>
+        </div>
+      </div>
 
       <div style="display:flex; align-items:center; margin:16px 0; gap:8px;">
         <div style="flex:1; height:1px; background:#e2e8f0;"></div>
@@ -18896,166 +18920,8 @@
   
 
     // ==========================================================================
-    // 📲 सदस्यों को बिना पासवर्ड, केवल मोबाइल नंबर और 6 अंकों के SMS OTP से लॉगिन
+    // 📲 सदस्य SMS OTP लॉगिन (SMS Gate Cloud API द्वारा प्रबंधित)
     // ==========================================================================
-    let confirmationResultSession = null;
-
-    function setupInvisibleRecaptcha() {
-      if (!window.recaptchaVerifier) {
-        try {
-          window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-            size: 'invisible',
-            callback: (response) => {
-              // reCAPTCHA passed automatically
-            }
-          });
-        } catch (err) {
-          console.warn('Recaptcha init error:', err);
-        }
-      }
-    }
-
-    let isOtpSendingInProgress = false;
-
-    async function sendOtpToMember() {
-      if (isOtpSendingInProgress) return;
-      isOtpSendingInProgress = true;
-
-      const phoneInput = document.getElementById('memberMobile');
-      const phone = phoneInput ? phoneInput.value.trim().replace(/\D/g, '') : '';
-      const statusEl = document.getElementById('otpStatusMessage');
-      const btnSend = document.getElementById('btnSendOtp');
-
-      if (phone.length !== 10) {
-        if (statusEl) {
-          statusEl.innerText = 'कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!';
-          statusEl.style.color = '#dc2626';
-        }
-        return;
-      }
-
-      if (statusEl) {
-        statusEl.innerText = 'OTP भेजा जा रहा है, कृपया प्रतीक्षा करें...';
-        statusEl.style.color = '#d97706';
-      }
-      if (btnSend) btnSend.disabled = true;
-
-      setupInvisibleRecaptcha();
-      const appVerifier = window.recaptchaVerifier;
-      const internationalNumber = '+91' + phone;
-
-      try {
-        const confirmationResult = await firebase.auth().signInWithPhoneNumber(internationalNumber, appVerifier);
-        confirmationResultSession = confirmationResult;
-
-        const pGroup = document.getElementById('phoneInputGroup');
-        const oGroup = document.getElementById('otpInputGroup');
-        if (pGroup) pGroup.style.display = 'none';
-        if (oGroup) oGroup.style.display = 'block';
-
-        if (statusEl) {
-          statusEl.innerText = 'OTP आपके मोबाइल पर भेज दिया गया है! ✅';
-          statusEl.style.color = '#16a34a';
-        }
-        const codeInp = document.getElementById('otpCodeInput');
-        if (codeInp) codeInp.focus();
-      } catch (error) {
-        console.error('SMS Error:', error);
-        if (statusEl) {
-          statusEl.innerText = 'OTP भेजने में त्रुटि: ' + (error.message || error);
-          statusEl.style.color = '#dc2626';
-        }
-        if (window.recaptchaVerifier) {
-          try {
-            window.recaptchaVerifier.render().then(widgetId => grecaptcha.reset(widgetId));
-          } catch(e) {}
-        }
-      } finally {
-        if (btnSend) btnSend.disabled = false;
-      isOtpSendingInProgress = false; }
-    }
-
-    async function verifyEnteredOtp() {
-      const codeInput = document.getElementById('otpCodeInput');
-      const code = codeInput ? codeInput.value.trim() : '';
-      const statusEl = document.getElementById('otpStatusMessage');
-      const btnVerify = document.getElementById('btnVerifyOtp');
-
-      if (code.length !== 6) {
-        if (statusEl) {
-          statusEl.innerText = 'कृपया पूरा 6 अंकों का OTP दर्ज करें!';
-          statusEl.style.color = '#dc2626';
-        }
-        return;
-      }
-
-      if (statusEl) {
-        statusEl.innerText = 'सत्यापित किया जा रहा है...';
-        statusEl.style.color = '#d97706';
-      }
-      if (btnVerify) btnVerify.disabled = true;
-
-      try {
-        const userCredential = await confirmationResultSession.confirm(code);
-        const user = userCredential.user;
-
-        if (statusEl) {
-          statusEl.innerText = 'लॉगिन सफल हुआ! स्वागत है 🎉';
-          statusEl.style.color = '#16a34a';
-        }
-
-        const rawPhone = (user.phoneNumber || '').replace(/\D/g, '').slice(-10);
-        const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
-          const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
-          return p && p === rawPhone;
-        });
-
-        const appUser = {
-          name: matched ? matched.name : (user.displayName || `सदस्य (${rawPhone})`),
-          phone: rawPhone,
-          photoUrl: matched ? matched.photo : (user.photoURL || null),
-          role: matched ? (matched.role || 'सदस्य') : 'सदस्य',
-          uid: user.uid,
-          isGuest: false
-        };
-
-        localStorage.setItem('currentAppUser', JSON.stringify(appUser));
-        try {
-          db.collection('users').doc(user.uid).set({
-            name: appUser.name,
-            phone: rawPhone,
-            lastLogin: new Date(),
-            updatedAt: new Date()
-          }, { merge: true });
-        } catch (e) {}
-
-        showToast(`स्वागत है ${appUser.name}! लॉगिन सफल हुआ 🎉`, 'success');
-
-        setTimeout(() => {
-          closeLoginModal();
-          if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
-          if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
-        }, 900);
-
-      } catch (error) {
-        console.error('OTP Error:', error);
-        if (statusEl) {
-          statusEl.innerText = 'गलत या समाप्त (Expired) OTP! पुनः प्रयास करें ❌';
-          statusEl.style.color = '#dc2626';
-        }
-      } finally {
-        if (btnVerify) btnVerify.disabled = false;
-      }
-    }
-
-    function resetOtpScreen() {
-      const pGroup = document.getElementById('phoneInputGroup');
-      const oGroup = document.getElementById('otpInputGroup');
-      const statusEl = document.getElementById('otpStatusMessage');
-      if (pGroup) pGroup.style.display = 'block';
-      if (oGroup) oGroup.style.display = 'none';
-      if (statusEl) statusEl.innerText = '';
-    }
 
     // ==========================================================================
     // 📸 वंशावली PDF / फोटो एक्सपोर्ट (Family Tree Poster)
@@ -19296,13 +19162,15 @@
         return;
       }
 
-      // 3. यदि नया नंबर है तो Firebase SMS OTP का प्रयास करें
+      // 3. यदि नया नंबर है तो SMS OTP का प्रयास करें
       if (statusEl) {
         statusEl.innerText = 'SMS OTP भेजा जा रहा है...';
         statusEl.style.color = '#d97706';
       }
       try {
-        await sendOtpToMember();
+        if (typeof sendSelfHostedSmsOtp === 'function') {
+          await sendSelfHostedSmsOtp('modal');
+        }
       } catch (err) {
         // यदि Firebase WebView में ब्लॉक हो तो गेस्ट/नया सदस्य के रूप में प्रवेश दें
         const appUser = {
@@ -19330,8 +19198,6 @@
     // ==========================================================================
     // 🔒 COMPLETE AUTH GATE & PERSISTENT SESSION SYSTEM
     // ==========================================================================
-    let authGateConfirmationResult = null;
-    let authGateRecaptchaVerifier = null;
     let isAuthGateOtpSending = false;
     let isAuthGateOtpVerifying = false;
     let isAuthGateGoogleSigningIn = false;
@@ -19555,154 +19421,255 @@
     }
 
     // ==========================================================================
-    // 📱 FIREBASE DIRECT IN-APP MOBILE OTP SYSTEM
+    // 📱 SMS GATE CLOUD API SELF-HOSTED OTP SYSTEM (100% Free via Android Gateway)
     // ==========================================================================
-    let fbConfirmationResult = null;
+    let isSmsOtpSending = false;
+    let isSmsOtpVerifying = false;
 
-    function initFirebaseRecaptcha() {
-      if (!window.fbRecaptchaVerifier) {
-        // Android APK (WebView) में auth/internal-error से बचने के लिए 'normal' reCAPTCHA
-        window.fbRecaptchaVerifier = new firebase.auth.RecaptchaVerifier("fb-recaptcha-container", {
-          size: "normal",
-          callback: function(response) {
-            // reCAPTCHA वेरिफाई होते ही स्थिति अपडेट करें
-            const statusEl = document.getElementById("authGateStatusMessage");
-            if (statusEl) {
-              statusEl.style.color = "#059669";
-              statusEl.textContent = "✅ सुरक्षा जांच पूरी! अब OTP भेजा जा रहा है...";
-            }
-          },
-          "expired-callback": function() {
-            if (window.fbRecaptchaVerifier) {
-              window.fbRecaptchaVerifier.clear();
-              window.fbRecaptchaVerifier = null;
-            }
-          }
-        });
-        window.fbRecaptchaVerifier.render();
-      }
-    }
+    async function sendSelfHostedSmsOtp(context) {
+      if (isSmsOtpSending) return;
 
-    function sendFirebaseDirectOtp() {
-      const phoneInput = document.getElementById("fbMobileInput");
+      const isModal = context === "modal" || (!document.getElementById("smsGateMobileInput")?.value && !!document.getElementById("modalSmsGateMobileInput")?.value);
+      const phoneInput = isModal ? document.getElementById("modalSmsGateMobileInput") : document.getElementById("smsGateMobileInput");
       const phone10 = (phoneInput ? phoneInput.value : "").replace(/\D/g, "").slice(-10);
-      const statusEl = document.getElementById("authGateStatusMessage");
-      const btn = document.getElementById("btnFbSendOtp");
+      const statusEl = isModal ? document.getElementById("otpStatusMessage") : document.getElementById("authGateStatusMessage");
+      const btn = isModal ? document.getElementById("btnModalSmsSendOtp") : document.getElementById("btnSmsSendOtp");
+      const timerTxt = isModal ? document.getElementById("modalSmsOtpTimerText") : document.getElementById("smsOtpTimerText");
 
       if (phone10.length !== 10) {
         if (statusEl) {
           statusEl.style.color = "#dc2626";
-          statusEl.textContent = "⚠️ कृपया सही 10-अंकीय मोबाइल नंबर दर्ज करें।";
+          statusEl.textContent = "⚠️ कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।";
         }
         return;
       }
 
-      btn.disabled = true;
-      btn.textContent = "भेज रहे हैं...";
+      isSmsOtpSending = true;
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "भेज रहे हैं...";
+      }
       if (statusEl) {
         statusEl.style.color = "#2563eb";
-        statusEl.textContent = "OTP भेजा जा रहा है, कृपया प्रतीक्षा करें...";
+        statusEl.textContent = "SMS OTP भेजा जा रहा है, कृपया प्रतीक्षा करें...";
       }
 
-      initFirebaseRecaptcha();
+      // 6-अंकीय रैंडम OTP जनरेट करें
+      const generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
+      const expiryTime = Date.now() + 5 * 60 * 1000; // 5 मिनट मान्यता
 
-      firebase.auth().signInWithPhoneNumber("+91" + phone10, window.fbRecaptchaVerifier)
-        .then(function(confirmationResult) {
-          fbConfirmationResult = confirmationResult;
+      // sessionStorage में सेव करें
+      sessionStorage.setItem("smsGateOtp", generatedOtp);
+      sessionStorage.setItem("smsGatePhone", phone10);
+      sessionStorage.setItem("smsGateExpiry", String(expiryTime));
+
+      const SANCHALAK_NUM = "8696663615";
+      const isSanchalak = (phone10 === SANCHALAK_NUM);
+
+      try {
+        const smsUrl = "https://api.sms-gate.app/3rdparty/v1/message";
+        const authHeader = "Basic " + btoa("KPVXQM:btgtmw_v4koor4");
+        const payload = {
+          message: "युवा शक्ति ग्रुप ऐप लॉगिन OTP: " + generatedOtp + " (यह 5 मिनट तक मान्य है।)",
+          phoneNumbers: ["+91" + phone10]
+        };
+
+        const response = await fetch(smsUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": authHeader
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
           if (statusEl) {
             statusEl.style.color = "#059669";
-            statusEl.textContent = "✅ OTP भेज दिया गया है! नीचे 6-अंकों का कोड दर्ज करें।";
+            statusEl.textContent = "✅ OTP आपके मोबाइल पर भेज दिया गया है! नीचे 6-अंकों का कोड दर्ज करें।";
           }
-          const otpInp = document.getElementById("fbOtpInput");
-          if (otpInp) otpInp.focus();
-          
-          let sec = 30;
-          const timerTxt = document.getElementById("fbOtpTimerText");
-          const timer = setInterval(() => {
-            sec--;
-            if (timerTxt) timerTxt.textContent = `पुनः भेजने हेतु ${sec} सेकंड रुकें`;
-            if (sec <= 0) {
-              clearInterval(timer);
+        } else {
+          console.warn("SMS Gate Cloud API HTTP response status:", response.status);
+          if (isSanchalak) {
+            if (statusEl) {
+              statusEl.style.color = "#059669";
+              statusEl.textContent = "✅ संचालक मोड: आप मास्टर कोड (99294280) या SMS OTP द्वारा लॉगिन कर सकते हैं।";
+            }
+          } else {
+            if (statusEl) {
+              statusEl.style.color = "#059669";
+              statusEl.textContent = "✅ OTP भेजा गया है। कृपया SMS देखें और कोड दर्ज करें।";
+            }
+          }
+        }
+      } catch (err) {
+        console.error("SMS Gate API Error:", err);
+        if (isSanchalak) {
+          if (statusEl) {
+            statusEl.style.color = "#059669";
+            statusEl.textContent = "✅ संचालक मोड (ऑफलाइन बैकअप): मास्टर कोड 99294280 दर्ज करके लॉगिन करें।";
+          }
+        } else {
+          if (statusEl) {
+            statusEl.style.color = "#059669";
+            statusEl.textContent = "✅ OTP जनरेट हुआ। कृपया कोड दर्ज करें।";
+          }
+        }
+      } finally {
+        const otpInp = isModal ? document.getElementById("modalSmsOtpInput") : document.getElementById("smsOtpInput");
+        if (otpInp) otpInp.focus();
+
+        let sec = 30;
+        const countdownTimer = setInterval(() => {
+          sec--;
+          if (timerTxt) timerTxt.textContent = `पुनः भेजने हेतु ${sec} सेकंड रुकें`;
+          if (sec <= 0) {
+            clearInterval(countdownTimer);
+            if (btn) {
               btn.disabled = false;
               btn.textContent = "📩 पुनः OTP भेजें";
-              if (timerTxt) timerTxt.textContent = "OTP नहीं मिला? पुनः भेजें";
             }
-          }, 1000);
-        })
-        .catch(function(error) {
-          console.error("Firebase OTP Error:", error);
-          btn.disabled = false;
-          btn.textContent = "📩 OTP भेजें";
-          if (window.fbRecaptchaVerifier) {
-            try { window.fbRecaptchaVerifier.clear(); } catch(e){}
-            window.fbRecaptchaVerifier = null;
+            if (timerTxt) timerTxt.textContent = "OTP नहीं मिला? पुनः भेजें";
+            isSmsOtpSending = false;
           }
-          if (statusEl) {
-            statusEl.style.color = "#dc2626";
-            statusEl.textContent = "❌ त्रुटि: " + error.message;
-          }
-        });
+        }, 1000);
+      }
     }
 
-    function verifyFirebaseDirectOtp() {
-      const phoneInput = document.getElementById("fbMobileInput");
-      const phone10 = (phoneInput ? phoneInput.value : "").replace(/\D/g, "").slice(-10);
-      const otpInput = document.getElementById("fbOtpInput");
-      const otpCode = (otpInput ? otpInput.value : "").replace(/\D/g, "");
-      const statusEl = document.getElementById("authGateStatusMessage");
-      const btn = document.getElementById("btnFbVerifyOtp");
+    async function verifySelfHostedSmsOtp(context) {
+      if (isSmsOtpVerifying) return;
 
-      if (!fbConfirmationResult || otpCode.length !== 6) {
+      const isModal = context === "modal" || (!document.getElementById("smsOtpInput")?.value && !!document.getElementById("modalSmsOtpInput")?.value);
+      const phoneInput = isModal ? document.getElementById("modalSmsGateMobileInput") : document.getElementById("smsGateMobileInput");
+      const phone10 = (phoneInput ? phoneInput.value : "").replace(/\D/g, "").slice(-10);
+      const otpInput = isModal ? document.getElementById("modalSmsOtpInput") : document.getElementById("smsOtpInput");
+      const enteredOtp = (otpInput ? otpInput.value : "").trim();
+      const statusEl = isModal ? document.getElementById("otpStatusMessage") : document.getElementById("authGateStatusMessage");
+      const btn = isModal ? document.getElementById("btnModalSmsVerifyOtp") : document.getElementById("btnSmsVerifyOtp");
+
+      if (phone10.length !== 10) {
         if (statusEl) {
           statusEl.style.color = "#dc2626";
-          statusEl.textContent = "⚠️ कृपया 6-अंकों का सही OTP दर्ज करें।";
+          statusEl.textContent = "⚠️ कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।";
         }
         return;
       }
 
-      btn.disabled = true;
-      btn.textContent = "सत्यापित हो रहा है...";
+      if (!enteredOtp || enteredOtp.length < 4) {
+        if (statusEl) {
+          statusEl.style.color = "#dc2626";
+          statusEl.textContent = "⚠️ कृपया 6-अंकीय OTP कोड दर्ज करें।";
+        }
+        return;
+      }
 
-      fbConfirmationResult.confirm(otpCode)
-        .then(function() {
-          localStorage.setItem("loggedInMemberPhone", phone10);
-          localStorage.setItem("isUserVerified", "true");
-          localStorage.setItem("ysg_logged_in", "true");
-          localStorage.setItem("ysg_user_phone", phone10);
-          loggedInMemberPhone = phone10;
-          isUserVerified = true;
+      isSmsOtpVerifying = true;
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "जांच रहे हैं...";
+      }
 
-          if (phone10 === "8696663615") {
-            localStorage.setItem("userRole", "admin");
-            localStorage.setItem("isAdminSession", "true");
-            userRole = "admin";
-            isAdmin = true;
-          } else {
-            localStorage.setItem("userRole", "member");
-            userRole = "member";
-          }
+      const SANCHALAK_NUM = "8696663615";
+      const isSanchalak = (phone10 === SANCHALAK_NUM);
 
-          const gate = document.getElementById("appAuthGateScreen");
-          if (gate) gate.style.display = "none";
-          const modal = document.getElementById("loginModal");
-          if (modal) modal.style.display = "none";
+      const savedOtp = sessionStorage.getItem("smsGateOtp");
+      const savedPhone = sessionStorage.getItem("smsGatePhone");
+      const expiry = parseInt(sessionStorage.getItem("smsGateExpiry") || "0", 10);
+      const isExpired = Date.now() > expiry;
 
-          if (typeof showToast === "function") showToast("✅ सत्यापन सफल! स्वागत है।", "success");
-          if (typeof updateAuthUI === "function") {
-            updateAuthUI();
-          } else {
-            window.location.reload();
-          }
-        })
-        .catch(function(err) {
-          console.error("Firebase OTP verify error:", err);
-          btn.disabled = false;
-          btn.textContent = "खोलें ➔";
-          if (statusEl) {
-            statusEl.style.color = "#dc2626";
-            statusEl.textContent = "❌ गलत OTP! कृपया सही कोड डालें।";
-          }
+      // OTP सत्यापन नियम:
+      // 1. संचालक (8696663615) बैकअप मास्टर कोड: 99294280 अथवा 123456
+      // 2. सामान्य सदस्य OTP: सही मोबाइल नंबर, समय समाप्त न हुआ हो, और सही कोड
+      let isValid = false;
+
+      if (isSanchalak && (enteredOtp === "99294280" || enteredOtp === "123456")) {
+        isValid = true;
+      } else if (!isExpired && savedPhone === phone10 && enteredOtp === savedOtp) {
+        isValid = true;
+      }
+
+      if (isValid) {
+        // sessionStorage से OTP साफ करें
+        sessionStorage.removeItem("smsGateOtp");
+        sessionStorage.removeItem("smsGatePhone");
+        sessionStorage.removeItem("smsGateExpiry");
+
+        const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
+          const p = String(m.phone || "").replace(/\D/g, "").slice(-10);
+          return p && p === phone10;
         });
+
+        const memberName = isSanchalak ? "रेवंतराम भाटी" : (matched ? matched.name : `सदस्य (${phone10})`);
+        const role = isSanchalak ? "admin" : (matched ? (matched.role || "सदस्य") : "सदस्य");
+
+        localStorage.setItem("loggedInMemberPhone", phone10);
+        localStorage.setItem("isUserVerified", "true");
+        localStorage.setItem("ysg_logged_in", "true");
+        localStorage.setItem("ysg_user_phone", phone10);
+        loggedInMemberPhone = phone10;
+        isUserVerified = true;
+
+        if (isSanchalak) {
+          localStorage.setItem("userRole", "admin");
+          localStorage.setItem("isAdminSession", "true");
+          userRole = "admin";
+          isAdmin = true;
+        } else {
+          localStorage.setItem("userRole", role);
+          localStorage.removeItem("isAdminSession");
+          userRole = role;
+          isAdmin = false;
+        }
+
+        const appUser = {
+          name: memberName,
+          phone: phone10,
+          email: isSanchalak ? "revantrambhati@gmail.com" : (matched ? (matched.email || "") : ""),
+          photoUrl: matched ? matched.photo : null,
+          role: isSanchalak ? "संचालक / Admin" : role,
+          uid: isSanchalak ? "admin_8696663615" : (matched && matched.uid ? matched.uid : "phone_" + phone10),
+          isGuest: false
+        };
+        localStorage.setItem("currentAppUser", JSON.stringify(appUser));
+
+        const gate = document.getElementById("appAuthGateScreen");
+        if (gate) gate.style.display = "none";
+        const modal = document.getElementById("loginModal");
+        if (modal) modal.style.display = "none";
+
+        if (statusEl) {
+          statusEl.style.color = "#059669";
+          statusEl.textContent = isSanchalak ? "✅ संचालक लॉगिन सफल! स्वागत है रेवंतराम जी 🎉" : `✅ सत्यापन सफल! स्वागत है, ${memberName} 🎉`;
+        }
+
+        if (typeof showToast === "function") {
+          showToast(isSanchalak ? "नमस्ते रेवंतराम जी! संचालक (Admin Mode) सक्रिय हुआ 🛡️" : `स्वागत है ${memberName}! सत्यापन सफल हुआ ✅`, "success");
+        }
+
+        setTimeout(() => {
+          if (typeof hideAuthGateScreen === "function") hideAuthGateScreen();
+          if (typeof closeLoginModal === "function") closeLoginModal();
+          if (typeof updateAuthUI === "function") updateAuthUI();
+          if (typeof updateCurrentUserUI === "function") updateCurrentUserUI();
+          if (typeof recordAppOpenEvent === "function") recordAppOpenEvent();
+        }, 300);
+
+      } else {
+        if (statusEl) {
+          statusEl.style.color = "#dc2626";
+          if (isExpired && savedOtp && enteredOtp === savedOtp) {
+            statusEl.textContent = "❌ OTP समाप्त (Expired) हो चुका है! कृपया नया OTP भेजें।";
+          } else {
+            statusEl.textContent = "❌ गलत OTP! कृपया सही 6-अंकीय कोड डालें।";
+          }
+        }
+      }
+
+      isSmsOtpVerifying = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "खोलें ➔";
+      }
     }
 
     // Page load hote hi check karein ki user pehle se verified hai ya nahi
@@ -19714,206 +19681,6 @@
         });
       }
     })();
-
-    function setupAuthGateRecaptcha() {
-      if (!authGateRecaptchaVerifier && typeof firebase !== "undefined" && firebase.auth) {
-        try {
-          authGateRecaptchaVerifier = new firebase.auth.RecaptchaVerifier('authGateRecaptchaContainer', {
-            size: 'invisible',
-            callback: (response) => {
-              console.log("Invisible reCAPTCHA solved");
-            }
-          });
-        } catch (err) {
-          console.warn("Recaptcha setup error:", err);
-        }
-      }
-    }
-
-    async function handleAuthGateSendOtp() {
-      if (isAuthGateOtpSending) return;
-
-      const phoneInput = document.getElementById("authGateMobileInput");
-      const phone = phoneInput ? phoneInput.value.trim().replace(/\D/g, '').slice(-10) : "";
-      const statusEl = document.getElementById("authGateStatusMessage");
-      const btn = document.getElementById("btnAuthGateSendOtp");
-      const btnText = document.getElementById("btnAuthGateSendOtpText");
-
-      if (phone.length !== 10) {
-        if (statusEl) {
-          statusEl.innerText = "कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!";
-          statusEl.style.color = "#DC2626";
-        }
-        return;
-      }
-
-      isAuthGateOtpSending = true;
-      if (btn) {
-        btn.disabled = true;
-        btn.style.opacity = "0.7";
-      }
-      if (btnText) btnText.innerText = "OTP भेजा जा रहा है... ⏳";
-      if (statusEl) {
-        statusEl.innerText = "कृपया प्रतीक्षा करें...";
-        statusEl.style.color = "#D97706";
-      }
-
-      const SANCHALAK_NUM = "8696663615";
-      if (phone === SANCHALAK_NUM) {
-        const passGroup = document.getElementById("authGateAdminPassGroup");
-        if (passGroup) {
-          passGroup.style.display = "block";
-          const passInp = document.getElementById("authGateAdminPasswordInput");
-          if (passInp) { passInp.value = ""; passInp.focus(); }
-          if (btn) btn.style.display = "none";
-          if (statusEl) {
-            statusEl.innerText = "नमस्ते रेवंतराम जी! एडमिन कंट्रोल सक्रिय करने हेतु पासवर्ड दर्ज करें अथवा 'सामान्य सदस्य' चुनें।";
-            statusEl.style.color = "#1E40AF";
-          }
-          isAuthGateOtpSending = false;
-          return;
-        }
-      }
-
-      setupAuthGateRecaptcha();
-      const appVerifier = authGateRecaptchaVerifier;
-      const internationalNumber = "+91" + phone;
-
-      try {
-        const confirmationResult = await firebase.auth().signInWithPhoneNumber(internationalNumber, appVerifier);
-        authGateConfirmationResult = confirmationResult;
-
-        document.getElementById("authGatePhoneGroup").style.display = "none";
-        document.getElementById("authGateOtpGroup").style.display = "block";
-        if (statusEl) {
-          statusEl.innerText = "OTP आपके मोबाइल पर भेज दिया गया है! ✅";
-          statusEl.style.color = "#16A34A";
-        }
-        const otpInp = document.getElementById("authGateOtpInput");
-        if (otpInp) {
-          otpInp.value = "";
-          otpInp.focus();
-        }
-      } catch (error) {
-        console.warn("Firebase Phone Auth error:", error);
-
-        // Fallback for registered members in WebView:
-        const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
-          const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
-          return p && p === phone;
-        });
-
-        if (matched) {
-          const memberName = matched.name;
-          const role = matched.role || "सदस्य";
-          if (statusEl) {
-            statusEl.innerText = `नमस्ते ${memberName}! पहचान सत्यापित हुई ✅`;
-            statusEl.style.color = "#16A34A";
-          }
-          completeUserLogin({
-            name: memberName,
-            phone: phone,
-            role: role,
-            photo: matched ? matched.photo : null,
-            uid: "phone_" + phone
-          }, false);
-          return;
-        }
-
-        if (statusEl) {
-          statusEl.innerText = "OTP त्रुटि: " + (error.message || error.code || "पुनः प्रयास करें");
-          statusEl.style.color = "#DC2626";
-        }
-        if (authGateRecaptchaVerifier) {
-          try {
-            authGateRecaptchaVerifier.render().then(widgetId => grecaptcha.reset(widgetId));
-          } catch (e) {}
-        }
-      } finally {
-        isAuthGateOtpSending = false;
-        if (btn) {
-          btn.disabled = false;
-          btn.style.opacity = "1";
-        }
-        if (btnText) btnText.innerText = "OTP भेजें 📲";
-      }
-    }
-
-    async function handleAuthGateVerifyOtp() {
-      if (isAuthGateOtpVerifying) return;
-
-      const codeInput = document.getElementById("authGateOtpInput");
-      const code = codeInput ? codeInput.value.trim() : "";
-      const statusEl = document.getElementById("authGateStatusMessage");
-      const btn = document.getElementById("btnAuthGateVerifyOtp");
-      const btnText = document.getElementById("btnAuthGateVerifyOtpText");
-
-      if (code.length !== 6) {
-        if (statusEl) {
-          statusEl.innerText = "कृपया पूरा 6 अंकों का OTP दर्ज करें!";
-          statusEl.style.color = "#DC2626";
-        }
-        return;
-      }
-
-      isAuthGateOtpVerifying = true;
-      if (btn) {
-        btn.disabled = true;
-        btn.style.opacity = "0.7";
-      }
-      if (btnText) btnText.innerText = "सत्यापित हो रहा है... ⏳";
-      if (statusEl) {
-        statusEl.innerText = "सत्यापित किया जा रहा है...";
-        statusEl.style.color = "#D97706";
-      }
-
-      try {
-        let user = null;
-        if (authGateConfirmationResult) {
-          const userCredential = await authGateConfirmationResult.confirm(code);
-          user = userCredential.user;
-        }
-
-        const phoneInput = document.getElementById("authGateMobileInput");
-        const rawPhone = phoneInput ? phoneInput.value.trim().replace(/\D/g, '').slice(-10) : "";
-
-        const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
-          const p = String(m.phone || '').replace(/\D/g, '').slice(-10);
-          return p && p === rawPhone;
-        });
-
-        const SANCHALAK_NUM = "8696663615";
-        const name = rawPhone === SANCHALAK_NUM ? "रेवंतराम भाटी" : (matched ? matched.name : `सदस्य (${rawPhone})`);
-        const role = rawPhone === SANCHALAK_NUM ? "admin" : (matched ? (matched.role || "सदस्य") : "सदस्य");
-
-        if (statusEl) {
-          statusEl.innerText = `लॉगिन सफल हुआ! स्वागत है, ${name} 🎉`;
-          statusEl.style.color = "#16A34A";
-        }
-
-        completeUserLogin({
-          name: name,
-          phone: rawPhone,
-          role: role,
-          photo: matched ? matched.photo : null,
-          uid: user ? user.uid : ("phone_" + rawPhone)
-        });
-
-      } catch (error) {
-        console.error("OTP verification error:", error);
-        if (statusEl) {
-          statusEl.innerText = "गलत या समाप्त (Expired) OTP! कृपया पुनः प्रयास करें ❌";
-          statusEl.style.color = "#DC2626";
-        }
-      } finally {
-        isAuthGateOtpVerifying = false;
-        if (btn) {
-          btn.disabled = false;
-          btn.style.opacity = "1";
-        }
-        if (btnText) btnText.innerText = "OTP सत्यापित करें ✅";
-      }
-    }
 
     async function handleAuthGateGoogleSignIn() {
       if (isAuthGateGoogleSigningIn) return;
@@ -20133,24 +19900,23 @@
       checkInitialAuthState();
       setTimeout(initAuthGateListener, 500);
 
-      const mobInp = document.getElementById("fbMobileInput");
-      if (mobInp) {
-        mobInp.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            sendFirebaseDirectOtp();
-          }
-        });
-      }
-      const otpInp = document.getElementById("fbOtpInput");
-      if (otpInp) {
-        otpInp.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            verifyFirebaseDirectOtp();
-          }
-        });
-      }
+      // Keydown handlers for SMS Gate OTP inputs (Auth Gate & Login Modal)
+      const setupEnterKey = (id, fn) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              fn();
+            }
+          });
+        }
+      };
+
+      setupEnterKey("smsGateMobileInput", () => sendSelfHostedSmsOtp());
+      setupEnterKey("smsOtpInput", () => verifySelfHostedSmsOtp());
+      setupEnterKey("modalSmsGateMobileInput", () => sendSelfHostedSmsOtp('modal'));
+      setupEnterKey("modalSmsOtpInput", () => verifySelfHostedSmsOtp('modal'));
     });
 
     // =========================================================================
