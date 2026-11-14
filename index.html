@@ -3358,52 +3358,34 @@
         ग्रुप रिकॉर्ड्स, बही-खाता व वंशावली देखने हेतु कृपया अपना सत्यापन करें।
       </p>
 
-      <!-- 📱 Self-Hosted SMS Gate OTP Box -->
-      <div id="smsOtpContainer" style="text-align:left; margin-bottom:16px;">
-        <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
-          मोबाइल नंबर दर्ज करें:
-        </label>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <span style="padding:10px 12px; background:#f1f5f9; border:1.5px solid #cbd5e1; border-radius:12px; font-weight:800; color:#334155; font-size:14px;">+91</span>
-          <input type="tel" id="smsGateMobileInput" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none;">
-        </div>
-
-        <!-- मोबाइल नंबर के ठीक नीचे छोटा OTP भेजें बटन -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-          <span id="smsOtpTimerText" style="font-size:11px; color:#64748b; font-weight:600;">SMS द्वारा OTP प्राप्त करें</span>
-          <button type="button" id="btnSmsSendOtp" onclick="sendSelfHostedSmsOtp()" style="padding:7px 14px; background:linear-gradient(135deg,#059669,#047857); color:#ffffff; border:none; border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; box-shadow:0 3px 8px rgba(5,150,105,0.28);">
-            📩 OTP भेजें
-          </button>
-        </div>
-
-        <!-- नीचे OTP डालने और खोलने का बॉक्स -->
-        <div style="margin-top:14px; padding-top:12px; border-top:1px dashed #e2e8f0;">
+      <!-- 📝 सदस्य पहचान जानकारी (नाम व मोबाइल नंबर) -->
+      <div style="text-align:left; margin-bottom:18px;">
+        <div style="margin-bottom:12px;">
           <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
-            OTP दर्ज करें:
+            <i class="fa-solid fa-user" style="color:#2563eb; margin-right:4px;"></i> आपका पूरा नाम:
           </label>
-          <div style="display:flex; gap:8px;">
-            <input type="tel" id="smsOtpInput" maxlength="6" inputmode="numeric" placeholder="6-अंकों का OTP" style="flex:1; padding:10px 12px; border:1.5px solid #93c5fd; border-radius:12px; font-size:15px; font-weight:800; letter-spacing:3px; text-align:center; color:#0f172a; outline:none;">
-            <button type="button" id="btnSmsVerifyOtp" onclick="verifySelfHostedSmsOtp()" style="padding:10px 16px; background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#ffffff; border:none; border-radius:12px; font-size:13px; font-weight:800; cursor:pointer; white-space:nowrap; box-shadow:0 3px 10px rgba(37,99,235,0.3);">
-              खोलें ➔
-            </button>
+          <input type="text" id="authGateUserNameInput" placeholder="उदा. सुखदेव भाटी" style="width:100%; box-sizing:border-box; padding:11px 13px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
+        </div>
+
+        <div style="margin-bottom:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
+            <i class="fa-solid fa-phone" style="color:#2563eb; margin-right:4px;"></i> मोबाइल नंबर (पद व रिकॉर्ड हेतु):
+          </label>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="padding:10px 12px; background:#f1f5f9; border:1.5px solid #cbd5e1; border-radius:12px; font-weight:800; color:#334155; font-size:14px;">+91</span>
+            <input type="tel" id="authGateUserPhoneInput" oninput="onAuthGatePhoneInput(this.value)" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none;">
           </div>
         </div>
+        <div id="authGateMemberPreview" style="display:none; font-size:11.5px; margin-top:6px; padding:6px 10px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px;"></div>
       </div>
 
-      <!-- Divider -->
-      <div style="display:flex; align-items:center; margin:16px 0; gap:10px;">
-        <div style="flex:1; height:1px; background:#E2E8F0;"></div>
-        <span style="font-size:11px; color:#94A3B8; font-weight:800; text-transform:uppercase;">अथवा</span>
-        <div style="flex:1; height:1px; background:#E2E8F0;"></div>
-      </div>
-
-      <!-- विकल्प 2: गूगल खाते से लॉगिन करें -->
-      <button type="button" onclick="handleAuthGateGoogleSignIn()" id="btnAuthGateGoogle" class="btn-google-signin" style="width:100%; padding:12px; border-radius:14px; border:1.5px solid #CBD5E1; background:#FFFFFF; color:#334155; font-weight:800; font-size:13.5px; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.06); transition:transform 0.15s, opacity 0.2s;">
-        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        <span>गूगल खाते से लॉगिन करें</span>
+      <!-- 🔐 मुख्य Google लॉगिन बटन -->
+      <button type="button" onclick="handleAuthGateGoogleSignIn()" id="btnAuthGateGoogle" class="btn-google-signin" style="width:100%; padding:13px; border-radius:14px; border:1.5px solid #cbd5e1; background:#ffffff; color:#0f172a; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 3px 12px rgba(0,0,0,0.08); transition:transform 0.15s, opacity 0.2s;">
+        <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <span>गूगल खाते से लॉगिन व सत्यापन करें ➔</span>
       </button>
 
-      <p id="authGateStatusMessage" style="font-size:12px; text-align:center; margin-top:12px; font-weight:700; min-height:14px;"></p>
+      <p id="authGateStatusMessage" style="font-size:12.5px; text-align:center; margin-top:12px; font-weight:700; min-height:16px;"></p>
     </div>
 
     <div style="font-size:11px; color:rgba(255,255,255,0.6); margin-top:16px;">
@@ -4539,51 +4521,34 @@
         ग्रुप रिकॉर्ड्स, बही-खाता व वंशावली देखने हेतु कृपया लॉगिन करें।
       </p>
 
-      <!-- 📱 SMS Gate Cloud Direct OTP Box -->
-      <div id="modalSmsOtpContainer" style="text-align:left; margin-bottom:16px;">
-        <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
-          मोबाइल नंबर दर्ज करें:
-        </label>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <span style="padding:10px 12px; background:#f1f5f9; border:1.5px solid #cbd5e1; border-radius:12px; font-weight:800; color:#334155; font-size:14px;">+91</span>
-          <input type="tel" id="modalSmsGateMobileInput" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none;">
-        </div>
-
-        <!-- मोबाइल नंबर के ठीक नीचे छोटा OTP भेजें बटन -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-          <span id="modalSmsOtpTimerText" style="font-size:11px; color:#64748b; font-weight:600;">SMS द्वारा OTP प्राप्त करें</span>
-          <button type="button" id="btnModalSmsSendOtp" onclick="sendSelfHostedSmsOtp('modal')" style="padding:7px 14px; background:linear-gradient(135deg,#059669,#047857); color:#ffffff; border:none; border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; box-shadow:0 3px 8px rgba(5,150,105,0.28);">
-            📩 OTP भेजें
-          </button>
-        </div>
-
-        <!-- नीचे OTP डालने और खोलने का बॉक्स -->
-        <div style="margin-top:14px; padding-top:12px; border-top:1px dashed #e2e8f0;">
+      <!-- 📝 सदस्य पहचान जानकारी (नाम व मोबाइल नंबर) -->
+      <div style="text-align:left; margin-bottom:18px;">
+        <div style="margin-bottom:12px;">
           <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
-            OTP दर्ज करें:
+            <i class="fa-solid fa-user" style="color:#2563eb; margin-right:4px;"></i> आपका पूरा नाम:
           </label>
-          <div style="display:flex; gap:8px;">
-            <input type="tel" id="modalSmsOtpInput" maxlength="6" inputmode="numeric" placeholder="6-अंकों का OTP" style="flex:1; padding:10px 12px; border:1.5px solid #93c5fd; border-radius:12px; font-size:15px; font-weight:800; letter-spacing:3px; text-align:center; color:#0f172a; outline:none;">
-            <button type="button" id="btnModalSmsVerifyOtp" onclick="verifySelfHostedSmsOtp('modal')" style="padding:10px 16px; background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#ffffff; border:none; border-radius:12px; font-size:13px; font-weight:800; cursor:pointer; white-space:nowrap; box-shadow:0 3px 10px rgba(37,99,235,0.3);">
-              खोलें ➔
-            </button>
+          <input type="text" id="modalUserNameInput" placeholder="उदा. सुखदेव भाटी" style="width:100%; box-sizing:border-box; padding:11px 13px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
+        </div>
+
+        <div style="margin-bottom:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
+            <i class="fa-solid fa-phone" style="color:#2563eb; margin-right:4px;"></i> मोबाइल नंबर (पद व रिकॉर्ड हेतु):
+          </label>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="padding:10px 12px; background:#f1f5f9; border:1.5px solid #cbd5e1; border-radius:12px; font-weight:800; color:#334155; font-size:14px;">+91</span>
+            <input type="tel" id="modalUserPhoneInput" oninput="onModalPhoneInput(this.value)" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" style="flex:1; padding:10px 12px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none;">
           </div>
         </div>
+        <div id="modalMemberPreview" style="display:none; font-size:11.5px; margin-top:6px; padding:6px 10px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px;"></div>
       </div>
 
-      <div style="display:flex; align-items:center; margin:16px 0; gap:8px;">
-        <div style="flex:1; height:1px; background:#e2e8f0;"></div>
-        <span style="font-size:11px; color:#94a3b8; font-weight:800; text-transform:uppercase;">अथवा</span>
-        <div style="flex:1; height:1px; background:#e2e8f0;"></div>
-      </div>
-
-      <!-- विकल्प 2: Google Sign In -->
-      <button type="button" onclick="handleGoogleSignInClick()" class="btn-google-signin" style="width:100%; padding:12px; border-radius:14px; border:1.5px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:800; font-size:13.5px; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.06); transition:transform 0.15s, opacity 0.2s;">
-        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        <span>गूगल खाते से लॉगिन करें</span>
+      <!-- 🔐 मुख्य Google लॉगिन बटन -->
+      <button type="button" onclick="handleGoogleSignInClick()" id="btnModalGoogle" class="btn-google-signin" style="width:100%; padding:13px; border-radius:14px; border:1.5px solid #cbd5e1; background:#ffffff; color:#0f172a; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 3px 12px rgba(0,0,0,0.08); transition:transform 0.15s, opacity 0.2s;">
+        <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <span>गूगल खाते से लॉगिन व सत्यापन करें ➔</span>
       </button>
 
-      <p id="otpStatusMessage" style="font-size:12px; text-align:center; margin-top:12px; font-weight:700; min-height:14px;"></p>
+      <p id="otpStatusMessage" style="font-size:12.5px; text-align:center; margin-top:12px; font-weight:700; min-height:16px;"></p>
     </div>
   </div>
 
@@ -19428,270 +19393,185 @@
     }
 
     // ==========================================================================
-    // 📱 SMS GATE CLOUD API SELF-HOSTED OTP SYSTEM (100% Free via Android Gateway)
+    // 🌐 GOOGLE AUTHENTICATION & MEMBER IDENTIFICATION SYSTEM
     // ==========================================================================
-    let isSmsOtpSending = false;
-    let isSmsOtpVerifying = false;
 
-    async function sendSelfHostedSmsOtp(context) {
-      if (isSmsOtpSending) return;
+    // मोबाइल नंबर दर्ज करते ही डेटाबेस से सदस्य व पद की लाइव जांच
+    function onAuthGatePhoneInput(val) {
+      const phone10 = String(val || "").replace(/\D/g, "").slice(-10);
+      const previewEl = document.getElementById("authGateMemberPreview");
+      const nameInp = document.getElementById("authGateUserNameInput");
+      if (!previewEl) return;
 
-      const isModal = context === "modal" || (!document.getElementById("smsGateMobileInput")?.value && !!document.getElementById("modalSmsGateMobileInput")?.value);
-      const phoneInput = isModal ? document.getElementById("modalSmsGateMobileInput") : document.getElementById("smsGateMobileInput");
-      const phone10 = (phoneInput ? phoneInput.value : "").replace(/\D/g, "").slice(-10);
-      const statusEl = isModal ? document.getElementById("otpStatusMessage") : document.getElementById("authGateStatusMessage");
-      const btn = isModal ? document.getElementById("btnModalSmsSendOtp") : document.getElementById("btnSmsSendOtp");
-      const timerTxt = isModal ? document.getElementById("modalSmsOtpTimerText") : document.getElementById("smsOtpTimerText");
-
-      if (phone10.length !== 10) {
-        if (statusEl) {
-          statusEl.style.color = "#dc2626";
-          statusEl.textContent = "⚠️ कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।";
-        }
+      if (phone10 === "8696663615") {
+        previewEl.style.display = "block";
+        previewEl.innerHTML = `<span style="color:#059669; font-weight:800;">🛡️ संचालक: रेवंतराम भाटी (Admin Mode)</span>`;
+        if (nameInp && !nameInp.value) nameInp.value = "रेवंतराम भाटी";
         return;
       }
 
-      isSmsOtpSending = true;
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "भेज रहे हैं...";
-      }
-      if (statusEl) {
-        statusEl.style.color = "#2563eb";
-        statusEl.textContent = "SMS OTP भेजा जा रहा है, कृपया प्रतीक्षा करें...";
-      }
-
-      // 6-अंकीय रैंडम OTP जनरेट करें
-      const generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
-      const expiryTime = Date.now() + 5 * 60 * 1000; // 5 मिनट मान्यता
-
-      // sessionStorage में सेव करें
-      sessionStorage.setItem("smsGateOtp", generatedOtp);
-      sessionStorage.setItem("smsGatePhone", phone10);
-      sessionStorage.setItem("smsGateExpiry", String(expiryTime));
-
-      const SANCHALAK_NUM = "8696663615";
-      const isSanchalak = (phone10 === SANCHALAK_NUM);
-
-      try {
-        const smsUrl = "https://api.sms-gate.app/3rdparty/v1/message";
-        const authHeader = "Basic " + btoa("KPVXQM:btgtmw_v4koor4");
-        const payload = {
-          message: "युवा शक्ति ग्रुप ऐप लॉगिन OTP: " + generatedOtp + " (यह 5 मिनट तक मान्य है।)",
-          phoneNumbers: ["+91" + phone10]
-        };
-
-        const response = await fetch(smsUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": authHeader
-          },
-          body: JSON.stringify(payload)
-        });
-
-        if (response.ok) {
-          if (statusEl) {
-            statusEl.style.color = "#059669";
-            statusEl.textContent = "✅ OTP आपके मोबाइल पर भेज दिया गया है! नीचे 6-अंकों का कोड दर्ज करें।";
-          }
-        } else {
-          console.warn("SMS Gate Cloud API HTTP response status:", response.status);
-          if (isSanchalak) {
-            if (statusEl) {
-              statusEl.style.color = "#059669";
-              statusEl.textContent = "✅ संचालक मोड: आप मास्टर कोड (99294280) या SMS OTP द्वारा लॉगिन कर सकते हैं।";
-            }
-          } else {
-            if (statusEl) {
-              statusEl.style.color = "#059669";
-              statusEl.textContent = "✅ OTP भेजा गया है। कृपया SMS देखें और कोड दर्ज करें।";
-            }
-          }
-        }
-      } catch (err) {
-        console.error("SMS Gate API Error:", err);
-        if (isSanchalak) {
-          if (statusEl) {
-            statusEl.style.color = "#059669";
-            statusEl.textContent = "✅ संचालक मोड (ऑफलाइन बैकअप): मास्टर कोड 99294280 दर्ज करके लॉगिन करें।";
-          }
-        } else {
-          if (statusEl) {
-            statusEl.style.color = "#059669";
-            statusEl.textContent = "✅ OTP जनरेट हुआ। कृपया कोड दर्ज करें।";
-          }
-        }
-      } finally {
-        const otpInp = isModal ? document.getElementById("modalSmsOtpInput") : document.getElementById("smsOtpInput");
-        if (otpInp) otpInp.focus();
-
-        let sec = 30;
-        const countdownTimer = setInterval(() => {
-          sec--;
-          if (timerTxt) timerTxt.textContent = `पुनः भेजने हेतु ${sec} सेकंड रुकें`;
-          if (sec <= 0) {
-            clearInterval(countdownTimer);
-            if (btn) {
-              btn.disabled = false;
-              btn.textContent = "📩 पुनः OTP भेजें";
-            }
-            if (timerTxt) timerTxt.textContent = "OTP नहीं मिला? पुनः भेजें";
-            isSmsOtpSending = false;
-          }
-        }, 1000);
-      }
-    }
-
-    async function verifySelfHostedSmsOtp(context) {
-      if (isSmsOtpVerifying) return;
-
-      const isModal = context === "modal" || (!document.getElementById("smsOtpInput")?.value && !!document.getElementById("modalSmsOtpInput")?.value);
-      const phoneInput = isModal ? document.getElementById("modalSmsGateMobileInput") : document.getElementById("smsGateMobileInput");
-      const phone10 = (phoneInput ? phoneInput.value : "").replace(/\D/g, "").slice(-10);
-      const otpInput = isModal ? document.getElementById("modalSmsOtpInput") : document.getElementById("smsOtpInput");
-      const enteredOtp = (otpInput ? otpInput.value : "").trim();
-      const statusEl = isModal ? document.getElementById("otpStatusMessage") : document.getElementById("authGateStatusMessage");
-      const btn = isModal ? document.getElementById("btnModalSmsVerifyOtp") : document.getElementById("btnSmsVerifyOtp");
-
-      if (phone10.length !== 10) {
-        if (statusEl) {
-          statusEl.style.color = "#dc2626";
-          statusEl.textContent = "⚠️ कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।";
-        }
-        return;
-      }
-
-      if (!enteredOtp || enteredOtp.length < 4) {
-        if (statusEl) {
-          statusEl.style.color = "#dc2626";
-          statusEl.textContent = "⚠️ कृपया 6-अंकीय OTP कोड दर्ज करें।";
-        }
-        return;
-      }
-
-      isSmsOtpVerifying = true;
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "जांच रहे हैं...";
-      }
-
-      const SANCHALAK_NUM = "8696663615";
-      const isSanchalak = (phone10 === SANCHALAK_NUM);
-
-      const savedOtp = sessionStorage.getItem("smsGateOtp");
-      const savedPhone = sessionStorage.getItem("smsGatePhone");
-      const expiry = parseInt(sessionStorage.getItem("smsGateExpiry") || "0", 10);
-      const isExpired = Date.now() > expiry;
-
-      // OTP सत्यापन नियम:
-      // 1. संचालक (8696663615) बैकअप मास्टर कोड: 99294280 अथवा 123456
-      // 2. सामान्य सदस्य OTP: सही मोबाइल नंबर, समय समाप्त न हुआ हो, और सही कोड
-      let isValid = false;
-
-      if (isSanchalak && (enteredOtp === "99294280" || enteredOtp === "123456")) {
-        isValid = true;
-      } else if (!isExpired && savedPhone === phone10 && enteredOtp === savedOtp) {
-        isValid = true;
-      }
-
-      if (isValid) {
-        // sessionStorage से OTP साफ करें
-        sessionStorage.removeItem("smsGateOtp");
-        sessionStorage.removeItem("smsGatePhone");
-        sessionStorage.removeItem("smsGateExpiry");
-
+      if (phone10.length === 10) {
         const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
           const p = String(m.phone || "").replace(/\D/g, "").slice(-10);
           return p && p === phone10;
         });
-
-        const memberName = isSanchalak ? "रेवंतराम भाटी" : (matched ? matched.name : `सदस्य (${phone10})`);
-        const role = isSanchalak ? "admin" : (matched ? (matched.role || "सदस्य") : "सदस्य");
-
-        localStorage.setItem("loggedInMemberPhone", phone10);
-        localStorage.setItem("isUserVerified", "true");
-        localStorage.setItem("ysg_logged_in", "true");
-        localStorage.setItem("ysg_user_phone", phone10);
-        loggedInMemberPhone = phone10;
-        isUserVerified = true;
-
-        if (isSanchalak) {
-          localStorage.setItem("userRole", "admin");
-          localStorage.setItem("isAdminSession", "true");
-          userRole = "admin";
-          isAdmin = true;
-        } else {
-          localStorage.setItem("userRole", role);
-          localStorage.removeItem("isAdminSession");
-          userRole = role;
-          isAdmin = false;
-        }
-
-        const appUser = {
-          name: memberName,
-          phone: phone10,
-          email: isSanchalak ? "revantrambhati@gmail.com" : (matched ? (matched.email || "") : ""),
-          photoUrl: matched ? matched.photo : null,
-          role: isSanchalak ? "संचालक / Admin" : role,
-          uid: isSanchalak ? "admin_8696663615" : (matched && matched.uid ? matched.uid : "phone_" + phone10),
-          isGuest: false
-        };
-        localStorage.setItem("currentAppUser", JSON.stringify(appUser));
-
-        const gate = document.getElementById("appAuthGateScreen");
-        if (gate) gate.style.display = "none";
-        const modal = document.getElementById("loginModal");
-        if (modal) modal.style.display = "none";
-
-        if (statusEl) {
-          statusEl.style.color = "#059669";
-          statusEl.textContent = isSanchalak ? "✅ संचालक लॉगिन सफल! स्वागत है रेवंतराम जी 🎉" : `✅ सत्यापन सफल! स्वागत है, ${memberName} 🎉`;
-        }
-
-        if (typeof showToast === "function") {
-          showToast(isSanchalak ? "नमस्ते रेवंतराम जी! संचालक (Admin Mode) सक्रिय हुआ 🛡️" : `स्वागत है ${memberName}! सत्यापन सफल हुआ ✅`, "success");
-        }
-
-        setTimeout(() => {
-          if (typeof hideAuthGateScreen === "function") hideAuthGateScreen();
-          if (typeof closeLoginModal === "function") closeLoginModal();
-          if (typeof updateAuthUI === "function") updateAuthUI();
-          if (typeof updateCurrentUserUI === "function") updateCurrentUserUI();
-          if (typeof recordAppOpenEvent === "function") recordAppOpenEvent();
-        }, 300);
-
-      } else {
-        if (statusEl) {
-          statusEl.style.color = "#dc2626";
-          if (isExpired && savedOtp && enteredOtp === savedOtp) {
-            statusEl.textContent = "❌ OTP समाप्त (Expired) हो चुका है! कृपया नया OTP भेजें।";
-          } else {
-            statusEl.textContent = "❌ गलत OTP! कृपया सही 6-अंकीय कोड डालें।";
+        if (matched) {
+          previewEl.style.display = "block";
+          const pad = matched.role || matched.pad || "सदस्य";
+          previewEl.innerHTML = `<span style="color:#059669; font-weight:800;">✅ सदस्य पहचान: ${escapeHtml(matched.name)} (पद: ${escapeHtml(pad)})</span>`;
+          if (nameInp && (!nameInp.value || nameInp.dataset.autofilled === "true")) {
+            nameInp.value = matched.name;
+            nameInp.dataset.autofilled = "true";
           }
+        } else {
+          previewEl.style.display = "block";
+          previewEl.innerHTML = `<span style="color:#0284c7; font-weight:700;">ℹ️ नया सदस्य: कृपया अपना पूरा नाम भी दर्ज करें</span>`;
         }
-      }
-
-      isSmsOtpVerifying = false;
-      if (btn) {
-        btn.disabled = false;
-        btn.textContent = "खोलें ➔";
+      } else {
+        previewEl.style.display = "none";
       }
     }
 
-    // Page load hote hi check karein ki user pehle se verified hai ya nahi
-    (function checkExistingSessionOnBoot() {
-      if (localStorage.getItem("isUserVerified") === "true" && localStorage.getItem("loggedInMemberPhone")) {
-        window.addEventListener("DOMContentLoaded", function() {
-          const gate = document.getElementById("appAuthGateScreen");
-          if (gate) gate.style.display = "none";
+    function onModalPhoneInput(val) {
+      const phone10 = String(val || "").replace(/\D/g, "").slice(-10);
+      const previewEl = document.getElementById("modalMemberPreview");
+      const nameInp = document.getElementById("modalUserNameInput");
+      if (!previewEl) return;
+
+      if (phone10 === "8696663615") {
+        previewEl.style.display = "block";
+        previewEl.innerHTML = `<span style="color:#059669; font-weight:800;">🛡️ संचालक: रेवंतराम भाटी (Admin Mode)</span>`;
+        if (nameInp && !nameInp.value) nameInp.value = "रेवंतराम भाटी";
+        return;
+      }
+
+      if (phone10.length === 10) {
+        const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
+          const p = String(m.phone || "").replace(/\D/g, "").slice(-10);
+          return p && p === phone10;
+        });
+        if (matched) {
+          previewEl.style.display = "block";
+          const pad = matched.role || matched.pad || "सदस्य";
+          previewEl.innerHTML = `<span style="color:#059669; font-weight:800;">✅ सदस्य पहचान: ${escapeHtml(matched.name)} (पद: ${escapeHtml(pad)})</span>`;
+          if (nameInp && (!nameInp.value || nameInp.dataset.autofilled === "true")) {
+            nameInp.value = matched.name;
+            nameInp.dataset.autofilled = "true";
+          }
+        } else {
+          previewEl.style.display = "block";
+          previewEl.innerHTML = `<span style="color:#0284c7; font-weight:700;">ℹ️ नया सदस्य: कृपया अपना पूरा नाम भी दर्ज करें</span>`;
+        }
+      } else {
+        previewEl.style.display = "none";
+      }
+    }
+
+    // Google Sign-In प्रक्रिया आरंभ
+    function triggerGoogleSignIn(context) {
+      const isModal = context === "modal";
+      const statusEl = isModal ? document.getElementById("otpStatusMessage") : document.getElementById("authGateStatusMessage");
+      const nameInp = isModal ? document.getElementById("modalUserNameInput") : document.getElementById("authGateUserNameInput");
+      const phoneInp = isModal ? document.getElementById("modalUserPhoneInput") : document.getElementById("authGateUserPhoneInput");
+
+      const nameVal = nameInp ? nameInp.value.trim() : "";
+      const phoneVal = phoneInp ? phoneInp.value.replace(/\D/g, "").slice(-10) : "";
+
+      if (phoneVal && phoneVal.length !== 10) {
+        if (statusEl) {
+          statusEl.style.color = "#dc2626";
+          statusEl.textContent = "⚠️ कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें!";
+        }
+        return;
+      }
+
+      if (nameVal) sessionStorage.setItem("pendingGoogleName", nameVal);
+      if (phoneVal) sessionStorage.setItem("pendingGooglePhone", phoneVal);
+
+      // 1. यदि Android Native App में चल रहा है तो फ़ोन का Google Account Picker खोलें
+      if (typeof AndroidApp !== "undefined" && typeof AndroidApp.promptGoogleAccountPicker === "function") {
+        if (statusEl) {
+          statusEl.style.color = "#2563eb";
+          statusEl.textContent = "Google खाता चुनने हेतु प्रतीक्षा करें...";
+        }
+        AndroidApp.promptGoogleAccountPicker();
+        return;
+      }
+
+      // 2. यदि वेब ब्राउज़र में चल रहा है तो Firebase Popup फ़ॉलबैक इस्तेमाल करें
+      handleWebBrowserGoogleSignIn(statusEl);
+    }
+
+    async function handleWebBrowserGoogleSignIn(statusEl) {
+      if (isAuthGateGoogleSigningIn) return;
+      isAuthGateGoogleSigningIn = true;
+      if (statusEl) {
+        statusEl.innerText = "गूगल लॉगिन शुरू हो रहा है...";
+        statusEl.style.color = "#D97706";
+      }
+
+      try {
+        if (typeof firebase === "undefined" || !firebase.auth) {
+          throw new Error("Firebase Auth उपलब्ध नहीं है।");
+        }
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: "select_account" });
+        const result = await firebase.auth().signInWithPopup(provider);
+        const user = result.user;
+        if (!user) throw new Error("गूगल खाता सत्यापित नहीं हो सका।");
+        processGoogleUserLogin(user.email, user.displayName, user.photoURL, user.uid);
+      } catch (err) {
+        if (err && err.code !== "auth/popup-closed-by-user" && err.code !== "auth/cancelled-popup-request") {
+          console.error("Web Google Sign-In error:", err);
+          if (statusEl) {
+            statusEl.innerText = "गूगल लॉगिन विफल: " + (err.message || err.code || "पुनः प्रयास करें");
+            statusEl.style.color = "#DC2626";
+          }
+        }
+      } finally {
+        isAuthGateGoogleSigningIn = false;
+        const btns = document.querySelectorAll(".btn-google-signin");
+        btns.forEach(b => {
+          b.disabled = false;
+          b.style.opacity = "1";
+          b.style.pointerEvents = "";
         });
       }
-    })();
+    }
 
-    // ==========================================================================
-    // 🌐 GOOGLE SIGN-IN SYSTEM (Native Android Account Picker & Web Fallback)
-    // ==========================================================================
+    // Android Native Google Account Picker का कॉलबैक
+    window.onNativeGoogleSignInResult = function(result) {
+      isAuthGateGoogleSigningIn = false;
+      isGoogleSignInInProgress = false;
+
+      const btns = document.querySelectorAll(".btn-google-signin");
+      btns.forEach(b => {
+        b.disabled = false;
+        b.style.opacity = "1";
+        b.style.pointerEvents = "";
+      });
+
+      const statusEl = document.getElementById("authGateStatusMessage") || document.getElementById("otpStatusMessage");
+
+      if (result && result.success && result.email) {
+        processGoogleUserLogin(result.email, null, null, null);
+      } else {
+        if (statusEl) {
+          statusEl.style.color = "#dc2626";
+          statusEl.textContent = result && result.error ? ("❌ " + result.error) : "❌ Google लॉगिन रद्द किया गया";
+        }
+      }
+    };
+
+    function handleAuthGateGoogleSignIn() {
+      triggerGoogleSignIn("gate");
+    }
+
+    function handleGoogleSignInClick() {
+      triggerGoogleSignIn("modal");
+    }
+
+    // Google सत्यापन पूर्ण होने पर नाम, मोबाइल नंबर व पद से खाता खोलना
     function processGoogleUserLogin(emailRaw, displayName, photoUrl, uid) {
       const email = String(emailRaw || "").trim().toLowerCase();
       if (!email || !email.includes("@")) {
@@ -19703,13 +19583,44 @@
       const SANCHALAK_PHONE = "8696663615";
       const isSuperAdmin = (email === SANCHALAK_EMAIL.toLowerCase());
 
-      const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
-        return (m.email && m.email.toLowerCase() === email) || (m.googleUid && m.googleUid === email);
-      });
+      const pendingPhone = sessionStorage.getItem("pendingGooglePhone") || (document.getElementById("authGateUserPhoneInput")?.value || document.getElementById("modalUserPhoneInput")?.value || "").replace(/\D/g, "").slice(-10);
+      const pendingName = sessionStorage.getItem("pendingGoogleName") || (document.getElementById("authGateUserNameInput")?.value || document.getElementById("modalUserNameInput")?.value || "").trim();
 
-      const name = isSuperAdmin ? "रेवंतराम भाटी" : (displayName || (matched ? matched.name : email.split('@')[0]));
-      const phone = isSuperAdmin ? SANCHALAK_PHONE : (matched ? (matched.phone || "") : "");
-      const role = isSuperAdmin ? "admin" : (matched ? (matched.role || "सदस्य") : "सदस्य");
+      sessionStorage.removeItem("pendingGooglePhone");
+      sessionStorage.removeItem("pendingGoogleName");
+
+      // सदस्य डेटाबेस में खोजें (पहले मोबाइल नंबर से ताकि सही पद मिल सके, फिर ईमेल से)
+      let matched = null;
+      if (pendingPhone && pendingPhone.length === 10) {
+        matched = (Array.isArray(membersList) ? membersList : []).find(m => {
+          const p = String(m.phone || "").replace(/\D/g, "").slice(-10);
+          return p && p === pendingPhone;
+        });
+      }
+      if (!matched) {
+        matched = (Array.isArray(membersList) ? membersList : []).find(m => {
+          return (m.email && m.email.toLowerCase() === email) || (m.googleUid && m.googleUid === email);
+        });
+      }
+
+      // पद (Role / Designation) व नाम निर्धारण
+      let name = "";
+      let phone = "";
+      let role = "सदस्य";
+
+      if (isSuperAdmin) {
+        name = "रेवंतराम भाटी";
+        phone = SANCHALAK_PHONE;
+        role = "admin";
+      } else if (matched) {
+        name = matched.name || pendingName || displayName || email.split("@")[0];
+        phone = pendingPhone || matched.phone || "";
+        role = matched.role || matched.pad || "सदस्य";
+      } else {
+        name = pendingName || displayName || email.split("@")[0];
+        phone = pendingPhone || "";
+        role = "सदस्य";
+      }
 
       // क्रेडेंशियल localStorage में सुरक्षित करें
       localStorage.setItem("loggedInUserEmail", email);
@@ -19741,7 +19652,7 @@
         email: email,
         photoUrl: photoUrl || (matched ? matched.photo : null),
         role: isSuperAdmin ? "संचालक / Admin" : role,
-        uid: uid || (isSuperAdmin ? "admin_8696663615" : (matched && matched.uid ? matched.uid : "google_" + btoa(email).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16))),
+        uid: uid || (isSuperAdmin ? "admin_8696663615" : (matched && matched.uid ? matched.uid : "google_" + btoa(email).replace(/[^a-zA-Z0-9]/g, "").slice(0, 16))),
         isGuest: false
       };
       localStorage.setItem("currentAppUser", JSON.stringify(appUser));
@@ -19762,107 +19673,31 @@
       const statusEl = document.getElementById("authGateStatusMessage") || document.getElementById("otpStatusMessage");
       if (statusEl) {
         statusEl.style.color = "#059669";
-        statusEl.textContent = isSuperAdmin ? "✅ संचालक लॉगिन सफल! स्वागत है रेवंतराम जी 🎉" : `✅ स्वागत है ${name}! गूगल लॉगिन सफल हुआ 🎉`;
+        statusEl.textContent = isSuperAdmin ? "✅ संचालक लॉगिन सफल! स्वागत है रेवंतराम जी 🎉" : `✅ स्वागत है ${name}! पहचान व पद (${role}) सत्यापित हुआ 🎉`;
       }
 
       if (typeof showToast === "function") {
-        showToast(isSuperAdmin ? "नमस्ते रेवंतराम जी! संचालक (Admin Mode) सक्रिय हुआ 🛡️" : `स्वागत है ${name}! गूगल लॉगिन सफल हुआ ✅`, "success");
+        showToast(isSuperAdmin ? "नमस्ते रेवंतराम जी! संचालक (Admin Mode) सक्रिय हुआ 🛡️" : `स्वागत है ${name} (${role})! गूगल लॉगिन सफल हुआ ✅`, "success");
       }
 
       setTimeout(() => {
         hideAuthGateScreen();
         closeLoginModal();
         updateAuthUI();
-        if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
-        if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
+        if (typeof updateCurrentUserUI === "function") updateCurrentUserUI();
+        if (typeof recordAppOpenEvent === "function") recordAppOpenEvent();
       }, 300);
     }
 
-    // Android Native Google Account Picker का कॉलबैक
-    window.onNativeGoogleSignInResult = function(result) {
-      isAuthGateGoogleSigningIn = false;
-      isGoogleSignInInProgress = false;
-
-      const btns = document.querySelectorAll('.btn-google-signin');
-      btns.forEach(b => {
-        b.disabled = false;
-        b.style.opacity = "1";
-        b.style.pointerEvents = "";
-      });
-
-      const statusEl = document.getElementById("authGateStatusMessage") || document.getElementById("otpStatusMessage");
-
-      if (result && result.success && result.email) {
-        processGoogleUserLogin(result.email, null, null, null);
-      } else {
-        if (statusEl) {
-          statusEl.style.color = "#dc2626";
-          statusEl.textContent = result && result.error ? ("❌ " + result.error) : "❌ Google लॉगिन रद्द किया गया";
-        }
-      }
-    };
-
-    function triggerGoogleSignIn(context) {
-      const statusEl = (context === 'modal') ? document.getElementById("otpStatusMessage") : document.getElementById("authGateStatusMessage");
-
-      // 1. यदि Android Native App में चल रहा है तो फ़ोन का Google Account Picker खोलें
-      if (typeof AndroidApp !== "undefined" && typeof AndroidApp.promptGoogleAccountPicker === "function") {
-        if (statusEl) {
-          statusEl.style.color = "#2563eb";
-          statusEl.textContent = "Google खाता चुनने हेतु प्रतीक्षा करें...";
-        }
-        AndroidApp.promptGoogleAccountPicker();
-        return;
-      }
-
-      // 2. यदि वेब ब्राउज़र में चल रहा है तो Firebase Popup फ़ॉलबैक इस्तेमाल करें
-      handleWebBrowserGoogleSignIn(statusEl);
-    }
-
-    async function handleWebBrowserGoogleSignIn(statusEl) {
-      if (isAuthGateGoogleSigningIn) return;
-      isAuthGateGoogleSigningIn = true;
-      if (statusEl) {
-        statusEl.innerText = "गूगल लॉगिन शुरू हो रहा है...";
-        statusEl.style.color = "#D97706";
-      }
-
-      try {
-        if (typeof firebase === "undefined" || !firebase.auth) {
-          throw new Error("Firebase Auth उपलब्ध नहीं है।");
-        }
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-        const result = await firebase.auth().signInWithPopup(provider);
-        const user = result.user;
-        if (!user) throw new Error("गूगल खाता सत्यापित नहीं हो सका।");
-        processGoogleUserLogin(user.email, user.displayName, user.photoURL, user.uid);
-      } catch (err) {
-        if (err && err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
-          console.error("Web Google Sign-In error:", err);
-          if (statusEl) {
-            statusEl.innerText = "गूगल लॉगिन विफल: " + (err.message || err.code || "पुनः प्रयास करें");
-            statusEl.style.color = "#DC2626";
-          }
-        }
-      } finally {
-        isAuthGateGoogleSigningIn = false;
-        const btns = document.querySelectorAll('.btn-google-signin');
-        btns.forEach(b => {
-          b.disabled = false;
-          b.style.opacity = "1";
-          b.style.pointerEvents = "";
+    // Page load hote hi check karein ki user pehle se verified hai ya nahi
+    (function checkExistingSessionOnBoot() {
+      if (localStorage.getItem("isUserVerified") === "true" && (localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("loggedInUserEmail"))) {
+        window.addEventListener("DOMContentLoaded", function() {
+          const gate = document.getElementById("appAuthGateScreen");
+          if (gate) gate.style.display = "none";
         });
       }
-    }
-
-    function handleAuthGateGoogleSignIn() {
-      triggerGoogleSignIn('gate');
-    }
-
-    function handleGoogleSignInClick() {
-      triggerGoogleSignIn('modal');
-    }
+    })();
 
     function checkInitialAuthState() {
       const isUserVerified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
@@ -19991,7 +19826,7 @@
       checkInitialAuthState();
       setTimeout(initAuthGateListener, 500);
 
-      // Keydown handlers for SMS Gate OTP inputs (Auth Gate & Login Modal)
+      // Keydown handlers for Enter key
       const setupEnterKey = (id, fn) => {
         const el = document.getElementById(id);
         if (el) {
@@ -20004,10 +19839,10 @@
         }
       };
 
-      setupEnterKey("smsGateMobileInput", () => sendSelfHostedSmsOtp());
-      setupEnterKey("smsOtpInput", () => verifySelfHostedSmsOtp());
-      setupEnterKey("modalSmsGateMobileInput", () => sendSelfHostedSmsOtp('modal'));
-      setupEnterKey("modalSmsOtpInput", () => verifySelfHostedSmsOtp('modal'));
+      setupEnterKey("authGateUserNameInput", () => handleAuthGateGoogleSignIn());
+      setupEnterKey("authGateUserPhoneInput", () => handleAuthGateGoogleSignIn());
+      setupEnterKey("modalUserNameInput", () => handleGoogleSignInClick());
+      setupEnterKey("modalUserPhoneInput", () => handleGoogleSignInClick());
     });
 
     // =========================================================================
