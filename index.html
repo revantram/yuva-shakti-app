@@ -7173,6 +7173,10 @@
     let isGoogleSignInInProgress = false;
 
     async function handleGoogleSignInClick() {
+      if (typeof AndroidApp !== "undefined" && typeof AndroidApp.promptGoogleAccountPicker === "function") {
+        AndroidApp.promptGoogleAccountPicker();
+        return;
+      }
       if (isGoogleSignInInProgress) return;
       isGoogleSignInInProgress = true;
       const googleBtns = document.querySelectorAll('.btn-google-signin');
@@ -19378,6 +19382,9 @@
 
       localStorage.setItem("currentAppUser", JSON.stringify(appUser));
       localStorage.setItem("ysg_logged_in", "true");
+      if (appUser.email) {
+        localStorage.setItem("loggedInUserEmail", appUser.email);
+      }
       if (appUser.phone) {
         localStorage.setItem("loggedInMemberPhone", appUser.phone);
         localStorage.setItem("ysg_user_phone", appUser.phone);
@@ -19682,82 +19689,157 @@
       }
     })();
 
-    async function handleAuthGateGoogleSignIn() {
+    // ==========================================================================
+    // 🌐 GOOGLE SIGN-IN SYSTEM (Native Android Account Picker & Web Fallback)
+    // ==========================================================================
+    function processGoogleUserLogin(emailRaw, displayName, photoUrl, uid) {
+      const email = String(emailRaw || "").trim().toLowerCase();
+      if (!email || !email.includes("@")) {
+        if (typeof showToast === "function") showToast("अमान्य Google ईमेल आईडी!", "error");
+        return;
+      }
+
+      const SANCHALAK_EMAIL = "revantrambhati@gmail.com";
+      const SANCHALAK_PHONE = "8696663615";
+      const isSuperAdmin = (email === SANCHALAK_EMAIL.toLowerCase());
+
+      const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
+        return (m.email && m.email.toLowerCase() === email) || (m.googleUid && m.googleUid === email);
+      });
+
+      const name = isSuperAdmin ? "रेवंतराम भाटी" : (displayName || (matched ? matched.name : email.split('@')[0]));
+      const phone = isSuperAdmin ? SANCHALAK_PHONE : (matched ? (matched.phone || "") : "");
+      const role = isSuperAdmin ? "admin" : (matched ? (matched.role || "सदस्य") : "सदस्य");
+
+      // क्रेडेंशियल localStorage में सुरक्षित करें
+      localStorage.setItem("loggedInUserEmail", email);
+      localStorage.setItem("isUserVerified", "true");
+      localStorage.setItem("ysg_logged_in", "true");
+
+      if (phone) {
+        localStorage.setItem("loggedInMemberPhone", phone);
+        localStorage.setItem("ysg_user_phone", phone);
+        loggedInMemberPhone = phone;
+      }
+      isUserVerified = true;
+
+      if (isSuperAdmin) {
+        localStorage.setItem("userRole", "admin");
+        localStorage.setItem("isAdminSession", "true");
+        userRole = "admin";
+        isAdmin = true;
+      } else {
+        localStorage.setItem("userRole", role);
+        localStorage.removeItem("isAdminSession");
+        userRole = role;
+        isAdmin = false;
+      }
+
+      const appUser = {
+        name: name,
+        phone: phone,
+        email: email,
+        photoUrl: photoUrl || (matched ? matched.photo : null),
+        role: isSuperAdmin ? "संचालक / Admin" : role,
+        uid: uid || (isSuperAdmin ? "admin_8696663615" : (matched && matched.uid ? matched.uid : "google_" + btoa(email).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16))),
+        isGuest: false
+      };
+      localStorage.setItem("currentAppUser", JSON.stringify(appUser));
+
+      try {
+        if (typeof db !== "undefined" && db.collection) {
+          db.collection("users").doc(appUser.uid).set({
+            name: appUser.name,
+            email: appUser.email,
+            phone: appUser.phone,
+            role: appUser.role,
+            lastLogin: new Date(),
+            updatedAt: new Date()
+          }, { merge: true });
+        }
+      } catch (e) {}
+
+      const statusEl = document.getElementById("authGateStatusMessage") || document.getElementById("otpStatusMessage");
+      if (statusEl) {
+        statusEl.style.color = "#059669";
+        statusEl.textContent = isSuperAdmin ? "✅ संचालक लॉगिन सफल! स्वागत है रेवंतराम जी 🎉" : `✅ स्वागत है ${name}! गूगल लॉगिन सफल हुआ 🎉`;
+      }
+
+      if (typeof showToast === "function") {
+        showToast(isSuperAdmin ? "नमस्ते रेवंतराम जी! संचालक (Admin Mode) सक्रिय हुआ 🛡️" : `स्वागत है ${name}! गूगल लॉगिन सफल हुआ ✅`, "success");
+      }
+
+      setTimeout(() => {
+        hideAuthGateScreen();
+        closeLoginModal();
+        updateAuthUI();
+        if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
+        if (typeof recordAppOpenEvent === 'function') recordAppOpenEvent();
+      }, 300);
+    }
+
+    // Android Native Google Account Picker का कॉलबैक
+    window.onNativeGoogleSignInResult = function(result) {
+      isAuthGateGoogleSigningIn = false;
+      isGoogleSignInInProgress = false;
+
+      const btns = document.querySelectorAll('.btn-google-signin');
+      btns.forEach(b => {
+        b.disabled = false;
+        b.style.opacity = "1";
+        b.style.pointerEvents = "";
+      });
+
+      const statusEl = document.getElementById("authGateStatusMessage") || document.getElementById("otpStatusMessage");
+
+      if (result && result.success && result.email) {
+        processGoogleUserLogin(result.email, null, null, null);
+      } else {
+        if (statusEl) {
+          statusEl.style.color = "#dc2626";
+          statusEl.textContent = result && result.error ? ("❌ " + result.error) : "❌ Google लॉगिन रद्द किया गया";
+        }
+      }
+    };
+
+    function triggerGoogleSignIn(context) {
+      const statusEl = (context === 'modal') ? document.getElementById("otpStatusMessage") : document.getElementById("authGateStatusMessage");
+
+      // 1. यदि Android Native App में चल रहा है तो फ़ोन का Google Account Picker खोलें
+      if (typeof AndroidApp !== "undefined" && typeof AndroidApp.promptGoogleAccountPicker === "function") {
+        if (statusEl) {
+          statusEl.style.color = "#2563eb";
+          statusEl.textContent = "Google खाता चुनने हेतु प्रतीक्षा करें...";
+        }
+        AndroidApp.promptGoogleAccountPicker();
+        return;
+      }
+
+      // 2. यदि वेब ब्राउज़र में चल रहा है तो Firebase Popup फ़ॉलबैक इस्तेमाल करें
+      handleWebBrowserGoogleSignIn(statusEl);
+    }
+
+    async function handleWebBrowserGoogleSignIn(statusEl) {
       if (isAuthGateGoogleSigningIn) return;
       isAuthGateGoogleSigningIn = true;
-
-      const btn = document.getElementById("btnAuthGateGoogle");
-      const statusEl = document.getElementById("authGateStatusMessage");
-
-      if (btn) {
-        btn.disabled = true;
-        btn.style.opacity = "0.6";
-        btn.style.pointerEvents = "none";
-      }
       if (statusEl) {
         statusEl.innerText = "गूगल लॉगिन शुरू हो रहा है...";
         statusEl.style.color = "#D97706";
       }
 
       try {
+        if (typeof firebase === "undefined" || !firebase.auth) {
+          throw new Error("Firebase Auth उपलब्ध नहीं है।");
+        }
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
-
-        let result = null;
-        try {
-          result = await firebase.auth().signInWithPopup(provider);
-        } catch (popupErr) {
-          if (popupErr.code === 'auth/cancelled-popup-request' || popupErr.code === 'auth/popup-closed-by-user') {
-            console.warn("Popup cancelled or closed:", popupErr);
-            if (statusEl) statusEl.innerText = "";
-            return;
-          }
-          throw popupErr;
-        }
-
+        const result = await firebase.auth().signInWithPopup(provider);
         const user = result.user;
         if (!user) throw new Error("गूगल खाता सत्यापित नहीं हो सका।");
-
-        const email = (user.email || "").trim().toLowerCase();
-        const SANCHALAK_EMAIL = "revantrambhati@gmail.com";
-        const SANCHALAK_PHONE = "8696663615";
-
-        let role = "member";
-        let name = user.displayName || "गूगल सदस्य";
-        let phone = "";
-
-        if (email === SANCHALAK_EMAIL.toLowerCase()) {
-          role = "admin";
-          name = "रेवंतराम भाटी";
-          phone = SANCHALAK_PHONE;
-        } else {
-          const matched = (Array.isArray(membersList) ? membersList : []).find(m => {
-            return (m.email && m.email.toLowerCase() === email) || (m.googleUid && m.googleUid === user.uid);
-          });
-          if (matched) {
-            name = matched.name;
-            phone = matched.phone || "";
-            role = matched.role || "सदस्य";
-          }
-        }
-
-        if (statusEl) {
-          statusEl.innerText = `लॉगिन सफल हुआ! स्वागत है, ${name} 🎉`;
-          statusEl.style.color = "#16A34A";
-        }
-
-        completeUserLogin({
-          name: name,
-          phone: phone,
-          email: email,
-          role: role,
-          photo: user.photoURL || null,
-          uid: user.uid
-        });
-
+        processGoogleUserLogin(user.email, user.displayName, user.photoURL, user.uid);
       } catch (err) {
         if (err && err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
-          console.error("Google Sign-in error:", err);
+          console.error("Web Google Sign-In error:", err);
           if (statusEl) {
             statusEl.innerText = "गूगल लॉगिन विफल: " + (err.message || err.code || "पुनः प्रयास करें");
             statusEl.style.color = "#DC2626";
@@ -19765,12 +19847,21 @@
         }
       } finally {
         isAuthGateGoogleSigningIn = false;
-        if (btn) {
-          btn.disabled = false;
-          btn.style.opacity = "1";
-          btn.style.pointerEvents = "auto";
-        }
+        const btns = document.querySelectorAll('.btn-google-signin');
+        btns.forEach(b => {
+          b.disabled = false;
+          b.style.opacity = "1";
+          b.style.pointerEvents = "";
+        });
       }
+    }
+
+    function handleAuthGateGoogleSignIn() {
+      triggerGoogleSignIn('gate');
+    }
+
+    function handleGoogleSignInClick() {
+      triggerGoogleSignIn('modal');
     }
 
     function checkInitialAuthState() {

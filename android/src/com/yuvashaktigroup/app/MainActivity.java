@@ -1,6 +1,7 @@
 package com.yuvashaktigroup.app;
 
 import android.app.Activity;
+import android.accounts.AccountManager;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -51,8 +52,25 @@ public class MainActivity extends Activity {
     private long mLastBackPressTime = 0;
     private ValueCallback<Uri[]> mFilePathCallback;
     private static final int FILECHOOSER_RESULTCODE = 1001;
+    private static final int GOOGLE_SIGNIN_REQUEST_CODE = 1002;
 
     public class WebAppInterface {
+        @JavascriptInterface
+        public void promptGoogleAccountPicker() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Intent intent = AccountManager.newChooseAccountIntent(
+                            null, null, new String[]{"com.google"}, null, null, null, null
+                        );
+                        startActivityForResult(intent, GOOGLE_SIGNIN_REQUEST_CODE);
+                    } catch (Exception e) {
+                        sendGoogleSignInResult(false, null, "Google Account Picker error: " + e.getMessage());
+                    }
+                }
+            });
+        }
         @JavascriptInterface
         public void downloadAndInstall(String apkUrl, String versionName) {
             downloadAndInstallApk(apkUrl);
@@ -357,6 +375,20 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GOOGLE_SIGNIN_REQUEST_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+                String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                if (accountName != null && !accountName.trim().isEmpty()) {
+                    sendGoogleSignInResult(true, accountName.trim(), null);
+                } else {
+                    sendGoogleSignInResult(false, null, "कोई Google खाता नहीं चुना गया");
+                }
+            } else {
+                sendGoogleSignInResult(false, null, "Google लॉगिन रद्द किया गया");
+            }
+            return;
+        }
+
         if (requestCode == FILECHOOSER_RESULTCODE) {
             if (mFilePathCallback != null) {
                 mFilePathCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
@@ -364,6 +396,24 @@ public class MainActivity extends Activity {
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    public void sendGoogleSignInResult(final boolean success, final String email, final String error) {
+        if (mWebView != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject res = new JSONObject();
+                        res.put("success", success);
+                        if (email != null) res.put("email", email);
+                        if (error != null) res.put("error", error);
+                        String script = "if (typeof window.onNativeGoogleSignInResult === 'function') { window.onNativeGoogleSignInResult(" + res.toString() + "); }";
+                        mWebView.evaluateJavascript(script, null);
+                    } catch (Exception ignored) {}
+                }
+            });
         }
     }
 

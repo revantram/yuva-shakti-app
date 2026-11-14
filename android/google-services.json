@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "803378454655",
+    "project_id": "yuva-shakti-group-ace55",
+    "storage_bucket": "yuva-shakti-group-ace55.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803378454655:android:bd9d931a3207cfa7965f4a",
+        "android_client_info": {
+          "package_name": "com.yuvashaktigroup.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "803378454655-ptc5u5sddh7brub8qiu7vgj20gl9hbfg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yuvashaktigroup.app",
+            "certificate_hash": "47e953c928fe80ff11802dbca06c5f8b7086139b"
+          }
+        },
+        {
+          "client_id": "803378454655-m8b8t880iu94nhqdnqk62tbc1ufkn2v9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbkwPy2A98CEtBa5h1w8rs0rdu8pVZLGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803378454655-m8b8t880iu94nhqdnqk62tbc1ufkn2v9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

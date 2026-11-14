@@ -17,6 +17,7 @@ cp "${PROJECT_DIR}/ic_launcher.png" "${BUILD_DIR}/assets/ic_launcher.png" 2>/dev
 cp "${PROJECT_DIR}/android/AndroidManifest.xml" "${BUILD_DIR}/AndroidManifest.xml"
 cp -r "${PROJECT_DIR}/android/src/"* "${BUILD_DIR}/src/"
 cp -r "${PROJECT_DIR}/android/res/"* "${BUILD_DIR}/res/"
+cp "${PROJECT_DIR}/android/google-services.json" "${BUILD_DIR}/" 2>/dev/null || true
 
 echo "==> 🧹 Cleaning build directory..."
 cd "${BUILD_DIR}"
