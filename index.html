@@ -26,7 +26,7 @@
   <!-- Google Fonts: Inter & Noto Sans Devanagari -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Noto+Serif+Devanagari:wght@600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- Firebase Classic Compatibility Scripts -->
@@ -14495,7 +14495,7 @@
                 स्मृति दिवस • शत-शत नमन एवं भावभीनी श्रद्धांजलि
               </div>
               <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
-                <button onclick="shareOccasionPoster('punyatithi', { name: '${vEsc(p.name)}' })" style="background:#475569; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                <button onclick="shareOccasionPoster('punyatithi', { name: '${vEsc(p.name)}', dod: '${vEsc(p.dod || "")}', photoUrl: '${vEsc(p.photoUrl || p.photo || "")}' })" style="background:#475569; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
                   <i class="fa-solid fa-image"></i> 🕊️ श्रद्धांजलि पोस्टर शेयर
                 </button>
               </div>
@@ -14674,6 +14674,7 @@
       return lines;
     }
 
+    // Test script directly without nesting inside template literal
     async function generateOccasionCardDataUrl(type, data = {}) {
       try {
         await document.fonts.ready;
@@ -14682,7 +14683,7 @@
       const width = 1200;
 
       // 1. Resolve Sender Details
-      const sender = getSuvicharSender();
+      const sender = (typeof getSuvicharSender === 'function') ? getSuvicharSender() : { name: "रेवंतराम भाटी", role: "संचालक" };
       let senderImg = null;
       if (sender.photoUrl) {
         try {
@@ -14692,173 +14693,335 @@
         }
       }
 
-      // 2. Resolve Target Name & Details
-      const rawName = data.name || (type === 'festival' ? "दीपावली महापर्व" : (type === 'punyatithi' ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य"));
-      const cleanName = rawName.replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').replace(/ की पुण्यतिथि/g, '').trim();
-
       // Determine Category Type
-      const isFestival = (type === 'festival' || type === 'amavasya' || type === 'national');
       const isBirthday = (type === 'birthday' || type === 'bday');
       const isAnniversary = (type === 'anniversary' || type === 'anniv');
       const isPunyatithi = (type === 'punyatithi' || type === 'shraddhanjali' || type === 'smriti');
+      const isFestival = (!isBirthday && !isAnniversary && !isPunyatithi);
 
-      // 3. Resolve Wish Text
-      let wishText = data.wish || "";
-      if (!wishText) {
-        if (isFestival) {
-          wishText = `${cleanName} के पावन अवसर पर आपके जीवन में सुख, शांति, समृद्धि एवं उत्तम स्वास्थ्य का संचार हो। समस्त भाटी परिवार की ओर से हार्दिक मंगलकामनाएं!`;
-        } else if (isBirthday) {
-          wishText = "परमपिता परमेश्वर से प्रार्थना है कि आपका जीवन उत्तम स्वास्थ्य, सुख-समृद्धि, दीर्घायु एवं निरंतर सफलता से आलोकित रहे। आपका प्रत्येक क्षण खुशियों और नई ऊर्जा से परिपूर्ण हो!\n\nसमस्त भाटी परिवार की ओर से आपको जन्मदिन की अनंत शुभकामनाएं!";
-        } else if (isAnniversary) {
-          wishText = "आपका दांपत्य जीवन सदैव अटूट प्रेम, आपसी विश्वास, सुख-समृद्धि एवं ईश्वर के असीम आशीर्वाद से महकता रहे। दांपत्य जीवन के यह सुनहरे वर्ष यूं ही खुशियों व मधुर स्मृतियों से सजे रहें।\n\nसमस्त भाटी परिवार की ओर से विवाह वर्षगांठ की हार्दिक बधाई!";
-        } else if (isPunyatithi) {
-          wishText = "आपकी पावन स्मृतियां, उच्च आदर्श, संस्कार और स्नेह सदैव हमारे अंतःकरण में जीवित रहेंगे। आपके दिखाए सत्पथ पर चलना ही हमारी सच्ची श्रद्धांजलि है।\n\nईश्वर से विनम्र प्रार्थना है कि दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति एवं मोक्ष प्रदान करें।\n\nॐ शांतिः शांतिः शांतिः 🙏";
+      // 2. Resolve Target Name & Details from membersList / vamshaFamilyData
+      const rawName = data.name || (isFestival ? "दीपावली महापर्व" : (isPunyatithi ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य"));
+      let cleanBaseName = rawName.replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').replace(/ की पुण्यतिथि/g, '').trim();
+      cleanBaseName = cleanBaseName.replace(/^(पूज्य|स्व\.|स्वर्गीय|श्री|सुश्री|श्रीमती|प्रिय)\s*/g, '').replace(/(\s*जी)+$/g, '').trim();
+      if (!cleanBaseName) cleanBaseName = rawName.trim();
+
+      let pFound = null;
+      const searchPhone = (data.phone || '').trim().replace(/\D/g, '').slice(-10);
+      if (typeof membersList !== 'undefined' && Array.isArray(membersList)) {
+        if (searchPhone) {
+          pFound = membersList.find(m => (m.phone || '').replace(/\D/g, '').slice(-10) === searchPhone);
+        }
+        if (!pFound && cleanBaseName) {
+          const s = cleanBaseName.toLowerCase();
+          pFound = membersList.find(m => (m.name || '').toLowerCase().includes(s) || s.includes((m.name || '').toLowerCase()));
         }
       }
-      wishText = wishText.replace(/\n{3,}/g, '\n\n').trim();
 
-      // 4. Resolve Icons & Color Themes
-      let theme = {
-        outerBg1: "#fffbeb", outerBg2: "#fef3c7", outerBg3: "#ffedd5",
-        cardBg1: "#ffffff", cardBg2: "#fffdfa", cardBg3: "#fff7ed",
-        cardBorder: "#fdba74", cardShadow: "rgba(234, 88, 12, 0.16)",
-        headerLeftBg: "#fef3c7", headerLeftBorder: "#fde68a", headerLeftText: "#b45309",
-        headerRightBg: "#fff7ed", headerRightBorder: "#fed7aa", headerRightText: "#9a3412",
-        iconSquircle1: "#f97316", iconSquircle2: "#ea580c",
-        iconShadow: "rgba(234, 88, 12, 0.35)", iconChar: "🪔",
-        categoryTag: "✨ पावन पर्व एवं उत्सव ✨", categoryColor: "#b45309",
-        heroBannerBg1: "#fef3c7", heroBannerBg2: "#fde68a", heroBannerBorder: "#f59e0b", heroBannerText: "#78350f",
-        heroTitle: `✨ ${cleanName} ✨`,
-        subText: data.sub || "पावन हिंदू पर्व • समस्त परिवार हेतु मंगलकामनाएं", subColor: "#ea580c",
-        wishBoxBorder: "#fde68a", wishBoxShadow: "rgba(245, 158, 11, 0.08)",
-        wishBoxHeader: "“ पावन शुभकामना संदेश “", wishBoxHeaderColor: "#b45309",
-        senderBoxBg1: "#fff7ed", senderBoxBg2: "#ffedd5", senderBoxBorder: "#fed7aa",
-        senderLabel: "💐 सप्रेम शुभकामना प्रेषक:", senderLabelColor: "#9a3412",
-        senderBadgeBg1: "#fef3c7", senderBadgeBg2: "#fde68a", senderBadgeBorder: "#f59e0b", senderBadgeText: "#431407",
-        senderSubColor: "#ea580c",
-        footerTagline: "🪔 धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन 🪔", footerTaglineColor: "#9a3412"
-      };
+      let vFound = null;
+      try {
+        const tree = (typeof vamshaFamilyData !== 'undefined' && Array.isArray(vamshaFamilyData)) ? vamshaFamilyData : [];
+        if (cleanBaseName) {
+          const s = cleanBaseName.toLowerCase();
+          vFound = tree.find(p => (p.name || '').toLowerCase().includes(s) || s.includes((p.name || '').toLowerCase()));
+        }
+      } catch (e) {}
 
-      if (isFestival) {
-        let fIcon = "🪔";
-        const fn = cleanName.toLowerCase();
-        if (fn.includes("शिव") || fn.includes("महाशिवरात्रि")) fIcon = "🕉️";
-        else if (fn.includes("होली") || fn.includes("धुलंडी")) fIcon = "🎨";
-        else if (fn.includes("राम") || fn.includes("दशहरा") || fn.includes("विजयादशमी")) fIcon = "🏹";
-        else if (fn.includes("कृष्ण") || fn.includes("जन्माष्टमी")) fIcon = "🦚";
-        else if (fn.includes("गणेश")) fIcon = "🐘";
-        else if (fn.includes("नवरात्रि") || fn.includes("दुर्गा")) fIcon = "🌸";
-        else if (fn.includes("अमावस्या")) fIcon = "🌑";
-        else if (fn.includes("तिरंगा") || fn.includes("स्वतंत्रता") || fn.includes("गणतंत्र") || fn.includes("राष्ट्रीय")) fIcon = "🇮🇳";
-        else if (fn.includes("दीपावली") || fn.includes("दिवाली")) fIcon = "🪔";
-        theme.iconChar = fIcon;
-        theme.heroTitle = `✨ ${cleanName} ✨`;
-        theme.subText = data.sub || "पावन पर्व • समस्त परिवार हेतु हार्दिक मंगलकामनाएं";
-      } else if (isBirthday) {
-        theme.outerBg1 = "#fefce8"; theme.outerBg2 = "#fef08a"; theme.outerBg3 = "#fde047";
-        theme.cardBg1 = "#ffffff"; theme.cardBg2 = "#fffdf5"; theme.cardBg3 = "#fefce8";
-        theme.cardBorder = "#f59e0b"; theme.cardShadow = "rgba(245, 158, 11, 0.2)";
-        theme.headerLeftBg = "#fef3c7"; theme.headerLeftBorder = "#fde68a"; theme.headerLeftText = "#b45309";
-        theme.iconSquircle1 = "#f59e0b"; theme.iconSquircle2 = "#d97706";
-        theme.iconShadow = "rgba(245, 158, 11, 0.4)"; theme.iconChar = "🎂";
-        theme.categoryTag = "✨ जन्मदिवस की हार्दिक शुभकामनाएं ✨"; theme.categoryColor = "#b45309";
-        theme.heroBannerBg1 = "#fef3c7"; theme.heroBannerBg2 = "#fde68a"; theme.heroBannerBorder = "#d97706"; theme.heroBannerText = "#451a03";
-        theme.heroTitle = `✨ ${cleanName} जी ✨`;
-        theme.subText = "ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु एवं अपार खुशियां प्रदान करें"; theme.subColor = "#854d0e";
-        theme.wishBoxBorder = "#fde68a"; theme.wishBoxHeader = "🎉 जन्मदिवस मंगलकामनाएं 🎉"; theme.wishBoxHeaderColor = "#b45309";
-        theme.senderLabel = "💐 शुभकामना प्रेषक:";
-      } else if (isAnniversary) {
-        theme.outerBg1 = "#fff1f2"; theme.outerBg2 = "#ffe4e6"; theme.outerBg3 = "#fecdd3";
-        theme.cardBg1 = "#ffffff"; theme.cardBg2 = "#fff5f5"; theme.cardBg3 = "#fff1f2";
-        theme.cardBorder = "#fb7185"; theme.cardShadow = "rgba(225, 29, 72, 0.16)";
-        theme.headerLeftBg = "#ffe4e6"; theme.headerLeftBorder = "#fecdd3"; theme.headerLeftText = "#9f1239";
-        theme.iconSquircle1 = "#e11d48"; theme.iconSquircle2 = "#be123c";
-        theme.iconShadow = "rgba(225, 29, 72, 0.35)"; theme.iconChar = "💍";
-        theme.categoryTag = "✨ वैवाहिक वर्षगांठ की हार्दिक बधाई ✨"; theme.categoryColor = "#9f1239";
-        theme.heroBannerBg1 = "#ffe4e6"; theme.heroBannerBg2 = "#fecdd3"; theme.heroBannerBorder = "#e11d48"; theme.heroBannerText = "#881337";
-        theme.heroTitle = `✨ ${cleanName} जी ✨`;
-        theme.subText = "सुखी, समृद्ध एवं मंगलमय दांपत्य जीवन की अनंत मंगलकामनाएं"; theme.subColor = "#9f1239";
-        theme.wishBoxBorder = "#fecdd3"; theme.wishBoxHeader = "💖 दांपत्य जीवन मंगलकामनाएं 💖"; theme.wishBoxHeaderColor = "#9f1239";
-        theme.senderBoxBg1 = "#fff1f2"; theme.senderBoxBg2 = "#ffe4e6"; theme.senderBoxBorder = "#fecdd3";
-        theme.senderLabel = "💐 मंगलकामना प्रेषक:"; theme.senderLabelColor = "#9f1239";
-        theme.senderBadgeBg1 = "#ffe4e6"; theme.senderBadgeBg2 = "#fecdd3"; theme.senderBadgeBorder = "#fb7185"; theme.senderBadgeText = "#881337";
-        theme.senderSubColor = "#be123c";
-      } else if (isPunyatithi) {
-        theme.outerBg1 = "#f8fafc"; theme.outerBg2 = "#f1f5f9"; theme.outerBg3 = "#e2e8f0";
-        theme.cardBg1 = "#ffffff"; theme.cardBg2 = "#f8fafc"; theme.cardBg3 = "#f1f5f9";
-        theme.cardBorder = "#94a3b8"; theme.cardShadow = "rgba(100, 116, 139, 0.18)";
-        theme.headerLeftBg = "#e2e8f0"; theme.headerLeftBorder = "#cbd5e1"; theme.headerLeftText = "#334155";
-        theme.iconSquircle1 = "#64748b"; theme.iconSquircle2 = "#475569";
-        theme.iconShadow = "rgba(71, 85, 105, 0.3)"; theme.iconChar = "🕊️";
-        theme.categoryTag = "🕊️ भावभीनी श्रद्धांजलि व शत-शत नमन 🕊️"; theme.categoryColor = "#1e293b";
-        theme.heroBannerBg1 = "#ffffff"; theme.heroBannerBg2 = "#f1f5f9"; theme.heroBannerBorder = "#64748b"; theme.heroBannerText = "#0f172a";
-        theme.heroTitle = `पूज्य ${cleanName} जी`;
-        theme.subText = "आपकी पावन स्मृतियां एवं संस्कार सदैव हमारे अंतःकरण में अमर रहेंगे"; theme.subColor = "#475569";
-        theme.wishBoxBorder = "#cbd5e1"; theme.wishBoxHeader = "🙏 श्रद्धांजलि एवं शत-शत नमन 🙏"; theme.wishBoxHeaderColor = "#334155";
-        theme.senderBoxBg1 = "#f8fafc"; theme.senderBoxBg2 = "#f1f5f9"; theme.senderBoxBorder = "#cbd5e1";
-        theme.senderLabel = "🙏 सादर श्रद्धांजलि प्रेषक:"; theme.senderLabelColor = "#334155";
-        theme.senderBadgeBg1 = "#ffffff"; theme.senderBadgeBg2 = "#f1f5f9"; theme.senderBadgeBorder = "#94a3b8"; theme.senderBadgeText = "#0f172a";
-        theme.senderSubColor = "#475569";
-        theme.footerTagline = "🕊️ दिवंगत पुण्यात्मा को अश्रुपूर्ण श्रद्धांजलि • शत-शत नमन 🕊️"; theme.footerTaglineColor = "#334155";
+      const person = Object.assign({}, vFound || {}, pFound || {}, data);
+      const personPhoto = data.photoUrl || data.photo || person.photoUrl || person.photo || person.avatar || null;
+      let targetImg = null;
+      if (personPhoto) {
+        try {
+          targetImg = await loadImagePromise(personPhoto);
+        } catch (e) {
+          console.warn("Could not load target photo for card:", e);
+        }
       }
 
-      // Step 5: Dynamic Content-Aware Dimension Calculations
+      // 3. Configure Theme, Badges, Typography & Occasion Texts
+      let theme = {};
+      let topBadgeText = "";
+      let heroTitle = "";
+      let subBadgeText = "";
+      let subTagline = "";
+      let wishBoxHeader = "";
+      let wishText = data.wish || "";
+      let endingPeaceMantra = "";
+      let footerMotto = "";
+      let footerBannerBg = "#5C1111";
+      let footerBannerBorder = "#B8860B";
+
+      if (isBirthday) {
+        // Theme A: जन्मदिवस (Birthday Card) — Vibrant, Royal & Festive
+        theme = {
+          outerBg1: "#FFFDF5", outerBg2: "#FFF8E7", outerBg3: "#FFF3D6",
+          cardBg1: "#FFFFFF", cardBg2: "#FFFCF2", cardBg3: "#FFF8E7",
+          cardBorder1: "#D97706", cardBorder2: "#F59E0B", cardShadow: "rgba(217, 119, 6, 0.20)",
+          cornerColor: "#D97706",
+          topBadgeBg1: "#D97706", topBadgeBg2: "#B45309", topBadgeBorder: "#F59E0B", topBadgeText: "#FFFFFF",
+          frameRing1: "#D97706", frameRing2: "#F59E0B", frameRing3: "#FEF08A",
+          heroTitleColor: "#78350F",
+          subBadgeBg1: "#FEF3C7", subBadgeBg2: "#FDE68A", subBadgeBorder: "#D97706", subBadgeText: "#78350F",
+          subTaglineColor: "#B45309",
+          wishBoxBorder: "#FDE68A", wishBoxShadow: "rgba(245, 158, 11, 0.10)",
+          wishBoxHeaderColor: "#9A3412",
+          senderBoxBg1: "#FFFDF5", senderBoxBg2: "#FEF3C7", senderBoxBorder: "#FDE68A",
+          senderLabelColor: "#9A3412",
+          senderBadgeBg1: "#FEF3C7", senderBadgeBg2: "#FDE68A", senderBadgeBorder: "#D97706", senderBadgeText: "#451A03",
+          senderRoleColor: "#B45309",
+          footerMottoColor: "#78350F"
+        };
+
+        topBadgeText = "जन्मदिवस की हार्दिक शुभकामनाएं";
+
+        // Calculate age
+        let age = null;
+        const dobVal = person.dob;
+        if (dobVal) {
+          const m = String(dobVal).match(/\b(19\d\d|20\d\d)\b/);
+          if (m) {
+            const bYear = parseInt(m[1], 10);
+            const diff = new Date().getFullYear() - bYear;
+            if (diff > 0 && diff < 125) age = diff;
+          }
+        }
+
+        // Honorific prefix
+        let honorific = "श्री";
+        const g = (person.gender || '').toLowerCase();
+        if (g === 'female' || g === 'f' || g === 'महिला') {
+          honorific = (person.spouse_name || person.spouse || person.anniversary) ? "श्रीमती" : "सुश्री";
+        } else if (age && age < 18) {
+          honorific = "प्रिय";
+        }
+        heroTitle = `${honorific} ${cleanBaseName} जी`;
+
+        if (age) {
+          subBadgeText = `🎂 ${age}वें जन्मदिवस की हार्दिक शुभकामनाएं 🎂`;
+        }
+        subTagline = "ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु एवं अपार खुशियां प्रदान करें";
+        wishBoxHeader = "💐 जन्मदिवस मंगलकामनाएं 💐";
+
+        if (!wishText) {
+          wishText = "परमपिता परमेश्वर से प्रार्थना है कि आपका जीवन उत्तम स्वास्थ्य, सुख-समृद्धि, दीर्घायु एवं निरंतर सफलता से आलोकित रहे। आपका प्रत्येक क्षण नई उमंग, खुशियों और उज्ज्वल भविष्य की नई ऊंचाइयों से परिपूर्ण हो!\n\nसमस्त भाटी परिवार की ओर से आपको जन्मदिन की अनंत शुभकामनाएं!";
+        }
+
+        footerMotto = "धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन";
+        footerBannerBg = "#451A03"; // Dark royal bronze
+        footerBannerBorder = "#F59E0B";
+
+      } else if (isAnniversary) {
+        // Theme B: शादी की सालगिरह (Marriage Anniversary Card) — Romantic, Traditional & Auspicious
+        theme = {
+          outerBg1: "#FFF5F7", outerBg2: "#FFE8ED", outerBg3: "#FFF0F3",
+          cardBg1: "#FFFFFF", cardBg2: "#FFF9FA", cardBg3: "#FFF3F5",
+          cardBorder1: "#BE123C", cardBorder2: "#B8860B", cardShadow: "rgba(190, 18, 60, 0.20)",
+          cornerColor: "#BE123C",
+          topBadgeBg1: "#9F1239", topBadgeBg2: "#881337", topBadgeBorder: "#B8860B", topBadgeText: "#FFFFFF",
+          frameRing1: "#B8860B", frameRing2: "#BE123C", frameRing3: "#FECDD3",
+          heroTitleColor: "#881337",
+          subBadgeBg1: "#FFE4E6", subBadgeBg2: "#FECDD3", subBadgeBorder: "#BE123C", subBadgeText: "#881337",
+          subTaglineColor: "#9F1239",
+          wishBoxBorder: "#FECDD3", wishBoxShadow: "rgba(225, 29, 72, 0.10)",
+          wishBoxHeaderColor: "#9F1239",
+          senderBoxBg1: "#FFF5F7", senderBoxBg2: "#FFE4E6", senderBoxBorder: "#FECDD3",
+          senderLabelColor: "#9F1239",
+          senderBadgeBg1: "#FFE4E6", senderBadgeBg2: "#FECDD3", senderBadgeBorder: "#BE123C", senderBadgeText: "#881337",
+          senderRoleColor: "#9F1239",
+          footerMottoColor: "#881337"
+        };
+
+        topBadgeText = "वैवाहिक वर्षगांठ की हार्दिक शुभकामनाएं";
+
+        // Calculate anniversary years
+        let anniYears = null;
+        const annVal = person.anniversary;
+        if (annVal) {
+          const m = String(annVal).match(/\b(19\d\d|20\d\d)\b/);
+          if (m) {
+            const aYear = parseInt(m[1], 10);
+            const diff = new Date().getFullYear() - aYear;
+            if (diff > 0 && diff < 90) anniYears = diff;
+          }
+        }
+
+        // Couple names
+        const spouse = person.spouse_name || person.spouse || "";
+        if (spouse) {
+          const cleanSpouse = spouse.replace(/^(श्रीमती|श्री)\s*/g, '').replace(/(\s*जी)+$/g, '').trim();
+          heroTitle = `श्री ${cleanBaseName} एवं श्रीमती ${cleanSpouse}`;
+        } else {
+          heroTitle = `श्री ${cleanBaseName} जी एवं परिवार`;
+        }
+
+        if (anniYears) {
+          subBadgeText = `💐 ${anniYears}वीं वैवाहिक वर्षगांठ 💐`;
+        }
+        subTagline = "सुखी, समृद्ध एवं मंगलमय दांपत्य जीवन की अनंत मंगलकामनाएं";
+        wishBoxHeader = "💐 दांपत्य जीवन मंगलकामनाएं 💐";
+
+        if (!wishText) {
+          wishText = "आपका दांपत्य जीवन सदैव अटूट प्रेम, आपसी विश्वास, सुख-समृद्धि एवं ईश्वर के असीम आशीर्वाद से महकता रहे। दांपत्य जीवन के यह सुनहरे वर्ष यूं ही खुशियों, सौहार्द व मधुर स्मृतियों से सजे रहें।\n\nसमस्त भाटी परिवार की ओर से विवाह वर्षगांठ की हार्दिक बधाई व मंगलकामनाएं!";
+        }
+
+        footerMotto = "स्नेह • विश्वास • समर्पण | भाटी परिवार";
+        footerBannerBg = "#4C0519"; // Deep wine/maroon
+        footerBannerBorder = "#B8860B";
+
+      } else if (isPunyatithi) {
+        // Theme C: पुण्यतिथि / पावन स्मृति दिवस (Punyatithi Card) — Peaceful, Spiritual & Respectful
+        theme = {
+          outerBg1: "#FDF8F0", outerBg2: "#F7F1E6", outerBg3: "#EFE8D8",
+          cardBg1: "#FFFFFF", cardBg2: "#FCFBF7", cardBg3: "#F8F5EE",
+          cardBorder1: "#5C1111", cardBorder2: "#B8860B", cardShadow: "rgba(92, 17, 17, 0.20)",
+          cornerColor: "#5C1111",
+          topBadgeBg1: "#5C1111", topBadgeBg2: "#4A0E0E", topBadgeBorder: "#B8860B", topBadgeText: "#FFFFFF",
+          frameRing1: "#B8860B", frameRing2: "#5C1111", frameRing3: "#D4AF37",
+          heroTitleColor: "#4A0E0E",
+          subBadgeBg1: "#F5EFEB", subBadgeBg2: "#EFE8D8", subBadgeBorder: "#B8860B", subBadgeText: "#4A0E0E",
+          subTaglineColor: "#5C1111",
+          wishBoxBorder: "#D4C5A9", wishBoxShadow: "rgba(92, 17, 17, 0.08)",
+          wishBoxHeaderColor: "#5C1111",
+          senderBoxBg1: "#FDF8F0", senderBoxBg2: "#F7F1E6", senderBoxBorder: "#D4C5A9",
+          senderLabelColor: "#5C1111",
+          senderBadgeBg1: "#F7F1E6", senderBadgeBg2: "#EFE8D8", senderBadgeBorder: "#B8860B", senderBadgeText: "#4A0E0E",
+          senderRoleColor: "#5C1111",
+          footerMottoColor: "#5C1111"
+        };
+
+        topBadgeText = "पावन स्मृति दिवस • भावभीनी श्रद्धांजलि";
+        heroTitle = `पूज्य स्व. ${cleanBaseName} जी`;
+
+        if (person.dod) {
+          subTagline = `पावन स्मृति दिवस (${(typeof formatDisplayDate === 'function') ? formatDisplayDate(person.dod) : person.dod}) • शत-शत नमन`;
+        } else {
+          subTagline = "आपकी पावन स्मृतियां एवं संस्कार सदैव हमारे अंतःकरण में अमर रहेंगे";
+        }
+        wishBoxHeader = "🙏 पावन श्रद्धांजलि एवं शत-शत नमन 🙏";
+
+        if (!wishText) {
+          wishText = "आपकी पावन स्मृतियां, उच्च आदर्श, संस्कार और स्नेह सदैव हमारे अंतःकरण में जीवित रहेंगे। आपके दिखाए सत्पथ और जीवन मूल्यों पर चलना ही हमारी सच्ची श्रद्धांजलि है।\n\nईश्वर से विनम्र प्रार्थना है कि दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति एवं मोक्ष प्रदान करें।";
+        }
+        endingPeaceMantra = "ॐ शांतिः शांतिः शांतिः 🙏";
+
+        footerMotto = "दिवंगत पुण्यात्मा को अश्रुपूर्ण श्रद्धांजलि • शत-शत नमन";
+        footerBannerBg = "#5C1111"; // Deep devotional maroon
+        footerBannerBorder = "#B8860B";
+
+      } else {
+        // Universal Festive / National theme
+        theme = {
+          outerBg1: "#FFFBEB", outerBg2: "#FEF3C7", outerBg3: "#FFEDD5",
+          cardBg1: "#FFFFFF", cardBg2: "#FFFDF9", cardBg3: "#FFF7ED",
+          cardBorder1: "#EA580C", cardBorder2: "#F59E0B", cardShadow: "rgba(234, 88, 12, 0.18)",
+          cornerColor: "#EA580C",
+          topBadgeBg1: "#EA580C", topBadgeBg2: "#C2410C", topBadgeBorder: "#F59E0B", topBadgeText: "#FFFFFF",
+          frameRing1: "#F59E0B", frameRing2: "#EA580C", frameRing3: "#FEF08A",
+          heroTitleColor: "#78350F",
+          subBadgeBg1: "#FEF3C7", subBadgeBg2: "#FDE68A", subBadgeBorder: "#EA580C", subBadgeText: "#78350F",
+          subTaglineColor: "#C2410C",
+          wishBoxBorder: "#FDE68A", wishBoxShadow: "rgba(234, 88, 12, 0.10)",
+          wishBoxHeaderColor: "#9A3412",
+          senderBoxBg1: "#FFFBEB", senderBoxBg2: "#FEF3C7", senderBoxBorder: "#FDE68A",
+          senderLabelColor: "#9A3412",
+          senderBadgeBg1: "#FEF3C7", senderBadgeBg2: "#FDE68A", senderBadgeBorder: "#EA580C", senderBadgeText: "#451A03",
+          senderRoleColor: "#B45309",
+          footerMottoColor: "#9A3412"
+        };
+
+        topBadgeText = "पावन पर्व एवं उत्सव";
+        heroTitle = cleanBaseName;
+        subTagline = data.sub || "पावन हिंदू पर्व • समस्त परिवार हेतु हार्दिक मंगलकामनाएं";
+        wishBoxHeader = "🪔 पावन मंगलकामनाएं 🪔";
+        if (!wishText) {
+          wishText = `${cleanBaseName} के पावन अवसर पर आपके जीवन में सुख, शांति, समृद्धि एवं उत्तम स्वास्थ्य का संचार हो। समस्त भाटी परिवार की ओर से हार्दिक मंगलकामनाएं!`;
+        }
+        footerMotto = "धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन";
+        footerBannerBg = "#78350F";
+        footerBannerBorder = "#F59E0B";
+      }
+
+      wishText = wishText.replace(/\n{3,}/g, '\n\n').trim();
+
+      // 4. Content Measurement & Dynamic Canvas Height Layout
       const measureCanvas = document.createElement("canvas");
       const measureCtx = measureCanvas.getContext("2d");
 
-      let wishFontSize = 33;
+      let wishFontSize = 32;
       if (wishText.length > 200) wishFontSize = 29;
-      if (wishText.length > 320) wishFontSize = 26;
-      measureCtx.font = `600 ${wishFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
+      if (wishText.length > 340) wishFontSize = 26;
+      measureCtx.font = `600 ${wishFontSize}px 'Noto Serif Devanagari', 'Noto Sans Devanagari', serif`;
 
-      const wishBoxW = 1040;
+      const wishBoxW = 1048;
       const wishLines = wrapCanvasText(measureCtx, wishText, wishBoxW - 140);
       const lineHeight = Math.round(wishFontSize * 1.55);
 
-      const cardMargin = 40;
-      const cardW = width - (cardMargin * 2); // 1120px
+      const cardMargin = 38;
+      const cardW = width - (cardMargin * 2);
 
-      const topHeaderY = cardMargin + 25; // 65
-      const topHeaderH = 62;
+      const topHeaderY = cardMargin + 26;
+      const topHeaderH = 58;
 
-      const sqSize = 104;
-      const sqY = topHeaderY + topHeaderH + 24; // 151
-      const sqX = (width - sqSize) / 2;
+      const topBadgeY = topHeaderY + topHeaderH + 20;
+      const topBadgeH = 54;
 
-      const catTagY = sqY + sqSize + 24; // 279
+      const targetRadius = 90;
+      const garlandPadding = isPunyatithi ? 22 : 12;
+      const targetCx = width / 2;
+      const targetCy = topBadgeY + topBadgeH + 20 + targetRadius + (isPunyatithi ? 10 : 0);
 
-      const heroBannerY = catTagY + 24; // 303
-      const heroBannerH = 92;
+      let nextContentY = targetCy + targetRadius + garlandPadding + 22;
 
-      const subY = heroBannerY + heroBannerH + 24; // 419
+      let subBadgeY = 0;
+      let subBadgeH = 0;
+      if (subBadgeText) {
+        subBadgeY = nextContentY;
+        subBadgeH = 46;
+        nextContentY = subBadgeY + subBadgeH + 16;
+      }
 
-      const wishBoxY = subY + 20; // 439
+      const heroNameY = nextContentY;
+      const heroNameH = 74;
+      nextContentY = heroNameY + heroNameH + 16;
+
+      const subTaglineY = nextContentY;
+      const subTaglineH = 34;
+      nextContentY = subTaglineY + subTaglineH + 24;
+
+      const wishBoxY = nextContentY;
       const wishBoxX = (width - wishBoxW) / 2;
 
-      const wishBoxHeaderY = wishBoxY + 36;
-      const wishTextStartY = wishBoxHeaderY + 48;
+      const wishBoxHeaderY = wishBoxY + 34;
+      const wishTextStartY = wishBoxHeaderY + 46;
       const wishTextH = wishLines.length * lineHeight;
       const wishTextEndY = wishTextStartY + wishTextH;
-      const wishTaglineY = wishTextEndY + 36;
-      const wishBoxH = (wishTaglineY + 28) - wishBoxY;
 
-      const senderBoxY = wishBoxY + wishBoxH + 26;
-      const senderBoxH = 210;
-      const senderBoxW = 1040;
+      let wishInnerBottomY = wishTextEndY;
+      let peaceMantraY = 0;
+      if (endingPeaceMantra) {
+        peaceMantraY = wishInnerBottomY + 28;
+        wishInnerBottomY = peaceMantraY + 32;
+      }
+
+      const wishTaglineY = wishInnerBottomY + 26;
+      const wishBoxH = (wishTaglineY + 32) - wishBoxY;
+
+      const senderBoxY = wishBoxY + wishBoxH + 24;
+      const senderBoxH = 196;
+      const senderBoxW = 1048;
       const senderBoxX = (width - senderBoxW) / 2;
 
       const cardBottom = senderBoxY + senderBoxH + 34;
       const cardH = cardBottom - cardMargin;
 
-      const footerY1 = cardBottom + 32;
-      const appBadgeY = footerY1 + 26;
+      const footerMottoY = cardBottom + 30;
+      const appBadgeY = footerMottoY + 26;
       const appBadgeH = 64;
-      const appBadgeW = 940;
+      const appBadgeW = 960;
       const appBadgeX = (width - appBadgeW) / 2;
 
       const totalHeight = appBadgeY + appBadgeH + 42;
 
-      // Step 6: Render Canvas
+      // 5. Render Canvas
       const canvas = document.createElement("canvas");
       canvas.width = width;
       canvas.height = totalHeight;
@@ -14868,7 +15031,7 @@
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
 
-      // 1. Overall Outer Gradient
+      // A. Outer Background Gradient
       const outGrad = ctx.createLinearGradient(0, 0, width, totalHeight);
       outGrad.addColorStop(0, theme.outerBg1);
       outGrad.addColorStop(0.5, theme.outerBg2);
@@ -14876,9 +15039,9 @@
       ctx.fillStyle = outGrad;
       ctx.fillRect(0, 0, width, totalHeight);
 
-      // Ambient decorative watermark rings
+      // Ambient decorative soft halos
       ctx.save();
-      ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
       ctx.beginPath();
       ctx.arc(140, 160, 260, 0, Math.PI * 2);
       ctx.fill();
@@ -14887,143 +15050,320 @@
       ctx.fill();
       ctx.restore();
 
-      // 2. Main Inset Card
+      // B. Main Inset Card Background with Shadow
       ctx.save();
       ctx.shadowColor = theme.cardShadow;
       ctx.shadowBlur = 36;
-      ctx.shadowOffsetY = 14;
+      ctx.shadowOffsetY = 12;
       const cardGrad = ctx.createLinearGradient(cardMargin, cardMargin, cardMargin, cardMargin + cardH);
       cardGrad.addColorStop(0, theme.cardBg1);
-      cardGrad.addColorStop(0.7, theme.cardBg2);
+      cardGrad.addColorStop(0.6, theme.cardBg2);
       cardGrad.addColorStop(1, theme.cardBg3);
       ctx.fillStyle = cardGrad;
-      canvasRoundRect(ctx, cardMargin, cardMargin, cardW, cardH, 44, true, false);
+      canvasRoundRect(ctx, cardMargin, cardMargin, cardW, cardH, 40, true, false);
       ctx.restore();
 
-      // Card border
-      ctx.strokeStyle = theme.cardBorder;
+      // Card Double Border
+      ctx.save();
+      ctx.strokeStyle = theme.cardBorder1;
       ctx.lineWidth = 3.5;
-      canvasRoundRect(ctx, cardMargin, cardMargin, cardW, cardH, 44, false, true);
+      canvasRoundRect(ctx, cardMargin, cardMargin, cardW, cardH, 40, false, true);
 
-      // 3. Top Header Bar
+      // Inner delicate border line
+      ctx.strokeStyle = theme.cardBorder2;
+      ctx.lineWidth = 1.5;
+      canvasRoundRect(ctx, cardMargin + 6, cardMargin + 6, cardW - 12, cardH - 12, 36, false, true);
+      ctx.restore();
+
+      // Traditional Corner Accents
+      ctx.save();
+      ctx.strokeStyle = theme.cornerColor;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.45;
+      const cInset = cardMargin + 14;
+      const cLen = 32;
+      ctx.beginPath(); ctx.moveTo(cInset, cInset + cLen); ctx.lineTo(cInset, cInset); ctx.lineTo(cInset + cLen, cInset); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cardMargin + cardW - 14 - cLen, cInset); ctx.lineTo(cardMargin + cardW - 14, cInset); ctx.lineTo(cardMargin + cardW - 14, cInset + cLen); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cInset, cardMargin + cardH - 14 - cLen); ctx.lineTo(cInset, cardMargin + cardH - 14); ctx.lineTo(cInset + cLen, cardMargin + cardH - 14); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cardMargin + cardW - 14 - cLen, cardMargin + cardH - 14); ctx.lineTo(cardMargin + cardW - 14, cardMargin + cardH - 14); ctx.lineTo(cardMargin + cardW - 14, cardMargin + cardH - 14 - cLen); ctx.stroke();
+      ctx.restore();
+
+      // C. Top Header Bar (Pills)
       const todayDateFormatted = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
       // Left Pill
-      const leftPillW = 380;
-      const leftPillX = cardMargin + 32;
+      const leftPillW = 390;
+      const leftPillX = cardMargin + 28;
       ctx.save();
-      ctx.fillStyle = theme.headerLeftBg;
-      canvasRoundRect(ctx, leftPillX, topHeaderY, leftPillW, topHeaderH, 31, true, false);
-      ctx.strokeStyle = theme.headerLeftBorder;
-      ctx.lineWidth = 2.5;
-      canvasRoundRect(ctx, leftPillX, topHeaderY, leftPillW, topHeaderH, 31, false, true);
-      ctx.fillStyle = theme.headerLeftText;
-      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.fillStyle = theme.subBadgeBg1;
+      canvasRoundRect(ctx, leftPillX, topHeaderY, leftPillW, topHeaderH, 29, true, false);
+      ctx.strokeStyle = theme.subBadgeBorder;
+      ctx.lineWidth = 2;
+      canvasRoundRect(ctx, leftPillX, topHeaderY, leftPillW, topHeaderH, 29, false, true);
+      ctx.fillStyle = theme.subBadgeText;
+      ctx.font = "bold 24px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      const leftPillText = isPunyatithi ? "🕊️ पावन स्मृति दिवस" : (isBirthday ? "🎂 जन्मदिवस विशेष" : (isAnniversary ? "💍 वैवाहिक वर्षगांठ" : `☀️ ${todayDateFormatted}`));
-      ctx.fillText(leftPillText, leftPillX + leftPillW / 2, topHeaderY + topHeaderH / 2);
+      const leftPillLabel = isPunyatithi ? "🕊️ पावन स्मृति दिवस" : (isBirthday ? "🎂 जन्मदिवस विशेष" : (isAnniversary ? "💐 वैवाहिक वर्षगांठ" : `☀️ ${todayDateFormatted}`));
+      ctx.fillText(leftPillLabel, leftPillX + leftPillW / 2, topHeaderY + topHeaderH / 2);
       ctx.restore();
 
       // Right Pill (Group Branding)
-      const rightPillW = 440;
-      const rightPillX = cardMargin + cardW - rightPillW - 32;
+      const rightPillW = 430;
+      const rightPillX = cardMargin + cardW - rightPillW - 28;
       ctx.save();
-      ctx.fillStyle = theme.headerRightBg;
-      canvasRoundRect(ctx, rightPillX, topHeaderY, rightPillW, topHeaderH, 31, true, false);
-      ctx.strokeStyle = theme.headerRightBorder;
+      ctx.fillStyle = theme.subBadgeBg1;
+      canvasRoundRect(ctx, rightPillX, topHeaderY, rightPillW, topHeaderH, 29, true, false);
+      ctx.strokeStyle = theme.subBadgeBorder;
       ctx.lineWidth = 2;
-      canvasRoundRect(ctx, rightPillX, topHeaderY, rightPillW, topHeaderH, 31, false, true);
-      ctx.fillStyle = theme.headerRightText;
-      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      canvasRoundRect(ctx, rightPillX, topHeaderY, rightPillW, topHeaderH, 29, false, true);
+      ctx.fillStyle = theme.subBadgeText;
+      ctx.font = "bold 24px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("🚩 युवा शक्ति ग्रुप (कुचेरा)", rightPillX + rightPillW / 2, topHeaderY + topHeaderH / 2);
+      ctx.fillText("युवा शक्ति ग्रुप (कुचेरा)", rightPillX + rightPillW / 2, topHeaderY + topHeaderH / 2);
       ctx.restore();
 
-      // 4. Center Squircle Icon
+      // D. Top Occasion Badge
       ctx.save();
-      ctx.shadowColor = theme.iconShadow;
-      ctx.shadowBlur = 24;
-      ctx.shadowOffsetY = 8;
-      const sqGrad = ctx.createLinearGradient(sqX, sqY, sqX + sqSize, sqY + sqSize);
-      sqGrad.addColorStop(0, theme.iconSquircle1);
-      sqGrad.addColorStop(1, theme.iconSquircle2);
-      ctx.fillStyle = sqGrad;
-      canvasRoundRect(ctx, sqX, sqY, sqSize, sqSize, 32, true, false);
+      ctx.font = "bold 29px 'Noto Serif Devanagari', 'Poppins', sans-serif";
+      const topBadgeMetrics = ctx.measureText(topBadgeText);
+      const topBadgeW = Math.max(520, topBadgeMetrics.width + 64);
+      const topBadgeX = (width - topBadgeW) / 2;
+
+      ctx.shadowColor = "rgba(0, 0, 0, 0.12)";
+      ctx.shadowBlur = 18;
+      ctx.shadowOffsetY = 6;
+      const topBadgeGrad = ctx.createLinearGradient(topBadgeX, topBadgeY, topBadgeX + topBadgeW, topBadgeY + topBadgeH);
+      topBadgeGrad.addColorStop(0, theme.topBadgeBg1);
+      topBadgeGrad.addColorStop(1, theme.topBadgeBg2);
+      ctx.fillStyle = topBadgeGrad;
+      canvasRoundRect(ctx, topBadgeX, topBadgeY, topBadgeW, topBadgeH, 27, true, false);
+
+      ctx.strokeStyle = theme.topBadgeBorder;
+      ctx.lineWidth = 2.5;
+      canvasRoundRect(ctx, topBadgeX, topBadgeY, topBadgeW, topBadgeH, 27, false, true);
+
+      ctx.fillStyle = theme.topBadgeText;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(topBadgeText, width / 2, topBadgeY + topBadgeH / 2);
       ctx.restore();
 
-      ctx.font = "56px sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(theme.iconChar, sqX + sqSize / 2, sqY + sqSize / 2 + 2);
+      // E. TARGET MEMBER / DECEASED PERSON CIRCULAR FRAME
+      ctx.save();
+      if (isPunyatithi) {
+        const garlandRadius = targetRadius + 14;
+        const garlandCount = 34;
 
-      // 5. Category Banner Tag
-      ctx.fillStyle = theme.categoryColor;
-      ctx.font = "bold 32px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(theme.categoryTag, width / 2, catTagY);
+        for (let i = 0; i < garlandCount; i++) {
+          const angle = (i / garlandCount) * Math.PI * 2;
+          const fx = targetCx + garlandRadius * Math.cos(angle);
+          const fy = targetCy + garlandRadius * Math.sin(angle);
+          const isYellow = (i % 2 === 0);
 
-      // 6. Hero Name Banner
-      ctx.font = "bold 52px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      const nameMetrics = ctx.measureText(theme.heroTitle);
-      const heroBannerW = Math.min(1040, Math.max(500, nameMetrics.width + 80));
+          ctx.save();
+          ctx.shadowColor = "rgba(0,0,0,0.18)";
+          ctx.shadowBlur = 6;
+          ctx.fillStyle = isYellow ? "#FBBF24" : "#F97316";
+          ctx.beginPath();
+          ctx.arc(fx, fy, 8, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = isYellow ? "#D97706" : "#EA580C";
+          ctx.beginPath();
+          ctx.arc(fx, fy, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        const tasselY = targetCy + garlandRadius + 8;
+        ctx.save();
+        ctx.fillStyle = "#F59E0B";
+        ctx.beginPath();
+        ctx.arc(targetCx, tasselY, 10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#EA580C";
+        ctx.beginPath();
+        ctx.arc(targetCx, tasselY + 11, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.shadowColor = "rgba(92, 17, 17, 0.25)";
+        ctx.shadowBlur = 18;
+        ctx.shadowOffsetY = 6;
+        ctx.strokeStyle = theme.frameRing1;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(targetCx, targetCy, targetRadius + 2, 0, Math.PI * 2);
+        ctx.stroke();
+
+        if (targetImg) {
+          drawClippedCircleImage(ctx, targetImg, targetCx, targetCy, targetRadius);
+        } else {
+          const pGrad = ctx.createRadialGradient(targetCx, targetCy, 10, targetCx, targetCy, targetRadius);
+          pGrad.addColorStop(0, "#4A0E0E");
+          pGrad.addColorStop(0.7, "#2D0808");
+          pGrad.addColorStop(1, "#180303");
+          ctx.fillStyle = pGrad;
+          ctx.beginPath();
+          ctx.arc(targetCx, targetCy, targetRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#FDE68A";
+          ctx.font = "bold 82px 'Noto Serif Devanagari', 'Inter', serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("ॐ", targetCx, targetCy + 2);
+
+          ctx.fillStyle = "#F59E0B";
+          ctx.font = "26px sans-serif";
+          ctx.fillText("🪔", targetCx, targetCy + targetRadius - 24);
+        }
+
+      } else {
+        ctx.shadowColor = "rgba(0, 0, 0, 0.18)";
+        ctx.shadowBlur = 20;
+        ctx.shadowOffsetY = 8;
+
+        ctx.strokeStyle = theme.frameRing1;
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.arc(targetCx, targetCy, targetRadius + 4, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = theme.frameRing3;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(targetCx, targetCy, targetRadius + 1, 0, Math.PI * 2);
+        ctx.stroke();
+
+        const beadCount = 24;
+        const beadRadius = targetRadius + 11;
+        for (let b = 0; b < beadCount; b++) {
+          const bAngle = (b / beadCount) * Math.PI * 2;
+          const bx = targetCx + beadRadius * Math.cos(bAngle);
+          const by = targetCy + beadRadius * Math.sin(bAngle);
+          ctx.fillStyle = theme.frameRing2;
+          ctx.beginPath();
+          ctx.arc(bx, by, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        if (targetImg) {
+          drawClippedCircleImage(ctx, targetImg, targetCx, targetCy, targetRadius);
+        } else {
+          const avGrad = ctx.createLinearGradient(targetCx - targetRadius, targetCy - targetRadius, targetCx + targetRadius, targetCy + targetRadius);
+          avGrad.addColorStop(0, theme.topBadgeBg1);
+          avGrad.addColorStop(1, theme.topBadgeBg2);
+          ctx.fillStyle = avGrad;
+          ctx.beginPath();
+          ctx.arc(targetCx, targetCy, targetRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#FFFFFF";
+          ctx.font = "bold 78px 'Noto Serif Devanagari', 'Poppins', serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          const initChar = cleanBaseName.charAt(0) || "भा";
+          ctx.fillText(initChar, targetCx, targetCy - 4);
+
+          ctx.font = "26px sans-serif";
+          const centerEmoji = isAnniversary ? "💍" : "🎂";
+          ctx.fillText(centerEmoji, targetCx, targetCy + targetRadius - 24);
+        }
+      }
+      ctx.restore();
+
+      // F. Sub-Badge (Age or Anniversary Years Pill, if available)
+      if (subBadgeText) {
+        ctx.save();
+        ctx.font = "bold 25px 'Noto Sans Devanagari', 'Poppins', sans-serif";
+        const sbMetrics = ctx.measureText(subBadgeText);
+        const sbW = Math.max(420, sbMetrics.width + 56);
+        const sbX = (width - sbW) / 2;
+
+        ctx.shadowColor = "rgba(0, 0, 0, 0.08)";
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 4;
+        const sbGrad = ctx.createLinearGradient(sbX, subBadgeY, sbX + sbW, subBadgeY + subBadgeH);
+        sbGrad.addColorStop(0, theme.subBadgeBg1);
+        sbGrad.addColorStop(1, theme.subBadgeBg2);
+        ctx.fillStyle = sbGrad;
+        canvasRoundRect(ctx, sbX, subBadgeY, sbW, subBadgeH, 23, true, false);
+
+        ctx.strokeStyle = theme.subBadgeBorder;
+        ctx.lineWidth = 2;
+        canvasRoundRect(ctx, sbX, subBadgeY, sbW, subBadgeH, 23, false, true);
+
+        ctx.fillStyle = theme.subBadgeText;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(subBadgeText, width / 2, subBadgeY + subBadgeH / 2);
+        ctx.restore();
+      }
+
+      // G. Hero Name Banner Card
+      ctx.save();
+      ctx.font = "bold 48px 'Noto Serif Devanagari', 'Poppins', serif";
+      let heroFontSize = 48;
+      let nameMetrics = ctx.measureText(heroTitle);
+      if (nameMetrics.width > 900) {
+        heroFontSize = 40;
+        ctx.font = `bold ${heroFontSize}px 'Noto Serif Devanagari', 'Poppins', serif`;
+        nameMetrics = ctx.measureText(heroTitle);
+      }
+      const heroBannerW = Math.min(1048, Math.max(520, nameMetrics.width + 80));
       const heroBannerX = (width - heroBannerW) / 2;
 
-      ctx.save();
       ctx.shadowColor = "rgba(0, 0, 0, 0.08)";
-      ctx.shadowBlur = 20;
+      ctx.shadowBlur = 18;
       ctx.shadowOffsetY = 6;
-      const heroGrad = ctx.createLinearGradient(heroBannerX, heroBannerY, heroBannerX + heroBannerW, heroBannerY + heroBannerH);
-      heroGrad.addColorStop(0, theme.heroBannerBg1);
-      heroGrad.addColorStop(1, theme.heroBannerBg2);
+      const heroGrad = ctx.createLinearGradient(heroBannerX, heroNameY, heroBannerX + heroBannerW, heroNameY + heroNameH);
+      heroGrad.addColorStop(0, theme.subBadgeBg1);
+      heroGrad.addColorStop(1, theme.subBadgeBg2);
       ctx.fillStyle = heroGrad;
-      canvasRoundRect(ctx, heroBannerX, heroBannerY, heroBannerW, heroBannerH, 26, true, false);
+      canvasRoundRect(ctx, heroBannerX, heroNameY, heroBannerW, heroNameH, 24, true, false);
+
+      ctx.strokeStyle = theme.subBadgeBorder;
+      ctx.lineWidth = 2.5;
+      canvasRoundRect(ctx, heroBannerX, heroNameY, heroBannerW, heroNameH, 24, false, true);
+
+      ctx.fillStyle = theme.heroTitleColor;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(heroTitle, width / 2, heroNameY + heroNameH / 2);
       ctx.restore();
 
-      ctx.strokeStyle = theme.heroBannerBorder;
-      ctx.lineWidth = 3.5;
-      canvasRoundRect(ctx, heroBannerX, heroBannerY, heroBannerW, heroBannerH, 26, false, true);
-
-      // Render Hero Name
-      ctx.fillStyle = theme.heroBannerText;
-      let nameFontSize = 52;
-      if (nameMetrics.width > heroBannerW - 40) nameFontSize = 42;
-      ctx.font = `bold ${nameFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
+      // H. Subtitle / Tagline below Hero Name
+      ctx.save();
+      ctx.fillStyle = theme.subTaglineColor;
+      ctx.font = "600 24px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(theme.heroTitle, width / 2, heroBannerY + heroBannerH / 2);
+      ctx.fillText(subTagline, width / 2, subTaglineY + subTaglineH / 2);
+      ctx.restore();
 
-      // 7. Subtitle / Tagline below hero
-      ctx.fillStyle = theme.subColor;
-      ctx.font = "600 24px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(theme.subText, width / 2, subY);
-
-      // 8. Frosted White Inner Wish Box (Dynamic Height - Zero Blank Space!)
+      // I. Frosted Inner Wish Box
       ctx.save();
       ctx.shadowColor = theme.wishBoxShadow;
       ctx.shadowBlur = 24;
       ctx.shadowOffsetY = 8;
       ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-      canvasRoundRect(ctx, wishBoxX, wishBoxY, wishBoxW, wishBoxH, 34, true, false);
-      ctx.restore();
+      canvasRoundRect(ctx, wishBoxX, wishBoxY, wishBoxW, wishBoxH, 32, true, false);
 
       ctx.strokeStyle = theme.wishBoxBorder;
-      ctx.lineWidth = 3;
-      canvasRoundRect(ctx, wishBoxX, wishBoxY, wishBoxW, wishBoxH, 34, false, true);
+      ctx.lineWidth = 2.5;
+      canvasRoundRect(ctx, wishBoxX, wishBoxY, wishBoxW, wishBoxH, 32, false, true);
 
       // Header of Wish Box
       ctx.fillStyle = theme.wishBoxHeaderColor;
-      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.font = "bold 26px 'Noto Serif Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(theme.wishBoxHeader, width / 2, wishBoxHeaderY);
+      ctx.fillText(wishBoxHeader, width / 2, wishBoxHeaderY);
 
       // Dotted Divider inside Wish Box
-      ctx.save();
       ctx.strokeStyle = theme.wishBoxBorder;
       ctx.lineWidth = 2;
       ctx.setLineDash([10, 8]);
@@ -15034,8 +15374,9 @@
       ctx.restore();
 
       // Render Wish Text Line by Line
-      ctx.font = `600 ${wishFontSize}px 'Noto Sans Devanagari', 'Inter', sans-serif`;
-      ctx.fillStyle = "#1e293b";
+      ctx.save();
+      ctx.font = `600 ${wishFontSize}px 'Noto Serif Devanagari', 'Noto Sans Devanagari', serif`;
+      ctx.fillStyle = "#1E293B";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
       let curWishY = wishTextStartY;
@@ -15044,14 +15385,24 @@
         curWishY += lineHeight;
       }
 
-      // Group Subtext inside Wish Box (snug below text)
-      ctx.fillStyle = theme.subColor;
-      ctx.font = "bold 23px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      // If Punyatithi: Render Concluding Peace Mantra
+      if (endingPeaceMantra) {
+        ctx.fillStyle = "#5C1111";
+        ctx.font = "bold 32px 'Noto Serif Devanagari', 'Noto Sans Devanagari', serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(endingPeaceMantra, width / 2, peaceMantraY);
+      }
+
+      // Group Subtext inside Wish Box
+      ctx.fillStyle = theme.subTaglineColor;
+      ctx.font = "bold 23px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("— समस्त युवा शक्ति ग्रुप परिवार (भाटी परिवार • कुचेरा) —", width / 2, wishTaglineY);
+      ctx.restore();
 
-      // 9. 📸 SENDER SECTION (भेजने वाले का नाम और फोटो - Bottom Container)
+      // J. SENDER SECTION
       ctx.save();
       ctx.shadowColor = "rgba(0, 0, 0, 0.08)";
       ctx.shadowBlur = 20;
@@ -15060,125 +15411,116 @@
       senderGrad.addColorStop(0, theme.senderBoxBg1);
       senderGrad.addColorStop(1, theme.senderBoxBg2);
       ctx.fillStyle = senderGrad;
-      canvasRoundRect(ctx, senderBoxX, senderBoxY, senderBoxW, senderBoxH, 34, true, false);
-      ctx.restore();
+      canvasRoundRect(ctx, senderBoxX, senderBoxY, senderBoxW, senderBoxH, 32, true, false);
 
       ctx.strokeStyle = theme.senderBoxBorder;
-      ctx.lineWidth = 3;
-      canvasRoundRect(ctx, senderBoxX, senderBoxY, senderBoxW, senderBoxH, 34, false, true);
+      ctx.lineWidth = 2.5;
+      canvasRoundRect(ctx, senderBoxX, senderBoxY, senderBoxW, senderBoxH, 32, false, true);
 
       // Sender Circular Avatar (Left)
-      const avRadius = 72;
-      const avCx = senderBoxX + 45 + avRadius;
+      const avRadius = 74;
+      const avCx = senderBoxX + 44 + avRadius;
       const avCy = senderBoxY + senderBoxH / 2;
 
-      ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
+      ctx.shadowColor = "rgba(0, 0, 0, 0.16)";
       ctx.shadowBlur = 14;
       ctx.shadowOffsetY = 5;
-      ctx.strokeStyle = theme.senderBadgeBorder;
+      ctx.strokeStyle = theme.frameRing1;
       ctx.lineWidth = 5;
       ctx.beginPath();
       ctx.arc(avCx, avCy, avRadius + 2, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.restore();
 
       if (senderImg) {
         drawClippedCircleImage(ctx, senderImg, avCx, avCy, avRadius);
       } else {
-        ctx.save();
         const avGrad = ctx.createLinearGradient(avCx - avRadius, avCy - avRadius, avCx + avRadius, avCy + avRadius);
-        avGrad.addColorStop(0, theme.iconSquircle1);
-        avGrad.addColorStop(1, theme.iconSquircle2);
+        avGrad.addColorStop(0, theme.topBadgeBg1);
+        avGrad.addColorStop(1, theme.topBadgeBg2);
         ctx.fillStyle = avGrad;
         ctx.beginPath();
         ctx.arc(avCx, avCy, avRadius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 64px 'Noto Sans Devanagari', 'Inter', sans-serif";
+
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 66px 'Noto Serif Devanagari', 'Poppins', serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        const initial = (sender.name || 'भा').trim().charAt(0);
+        const initial = (sender.name || 'रे').trim().charAt(0);
         ctx.fillText(initial, avCx, avCy);
-        ctx.restore();
       }
 
-      // Sender Text (Right of avatar)
-      const textLeft = avCx + avRadius + 38;
-      ctx.textAlign = "left";
+      // Sender Text
+      const textLeft = avCx + avRadius + 36;
 
-      // Line 1: Sender Label
       ctx.fillStyle = theme.senderLabelColor;
-      ctx.font = "bold 23px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.font = "bold 22px 'Noto Sans Devanagari', 'Poppins', sans-serif";
+      ctx.textAlign = "left";
       ctx.textBaseline = "top";
-      ctx.fillText(theme.senderLabel, textLeft, senderBoxY + 28);
+      const sLabel = isPunyatithi ? "🙏 सादर श्रद्धांजलि प्रेषक:" : "💐 सप्रेम शुभकामना प्रेषक:";
+      ctx.fillText(sLabel, textLeft, senderBoxY + 26);
 
-      // Line 2: Sender Name inside distinct badge
-      const sName = sender.name || "रेवंतराम भाटी";
-      const nameBadgeY = senderBoxY + 62;
-      const nameBadgeH = 72;
+      const sName = (sender.name || "रेवंतराम भाटी").replace(/✨/g, '').trim();
+      const nameBadgeY = senderBoxY + 58;
+      const nameBadgeH = 68;
 
-      ctx.font = "bold 44px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      const sNameMetrics = ctx.measureText(`✨ ${sName} ✨`);
-      const nameBadgeW = Math.max(380, sNameMetrics.width + 48);
+      ctx.font = "bold 42px 'Noto Serif Devanagari', 'Poppins', serif";
+      const sNameMetrics = ctx.measureText(sName);
+      const nameBadgeW = Math.max(360, sNameMetrics.width + 48);
 
-      ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.1)";
-      ctx.shadowBlur = 14;
+      ctx.shadowColor = "rgba(0, 0, 0, 0.08)";
+      ctx.shadowBlur = 12;
       ctx.shadowOffsetY = 4;
       const nameBadgeGrad = ctx.createLinearGradient(textLeft, nameBadgeY, textLeft + nameBadgeW, nameBadgeY + nameBadgeH);
       nameBadgeGrad.addColorStop(0, theme.senderBadgeBg1);
       nameBadgeGrad.addColorStop(1, theme.senderBadgeBg2);
       ctx.fillStyle = nameBadgeGrad;
-      canvasRoundRect(ctx, textLeft, nameBadgeY, nameBadgeW, nameBadgeH, 22, true, false);
-      ctx.restore();
+      canvasRoundRect(ctx, textLeft, nameBadgeY, nameBadgeW, nameBadgeH, 20, true, false);
 
       ctx.strokeStyle = theme.senderBadgeBorder;
-      ctx.lineWidth = 3;
-      canvasRoundRect(ctx, textLeft, nameBadgeY, nameBadgeW, nameBadgeH, 22, false, true);
+      ctx.lineWidth = 2.5;
+      canvasRoundRect(ctx, textLeft, nameBadgeY, nameBadgeW, nameBadgeH, 20, false, true);
 
       ctx.fillStyle = theme.senderBadgeText;
-      ctx.font = "bold 44px 'Noto Sans Devanagari', 'Inter', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(`✨ ${sName} ✨`, textLeft + nameBadgeW / 2, nameBadgeY + nameBadgeH / 2);
+      ctx.fillText(sName, textLeft + nameBadgeW / 2, nameBadgeY + nameBadgeH / 2);
 
-      // Line 3: Sender Role & Group
       ctx.textAlign = "left";
-      ctx.fillStyle = theme.senderSubColor;
-      ctx.font = "bold 23px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      ctx.fillStyle = theme.senderRoleColor;
+      ctx.font = "bold 22px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textBaseline = "top";
-      ctx.fillText(sender.role || "🚩 भाटी परिवार • कुचेरा (युवा शक्ति ग्रुप)", textLeft, senderBoxY + 150);
-
-      // 10. Footer Section: Motto & App Download Pill
-      ctx.fillStyle = theme.footerTaglineColor;
-      ctx.font = "bold 26px 'Noto Sans Devanagari', 'Inter', sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(theme.footerTagline, width / 2, footerY1);
-
-      // App Download Pill
-      ctx.save();
-      ctx.shadowColor = "rgba(30, 58, 138, 0.22)";
-      ctx.shadowBlur = 18;
-      ctx.shadowOffsetY = 6;
-      const appGrad = ctx.createLinearGradient(appBadgeX, appBadgeY, appBadgeX + appBadgeW, appBadgeY + appBadgeH);
-      appGrad.addColorStop(0, "#1e3a8a");
-      appGrad.addColorStop(0.5, "#0369a1");
-      appGrad.addColorStop(1, "#0284c7");
-      ctx.fillStyle = appGrad;
-      canvasRoundRect(ctx, appBadgeX, appBadgeY, appBadgeW, appBadgeH, 32, true, false);
+      const sRole = (sender.role || "संचालक • युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)").replace(/✨/g, '').replace(/🚩/g, '').trim();
+      ctx.fillText(sRole, textLeft, senderBoxY + 140);
       ctx.restore();
 
-      ctx.strokeStyle = "rgba(254, 215, 170, 0.8)";
-      ctx.lineWidth = 2.5;
-      canvasRoundRect(ctx, appBadgeX, appBadgeY, appBadgeW, appBadgeH, 32, false, true);
+      // K. Footer Tagline / Motto
+      ctx.save();
+      ctx.fillStyle = theme.footerMottoColor;
+      ctx.font = "bold 25px 'Noto Serif Devanagari', 'Noto Sans Devanagari', serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(footerMotto, width / 2, footerMottoY);
+      ctx.restore();
 
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 25px 'Noto Sans Devanagari', 'Inter', sans-serif";
+      // L. Footer Banner
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.25)";
+      ctx.shadowBlur = 18;
+      ctx.shadowOffsetY = 6;
+      ctx.fillStyle = footerBannerBg;
+      canvasRoundRect(ctx, appBadgeX, appBadgeY, appBadgeW, appBadgeH, 31, true, false);
+
+      ctx.strokeStyle = footerBannerBorder;
+      ctx.lineWidth = 2.5;
+      canvasRoundRect(ctx, appBadgeX, appBadgeY, appBadgeW, appBadgeH, 31, false, true);
+
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "bold 25px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("📲 युवा शक्ति ऐप डाउनलोड करें • bit.ly/yuva-shakti-app (भाटी परिवार)", width / 2, appBadgeY + appBadgeH / 2);
+      ctx.restore();
 
       try {
         return canvas.toDataURL("image/jpeg", 0.98);
@@ -15197,20 +15539,31 @@
         const dataUrl = await generateOccasionCardDataUrl(type, data);
         if (!dataUrl) throw new Error("पोस्टर जनरेट नहीं हो सका");
 
-        const rawName = data.name || (type === 'festival' ? "दीपावली महापर्व" : (type === 'punyatithi' ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य"));
-        const cleanName = rawName.replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').replace(/ की पुण्यतिथि/g, '').trim();
-        const sender = getSuvicharSender();
-        const appDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
+        const isBirthday = (type === 'birthday' || type === 'bday');
+        const isAnniversary = (type === 'anniversary' || type === 'anniv');
+        const isPunyatithi = (type === 'punyatithi' || type === 'shraddhanjali' || type === 'smriti');
+        const isFestival = (!isBirthday && !isAnniversary && !isPunyatithi);
+
+        const rawName = data.name || (isFestival ? "दीपावली महापर्व" : (isPunyatithi ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य"));
+        let cleanBaseName = rawName.replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').replace(/ की पुण्यतिथि/g, '').trim();
+        cleanBaseName = cleanBaseName.replace(/^(पूज्य|स्व\.|स्वर्गीय|श्री|सुश्री|श्रीमती|प्रिय)\s*/g, '').replace(/(\s*जी)+$/g, '').trim();
+        if (!cleanBaseName) cleanBaseName = rawName.trim();
+
+        const sender = (typeof getSuvicharSender === 'function') ? getSuvicharSender() : { name: "रेवंतराम भाटी", role: "संचालक" };
+        const cleanSenderName = (sender.name || "रेवंतराम भाटी").replace(/✨/g, '').trim();
+        const cleanSenderRole = (sender.role || "संचालक • युवा शक्ति ग्रुप").replace(/✨/g, '').replace(/🚩/g, '').trim();
+        const repoName = (typeof GITHUB_REPO !== 'undefined') ? GITHUB_REPO : "revantram/yuva-shakti-app";
+        const appDownloadUrl = `https://github.com/${repoName}/releases/latest/download/YuvaShaktiGroup.apk`;
 
         let caption = "";
-        if (type === 'festival' || type === 'amavasya' || type === 'national') {
-          caption = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n✨ *${cleanName}* ✨\n${data.sub ? `_(${data.sub})_\n` : ''}\n${data.wish || 'पावन पर्व की आप सभी को हार्दिक शुभकामनाएं!'}\n\n╭──────────────────────────╮\n   ✨ *${sender.name}* ✨\n   🚩 _${sender.role || 'शुभकामना प्रेषक • युवा शक्ति ग्रुप'}_\n╰──────────────────────────╯\n\n🪔 *धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन*\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
-        } else if (type === 'birthday' || type === 'bday') {
-          caption = `🎂 *जन्मदिन की अनंत शुभकामनाएं!* 🎂\n\nआदरणीय *${cleanName} जी*,\nयुवा शक्ति ग्रुप (भाटी परिवार कुचेरा) की ओर से आपको जन्मदिन की अनंत मंगलकामनाएं! ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु एवं अपार खुशियां प्रदान करें। 💐🎉\n\n╭──────────────────────────╮\n   ✨ *${sender.name}* ✨\n   🚩 _${sender.role || 'शुभकामना प्रेषक • युवा शक्ति ग्रुप'}_\n╰──────────────────────────╯\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
-        } else if (type === 'anniversary' || type === 'anniv') {
-          caption = `💍 *विवाह वर्षगांठ की हार्दिक बधाई!* 💍\n\nआदरणीय *${cleanName} जी*,\nदांपत्य जीवन की वर्षगांठ पर समस्त भाटी परिवार की ओर से हार्दिक बधाई! आपका जीवन प्रेम, विश्वास और खुशियों से परिपूर्ण रहे। 💐💖\n\n╭──────────────────────────╮\n   ✨ *${sender.name}* ✨\n   🚩 _${sender.role || 'मंगलकामना प्रेषक • युवा शक्ति ग्रुप'}_\n╰──────────────────────────╯\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
-        } else if (type === 'punyatithi' || type === 'shraddhanjali' || type === 'smriti') {
-          caption = `🕊️ *पावन पुण्यतिथि पर शत-शत नमन* 🕊️\n\nपूज्य *${cleanName} जी* की पावन पुण्यतिथि पर विनम्र श्रद्धांजलि एवं शत-शत नमन।\n\nआपकी पावन स्मृतियां, उच्च संस्कार और आशीर्वाद सदैव हमारे अंतःकरण में अमर रहेंगे। ईश्वर दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति प्रदान करें।\nॐ शांतिः शांतिः शांतिः 🙏\n\n╭──────────────────────────╮\n   ✨ *${sender.name}* ✨\n   🚩 _${sender.role || 'श्रद्धांजलि प्रेषक • युवा शक्ति ग्रुप'}_\n╰──────────────────────────╯\n\n🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*`;
+        if (isFestival) {
+          caption = `*युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n\n*${cleanBaseName}*\n${data.sub ? `_(${data.sub})_\n` : ''}\n${data.wish || 'पावन पर्व की आप सभी को हार्दिक शुभकामनाएं!'}\n\n╭──────────────────────────╮\n   *${cleanSenderName}*\n   _${cleanSenderRole}_\n╰──────────────────────────╯\n\n🪔 *धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन*\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
+        } else if (isBirthday) {
+          caption = `🎂 *जन्मदिन की अनंत शुभकामनाएं!* 🎂\n\nआदरणीय *${cleanBaseName} जी*,\nयुवा शक्ति ग्रुप (भाटी परिवार कुचेरा) की ओर से आपको जन्मदिन की अनंत मंगलकामनाएं! ईश्वर आपको उत्तम स्वास्थ्य, दीर्घायु एवं अपार खुशियां प्रदान करें। 💐\n\n╭──────────────────────────╮\n   *${cleanSenderName}*\n   _${cleanSenderRole}_\n╰──────────────────────────╯\n\n*युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
+        } else if (isAnniversary) {
+          caption = `💐 *विवाह वर्षगांठ की हार्दिक बधाई!* 💐\n\nआदरणीय *${cleanBaseName} जी*,\nदांपत्य जीवन की वर्षगांठ पर समस्त भाटी परिवार की ओर से हार्दिक बधाई! आपका जीवन प्रेम, विश्वास और खुशियों से परिपूर्ण रहे। 💐\n\n╭──────────────────────────╮\n   *${cleanSenderName}*\n   _${cleanSenderRole}_\n╰──────────────────────────╯\n\n*युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*\n📲 *ऐप डाउनलोड करें:* ${appDownloadUrl}`;
+        } else if (isPunyatithi) {
+          caption = `🕊️ *पावन पुण्यतिथि पर शत-शत नमन* 🕊️\n\nपूज्य *स्व. ${cleanBaseName} जी* की पावन पुण्यतिथि पर विनम्र श्रद्धांजलि एवं शत-शत नमन।\n\nआपकी पावन स्मृतियां, उच्च संस्कार और आशीर्वाद सदैव हमारे अंतःकरण में अमर रहेंगे। ईश्वर दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति प्रदान करें।\nॐ शांतिः शांतिः शांतिः 🙏\n\n╭──────────────────────────╮\n   *${cleanSenderName}*\n   _${cleanSenderRole}_\n╰──────────────────────────╯\n\n*युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)*`;
         }
 
         currentPosterDataUrl = dataUrl;
@@ -15413,7 +15766,16 @@
     }
 
     function shareMemberWish(type, name, phone, mode = 'personal') {
-      shareOccasionPoster(type, { name: name, phone: phone, mode: mode });
+      let memObj = { name: name, phone: phone, mode: mode };
+      const searchPhone = (phone || '').trim().replace(/\D/g, '').slice(-10);
+      const cleanName = (name || '').trim().toLowerCase();
+      if (typeof membersList !== 'undefined' && Array.isArray(membersList)) {
+        const found = membersList.find(m => (searchPhone && (m.phone || '').replace(/\D/g, '').slice(-10) === searchPhone) || (cleanName && (m.name || '').toLowerCase().includes(cleanName)));
+        if (found) {
+          memObj = Object.assign({}, found, memObj);
+        }
+      }
+      shareOccasionPoster(type, memObj);
     }
 
     function checkAndShowTodayCelebrations() {
@@ -15522,7 +15884,7 @@
                 </div>
               </div>
               <div style="margin-top:8px;">
-                <button onclick="shareOccasionPoster('punyatithi', { name: '${vEsc(p.name)}' })" style="background:#475569; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                <button onclick="shareOccasionPoster('punyatithi', { name: '${vEsc(p.name)}', dod: '${vEsc(p.dod || "")}', photoUrl: '${vEsc(p.photoUrl || p.photo || "")}' })" style="background:#475569; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:700; font-size:11px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
                   <i class="fa-solid fa-image"></i> 🕊️ श्रद्धांजलि पोस्टर शेयर करें
                 </button>
               </div>
