@@ -10198,10 +10198,30 @@
       return false;
     }
 
+    // 🌸 जिस सुपुत्री (लड़की) की शादी हो चुकी है और पति का नाम उसके साथ दर्ज है,
+    // परंपरा अनुसार वे ससुराल पक्ष की वंशावली में गिनी जाती हैं, अतः मायके (भाटी परिवार) के "जीवित सदस्यों" में शामिल नहीं होंगी।
+    function vIsMarriedDaughterWithHusband(p) {
+      if (!p) return false;
+      if (!vIsFemale(p)) return false;
+
+      // 1. पति का नाम p.wife, p.husband या p.spouse में दर्ज हो
+      const spouseStr = String(p.husband || p.spouse || p.wife || '').trim();
+      const hasSpouseField = !!(spouseStr && spouseStr !== 'धर्मपत्नी' && spouseStr !== 'पत्नी');
+
+      // 2. नाम (name) या पीढ़ी विवरण (gen) में पति का नाम या w/o, पत्नी, पति दर्ज हो
+      const nameStr = String(p.name || '');
+      const genStr = String(p.gen || '');
+      const hasHusbandInText = /(पति|w\/o|wife of|w\/|पत्नी\s*[:\-]?\s*[\u0900-\u097Fa-zA-Z]|\+\s*[\u0900-\u097Fa-zA-Z]|संग\s*[\u0900-\u097Fa-zA-Z])/i.test(nameStr) ||
+                               /(पति|w\/o|विवाहिता)/i.test(genStr);
+
+      return hasSpouseField || hasHusbandInText;
+    }
+
     function vIsLivingMember(p) {
       if (!p) return false;
       if (vIsDeceased(p)) return false;
       if (vIsChildOfDaughter(p)) return false;
+      if (vIsMarriedDaughterWithHusband(p)) return false;
       return true;
     }
     function vPriv() { return (typeof canFin === 'function') ? canFin() : isAdmin; }
@@ -10267,7 +10287,7 @@
       let tree = [];
       try { tree = vamshaFamilyData; } catch (e) { tree = []; }
       tree.forEach(p => {
-        if (vIsDeceased(p) || vIsChildOfDaughter(p)) return;
+        if (vIsDeceased(p) || vIsChildOfDaughter(p) || vIsMarriedDaughterWithHusband(p)) return;
         const dob = vDateVal(p.dob), ann = vDateVal(p.anniversary);
         if (!dob && !ann) return;
         const mem = vMemberFor(p);
@@ -10718,7 +10738,7 @@
       host.innerHTML = vamshaPopupStack.map((id, i) => vPopupHtml(id, i)).join('');
     }
 
-    // ---- जीवित सदस्य: बड़े से छोटे (स्वर्गवासी व सुपुत्रियों की संतानें शामिल नहीं) ----
+    // ---- जीवित सदस्य: बड़े से छोटे (स्वर्गवासी, सुपुत्रियों की संतानें व विवाहित बेटियां (पति के नाम सहित) शामिल नहीं) ----
     function closeVamshaLiving() {
       const o = document.getElementById('vamshaLivingOverlay');
       if (o) o.remove();
