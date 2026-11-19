@@ -42,6 +42,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -449,7 +451,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    Toast.makeText(MainActivity.this, "अपडेट डाउनलोड शुरू हो रहा है...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "📲 ऐप अपडेट डाउनलोड शुरू हो रहा है...", Toast.LENGTH_SHORT).show();
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         if (!getPackageManager().canRequestPackageInstalls()) {
@@ -461,70 +463,163 @@ public class MainActivity extends Activity {
                         }
                     }
 
-                    File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    if (downloadDir != null) {
-                        File existingApk = new File(downloadDir, "YuvaShaktiGroup.apk");
-                        if (existingApk.exists()) {
-                            existingApk.delete();
+                    // Start background download thread with real-time in-app progress updates
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            downloadApkWithProgress(url);
                         }
-                    }
+                    }).start();
 
-                    Uri uri = Uri.parse(url);
-                    DownloadManager.Request request = new DownloadManager.Request(uri);
-                    request.setTitle("युवा शक्ति ग्रुप - नया अपडेट");
-                    request.setDescription("नवीनतम APK डाउनलोड हो रहा है...");
-                    request.setMimeType("application/vnd.android.package-archive");
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "YuvaShaktiGroup.apk");
-
-                    final DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                    if (manager != null) {
-                        final long downloadId = manager.enqueue(request);
-
-                        BroadcastReceiver onComplete = new BroadcastReceiver() {
-                            @Override
-                            public void onReceive(Context context, Intent intent) {
-                                long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                                if (id == downloadId) {
-                                    try {
-                                        Uri apkUri = manager.getUriForDownloadedFile(downloadId);
-                                        File downloadedFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "YuvaShaktiGroup.apk");
-                                        Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                                        if (apkUri != null) {
-                                            installIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
-                                        } else if (downloadedFile.exists()) {
-                                            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                                            StrictMode.setVmPolicy(builder.build());
-                                            installIntent.setDataAndType(Uri.fromFile(downloadedFile), "application/vnd.android.package-archive");
-                                        }
-                                        installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                        context.startActivity(installIntent);
-                                    } catch (Exception ex) {
-                                        Toast.makeText(MainActivity.this, "डाउनलोड पूर्ण हुआ! डाउनलोड्स फोल्डर से इंस्टॉल करें", Toast.LENGTH_LONG).show();
-                                    }
-                                    try {
-                                        unregisterReceiver(this);
-                                    } catch (Exception ignored) {}
-                                }
-                            }
-                        };
-
-                        if (Build.VERSION.SDK_INT >= 33) {
-                            registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_EXPORTED);
-                        } else {
-                            registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-                        }
-                    }
                 } catch (Exception e) {
-                    try {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        startActivity(browserIntent);
-                    } catch (Exception ex) {
-                        Toast.makeText(MainActivity.this, "डाउनलोड त्रुटि: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                    fallbackBrowserDownload(url);
                 }
             }
         });
+    }
+
+    private void downloadApkWithProgress(final String downloadUrl) {
+        InputStream in = null;
+        OutputStream out = null;
+        HttpURLConnection conn = null;
+        File cacheApk = null;
+
+        try {
+            // Initial progress 0%
+            postDownloadProgress(0, -1, 0);
+
+            // Follow HTTP redirects (GitHub releases redirect to AWS S3)
+            String targetUrl = downloadUrl;
+            int redirectCount = 0;
+            while (redirectCount < 6) {
+                URL u = new URL(targetUrl);
+                conn = (HttpURLConnection) u.openConnection();
+                conn.setInstanceFollowRedirects(false);
+                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(30000);
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0 YuvaShaktiApp/Android");
+                conn.connect();
+
+                int status = conn.getResponseCode();
+                if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == 307 || status == 308) {
+                    String newUrl = conn.getHeaderField("Location");
+                    if (newUrl != null && !newUrl.isEmpty()) {
+                        conn.disconnect();
+                        targetUrl = newUrl;
+                        redirectCount++;
+                        continue;
+                    }
+                }
+                break;
+            }
+
+            if (conn == null) throw new Exception("सर्वर से कनेक्शन स्थापित नहीं हो सका");
+
+            final long contentLength = Build.VERSION.SDK_INT >= 24 ? conn.getContentLengthLong() : conn.getContentLength();
+            in = conn.getInputStream();
+
+            cacheApk = new File(getCacheDir(), "YuvaShaktiGroup.apk");
+            if (cacheApk.exists()) cacheApk.delete();
+
+            out = new FileOutputStream(cacheApk);
+            byte[] buffer = new byte[16384];
+            int bytesRead;
+            long totalRead = 0;
+            long lastProgressUpdate = 0;
+
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+                totalRead += bytesRead;
+
+                long now = System.currentTimeMillis();
+                if (now - lastProgressUpdate > 120) {
+                    lastProgressUpdate = now;
+                    final int percent = (contentLength > 0) ? (int)((totalRead * 100) / contentLength) : -1;
+                    postDownloadProgress(totalRead, contentLength, percent);
+                }
+            }
+            out.flush();
+
+            // 100% complete
+            postDownloadProgress(totalRead, totalRead, 100);
+
+            // Also copy to Downloads folder for safety and offline storage
+            try {
+                File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                if (downloadDir != null && (downloadDir.exists() || downloadDir.mkdirs())) {
+                    File pubApk = new File(downloadDir, "YuvaShaktiGroup.apk");
+                    copyFile(cacheApk, pubApk);
+                }
+            } catch (Exception ignored) {}
+
+            final File finalApk = cacheApk;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mWebView != null) {
+                        mWebView.evaluateJavascript("if(window.onAppDownloadComplete) window.onAppDownloadComplete();", null);
+                    }
+                    promptApkInstall(finalApk);
+                }
+            });
+
+        } catch (Exception ex) {
+            final String errMsg = ex.getMessage();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mWebView != null) {
+                        mWebView.evaluateJavascript("if(window.onAppDownloadError) window.onAppDownloadError('" + (errMsg != null ? errMsg.replace("'", "\\'") : "डाउनलोड त्रुटि") + "');", null);
+                    }
+                    fallbackBrowserDownload(downloadUrl);
+                }
+            });
+        } finally {
+            try { if (in != null) in.close(); } catch (Exception ignored) {}
+            try { if (out != null) out.close(); } catch (Exception ignored) {}
+            try { if (conn != null) conn.disconnect(); } catch (Exception ignored) {}
+        }
+    }
+
+    private void postDownloadProgress(final long bytesDownloaded, final long totalBytes, final int percent) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mWebView != null) {
+                    mWebView.evaluateJavascript("if(window.onAppDownloadProgress) window.onAppDownloadProgress(" + bytesDownloaded + "," + totalBytes + "," + percent + ");", null);
+                }
+            }
+        });
+    }
+
+    private void promptApkInstall(File apkFile) {
+        try {
+            Uri apkUri = Uri.parse("content://" + AppFileProvider.AUTHORITY + "/YuvaShaktiGroup.apk");
+            Intent installIntent = new Intent(Intent.ACTION_VIEW);
+            installIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+            installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(installIntent);
+        } catch (Exception ex) {
+            try {
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                Intent installIntent = new Intent(Intent.ACTION_VIEW);
+                installIntent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+                installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(installIntent);
+            } catch (Exception ex2) {
+                Toast.makeText(MainActivity.this, "डाउनलोड पूर्ण हुआ! डाउनलोड्स फोल्डर से APK इंस्टॉल करें", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void fallbackBrowserDownload(String url) {
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        } catch (Exception ex) {
+            Toast.makeText(MainActivity.this, "डाउनलोड शुरू नहीं हो सका: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void shareApplicationApk() {
