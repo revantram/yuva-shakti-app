@@ -10721,7 +10721,7 @@
       }
       html += `</div>`;
       html += `<div style="text-align:center; font-size:11px; color:#b45309; margin:2px 0 6px;">👆 किसी भी सदस्य पर टैप करें — उनका परिवार नई विंडो में खुलेगा</div>`;
-      html += `<button onclick="vamshaOpenLiving()" style="${VB} width:100%; margin:6px 0 2px; background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; padding:10px;">🎂 परिवार के बड़े से छोटे जीवित सदस्य • ${vamshaFamilyData.filter(x => vIsLivingMember(x)).length}</button>`;
+      html += `<button onclick="vamshaOpenLiving()" style="${VB} width:100%; margin:6px 0 2px; background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; padding:10px;">🌳 परिवार के जीवित सदस्य (फ्लोचार्ट व पीढ़ी अनुसार) • ${vamshaFamilyData.filter(x => vIsLivingMember(x)).length}</button>`;
       html += vActionsHtml(cur);
       html += `<div style="margin:14px 0 8px; padding-top:12px; border-top:2px dashed #fcd34d; font-weight:800; font-size:14px; color:#92400e;">${vEsc(cur.name)} की संतानें (${cur.children.length})</div>`;
       cur.children.forEach((cid, i) => { const ch = vFind(cid); if (ch) html += vCardHtml(ch, i); });
@@ -10784,41 +10784,104 @@
       host.innerHTML = vamshaPopupStack.map((id, i) => vPopupHtml(id, i)).join('');
     }
 
-    // ---- जीवित सदस्य: बड़े से छोटे (स्वर्गवासी, सुपुत्रियों की संतानें व विवाहित बेटियां (पति के नाम सहित) शामिल नहीं) ----
+    // ---- फ्लोचार्ट व पीढ़ी अनुसार जीवित सदस्यों का क्रम (Tree Hierarchy Traversal) ----
+    function vamshaGetLivingFlowchartOrdered() {
+      const ordered = [];
+      const visited = new Set();
+
+      function walk(id) {
+        if (visited.has(String(id))) return;
+        visited.add(String(id));
+        const p = vFind(id);
+        if (!p) return;
+
+        if (vIsLivingMember(p)) {
+          const parent = vParentIn(vamshaFamilyData, p.id);
+          const depth = vDepthIn(vamshaFamilyData, p.id);
+          ordered.push({
+            p: p,
+            depth: depth,
+            parentName: parent ? parent.name : ''
+          });
+        }
+
+        // फ्लोचार्ट में जिस क्रम में बड़े बुजुर्ग के नीचे पुत्र/संतानें जोड़ी गई हैं
+        (p.children || []).forEach(childId => {
+          walk(childId);
+        });
+      }
+
+      // मूल पूर्वज (Roots) से शुरुआत
+      const roots = vamshaFamilyData.filter(p => !vParentIn(vamshaFamilyData, p.id));
+      if (roots.length) {
+        roots.forEach(r => walk(r.id));
+      } else {
+        walk("0");
+      }
+
+      // यदि कोई सदस्य अलग हो, तो उसे भी शामिल करें
+      vamshaFamilyData.forEach(p => {
+        if (!visited.has(String(p.id))) walk(p.id);
+      });
+
+      return ordered;
+    }
+
+    // ---- जीवित सदस्य: फ्लोचार्ट एवं पीढ़ी अनुसार क्रम ----
     function closeVamshaLiving() {
       const o = document.getElementById('vamshaLivingOverlay');
       if (o) o.remove();
       if (typeof updateActiveModalState === 'function') updateActiveModalState();
     }
+
     function vamshaOpenLiving() {
       closeVamshaLiving();
-      const living = vamshaFamilyData.filter(p => vIsLivingMember(p));
-      const toTime = d => new Date(d.y, d.m - 1, d.d).getTime();
-      const withDob = living.map(p => ({ p: p, d: vParseDob(vDobOf(p)) })).filter(x => x.d).sort((a, b) => toTime(a.d) - toTime(b.d));
-      const noDob = living.filter(p => !vParseDob(vDobOf(p)));
-      const row = (p, n, d) => {
-        const sp = vSpouse(p), age = vAgeOf(p);
-        return `<div onclick="closeVamshaLiving(); vamshaOpenPopup('${vEsc(p.id)}')" style="display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid #ddd6fe; border-radius:12px; padding:8px 10px; margin-bottom:6px; cursor:pointer;">
-          <div style="width:24px; text-align:center; font-weight:800; font-size:12px; color:#7c3aed;">${n || ''}</div>
-          ${vAvatar(p, 42)}
+      const livingItems = vamshaGetLivingFlowchartOrdered();
+
+      const row = (item, idx) => {
+        const p = item.p;
+        const sp = vSpouse(p), age = vAgeOf(p), d = vParseDob(vDobOf(p));
+        const depth = item.depth || vDepthIn(vamshaFamilyData, p.id);
+        const parentText = item.parentName ? `पिता: ${vEsc(item.parentName)}` : '';
+        const f = vIsFemale(p);
+
+        // पीढ़ी लेबल
+        let genBadge = `पीढ़ी ${depth}`;
+        if (depth === 2) genBadge = 'पीढ़ी 2: पुत्र';
+        else if (depth === 3) genBadge = f ? 'पीढ़ी 3: सुपुत्री' : 'पीढ़ी 3: पौत्र';
+        else if (depth === 4) genBadge = f ? 'पीढ़ी 4: सुपुत्री' : 'पीढ़ी 4: पड़पोता / प्रपौत्र';
+        else if (depth === 5) genBadge = f ? 'पीढ़ी 5: सुपुत्री' : 'पीढ़ी 5: सक्कपड़पोता';
+        else if (depth >= 6) genBadge = `पीढ़ी ${depth}`;
+
+        return `<div onclick="closeVamshaLiving(); vamshaOpenPopup('${vEsc(p.id)}')" style="display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid #ddd6fe; border-radius:14px; padding:10px 12px; margin-bottom:8px; cursor:pointer; box-shadow:0 2px 6px rgba(124,58,237,0.06);">
+          <div style="width:26px; height:26px; border-radius:50%; background:#f3e8ff; color:#7c3aed; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:11.5px; flex-shrink:0;">${idx + 1}</div>
+          ${vAvatar(p, 44)}
           <div style="flex:1; min-width:0;">
-            <div style="font-weight:800; font-size:13.5px; color:#1e293b;">${vEsc(p.name)}${sp ? ` <span style="color:#d97706;">+</span> <span style="color:#be123c; font-size:12px;">${vEsc(sp)}</span>` : ''}</div>
-            <div style="font-size:11px; color:#64748b; margin-top:2px;">${vEsc(p.gen || '')}${age !== null ? ` • <b style="color:#7c3aed;">${age} वर्ष</b>` : ''}${d ? ` • 🎂 ${vFmtDate(d)}` : ''}</div>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:2px;">
+              <span style="background:linear-gradient(135deg, #7c3aed, #6d28d9); color:#fff; font-size:9.5px; font-weight:800; padding:2px 7px; border-radius:6px; letter-spacing:0.3px;">${genBadge}</span>
+              ${parentText ? `<span style="font-size:10.5px; color:#64748b; font-weight:700;">• ${parentText}</span>` : ''}
+            </div>
+            <div style="font-weight:800; font-size:14px; color:#1e293b; line-height:1.3;">
+              ${vEsc(p.name)}${sp ? ` <span style="color:#d97706;">+</span> <span style="color:#be123c; font-size:12px;">${vEsc(sp)}</span>` : ''}
+            </div>
+            <div style="font-size:11px; color:#64748b; margin-top:2px;">
+              ${age !== null ? `<b style="color:#7c3aed;">${age} वर्ष</b>` : ''}${d ? ` • 🎂 ${vFmtDate(d)}` : ''}
+            </div>
           </div>
-          <div style="color:#7c3aed; font-size:14px; font-weight:800;">›</div>
+          <div style="color:#7c3aed; font-size:16px; font-weight:800; padding-left:4px;">›</div>
         </div>`;
       };
+
       const o = document.createElement('div');
       o.id = 'vamshaLivingOverlay';
       o.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.65);backdrop-filter:blur(10px);z-index:1450;display:flex;align-items:center;justify-content:center;padding:14px;';
       o.innerHTML = `<div style="background:#faf5ff; border:2px solid #8b5cf6; border-radius:20px; width:100%; max-width:480px; max-height:92vh; overflow-y:auto; padding:14px; box-shadow:0 12px 36px rgba(0,0,0,0.3);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <div style="font-weight:800; font-size:15px; color:#5b21b6;">🎂 परिवार के बड़े से छोटे जीवित सदस्य (${living.length})</div>
+          <div style="font-weight:800; font-size:15px; color:#5b21b6;">🌳 परिवार के जीवित सदस्य (${livingItems.length})</div>
           <button onclick="closeVamshaLiving()" style="border:none; background:#ede9fe; color:#5b21b6; border-radius:50%; width:32px; height:32px; font-size:16px; font-weight:800; cursor:pointer;">✕</button>
         </div>
-        <div style="font-size:11px; color:#6d28d9; margin-bottom:10px;">बड़े से छोटे क्रम में • स्वर्गवासी व सुपुत्रियों की संतानें शामिल नहीं</div>
-        ${withDob.map((x, i) => row(x.p, i + 1, x.d)).join('')}
-        ${noDob.length ? `<div style="font-weight:800; font-size:12px; color:#64748b; margin:10px 0 6px;">जन्म तिथि दर्ज नहीं (${noDob.length})</div>${noDob.map(p => row(p, '', null)).join('')}` : ''}
+        <div style="font-size:11px; color:#6d28d9; margin-bottom:10px;">फ्लोचार्ट शाखा व पीढ़ी अनुसार क्रम • स्वर्गवासी, विवाहित बेटियां व सुपुत्रियों की संतानें शामिल नहीं</div>
+        ${livingItems.map((item, i) => row(item, i)).join('')}
       </div>`;
       o.addEventListener('click', e => { if (e.target === o) closeVamshaLiving(); });
       document.body.appendChild(o);
