@@ -3367,14 +3367,57 @@
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
     }
 
+    /* ⚡ Zero Auth Flicker Protection */
+    #appAuthGateScreen {
+      display: none !important;
+    }
+    html.auth-gate-active #appAuthGateScreen {
+      display: flex !important;
+    }
   </style>
+  <script>
+    // ⚡ Fast synchronous pre-render session check to eliminate auth flicker
+    (function() {
+      try {
+        var isVerified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
+        var hasUser = Boolean(localStorage.getItem("currentAppUser"));
+        var hasPhone = Boolean(localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone"));
+        window.__hasPersistedSession = isVerified || hasUser || hasPhone;
+        window.isAuthChecking = true;
+        window.authReady = false;
+        if (window.__hasPersistedSession) {
+          document.documentElement.classList.add("auth-persisted-session");
+        }
+      } catch (e) {
+        window.__hasPersistedSession = false;
+        window.isAuthChecking = true;
+        window.authReady = false;
+      }
+    })();
+  </script>
 </head>
 <body>
 
   <!-- ==========================================================================
+       🚀 INITIAL APP SPLASH / AUTH INITIALIZATION SCREEN (Eliminates Auth Flicker)
+       ========================================================================== -->
+  <div id="appInitialSplashScreen" style="position:fixed; inset:0; z-index:100000; display:flex; flex-direction:column; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 15%, #1e3a8a 0%, #0f172a 65%, #020617 100%); padding:24px; font-family:'Noto Sans Devanagari', sans-serif; transition:opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1); pointer-events:auto;">
+    <div style="width:84px; height:84px; margin-bottom:18px; border-radius:26px; background:rgba(255,255,255,0.14); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; box-shadow:0 16px 36px rgba(0,0,0,0.45); animation:ysPulse 2s infinite ease-in-out;">
+      <img src="ic_launcher.png" alt="युवा शक्ति ग्रुप" style="width:68px; height:68px; border-radius:18px; object-fit:cover;" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
+      <i class="fa-solid fa-people-roof" style="display:none; color:white; font-size:38px;"></i>
+    </div>
+    <div style="font-size:24px; font-weight:900; color:#FFFFFF; margin:0; text-shadow:0 2px 8px rgba(0,0,0,0.6); text-align:center;">युवा शक्ति ग्रुप</div>
+    <div style="font-size:13.5px; font-weight:800; color:#FCD34D; margin-top:5px; text-shadow:0 1px 4px rgba(0,0,0,0.4); text-align:center;">भाटी परिवार • कुचेरा (नागौर)</div>
+    <div style="margin-top:28px; display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.12); padding:8px 18px; border-radius:999px; border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(10px);">
+      <i class="fa-solid fa-circle-notch fa-spin" style="color:#60a5fa; font-size:14px;"></i>
+      <span style="color:#e2e8f0; font-size:12px; font-weight:700; letter-spacing:0.3px;">सत्र लोड हो रहा है...</span>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
        🔒 APP AUTH GATE SCREEN (Landing / Auth Screen)
        ========================================================================== -->
-  <div id="appAuthGateScreen" style="position:fixed; inset:0; z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 15%, #1e3a8a 0%, #0f172a 65%, #020617 100%); padding:20px; font-family:'Noto Sans Devanagari', sans-serif; transition:opacity 0.25s ease;">
+  <div id="appAuthGateScreen" style="position:fixed; inset:0; z-index:99999; display:none; flex-direction:column; align-items:center; justify-content:center; background:radial-gradient(circle at 50% 15%, #1e3a8a 0%, #0f172a 65%, #020617 100%); padding:20px; font-family:'Noto Sans Devanagari', sans-serif; transition:opacity 0.25s ease;">
     
     <!-- App Branding Header -->
     <div style="text-align:center; margin-bottom:18px;">
@@ -10975,8 +11018,22 @@
     function vIsActuallyFemale(p) {
       if (!p) return false;
       if (p.gender === 'M') return false;
+      const name = String(p.name || '').trim();
+      const genStr = String(p.gen || '').trim();
+      // यदि स्पष्ट रूप से पुरुष नाम है (उदा. सुभाष, रूपाराम, रेवंतराम, संजय आदि)
+      if (/(सुभाष|रूपाराम|रेवंतराम|शौकीन|मोतीराम|संजय|सुरेन्द्र|सुरेश|नरेंद्र|जयपाल|ऋतिक|रोनित|केवलराम|हजारी|बुधाराम|रामू|नेनाराम|देबूराम|राजुराम|केसाराम)/.test(name)) {
+        return false;
+      }
+      // यदि नाम के अंत में सामान्य पुरुष सूचक प्रत्यय हो
+      if (/(राम|लाल|प्रसाद|चन्द|चंद|कुमार|सिंह|पाल|प्रकाश|देव|नारायण|करण|भंवर|दिनेश|मुकेश|राकेश|संजय|विजय|विकास|अशोक|अनिल|सुनील|पवन|ऋतिक|रोनित|विशाल|अभिषेक|सचिन|मनीष|दीपक|सोनू|मोनू|पप्पू|राजू|कालू|गोपाल|मोहन|सोहन|ओम|प्रेम|मदन|बजरंग|जगदीश|कैलाश|हनुमान|श्याम|कृष्ण|हरी|हरि|गणेश|भैरू)$/.test(name.replace(/\s*(भाटी|जी)?\s*$/g, ''))) {
+        return false;
+      }
+      // यदि gen में पुत्र लिखा हो (और पुत्री न हो)
+      if (/(सुपुत्र|पुत्र)/.test(genStr) && !/(सुपुत्री|पुत्री)/.test(genStr)) {
+        return false;
+      }
       // यदि पत्नी दर्ज है और नाम में देवी/बाई नहीं है, तो वह पुरुष है
-      if ((p.wife === 'धर्मपत्नी' || (p.wife && !p.husband)) && !/(देवी|बाई)$/.test(p.name || '') && !/(सुपुत्री|पुत्री|बेटी)/.test(p.gen || '')) {
+      if ((p.wife === 'धर्मपत्नी' || (p.wife && !p.husband)) && !/(देवी|बाई)$/.test(name) && !/(सुपुत्री|पुत्री|बेटी)/.test(genStr)) {
         return false;
       }
       return vIsFemale(p);
@@ -10992,7 +11049,7 @@
       if (/(पड़पोता|प्रपौत्र)/i.test(genStr)) return `पीढ़ी ${depth}: पड़पोता / प्रपौत्र`;
       if (/(सक्कपड़पोता|सक्क\s*पड़पोता|अतिप्रपौत्र)/i.test(genStr)) return `पीढ़ी ${depth}: सक्कपड़पोता`;
       if (/(पौत्र)/i.test(genStr)) return f ? `पीढ़ी ${depth}: पौत्री` : `पीढ़ी ${depth}: पौत्र`;
-      if (/(सुपुत्र|पुत्र)/i.test(genStr) && !/(सुपुत्री|पुत्री)/i.test(genStr)) return `पीढ़ी ${depth}: सुपुत्र`;
+      if (/(सुपुत्र|पुत्र)/i.test(genStr) && !/(सुपुत्री|पुत्री)/i.test(genStr)) return f ? `पीढ़ी ${depth}: सुपुत्री` : (depth === 5 ? `पीढ़ी 5: सक्कपड़पोता` : (depth === 4 ? `पीढ़ी 4: पड़पोता / प्रपौत्र` : `पीढ़ी ${depth}: सुपुत्र`));
       if (/(सुपुत्री|पुत्री|बेटी)/i.test(genStr)) return `पीढ़ी ${depth}: सुपुत्री`;
 
       if (depth === 1) return 'मूल पुरुष / पूर्वज';
@@ -20338,22 +20395,44 @@
     let isAuthGateOtpVerifying = false;
     let isAuthGateGoogleSigningIn = false;
 
-    function showAuthGateScreen() {
-      const isVerified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
-      const savedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
-      if (isVerified || savedPhone) {
-        hideAuthGateScreen();
-        return;
-      }
-      const gate = document.getElementById("appAuthGateScreen");
-      if (gate) {
-        gate.style.display = "flex";
-        gate.style.opacity = "1";
-        gate.style.pointerEvents = "auto";
+    function dismissInitialSplash(onDone) {
+      window.isAuthChecking = false;
+      window.authReady = true;
+      const splash = document.getElementById("appInitialSplashScreen");
+      if (splash) {
+        splash.style.opacity = "0";
+        splash.style.pointerEvents = "none";
+        setTimeout(() => {
+          splash.remove();
+          if (typeof onDone === "function") onDone();
+        }, 280);
+      } else {
+        if (typeof onDone === "function") onDone();
       }
     }
 
+    function showAuthGateScreen() {
+      const isVerified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
+      const savedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
+      const savedUser = localStorage.getItem("currentAppUser");
+      if (isVerified || savedPhone || savedUser) {
+        hideAuthGateScreen();
+        dismissInitialSplash();
+        return;
+      }
+      dismissInitialSplash(() => {
+        document.documentElement.classList.add("auth-gate-active");
+        const gate = document.getElementById("appAuthGateScreen");
+        if (gate) {
+          gate.style.display = "flex";
+          gate.style.opacity = "1";
+          gate.style.pointerEvents = "auto";
+        }
+      });
+    }
+
     function hideAuthGateScreen() {
+      document.documentElement.classList.remove("auth-gate-active");
       const gate = document.getElementById("appAuthGateScreen");
       if (gate) {
         gate.style.opacity = "0";
@@ -20362,6 +20441,7 @@
           gate.style.display = "none";
         }, 250);
       }
+      dismissInitialSplash();
     }
 
     function resetAuthGateToPhone() {
@@ -20856,12 +20936,20 @@
       }, 300);
     }
 
-    // Page load hote hi check karein ki user pehle se verified hai ya nahi
+    // ⚡ Pre-DOM Session Resolver (Instant Zero Flicker)
     (function checkExistingSessionOnBoot() {
-      if (localStorage.getItem("isUserVerified") === "true" && (localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("loggedInUserEmail"))) {
+      const isVerified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
+      const hasPhone = Boolean(localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone") || localStorage.getItem("loggedInUserEmail"));
+      const hasUser = Boolean(localStorage.getItem("currentAppUser"));
+      if (isVerified || hasPhone || hasUser) {
+        window.isAuthChecking = false;
+        window.authReady = true;
+        const gate = document.getElementById("appAuthGateScreen");
+        if (gate) gate.style.display = "none";
         window.addEventListener("DOMContentLoaded", function() {
-          const gate = document.getElementById("appAuthGateScreen");
-          if (gate) gate.style.display = "none";
+          const g = document.getElementById("appAuthGateScreen");
+          if (g) g.style.display = "none";
+          dismissInitialSplash();
         });
       }
     })();
@@ -20872,7 +20960,10 @@
       const cachedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
 
       if (isUserVerified || cachedUserStr || cachedPhone) {
+        window.isAuthChecking = false;
+        window.authReady = true;
         hideAuthGateScreen();
+        dismissInitialSplash();
         const gateScreen = document.getElementById("appAuthGateScreen");
         if (gateScreen) gateScreen.style.display = "none";
         const phone = cachedPhone ? String(cachedPhone).replace(/\D/g, '').slice(-10) : "";
@@ -20939,19 +21030,25 @@
               userRole = "member";
             }
 
+            window.isAuthChecking = false;
+            window.authReady = true;
             hideAuthGateScreen();
+            dismissInitialSplash();
             const gateScreen = document.getElementById("appAuthGateScreen");
             if (gateScreen) gateScreen.style.display = "none";
             updateAuthUI();
             if (typeof updateCurrentUserUI === 'function') updateCurrentUserUI();
           } else {
-            // Firebase user is null (e.g. Phone.email session) - check isUserVerified & cached session
+            // Firebase user is null (e.g. Phone/SMS session) - check isUserVerified & cached session
             const isUserVerified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
             const cachedUserStr = localStorage.getItem("currentAppUser");
             const cachedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
 
             if (isUserVerified || cachedUserStr || cachedPhone) {
+              window.isAuthChecking = false;
+              window.authReady = true;
               hideAuthGateScreen();
+              dismissInitialSplash();
               const gateScreen = document.getElementById("appAuthGateScreen");
               if (gateScreen) gateScreen.style.display = "none";
               const phone = cachedPhone ? String(cachedPhone).replace(/\D/g, '').slice(-10) : "";
@@ -20976,16 +21073,6 @@
         });
       }
     }
-
-    // Page load hote hi agar user pehle se verified hai toh Auth Gate chhupayein
-    window.addEventListener("DOMContentLoaded", function() {
-      const verified = (localStorage.getItem("isUserVerified") === "true") || (localStorage.getItem("ysg_logged_in") === "true");
-      const savedPhone = localStorage.getItem("loggedInMemberPhone") || localStorage.getItem("ysg_user_phone");
-      if (verified && savedPhone) {
-        const gateScreen = document.getElementById("appAuthGateScreen");
-        if (gateScreen) gateScreen.style.display = "none";
-      }
-    });
 
     // Call on load
     document.addEventListener("DOMContentLoaded", () => {
