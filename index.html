@@ -4888,12 +4888,12 @@
 
   <!-- Update Notification Modal -->
   <div class="modal-overlay" id="updateModal">
-    <div class="modal-content" style="border-radius:24px; padding:20px 18px; max-width:420px;">
+    <div class="modal-content" style="border-radius:24px; padding:20px 18px; max-width:440px; max-height:92vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.35);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 id="updateModalTitle" style="font-size:16.5px; font-weight:800; color:#1e3a8a; margin:0; display:flex; align-items:center; gap:8px;">
           <i class="fa-solid fa-rocket" style="color:#f59e0b;"></i> <span>नया ऐप अपडेट उपलब्ध है!</span>
         </h3>
-        <button id="updateModalCloseBtn" onclick="closeUpdateModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:28px; height:28px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+        <button id="updateModalCloseBtn" onclick="closeUpdateModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
@@ -4901,15 +4901,51 @@
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
-      <div style="font-size:12.5px; color:#475569; margin-bottom:16px; max-height:180px; overflow-y:auto; line-height:1.6;" id="updateModalNotes">
+      <div style="font-size:12.5px; color:#475569; margin-bottom:14px; max-height:160px; overflow-y:auto; line-height:1.6;" id="updateModalNotes">
         नया संस्करण डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
       </div>
 
-      <div style="display:flex; gap:8px;" id="updateModalBtnRow">
+      <div style="display:flex; gap:8px; margin-bottom:14px;" id="updateModalBtnRow">
         <button id="updateModalLaterBtn" onclick="closeUpdateModal()" style="flex:1; padding:11px; border-radius:12px; border:1px solid #cbd5e1; background:white; font-weight:700; font-size:13px; color:#475569; cursor:pointer;">बाद में</button>
         <button id="updateModalInstallBtn" onclick="downloadLatestApp()" style="flex:1.6; padding:12px; border-radius:12px; border:none; background:linear-gradient(135deg, #16a34a, #15803d); color:white; font-weight:800; font-size:13px; box-shadow:0 6px 16px rgba(22, 163, 74, 0.35); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
-          <i class="fa-solid fa-download"></i> <span>अभी डाउनलोड करें</span>
+          <i class="fa-solid fa-download"></i> <span>📲 अभी अपडेट करें</span>
         </button>
+      </div>
+
+      <!-- 💡 यदि 'App Not Installed' या अपडेट में समस्या आए तो क्या करें? (सरल गाइडलाइन) -->
+      <div id="updateHelpGuide" style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border:1.5px solid #f59e0b; border-radius:16px; padding:13px 14px; text-align:left; box-shadow:0 2px 10px rgba(245,158,11,0.12);">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+          <div style="font-weight:800; font-size:13px; color:#92400e; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-circle-question" style="color:#d97706; font-size:15px;"></i>
+            <span>यदि 'App Not Installed' या अपडेट न हो?</span>
+          </div>
+          <span style="font-size:10px; font-weight:800; background:#d97706; color:white; padding:2px 8px; border-radius:10px;">सरल समाधान</span>
+        </div>
+
+        <div style="font-size:11.8px; color:#78350f; line-height:1.6;">
+          <div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:8px;">
+            <span style="background:#ea580c; color:#fff; font-size:11px; font-weight:800; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">1</span>
+            <div>
+              <strong>पुराना ऐप अनइंस्टॉल (Delete) करें:</strong><br>
+              फोन की होम स्क्रीन से पुराने युवा शक्ति ग्रुप ऐप के आइकन को 2 सेकंड तक दबाकर रखें और <em>'Uninstall' / 'हटाएं'</em> पर क्लिक करें।
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:8px;">
+            <span style="background:#ea580c; color:#fff; font-size:11px; font-weight:800; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">2</span>
+            <div>
+              <strong>नया APK डाउनलोड व इंस्टॉल करें:</strong><br>
+              ऊपर दिए गए <em>'📲 अभी अपडेट करें'</em> बटन से डाउनलोड करें (या फोन के <strong>Downloads</strong> फोल्डर में जाकर <code>YuvaShaktiGroup.apk</code> पर क्लिक करके इंस्टॉल करें)।
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:flex-start; gap:8px; background:rgba(255,255,255,0.75); padding:7px 9px; border-radius:10px; border:1px dashed #f59e0b;">
+            <i class="fa-solid fa-shield-halved" style="color:#16a34a; font-size:14px; margin-top:2px; flex-shrink:0;"></i>
+            <div style="font-size:11px; color:#15803d; font-weight:700;">
+              डेटा सुरक्षा: पुराना ऐप हटाने से आपका कोई डेटा नहीं हटेगा। बही-खाता, सदस्य और वंशावली क्लाउड सर्वर पर 100% सुरक्षित हैं!
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -8092,11 +8128,21 @@
       const notesEl = document.getElementById("updateModalNotes");
       if (notesEl) {
         notesEl.innerHTML = `
-          <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:12px; text-align:center; color:#166534; font-size:13px; line-height:1.6; margin-bottom:8px;">
-            <div style="font-size:24px; margin-bottom:6px;"><i class="fa-solid fa-circle-down fa-bounce" style="color:#16a34a;"></i></div>
-            <strong>डाउनलोड बैकग्राउंड में शुरू हो चुका है!</strong><br>
+          <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:14px; padding:12px; text-align:center; color:#166534; font-size:12.5px; line-height:1.6; margin-bottom:8px;">
+            <div style="font-size:26px; margin-bottom:6px;"><i class="fa-solid fa-circle-down fa-bounce" style="color:#16a34a;"></i></div>
+            <strong style="font-size:13.5px;">डाउनलोड बैकग्राउंड में शुरू हो चुका है!</strong><br>
             जैसे ही डाउनलोड पूरा होगा, स्क्रीन पर स्वतः <em>'Install / अपडेट करें'</em> का प्रॉम्प्ट आएगा। कृपया उस पर टैप करके ऐप इंस्टॉल करें।
           </div>
+        `;
+      }
+
+      const btnRow = document.getElementById("updateModalBtnRow");
+      if (btnRow) {
+        btnRow.innerHTML = `
+          <button onclick="closeUpdateModal()" style="flex:1; padding:11px; border-radius:12px; border:1px solid #cbd5e1; background:white; font-weight:700; font-size:13px; color:#475569; cursor:pointer;">बाद में</button>
+          <a href="${latestDownloadUrl}" target="_blank" style="flex:1.6; text-decoration:none; padding:12px; border-radius:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; font-weight:800; font-size:12.5px; box-shadow:0 6px 16px rgba(37, 99, 235, 0.35); display:flex; align-items:center; justify-content:center; gap:6px;">
+            <i class="fa-solid fa-globe"></i> <span>ब्राउज़र से डाउनलोड</span>
+          </a>
         `;
       }
 
@@ -8172,45 +8218,64 @@
             document.getElementById("updateBannerSub").innerText = `वर्तमान: v${APP_VERSION} → नया: v${latestTag}`;
           }
 
-          // 🚨 Configure Mandatory Update Modal as requested by user
+          // 🚨 Configure Update Modal as requested by user
           const modal = document.getElementById("updateModal");
           const titleEl = document.getElementById("updateModalTitle");
           const closeBtn = document.getElementById("updateModalCloseBtn");
-          const laterBtn = document.getElementById("updateModalLaterBtn");
-          const installBtn = document.getElementById("updateModalInstallBtn");
+          const verEl = document.getElementById("updateModalVersion");
+          const dateEl = document.getElementById("updateModalDate");
+          const notesEl = document.getElementById("updateModalNotes");
+          const btnRow = document.getElementById("updateModalBtnRow");
 
           if (titleEl) {
-            titleEl.innerHTML = `<i class="fa-solid fa-cloud-arrow-down" style="color:#ef4444;"></i> <span>🚀 नया अपडेट उपलब्ध है! (अनिवार्य)</span>`;
+            titleEl.innerHTML = `<i class="fa-solid fa-cloud-arrow-down" style="color:#ef4444;"></i> <span>🚀 नया ऐप अपडेट उपलब्ध है!</span>`;
           }
-          // Only show mandatory popup once per version (unless not dismissed yet)
-          const skippedKey = "update_skipped_" + latestTag;
-          const alreadySkipped = localStorage.getItem(skippedKey);
+          if (verEl) {
+            verEl.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center;"><span style="color:#64748b; font-size:12px;">वर्तमान: <b>v${APP_VERSION}</b></span> <span style="background:#16a34a; color:#fff; font-weight:800; font-size:12px; padding:3px 9px; border-radius:8px;">नया: v${latestTag}</span></div>`;
+          }
+          if (dateEl) {
+            const relDate = release.published_at ? new Date(release.published_at).toLocaleDateString('hi-IN', { day:'numeric', month:'long', year:'numeric' }) : 'नवीनतम आधिकारिक रिलीज़';
+            dateEl.innerText = `आधिकारिक रिलीज़: ${relDate}`;
+          }
+          if (notesEl) {
+            let bodyText = (release.body || "")
+              .replace(/###/g, '')
+              .replace(/\*\*/g, '')
+              .trim();
+            if (!bodyText || bodyText.length < 5) {
+              bodyText = "युवा शक्ति ग्रुप ऐप का नया अपडेट उपलब्ध है। बेहतर प्रदर्शन और नई सुविधाओं के लिए अभी अपडेट करें।";
+            }
+            notesEl.innerHTML = `<div style="white-space:pre-line; color:#334155;">${vEsc(bodyText)}</div>`;
+          }
+          if (btnRow) {
+            btnRow.innerHTML = `
+              <button id="updateModalLaterBtn" onclick="closeUpdateModal()" style="flex:1; padding:11px; border-radius:12px; border:1px solid #cbd5e1; background:white; font-weight:700; font-size:13px; color:#475569; cursor:pointer;">बाद में</button>
+              <button id="updateModalInstallBtn" onclick="downloadLatestApp()" style="flex:1.6; padding:12px; border-radius:12px; border:none; background:linear-gradient(135deg, #16a34a, #15803d); color:white; font-weight:800; font-size:13px; box-shadow:0 6px 16px rgba(22, 163, 74, 0.35); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+                <i class="fa-solid fa-download"></i> <span>📲 अभी अपडेट करें</span>
+              </button>
+            `;
+          }
+
+          // Session-level skip so freshly opening the app always prompts for update
+          const skippedKey = "update_skipped_session_" + latestTag;
+          const alreadySkipped = sessionStorage.getItem(skippedKey);
 
           if (closeBtn) {
             closeBtn.style.display = "flex";
             closeBtn.onclick = () => {
-              localStorage.setItem(skippedKey, "true");
+              sessionStorage.setItem(skippedKey, "true");
               modal.style.display = "none";
             };
           }
-          if (laterBtn) {
-            laterBtn.style.display = "block";
-            laterBtn.textContent = "बाद में";
-            laterBtn.onclick = () => {
-              localStorage.setItem(skippedKey, "true");
+          const freshLaterBtn = document.getElementById("updateModalLaterBtn");
+          if (freshLaterBtn) {
+            freshLaterBtn.onclick = () => {
+              sessionStorage.setItem(skippedKey, "true");
               modal.style.display = "none";
             };
-          }
-          if (installBtn) {
-            installBtn.style.flex = "1.6";
-            installBtn.style.padding = "12px";
-            installBtn.style.fontSize = "13px";
-            installBtn.style.background = "linear-gradient(135deg, #16a34a, #15803d)";
-            installBtn.innerHTML = `<i class="fa-solid fa-download"></i> <span>📲 अभी अपडेट करें</span>`;
           }
 
           if (modal && !alreadySkipped) {
-            modal.setAttribute("data-mandatory", "true");
             modal.style.display = "flex";
           }
         } else {
@@ -17969,7 +18034,7 @@
       if (!appOpenRecorded) {
         recordAppOpenEvent();
       }
-    }, 2000);
+    }, 800);
 
     // Periodic check every 60 seconds for scheduled 8:00 AM / 8:00 PM alerts while app is running
     setInterval(() => {
