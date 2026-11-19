@@ -2653,6 +2653,38 @@
     @keyframes ysSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     @keyframes ysFade { from { opacity: 0; } to { opacity: 1; } }
 
+    /* ===== 🛡️ Modal Backdrop Isolation & Background Screen Lock ===== */
+    body.has-active-modal {
+      overflow: hidden !important;
+      height: 100vh !important;
+      touch-action: none !important;
+    }
+    body.has-active-modal #mainAppHeader,
+    body.has-active-modal .nav-bar,
+    body.has-active-modal #appLayout,
+    body.has-active-modal .section-view {
+      pointer-events: none !important;
+      user-select: none !important;
+    }
+    /* Active overlays, modals, and dedicated sub-pages retain pointer events */
+    .modal-overlay,
+    .modal-bottom-sheet,
+    #passbookOverlay,
+    #dedicatedGalleryPage,
+    #dedicatedPaymentPage,
+    #dedicatedCashCounterPage,
+    #vamshaPopupHost,
+    #vamshaLivingOverlay,
+    #vamshaFormOverlay,
+    #vamshaPosterExportModal,
+    [id$="Modal"],
+    [id$="Overlay"],
+    [id$="Page"] {
+      pointer-events: auto !important;
+      touch-action: pan-y !important;
+      overscroll-behavior: contain !important;
+    }
+
     /* ===== Parivar Notice Board / Ticker ===== */
     #noticeBoardWrap {
       display: none; align-items: center; gap: 8px; margin: 0 10px 8px 10px; padding: 7px 10px;
@@ -10123,7 +10155,36 @@
       while (cur && guard++ < 60) { const par = vParentIn(arr, cur.id); if (!par) break; d++; cur = par; }
       return d;
     }
-    function vIsFemale(p) { return p && (p.gender === 'F' || (!p.gender && /सुपुत्री/.test(p.gen || ''))); }
+    function vIsFemale(p) { return p && (p.gender === 'F' || (!p.gender && /(सुपुत्री|पुत्री|बेटी|कन्या|बाई|देवी)/.test(p.gen || '') || /(देवी|बाई)$/.test(p.name || ''))); }
+
+    // 🌸 राजस्थानी वंशावली परंपरा: सुपुत्री (लड़की) की संतानें (दोहिते/दोहिती) उनके पिता के वंश में जुड़ती हैं,
+    // अतः भाटी परिवार की वंशावली के "जीवित सदस्यों" में किसी लड़की की संतान शामिल नहीं होगी।
+    function vIsChildOfDaughter(p) {
+      if (!p) return false;
+      const genStr = String(p.gen || '');
+      const nameStr = String(p.name || '');
+      if (/(दोहिता|दोहिती|दौहिता|दौहिती|नवासा|नवासी|भांजा|भांजी|लड़की की संतान|सुपुत्री की संतान|पुत्री की संतान|बेटी की संतान)/i.test(genStr) ||
+          /(दोहिता|दोहिती|दौहिता|दौहिती)/i.test(nameStr)) {
+        return true;
+      }
+      let cur = p, guard = 0;
+      while (cur && guard++ < 40) {
+        const par = vParentIn(vamshaFamilyData, cur.id);
+        if (!par) break;
+        if (vIsFemale(par) || /(सुपुत्री|पुत्री|बेटी|कन्या)/i.test(par.gen || '')) {
+          return true;
+        }
+        cur = par;
+      }
+      return false;
+    }
+
+    function vIsLivingMember(p) {
+      if (!p) return false;
+      if (vIsDeceased(p)) return false;
+      if (vIsChildOfDaughter(p)) return false;
+      return true;
+    }
     function vPriv() { return (typeof canFin === 'function') ? canFin() : isAdmin; }
     function vCanAdd() { return !!(vPriv() || loggedInMemberPhone); }
     function vMyPhone() { return isAdmin ? SANCHALAK_PHONE : (loggedInMemberPhone || ''); }
@@ -10187,7 +10248,7 @@
       let tree = [];
       try { tree = vamshaFamilyData; } catch (e) { tree = []; }
       tree.forEach(p => {
-        if (vIsDeceased(p)) return;
+        if (vIsDeceased(p) || vIsChildOfDaughter(p)) return;
         const dob = vDateVal(p.dob), ann = vDateVal(p.anniversary);
         if (!dob && !ann) return;
         const mem = vMemberFor(p);
@@ -10368,7 +10429,11 @@
         if (mode === 'add') {
           const par = people.find(x => x.id === String(id));
           if (!par) throw new Error('parent missing');
-          if (vIsFemale(par)) throw new Error('daughter cannot have children');
+          if (vIsFemale(par)) {
+            showToast("राजस्थानी वंशावली परंपरा: सुपुत्री (लड़की) की संतानें उनके पिता के वंश में जुड़ती हैं, अतः इन्हें भाटी परिवार की वंशावली में नहीं जोड़ा जा सकता।", "warning");
+            if (btn) { btn.disabled = false; btn.innerText = 'सेव करें'; }
+            return;
+          }
           const newId = 'n' + Date.now();
           const depth = vDepthIn(people, par.id) + 1;
           const np = {
@@ -10571,7 +10636,7 @@
       }
       html += `</div>`;
       html += `<div style="text-align:center; font-size:11px; color:#b45309; margin:2px 0 6px;">👆 किसी भी सदस्य पर टैप करें — उनका परिवार नई विंडो में खुलेगा</div>`;
-      html += `<button onclick="vamshaOpenLiving()" style="${VB} width:100%; margin:6px 0 2px; background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; padding:10px;">🎂 परिवार के बड़े से छोटे सदस्य • ${vamshaFamilyData.filter(x => !vIsDeceased(x)).length}</button>`;
+      html += `<button onclick="vamshaOpenLiving()" style="${VB} width:100%; margin:6px 0 2px; background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; padding:10px;">🎂 परिवार के बड़े से छोटे जीवित सदस्य • ${vamshaFamilyData.filter(x => vIsLivingMember(x)).length}</button>`;
       html += vActionsHtml(cur);
       html += `<div style="margin:14px 0 8px; padding-top:12px; border-top:2px dashed #fcd34d; font-weight:800; font-size:14px; color:#92400e;">${vEsc(cur.name)} की संतानें (${cur.children.length})</div>`;
       cur.children.forEach((cid, i) => { const ch = vFind(cid); if (ch) html += vCardHtml(ch, i); });
@@ -10634,11 +10699,15 @@
       host.innerHTML = vamshaPopupStack.map((id, i) => vPopupHtml(id, i)).join('');
     }
 
-    // ---- जीवित सदस्य: बड़े से छोटे (स्वर्गवासी शामिल नहीं) ----
-    function closeVamshaLiving() { const o = document.getElementById('vamshaLivingOverlay'); if (o) o.remove(); }
+    // ---- जीवित सदस्य: बड़े से छोटे (स्वर्गवासी व सुपुत्रियों की संतानें शामिल नहीं) ----
+    function closeVamshaLiving() {
+      const o = document.getElementById('vamshaLivingOverlay');
+      if (o) o.remove();
+      if (typeof updateActiveModalState === 'function') updateActiveModalState();
+    }
     function vamshaOpenLiving() {
       closeVamshaLiving();
-      const living = vamshaFamilyData.filter(p => !vIsDeceased(p));
+      const living = vamshaFamilyData.filter(p => vIsLivingMember(p));
       const toTime = d => new Date(d.y, d.m - 1, d.d).getTime();
       const withDob = living.map(p => ({ p: p, d: vParseDob(vDobOf(p)) })).filter(x => x.d).sort((a, b) => toTime(a.d) - toTime(b.d));
       const noDob = living.filter(p => !vParseDob(vDobOf(p)));
@@ -10649,25 +10718,26 @@
           ${vAvatar(p, 42)}
           <div style="flex:1; min-width:0;">
             <div style="font-weight:800; font-size:13.5px; color:#1e293b;">${vEsc(p.name)}${sp ? ` <span style="color:#d97706;">+</span> <span style="color:#be123c; font-size:12px;">${vEsc(sp)}</span>` : ''}</div>
-            ${d ? `<div style="font-size:11px; color:#7c3aed; font-weight:700;">🎂 ${vFmtDate(d)}</div>` : '<div style="font-size:11px; color:#94a3b8;">जन्म तिथि दर्ज नहीं</div>'}
+            <div style="font-size:11px; color:#64748b; margin-top:2px;">${vEsc(p.gen || '')}${age !== null ? ` • <b style="color:#7c3aed;">${age} वर्ष</b>` : ''}${d ? ` • 🎂 ${vFmtDate(d)}` : ''}</div>
           </div>
-          ${age !== null ? `<div style="background:#ede9fe; color:#5b21b6; font-weight:800; font-size:12px; padding:3px 9px; border-radius:10px;">${age} वर्ष</div>` : ''}
+          <div style="color:#7c3aed; font-size:14px; font-weight:800;">›</div>
         </div>`;
       };
       const o = document.createElement('div');
       o.id = 'vamshaLivingOverlay';
-      o.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.55);z-index:1450;display:flex;align-items:center;justify-content:center;padding:14px;';
-      o.innerHTML = `<div style="background:#faf5ff; border:2px solid #8b5cf6; border-radius:20px; width:100%; max-width:480px; max-height:92vh; overflow-y:auto; padding:14px;">
+      o.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.65);backdrop-filter:blur(10px);z-index:1450;display:flex;align-items:center;justify-content:center;padding:14px;';
+      o.innerHTML = `<div style="background:#faf5ff; border:2px solid #8b5cf6; border-radius:20px; width:100%; max-width:480px; max-height:92vh; overflow-y:auto; padding:14px; box-shadow:0 12px 36px rgba(0,0,0,0.3);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <div style="font-weight:800; font-size:15px; color:#5b21b6;">🎂 परिवार के बड़े से छोटे सदस्य (${living.length})</div>
+          <div style="font-weight:800; font-size:15px; color:#5b21b6;">🎂 परिवार के बड़े से छोटे जीवित सदस्य (${living.length})</div>
           <button onclick="closeVamshaLiving()" style="border:none; background:#ede9fe; color:#5b21b6; border-radius:50%; width:32px; height:32px; font-size:16px; font-weight:800; cursor:pointer;">✕</button>
         </div>
-        <div style="font-size:11px; color:#6d28d9; margin-bottom:10px;">बड़े से छोटे क्रम में • स्वर्गवासी सदस्य शामिल नहीं</div>
+        <div style="font-size:11px; color:#6d28d9; margin-bottom:10px;">बड़े से छोटे क्रम में • स्वर्गवासी व सुपुत्रियों की संतानें शामिल नहीं</div>
         ${withDob.map((x, i) => row(x.p, i + 1, x.d)).join('')}
         ${noDob.length ? `<div style="font-weight:800; font-size:12px; color:#64748b; margin:10px 0 6px;">जन्म तिथि दर्ज नहीं (${noDob.length})</div>${noDob.map(p => row(p, '', null)).join('')}` : ''}
       </div>`;
       o.addEventListener('click', e => { if (e.target === o) closeVamshaLiving(); });
       document.body.appendChild(o);
+      if (typeof updateActiveModalState === 'function') updateActiveModalState();
     }
 
 
@@ -20208,10 +20278,68 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.5)
-    //  Supports: Android System Back Gesture, Bezel Swipes, Nav Buttons & In-App Edge Swipes
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.6)
+    //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 
+    // 🛡️ Modal Backdrop Isolation & Screen Lock State Checker
+    function isAnyModalOrOverlayOpen() {
+      // 1. Dedicated Sub-Pages
+      const fullPages = ['dedicatedGalleryPage', 'dedicatedPaymentPage', 'dedicatedCashCounterPage', 'passbookOverlay'];
+      for (const pid of fullPages) {
+        const el = document.getElementById(pid);
+        if (el && window.getComputedStyle(el).display !== 'none') return true;
+      }
+      // 2. Vamshavali Popups and Overlays
+      if (typeof vamshaPopupStack !== 'undefined' && vamshaPopupStack.length > 0) return true;
+      if (document.getElementById('vamshaLivingOverlay')) return true;
+      if (document.getElementById('vamshaFormOverlay')) return true;
+      if (document.getElementById('vamshaPosterExportModal')) return true;
+
+      // 3. Modals and Overlays
+      const openModals = Array.from(document.querySelectorAll('.modal-overlay, .modal-bottom-sheet, [id$="Modal"], [id$="Overlay"]')).filter(el => {
+        if (!el) return false;
+        if (el.id === 'toastContainer' || el.id === 'appAuthGateScreen') return false;
+        const style = window.getComputedStyle(el);
+        return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+      });
+      return openModals.length > 0;
+    }
+
+    function updateActiveModalState() {
+      try {
+        if (isAnyModalOrOverlayOpen()) {
+          if (!document.body.classList.contains('has-active-modal')) {
+            document.body.classList.add('has-active-modal');
+          }
+        } else {
+          if (document.body.classList.contains('has-active-modal')) {
+            document.body.classList.remove('has-active-modal');
+          }
+        }
+      } catch (e) {}
+    }
+    window.updateActiveModalState = updateActiveModalState;
+
+    // Observe DOM mutations to auto-lock background screen whenever a modal opens
+    if (typeof MutationObserver !== 'undefined') {
+      const modalObserver = new MutationObserver(() => {
+        updateActiveModalState();
+      });
+      modalObserver.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['style', 'class'] });
+    }
+
+    // 🚫 Prevent Touchmove Bleed on Modal Background
+    document.addEventListener('touchmove', function(e) {
+      if (document.body.classList.contains('has-active-modal')) {
+        const scrollable = e.target.closest('.modal-content, #passbookBody, #dedicatedGalleryPage, #dedicatedPaymentPage, #dedicatedCashCounterPage, #vamshaLivingOverlay > div, #vamshaPopupHost .vf-popup-card, #vamshaFormOverlay > div, #vamshaPosterCard');
+        if (!scrollable) {
+          if (e.cancelable) e.preventDefault();
+        }
+      }
+    }, { passive: false });
+
+    // 📋 All Modal Close Handlers Map
     window.modalCloseHandlers = {
       'languageModal': () => typeof closeLanguageModal === 'function' && closeLanguageModal(),
       'themeModal': () => typeof closeThemeModal === 'function' && closeThemeModal(),
@@ -20253,20 +20381,77 @@
       'galLightboxModal': () => typeof closeGalLightbox === 'function' && closeGalLightbox(),
       'galUploadModal': () => typeof closeUploadPhotoModal === 'function' && closeUploadPhotoModal(),
       'galNewFolderModal': () => typeof closeCreateFolderModal === 'function' && closeCreateFolderModal(),
+      'vamshaPosterExportModal': () => typeof closeVamshaPosterModal === 'function' && closeVamshaPosterModal(),
       'vamshaPosterModal': () => typeof closeVamshaPosterModal === 'function' && closeVamshaPosterModal(),
       'passbookOverlay': () => typeof closePassbook === 'function' && closePassbook(),
+      'dedicatedGalleryPage': () => {
+        if (window.galActiveFolder && window.galActiveFolder !== 'all' && typeof setGalActiveFolder === 'function') {
+          setGalActiveFolder('all');
+          return true;
+        }
+        if (typeof closeDedicatedGalleryPage === 'function') closeDedicatedGalleryPage();
+      },
+      'dedicatedPaymentPage': () => typeof closeDedicatedPaymentPage === 'function' && closeDedicatedPaymentPage(),
+      'dedicatedCashCounterPage': () => typeof closeDedicatedCashCounterPage === 'function' && closeDedicatedCashCounterPage(),
       'setMyNameModal': () => {
         const el = document.getElementById('setMyNameModal');
         if (el) el.remove();
       }
     };
 
+    // 🔙 Master App Back Action Handler
     window.handleAppBackAction = function() {
       try {
-        // 1. Close any visible modal, bottom sheet, or full-screen overlay
+        // 1. Topmost Lightbox
+        const galLightbox = document.getElementById('galLightboxModal');
+        if (galLightbox && window.getComputedStyle(galLightbox).display !== 'none') {
+          if (typeof closeGalLightbox === 'function') closeGalLightbox();
+          updateActiveModalState();
+          return true;
+        }
+
+        // 2. Vamshavali Popups Stack
+        if (typeof vamshaPopupStack !== 'undefined' && vamshaPopupStack.length > 0) {
+          if (typeof vamshaClosePopup === 'function') {
+            vamshaClosePopup();
+            updateActiveModalState();
+            return true;
+          }
+        }
+
+        // 3. Vamshavali Living List Overlay
+        const vLiving = document.getElementById('vamshaLivingOverlay');
+        if (vLiving) {
+          if (typeof closeVamshaLiving === 'function') closeVamshaLiving();
+          else vLiving.remove();
+          updateActiveModalState();
+          return true;
+        }
+
+        // 4. Vamshavali Form Overlay
+        const vForm = document.getElementById('vamshaFormOverlay');
+        if (vForm) {
+          if (typeof closeVamshaForm === 'function') closeVamshaForm();
+          else vForm.remove();
+          updateActiveModalState();
+          return true;
+        }
+
+        // 5. Vamshavali Poster Export Modal
+        const vPoster = document.getElementById('vamshaPosterExportModal');
+        if (vPoster) {
+          if (typeof closeVamshaPosterModal === 'function') closeVamshaPosterModal();
+          else vPoster.remove();
+          updateActiveModalState();
+          return true;
+        }
+
+        // 6. Visible Modals / Overlays / Bottom Sheets
         const openModals = Array.from(document.querySelectorAll('.modal-overlay, .modal-bottom-sheet, [id$="Modal"], [id$="Overlay"]')).filter(el => {
           if (!el) return false;
           if (el.id === 'updateModal' && el.getAttribute('data-mandatory') === 'true') return false;
+          if (el.id === 'passbookOverlay') return false; // Handled as dedicated full-screen page below
+          if (el.id === 'toastContainer' || el.id === 'appAuthGateScreen') return false;
           const style = window.getComputedStyle(el);
           return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
         });
@@ -20277,20 +20462,60 @@
 
           if (modalId && window.modalCloseHandlers && typeof window.modalCloseHandlers[modalId] === 'function') {
             window.modalCloseHandlers[modalId]();
+            updateActiveModalState();
             return true;
           }
 
           const closeBtn = topModal.querySelector('button[onclick*="close"], button[onclick*="reset"], button[onclick*="hide"], button.close, .btn-close');
           if (closeBtn) {
             closeBtn.click();
+            updateActiveModalState();
             return true;
           }
 
           topModal.style.display = 'none';
+          updateActiveModalState();
           return true;
         }
 
-        // 2. Navigate back through tab history
+        // 7. Dedicated Full-Screen Sub-Pages (Gallery, Payment, Cash Counter, Passbook)
+        const galPage = document.getElementById('dedicatedGalleryPage');
+        if (galPage && window.getComputedStyle(galPage).display !== 'none') {
+          if (window.galActiveFolder && window.galActiveFolder !== 'all' && typeof setGalActiveFolder === 'function') {
+            setGalActiveFolder('all');
+            return true;
+          }
+          if (typeof closeDedicatedGalleryPage === 'function') closeDedicatedGalleryPage();
+          else galPage.style.display = 'none';
+          updateActiveModalState();
+          return true;
+        }
+
+        const payPage = document.getElementById('dedicatedPaymentPage');
+        if (payPage && window.getComputedStyle(payPage).display !== 'none') {
+          if (typeof closeDedicatedPaymentPage === 'function') closeDedicatedPaymentPage();
+          else payPage.style.display = 'none';
+          updateActiveModalState();
+          return true;
+        }
+
+        const cashPage = document.getElementById('dedicatedCashCounterPage');
+        if (cashPage && window.getComputedStyle(cashPage).display !== 'none') {
+          if (typeof closeDedicatedCashCounterPage === 'function') closeDedicatedCashCounterPage();
+          else cashPage.style.display = 'none';
+          updateActiveModalState();
+          return true;
+        }
+
+        const pbOverlay = document.getElementById('passbookOverlay');
+        if (pbOverlay && window.getComputedStyle(pbOverlay).display !== 'none') {
+          if (typeof closePassbook === 'function') closePassbook();
+          else pbOverlay.style.display = 'none';
+          updateActiveModalState();
+          return true;
+        }
+
+        // 8. Tab History Navigation
         if (window.appNavHistory && window.appNavHistory.length > 1) {
           window.appNavHistory.pop(); // Remove current tab
           const prevTab = window.appNavHistory[window.appNavHistory.length - 1];
@@ -20298,7 +20523,7 @@
           return true;
         }
 
-        // 3. Fallback: if we are not on the root Home tab (viewMembers), return to Home
+        // 9. If not on the root Home tab (viewMembers), return to Home
         const currentActive = document.querySelector('.section-view.active-view');
         if (currentActive && currentActive.id !== 'viewMembers') {
           switchTab('members', null, true);
@@ -20306,7 +20531,7 @@
           return true;
         }
 
-        // 4. Already on root Home page with nothing open -> return false to let Android show exit toast
+        // 10. Already on root Home page with nothing open -> let Android handle exit toast
         return false;
       } catch (err) {
         console.error("handleAppBackAction error:", err);
@@ -20314,7 +20539,7 @@
       }
     };
 
-    // In-app touch swipe-back gesture (Swipe right from left edge to go back)
+    // 📱 In-App Touch Edge-Swipe Back Gesture (Left & Right bezels)
     (function setupInAppEdgeSwipeBack() {
       let startX = 0;
       let startY = 0;
@@ -20326,8 +20551,9 @@
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         startTime = Date.now();
-        // Allow gesture if touch starts within 45px of screen edge
-        isEdgeSwipe = (startX <= 45);
+        const w = window.innerWidth || 360;
+        // Check touch within 50px of either bezel
+        isEdgeSwipe = (startX <= 50 || startX >= w - 50);
       }, { passive: true });
 
       window.addEventListener('touchend', function(e) {
@@ -20337,8 +20563,12 @@
         const dx = endX - startX;
         const dy = endY - startY;
         const elapsed = Date.now() - startTime;
+        const w = window.innerWidth || 360;
 
-        if (dx >= 50 && Math.abs(dy) <= 60 && elapsed <= 600 && dx > Math.abs(dy) * 1.1) {
+        const isLeftSwipeBack = (startX <= 50 && dx >= 45 && Math.abs(dy) <= 70 && elapsed <= 700 && dx > Math.abs(dy) * 1.1);
+        const isRightSwipeBack = (startX >= w - 50 && dx <= -45 && Math.abs(dy) <= 70 && elapsed <= 700 && Math.abs(dx) > Math.abs(dy) * 1.1);
+
+        if (isLeftSwipeBack || isRightSwipeBack) {
           if (typeof window.handleAppBackAction === 'function') {
             const handled = window.handleAppBackAction();
             if (handled && window.navigator && window.navigator.vibrate) {

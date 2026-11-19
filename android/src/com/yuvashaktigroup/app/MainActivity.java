@@ -160,6 +160,31 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         checkAndRequestNotificationPermission();
 
+        if (Build.VERSION.SDK_INT >= 33) {
+            try {
+                java.lang.reflect.Method getDispatcher = getClass().getMethod("getOnBackInvokedDispatcher");
+                Object dispatcher = getDispatcher.invoke(this);
+                if (dispatcher != null) {
+                    Class<?> callbackClass = Class.forName("android.window.OnBackInvokedCallback");
+                    Object callback = java.lang.reflect.Proxy.newProxyInstance(
+                        getClassLoader(),
+                        new Class<?>[]{callbackClass},
+                        new java.lang.reflect.InvocationHandler() {
+                            @Override
+                            public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) throws Throwable {
+                                if ("onBackInvoked".equals(method.getName())) {
+                                    handleBackNavigation();
+                                }
+                                return null;
+                            }
+                        }
+                    );
+                    java.lang.reflect.Method register = dispatcher.getClass().getMethod("registerOnBackInvokedCallback", int.class, callbackClass);
+                    register.invoke(dispatcher, 0, callback);
+                }
+            } catch (Throwable ignored) {}
+        }
+
         mWebView = new WebView(this);
         setContentView(mWebView);
 
@@ -1093,6 +1118,15 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
         handleBackNavigation();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
+        if (keyCode == android.view.KeyEvent.KEYCODE_BACK && event.getAction() == android.view.KeyEvent.ACTION_DOWN) {
+            handleBackNavigation();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void handleBackNavigation() {
