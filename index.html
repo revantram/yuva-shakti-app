@@ -4082,7 +4082,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.4.7
+            APK v5.4.8
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4109,7 +4109,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.7 (बिल्ड कोड: 547)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.8 (बिल्ड कोड: 548)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4946,7 +4946,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.7 (बिल्ड कोड: 547)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.8 (बिल्ड कोड: 548)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6521,10 +6521,62 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- 🌳 समर्पित वंशावली परिवार विवरण पेज (Dedicated Vamshavali Family Full Page View) -->
+  <!-- ========================================================================= -->
+  <div id="dedicatedVamshaPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:#f8fafc; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
+    
+    <!-- Top Sticky Apple iOS Header Bar -->
+    <div style="position:sticky; top:0; z-index:100; background:rgba(255, 255, 255, 0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(0, 0, 0, 0.08); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.03);">
+      <button onclick="closeDedicatedVamshaPage()" style="border:none; background:rgba(0,0,0,0.06); color:#0f172a; padding:7px 12px; border-radius:12px; font-weight:700; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
+      </button>
+      <div style="text-align:center;">
+        <h3 id="vamshaPageHeaderTitle" style="margin:0; font-size:15px; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>🌳 परिवार विवरण</span>
+        </h3>
+        <span id="vamshaPageHeaderSubtitle" style="font-size:11px; color:#64748b; font-weight:600;">भाटी परिवार • कुचेरा</span>
+      </div>
+      <div id="vamshaPageHeaderBadge">
+        <span style="background:linear-gradient(135deg, #d97706, #b45309); color:white; padding:4px 10px; border-radius:999px; font-weight:800; font-size:11px;">पीढ़ी</span>
+      </div>
+    </div>
+
+    <!-- Page Content Container -->
+    <div id="dedicatedVamshaPageContent" style="padding:14px 16px 80px 16px; max-width:680px; margin:0 auto; width:100%; box-sizing:border-box;">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 🎂 समर्पित परिवार के जीवित सदस्य पेज (Dedicated Living Members Full Page View) -->
+  <!-- ========================================================================= -->
+  <div id="dedicatedVamshaLivingPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1155; background:#f8fafc; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
+    
+    <!-- Top Sticky Apple iOS Header Bar -->
+    <div style="position:sticky; top:0; z-index:100; background:rgba(255, 255, 255, 0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(0, 0, 0, 0.08); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.03);">
+      <button onclick="closeDedicatedVamshaLivingPage()" style="border:none; background:rgba(0,0,0,0.06); color:#0f172a; padding:7px 12px; border-radius:12px; font-weight:700; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
+      </button>
+      <div style="text-align:center;">
+        <h3 style="margin:0; font-size:15px; font-weight:800; color:#5b21b6; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>🎂 परिवार के जीवित सदस्य</span>
+        </h3>
+        <span style="font-size:11px; color:#7c3aed; font-weight:600;">भाटी परिवार • कुचेरा</span>
+      </div>
+      <span id="vamshaLivingCountBadge" style="background:#ede9fe; color:#5b21b6; padding:4px 10px; border-radius:12px; font-weight:800; font-size:11.5px; border:1px solid #ddd6fe;">0</span>
+    </div>
+
+    <!-- Living Members Content Container -->
+    <div id="dedicatedVamshaLivingContent" style="padding:14px 16px 80px 16px; max-width:680px; margin:0 auto; width:100%; box-sizing:border-box;">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.4.7";
+    const APP_VERSION = "5.4.8";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -8397,10 +8449,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 547)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 548)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 547)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 548)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -8534,7 +8586,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 547)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 548)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -8545,7 +8597,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 547)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 548)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -10950,8 +11002,8 @@
         html += `</div>`;
       }
       html += `</div>`;
-      html += `<div style="text-align:center; font-size:11px; color:#b45309; margin:2px 0 6px;">👆 किसी भी सदस्य पर टैप करें — उनका परिवार नई विंडो में खुलेगा</div>`;
-      html += `<button onclick="vamshaOpenLiving()" style="${VB} width:100%; margin:6px 0 2px; background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; padding:10px;">🎂 परिवार के बड़े से छोटे जीवित सदस्य • ${vamshaFamilyData.filter(x => vIsLivingMember(x)).length}</button>`;
+      html += `<div style="text-align:center; font-size:11.5px; color:#b45309; margin:4px 0 8px; font-weight:700;">👆 किसी भी सदस्य पर टैप करें — उनका पूरा परिवार पेज खुलेगा</div>`;
+      html += `<button onclick="openDedicatedVamshaLivingPage()" style="${VB} width:100%; margin:6px 0 2px; background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; padding:10px;">🎂 परिवार के बड़े से छोटे जीवित सदस्य • ${vamshaFamilyData.filter(x => vIsLivingMember(x)).length}</button>`;
       html += vActionsHtml(cur);
       html += `<div style="margin:14px 0 8px; padding-top:12px; border-top:2px dashed #fcd34d; font-weight:800; font-size:14px; color:#92400e;">${vEsc(cur.name)} की संतानें (${cur.children.length})</div>`;
       cur.children.forEach((cid, i) => { const ch = vFind(cid); if (ch) html += vCardHtml(ch, i); });
@@ -10959,59 +11011,205 @@
       if (bodyEl) bodyEl.innerHTML = html;
     }
 
-    // ---- पॉपअप: हर परिवार की अलग विंडो ----
-    let vamshaPopupStack = [];
+    // =========================================================================
+    // 🌳 समर्पित वंशावली नया पेज नेविगेशन सिस्टम (Dedicated Full Page Navigation)
+    // =========================================================================
+    let vamshaPageStack = [];
 
-    function vamshaOpenPopup(id) {
-      if (!vFind(id)) return;
-      vamshaPopupStack.push(String(id));
-      vamshaRenderPopups();
+    // पूर्वज मार्ग (Breadcrumb Trail): हजारीराम जी › बुधाराम जी › ... › सदस्य
+    function vGetLineageTrail(id) {
+      const trail = [];
+      let cur = vFind(id), guard = 0;
+      while (cur && guard++ < 30) {
+        trail.unshift(cur);
+        const par = vParentIn(vamshaFamilyData, cur.id);
+        if (!par) break;
+        cur = par;
+      }
+      return trail;
     }
-    function vamshaClosePopup() { vamshaPopupStack.pop(); vamshaRenderPopups(); }
 
-    function vPopupHtml(id, idx) {
-      const p = vFind(id); if (!p) return '';
+    function vamshaOpenPage(id) {
+      const p = vFind(id);
+      if (!p) return;
+
+      if (!vamshaPageStack.length || vamshaPageStack[vamshaPageStack.length - 1] !== String(id)) {
+        vamshaPageStack.push(String(id));
+      }
+
+      const pageEl = document.getElementById("dedicatedVamshaPage");
+      if (pageEl) {
+        pageEl.style.display = "flex";
+        pageEl.scrollTop = 0;
+      }
+
+      renderDedicatedVamshaPage(p);
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.vamshaOpenPopup = vamshaOpenPage;
+    window.vamshaOpenPage = vamshaOpenPage;
+
+    function closeDedicatedVamshaPage() {
+      if (vamshaPageStack.length > 1) {
+        vamshaPageStack.pop();
+        const prevId = vamshaPageStack[vamshaPageStack.length - 1];
+        const prev = vFind(prevId);
+        if (prev) {
+          renderDedicatedVamshaPage(prev);
+          const pageEl = document.getElementById("dedicatedVamshaPage");
+          if (pageEl) pageEl.scrollTop = 0;
+          return;
+        }
+      }
+
+      vamshaPageStack = [];
+      const pageEl = document.getElementById("dedicatedVamshaPage");
+      if (pageEl) pageEl.style.display = "none";
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.closeDedicatedVamshaPage = closeDedicatedVamshaPage;
+    window.vamshaClosePopup = closeDedicatedVamshaPage;
+
+    function renderDedicatedVamshaPage(p) {
+      if (!p) return;
+      vInjectStyle();
       const f = vIsFemale(p);
       const sp = vSpouse(p);
-      const z = 1300 + idx * 10;
-      const level = vamshaPopupStack.length;
-      let h = `<div style="position:fixed; inset:0; background:rgba(15,23,42,${idx === 0 ? '0.55' : '0.35'}); z-index:${z}; display:flex; align-items:center; justify-content:center; padding:14px;" onclick="if(event.target===this) vamshaClosePopup()">
-        <div style="background:linear-gradient(180deg,#fffbeb 0%,#ffffff 100%); border:2px solid #f59e0b; border-radius:20px; width:100%; max-width:480px; max-height:92vh; overflow-y:auto; padding:14px; box-shadow:0 24px 60px rgba(0,0,0,0.4);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <span style="background:#f59e0b; color:#fff; font-weight:800; font-size:12px; padding:3px 14px; border-radius:999px;">${vEsc(vGenLabel(p))}</span>
-            <button onclick="vamshaClosePopup()" style="border:none; background:#fef3c7; color:#92400e; border-radius:50%; width:32px; height:32px; font-size:16px; font-weight:800; cursor:pointer;">✕</button>
-          </div>
-          <div style="background:#fff; border:2px solid #d97706; border-radius:16px; padding:12px; box-shadow:0 4px 14px rgba(217,119,6,0.15);">
-            <div style="display:flex; align-items:center; gap:12px;">
-              ${vAvatar(p, 60)}
-              <div style="flex:1; min-width:0;">
-                <div style="font-size:10.5px; color:#b45309; font-weight:700;">${(sp || p.wife) ? (f ? 'पति-पत्नी' : 'पति + धर्मपत्नी') : (f ? 'सुपुत्री' : 'मुखिया')}</div>
-                <div style="font-weight:800; font-size:17px; color:#7f1d1d; line-height:1.35;">${vEsc(p.name)}${(sp || p.wife) ? ` <span style="color:#d97706;">+</span> <span style="color:#be123c;">${vEsc(sp || p.wife)}</span>` : ''}</div>
-                ${vDobHtml(p)}
-              </div>
-            </div>
-            ${p.addedByName ? `<div style="font-size:10px; color:#94a3b8; margin-top:6px;">जोड़ने वाले: ${vEsc(p.addedByName)}</div>` : ''}
-          </div>
-          ${vActionsHtml(p)}
-          ${(f && !p.children.length) ? '' : `<div style="font-weight:800; font-size:13.5px; margin:12px 0 8px; color:#92400e;">${vEsc(p.name)} की संतानें (${p.children.length})</div>`}`;
-      if (!p.children.length) {
-        if (f) { /* बेटी के आगे परिवार नहीं */ } else
-        h += `<div style="text-align:center; padding:16px; color:#64748b; background:#fff; border:1px dashed #cbd5e1; border-radius:10px; font-size:12px;">इस परिवार में आगे कोई संतान दर्ज नहीं है।</div>`;
-      } else {
-        p.children.forEach((cid, i) => { const ch = vFind(cid); if (ch) h += vCardHtml(ch, i); });
-      }
-      if (level > 1 && idx === level - 1) {
-        h += `<button onclick="vamshaClosePopup()" style="${VB} width:100%; margin-top:6px; background:#e2e8f0; color:#334155; padding:10px;">← पिछली विंडो पर जाएं</button>`;
-      }
-      return h + `</div></div>`;
-    }
+      const parent = vParentIn(vamshaFamilyData, p.id);
+      const genBadge = vGetMemberTagline(p);
 
-    function vamshaRenderPopups() {
-      vInjectStyle();
-      let host = document.getElementById('vamshaPopupHost');
-      if (!vamshaPopupStack.length) { if (host) host.remove(); return; }
-      if (!host) { host = document.createElement('div'); host.id = 'vamshaPopupHost'; document.body.appendChild(host); }
-      host.innerHTML = vamshaPopupStack.map((id, i) => vPopupHtml(id, i)).join('');
+      // 1. Header Updates
+      const titleEl = document.getElementById("vamshaPageHeaderTitle");
+      const subEl = document.getElementById("vamshaPageHeaderSubtitle");
+      const badgeEl = document.getElementById("vamshaPageHeaderBadge");
+
+      if (titleEl) titleEl.innerHTML = `<span>🌳 ${vEsc(p.name)}</span>`;
+      if (subEl) subEl.innerText = parent ? `पिता: ${parent.name} • भाटी परिवार` : 'मूल पूर्वज • भाटी परिवार';
+      if (badgeEl) {
+        badgeEl.innerHTML = `<span style="background:linear-gradient(135deg, #d97706, #b45309); color:white; padding:4px 10px; border-radius:999px; font-weight:800; font-size:11px; box-shadow:0 2px 6px rgba(217,119,6,0.3);">${genBadge}</span>`;
+      }
+
+      // 2. Lineage Breadcrumbs Trail
+      const trail = vGetLineageTrail(p.id);
+      let breadcrumbHtml = '';
+      if (trail.length > 1) {
+        breadcrumbHtml = `<div style="margin-bottom:14px; overflow-x:auto; white-space:nowrap; padding:6px 2px; display:flex; align-items:center; gap:6px; scrollbar-width:none; -webkit-overflow-scrolling:touch;">`;
+        trail.forEach((t, i) => {
+          const isCurrent = t.id === p.id;
+          const shortName = String(t.name).replace(/\s*भाटी$/, '').replace(/^स्व\.\s*/, '');
+          breadcrumbHtml += `
+            <button onclick="vamshaOpenPage('${vEsc(t.id)}')" style="border:none; background:${isCurrent ? '#fef3c7' : '#ffffff'}; color:${isCurrent ? '#92400e' : '#475569'}; border:${isCurrent ? '1.5px solid #f59e0b' : '1px solid #e2e8f0'}; padding:5px 11px; border-radius:10px; font-weight:800; font-size:11.5px; cursor:pointer; flex-shrink:0; display:inline-flex; align-items:center; gap:4px; box-shadow:0 1px 4px rgba(0,0,0,0.03);">
+              ${i === 0 ? '👑 ' : ''}${vEsc(shortName)}
+            </button>
+          `;
+          if (i < trail.length - 1) {
+            breadcrumbHtml += `<span style="color:#94a3b8; font-size:11px; font-weight:900;">›</span>`;
+          }
+        });
+        breadcrumbHtml += `</div>`;
+      }
+
+      // 3. Hero Card Details
+      let ageHtml = '';
+      const age = vAgeOf(p), d = vParseDob(vDobOf(p));
+      if (age !== null || d) {
+        ageHtml = `<div style="font-size:12px; color:#64748b; margin-top:4px;">
+          ${age !== null ? `<b style="color:#d97706; font-size:12.5px;">${age} वर्ष</b>` : ''}
+          ${d ? ` • 🎂 जन्म: ${vFmtDate(d)}` : ''}
+        </div>`;
+      }
+
+      let dodHtml = '';
+      if (p.dod) {
+        const dodParsed = vParseDob(p.dod);
+        dodHtml = `<div style="font-size:11.5px; color:#475569; margin-top:3px; font-weight:600;">
+          🕊️ स्वर्गवास: ${dodParsed ? vFmtDate(dodParsed) : vEsc(p.dod)}
+        </div>`;
+      }
+
+      let annHtml = '';
+      if (p.anniversary) {
+        const annParsed = vParseDob(p.anniversary);
+        annHtml = `<div style="font-size:11.5px; color:#be123c; margin-top:3px; font-weight:600;">
+          💍 विवाह वर्षगांठ: ${annParsed ? vFmtDate(annParsed) : vEsc(p.anniversary)}
+        </div>`;
+      }
+
+      let mainCardHtml = `
+        <div style="background:linear-gradient(145deg, #ffffff 0%, #fffbeb 100%); border:1.8px solid #f59e0b; border-radius:22px; padding:18px; margin-bottom:16px; box-shadow:0 10px 30px rgba(217,119,6,0.12);">
+          <div style="display:flex; align-items:center; gap:14px;">
+            ${vAvatar(p, 64)}
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:3px;">
+                <span style="background:linear-gradient(135deg, #d97706, #b45309); color:#fff; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; letter-spacing:0.3px;">${genBadge}</span>
+                <span style="font-size:11px; color:#b45309; font-weight:700;">${(sp || p.wife) ? (f ? 'पति-पत्नी' : 'पति + धर्मपत्नी') : (f ? 'सुपुत्री' : 'मुखिया')}</span>
+              </div>
+              <div style="font-weight:900; font-size:18px; color:#7f1d1d; line-height:1.3;">
+                ${vEsc(p.name)}${(sp || p.wife) ? ` <span style="color:#d97706;">+</span> <span style="color:#be123c;">${vEsc(sp || p.wife)}</span>` : ''}
+              </div>
+              ${parent ? `<div style="font-size:11.5px; color:#64748b; margin-top:2px; font-weight:700;">पिता: ${vEsc(parent.name)}</div>` : ''}
+              ${ageHtml}
+              ${dodHtml}
+              ${annHtml}
+            </div>
+          </div>
+          ${p.addedByName ? `<div style="font-size:10px; color:#94a3b8; margin-top:8px; border-top:1px dashed #fcd34d; padding-top:6px;">जोड़ने वाले: ${vEsc(p.addedByName)}</div>` : ''}
+          <div style="margin-top:14px; border-top:1px solid rgba(245,158,11,0.25); padding-top:12px;">
+            ${vActionsHtml(p)}
+          </div>
+        </div>
+      `;
+
+      // 4. Children Cards Section
+      let childrenHtml = '';
+      if (f && !p.children.length) {
+        childrenHtml = `
+          <div style="text-align:center; padding:20px; color:#64748b; background:#fff; border:1.5px solid #e2e8f0; border-radius:16px; font-size:12.5px; margin-bottom:14px;">
+            🌸 विवाहित सुपुत्री (राजस्थानी परंपरा अनुसार ससुराल पक्ष की वंशावली)
+          </div>
+        `;
+      } else {
+        childrenHtml = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin:16px 2px 10px;">
+            <div style="font-weight:800; font-size:14.5px; color:#92400e; display:flex; align-items:center; gap:6px;">
+              <span>👨‍👩‍👧‍👦 ${vEsc(p.name)} की संतानें</span>
+              <span style="background:#fef3c7; color:#92400e; font-size:11px; padding:2px 8px; border-radius:10px; font-weight:800; border:1px solid #fde68a;">${p.children.length}</span>
+            </div>
+          </div>
+        `;
+
+        if (!p.children.length) {
+          childrenHtml += `
+            <div style="text-align:center; padding:24px 16px; color:#64748b; background:#fff; border:1.5px dashed #cbd5e1; border-radius:16px; font-size:12.5px; margin-bottom:14px;">
+              <i class="fa-solid fa-seedling" style="font-size:24px; color:#d97706; margin-bottom:8px; display:block;"></i>
+              इस परिवार में आगे कोई संतान दर्ज नहीं है।
+              ${vCanAdd() && !f ? `<div style="margin-top:8px;"><button onclick="vamshaOpenForm('add','${vEsc(p.id)}')" style="${VB} background:#16a34a; color:#fff;">➕ संतान जोड़ें</button></div>` : ''}
+            </div>
+          `;
+        } else {
+          childrenHtml += `<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">`;
+          p.children.forEach((cid, i) => {
+            const ch = vFind(cid);
+            if (ch) childrenHtml += vCardHtml(ch, i);
+          });
+          childrenHtml += `</div>`;
+        }
+      }
+
+      // Back navigation helper button at bottom if navigated deeper
+      let bottomBackBtn = '';
+      if (vamshaPageStack.length > 1) {
+        bottomBackBtn = `
+          <button onclick="closeDedicatedVamshaPage()" style="${VB} width:100%; margin-top:8px; background:#f1f5f9; color:#334155; padding:12px; font-size:13px; border:1.5px solid #cbd5e1; border-radius:14px; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <i class="fa-solid fa-arrow-left"></i> <span>पिछली पीढ़ी / पेज पर वापस जाएं</span>
+          </button>
+        `;
+      }
+
+      const contentEl = document.getElementById("dedicatedVamshaPageContent");
+      if (contentEl) {
+        contentEl.innerHTML = breadcrumbHtml + mainCardHtml + childrenHtml + bottomBackBtn;
+      }
     }
 
     // ---- सदस्य की पीढ़ी / सम्बन्ध टैगलाइन (Tagline) ----
@@ -11046,23 +11244,30 @@
       return `पीढ़ी ${depth}`;
     }
 
-    // ---- जीवित सदस्य: जन्म तारीख अनुसार बड़े से छोटा क्रम ----
-    function closeVamshaLiving() {
+    // ---- जीवित सदस्य: समर्पित नया पेज नेविगेशन (Dedicated Full Page) ----
+    function closeDedicatedVamshaLivingPage() {
       const o = document.getElementById('vamshaLivingOverlay');
       if (o) o.remove();
+      const pageEl = document.getElementById('dedicatedVamshaLivingPage');
+      if (pageEl) pageEl.style.display = 'none';
       if (typeof updateActiveModalState === 'function') updateActiveModalState();
     }
+    window.closeDedicatedVamshaLivingPage = closeDedicatedVamshaLivingPage;
+    window.closeVamshaLiving = closeDedicatedVamshaLivingPage;
 
-    function vamshaOpenLiving() {
-      closeVamshaLiving();
+    function openDedicatedVamshaLivingPage() {
+      closeDedicatedVamshaLivingPage();
       const living = vamshaFamilyData.filter(p => vIsLivingMember(p));
+
+      const countBadge = document.getElementById("vamshaLivingCountBadge");
+      if (countBadge) countBadge.textContent = living.length;
 
       // 1. जिनकी जन्म तारीख (DOB) उपलब्ध है - उम्र/जन्म तारीख के अनुसार बड़े से छोटा क्रम
       const toTime = d => new Date(d.y, d.m - 1, d.d).getTime();
       const withDob = living
         .map(p => ({ p: p, d: vParseDob(vDobOf(p)) }))
         .filter(x => x.d)
-        .sort((a, b) => toTime(a.d) - toTime(b.d)); // सबसे बड़े पहले (earliest birth date first)
+        .sort((a, b) => toTime(a.d) - toTime(b.d)); // सबसे बड़े पहले
 
       // 2. जिनकी जन्म तारीख अभी दर्ज नहीं है
       const noDob = living.filter(p => !vParseDob(vDobOf(p)));
@@ -11073,45 +11278,67 @@
         const parentText = parent ? `पिता: ${vEsc(parent.name)}` : '';
         const genBadge = vGetMemberTagline(p);
 
-        return `<div onclick="closeVamshaLiving(); vamshaOpenPopup('${vEsc(p.id)}')" style="display:flex; align-items:center; gap:10px; background:#fff; border:1.5px solid #ddd6fe; border-radius:14px; padding:10px 12px; margin-bottom:8px; cursor:pointer; box-shadow:0 2px 6px rgba(124,58,237,0.06);">
-          <div style="width:26px; height:26px; border-radius:50%; background:#f3e8ff; color:#7c3aed; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:11.5px; flex-shrink:0;">${idx}</div>
-          ${vAvatar(p, 44)}
+        return `<div onclick="vamshaOpenPage('${vEsc(p.id)}')" style="display:flex; align-items:center; gap:12px; background:#fff; border:1.5px solid #e2e8f0; border-radius:16px; padding:12px 14px; margin-bottom:10px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,0.03); transition:all 0.2s ease;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#f3e8ff; color:#7c3aed; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; flex-shrink:0;">${idx}</div>
+          ${vAvatar(p, 48)}
           <div style="flex:1; min-width:0;">
-            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:2px;">
-              <span style="background:linear-gradient(135deg, #4338ca, #3b82f6); color:#fff; font-size:9.5px; font-weight:800; padding:2px 7px; border-radius:6px; letter-spacing:0.3px;">${genBadge}</span>
-              ${parentText ? `<span style="font-size:10.5px; color:#64748b; font-weight:700;">• ${parentText}</span>` : ''}
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:3px;">
+              <span style="background:linear-gradient(135deg, #4338ca, #3b82f6); color:#fff; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; letter-spacing:0.3px;">${genBadge}</span>
+              ${parentText ? `<span style="font-size:11px; color:#64748b; font-weight:700;">• ${parentText}</span>` : ''}
             </div>
-            <div style="font-weight:800; font-size:14px; color:#1e293b; line-height:1.3;">
-              ${vEsc(p.name)}${sp ? ` <span style="color:#d97706;">+</span> <span style="color:#be123c; font-size:12px;">${vEsc(sp)}</span>` : ''}
+            <div style="font-weight:800; font-size:14.5px; color:#1e293b; line-height:1.3;">
+              ${vEsc(p.name)}${sp ? ` <span style="color:#d97706;">+</span> <span style="color:#be123c; font-size:12.5px;">${vEsc(sp)}</span>` : ''}
             </div>
-            <div style="font-size:11px; color:#64748b; margin-top:2px;">
+            <div style="font-size:11.5px; color:#64748b; margin-top:3px;">
               ${age !== null ? `<b style="color:#7c3aed;">${age} वर्ष</b>` : ''}${d ? ` • 🎂 ${vFmtDate(d)}` : ''}
             </div>
           </div>
-          <div style="color:#7c3aed; font-size:16px; font-weight:800; padding-left:4px;">›</div>
+          <div style="color:#7c3aed; font-size:18px; font-weight:800; padding-left:4px;">›</div>
         </div>`;
       };
 
-      const o = document.createElement('div');
-      o.id = 'vamshaLivingOverlay';
-      o.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.65);backdrop-filter:blur(10px);z-index:1450;display:flex;align-items:center;justify-content:center;padding:14px;';
-      o.innerHTML = `<div style="background:#faf5ff; border:2px solid #8b5cf6; border-radius:20px; width:100%; max-width:480px; max-height:92vh; overflow-y:auto; padding:14px; box-shadow:0 12px 36px rgba(0,0,0,0.3);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <div style="font-weight:800; font-size:15px; color:#5b21b6;">🎂 परिवार के जीवित सदस्य (${living.length})</div>
-          <button onclick="closeVamshaLiving()" style="border:none; background:#ede9fe; color:#5b21b6; border-radius:50%; width:32px; height:32px; font-size:16px; font-weight:800; cursor:pointer;">✕</button>
+      let contentHtml = `
+        <div style="background:linear-gradient(135deg, #f5f3ff, #ede9fe); border:1.5px solid #ddd6fe; border-radius:18px; padding:14px 16px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:38px; height:38px; border-radius:12px; background:#7c3aed; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+              <div style="font-size:14px; font-weight:800; color:#4c1d95;">परिवार के कुल जीवित सदस्य: ${living.length}</div>
+              <div style="font-size:11px; color:#6d28d9; font-weight:600; margin-top:2px;">फ्लोचार्ट शाखा व पीढ़ी अनुसार क्रम • स्वर्गवासी, विवाहित बेटियां शामिल नहीं</div>
+            </div>
+          </div>
         </div>
-        ${withDob.map((x, i) => row(x.p, i + 1, x.d)).join('')}
-        ${noDob.length ? `
-          <div style="font-weight:800; font-size:12px; color:#64748b; margin:14px 0 6px; padding:0 4px; display:flex; align-items:center; gap:6px;">
+      `;
+
+      contentHtml += withDob.map((x, i) => row(x.p, i + 1, x.d)).join('');
+      if (noDob.length) {
+        contentHtml += `
+          <div style="font-weight:800; font-size:12.5px; color:#64748b; margin:16px 0 8px; padding:0 4px; display:flex; align-items:center; gap:6px;">
             <i class="fa-solid fa-calendar-xmark"></i> <span>जन्म तारीख दर्ज नहीं (${noDob.length})</span>
           </div>
-          ${noDob.map((p, j) => row(p, withDob.length + j + 1, null)).join('')}
-        ` : ''}
-      </div>`;
-      o.addEventListener('click', e => { if (e.target === o) closeVamshaLiving(); });
-      document.body.appendChild(o);
-      if (typeof updateActiveModalState === 'function') updateActiveModalState();
+        `;
+        contentHtml += noDob.map((p, j) => row(p, withDob.length + j + 1, null)).join('');
+      }
+
+      contentHtml += `
+        <button onclick="closeDedicatedVamshaLivingPage()" style="width:100%; margin-top:16px; padding:12px; border:none; border-radius:14px; background:#f1f5f9; color:#475569; font-weight:800; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-solid fa-arrow-left"></i> <span>वापस वंशावली में जाएं</span>
+        </button>
+      `;
+
+      const container = document.getElementById("dedicatedVamshaLivingContent");
+      if (container) container.innerHTML = contentHtml;
+
+      const pageEl = document.getElementById("dedicatedVamshaLivingPage");
+      if (pageEl) {
+        pageEl.style.display = "flex";
+        pageEl.scrollTop = 0;
+      }
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
     }
+    window.openDedicatedVamshaLivingPage = openDedicatedVamshaLivingPage;
+    window.vamshaOpenLiving = openDedicatedVamshaLivingPage;
 
 
     // ===================== वंशावली v5.1: पूर्वज फ्लोचार्ट + क्रम-सुधार =====================
@@ -21084,19 +21311,20 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.7)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.8)
     //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 
     // 🛡️ Modal Backdrop Isolation & Screen Lock State Checker
     function isAnyModalOrOverlayOpen() {
       // 1. Dedicated Sub-Pages
-      const fullPages = ['dedicatedGalleryPage', 'dedicatedPaymentPage', 'dedicatedCashCounterPage', 'passbookOverlay'];
+      const fullPages = ['dedicatedGalleryPage', 'dedicatedPaymentPage', 'dedicatedCashCounterPage', 'passbookOverlay', 'dedicatedVamshaPage', 'dedicatedVamshaLivingPage'];
       for (const pid of fullPages) {
         const el = document.getElementById(pid);
         if (el && window.getComputedStyle(el).display !== 'none') return true;
       }
       // 2. Vamshavali Popups and Overlays
+      if (typeof vamshaPageStack !== 'undefined' && vamshaPageStack.length > 0) return true;
       if (typeof vamshaPopupStack !== 'undefined' && vamshaPopupStack.length > 0) return true;
       if (document.getElementById('vamshaLivingOverlay')) return true;
       if (document.getElementById('vamshaFormOverlay')) return true;
@@ -21138,7 +21366,7 @@
     // 🚫 Prevent Touchmove Bleed on Modal Background
     document.addEventListener('touchmove', function(e) {
       if (document.body.classList.contains('has-active-modal')) {
-        const scrollable = e.target.closest('.modal-content, #passbookBody, #dedicatedGalleryPage, #dedicatedPaymentPage, #dedicatedCashCounterPage, #vamshaLivingOverlay > div, #vamshaPopupHost .vf-popup-card, #vamshaFormOverlay > div, #vamshaPosterCard');
+        const scrollable = e.target.closest('.modal-content, #passbookBody, #dedicatedGalleryPage, #dedicatedPaymentPage, #dedicatedCashCounterPage, #dedicatedVamshaPage, #dedicatedVamshaLivingPage, #vamshaLivingOverlay > div, #vamshaPopupHost .vf-popup-card, #vamshaFormOverlay > div, #vamshaPosterCard');
         if (!scrollable) {
           if (e.cancelable) e.preventDefault();
         }
@@ -21147,6 +21375,8 @@
 
     // 📋 All Modal Close Handlers Map
     window.modalCloseHandlers = {
+      'dedicatedVamshaPage': () => typeof closeDedicatedVamshaPage === 'function' && closeDedicatedVamshaPage(),
+      'dedicatedVamshaLivingPage': () => typeof closeDedicatedVamshaLivingPage === 'function' && closeDedicatedVamshaLivingPage(),
       'languageModal': () => typeof closeLanguageModal === 'function' && closeLanguageModal(),
       'themeModal': () => typeof closeThemeModal === 'function' && closeThemeModal(),
       'todayCelebrationModal': () => typeof closeTodayCelebrationModal === 'function' && closeTodayCelebrationModal(),
@@ -21216,7 +21446,25 @@
           return true;
         }
 
-        // 2. Vamshavali Popups Stack
+        // 2. Dedicated Vamshavali Member Full Page (Stack-aware Back)
+        const vMemberPage = document.getElementById('dedicatedVamshaPage');
+        if (vMemberPage && window.getComputedStyle(vMemberPage).display !== 'none') {
+          if (typeof closeDedicatedVamshaPage === 'function') closeDedicatedVamshaPage();
+          else vMemberPage.style.display = 'none';
+          updateActiveModalState();
+          return true;
+        }
+
+        // 2b. Dedicated Vamshavali Living Members Page
+        const vLivingPage = document.getElementById('dedicatedVamshaLivingPage');
+        if (vLivingPage && window.getComputedStyle(vLivingPage).display !== 'none') {
+          if (typeof closeDedicatedVamshaLivingPage === 'function') closeDedicatedVamshaLivingPage();
+          else vLivingPage.style.display = 'none';
+          updateActiveModalState();
+          return true;
+        }
+
+        // 2c. Vamshavali Legacy Popups Stack
         if (typeof vamshaPopupStack !== 'undefined' && vamshaPopupStack.length > 0) {
           if (typeof vamshaClosePopup === 'function') {
             vamshaClosePopup();
