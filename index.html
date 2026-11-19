@@ -3447,7 +3447,7 @@
           <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
             <i class="fa-solid fa-user" style="color:#2563eb; margin-right:4px;"></i> आपका पूरा नाम:
           </label>
-          <input type="text" id="authGateUserNameInput" placeholder="उदा. सुखदेव भाटी" style="width:100%; box-sizing:border-box; padding:11px 13px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
+          <input type="text" id="authGateUserNameInput" placeholder="आपका पूरा नाम दर्ज करें" style="width:100%; box-sizing:border-box; padding:11px 13px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
         </div>
 
         <div style="margin-bottom:6px;">
@@ -4534,7 +4534,7 @@
       <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:14px;">
         <div>
           <label id="lblPosterTargetName" style="font-size:12px; font-weight:700; color:#334155; margin-bottom:4px; display:block;">त्यौहार का नाम:</label>
-          <input type="text" id="inpPosterTargetName" placeholder="उदा. दीपावली महापर्व या सदस्य का नाम" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13px; font-family:inherit;">
+          <input type="text" id="inpPosterTargetName" placeholder="पर्व, सुविचार या सदस्य का नाम लिखें" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13px; font-family:inherit;">
         </div>
 
         <div id="rowPosterSub" style="display:block;">
@@ -4616,7 +4616,7 @@
           <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:5px;">
             <i class="fa-solid fa-user" style="color:#2563eb; margin-right:4px;"></i> आपका पूरा नाम:
           </label>
-          <input type="text" id="modalUserNameInput" placeholder="उदा. सुखदेव भाटी" style="width:100%; box-sizing:border-box; padding:11px 13px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
+          <input type="text" id="modalUserNameInput" placeholder="आपका पूरा नाम दर्ज करें" style="width:100%; box-sizing:border-box; padding:11px 13px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:14.5px; font-weight:700; color:#0f172a; outline:none; background:#ffffff;">
         </div>
 
         <div style="margin-bottom:6px;">
@@ -5881,7 +5881,7 @@
       
       <div class="form-group">
         <label><span data-i18n="full_name">सदस्य का पूरा नाम</span> <span style="color:#dc2626;">*</span></label>
-        <input type="text" id="memName" placeholder="उदा. रेवंतराम भाटी" data-i18n-ph="mem_name_ph">
+        <input type="text" id="memName" placeholder="सदस्य का पूरा नाम दर्ज करें" data-i18n-ph="mem_name_ph">
       </div>
       
       <div class="form-group">
@@ -6294,7 +6294,7 @@
         </div>
 
         <!-- Note Input -->
-        <input type="text" id="dedicatedPayNoteInput" placeholder="विवरण (उदा. अंशदान - रेवंतराम भाटी)" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:12px; border:1px solid #e2e8f0; font-size:12.5px; color:#334155; outline:none; background:white;">
+        <input type="text" id="dedicatedPayNoteInput" placeholder="विवरण लिखें (उदा. मासिक अंशदान)" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:12px; border:1px solid #e2e8f0; font-size:12.5px; color:#334155; outline:none; background:white;">
       </div>
 
       <!-- Payment App Selection Buttons -->
@@ -6936,7 +6936,7 @@
         form_title: "नया सदस्य जोड़ें",
         form_badge: "भाटी परिवार",
         full_name: "सदस्य का पूरा नाम",
-        mem_name_ph: "उदा. रेवंतराम भाटी",
+        mem_name_ph: "सदस्य का पूरा नाम दर्ज करें",
         mobile_phone: "मोबाइल नंबर (कॉल हेतु)",
         mem_phone_ph: "10 अंकों का मोबाइल नंबर",
         wa_number: "व्हाट्सएप नंबर (कंट्री कोड 91 सहित या 10 अंक)",
@@ -10663,8 +10663,8 @@
           <div style="font-weight:800;font-size:15px;color:#92400e;margin-bottom:4px;">${mode === 'add' ? '➕ संतान जोड़ें' : mode === 'edit' ? '✏️ जानकारी बदलें' : '📷 फोटो / जन्म तिथि'}</div>
           <div style="font-size:12px;color:#64748b;margin-bottom:12px;">${mode === 'add' ? 'परिवार: ' + vEsc(parent ? parent.name : '') + ' की संतान' : vEsc(person ? person.name : '')}</div>
           ${full ? `
-          <div class="form-group"><label>नाम *</label><input id="vfName" type="text" value="${vEsc(person ? person.name : '')}" placeholder="जैसे: मोहन भाटी"></div>
-          <div class="form-group"><label>धर्मपत्नी / पति का नाम (वैकल्पिक)</label><input id="vfWife" type="text" value="${vEsc(person ? (person.wife === 'धर्मपत्नी' ? '' : person.wife) : '')}" placeholder="जैसे: सीता देवी"></div>
+          <div class="form-group"><label>नाम *</label><input id="vfName" type="text" value="${vEsc(person ? person.name : '')}" placeholder="सदस्य का नाम लिखें"></div>
+          <div class="form-group"><label>धर्मपत्नी / पति का नाम (वैकल्पिक)</label><input id="vfWife" type="text" value="${vEsc(person ? (person.wife === 'धर्मपत्नी' ? '' : person.wife) : '')}" placeholder="जीवनसाथी का नाम लिखें"></div>
           <div class="form-group"><label>सुपुत्र / सुपुत्री</label>
             <select id="vfGender"><option value="M" ${!isF ? 'selected' : ''}>सुपुत्र (लड़का)</option><option value="F" ${isF ? 'selected' : ''}>सुपुत्री (लड़की)</option></select>
           </div>` : ''}
@@ -16345,7 +16345,7 @@
       } else if (type === "birthday") {
         if (lblName) lblName.innerText = "सदस्य का नाम (जिसका जन्मदिन है):";
         if (inpName) {
-          inpName.placeholder = "उदा. रेवंतराम भाटी";
+          inpName.placeholder = "सदस्य का नाम दर्ज करें";
           if (inpName.value.includes("सुविचार") || inpName.value.includes("महापर्व") || inpName.value === "होली") inpName.value = "";
         }
         if (lblSub) lblSub.innerText = "शुभकामना उपशीर्षक (वैकल्पिक):";
@@ -16357,7 +16357,7 @@
       } else if (type === "anniversary") {
         if (lblName) lblName.innerText = "दम्पति / सदस्य का नाम:";
         if (inpName) {
-          inpName.placeholder = "उदा. श्री एवं श्रीमती रेवंतराम भाटी";
+          inpName.placeholder = "दम्पति / सदस्य का नाम दर्ज करें";
           if (inpName.value.includes("सुविचार") || inpName.value.includes("महापर्व") || inpName.value === "होली") inpName.value = "";
         }
         if (lblSub) lblSub.innerText = "उपशीर्षक (वैकल्पिक):";
@@ -16369,7 +16369,7 @@
       } else if (type === "punyatithi") {
         if (lblName) lblName.innerText = "दिवंगत पूज्य का नाम (स्व.):";
         if (inpName) {
-          inpName.placeholder = "उदा. स्व. श्री बुधाराम जी भाटी";
+          inpName.placeholder = "दिवंगत पूज्य / सदस्य का नाम दर्ज करें";
           if (inpName.value.includes("सुविचार") || inpName.value.includes("महापर्व") || inpName.value === "होली") inpName.value = "";
         }
         if (lblSub) lblSub.innerText = "स्मृति उपशीर्षक (वैकल्पिक):";
