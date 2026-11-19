@@ -10861,9 +10861,9 @@
     ];
 
     function vGenLabel(p) {
-      if (p.id === "0") return 'मूल पूर्वज';
-      let g = String(p.gen || '').replace(/पीढ़ी\s*[-0-9]+\s*:?\s*/gi, '').trim();
-      return g || 'परिवार सदस्य';
+      if (!p || p.id === "0") return 'मूल पूर्वज (पीढ़ी 1)';
+      const d = vDepthIn(vamshaFamilyData, p.id);
+      return `पीढ़ी ${d}`;
     }
     function vSpouse(p) { return (p && p.wife && p.wife !== 'धर्मपत्नी') ? p.wife : ''; }
     const VB = 'border:none; padding:7px 11px; border-radius:8px; cursor:pointer; font-size:11.5px; font-weight:700;';
@@ -11039,29 +11039,14 @@
       return vIsFemale(p);
     }
 
+    // ---- सदस्य की केवल पीढ़ी संख्या (उदा. पीढ़ी 4, पीढ़ी 5 - कोई पोता/पड़पोता टैग नहीं) ----
     function vGetMemberTagline(p) {
       if (!p) return 'परिवार सदस्य';
       const depth = vDepthIn(vamshaFamilyData, p.id);
-      const f = vIsActuallyFemale(p);
-      const genStr = String(p.gen || '').trim();
-
-      // यदि p.gen में पहले से विशिष्ट सम्बन्ध (जैसे पड़पोता / सक्कपड़पोता / पौत्र आदि) लिखा हो
-      if (/(पड़पोता|प्रपौत्र)/i.test(genStr)) return `पीढ़ी ${depth}: पड़पोता / प्रपौत्र`;
-      if (/(सक्कपड़पोता|सक्क\s*पड़पोता|अतिप्रपौत्र)/i.test(genStr)) return `पीढ़ी ${depth}: सक्कपड़पोता`;
-      if (/(पौत्र)/i.test(genStr)) return f ? `पीढ़ी ${depth}: पौत्री` : `पीढ़ी ${depth}: पौत्र`;
-      if (/(सुपुत्र|पुत्र)/i.test(genStr) && !/(सुपुत्री|पुत्री)/i.test(genStr)) return f ? `पीढ़ी ${depth}: सुपुत्री` : (depth === 5 ? `पीढ़ी 5: सक्कपड़पोता` : (depth === 4 ? `पीढ़ी 4: पड़पोता / प्रपौत्र` : `पीढ़ी ${depth}: सुपुत्र`));
-      if (/(सुपुत्री|पुत्री|बेटी)/i.test(genStr)) return `पीढ़ी ${depth}: सुपुत्री`;
-
-      if (depth === 1) return 'मूल पुरुष / पूर्वज';
-      if (depth === 2) return f ? 'पीढ़ी 2: सुपुत्री' : 'पीढ़ी 2: मुख्य पुत्र';
-      if (depth === 3) return f ? 'पीढ़ी 3: सुपुत्री' : 'पीढ़ी 3: पौत्र';
-      if (depth === 4) return f ? 'पीढ़ी 4: सुपुत्री' : 'पीढ़ी 4: पड़पोता / प्रपौत्र';
-      if (depth === 5) return f ? 'पीढ़ी 5: सुपुत्री' : 'पीढ़ी 5: सक्कपड़पोता';
-      if (depth >= 6) return f ? `पीढ़ी ${depth}: सुपुत्री` : `पीढ़ी ${depth}`;
       return `पीढ़ी ${depth}`;
     }
 
-    // ---- जीवित सदस्य: जन्म तारीख अनुसार बड़े से छोटा क्रम (टैगलाइन सहित) ----
+    // ---- जीवित सदस्य: जन्म तारीख अनुसार बड़े से छोटा क्रम ----
     function closeVamshaLiving() {
       const o = document.getElementById('vamshaLivingOverlay');
       if (o) o.remove();
@@ -11111,11 +11096,10 @@
       o.id = 'vamshaLivingOverlay';
       o.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.65);backdrop-filter:blur(10px);z-index:1450;display:flex;align-items:center;justify-content:center;padding:14px;';
       o.innerHTML = `<div style="background:#faf5ff; border:2px solid #8b5cf6; border-radius:20px; width:100%; max-width:480px; max-height:92vh; overflow-y:auto; padding:14px; box-shadow:0 12px 36px rgba(0,0,0,0.3);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <div style="font-weight:800; font-size:15px; color:#5b21b6;">🎂 परिवार के जीवित सदस्य (${living.length})</div>
           <button onclick="closeVamshaLiving()" style="border:none; background:#ede9fe; color:#5b21b6; border-radius:50%; width:32px; height:32px; font-size:16px; font-weight:800; cursor:pointer;">✕</button>
         </div>
-        <div style="font-size:11px; color:#6d28d9; margin-bottom:10px;">जन्म तारीख अनुसार बड़े से छोटे क्रम में • स्वर्गवासी व विवाहित बेटियां शामिल नहीं</div>
         ${withDob.map((x, i) => row(x.p, i + 1, x.d)).join('')}
         ${noDob.length ? `
           <div style="font-weight:800; font-size:12px; color:#64748b; margin:14px 0 6px; padding:0 4px; display:flex; align-items:center; gap:6px;">
