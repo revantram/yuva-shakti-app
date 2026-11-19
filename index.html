@@ -2684,6 +2684,14 @@
       touch-action: pan-y !important;
       overscroll-behavior: contain !important;
     }
+    /* 🖼️ फोटो गैलरी लाइटबॉक्स के लिए फ्री-फॉर्म पिंच और पैन (No browser touch gestures intercept) */
+    #galLightboxModal,
+    #galLightboxImgContainer,
+    #galLightboxImg {
+      touch-action: none !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+    }
 
     /* ===== Parivar Notice Board / Ticker ===== */
     #noticeBoardWrap {
@@ -6083,27 +6091,38 @@
     </div>
   </div>
 
-  <!-- 🖼️ फुलस्क्रीन फोटो व्यूअर / लाइटबॉक्स (Fullscreen Photo Lightbox Modal) -->
-  <div id="galLightboxModal" style="display:none; position:fixed; inset:0; z-index:1250; background:rgba(0,0,0,0.94); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); flex-direction:column; justify-content:space-between; padding:16px; box-sizing:border-box;" onclick="if(event.target===this) closeGalLightbox()">
+  <!-- 🖼️ फुलस्क्रीन फोटो व्यूअर / लाइटबॉक्स (Fullscreen Photo Lightbox Modal with Zoom & Pan) -->
+  <div id="galLightboxModal" style="display:none; position:fixed; inset:0; z-index:1250; background:rgba(0,0,0,0.95); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); flex-direction:column; justify-content:space-between; padding:12px; box-sizing:border-box; touch-action:none;" onclick="if(event.target===this) closeGalLightbox()">
     <!-- Top Bar -->
-    <div style="display:flex; justify-content:space-between; align-items:center; z-index:10; padding:4px 0;">
-      <button onclick="closeGalLightbox()" style="border:none; background:rgba(255,255,255,0.18); color:white; border-radius:50%; width:38px; height:38px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+    <div style="display:flex; justify-content:space-between; align-items:center; z-index:30; padding:4px 0;" onclick="event.stopPropagation();">
+      <button onclick="closeGalLightbox()" title="बंद करें" style="border:none; background:rgba(255,255,255,0.18); color:white; border-radius:50%; width:38px; height:38px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
         ✕
       </button>
-      <div style="text-align:center; color:white; max-width:70%;">
+      <div style="text-align:center; color:white; max-width:48%; margin:0 6px; overflow:hidden;">
         <div id="galLightboxTitle" style="font-weight:800; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">फोटो शीर्षक</div>
-        <div id="galLightboxSub" style="font-size:11px; color:#cbd5e1;">फोल्डर • तिथि</div>
+        <div id="galLightboxSub" style="font-size:11px; color:#cbd5e1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">फोल्डर • तिथि</div>
       </div>
-      <div style="width:38px;"></div>
+      <!-- Zoom On-Screen Controls -->
+      <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
+        <button onclick="zoomGalPhoto(-0.5)" title="छोटा करें" style="border:none; background:rgba(255,255,255,0.18); color:white; border-radius:50%; width:34px; height:34px; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <button id="galZoomLevelBadge" onclick="resetGalPhotoZoom(true)" title="ज़ूम रीसेट (1.0x)" style="border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.15); color:#fbbf24; font-size:11px; font-weight:800; padding:4px 8px; border-radius:10px; cursor:pointer; min-width:38px; text-align:center;">
+          1.0x
+        </button>
+        <button onclick="zoomGalPhoto(0.5)" title="बड़ा करें" style="border:none; background:rgba(255,255,255,0.18); color:white; border-radius:50%; width:34px; height:34px; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
     </div>
 
-    <!-- Center Photo Container -->
-    <div style="flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:12px 0;">
-      <img id="galLightboxImg" src="" style="max-height:80vh; max-width:96vw; object-fit:contain; border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,0.6);">
+    <!-- Center Photo Container (Gesture, Pinch & Pan enabled) -->
+    <div id="galLightboxImgContainer" style="flex:1; width:100%; height:100%; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; touch-action:none; user-select:none; -webkit-user-select:none; cursor:grab;">
+      <img id="galLightboxImg" src="" draggable="false" style="max-height:80vh; max-width:96vw; object-fit:contain; border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,0.6); transform-origin:center center; will-change:transform; touch-action:none; user-select:none; -webkit-user-drag:none; transition:transform 0.12s ease-out;">
     </div>
 
     <!-- Bottom Actions Bar -->
-    <div style="display:flex; justify-content:center; align-items:center; gap:10px; z-index:10; padding:8px 0;" onclick="event.stopPropagation();">
+    <div style="display:flex; justify-content:center; align-items:center; gap:10px; z-index:30; padding:8px 0;" onclick="event.stopPropagation();">
       <button onclick="downloadGalleryPhoto(currentLightboxPhotoId)" style="border:none; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:11px 20px; border-radius:14px; font-weight:800; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 4px 14px rgba(37,99,235,0.35);">
         <i class="fa-solid fa-download"></i> <span>डाउनलोड करें</span>
       </button>
@@ -18944,6 +18963,200 @@
       }).join("");
     }
 
+    // =========================================================================
+    // 🔍 गैलरी फोटो ज़ूम और पैन नियंत्रक (Pinch-to-zoom, Pan, Double-tap & Zoom buttons)
+    // =========================================================================
+    let galZoomScale = 1;
+    let galZoomX = 0;
+    let galZoomY = 0;
+    let galInitialPinchDist = 0;
+    let galInitialScale = 1;
+    let galLastTouchX = 0;
+    let galLastTouchY = 0;
+    let galIsDragging = false;
+    let galLastTapTime = 0;
+    let galGesturesInitialized = false;
+
+    function updateGalImgTransform(smooth) {
+      const img = document.getElementById("galLightboxImg");
+      const badge = document.getElementById("galZoomLevelBadge");
+      if (!img) return;
+      if (smooth) {
+        img.style.transition = "transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1)";
+      } else {
+        img.style.transition = "none";
+      }
+      img.style.transform = `translate3d(${galZoomX}px, ${galZoomY}px, 0px) scale(${galZoomScale})`;
+      if (badge) {
+        badge.innerText = `${galZoomScale.toFixed(1)}x`;
+        badge.style.color = galZoomScale > 1.05 ? "#38bdf8" : "#fbbf24";
+        badge.style.borderColor = galZoomScale > 1.05 ? "rgba(56, 189, 248, 0.6)" : "rgba(255,255,255,0.25)";
+      }
+    }
+
+    function resetGalPhotoZoom(smooth) {
+      galZoomScale = 1;
+      galZoomX = 0;
+      galZoomY = 0;
+      galInitialPinchDist = 0;
+      galInitialScale = 1;
+      galIsDragging = false;
+      updateGalImgTransform(smooth);
+    }
+
+    function zoomGalPhoto(delta) {
+      let target = Math.round((galZoomScale + delta) * 10) / 10;
+      target = Math.max(1.0, Math.min(6.0, target));
+      galZoomScale = target;
+      if (galZoomScale <= 1.0) {
+        galZoomX = 0;
+        galZoomY = 0;
+      } else {
+        clampGalPan();
+      }
+      updateGalImgTransform(true);
+    }
+
+    function clampGalPan() {
+      const img = document.getElementById("galLightboxImg");
+      const container = document.getElementById("galLightboxImgContainer");
+      if (!img || !container) return;
+      const cW = container.clientWidth || window.innerWidth;
+      const cH = container.clientHeight || window.innerHeight;
+      const iW = (img.clientWidth || cW);
+      const iH = (img.clientHeight || cH);
+
+      const maxPanX = Math.max(0, ((iW * galZoomScale) - cW) / 2 + 80);
+      const maxPanY = Math.max(0, ((iH * galZoomScale) - cH) / 2 + 80);
+      galZoomX = Math.max(-maxPanX, Math.min(maxPanX, galZoomX));
+      galZoomY = Math.max(-maxPanY, Math.min(maxPanY, galZoomY));
+    }
+
+    function setupGalleryZoomGestures() {
+      if (galGesturesInitialized) return;
+      const container = document.getElementById("galLightboxImgContainer");
+      if (!container) return;
+      galGesturesInitialized = true;
+
+      // Touch events (Pinch-to-zoom, Pan, Double-tap)
+      container.addEventListener("touchstart", function(e) {
+        if (e.touches.length === 2) {
+          galIsDragging = false;
+          galInitialPinchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          galInitialScale = galZoomScale;
+          e.preventDefault();
+        } else if (e.touches.length === 1) {
+          const now = Date.now();
+          const t = e.touches[0];
+          if (now - galLastTapTime < 300) {
+            e.preventDefault();
+            galLastTapTime = 0;
+            if (galZoomScale > 1.2) {
+              resetGalPhotoZoom(true);
+            } else {
+              galZoomScale = 2.5;
+              clampGalPan();
+              updateGalImgTransform(true);
+            }
+            return;
+          }
+          galLastTapTime = now;
+          if (galZoomScale > 1.05) {
+            galIsDragging = true;
+            galLastTouchX = t.clientX;
+            galLastTouchY = t.clientY;
+          }
+        }
+      }, { passive: false });
+
+      container.addEventListener("touchmove", function(e) {
+        if (e.touches.length === 2 && galInitialPinchDist > 0) {
+          e.preventDefault();
+          const currentDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          const factor = currentDist / galInitialPinchDist;
+          let newScale = Math.max(1.0, Math.min(6.0, galInitialScale * factor));
+          if (newScale <= 1.03) {
+            newScale = 1.0;
+            galZoomX = 0;
+            galZoomY = 0;
+          }
+          galZoomScale = newScale;
+          if (galZoomScale > 1.05) clampGalPan();
+          updateGalImgTransform(false);
+        } else if (e.touches.length === 1 && galIsDragging && galZoomScale > 1.05) {
+          e.preventDefault();
+          const t = e.touches[0];
+          const dx = t.clientX - galLastTouchX;
+          const dy = t.clientY - galLastTouchY;
+          galZoomX += dx;
+          galZoomY += dy;
+          clampGalPan();
+          galLastTouchX = t.clientX;
+          galLastTouchY = t.clientY;
+          updateGalImgTransform(false);
+        }
+      }, { passive: false });
+
+      container.addEventListener("touchend", function(e) {
+        if (e.touches.length === 0) {
+          galIsDragging = false;
+          galInitialPinchDist = 0;
+          if (galZoomScale <= 1.05) {
+            resetGalPhotoZoom(true);
+          } else {
+            clampGalPan();
+            updateGalImgTransform(true);
+          }
+        } else if (e.touches.length === 1) {
+          galInitialPinchDist = 0;
+          galLastTouchX = e.touches[0].clientX;
+          galLastTouchY = e.touches[0].clientY;
+        }
+      });
+
+      // Mouse drag & wheel support
+      let mouseDragging = false;
+      let mouseStartX = 0, mouseStartY = 0;
+      container.addEventListener("mousedown", function(e) {
+        if (galZoomScale > 1.05 && e.button === 0) {
+          mouseDragging = true;
+          mouseStartX = e.clientX;
+          mouseStartY = e.clientY;
+          container.style.cursor = "grabbing";
+          e.preventDefault();
+        }
+      });
+      window.addEventListener("mousemove", function(e) {
+        if (mouseDragging && galZoomScale > 1.05) {
+          const dx = e.clientX - mouseStartX;
+          const dy = e.clientY - mouseStartY;
+          galZoomX += dx;
+          galZoomY += dy;
+          clampGalPan();
+          mouseStartX = e.clientX;
+          mouseStartY = e.clientY;
+          updateGalImgTransform(false);
+        }
+      });
+      window.addEventListener("mouseup", function() {
+        if (mouseDragging) {
+          mouseDragging = false;
+          container.style.cursor = galZoomScale > 1.05 ? "grab" : "default";
+        }
+      });
+      container.addEventListener("wheel", function(e) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.3 : -0.3;
+        zoomGalPhoto(delta);
+      }, { passive: false });
+    }
+
     // Lightbox Modal
     function openGalLightbox(photoId) {
       const photo = window.galPhotos.find(p => p.id === photoId);
@@ -18955,6 +19168,10 @@
       const title = document.getElementById("galLightboxTitle");
       const sub = document.getElementById("galLightboxSub");
       const delBtn = document.getElementById("galLightboxDeleteBtn");
+
+      // Reset zoom state and initialize gestures
+      resetGalPhotoZoom(false);
+      setupGalleryZoomGestures();
 
       if (img) img.src = photo.img;
       if (title) title.innerText = photo.title || "परिवार संस्मरण";
@@ -18970,6 +19187,7 @@
     }
 
     function closeGalLightbox() {
+      resetGalPhotoZoom(false);
       const modal = document.getElementById("galLightboxModal");
       if (modal) modal.style.display = "none";
       currentLightboxPhotoId = null;
