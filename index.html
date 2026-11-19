@@ -4522,16 +4522,22 @@
   </div>
 
   <!-- 🖼️ Poster Preview & Share Modal -->
-  <div class="modal-overlay" id="posterPreviewModal" style="display:none; z-index:1130;" onclick="if(event.target===this) closePosterPreviewModal()">
-    <div class="modal-content ios-glass-card" style="max-width:440px; width:92%; max-height:92vh; overflow-y:auto; padding:18px; border-radius:24px; text-align:center; background:rgba(255,255,255,0.96); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.9); box-shadow:0 24px 50px rgba(15,23,42,0.3);">
+  <div class="modal-overlay" id="posterPreviewModal" style="display:none; z-index:1130; align-items:center !important; justify-content:center !important; padding:12px !important;" onclick="if(event.target===this) closePosterPreviewModal()">
+    <div class="modal-content ios-glass-card" style="max-width:440px; width:94%; max-height:94vh; overflow-y:auto; padding:16px; border-radius:24px; text-align:center; background:rgba(255,255,255,0.97); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1.5px solid rgba(255,255,255,0.9); box-shadow:0 24px 50px rgba(15,23,42,0.3); box-sizing:border-box;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <h4 style="margin:0; font-size:16px; font-weight:800; color:#0f172a;" id="posterPreviewTitle">✨ तैयार पोस्टर (Ready Poster)</h4>
         <button onclick="closePosterPreviewModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer;">✕</button>
       </div>
 
-      <div style="border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.15); margin-bottom:14px; background:#f1f5f9; max-height:55vh;">
-        <img id="posterPreviewImg" src="" alt="Poster" style="width:100%; height:auto; display:block; object-fit:contain; max-height:55vh;">
+      <div style="border-radius:16px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.14); margin-bottom:12px; background:transparent; max-height:58vh; display:flex; align-items:center; justify-content:center;">
+        <img id="posterPreviewImg" src="" alt="Poster" style="width:100%; height:auto; display:block; object-fit:contain; max-height:58vh; border-radius:14px;">
       </div>
+
+      <!-- 📲 Clickable App Download Link Button -->
+      <a href="https://bit.ly/yuva-shakti-app" target="_blank" rel="noopener noreferrer" onclick="if(window.AndroidApp && typeof window.AndroidApp.openUrl==='function'){ window.AndroidApp.openUrl('https://bit.ly/yuva-shakti-app'); return false; }" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#eff6ff; border:1.5px solid #bfdbfe; color:#1d4ed8; border-radius:14px; padding:10px 14px; font-size:12.5px; font-weight:800; cursor:pointer; margin-bottom:10px; box-shadow:0 2px 8px rgba(37,99,235,0.12); transition:all .2s ease;">
+        <i class="fa-solid fa-cloud-arrow-down" style="font-size:15px; color:#2563eb;"></i>
+        <span>📲 युवा शक्ति ऐप डाउनलोड करें • bit.ly/yuva-shakti-app</span>
+      </a>
 
       <div style="display:flex; flex-direction:column; gap:8px;">
         <button id="btnPosterShareWhatsApp" class="btn-main" onclick="sharePosterFromPreviewModal()" style="width:100%; background:linear-gradient(135deg, #16a34a, #15803d); border-radius:14px; padding:11px; font-size:13.5px; font-weight:800; box-shadow:0 4px 12px rgba(22,163,74,0.3); display:flex; align-items:center; justify-content:center; gap:8px;">
@@ -14890,6 +14896,47 @@
     }
 
     // Test script directly without nesting inside template literal
+    // 📅 Helper: Get Today's Occasion (Festival or Daily Auspicious Wish)
+    function getTodayOccasionFestivalOrDaily(targetDate = null) {
+      const now = targetDate ? new Date(targetDate) : new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      const todayStr = `${y}-${m}-${d}`;
+      const mmdd = `${m}-${d}`;
+
+      let fest = null;
+      if (typeof HINDU_FESTIVALS !== 'undefined' && Array.isArray(HINDU_FESTIVALS)) {
+        fest = HINDU_FESTIVALS.find(f => f.date === todayStr);
+      }
+      if (!fest && typeof AMAVASYA_LIST !== 'undefined' && Array.isArray(AMAVASYA_LIST)) {
+        const am = AMAVASYA_LIST.find(a => a.date === todayStr);
+        if (am) fest = { name: am.name, tithi: "मासिक अमावस्या सत्संग व अंशदान पर्व", wish: `${am.name} के पावन अवसर पर समस्त परिवार को हार्दिक मंगलकामनाएं।` };
+      }
+      if (!fest && typeof GREGORIAN_DAYS !== 'undefined' && Array.isArray(GREGORIAN_DAYS)) {
+        const nat = GREGORIAN_DAYS.find(g => g.date === mmdd);
+        if (nat) fest = { name: nat.name, tithi: "राष्ट्रीय पर्व", wish: nat.wish || "समस्त देशवासियों को हार्दिक शुभकामनाएं।" };
+      }
+
+      if (fest) {
+        return {
+          isFestival: true,
+          name: fest.name,
+          tithi: fest.tithi || "पावन हिंदू पर्व",
+          wish: fest.wish || `${fest.name} की हार्दिक मंगलकामनाएं!`,
+          date: todayStr
+        };
+      }
+
+      return {
+        isFestival: false,
+        name: "दैनिक सुविचार एवं मंगलकामनाएं",
+        tithi: "शुभ प्रभात • आज का विचार",
+        wish: "परमपिता परमेश्वर की कृपा से आपका आज का दिन अत्यंत शुभ, सुखद, आरोग्यमय एवं सफलता से परिपूर्ण रहे। आपके सभी कार्य सिद्ध हों एवं परिवार में सुख-शांति व समृद्धि का वास रहे।\n\nॐ श्री गणेशाय नमः | शुभ प्रभात!",
+        date: todayStr
+      };
+    }
+
     async function generateOccasionCardDataUrl(type, data = {}) {
       try {
         await document.fonts.ready;
@@ -14914,8 +14961,51 @@
       const isPunyatithi = (type === 'punyatithi' || type === 'shraddhanjali' || type === 'smriti');
       const isFestival = (!isBirthday && !isAnniversary && !isPunyatithi);
 
+      // Check current / target date & festival matching dynamically
+      const todayDateObj = new Date();
+      const todayDateFormatted = todayDateObj.toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      const curY = todayDateObj.getFullYear();
+      const curM = String(todayDateObj.getMonth() + 1).padStart(2, '0');
+      const curD = String(todayDateObj.getDate()).padStart(2, '0');
+      const todayIsoStr = `${curY}-${curM}-${curD}`;
+      const todayMmDd = `${curM}-${curD}`;
+
+      let matchedFest = null;
+      if (typeof HINDU_FESTIVALS !== 'undefined' && Array.isArray(HINDU_FESTIVALS)) {
+        if (data.date) {
+          matchedFest = HINDU_FESTIVALS.find(f => f.date === data.date);
+        }
+        if (!matchedFest && data.name) {
+          const s = data.name.trim().toLowerCase();
+          matchedFest = HINDU_FESTIVALS.find(f => (f.name && f.name.toLowerCase().includes(s)) || (s.includes((f.name || '').toLowerCase())));
+        }
+        if (!matchedFest && isFestival && !data.name) {
+          matchedFest = HINDU_FESTIVALS.find(f => f.date === todayIsoStr);
+        }
+      }
+
+      if (!matchedFest && typeof AMAVASYA_LIST !== 'undefined' && Array.isArray(AMAVASYA_LIST)) {
+        if (data.date) matchedFest = AMAVASYA_LIST.find(a => a.date === data.date);
+        if (!matchedFest && data.name && data.name.includes("अमावस्या")) {
+          matchedFest = AMAVASYA_LIST.find(a => a.name.includes(data.name) || data.name.includes(a.name));
+        }
+        if (!matchedFest && isFestival && !data.name) {
+          matchedFest = AMAVASYA_LIST.find(a => a.date === todayIsoStr);
+        }
+      }
+
+      if (!matchedFest && typeof GREGORIAN_DAYS !== 'undefined' && Array.isArray(GREGORIAN_DAYS)) {
+        if (data.date && data.date.endsWith(`-${todayMmDd}`)) matchedFest = GREGORIAN_DAYS.find(g => g.date === todayMmDd);
+        if (!matchedFest && isFestival && !data.name) {
+          matchedFest = GREGORIAN_DAYS.find(g => g.date === todayMmDd);
+        }
+      }
+
+      const isDailyBlessing = isFestival && (!matchedFest && (!data.name || data.name.includes("दैनिक") || data.name.includes("सुविचार") || data.name.includes("शुभ प्रभात") || data.name.includes("मंगलकामना")));
+
       // 2. Resolve Target Name & Details from membersList / vamshaFamilyData
-      const rawName = data.name || (isFestival ? "दीपावली महापर्व" : (isPunyatithi ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य"));
+      let defaultTargetName = isFestival ? (matchedFest ? matchedFest.name : (isDailyBlessing ? "दैनिक सुविचार एवं मंगलकामनाएं" : "पावन पर्व")) : (isPunyatithi ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य");
+      const rawName = data.name || defaultTargetName;
       let cleanBaseName = rawName.replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').replace(/ की पुण्यतिथि/g, '').trim();
       cleanBaseName = cleanBaseName.replace(/^(पूज्य|स्व\.|स्वर्गीय|श्री|सुश्री|श्रीमती|प्रिय)\s*/g, '').replace(/(\s*जी)+$/g, '').trim();
       if (!cleanBaseName) cleanBaseName = rawName.trim();
@@ -14961,7 +15051,7 @@
       let wishBoxHeader = "";
       let wishText = data.wish || "";
       let endingPeaceMantra = "";
-      let footerMotto = "";
+      let footerMotto = "धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन";
       let footerBannerBg = "#5C1111";
       let footerBannerBorder = "#B8860B";
 
@@ -15021,7 +15111,7 @@
         }
 
         footerMotto = "धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन";
-        footerBannerBg = "#451A03"; // Dark royal bronze
+        footerBannerBg = "#451A03";
         footerBannerBorder = "#F59E0B";
 
       } else if (isAnniversary) {
@@ -15078,8 +15168,8 @@
           wishText = "आपका दांपत्य जीवन सदैव अटूट प्रेम, आपसी विश्वास, सुख-समृद्धि एवं ईश्वर के असीम आशीर्वाद से महकता रहे। दांपत्य जीवन के यह सुनहरे वर्ष यूं ही खुशियों, सौहार्द व मधुर स्मृतियों से सजे रहें।\n\nसमस्त भाटी परिवार की ओर से विवाह वर्षगांठ की हार्दिक बधाई व मंगलकामनाएं!";
         }
 
-        footerMotto = "स्नेह • विश्वास • समर्पण | भाटी परिवार";
-        footerBannerBg = "#4C0519"; // Deep wine/maroon
+        footerMotto = "धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन";
+        footerBannerBg = "#4C0519";
         footerBannerBorder = "#B8860B";
 
       } else if (isPunyatithi) {
@@ -15114,22 +15204,22 @@
         wishBoxHeader = "🙏 पावन श्रद्धांजलि एवं शत-शत नमन 🙏";
 
         if (!wishText) {
-          wishText = "आपकी पावन स्मृतियां, उच्च आदर्श, संस्कार और स्नेह सदैव हमारे अंतःकरण में जीवित रहेंगे। आपके दिखाए सत्पथ और जीवन मूल्यों पर चलना ही हमारी सच्ची श्रद्धांजलि है।\n\nईश्वर से विनम्र प्रार्थना है कि दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति एवं मोक्ष प्रदान करें।";
+          wishText = "आपकी पावन स्मृतियां, उच्च आदर्श, संस्कार और आशीर्वाद सदैव हमारे अंतःकरण में अमर रहेंगे। आपका कर्तव्यनिष्ठ व समर्पित जीवन हम सभी के लिए सदैव पथ-प्रदर्शक रहेगा।\n\nपरमपिता परमेश्वर से विनम्र प्रार्थना है कि दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति प्रदान करें।\n\nसमस्त भाटी परिवार की ओर से शत-शत नमन एवं विनम्र श्रद्धांजलि।";
         }
-        endingPeaceMantra = "ॐ शांतिः शांतिः शांतिः 🙏";
 
-        footerMotto = "दिवंगत पुण्यात्मा को अश्रुपूर्ण श्रद्धांजलि • शत-शत नमन";
-        footerBannerBg = "#5C1111"; // Deep devotional maroon
+        endingPeaceMantra = "ॐ शांतिः शांतिः शांतिः 🙏";
+        footerMotto = "धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन";
+        footerBannerBg = "#3D0A0A";
         footerBannerBorder = "#B8860B";
 
       } else {
-        // Universal Festive / National theme
+        // Theme D: पावन पर्व व उत्सव / दैनिक मंगलकामनाएं — Devotional, Saffron & Gold
         theme = {
-          outerBg1: "#FFFBEB", outerBg2: "#FEF3C7", outerBg3: "#FFEDD5",
-          cardBg1: "#FFFFFF", cardBg2: "#FFFDF9", cardBg3: "#FFF7ED",
-          cardBorder1: "#EA580C", cardBorder2: "#F59E0B", cardShadow: "rgba(234, 88, 12, 0.18)",
+          outerBg1: "#FFFDF5", outerBg2: "#FFF7ED", outerBg3: "#FFEDD5",
+          cardBg1: "#FFFFFF", cardBg2: "#FFFDF5", cardBg3: "#FFF7ED",
+          cardBorder1: "#EA580C", cardBorder2: "#F59E0B", cardShadow: "rgba(234, 88, 12, 0.20)",
           cornerColor: "#EA580C",
-          topBadgeBg1: "#EA580C", topBadgeBg2: "#C2410C", topBadgeBorder: "#F59E0B", topBadgeText: "#FFFFFF",
+          topBadgeBg1: "#EA580C", topBadgeBg2: "#C2410C", topBadgeBorder: "#FBBF24", topBadgeText: "#FFFFFF",
           frameRing1: "#F59E0B", frameRing2: "#EA580C", frameRing3: "#FEF08A",
           heroTitleColor: "#78350F",
           subBadgeBg1: "#FEF3C7", subBadgeBg2: "#FDE68A", subBadgeBorder: "#EA580C", subBadgeText: "#78350F",
@@ -15143,12 +15233,22 @@
           footerMottoColor: "#9A3412"
         };
 
-        topBadgeText = "पावन पर्व एवं उत्सव";
-        heroTitle = cleanBaseName;
-        subTagline = data.sub || "पावन हिंदू पर्व • समस्त परिवार हेतु हार्दिक मंगलकामनाएं";
-        wishBoxHeader = "🪔 पावन मंगलकामनाएं 🪔";
-        if (!wishText) {
-          wishText = `${cleanBaseName} के पावन अवसर पर आपके जीवन में सुख, शांति, समृद्धि एवं उत्तम स्वास्थ्य का संचार हो। समस्त भाटी परिवार की ओर से हार्दिक मंगलकामनाएं!`;
+        if (isDailyBlessing) {
+          topBadgeText = "शुभ प्रभात • दैनिक सुविचार";
+          heroTitle = "दैनिक सुविचार एवं मंगलकामनाएं";
+          subTagline = data.sub || "धर्म, संस्कार व सेवा के पावन संकल्प के साथ आपका दिन मंगलमय हो";
+          wishBoxHeader = "🌸 दैनिक सुविचार एवं मंगलकामनाएं 🌸";
+          if (!wishText) {
+            wishText = "परमपिता परमेश्वर की कृपा से आपका आज का दिन अत्यंत शुभ, सुखद, आरोग्यमय एवं सफलता से परिपूर्ण रहे। आपके सभी कार्य सिद्ध हों एवं परिवार में सुख-शांति व समृद्धि का वास रहे।\n\nॐ श्री गणेशाय नमः | शुभ प्रभात!";
+          }
+        } else {
+          topBadgeText = cleanBaseName.includes("महापर्व") || cleanBaseName.includes("पर्व") ? cleanBaseName : `${cleanBaseName} महापर्व`;
+          heroTitle = cleanBaseName;
+          subTagline = data.sub || (matchedFest && matchedFest.tithi ? `${matchedFest.tithi} • पावन मंगलकामनाएं` : "पावन हिंदू पर्व • समस्त परिवार हेतु हार्दिक मंगलकामनाएं");
+          wishBoxHeader = "🪔 पावन मंगलकामनाएं 🪔";
+          if (!wishText) {
+            wishText = matchedFest && matchedFest.wish ? matchedFest.wish : `${cleanBaseName} के पावन अवसर पर आपके जीवन में सुख, शांति, समृद्धि एवं उत्तम स्वास्थ्य का संचार हो। समस्त भाटी परिवार की ओर से हार्दिक मंगलकामनाएं!`;
+          }
         }
         footerMotto = "धर्मो रक्षति रक्षितः | सेवा • संस्कार • संगठन";
         footerBannerBg = "#78350F";
@@ -15304,10 +15404,26 @@
       ctx.restore();
 
       // C. Top Header Bar (Pills)
-      const todayDateFormatted = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      let leftPillLabel = "";
+      if (isPunyatithi) {
+        leftPillLabel = "🕊️ पावन स्मृति दिवस";
+      } else if (isBirthday) {
+        leftPillLabel = "🎂 जन्मदिवस विशेष";
+      } else if (isAnniversary) {
+        leftPillLabel = "💐 वैवाहिक वर्षगांठ";
+      } else if (isDailyBlessing) {
+        leftPillLabel = `☀️ ${todayDateFormatted}`;
+      } else if (data.date) {
+        leftPillLabel = `☀️ ${(typeof formatDisplayDate === 'function') ? formatDisplayDate(data.date) : data.date}`;
+      } else if (matchedFest && matchedFest.date) {
+        leftPillLabel = `☀️ ${(typeof formatDisplayDate === 'function') ? formatDisplayDate(matchedFest.date) : matchedFest.date}`;
+      } else {
+        leftPillLabel = `☀️ ${todayDateFormatted}`;
+      }
 
-      // Left Pill
-      const leftPillW = 390;
+      measureCtx.font = "bold 23px 'Noto Sans Devanagari', 'Poppins', sans-serif";
+      const pillMetrics = measureCtx.measureText(leftPillLabel);
+      const leftPillW = Math.max(390, Math.min(460, pillMetrics.width + 48));
       const leftPillX = cardMargin + 28;
       ctx.save();
       ctx.fillStyle = theme.subBadgeBg1;
@@ -15316,15 +15432,14 @@
       ctx.lineWidth = 2;
       canvasRoundRect(ctx, leftPillX, topHeaderY, leftPillW, topHeaderH, 29, false, true);
       ctx.fillStyle = theme.subBadgeText;
-      ctx.font = "bold 24px 'Noto Sans Devanagari', 'Poppins', sans-serif";
+      ctx.font = "bold 23px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      const leftPillLabel = isPunyatithi ? "🕊️ पावन स्मृति दिवस" : (isBirthday ? "🎂 जन्मदिवस विशेष" : (isAnniversary ? "💐 वैवाहिक वर्षगांठ" : `☀️ ${todayDateFormatted}`));
       ctx.fillText(leftPillLabel, leftPillX + leftPillW / 2, topHeaderY + topHeaderH / 2);
       ctx.restore();
 
       // Right Pill (Group Branding)
-      const rightPillW = 430;
+      const rightPillW = 420;
       const rightPillX = cardMargin + cardW - rightPillW - 28;
       ctx.save();
       ctx.fillStyle = theme.subBadgeBg1;
@@ -15333,7 +15448,7 @@
       ctx.lineWidth = 2;
       canvasRoundRect(ctx, rightPillX, topHeaderY, rightPillW, topHeaderH, 29, false, true);
       ctx.fillStyle = theme.subBadgeText;
-      ctx.font = "bold 24px 'Noto Sans Devanagari', 'Poppins', sans-serif";
+      ctx.font = "bold 23px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("युवा शक्ति ग्रुप (कुचेरा)", rightPillX + rightPillW / 2, topHeaderY + topHeaderH / 2);
@@ -15398,46 +15513,59 @@
         ctx.beginPath();
         ctx.arc(targetCx, tasselY, 10, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = "#EA580C";
+
+        ctx.strokeStyle = "#B45309";
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
-        ctx.arc(targetCx, tasselY + 11, 7, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(targetCx, tasselY + 10);
+        ctx.lineTo(targetCx, tasselY + 28);
+        ctx.stroke();
         ctx.restore();
 
-        ctx.shadowColor = "rgba(92, 17, 17, 0.25)";
-        ctx.shadowBlur = 18;
-        ctx.shadowOffsetY = 6;
+        ctx.shadowColor = "rgba(92, 17, 17, 0.35)";
+        ctx.shadowBlur = 22;
+        ctx.shadowOffsetY = 8;
+
         ctx.strokeStyle = theme.frameRing1;
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 6;
         ctx.beginPath();
-        ctx.arc(targetCx, targetCy, targetRadius + 2, 0, Math.PI * 2);
+        ctx.arc(targetCx, targetCy, targetRadius + 4, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = theme.frameRing3;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(targetCx, targetCy, targetRadius + 1, 0, Math.PI * 2);
         ctx.stroke();
 
         if (targetImg) {
           drawClippedCircleImage(ctx, targetImg, targetCx, targetCy, targetRadius);
         } else {
-          const pGrad = ctx.createRadialGradient(targetCx, targetCy, 10, targetCx, targetCy, targetRadius);
-          pGrad.addColorStop(0, "#4A0E0E");
-          pGrad.addColorStop(0.7, "#2D0808");
-          pGrad.addColorStop(1, "#180303");
-          ctx.fillStyle = pGrad;
+          // Peaceful Akhand Deepak medallion when photo not available
+          const radGrad = ctx.createRadialGradient(targetCx, targetCy, 10, targetCx, targetCy, targetRadius);
+          radGrad.addColorStop(0, "#FEF3C7");
+          radGrad.addColorStop(0.65, "#D97706");
+          radGrad.addColorStop(1, "#5C1111");
+          ctx.fillStyle = radGrad;
           ctx.beginPath();
           ctx.arc(targetCx, targetCy, targetRadius, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.fillStyle = "#FDE68A";
-          ctx.font = "bold 82px 'Noto Serif Devanagari', 'Inter', serif";
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(targetCx, targetCy, targetRadius - 8, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.font = "78px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText("ॐ", targetCx, targetCy + 2);
-
-          ctx.fillStyle = "#F59E0B";
-          ctx.font = "26px sans-serif";
-          ctx.fillText("🪔", targetCx, targetCy + targetRadius - 24);
+          ctx.fillText("🪔", targetCx, targetCy + 4);
         }
 
       } else {
-        ctx.shadowColor = "rgba(0, 0, 0, 0.18)";
+        // Birthday, Anniversary, Festival or Daily
+        ctx.shadowColor = "rgba(0, 0, 0, 0.20)";
         ctx.shadowBlur = 20;
         ctx.shadowOffsetY = 8;
 
@@ -15468,24 +15596,62 @@
         if (targetImg) {
           drawClippedCircleImage(ctx, targetImg, targetCx, targetCy, targetRadius);
         } else {
-          const avGrad = ctx.createLinearGradient(targetCx - targetRadius, targetCy - targetRadius, targetCx + targetRadius, targetCy + targetRadius);
-          avGrad.addColorStop(0, theme.topBadgeBg1);
-          avGrad.addColorStop(1, theme.topBadgeBg2);
-          ctx.fillStyle = avGrad;
+          // Radial glow background
+          const radGrad = ctx.createRadialGradient(targetCx, targetCy, 8, targetCx, targetCy, targetRadius);
+          if (isAnniversary) {
+            radGrad.addColorStop(0, "#FFE4E6");
+            radGrad.addColorStop(0.65, "#E11D48");
+            radGrad.addColorStop(1, "#881337");
+          } else if (isBirthday) {
+            radGrad.addColorStop(0, "#FFFBEB");
+            radGrad.addColorStop(0.65, "#F59E0B");
+            radGrad.addColorStop(1, "#B45309");
+          } else {
+            radGrad.addColorStop(0, "#FFFBEB");
+            radGrad.addColorStop(0.65, "#EA580C");
+            radGrad.addColorStop(1, "#9A3412");
+          }
+          ctx.fillStyle = radGrad;
           ctx.beginPath();
           ctx.arc(targetCx, targetCy, targetRadius, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.fillStyle = "#FFFFFF";
-          ctx.font = "bold 78px 'Noto Serif Devanagari', 'Poppins', serif";
+          // Ornate inner ring
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(targetCx, targetCy, targetRadius - 8, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Dedicated Crisp Glyph / Cultural Icon (No incomplete single letter placeholder)
+          let centerGlyph = "🪔";
+          const sNameLow = cleanBaseName.toLowerCase();
+          if (isAnniversary) {
+            centerGlyph = "💍";
+          } else if (isBirthday) {
+            centerGlyph = "🎂";
+          } else if (sNameLow.includes("शिव") || sNameLow.includes("महादेव") || sNameLow.includes("रुद्र")) {
+            centerGlyph = "🕉️";
+          } else if (sNameLow.includes("राम") || sNameLow.includes("दशहरा") || sNameLow.includes("विजयादशमी")) {
+            centerGlyph = "🏹";
+          } else if (sNameLow.includes("कृष्ण") || sNameLow.includes("जन्माष्टमी")) {
+            centerGlyph = "🦚";
+          } else if (sNameLow.includes("गणेश")) {
+            centerGlyph = "🐘";
+          } else if (sNameLow.includes("दुर्गा") || sNameLow.includes("नवरात्रि")) {
+            centerGlyph = "🌸";
+          } else if (sNameLow.includes("होली") || sNameLow.includes("धुलंडी")) {
+            centerGlyph = "🎨";
+          } else if (isDailyBlessing || sNameLow.includes("दैनिक") || sNameLow.includes("सुविचार") || sNameLow.includes("प्रभात")) {
+            centerGlyph = "☀️";
+          } else {
+            centerGlyph = "🪔";
+          }
+
+          ctx.font = "78px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          const initChar = cleanBaseName.charAt(0) || "भा";
-          ctx.fillText(initChar, targetCx, targetCy - 4);
-
-          ctx.font = "26px sans-serif";
-          const centerEmoji = isAnniversary ? "💍" : "🎂";
-          ctx.fillText(centerEmoji, targetCx, targetCy + targetRadius - 24);
+          ctx.fillText(centerGlyph, targetCx, targetCy + 4);
         }
       }
       ctx.restore();
@@ -15614,7 +15780,7 @@
       ctx.font = "bold 23px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("— समस्त युवा शक्ति ग्रुप परिवार (भाटी परिवार • कुचेरा) —", width / 2, wishTaglineY);
+      ctx.fillText("— समस्त भाटी परिवार • कुचेरा —", width / 2, wishTaglineY);
       ctx.restore();
 
       // J. SENDER SECTION
@@ -15705,7 +15871,8 @@
       ctx.fillStyle = theme.senderRoleColor;
       ctx.font = "bold 22px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textBaseline = "top";
-      const sRole = (sender.role || "संचालक • युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)").replace(/✨/g, '').replace(/🚩/g, '').trim();
+      const rawRole = (sender.role || "संचालक • युवा शक्ति ग्रुप").replace(/✨/g, '').replace(/🚩/g, '');
+      const sRole = rawRole.replace(/\(भाटी परिवार[^)]*\)/g, '').trim();
       ctx.fillText(sRole, textLeft, senderBoxY + 140);
       ctx.restore();
 
@@ -15734,7 +15901,7 @@
       ctx.font = "bold 25px 'Noto Sans Devanagari', 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("📲 युवा शक्ति ऐप डाउनलोड करें • bit.ly/yuva-shakti-app (भाटी परिवार)", width / 2, appBadgeY + appBadgeH / 2);
+      ctx.fillText("📲 युवा शक्ति ऐप डाउनलोड करें • bit.ly/yuva-shakti-app", width / 2, appBadgeY + appBadgeH / 2);
       ctx.restore();
 
       try {
@@ -15759,16 +15926,15 @@
         const isPunyatithi = (type === 'punyatithi' || type === 'shraddhanjali' || type === 'smriti');
         const isFestival = (!isBirthday && !isAnniversary && !isPunyatithi);
 
-        const rawName = data.name || (isFestival ? "दीपावली महापर्व" : (isPunyatithi ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य"));
+        const rawName = data.name || (isFestival ? "पावन पर्व" : (isPunyatithi ? "स्व. बुधाराम जी भाटी" : "आदरणीय सदस्य"));
         let cleanBaseName = rawName.replace(/ का जन्मदिन/g, '').replace(/ की विवाह वर्षगांठ/g, '').replace(/ की पुण्यतिथि/g, '').trim();
         cleanBaseName = cleanBaseName.replace(/^(पूज्य|स्व\.|स्वर्गीय|श्री|सुश्री|श्रीमती|प्रिय)\s*/g, '').replace(/(\s*जी)+$/g, '').trim();
         if (!cleanBaseName) cleanBaseName = rawName.trim();
 
         const sender = (typeof getSuvicharSender === 'function') ? getSuvicharSender() : { name: "रेवंतराम भाटी", role: "संचालक" };
         const cleanSenderName = (sender.name || "रेवंतराम भाटी").replace(/✨/g, '').trim();
-        const cleanSenderRole = (sender.role || "संचालक • युवा शक्ति ग्रुप").replace(/✨/g, '').replace(/🚩/g, '').trim();
-        const repoName = (typeof GITHUB_REPO !== 'undefined') ? GITHUB_REPO : "revantram/yuva-shakti-app";
-        const appDownloadUrl = `https://github.com/${repoName}/releases/latest/download/YuvaShaktiGroup.apk`;
+        const cleanSenderRole = (sender.role || "संचालक • युवा शक्ति ग्रुप").replace(/✨/g, '').replace(/🚩/g, '').replace(/\(भाटी परिवार[^)]*\)/g, '').trim();
+        const appDownloadUrl = `https://bit.ly/yuva-shakti-app`;
 
         let caption = "";
         if (isFestival) {
@@ -15796,21 +15962,26 @@
           try {
             const res = await fetch(dataUrl);
             const blob = await res.blob();
-            const file = new File([blob], `YuvaShakti_${type}_${Date.now()}.jpg`, { type: 'image/jpeg' });
+            const file = new File([blob], `${cleanBaseName || "Yuva_Shakti"}_Poster.jpg`, { type: "image/jpeg" });
             if (navigator.canShare({ files: [file] })) {
               await navigator.share({
-                files: [file],
-                title: "युवा शक्ति ग्रुप पोस्टर",
-                text: caption
+                title: `${cleanBaseName} पोस्टर`,
+                text: caption,
+                files: [file]
               });
+              showToast("✅ पोस्टर सफलतापूर्वक साझा किया गया!", "success");
               return;
             }
           } catch (e) {
-            console.warn("Web Share API canceled or unsupported, falling back to preview:", e);
+            if (e.name !== "AbortError") {
+              console.warn("Web Share API files failed, falling back to preview modal:", e);
+            } else {
+              return;
+            }
           }
         }
 
-        // 3. Fallback: Open Poster Preview & Download Modal
+        // 3. Fallback: Open in-app Preview Modal
         openPosterPreviewModal(dataUrl, caption, type);
       } catch (err) {
         console.error("Poster creation error:", err);
@@ -15864,6 +16035,14 @@
     function openOccasionPosterMaker(defaultType = "festival", defaultData = {}) {
       currentSelectedPosterType = defaultType;
       const modal = document.getElementById("occasionPosterMakerModal");
+
+      if (defaultType === "festival" && !defaultData.name) {
+        const todayOcc = getTodayOccasionFestivalOrDaily();
+        defaultData.name = todayOcc.name;
+        defaultData.sub = todayOcc.sub || todayOcc.tithi;
+        defaultData.wish = todayOcc.wish;
+      }
+
       selectPosterType(defaultType);
 
       const inpName = document.getElementById("inpPosterTargetName");
@@ -15908,41 +16087,67 @@
       const sLabel = document.getElementById("posterMakerSenderLabel");
 
       if (type === "festival") {
-        if (lblName) lblName.innerText = "त्यौहार / पर्व का नाम:";
-        if (inpName) inpName.placeholder = "उदा. दीपावली महापर्व, रामनवमी, होली";
+        const todayOcc = getTodayOccasionFestivalOrDaily();
+        if (lblName) lblName.innerText = todayOcc.isFestival ? "त्यौहार / पर्व का नाम:" : "उत्सव / सुविचार शीर्षक:";
+        if (inpName) {
+          inpName.placeholder = todayOcc.isFestival ? `उदा. ${todayOcc.name}` : "उदा. दैनिक सुविचार या पर्व का नाम";
+          if (!inpName.value || inpName.value === "होली" || inpName.value === "दीपावली महापर्व") {
+            inpName.value = todayOcc.name;
+          }
+        }
         if (lblSub) lblSub.innerText = "तिथि / उपशीर्षक (वैकल्पिक):";
-        if (inpSub) inpSub.placeholder = "उदा. कार्तिक कृष्ण पक्ष अमावस्या";
-        if (inpWish && !inpWish.value) inpWish.value = "इस पावन पर्व पर मां लक्ष्मी और भगवान श्री गणेश की कृपा से आपके जीवन में सुख, शांति, समृद्धि और उत्तम स्वास्थ्य का वास हो।";
+        if (inpSub) {
+          inpSub.placeholder = todayOcc.isFestival ? `उदा. ${todayOcc.sub || todayOcc.tithi}` : "उदा. शुभ प्रभात • आज का विचार";
+          if (!inpSub.value) inpSub.value = todayOcc.sub || todayOcc.tithi;
+        }
+        if (inpWish && (!inpWish.value || inpWish.value.includes("मां लक्ष्मी और भगवान श्री गणेश") || inpWish.value.includes("होली"))) {
+          inpWish.value = todayOcc.wish;
+        }
         if (sLabel) sLabel.innerText = "💐 शुभकामना प्रेषक (आपकी फोटो व नाम):";
       } else if (type === "birthday") {
         if (lblName) lblName.innerText = "सदस्य का नाम (जिसका जन्मदिन है):";
-        if (inpName) inpName.placeholder = "उदा. रेवंतराम भाटी";
+        if (inpName) {
+          inpName.placeholder = "उदा. रेवंतराम भाटी";
+          if (inpName.value.includes("सुविचार") || inpName.value.includes("महापर्व") || inpName.value === "होली") inpName.value = "";
+        }
         if (lblSub) lblSub.innerText = "शुभकामना उपशीर्षक (वैकल्पिक):";
         if (inpSub) inpSub.placeholder = "उदा. उत्तम स्वास्थ्य व दीर्घायु की मंगलकामनाएं";
-        if (inpWish && !inpWish.value) inpWish.value = "परमपिता परमेश्वर से विनम्र प्रार्थना है कि आपका जीवन उत्तम स्वास्थ्य, सुख-समृद्धि, दीर्घायु एवं निरंतर सफलता से आलोकित रहे। आपका प्रत्येक क्षण खुशियों से परिपूर्ण हो!";
+        if (inpWish && (!inpWish.value || inpWish.value.includes("मां लक्ष्मी") || inpWish.value.includes("सुविचार") || inpWish.value.includes("होली"))) {
+          inpWish.value = "परमपिता परमेश्वर से विनम्र प्रार्थना है कि आपका जीवन उत्तम स्वास्थ्य, सुख-समृद्धि, दीर्घायु एवं निरंतर सफलता से आलोकित रहे। आपका प्रत्येक क्षण खुशियों से परिपूर्ण हो!";
+        }
         if (sLabel) sLabel.innerText = "💐 शुभकामना प्रेषक (आपकी फोटो व नाम):";
       } else if (type === "anniversary") {
         if (lblName) lblName.innerText = "दम्पति / सदस्य का नाम:";
-        if (inpName) inpName.placeholder = "उदा. श्री एवं श्रीमती रेवंतराम भाटी";
+        if (inpName) {
+          inpName.placeholder = "उदा. श्री एवं श्रीमती रेवंतराम भाटी";
+          if (inpName.value.includes("सुविचार") || inpName.value.includes("महापर्व") || inpName.value === "होली") inpName.value = "";
+        }
         if (lblSub) lblSub.innerText = "उपशीर्षक (वैकल्पिक):";
         if (inpSub) inpSub.placeholder = "उदा. सुखी व मंगलमय दांपत्य जीवन";
-        if (inpWish && !inpWish.value) inpWish.value = "आपका दांपत्य जीवन सदैव अटूट प्रेम, आपसी विश्वास, सुख-समृद्धि एवं ईश्वर के असीम आशीर्वाद से महकता रहे। वैवाहिक वर्षगांठ की अनंत मंगलकामनाएं!";
+        if (inpWish && (!inpWish.value || inpWish.value.includes("मां लक्ष्मी") || inpWish.value.includes("सुविचार") || inpWish.value.includes("होली"))) {
+          inpWish.value = "आपका दांपत्य जीवन सदैव अटूट प्रेम, आपसी विश्वास, सुख-समृद्धि एवं ईश्वर के असीम आशीर्वाद से महकता रहे। वैवाहिक वर्षगांठ की अनंत मंगलकामनाएं!";
+        }
         if (sLabel) sLabel.innerText = "💐 मंगलकामना प्रेषक (आपकी फोटो व नाम):";
       } else if (type === "punyatithi") {
         if (lblName) lblName.innerText = "दिवंगत पूज्य का नाम (स्व.):";
-        if (inpName) inpName.placeholder = "उदा. स्व. श्री बुधाराम जी भाटी";
+        if (inpName) {
+          inpName.placeholder = "उदा. स्व. श्री बुधाराम जी भाटी";
+          if (inpName.value.includes("सुविचार") || inpName.value.includes("महापर्व") || inpName.value === "होली") inpName.value = "";
+        }
         if (lblSub) lblSub.innerText = "स्मृति उपशीर्षक (वैकल्पिक):";
         if (inpSub) inpSub.placeholder = "उदा. पावन पुण्यतिथि • सादर नमन";
-        if (inpWish && !inpWish.value) inpWish.value = "आपकी पावन स्मृतियां, उच्च आदर्श, संस्कार और स्नेह सदैव हमारे अंतःकरण में जीवित रहेंगे। ईश्वर दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति प्रदान करें। ॐ शांतिः 🙏";
+        if (inpWish && (!inpWish.value || inpWish.value.includes("मां लक्ष्मी") || inpWish.value.includes("सुविचार") || inpWish.value.includes("होली"))) {
+          inpWish.value = "आपकी पावन स्मृतियां, उच्च आदर्श, संस्कार और स्नेह सदैव हमारे अंतःकरण में जीवित रहेंगे। ईश्वर दिवंगत पुण्यात्मा को अपने श्रीचरणों में शाश्वत शांति प्रदान करें। ॐ शांतिः 🙏";
+        }
         if (sLabel) sLabel.innerText = "🙏 सादर श्रद्धांजलि प्रेषक (आपकी फोटो व नाम):";
       }
     }
 
     function updatePosterMakerSenderPreview() {
-      const sender = getSuvicharSender();
+      const sender = (typeof getSuvicharSender === 'function') ? getSuvicharSender() : { name: "रेवंतराम भाटी", role: "संचालक" };
       const nameEl = document.getElementById("posterMakerSenderName");
       const avEl = document.getElementById("posterMakerSenderAvatar");
-      if (nameEl) nameEl.innerText = `${sender.name} (${sender.role || 'सदस्य'})`;
+      if (nameEl) nameEl.innerText = `${sender.name} (${sender.role || 'संचालक'})`;
       if (avEl) {
         if (sender.photoUrl) {
           avEl.innerHTML = `<img src="${sender.photoUrl}" style="width:100%; height:100%; object-fit:cover;">`;
@@ -15957,11 +16162,16 @@
       const inpSub = document.getElementById("inpPosterSub");
       const inpWish = document.getElementById("inpPosterWish");
 
-      const name = inpName ? inpName.value.trim() : "";
+      let name = inpName ? inpName.value.trim() : "";
       if (!name) {
-        showToast("कृपया नाम अवश्य दर्ज करें!", "warning");
-        if (inpName) inpName.focus();
-        return;
+        if (currentSelectedPosterType === "festival") {
+          const todayOcc = getTodayOccasionFestivalOrDaily();
+          name = todayOcc.name;
+        } else {
+          showToast("कृपया नाम अवश्य दर्ज करें!", "warning");
+          if (inpName) inpName.focus();
+          return;
+        }
       }
 
       const sub = inpSub ? inpSub.value.trim() : "";
