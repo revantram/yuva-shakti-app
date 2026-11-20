@@ -3603,76 +3603,45 @@
         </div>
       </div>
 
-      <!-- 📸 परिवार की यादें / फोटो गैलरी (कार्तिक अमावस्या काउंटडाउन के ठीक नीचे कोष्टक) -->
-      <div onclick="openDedicatedGalleryPage()" class="card ios-glass-card" style="cursor:pointer; margin-bottom:12px; background:linear-gradient(135deg, rgba(238, 242, 255, 0.96) 0%, rgba(224, 231, 255, 0.90) 100%); border:1.5px solid rgba(99, 102, 241, 0.35); border-radius:18px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 6px 18px rgba(99, 102, 241, 0.12); transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.15s ease; -webkit-tap-highlight-color:transparent;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:42px; height:42px; border-radius:13px; background:linear-gradient(135deg, #4f46e5, #3730a3); color:white; display:flex; align-items:center; justify-content:center; font-size:19px; box-shadow:0 4px 12px rgba(79, 70, 229, 0.32); flex-shrink:0;">
+      <!-- ⚡ Quick-Action Bar (4 Icon Grid: UPI, Cash Counter, Memories Gallery, Live Status) -->
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:14px;">
+        
+        <!-- 1. UPI Payment Screen Access (Icon Only) -->
+        <div onclick="openDedicatedPaymentPage()" class="card ios-glass-card quick-action-icon-card" style="cursor:pointer; height:54px; margin:0; padding:0; border-radius:16px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 247, 255, 0.94) 100%) !important; border:1.5px solid rgba(37, 99, 235, 0.22) !important; box-shadow:0 4px 14px rgba(37, 99, 235, 0.08) !important; transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease; -webkit-tap-highlight-color:transparent;" title="UPI Payment">
+          <svg width="54" height="22" viewBox="0 0 115 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+            <text x="2" y="33" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-style="italic" font-size="34" fill="#1e293b" letter-spacing="-1">UPI</text>
+            <path d="M72 10 L88 22 L72 34 Z" fill="#f97316" />
+            <path d="M86 10 L102 22 L86 34 Z" fill="#16a34a" />
+          </svg>
+        </div>
+
+        <!-- 2. Cash Counter Screen Access (Single Clean Calculator Icon Only - No Overlapping) -->
+        <div onclick="openDedicatedCashCounterPage()" class="card ios-glass-card quick-action-icon-card" style="cursor:pointer; height:54px; margin:0; padding:0; border-radius:16px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 253, 244, 0.94) 100%) !important; border:1.5px solid rgba(22, 163, 74, 0.22) !important; box-shadow:0 4px 14px rgba(22, 163, 74, 0.08) !important; transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease; -webkit-tap-highlight-color:transparent;" title="Cash Counter">
+          <div style="width:36px; height:36px; border-radius:11px; background:linear-gradient(135deg, #0284c7, #0369a1); color:white; display:flex; align-items:center; justify-content:center; font-size:17px; box-shadow:0 2px 7px rgba(2,132,199,0.28);">
+            <i class="fa-solid fa-calculator"></i>
+          </div>
+        </div>
+
+        <!-- 3. Memories / Gallery Screen Access (Camera Icon Only) -->
+        <div onclick="openDedicatedGalleryPage()" class="card ios-glass-card quick-action-icon-card" style="cursor:pointer; height:54px; margin:0; padding:0; border-radius:16px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(238, 242, 255, 0.94) 100%) !important; border:1.5px solid rgba(99, 102, 241, 0.22) !important; box-shadow:0 4px 14px rgba(99, 102, 241, 0.08) !important; transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease; -webkit-tap-highlight-color:transparent;" title="परिवार की यादें">
+          <div style="width:36px; height:36px; border-radius:11px; background:linear-gradient(135deg, #4f46e5, #3730a3); color:white; display:flex; align-items:center; justify-content:center; font-size:17px; box-shadow:0 2px 7px rgba(79, 70, 229, 0.28);">
             <i class="fa-solid fa-camera-retro"></i>
           </div>
-          <div>
-            <div style="font-weight:800; font-size:14px; color:#1e1b4b; display:flex; align-items:center; gap:6px;">
-              <span>परिवार की यादें</span>
-              <span id="homeMemoriesCountBadge" style="font-size:10px; background:#e0e7ff; color:#3730a3; border:1px solid #c7d2fe; padding:2px 7px; border-radius:10px; font-weight:800;">🖼️ फोटो गैलरी</span>
-            </div>
-            <div style="font-size:11px; color:#4338ca; margin-top:2px; font-weight:500;">
-              भाटी परिवार के पावन उत्सव, यात्राएं व संस्मरण (देखें, डाउनलोड व शेयर करें)
-            </div>
-          </div>
-        </div>
-        <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
-          <span style="font-size:11.5px; font-weight:800; color:#4f46e5;">खोलें</span>
-          <div style="width:26px; height:26px; border-radius:50%; background:#e0e7ff; display:flex; align-items:center; justify-content:center;">
-            <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#4f46e5;"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- 💳 Quick 2-Column Action Cards: [UPI Payment] & [Cash Counter] -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
-        <!-- Left Card: UPI Payment Quick Access (Minimal Icon-Only) -->
-        <div onclick="openDedicatedPaymentPage()" class="card ios-glass-card quick-action-icon-card" style="cursor:pointer; height:68px; margin:0; padding:0; border-radius:18px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 247, 255, 0.92) 100%) !important; border:1.5px solid rgba(37, 99, 235, 0.22) !important; box-shadow:0 6px 18px rgba(37, 99, 235, 0.08) !important; transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease; -webkit-tap-highlight-color:transparent; position:relative; overflow:hidden;" title="UPI भुगतान (UPI Payment)">
-          <div style="display:flex; align-items:center; justify-content:center;">
-            <svg width="86" height="34" viewBox="0 0 115 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;">
-              <text x="2" y="33" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-style="italic" font-size="34" fill="#1e293b" letter-spacing="-1">UPI</text>
-              <!-- Saffron Triangle Arrow -->
-              <path d="M72 10 L88 22 L72 34 Z" fill="#f97316" />
-              <!-- Green Triangle Arrow -->
-              <path d="M86 10 L102 22 L86 34 Z" fill="#16a34a" />
-            </svg>
-          </div>
         </div>
 
-        <!-- Right Card: Cash Counter / Calculator Quick Access (Minimal Icon-Only) -->
-        <div onclick="openDedicatedCashCounterPage()" class="card ios-glass-card quick-action-icon-card" style="cursor:pointer; height:68px; margin:0; padding:0; border-radius:18px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 253, 244, 0.92) 100%) !important; border:1.5px solid rgba(22, 163, 74, 0.22) !important; box-shadow:0 6px 18px rgba(22, 163, 74, 0.08) !important; transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease; -webkit-tap-highlight-color:transparent; position:relative; overflow:hidden;" title="रोकड़ गणना (Cash Counter)">
-          <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
-            <div style="width:36px; height:36px; border-radius:11px; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 3px 8px rgba(16,185,129,0.3);">
-              <i class="fa-solid fa-money-bill-wave"></i>
-            </div>
-            <div style="width:36px; height:36px; border-radius:11px; background:linear-gradient(135deg, #0284c7, #0369a1); color:white; display:flex; align-items:center; justify-content:center; font-size:17px; box-shadow:0 3px 8px rgba(2,132,199,0.3);">
-              <i class="fa-solid fa-calculator"></i>
-            </div>
-          </div>
+        <!-- 4. Live Presence Modal Access (Pulsing LIVE Badge Only) -->
+        <div id="livePresenceHeaderBtn" onclick="openLivePresenceModal()" class="card ios-glass-card quick-action-icon-card" style="cursor:pointer; height:54px; margin:0; padding:0; border-radius:16px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(236, 253, 245, 0.94) 100%) !important; border:1.5px solid rgba(16, 185, 129, 0.25) !important; box-shadow:0 4px 14px rgba(16, 185, 129, 0.08) !important; transition:transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease; -webkit-tap-highlight-color:transparent;" title="सदस्यों की लाइव उपस्थिति">
+          <span style="background:linear-gradient(135deg, #ecfdf5, #d1fae5); border:1.5px solid #10b981; color:#047857; font-weight:900; font-size:11.5px; padding:5px 9px; border-radius:12px; display:inline-flex; align-items:center; gap:5px; box-shadow:0 2px 6px rgba(16,185,129,0.18);">
+            <span style="display:inline-block; width:7px; height:7px; background:#10b981; border-radius:50%; box-shadow:0 0 0 2.5px rgba(16,185,129,0.4); animation:livePulse 1.5s infinite;"></span>
+            <span>LIVE</span>
+          </span>
         </div>
+
       </div>
 
-
-      <!-- Search & Counts -->
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="memberSearchInput" class="search-input" placeholder="सदस्य नाम या मोबाइल नंबर से खोजें..." oninput="handleMemberSearch()" data-i18n-ph="search_placeholder">
-      </div>
-
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:8px;">
-        <span id="memberCountText" style="display:none;"></span>
-        <!-- 🟢 चक्रदार LIVE सिंबल (क्लिक करने पर लाइव उपस्थिति पॉपअप) -->
-        <button id="livePresenceHeaderBtn" onclick="openLivePresenceModal()" style="background:linear-gradient(135deg, #ecfdf5, #d1fae5); border:1.5px solid #10b981; color:#047857; font-weight:800; border-radius:20px; padding:6px 14px; display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-size:12px; box-shadow:0 2px 6px rgba(16,185,129,0.25);" title="सदस्यों की लाइव उपस्थिति देखें">
-          <span style="display:inline-block; width:8px; height:8px; background:#10b981; border-radius:50%; box-shadow:0 0 0 2.5px rgba(16,185,129,0.4); animation:livePulse 1.5s infinite;"></span>
-          <span>LIVE</span>
-        </button>
-        <button onclick="openAddFamilyMemberModal()" style="background:linear-gradient(135deg, #059669, #047857); border:none; color:white; font-weight:800; cursor:pointer; font-size:12px; padding:7px 14px; border-radius:12px; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(5,150,105,0.25);">
-          <i class="fa-solid fa-user-plus"></i> <span>+ परिवार सदस्य जोड़ें</span>
-        </button>
-      </div>
+      <!-- Hidden compatibility hooks -->
+      <span id="memberCountText" style="display:none;"></span>
+      <input type="hidden" id="memberSearchInput" value="">
 
       <div id="membersList">
         <div class="card" style="text-align:center; color:#64748b; font-size:13px; padding:24px;">
@@ -4082,7 +4051,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.4.8
+            APK v5.4.9
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4109,7 +4078,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.8 (बिल्ड कोड: 548)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.4.9 (बिल्ड कोड: 549)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4946,7 +4915,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.8 (बिल्ड कोड: 548)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.4.9 (बिल्ड कोड: 549)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5794,40 +5763,17 @@
           <div style="width:32px; height:32px; border-radius:50%; background:#dbeafe; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-size:15px;">
             <i class="fa-solid fa-bell"></i>
           </div>
-          <span>सूचना केंद्र (मुख्य सूचनाएं एवं नोटिस)</span>
+          <span>सूचना केंद्र (सभी सूचनाएं)</span>
         </div>
         <button onclick="closeNotificationCenterModal()" style="background:rgba(0,0,0,0.06); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; color:var(--text-color); display:flex; align-items:center; justify-content:center;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <!-- 📢 Admin Push Broadcast Box (Only for Admin) -->
-      <div id="notifAdminPushSection" style="display:none; background:linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(219, 234, 254, 0.85)); border:1.5px solid #93c5fd; border-radius:18px; padding:12px; margin-bottom:14px; box-shadow:0 4px 12px rgba(37,99,235,0.08);">
-        <div style="font-weight:800; font-size:12.5px; color:#1e40af; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
-          <span><i class="fa-solid fa-bullhorn" style="color:#2563eb;"></i> संचालक पुश संदेश (सभी को भेजें)</span>
-          <span style="font-size:10px; background:#bfdbfe; color:#1e3a8a; padding:1px 6px; border-radius:10px;">संचालक</span>
-        </div>
-        <input type="text" id="adminPushMsgTitle" placeholder="सूचना शीर्षक (उदा. विशेष बैठक, अमावस्या सूचना)" style="width:100%; padding:8px 10px; border-radius:10px; border:1px solid #93c5fd; font-size:12px; margin-bottom:6px; background:white;">
-        <textarea id="adminPushMsgBody" placeholder="समस्त ग्रुप सदस्यों के लिए संदेश लिखें..." style="width:100%; padding:8px 10px; border-radius:10px; border:1px solid #93c5fd; font-size:12px; min-height:60px; resize:vertical; margin-bottom:8px; background:white; font-family:inherit;"></textarea>
-        <button onclick="sendAdminPushMessage()" class="btn-main" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border-radius:12px; padding:9px 14px; font-size:12px; font-weight:800; width:100%; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 8px rgba(37,99,235,0.3);">
-          <i class="fa-solid fa-paper-plane"></i> <span>सभी ग्रुप सदस्यों को पुश संदेश भेजें</span>
-        </button>
-      </div>
-
-      <!-- Segmented Filter Tabs (Removed किसने ऐप खोला) -->
-      <div style="display:flex; gap:8px; margin-bottom:12px;">
-        <button id="notifFilterAll" onclick="setNotificationFilter('all')" style="flex:1; padding:7px 8px; font-size:11.5px; font-weight:700; border-radius:10px; text-align:center; border:none; cursor:pointer; background:#2563eb; color:white; transition:all 0.15s;">
-          🔔 सभी सूचनाएं
-        </button>
-        <button id="notifFilterNotices" onclick="setNotificationFilter('notices')" style="flex:1; padding:7px 8px; font-size:11.5px; font-weight:700; border-radius:10px; text-align:center; border:none; cursor:pointer; background:rgba(0,0,0,0.06); color:var(--text-color); transition:all 0.15s;">
-          📢 मुख्य नोटिस / संदेश
-        </button>
-      </div>
-
       <!-- Notification History Header -->
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <strong style="font-size:13px; color:var(--text-main);" id="notifSectionTitle">
-          <i class="fa-solid fa-clock-rotate-left" style="color:#64748b;"></i> सूचना इतिहास
+          <i class="fa-solid fa-bell" style="color:#2563eb;"></i> सभी सूचनाएं
         </strong>
         <span id="notifHistoryCountBadge" style="font-size:10.5px; background:rgba(0,122,255,0.1); color:#1d4ed8; padding:2px 8px; border-radius:12px; font-weight:700;">0 सूचनाएं</span>
       </div>
@@ -5836,7 +5782,7 @@
         <button onclick="clearAllNotifications()" style="width:100%; border:1.5px solid #fecaca; background:#fef2f2; color:#b91c1c; padding:8px; border-radius:10px; font-weight:800; font-size:12px; cursor:pointer;">🗑️ सभी सूचनाएं एक साथ मिटाएं</button>
       </div>
       <!-- History Items Container -->
-      <div id="notificationListContainer" style="display:flex; flex-direction:column; gap:8px; max-height:340px; overflow-y:auto; padding-right:2px; margin-bottom:14px;">
+      <div id="notificationListContainer" style="display:flex; flex-direction:column; gap:8px; max-height:360px; overflow-y:auto; padding-right:2px; margin-bottom:14px;">
         <div style="text-align:center; padding:20px; color:#64748b; font-size:12px;">सूचनाएं लोड हो रही हैं...</div>
       </div>
 
@@ -6576,7 +6522,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.4.8";
+    const APP_VERSION = "5.4.9";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -8449,10 +8395,10 @@
         if (!response.ok) {
           if (!silent) {
             showToast("अपडेट सर्वर से संपर्क नहीं हो सका। आप गिटहब से सीधे डाउनलोड कर सकते हैं।", "warning");
-            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 548)`;
+            document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 549)`;
             document.getElementById("updateModalNotes").innerHTML = `
               नेटवर्क अथवा गिटहब दर सीमा के कारण स्वतः जांच पूरी नहीं हो सकी।<br><br>
-              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 548)<br>
+              <strong>वर्तमान ऐप संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 549)<br>
               नवीनतम APK डाउनलोड करने के लिए नीचे दिए गए बटन पर टैप करें।
             `;
             latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
@@ -8586,7 +8532,7 @@
             document.getElementById("updateModalVersion").innerText = `✅ आप नवीनतम संस्करण (v${APP_VERSION}) पर हैं!`;
             document.getElementById("updateModalNotes").innerHTML = `
               बधाई! आपका युवा शक्ति ग्रुप ऐप पूरी तरह से अप-टू-डेट है।<br><br>
-              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 548)<br>
+              <strong>वर्तमान APK संस्करण:</strong> v${APP_VERSION} (बिल्ड कोड: 549)<br>
               <strong>नवीनतम गिटहब रिलीज़:</strong> v${latestTag || APP_VERSION}<br><br>
               यदि आप पुनः नवीनतम APK फ़ाइल डाउनलोड करना चाहते हैं तो नीचे 'पुनः डाउनलोड करें' बटन पर क्लिक कर सकते हैं।
             `;
@@ -8597,7 +8543,7 @@
       } catch (err) {
         if (!silent) {
           showToast("अपडेट जांच में त्रुटि: " + err.message, "error");
-          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 548)`;
+          document.getElementById("updateModalVersion").innerText = `संस्करण स्थिति: v${APP_VERSION} (बिल्ड कोड: 549)`;
           document.getElementById("updateModalNotes").innerHTML = `
             अपडेट जांचने में त्रुटि आई: ${err.message}<br><br>
             आप नीचे दिए गए बटन से सीधे नवीनतम APK डाउनलोड कर सकते हैं।
@@ -17830,41 +17776,12 @@
       }
     }
 
-    function setNotificationFilter(filter) {
-      currentNotificationFilter = filter;
-      const btnAll = document.getElementById("notifFilterAll");
-      const btnOpens = document.getElementById("notifFilterOpens");
-      const btnNotices = document.getElementById("notifFilterNotices");
-
-      [btnAll, btnOpens, btnNotices].forEach(b => {
-        if (b) {
-          b.style.background = "rgba(0,0,0,0.06)";
-          b.style.color = "var(--text-color)";
-        }
-      });
-
-      if (filter === 'all' && btnAll) {
-        btnAll.style.background = "#2563eb";
-        btnAll.style.color = "white";
-      } else if (filter === 'app_open' && btnOpens) {
-        btnOpens.style.background = "#10b981";
-        btnOpens.style.color = "white";
-      } else if (filter === 'notices' && btnNotices) {
-        btnNotices.style.background = "#d97706";
-        btnNotices.style.color = "white";
-      }
-
+    function setNotificationFilter(filter = 'all') {
+      currentNotificationFilter = 'all';
       const titleEl = document.getElementById("notifSectionTitle");
       if (titleEl) {
-        if (filter === 'app_open') {
-          titleEl.innerHTML = '<i class="fa-solid fa-mobile-screen-button" style="color:#10b981;"></i> ऐप ओपन टाइमलाइन (किसने कब खोला)';
-        } else if (filter === 'notices') {
-          titleEl.innerHTML = '<i class="fa-solid fa-bullhorn" style="color:#d97706;"></i> मुख्य सूचनाएं एवं नोटिस';
-        } else {
-          titleEl.innerHTML = '<i class="fa-solid fa-clock-rotate-left" style="color:#64748b;"></i> संपूर्ण सूचना इतिहास';
-        }
+        titleEl.innerHTML = '<i class="fa-solid fa-bell" style="color:#2563eb;"></i> सभी सूचनाएं';
       }
-
       renderNotificationCenterList();
     }
 
@@ -17875,7 +17792,7 @@
         lastReadNotificationTime = Date.now();
         localStorage.setItem("lastReadNotifTime", lastReadNotificationTime.toString());
         updateNotificationBadge();
-        setNotificationFilter('notices');
+        setNotificationFilter('all');
 
         const adminPushSection = document.getElementById("notifAdminPushSection");
         if (adminPushSection) {
@@ -17990,7 +17907,7 @@
         container.innerHTML = `
           <div style="text-align:center; padding:24px 12px; color:var(--text-muted);">
             <i class="fa-solid fa-bell-slash" style="font-size:26px; color:#cbd5e1; margin-bottom:8px; display:block;"></i>
-            <div>कोई सूचना या ऐप ओपन रिकॉर्ड उपलब्ध नहीं है।</div>
+            <div>कोई नई सूचना उपलब्ध नहीं है।</div>
           </div>
         `;
         return;
@@ -21311,7 +21228,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.8)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.4.9)
     //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 
