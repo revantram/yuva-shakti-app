@@ -1639,6 +1639,17 @@
       align-items: center;
       justify-content: center;
       padding: 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .ios-modal-sheet {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
     }
 
     .modal-content {
@@ -4061,7 +4072,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.1
+            APK v5.5.2
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4088,7 +4099,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.1 (बिल्ड कोड: 551)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.2 (बिल्ड कोड: 552)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4925,7 +4936,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.1 (बिल्ड कोड: 551)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.2 (बिल्ड कोड: 552)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5904,8 +5915,8 @@
   </div>
 
   <!-- 🟢 Admin Edit Member Contribution Modal -->
-  <div class="modal-overlay" id="adminEditMemberContributionModal" style="display:none; z-index:1013;" onclick="if(event.target === this) closeAdminEditContributionModal()">
-    <div class="ios-modal-sheet" style="max-width:480px; width:92%; max-height:88vh; overflow-y:auto; padding:20px; border-radius:24px; box-shadow:0 16px 40px rgba(0,0,0,0.3);">
+  <div class="modal-overlay" id="adminEditMemberContributionModal" data-no-swipe="true" style="display:none; z-index:1013; overflow-y:auto; -webkit-overflow-scrolling:touch;" onclick="if(event.target === this) closeAdminEditContributionModal()">
+    <div class="modal-content ios-modal-sheet" style="max-width:480px; width:92%; max-height:86vh; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; padding:20px; border-radius:24px; box-shadow:0 16px 40px rgba(0,0,0,0.3); touch-action:pan-y;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:10px;">
         <h3 style="font-size:16px; font-weight:800; color:#1e3a8a; margin:0;">अंशदान विवरण एडिट करें</h3>
         <button onclick="closeAdminEditContributionModal()" style="background:#f1f5f9; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer;">
@@ -6492,7 +6503,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.1";
+    const APP_VERSION = "5.5.2";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -13780,21 +13791,21 @@
     // 🗓️ मासिक अंशदान अमावस्या सूची एवं डायनामिक माह प्रणाली
     // =========================================================================
     const CONTRIB_AMAVASYA_MONTHS = [
-      { key: "2026-10", num: 1, title: "1. अक्टूबर माह अमावस्या", sub: "(अभियान शुरुआत)", date: "2026-10-11", defaultAmount: 50 },
-      { key: "2026-11", num: 2, title: "2. 8 नवंबर अमावस्या (कार्तिक)", sub: "(सत्संग बैठक)", date: "2026-11-08", defaultAmount: 100 },
-      { key: "2026-12", num: 3, title: "3. 8 दिसंबर अमावस्या (मार्गशीर्ष)", sub: "(सत्संग बैठक)", date: "2026-12-08", defaultAmount: 100 },
-      { key: "2027-01", num: 4, title: "4. 7 जनवरी अमावस्या (पौष)", sub: "(सत्संग बैठक)", date: "2027-01-07", defaultAmount: 100 },
-      { key: "2027-02", num: 5, title: "5. 6 फरवरी अमावस्या (माघ)", sub: "(सत्संग बैठक)", date: "2027-02-06", defaultAmount: 100 },
-      { key: "2027-03", num: 6, title: "6. 7 मार्च अमावस्या (फाल्गुन)", sub: "(सत्संग बैठक)", date: "2027-03-07", defaultAmount: 100 },
-      { key: "2027-04", num: 7, title: "7. 6 अप्रैल अमावस्या (चैत्र)", sub: "(सत्संग बैठक)", date: "2027-04-06", defaultAmount: 100 },
-      { key: "2027-05", num: 8, title: "8. 5 मई अमावस्या (वैशाख)", sub: "(सत्संग बैठक)", date: "2027-05-05", defaultAmount: 100 },
-      { key: "2027-06", num: 9, title: "9. 4 जून अमावस्या (ज्येष्ठ)", sub: "(सत्संग बैठक)", date: "2027-06-04", defaultAmount: 100 },
-      { key: "2027-07", num: 10, title: "10. 3 जुलाई अमावस्या (आषाढ़)", sub: "(सत्संग बैठक)", date: "2027-07-03", defaultAmount: 100 },
-      { key: "2027-08", num: 11, title: "11. 1 अगस्त अमावस्या (श्रावण)", sub: "(सत्संग बैठक)", date: "2027-08-01", defaultAmount: 100 },
-      { key: "2027-09", num: 12, title: "12. 29 सितंबर अमावस्या (सर्वपितृ)", sub: "(सत्संग बैठक)", date: "2027-09-29", defaultAmount: 100 },
-      { key: "2027-10", num: 13, title: "13. 29 अक्टूबर अमावस्या (दीपावली)", sub: "(सत्संग बैठक)", date: "2027-10-29", defaultAmount: 100 },
-      { key: "2027-11", num: 14, title: "14. 27 नवंबर अमावस्या (मार्गशीर्ष)", sub: "(सत्संग बैठक)", date: "2027-11-27", defaultAmount: 100 },
-      { key: "2027-12", num: 15, title: "15. 27 दिसंबर अमावस्या (पौष)", sub: "(सत्संग बैठक)", date: "2027-12-27", defaultAmount: 100 }
+      { key: "2026-10", num: 1, title: "1. अक्टूबर माह अमावस्या", sub: "(सहयोग राशि)", date: "2026-10-11", defaultAmount: 50 },
+      { key: "2026-11", num: 2, title: "2. 8 नवंबर अमावस्या (कार्तिक)", sub: "(सहयोग राशि)", date: "2026-11-08", defaultAmount: 100 },
+      { key: "2026-12", num: 3, title: "3. 8 दिसंबर अमावस्या (मार्गशीर्ष)", sub: "(सहयोग राशि)", date: "2026-12-08", defaultAmount: 100 },
+      { key: "2027-01", num: 4, title: "4. 7 जनवरी अमावस्या (पौष)", sub: "(सहयोग राशि)", date: "2027-01-07", defaultAmount: 100 },
+      { key: "2027-02", num: 5, title: "5. 6 फरवरी अमावस्या (माघ)", sub: "(सहयोग राशि)", date: "2027-02-06", defaultAmount: 100 },
+      { key: "2027-03", num: 6, title: "6. 7 मार्च अमावस्या (फाल्गुन)", sub: "(सहयोग राशि)", date: "2027-03-07", defaultAmount: 100 },
+      { key: "2027-04", num: 7, title: "7. 6 अप्रैल अमावस्या (चैत्र)", sub: "(सहयोग राशि)", date: "2027-04-06", defaultAmount: 100 },
+      { key: "2027-05", num: 8, title: "8. 5 मई अमावस्या (वैशाख)", sub: "(सहयोग राशि)", date: "2027-05-05", defaultAmount: 100 },
+      { key: "2027-06", num: 9, title: "9. 4 जून अमावस्या (ज्येष्ठ)", sub: "(सहयोग राशि)", date: "2027-06-04", defaultAmount: 100 },
+      { key: "2027-07", num: 10, title: "10. 3 जुलाई अमावस्या (आषाढ़)", sub: "(सहयोग राशि)", date: "2027-07-03", defaultAmount: 100 },
+      { key: "2027-08", num: 11, title: "11. 1 अगस्त अमावस्या (श्रावण)", sub: "(सहयोग राशि)", date: "2027-08-01", defaultAmount: 100 },
+      { key: "2027-09", num: 12, title: "12. 29 सितंबर अमावस्या (सर्वपितृ)", sub: "(सहयोग राशि)", date: "2027-09-29", defaultAmount: 100 },
+      { key: "2027-10", num: 13, title: "13. 29 अक्टूबर अमावस्या (दीपावली)", sub: "(सहयोग राशि)", date: "2027-10-29", defaultAmount: 100 },
+      { key: "2027-11", num: 14, title: "14. 27 नवंबर अमावस्या (मार्गशीर्ष)", sub: "(सहयोग राशि)", date: "2027-11-27", defaultAmount: 100 },
+      { key: "2027-12", num: 15, title: "15. 27 दिसंबर अमावस्या (पौष)", sub: "(सहयोग राशि)", date: "2027-12-27", defaultAmount: 100 }
     ];
 
     const CONTRIB_THEMES = [
@@ -21502,7 +21513,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.1)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.2)
     //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 
@@ -21557,7 +21568,7 @@
     // 🚫 Prevent Touchmove Bleed on Modal Background
     document.addEventListener('touchmove', function(e) {
       if (document.body.classList.contains('has-active-modal')) {
-        const scrollable = e.target.closest('.modal-content, #passbookBody, #dedicatedGalleryPage, #dedicatedPaymentPage, #dedicatedCashCounterPage, #dedicatedVamshaPage, #dedicatedVamshaLivingPage, #vamshaLivingOverlay > div, #vamshaPopupHost .vf-popup-card, #vamshaFormOverlay > div, #vamshaPosterCard');
+        const scrollable = e.target.closest('.modal-content, .ios-modal-sheet, #passbookBody, #dedicatedGalleryPage, #dedicatedPaymentPage, #dedicatedCashCounterPage, #dedicatedVamshaPage, #dedicatedVamshaLivingPage, #vamshaLivingOverlay > div, #vamshaPopupHost .vf-popup-card, #vamshaFormOverlay > div, #vamshaPosterCard, [style*="overflow-y:auto"], [style*="overflow-y: auto"]');
         if (!scrollable) {
           if (e.cancelable) e.preventDefault();
         }
