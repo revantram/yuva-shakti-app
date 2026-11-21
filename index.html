@@ -4061,7 +4061,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.0
+            APK v5.5.1
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4088,7 +4088,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.0 (बिल्ड कोड: 550)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.1 (बिल्ड कोड: 551)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4925,7 +4925,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.0 (बिल्ड कोड: 550)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.1 (बिल्ड कोड: 551)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -5925,54 +5925,14 @@
           <span class="member-tag-badge" id="editContribMemberRole">सदस्य</span>
         </div>
 
-        <!-- Section 1: अक्टूबर 2026 अमावस्या -->
-        <div style="border:1.5px solid #bfdbfe; background:#eff6ff; border-radius:14px; padding:12px;">
-          <div style="font-size:13px; font-weight:800; color:#1e40af; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between;">
-            <span>1. अक्टूबर माह अमावस्या</span>
-            <span style="font-size:11px; font-weight:600; color:#3b82f6;">(अभियान शुरुआत)</span>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
-            <div>
-              <label style="font-size:11px; font-weight:700; color:#1e3a8a; display:block; margin-bottom:4px;">स्थिति:</label>
-              <select id="editOctStatus" style="width:100%; padding:8px; border-radius:8px; border:1px solid #93c5fd; font-size:12px; font-weight:700; background:white;">
-                <option value="paid">जमा (Paid)</option>
-                <option value="due">बाकी (Due)</option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:11px; font-weight:700; color:#1e3a8a; display:block; margin-bottom:4px;">राशि (₹):</label>
-              <input type="number" id="editOctAmount" value="100" style="width:100%; padding:8px; border-radius:8px; border:1px solid #93c5fd; font-size:12px; font-weight:700; background:white;">
-            </div>
-          </div>
-          <div>
-            <label style="font-size:11px; font-weight:700; color:#1e3a8a; display:block; margin-bottom:4px;">जमा तारीख (वैकल्पिक):</label>
-            <input type="date" id="editOctDate" style="width:100%; padding:8px; border-radius:8px; border:1px solid #93c5fd; font-size:12px; background:white;">
-          </div>
-        </div>
+        <!-- 🟢 Dynamic Amavasya Months Container (अगले महीने का विकल्प ऑटोमैटिक) -->
+        <div id="adminEditContribMonthsContainer" style="display:flex; flex-direction:column; gap:12px;"></div>
 
-        <!-- Section 2: 8 नवंबर 2026 अमावस्या -->
-        <div style="border:1.5px solid #fde68a; background:#fffbeb; border-radius:14px; padding:12px;">
-          <div style="font-size:13px; font-weight:800; color:#92400e; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between;">
-            <span>2. 8 नवंबर अमावस्या (आगामी)</span>
-            <span style="font-size:11px; font-weight:600; color:#d97706;">(सत्संग बैठक)</span>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
-            <div>
-              <label style="font-size:11px; font-weight:700; color:#78350f; display:block; margin-bottom:4px;">स्थिति:</label>
-              <select id="editNovStatus" style="width:100%; padding:8px; border-radius:8px; border:1px solid #fcd34d; font-size:12px; font-weight:700; background:white;">
-                <option value="due">बाकी (Due)</option>
-                <option value="paid">जमा (Paid)</option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:11px; font-weight:700; color:#78350f; display:block; margin-bottom:4px;">राशि (₹):</label>
-              <input type="number" id="editNovAmount" value="100" style="width:100%; padding:8px; border-radius:8px; border:1px solid #fcd34d; font-size:12px; font-weight:700; background:white;">
-            </div>
-          </div>
-          <div>
-            <label style="font-size:11px; font-weight:700; color:#78350f; display:block; margin-bottom:4px;">जमा तारीख (वैकल्पिक):</label>
-            <input type="date" id="editNovDate" style="width:100%; padding:8px; border-radius:8px; border:1px solid #fcd34d; font-size:12px; background:white;">
-          </div>
+        <!-- Add Next Month Manual Button -->
+        <div style="text-align:center; margin-top:-4px;">
+          <button type="button" onclick="adminAddNextAmavasyaMonthManual()" style="background:#f8fafc; border:1px dashed #94a3b8; color:#334155; padding:7px 14px; border-radius:10px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-plus-circle" style="color:#2563eb;"></i> <span>अगला महीना जोड़ें (अग्रिम अंशदान दर्ज करने हेतु)</span>
+          </button>
         </div>
 
         <!-- Section 3: अतिरिक्त कुल जमा राशि (यदि ज्यादा दिए हों) -->
@@ -6532,7 +6492,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.0";
+    const APP_VERSION = "5.5.1";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -12312,6 +12272,51 @@
           }
           const grandTotal = Math.max(totalCalculated, Number(m.lifetimeContribution) || 0);
 
+          const cardsHtml = [];
+          cardsHtml.push(`
+            <div style="background:white; padding:8px 10px; border-radius:10px; border:1px solid #bfdbfe; box-shadow:0 1px 3px rgba(37,99,235,0.04); display:flex; flex-direction:column; gap:2px;">
+              <span style="color:#64748b; font-size:10.5px; font-weight:600;"><i class="fa-solid fa-moon" style="color:#d97706;"></i> अक्टूबर अमावस्या:</span>
+              <strong style="color:${octPaid ? '#16a34a' : '#dc2626'}; font-size:12.5px;">${octPaid ? `₹${octAmt} (जमा ✅)` : 'बाकी ❌'}</strong>
+            </div>
+          `);
+
+          cardsHtml.push(`
+            <div style="background:white; padding:8px 10px; border-radius:10px; border:1px solid #bfdbfe; box-shadow:0 1px 3px rgba(37,99,235,0.04); display:flex; flex-direction:column; gap:2px;">
+              <span style="color:#64748b; font-size:10.5px; font-weight:600;"><i class="fa-solid fa-calendar-check" style="color:#2563eb;"></i> 8 नवंबर (कार्तिक):</span>
+              <strong style="color:${novPaid ? '#16a34a' : '#dc2626'}; font-size:12.5px;">${novPaid ? `₹${novAmt} (जमा ✅)` : 'बाकी ❌'}</strong>
+            </div>
+          `);
+
+          let lastWasPaid = novPaid;
+          if (typeof CONTRIB_AMAVASYA_MONTHS !== 'undefined') {
+            for (let i = 2; i < CONTRIB_AMAVASYA_MONTHS.length; i++) {
+              const moCfg = CONTRIB_AMAVASYA_MONTHS[i];
+              const moRec = m.amavasyaPay && m.amavasyaPay[moCfg.key];
+              const isMoPaid = !!(moRec && moRec.isPaid === true);
+              const moAmt = isMoPaid ? (Number(moRec.amount) || moCfg.defaultAmount) : moCfg.defaultAmount;
+              const cleanTitle = moCfg.title.replace(/^\d+\.\s*/, '');
+              if (isMoPaid) {
+                cardsHtml.push(`
+                  <div style="background:#f0fdf4; padding:8px 10px; border-radius:10px; border:1px solid #86efac; box-shadow:0 1px 3px rgba(22,163,74,0.06); display:flex; flex-direction:column; gap:2px;">
+                    <span style="color:#166534; font-size:10.5px; font-weight:700;"><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> ${escapeHtml(cleanTitle)}:</span>
+                    <strong style="color:#15803d; font-size:12.5px;">₹${moAmt} (जमा ✅)</strong>
+                  </div>
+                `);
+                lastWasPaid = true;
+              } else {
+                if (lastWasPaid) {
+                  cardsHtml.push(`
+                    <div style="background:#fffbeb; padding:8px 10px; border-radius:10px; border:1px solid #fde68a; box-shadow:0 1px 3px rgba(217,119,6,0.06); display:flex; flex-direction:column; gap:2px;">
+                      <span style="color:#92400e; font-size:10.5px; font-weight:700;"><i class="fa-solid fa-hourglass-half" style="color:#d97706;"></i> ${escapeHtml(cleanTitle)}:</span>
+                      <strong style="color:#d97706; font-size:12px;">₹${moAmt} आगामी (बाकी)</strong>
+                    </div>
+                  `);
+                }
+                break;
+              }
+            }
+          }
+
           contribBox.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
               <span style="font-size:13px; font-weight:800; color:#1e40af; display:inline-flex; align-items:center; gap:5px;">
@@ -12322,14 +12327,7 @@
               </span>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:11.5px;">
-              <div style="background:white; padding:8px 10px; border-radius:10px; border:1px solid #bfdbfe; box-shadow:0 1px 3px rgba(37,99,235,0.04); display:flex; flex-direction:column; gap:2px;">
-                <span style="color:#64748b; font-size:10.5px; font-weight:600;"><i class="fa-solid fa-moon" style="color:#d97706;"></i> अक्टूबर अमावस्या:</span>
-                <strong style="color:${octPaid ? '#16a34a' : '#dc2626'}; font-size:12.5px;">${octPaid ? `₹${octAmt} (जमा ✅)` : 'बाकी ❌'}</strong>
-              </div>
-              <div style="background:white; padding:8px 10px; border-radius:10px; border:1px solid #bfdbfe; box-shadow:0 1px 3px rgba(37,99,235,0.04); display:flex; flex-direction:column; gap:2px;">
-                <span style="color:#64748b; font-size:10.5px; font-weight:600;"><i class="fa-solid fa-calendar-check" style="color:#2563eb;"></i> 8 नवंबर (कार्तिक):</span>
-                <strong style="color:${novPaid ? '#16a34a' : '#dc2626'}; font-size:12.5px;">${novPaid ? `₹${novAmt} (जमा ✅)` : 'बाकी ❌'}</strong>
-              </div>
+              ${cardsHtml.join('')}
             </div>
             ${extraAmt > 0 ? `
               <div style="margin-top:6px; background:#f0fdf4; padding:6px 10px; border-radius:8px; border:1px solid #bbf7d0; display:flex; justify-content:space-between; align-items:center; font-size:11px;">
@@ -13649,11 +13647,24 @@
         const novPaid = !!novRec;
         const novAmt = novPaid ? (Number(novRec.amount) || 100) : 0;
 
-        let totalAmt = octAmt + extraAmt;
+        let totalAmt = (octPaid ? octAmt : 0) + (novPaid ? novAmt : 0) + extraAmt;
+        const extraPaidBadges = [];
+        if (m.amavasyaPay && typeof m.amavasyaPay === "object") {
+          Object.entries(m.amavasyaPay).forEach(([k, rec]) => {
+            if (k !== "2026-10" && k !== "2026-11" && rec && rec.isPaid) {
+              const amt = Number(rec.amount) || 100;
+              totalAmt += amt;
+              const cfg = (typeof CONTRIB_AMAVASYA_MONTHS !== 'undefined') ? CONTRIB_AMAVASYA_MONTHS.find(x => x.key === k) : null;
+              const lbl = cfg ? cfg.title.replace(/^\d+\.\s*/, '').split('(')[0].trim() : k;
+              extraPaidBadges.push(`<div style="display:flex; align-items:center; justify-content:space-between; background:rgba(22, 163, 74, 0.07); padding:6px 8px; border-radius:8px;"><span style="color:#166534; font-weight:700;">${escapeHtml(lbl)}:</span><span style="font-weight:700; color:#15803d;">₹${amt} जमा (अग्रिम) ✅</span></div>`);
+            }
+          });
+        }
+        totalAmt = Math.max(totalAmt, Number(m.lifetimeContribution) || 0);
+
         let statusBlockHtml = "";
 
         if (hasNovPassed) {
-          totalAmt += (novPaid ? novAmt : 0);
           statusBlockHtml = `
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; padding-top:6px; border-top:1px dashed var(--border-color, #e2e8f0); font-size:11px;">
               <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.02); padding:6px 8px; border-radius:8px;">
@@ -13664,12 +13675,12 @@
                 <span style="color:#64748b;">8 नवंबर:</span>
                 <span style="font-weight:700; color:${novPaid ? '#16a34a' : '#dc2626'};">${novPaid ? `₹${novAmt} जमा ✅` : 'बाकी'}</span>
               </div>
+              ${extraPaidBadges.join('')}
             </div>
           `;
         } else {
           // Before November Amavasya:
           if (novPaid) {
-            totalAmt += novAmt;
             statusBlockHtml = `
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; padding-top:6px; border-top:1px dashed var(--border-color, #e2e8f0); font-size:11px;">
                 <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.02); padding:6px 8px; border-radius:8px;">
@@ -13680,6 +13691,7 @@
                   <span style="color:#64748b;">8 नवंबर:</span>
                   <span style="font-weight:700; color:#16a34a;">₹${novAmt} जमा (अग्रिम) ✅</span>
                 </div>
+                ${extraPaidBadges.join('')}
               </div>
             `;
           } else {
@@ -13693,6 +13705,7 @@
                   <span style="color:#64748b;">8 नवंबर:</span>
                   <span style="font-weight:700; color:#d97706;"><i class="fa-solid fa-hourglass-half"></i> आगामी</span>
                 </div>
+                ${extraPaidBadges.join('')}
               </div>
             `;
           }
@@ -13763,6 +13776,190 @@
       });
     }
 
+    // =========================================================================
+    // 🗓️ मासिक अंशदान अमावस्या सूची एवं डायनामिक माह प्रणाली
+    // =========================================================================
+    const CONTRIB_AMAVASYA_MONTHS = [
+      { key: "2026-10", num: 1, title: "1. अक्टूबर माह अमावस्या", sub: "(अभियान शुरुआत)", date: "2026-10-11", defaultAmount: 50 },
+      { key: "2026-11", num: 2, title: "2. 8 नवंबर अमावस्या (कार्तिक)", sub: "(सत्संग बैठक)", date: "2026-11-08", defaultAmount: 100 },
+      { key: "2026-12", num: 3, title: "3. 8 दिसंबर अमावस्या (मार्गशीर्ष)", sub: "(सत्संग बैठक)", date: "2026-12-08", defaultAmount: 100 },
+      { key: "2027-01", num: 4, title: "4. 7 जनवरी अमावस्या (पौष)", sub: "(सत्संग बैठक)", date: "2027-01-07", defaultAmount: 100 },
+      { key: "2027-02", num: 5, title: "5. 6 फरवरी अमावस्या (माघ)", sub: "(सत्संग बैठक)", date: "2027-02-06", defaultAmount: 100 },
+      { key: "2027-03", num: 6, title: "6. 7 मार्च अमावस्या (फाल्गुन)", sub: "(सत्संग बैठक)", date: "2027-03-07", defaultAmount: 100 },
+      { key: "2027-04", num: 7, title: "7. 6 अप्रैल अमावस्या (चैत्र)", sub: "(सत्संग बैठक)", date: "2027-04-06", defaultAmount: 100 },
+      { key: "2027-05", num: 8, title: "8. 5 मई अमावस्या (वैशाख)", sub: "(सत्संग बैठक)", date: "2027-05-05", defaultAmount: 100 },
+      { key: "2027-06", num: 9, title: "9. 4 जून अमावस्या (ज्येष्ठ)", sub: "(सत्संग बैठक)", date: "2027-06-04", defaultAmount: 100 },
+      { key: "2027-07", num: 10, title: "10. 3 जुलाई अमावस्या (आषाढ़)", sub: "(सत्संग बैठक)", date: "2027-07-03", defaultAmount: 100 },
+      { key: "2027-08", num: 11, title: "11. 1 अगस्त अमावस्या (श्रावण)", sub: "(सत्संग बैठक)", date: "2027-08-01", defaultAmount: 100 },
+      { key: "2027-09", num: 12, title: "12. 29 सितंबर अमावस्या (सर्वपितृ)", sub: "(सत्संग बैठक)", date: "2027-09-29", defaultAmount: 100 },
+      { key: "2027-10", num: 13, title: "13. 29 अक्टूबर अमावस्या (दीपावली)", sub: "(सत्संग बैठक)", date: "2027-10-29", defaultAmount: 100 },
+      { key: "2027-11", num: 14, title: "14. 27 नवंबर अमावस्या (मार्गशीर्ष)", sub: "(सत्संग बैठक)", date: "2027-11-27", defaultAmount: 100 },
+      { key: "2027-12", num: 15, title: "15. 27 दिसंबर अमावस्या (पौष)", sub: "(सत्संग बैठक)", date: "2027-12-27", defaultAmount: 100 }
+    ];
+
+    const CONTRIB_THEMES = [
+      { border: "#bfdbfe", bg: "#eff6ff", text: "#1e40af", sub: "#3b82f6", fieldBorder: "#93c5fd" }, // Blue (Oct)
+      { border: "#fde68a", bg: "#fffbeb", text: "#92400e", sub: "#d97706", fieldBorder: "#fcd34d" }, // Amber (Nov)
+      { border: "#bbf7d0", bg: "#f0fdf4", text: "#166534", sub: "#15803d", fieldBorder: "#86efac" }, // Green (Dec)
+      { border: "#e9d5ff", bg: "#faf5ff", text: "#6b21a8", sub: "#7e22ce", fieldBorder: "#d8b4fe" }, // Purple (Jan)
+      { border: "#fed7aa", bg: "#fff7ed", text: "#9a3412", sub: "#ea580c", fieldBorder: "#fdba74" }, // Orange (Feb)
+      { border: "#99f6e4", bg: "#f0fdfa", text: "#115e59", sub: "#0d9488", fieldBorder: "#5eead4" }, // Teal (Mar)
+      { border: "#fbcfe8", bg: "#fdf2f8", text: "#9d174d", sub: "#db2777", fieldBorder: "#f472b6" }, // Pink (Apr)
+      { border: "#c7d2fe", bg: "#eef2ff", text: "#3730a3", sub: "#4f46e5", fieldBorder: "#a5b4fc" }  // Indigo (May)
+    ];
+
+    window.adminEditActiveMonths = [];
+
+    function getMemberMonthData(m, key) {
+      if (!m) return { isPaid: false, status: "due", amount: 100, date: "" };
+      if (key === "2026-10") {
+        const octPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
+        const octAmt = Number(m.octoberAmavasya?.amount) || 50;
+        const octDate = m.octoberAmavasya?.date || "2026-10-11";
+        return { isPaid: !!octPaid, status: octPaid ? "paid" : "due", amount: octAmt, date: octDate };
+      }
+      if (key === "2026-11") {
+        const rec = m.novemberAmavasya || (m.amavasyaPay && m.amavasyaPay["2026-11"]);
+        const novPaid = !!(rec && rec.isPaid === true);
+        const novAmt = Number(rec?.amount) || 100;
+        const novDate = rec?.date || (novPaid ? (m.lastPaymentDate || "2026-11-08") : "");
+        return { isPaid: novPaid, status: novPaid ? "paid" : "due", amount: novAmt, date: novDate };
+      }
+      const rec = m.amavasyaPay && m.amavasyaPay[key];
+      const isPaid = !!(rec && rec.isPaid === true);
+      const amt = Number(rec?.amount) || 100;
+      const d = rec?.date || (isPaid ? (m.lastPaymentDate || "") : "");
+      return { isPaid: isPaid, status: isPaid ? "paid" : "due", amount: amt, date: d };
+    }
+
+    function buildAdminContribMonthCardHtml(moCfg, data, idx) {
+      const theme = CONTRIB_THEMES[idx % CONTRIB_THEMES.length];
+      const isPaid = (data.status === "paid" || data.isPaid === true);
+      const isOct = (moCfg.key === "2026-10");
+      const isNov = (moCfg.key === "2026-11");
+      const statusId = isOct ? "editOctStatus" : (isNov ? "editNovStatus" : `editMonthStatus_${moCfg.key}`);
+      const amountId = isOct ? "editOctAmount" : (isNov ? "editNovAmount" : `editMonthAmount_${moCfg.key}`);
+      const dateId = isOct ? "editOctDate" : (isNov ? "editNovDate" : `editMonthDate_${moCfg.key}`);
+      const cardId = `editMonthCard_${moCfg.key}`;
+
+      return `
+        <div id="${cardId}" style="border:1.5px solid ${theme.border}; background:${theme.bg}; border-radius:14px; padding:12px; transition:all 0.25s ease;">
+          <div style="font-size:13px; font-weight:800; color:${theme.text}; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between;">
+            <span>${escapeHtml(moCfg.title)}</span>
+            <span style="font-size:11px; font-weight:600; color:${theme.sub};">${escapeHtml(moCfg.sub)}</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
+            <div>
+              <label style="font-size:11px; font-weight:700; color:${theme.text}; display:block; margin-bottom:4px;">स्थिति:</label>
+              <select id="${statusId}" data-month="${moCfg.key}" onchange="onAdminContribStatusChange('${moCfg.key}')" style="width:100%; padding:8px; border-radius:8px; border:1px solid ${theme.fieldBorder}; font-size:12px; font-weight:700; background:white;">
+                <option value="due" ${!isPaid ? "selected" : ""}>बाकी (Due)</option>
+                <option value="paid" ${isPaid ? "selected" : ""}>जमा (Paid)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px; font-weight:700; color:${theme.text}; display:block; margin-bottom:4px;">राशि (₹):</label>
+              <input type="number" id="${amountId}" data-month="${moCfg.key}" value="${data.amount || moCfg.defaultAmount}" style="width:100%; padding:8px; border-radius:8px; border:1px solid ${theme.fieldBorder}; font-size:12px; font-weight:700; background:white;">
+            </div>
+          </div>
+          <div>
+            <label style="font-size:11px; font-weight:700; color:${theme.text}; display:block; margin-bottom:4px;">जमा तारीख (वैकल्पिक):</label>
+            <input type="date" id="${dateId}" data-month="${moCfg.key}" value="${data.date || ''}" style="width:100%; padding:8px; border-radius:8px; border:1px solid ${theme.fieldBorder}; font-size:12px; background:white;">
+          </div>
+        </div>
+      `;
+    }
+
+    function appendAdminContribMonthCard(moCfg, data, animate = false) {
+      const container = document.getElementById("adminEditContribMonthsContainer");
+      if (!container) return;
+      if (document.getElementById(`editMonthCard_${moCfg.key}`)) return;
+
+      const idx = CONTRIB_AMAVASYA_MONTHS.findIndex(m => m.key === moCfg.key);
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = buildAdminContribMonthCardHtml(moCfg, data, idx >= 0 ? idx : 0);
+      const cardNode = tempDiv.firstElementChild;
+      if (animate) {
+        cardNode.style.opacity = "0";
+        cardNode.style.transform = "translateY(10px)";
+        container.appendChild(cardNode);
+        requestAnimationFrame(() => {
+          cardNode.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+          cardNode.style.opacity = "1";
+          cardNode.style.transform = "translateY(0)";
+        });
+      } else {
+        container.appendChild(cardNode);
+      }
+    }
+
+    function onAdminContribStatusChange(changedKey) {
+      const isOct = (changedKey === "2026-10");
+      const isNov = (changedKey === "2026-11");
+      const statusEl = document.getElementById(isOct ? "editOctStatus" : (isNov ? "editNovStatus" : `editMonthStatus_${changedKey}`));
+      if (!statusEl) return;
+      const isPaid = (statusEl.value === "paid");
+
+      // Autofill date if empty when marked paid
+      const dateEl = document.getElementById(isOct ? "editOctDate" : (isNov ? "editNovDate" : `editMonthDate_${changedKey}`));
+      if (isPaid && dateEl && !dateEl.value) {
+        const moCfg = CONTRIB_AMAVASYA_MONTHS.find(m => m.key === changedKey);
+        dateEl.value = (moCfg && moCfg.date) ? moCfg.date : new Date().toISOString().slice(0, 10);
+      }
+
+      const idx = CONTRIB_AMAVASYA_MONTHS.findIndex(m => m.key === changedKey);
+      if (isPaid) {
+        // Automatically reveal next upcoming Amavasya month option!
+        if (idx !== -1 && idx + 1 < CONTRIB_AMAVASYA_MONTHS.length) {
+          const nextMo = CONTRIB_AMAVASYA_MONTHS[idx + 1];
+          if (!window.adminEditActiveMonths.includes(nextMo.key)) {
+            window.adminEditActiveMonths.push(nextMo.key);
+            appendAdminContribMonthCard(nextMo, { isPaid: false, status: "due", amount: nextMo.defaultAmount, date: nextMo.date }, true);
+            const cleanTitle = nextMo.title.replace(/^\d+\.\s*/, '');
+            showToast(`✨ अगला महीना (${cleanTitle}) जमा करने हेतु विकल्प खुल गया!`, "info");
+          }
+        }
+      } else {
+        // If changed to due, trim trailing unpaid dynamic months (beyond base Oct & Nov)
+        if (idx !== -1) {
+          for (let i = CONTRIB_AMAVASYA_MONTHS.length - 1; i > idx && i >= 2; i--) {
+            const checkKey = CONTRIB_AMAVASYA_MONTHS[i].key;
+            if (window.adminEditActiveMonths.includes(checkKey)) {
+              const subStatusEl = document.getElementById(`editMonthStatus_${checkKey}`);
+              const subStatus = subStatusEl ? subStatusEl.value : "due";
+              if (subStatus !== "paid") {
+                window.adminEditActiveMonths = window.adminEditActiveMonths.filter(k => k !== checkKey);
+                const cardEl = document.getElementById(`editMonthCard_${checkKey}`);
+                if (cardEl) cardEl.remove();
+              } else {
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    function adminAddNextAmavasyaMonthManual() {
+      if (!window.adminEditActiveMonths || !window.adminEditActiveMonths.length) {
+        window.adminEditActiveMonths = ["2026-10", "2026-11"];
+      }
+      const lastKey = window.adminEditActiveMonths[window.adminEditActiveMonths.length - 1];
+      const lastIdx = CONTRIB_AMAVASYA_MONTHS.findIndex(m => m.key === lastKey);
+      if (lastIdx !== -1 && lastIdx + 1 < CONTRIB_AMAVASYA_MONTHS.length) {
+        const nextMo = CONTRIB_AMAVASYA_MONTHS[lastIdx + 1];
+        if (!window.adminEditActiveMonths.includes(nextMo.key)) {
+          window.adminEditActiveMonths.push(nextMo.key);
+          appendAdminContribMonthCard(nextMo, { isPaid: false, status: "due", amount: nextMo.defaultAmount, date: nextMo.date }, true);
+          const cleanTitle = nextMo.title.replace(/^\d+\.\s*/, '');
+          showToast(`➕ अगला महीना (${cleanTitle}) जोड़ा गया!`, "success");
+        } else {
+          showToast("यह महीना पहले से ही खुला हुआ है।", "info");
+        }
+      } else {
+        showToast("सभी उपलब्ध अमावस्या महीने पहले से खुले हुए हैं।", "info");
+      }
+    }
+
     function openAdminEditContributionModal(memberId) {
       if (!canFin()) {
         showToast("यह सुविधा केवल संचालक के लिए है।", "error");
@@ -13781,17 +13978,36 @@
         roleEl.innerText = tag;
       }
 
-      // Populate October
-      const octPaid = m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true);
-      document.getElementById("editOctStatus").value = octPaid ? "paid" : "due";
-      document.getElementById("editOctAmount").value = m.octoberAmavasya?.amount ?? (octPaid ? 50 : 50);
-      document.getElementById("editOctDate").value = m.octoberAmavasya?.date || "2026-10-11";
+      // Determine initial visible months:
+      // Always include at least 2026-10 and 2026-11.
+      // If the latest month is paid, continue including the NEXT month!
+      const visibleKeys = ["2026-10", "2026-11"];
+      for (let i = 1; i < CONTRIB_AMAVASYA_MONTHS.length; i++) {
+        const curKey = CONTRIB_AMAVASYA_MONTHS[i].key;
+        const curData = getMemberMonthData(m, curKey);
+        if (curData.isPaid) {
+          if (i + 1 < CONTRIB_AMAVASYA_MONTHS.length) {
+            const nextKey = CONTRIB_AMAVASYA_MONTHS[i + 1].key;
+            if (!visibleKeys.includes(nextKey)) visibleKeys.push(nextKey);
+          }
+        } else {
+          break;
+        }
+      }
 
-      // Populate November
-      const novPaid = (m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
-      document.getElementById("editNovStatus").value = novPaid ? "paid" : "due";
-      document.getElementById("editNovAmount").value = m.novemberAmavasya?.amount ?? (novPaid ? 100 : 100);
-      document.getElementById("editNovDate").value = m.novemberAmavasya?.date || m.lastPaymentDate || "";
+      // Render cards
+      window.adminEditActiveMonths = visibleKeys;
+      const container = document.getElementById("adminEditContribMonthsContainer");
+      if (container) {
+        container.innerHTML = "";
+        visibleKeys.forEach((key) => {
+          const moCfg = CONTRIB_AMAVASYA_MONTHS.find(x => x.key === key);
+          if (moCfg) {
+            const data = getMemberMonthData(m, key);
+            appendAdminContribMonthCard(moCfg, data, false);
+          }
+        });
+      }
 
       // Populate Extra
       document.getElementById("editExtraAmount").value = m.extraContribution || "";
@@ -13810,71 +14026,105 @@
       const m = membersList.find(x => x.id === memberId);
       if (!m) return;
 
-      const octStatus = document.getElementById("editOctStatus").value;
-      const octAmount = Number(document.getElementById("editOctAmount").value) || 0;
-      const octDate = document.getElementById("editOctDate").value || null;
+      const extraAmount = Number(document.getElementById("editExtraAmount")?.value) || 0;
+      m.extraContribution = extraAmount;
+      if (!m.amavasyaPay || typeof m.amavasyaPay !== "object") {
+        m.amavasyaPay = {};
+      }
 
-      const novStatus = document.getElementById("editNovStatus").value;
-      const novAmount = Number(document.getElementById("editNovAmount").value) || 0;
-      const novDate = document.getElementById("editNovDate").value || null;
+      let totalLifetime = extraAmount;
+      let latestPaidDate = m.lastPaymentDate || "";
+      const activeKeys = (window.adminEditActiveMonths && window.adminEditActiveMonths.length)
+        ? window.adminEditActiveMonths
+        : ["2026-10", "2026-11"];
 
-      const extraAmount = Number(document.getElementById("editExtraAmount").value) || 0;
+      const _prevOctPaid = !!(m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true));
+      const _prevNovPaid = !!(m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
 
-      const octPaid = (octStatus === "paid");
-      const novPaid = (novStatus === "paid");
-      const _prevOct = !!(m.octoberAmavasya?.isPaid ?? (m.octoberPaid === true));
-      const _prevNov = !!(m.novemberAmavasya && m.novemberAmavasya.isPaid === true);
+      let octStatus = "due", novStatus = "due";
+      let octPaid = false, novPaid = false;
 
-      m.octoberAmavasya = {
-        isPaid: octPaid,
-        status: octStatus,
-        amount: octAmount,
-        date: octDate
-      };
+      activeKeys.forEach(key => {
+        const isOct = (key === "2026-10");
+        const isNov = (key === "2026-11");
+        const statusId = isOct ? "editOctStatus" : (isNov ? "editNovStatus" : `editMonthStatus_${key}`);
+        const amountId = isOct ? "editOctAmount" : (isNov ? "editNovAmount" : `editMonthAmount_${key}`);
+        const dateId = isOct ? "editOctDate" : (isNov ? "editNovDate" : `editMonthDate_${key}`);
 
-      m.novemberAmavasya = {
-        isPaid: novPaid,
-        status: novStatus,
-        amount: novAmount,
-        date: novDate
-      };
+        const status = document.getElementById(statusId)?.value || "due";
+        const isP = (status === "paid");
+        const moCfg = CONTRIB_AMAVASYA_MONTHS.find(x => x.key === key);
+        const defaultAmt = moCfg ? moCfg.defaultAmount : 100;
+        const amount = Number(document.getElementById(amountId)?.value) || defaultAmt;
+        const date = document.getElementById(dateId)?.value || null;
 
+        const rec = {
+          isPaid: isP,
+          status: status,
+          amount: amount,
+          date: date
+        };
+
+        if (isP) {
+          totalLifetime += amount;
+          if (date) latestPaidDate = date;
+        }
+
+        if (isOct) {
+          m.octoberAmavasya = rec;
+          m.octoberPaid = isP;
+          octStatus = status;
+          octPaid = isP;
+        } else if (isNov) {
+          m.novemberAmavasya = rec;
+          m.amavasyaPay["2026-11"] = rec;
+          novStatus = status;
+          novPaid = isP;
+        } else {
+          m.amavasyaPay[key] = rec;
+        }
+      });
+
+      // Sum existing paid months from m.amavasyaPay that might not be in activeKeys
+      Object.entries(m.amavasyaPay).forEach(([k, rec]) => {
+        if (!activeKeys.includes(k) && k !== "2026-10" && k !== "2026-11" && rec && rec.isPaid) {
+          totalLifetime += (Number(rec.amount) || 100);
+        }
+      });
+
+      m.lifetimeContribution = totalLifetime;
+      if (latestPaidDate) m.lastPaymentDate = latestPaidDate;
+
+      // Status for current active Amavasya (November)
       m.paidThisAmavasya = novPaid;
       m.paymentStatus = novPaid ? 'paid' : 'due';
-      if (novPaid && novDate) {
-        m.lastPaymentDate = novDate;
-      }
-      m.extraContribution = extraAmount;
-
-      const totalLifetime = (octPaid ? octAmount : 0) + (novPaid ? novAmount : 0) + extraAmount;
-      m.lifetimeContribution = totalLifetime;
-
-      if (novPaid) {
-        m.amavasyaPay = Object.assign({}, m.amavasyaPay || {}, { "2026-11": m.novemberAmavasya });
-      } else if (m.amavasyaPay && m.amavasyaPay["2026-11"]) {
-        delete m.amavasyaPay["2026-11"];
-      }
 
       try {
-        await db.collection("members").doc(memberId).update({
-          octoberAmavasya: m.octoberAmavasya,
-          novemberAmavasya: m.novemberAmavasya,
-          "amavasyaPay.2026-11": m.novemberAmavasya,
+        const updatePayload = {
+          octoberAmavasya: m.octoberAmavasya || null,
+          novemberAmavasya: m.novemberAmavasya || null,
+          amavasyaPay: m.amavasyaPay,
           paidThisAmavasya: m.paidThisAmavasya,
           paymentStatus: m.paymentStatus,
           lastPaymentDate: m.lastPaymentDate || null,
           extraContribution: m.extraContribution,
           lifetimeContribution: m.lifetimeContribution,
           updatedAt: new Date()
-        });
+        };
 
-        showToast(`सदस्य ${m.name} का अंशदान विवरण सफलतापूर्वक अपडेट हुआ!`, "success");
+        await db.collection("members").doc(memberId).update(updatePayload);
+
+        showToast(`सदस्य ${m.name} का अंशदान विवरण सफलतापूर्वक सुरक्षित हुआ!`, "success");
         closeAdminEditContributionModal();
-        renderMemberContributionsList();
-        renderMembers();
+        if (typeof renderMemberContributionsList === "function") renderMemberContributionsList();
+        if (typeof renderMembers === "function") renderMembers();
         if (typeof renderExpensesSpreadsheet === "function") renderExpensesSpreadsheet();
-        ysAudit("✏️ अंशदान विवरण बदला", `${m.name}: अक्टूबर=${octStatus}, नवंबर=${novStatus}`);
-        const _slipKey = (novPaid && !_prevNov) ? "nov" : ((octPaid && !_prevOct) ? "oct" : null);
+        if (currentProfileModalMemberId === memberId && typeof openMemberProfileModal === "function") {
+          openMemberProfileModal(memberId);
+        }
+        ysAudit("✏️ अंशदान विवरण बदला", `${m.name}: कुल अंशदान ₹${totalLifetime}`);
+
+        const _slipKey = (novPaid && !_prevNovPaid) ? "nov" : ((octPaid && !_prevOctPaid) ? "oct" : null);
         if (_slipKey) setTimeout(() => {
           const _rec = _slipKey === "nov" ? m.novemberAmavasya : m.octoberAmavasya;
           askSendSlip({ name: m.name, phone: m.phone, amount: _rec.amount, date: _rec.date, method: "PhonePe / UPI",
@@ -19051,9 +19301,23 @@
       });
       return out;
     }
-    function ysVisibleMonths() {
-      const lim = new Date(Date.now() + 10 * 864e5).toISOString().slice(0, 10);
-      return ysMonthRegistry().filter(x => x.date <= lim);
+    function ysVisibleMonths(member) {
+      const all = ysMonthRegistry();
+      const lim = new Date(Date.now() + 35 * 864e5).toISOString().slice(0, 10);
+      let visible = all.filter(x => x.date <= lim);
+      if (visible.length < 3) visible = all.slice(0, 3);
+      const targetMember = member || (typeof loggedInMemberPhone !== 'undefined' && loggedInMemberPhone ? (membersList.find(x => x.phone && x.phone.endsWith(loggedInMemberPhone))) : null);
+      if (targetMember) {
+        while (visible.length < all.length) {
+          const last = visible[visible.length - 1];
+          if (ysRec(targetMember, last.key)) {
+            visible.push(all[visible.length]);
+          } else {
+            break;
+          }
+        }
+      }
+      return visible;
     }
     function ysRec(m, key) {
       if (!m) return null;
@@ -19170,7 +19434,7 @@
     function ysFillPayReqExtras(m) {
       const sel = document.getElementById("payReqMonth");
       if (sel) {
-        const months = ysVisibleMonths();
+        const months = ysVisibleMonths(m);
         const dflt = (months.find(x => m && m.id && !ysRec(m, x.key)) || months[months.length - 1]);
         sel.innerHTML = months.map(x => `<option value="${x.key}" ${dflt && x.key === dflt.key ? "selected" : ""}>${x.label}</option>`).join("");
         if (dflt) document.getElementById("payReqAmount").value = dflt.amount;
@@ -21238,7 +21502,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.0)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.1)
     //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 
