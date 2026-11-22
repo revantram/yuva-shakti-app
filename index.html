@@ -2684,6 +2684,7 @@
     #dedicatedGalleryPage,
     #dedicatedPaymentPage,
     #dedicatedCashCounterPage,
+    #dedicatedDeveloperAppsPage,
     #vamshaPopupHost,
     #vamshaLivingOverlay,
     #vamshaFormOverlay,
@@ -4072,7 +4073,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.2
+            APK v5.5.3
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4099,7 +4100,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.2 (बिल्ड कोड: 552)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.3 (बिल्ड कोड: 553)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4109,6 +4110,27 @@
         <button class="btn-main" onclick="checkForAppUpdates(false)" style="margin-top:14px; width:100%; font-weight:800; border-radius:14px; background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color:white; padding:12px; font-size:13px; box-shadow:0 4px 14px rgba(37,99,235,0.25); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
           <i class="fa-solid fa-arrows-rotate"></i> <span>अपडेट की जांच करें (Check for Updates)</span>
         </button>
+      </div>
+
+      <!-- 🚀 2. डेवलपर के और दूसरे एप्लीकेशन (Developer Apps Entry Card) -->
+      <div class="card ios-glass-card" id="developerAppsEntryCard" onclick="openDeveloperAppsScreen()" style="padding: 13px 16px; border-radius: 20px; margin-bottom: 14px; cursor: pointer; border: 1.5px solid rgba(59, 130, 246, 0.28); background: linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(255, 255, 255, 0.98)); box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08); transition: transform 0.15s ease, box-shadow 0.15s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="ios-icon-tile" style="width: 38px; height: 38px; font-size: 17px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35); flex-shrink: 0;">
+              <i class="fa-solid fa-shapes"></i>
+            </div>
+            <div>
+              <div style="font-weight: 800; font-size: 14.5px; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
+                <span>डेवलपर के और दूसरे एप्लीकेशन</span>
+              </div>
+              <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">रेवंतराम भाटी के अन्य ऐप्स देखें व 1-क्लिक में इंस्टॉल करें</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="ios-value-badge" id="devAppsCountBadge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 11px; font-weight: 800; padding: 3px 9px;">3+ ऐप्स</span>
+            <i class="fa-solid fa-chevron-right ios-chevron" style="color: #94a3b8; font-size: 13px;"></i>
+          </div>
+        </div>
       </div>
 
       <!-- 📱 सेटिंग्स एवं प्राथमिकताएं (सभी विकल्प पॉपअप द्वारा) -->
@@ -4936,7 +4958,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.2 (बिल्ड कोड: 552)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.3 (बिल्ड कोड: 553)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6500,10 +6522,125 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- 🚀 समर्पित डेवलपर के अन्य ऐप्स पेज (Dedicated Developer Apps Full Page View) -->
+  <!-- ========================================================================= -->
+  <div id="dedicatedDeveloperAppsPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:#f8fafc; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
+    
+    <!-- Top Sticky Apple iOS Header Bar -->
+    <div style="position:sticky; top:0; z-index:100; background:rgba(255, 255, 255, 0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(0, 0, 0, 0.08); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.03);">
+      <button onclick="closeDeveloperAppsScreen()" style="border:none; background:rgba(0,0,0,0.06); color:#0f172a; padding:7px 12px; border-radius:12px; font-weight:700; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
+      </button>
+      <div style="text-align:center;">
+        <h3 style="margin:0; font-size:15px; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>📱 डेवलपर के अन्य ऐप्स</span>
+        </h3>
+        <span style="font-size:11px; color:#64748b; font-weight:600;">रेवंतराम भाटी द्वारा विकसित</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <button id="devAppsAdminAddBtn" onclick="openDeveloperAppEditModal()" style="display:none; border:none; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:7px 12px; border-radius:12px; font-weight:800; font-size:12px; cursor:pointer; box-shadow:0 3px 8px rgba(37,99,235,0.28); align-items:center; gap:5px;">
+          <i class="fa-solid fa-plus"></i> <span>ऐप जोड़ें</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Developer Apps Content Container -->
+    <div style="padding:14px 16px 80px 16px; max-width:680px; margin:0 auto; width:100%; box-sizing:border-box;">
+      
+      <!-- Developer Profile Banner Card -->
+      <div class="ios-glass-card" style="border-radius:20px; padding:16px; margin-bottom:16px; background:linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.08) 100%); border:1.5px solid rgba(59,130,246,0.25); display:flex; align-items:center; gap:14px;">
+        <div style="width:52px; height:52px; border-radius:18px; background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 6px 16px rgba(37,99,235,0.3); flex-shrink:0;">
+          <i class="fa-solid fa-code"></i>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:15.5px; font-weight:900; color:#1e3a8a;">रेवंतराम भाटी (डेवलपर)</div>
+          <div style="font-size:11.5px; color:#475569; margin-top:2px; line-height:1.4;">
+            कुचेरा (नागौर) • आपके लिए विशेष रूप से तैयार किए गए उपयोगी एंड्रॉइड ऐप्स। नीचे दिए गए ऐप्स को 1-क्लिक में सुरक्षित डाउनलोड करें।
+          </div>
+        </div>
+      </div>
+
+      <!-- Apps List Dynamic Container -->
+      <div id="developerAppsListContainer" style="display:flex; flex-direction:column; gap:14px;">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 🟢 Developer App Add / Edit Modal (Admin Only) -->
+  <div class="modal-overlay" id="developerAppEditModal" data-no-swipe="true" style="display:none; z-index:1160; overflow-y:auto; -webkit-overflow-scrolling:touch;" onclick="if(event.target === this) closeDeveloperAppEditModal()">
+    <div class="modal-content ios-modal-sheet" style="max-width:480px; width:92%; max-height:88vh; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; padding:20px; border-radius:24px; box-shadow:0 16px 40px rgba(0,0,0,0.3); touch-action:pan-y;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(0,0,0,0.08); padding-bottom:10px;">
+        <h3 style="font-size:16px; font-weight:800; color:#1e3a8a; margin:0;" id="devAppModalTitle">नया ऐप जोड़ें</h3>
+        <button onclick="closeDeveloperAppEditModal()" style="background:#f1f5f9; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="event.preventDefault(); saveDeveloperAppFromModal();" style="display:flex; flex-direction:column; gap:12px;">
+        <input type="hidden" id="devAppEditId">
+
+        <div>
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">ऐप का नाम *</label>
+          <input type="text" id="devAppEditName" required placeholder="उदा. RV Bhati Player" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; font-size:13px; font-weight:700;">
+        </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">संक्षिप्त शीर्षक / टैगलाइन</label>
+          <input type="text" id="devAppEditSubtitle" placeholder="उदा. ऑडियो व वीडियो प्लेयर" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; font-size:13px;">
+        </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">विवरण / मुख्य विशेषताएं *</label>
+          <textarea id="devAppEditDesc" required rows="3" placeholder="ऐप के बारे में संक्षिप्त जानकारी लिखें..." style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; font-size:12.5px; resize:vertical;"></textarea>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">संस्करण (Version)</label>
+            <input type="text" id="devAppEditVersion" value="v1.0.0" placeholder="उदा. v1.0.0" style="width:100%; box-sizing:border-box; padding:9px 12px; border-radius:10px; border:1px solid #cbd5e1; font-size:12.5px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">श्रेणी / बैज</label>
+            <input type="text" id="devAppEditBadge" value="उपयोगी ऐप" placeholder="उदा. मल्टीमीडिया / शिक्षा" style="width:100%; box-sizing:border-box; padding:9px 12px; border-radius:10px; border:1px solid #cbd5e1; font-size:12.5px;">
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">GitHub APK / रिलीज डाउनलोड लिंक *</label>
+          <input type="url" id="devAppEditUrl" required placeholder="https://github.com/.../releases/latest" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; font-size:12.5px;">
+        </div>
+
+        <div>
+          <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">आइकन स्टाइल</label>
+          <select id="devAppEditIcon" style="width:100%; box-sizing:border-box; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; font-size:12.5px; background:white;">
+            <option value="fa-solid fa-shapes">📱 सामान्य ऐप (Shapes)</option>
+            <option value="fa-solid fa-circle-play">🎵 ऑडियो / वीडियो प्लेयर (Play Circle)</option>
+            <option value="fa-solid fa-clipboard-user">📋 हाजिरी / उपस्थिति (Clipboard User)</option>
+            <option value="fa-solid fa-graduation-cap">🎓 शिक्षा / परीक्षा तैयारी (Graduation Cap)</option>
+            <option value="fa-solid fa-calculator">🧮 कैलकुलेटर / हिसाब (Calculator)</option>
+            <option value="fa-solid fa-toolbox">🛠️ उपयोगी टूल्स (Toolbox)</option>
+            <option value="fa-solid fa-gamepad">🎮 गेम्स / मनोरंजन (Gamepad)</option>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button type="submit" class="btn-main" style="flex:1; padding:11px; border-radius:12px; font-size:13px; font-weight:800; background:linear-gradient(135deg, #10b981, #059669); color:white; border:none; cursor:pointer;">
+            <i class="fa-solid fa-floppy-disk"></i> सुरक्षित करें
+          </button>
+          <button type="button" class="btn-sub" onclick="closeDeveloperAppEditModal()" style="flex:0.6; padding:11px; border-radius:12px; font-size:13px; cursor:pointer;">
+            रद्द करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.2";
+    const APP_VERSION = "5.5.3";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -17673,6 +17810,348 @@
     }
     window.copyCashCounterSummary = copyCashCounterSummary;
 
+    // =========================================================================
+    // 📱 डेवलपर के और दूसरे एप्लीकेशन (Developer Apps Screen Controller)
+    // =========================================================================
+    const DEFAULT_DEVELOPER_APPS = [
+      {
+        id: "rv-bhati-player",
+        name: "RV Bhati Player",
+        subtitle: "ऑडियो व वीडियो प्लेयर",
+        description: "शानदार ऑडियो-वीडियो प्लेयर, बैकग्राउंड प्लेबैक व राजस्थानी भजनों और भजनों के वीडियो का आनंद लें।",
+        version: "v1.0.0",
+        url: "https://github.com/revantram/rv-bhati-player/releases/latest",
+        icon: "fa-solid fa-circle-play",
+        iconGradient: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+        badge: "मल्टीमीडिया",
+        order: 1
+      },
+      {
+        id: "hajiri-app",
+        name: "हाजिरी (Hajiri)",
+        subtitle: "दैनिक उपस्थिति व हाजिरी रजिस्टर",
+        description: "दैनिक उपस्थिति, लेबर/कर्मचारी प्रबंधन, अवकाश रिकॉर्ड व डिजिटल हाजिरी रजिस्टर प्रबंधन ऐप।",
+        version: "v1.0.0",
+        url: "https://github.com/revantram/hajiri-app/releases/latest",
+        icon: "fa-solid fa-clipboard-user",
+        iconGradient: "linear-gradient(135deg, #059669, #0d9488)",
+        badge: "उपस्थिति",
+        order: 2
+      },
+      {
+        id: "meri-taiyari",
+        name: "मेरी तैयारी (Meri Taiyari)",
+        subtitle: "क्विज व परीक्षा तैयारी",
+        description: "प्रतियोगी परीक्षाओं की तैयारी, टॉपिक अनुसार टेस्ट सीरीज, दैनिक क्विज एवं परिणाम विश्लेषण।",
+        version: "v1.0.0",
+        url: "https://github.com/revantram/Utkarsh-/releases/latest",
+        icon: "fa-solid fa-graduation-cap",
+        iconGradient: "linear-gradient(135deg, #ea580c, #d97706)",
+        badge: "शिक्षा / क्विज",
+        order: 3
+      }
+    ];
+
+    let developerAppsList = [];
+    try {
+      const cached = localStorage.getItem("cache_developer_apps");
+      if (cached) developerAppsList = JSON.parse(cached);
+    } catch (e) {}
+    if (!developerAppsList || !developerAppsList.length) {
+      developerAppsList = DEFAULT_DEVELOPER_APPS.slice();
+    }
+
+    function canDevAppsAdmin() {
+      return !!((typeof isAdmin !== 'undefined' && isAdmin) || (typeof canFin === 'function' && canFin()));
+    }
+
+    function initDeveloperAppsListener() {
+      try {
+        db.collection("developer_apps").onSnapshot((snapshot) => {
+          if (!snapshot.empty) {
+            const list = [];
+            snapshot.forEach(doc => {
+              list.push({ id: doc.id, ...doc.data() });
+            });
+            list.sort((a, b) => (Number(a.order) || 999) - (Number(b.order) || 999));
+            developerAppsList = list;
+            try { localStorage.setItem("cache_developer_apps", JSON.stringify(list)); } catch (e) {}
+          } else {
+            developerAppsList = DEFAULT_DEVELOPER_APPS.slice();
+            if (canDevAppsAdmin()) {
+              autoSeedDeveloperApps();
+            }
+          }
+          updateDevAppsCountBadge();
+          const page = document.getElementById("dedicatedDeveloperAppsPage");
+          if (page && window.getComputedStyle(page).display !== "none") {
+            renderDeveloperAppsList();
+          }
+        }, (err) => {
+          console.warn("Firestore developer_apps listener:", err);
+        });
+      } catch (err) {
+        console.warn("initDeveloperAppsListener error:", err);
+      }
+    }
+
+    async function autoSeedDeveloperApps() {
+      try {
+        const batch = db.batch();
+        DEFAULT_DEVELOPER_APPS.forEach(app => {
+          const docRef = db.collection("developer_apps").doc(app.id);
+          batch.set(docRef, { ...app, createdAt: new Date() }, { merge: true });
+        });
+        await batch.commit();
+      } catch (e) {
+        console.warn("autoSeedDeveloperApps error:", e);
+      }
+    }
+
+    function updateDevAppsCountBadge() {
+      const badge = document.getElementById("devAppsCountBadge");
+      if (badge) {
+        const count = (developerAppsList && developerAppsList.length) ? developerAppsList.length : 3;
+        badge.innerText = `${count}+ ऐप्स`;
+      }
+    }
+
+    function openDeveloperAppsScreen() {
+      const page = document.getElementById("dedicatedDeveloperAppsPage");
+      if (!page) return;
+      page.style.display = "flex";
+      document.body.style.overflow = "hidden";
+
+      const adminAddBtn = document.getElementById("devAppsAdminAddBtn");
+      if (adminAddBtn) {
+        adminAddBtn.style.display = canDevAppsAdmin() ? "inline-flex" : "none";
+      }
+
+      renderDeveloperAppsList();
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.openDeveloperAppsScreen = openDeveloperAppsScreen;
+
+    function closeDeveloperAppsScreen() {
+      const page = document.getElementById("dedicatedDeveloperAppsPage");
+      if (page) page.style.display = "none";
+      document.body.style.overflow = "";
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.closeDeveloperAppsScreen = closeDeveloperAppsScreen;
+
+    function renderDeveloperAppsList() {
+      const container = document.getElementById("developerAppsListContainer");
+      if (!container) return;
+
+      const isAdminUser = canDevAppsAdmin();
+      const adminAddBtn = document.getElementById("devAppsAdminAddBtn");
+      if (adminAddBtn) {
+        adminAddBtn.style.display = isAdminUser ? "inline-flex" : "none";
+      }
+
+      const apps = (developerAppsList && developerAppsList.length) ? developerAppsList : DEFAULT_DEVELOPER_APPS;
+
+      let html = "";
+      apps.forEach((app, idx) => {
+        const iconClass = app.icon || "fa-solid fa-shapes";
+        const iconGrad = app.iconGradient || (idx % 3 === 0 ? "linear-gradient(135deg, #7c3aed, #4f46e5)" : (idx % 3 === 1 ? "linear-gradient(135deg, #059669, #0d9488)" : "linear-gradient(135deg, #ea580c, #d97706)"));
+        const badge = app.badge || "ऑफिशियल ऐप";
+        const version = app.version || "v1.0.0";
+        const subtitle = app.subtitle || "एंड्रॉइड एप्लीकेशन";
+        const desc = app.description || "रेवंतराम भाटी द्वारा विकसित सुरक्षित एंड्रॉइड ऐप।";
+        const downloadUrl = app.url || `https://github.com/revantram`;
+
+        html += `
+          <div class="ios-glass-card" style="background:#ffffff; border-radius:20px; padding:16px 18px; border:1.5px solid rgba(0,0,0,0.07); box-shadow:0 4px 16px rgba(0,0,0,0.04); display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:48px; height:48px; border-radius:14px; background:${iconGrad}; color:white; display:flex; align-items:center; justify-content:center; font-size:22px; box-shadow:0 4px 12px rgba(0,0,0,0.15); flex-shrink:0;">
+                  <i class="${escapeHtml(iconClass)}"></i>
+                </div>
+                <div>
+                  <div style="font-weight:900; font-size:16px; color:#0f172a; line-height:1.2;">
+                    ${escapeHtml(app.name)}
+                  </div>
+                  <div style="font-size:11.5px; color:#64748b; margin-top:2px; font-weight:600;">
+                    ${escapeHtml(subtitle)}
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0;">
+                <span style="font-size:10.5px; font-weight:800; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:2px 8px; border-radius:8px;">${escapeHtml(version)}</span>
+                <span style="font-size:10px; font-weight:700; background:#f1f5f9; color:#475569; padding:2px 6px; border-radius:6px;">${escapeHtml(badge)}</span>
+              </div>
+            </div>
+
+            <div style="font-size:12.5px; color:#334155; line-height:1.5; background:#f8fafc; padding:10px 12px; border-radius:12px; border:1px solid #f1f5f9;">
+              ${escapeHtml(desc)}
+            </div>
+
+            <!-- 1-Click Install / Download Button (For Everyone) -->
+            <button onclick="openDeveloperAppDownload('${encodeURI(downloadUrl)}', '${escapeHtml(app.name)}')" style="width:100%; border:none; background:linear-gradient(135deg, #10b981 0%, #059669 100%); color:white; padding:12px 14px; border-radius:14px; font-weight:800; font-size:13.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(16,185,129,0.3); transition:transform 0.1s ease;">
+              <i class="fa-solid fa-download"></i>
+              <span>1-क्लिक में इंस्टॉल / डाउनलोड करें</span>
+              <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px; opacity:0.85;"></i>
+            </button>
+
+            ${isAdminUser ? `
+              <!-- Admin Only Actions: Edit & Delete -->
+              <div style="display:flex; justify-content:flex-end; gap:8px; padding-top:6px; border-top:1px dashed #e2e8f0; margin-top:2px;">
+                <button type="button" onclick="openDeveloperAppEditModal('${app.id}')" style="background:#f1f5f9; border:1px solid #cbd5e1; color:#1e40af; padding:6px 12px; border-radius:8px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+                  <i class="fa-solid fa-pen-to-square"></i> <span>एडिट</span>
+                </button>
+                <button type="button" onclick="confirmDeleteDeveloperApp('${app.id}', '${escapeHtml(app.name)}')" style="background:#fef2f2; border:1px solid #fecaca; color:#dc2626; padding:6px 12px; border-radius:8px; font-size:11.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+                  <i class="fa-solid fa-trash-can"></i> <span>हटाएं</span>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function openDeveloperAppDownload(url, appName) {
+      if (!url) return;
+      try {
+        if (typeof showToast === "function") {
+          showToast(`🚀 ${appName || 'ऐप'} का डाउनलोड लिंक खोला जा रहा है...`, "info");
+        }
+        if (window.AndroidApp && typeof window.AndroidApp.downloadAndInstall === "function" && url.toLowerCase().endsWith(".apk")) {
+          window.AndroidApp.downloadAndInstall(url, appName || "app");
+          return;
+        }
+        if (window.AndroidApp && typeof window.AndroidApp.openWhatsApp === "function") {
+          window.AndroidApp.openWhatsApp(url);
+          return;
+        }
+        window.open(url, "_blank");
+      } catch (e) {
+        window.location.href = url;
+      }
+    }
+    window.openDeveloperAppDownload = openDeveloperAppDownload;
+
+    function openDeveloperAppEditModal(appId = null) {
+      if (!canDevAppsAdmin()) {
+        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
+        return;
+      }
+      const modal = document.getElementById("developerAppEditModal");
+      if (!modal) return;
+
+      const titleEl = document.getElementById("devAppModalTitle");
+      const idInput = document.getElementById("devAppEditId");
+      const nameInput = document.getElementById("devAppEditName");
+      const subInput = document.getElementById("devAppEditSubtitle");
+      const descInput = document.getElementById("devAppEditDesc");
+      const verInput = document.getElementById("devAppEditVersion");
+      const badgeInput = document.getElementById("devAppEditBadge");
+      const urlInput = document.getElementById("devAppEditUrl");
+      const iconInput = document.getElementById("devAppEditIcon");
+
+      if (appId) {
+        const app = developerAppsList.find(x => x.id === appId);
+        if (app) {
+          if (titleEl) titleEl.innerText = "ऐप विवरण एडिट करें";
+          if (idInput) idInput.value = app.id;
+          if (nameInput) nameInput.value = app.name || "";
+          if (subInput) subInput.value = app.subtitle || "";
+          if (descInput) descInput.value = app.description || "";
+          if (verInput) verInput.value = app.version || "v1.0.0";
+          if (badgeInput) badgeInput.value = app.badge || "";
+          if (urlInput) urlInput.value = app.url || "";
+          if (iconInput) iconInput.value = app.icon || "fa-solid fa-shapes";
+        }
+      } else {
+        if (titleEl) titleEl.innerText = "नया ऐप जोड़ें";
+        if (idInput) idInput.value = "";
+        if (nameInput) nameInput.value = "";
+        if (subInput) subInput.value = "";
+        if (descInput) descInput.value = "";
+        if (verInput) verInput.value = "v1.0.0";
+        if (badgeInput) badgeInput.value = "उपयोगी ऐप";
+        if (urlInput) urlInput.value = "";
+        if (iconInput) iconInput.value = "fa-solid fa-shapes";
+      }
+
+      modal.style.display = "flex";
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.openDeveloperAppEditModal = openDeveloperAppEditModal;
+
+    function closeDeveloperAppEditModal() {
+      const modal = document.getElementById("developerAppEditModal");
+      if (modal) modal.style.display = "none";
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.closeDeveloperAppEditModal = closeDeveloperAppEditModal;
+
+    async function saveDeveloperAppFromModal() {
+      if (!canDevAppsAdmin()) {
+        showToast("यह सुविधा केवल संचालक (Admin) के लिए है।", "error");
+        return;
+      }
+      const id = document.getElementById("devAppEditId")?.value.trim();
+      const name = document.getElementById("devAppEditName")?.value.trim();
+      const subtitle = document.getElementById("devAppEditSubtitle")?.value.trim() || "";
+      const description = document.getElementById("devAppEditDesc")?.value.trim();
+      const version = document.getElementById("devAppEditVersion")?.value.trim() || "v1.0.0";
+      const badge = document.getElementById("devAppEditBadge")?.value.trim() || "उपयोगी ऐप";
+      const url = document.getElementById("devAppEditUrl")?.value.trim();
+      const icon = document.getElementById("devAppEditIcon")?.value || "fa-solid fa-shapes";
+
+      if (!name || !description || !url) {
+        showToast("कृपया नाम, विवरण और डाउनलोड लिंक अवश्य भरें।", "warning");
+        return;
+      }
+
+      const payload = {
+        name,
+        subtitle,
+        description,
+        version,
+        badge,
+        url,
+        icon,
+        updatedAt: new Date()
+      };
+
+      try {
+        if (id) {
+          await db.collection("developer_apps").doc(id).set(payload, { merge: true });
+          showToast(`"${name}" ऐप विवरण सफलतापूर्वक अपडेट हुआ!`, "success");
+        } else {
+          payload.createdAt = new Date();
+          payload.order = (developerAppsList.length + 1);
+          await db.collection("developer_apps").add(payload);
+          showToast(`नया ऐप "${name}" सफलतापूर्वक जोड़ा गया!`, "success");
+        }
+        closeDeveloperAppEditModal();
+      } catch (err) {
+        showToast("त्रुटि: " + err.message, "error");
+      }
+    }
+    window.saveDeveloperAppFromModal = saveDeveloperAppFromModal;
+
+    async function confirmDeleteDeveloperApp(appId, appName) {
+      if (!canDevAppsAdmin()) return;
+      if (!confirm(`क्या आप वाकई ऐप "${appName}" को हटाना चाहते हैं?`)) return;
+      try {
+        await db.collection("developer_apps").doc(appId).delete();
+        developerAppsList = developerAppsList.filter(x => x.id !== appId);
+        try { localStorage.setItem("cache_developer_apps", JSON.stringify(developerAppsList)); } catch (e) {}
+        renderDeveloperAppsList();
+        updateDevAppsCountBadge();
+        showToast(`ऐप "${appName}" हटा दिया गया।`, "info");
+      } catch (err) {
+        showToast("हटाने में त्रुटि: " + err.message, "error");
+      }
+    }
+    window.confirmDeleteDeveloperApp = confirmDeleteDeveloperApp;
+
     // 🎉 Day Celebration Modal Functions (तारीख क्लिक पर उत्सव व बधाई पॉपअप)
     function openDayCelebrationModal(dateStr) {
       const parts = dateStr.split('-');
@@ -21492,6 +21971,7 @@
       document.body.style.overflow = "";
       checkInitialAuthState();
       setTimeout(initAuthGateListener, 500);
+      setTimeout(() => typeof initDeveloperAppsListener === "function" && initDeveloperAppsListener(), 600);
 
       // Keydown handlers for Enter key
       const setupEnterKey = (id, fn) => {
@@ -21513,14 +21993,14 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.2)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.3)
     //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 
     // 🛡️ Modal Backdrop Isolation & Screen Lock State Checker
     function isAnyModalOrOverlayOpen() {
       // 1. Dedicated Sub-Pages
-      const fullPages = ['dedicatedGalleryPage', 'dedicatedPaymentPage', 'dedicatedCashCounterPage', 'passbookOverlay', 'dedicatedVamshaPage', 'dedicatedVamshaLivingPage'];
+      const fullPages = ['dedicatedGalleryPage', 'dedicatedPaymentPage', 'dedicatedCashCounterPage', 'dedicatedDeveloperAppsPage', 'passbookOverlay', 'dedicatedVamshaPage', 'dedicatedVamshaLivingPage'];
       for (const pid of fullPages) {
         const el = document.getElementById(pid);
         if (el && window.getComputedStyle(el).display !== 'none') return true;
@@ -21568,7 +22048,7 @@
     // 🚫 Prevent Touchmove Bleed on Modal Background
     document.addEventListener('touchmove', function(e) {
       if (document.body.classList.contains('has-active-modal')) {
-        const scrollable = e.target.closest('.modal-content, .ios-modal-sheet, #passbookBody, #dedicatedGalleryPage, #dedicatedPaymentPage, #dedicatedCashCounterPage, #dedicatedVamshaPage, #dedicatedVamshaLivingPage, #vamshaLivingOverlay > div, #vamshaPopupHost .vf-popup-card, #vamshaFormOverlay > div, #vamshaPosterCard, [style*="overflow-y:auto"], [style*="overflow-y: auto"]');
+        const scrollable = e.target.closest('.modal-content, .ios-modal-sheet, #passbookBody, #dedicatedGalleryPage, #dedicatedPaymentPage, #dedicatedCashCounterPage, #dedicatedDeveloperAppsPage, #dedicatedVamshaPage, #dedicatedVamshaLivingPage, #vamshaLivingOverlay > div, #vamshaPopupHost .vf-popup-card, #vamshaFormOverlay > div, #vamshaPosterCard, [style*="overflow-y:auto"], [style*="overflow-y: auto"]');
         if (!scrollable) {
           if (e.cancelable) e.preventDefault();
         }
@@ -21631,6 +22111,8 @@
       },
       'dedicatedPaymentPage': () => typeof closeDedicatedPaymentPage === 'function' && closeDedicatedPaymentPage(),
       'dedicatedCashCounterPage': () => typeof closeDedicatedCashCounterPage === 'function' && closeDedicatedCashCounterPage(),
+      'dedicatedDeveloperAppsPage': () => typeof closeDeveloperAppsScreen === 'function' && closeDeveloperAppsScreen(),
+      'developerAppEditModal': () => typeof closeDeveloperAppEditModal === 'function' && closeDeveloperAppEditModal(),
       'setMyNameModal': () => {
         const el = document.getElementById('setMyNameModal');
         if (el) el.remove();
@@ -21759,6 +22241,14 @@
         if (cashPage && window.getComputedStyle(cashPage).display !== 'none') {
           if (typeof closeDedicatedCashCounterPage === 'function') closeDedicatedCashCounterPage();
           else cashPage.style.display = 'none';
+          updateActiveModalState();
+          return true;
+        }
+
+        const devAppsPage = document.getElementById('dedicatedDeveloperAppsPage');
+        if (devAppsPage && window.getComputedStyle(devAppsPage).display !== 'none') {
+          if (typeof closeDeveloperAppsScreen === 'function') closeDeveloperAppsScreen();
+          else devAppsPage.style.display = 'none';
           updateActiveModalState();
           return true;
         }
