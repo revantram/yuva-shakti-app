@@ -4073,7 +4073,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.4
+            APK v5.5.5
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4100,7 +4100,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.4 (बिल्ड कोड: 554)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.5 (बिल्ड कोड: 555)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4958,7 +4958,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.4 (बिल्ड कोड: 554)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.5 (बिल्ड कोड: 555)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6684,7 +6684,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.4";
+    const APP_VERSION = "5.5.5";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -10378,7 +10378,11 @@
 
     // 11. Navigation Tabs
     // 🔐 उप-संचालक / कोषाध्यक्ष: पद आधारित अधिकार + पिन सुरक्षा
-    var rolePins = {};
+    const KNOWN_ROLE_MEMBERS = [
+      { name: "संजय भाटी", phone: "6375314729", role: "उप-संचालक" },
+      { name: "नेताराम भाटी", phone: "7850983600", role: "कोषाध्यक्ष" }
+    ];
+
     var roleUnlockUntil = 0, roleUnlockPhone = '';
     try { roleUnlockUntil = Number(sessionStorage.getItem('roleUnlockUntil') || 0); roleUnlockPhone = sessionStorage.getItem('roleUnlockPhone') || ''; } catch (e) {}
     var ROLE_SESSION_MS = 30 * 60 * 1000;
@@ -10421,17 +10425,54 @@
     }
     function roleHash(phone10, pin) { return sha256hex('ys|' + phone10 + '|' + pin); }
     function rolePhone10(v) { return String(v || '').replace(/\D/g, '').slice(-10); }
+
+    const DEFAULT_ROLE_PINS = {
+      '6375314729': roleHash('6375314729', '0000'), // संजय भाटी (उप-संचालक)
+      '7850983600': roleHash('7850983600', '0000')  // नेताराम भाटी (कोषाध्यक्ष)
+    };
+
+    var rolePins = { ...DEFAULT_ROLE_PINS };
+
     function memberRoleKind(m) {
-      const t = String((m && m.tag) || '').trim();
-      if (/उप[\s-]?संचालक/.test(t)) return 'उप-संचालक';
-      if (/कोषाध्यक्ष/.test(t)) return 'कोषाध्यक्ष';
+      if (!m) return '';
+      const ph = rolePhone10(m.phone);
+      if (ph === '6375314729') return 'उप-संचालक';
+      if (ph === '7850983600') return 'कोषाध्यक्ष';
+
+      try {
+        if (typeof splitMemberNameAndRole === 'function') {
+          const parsed = splitMemberNameAndRole(m);
+          if (parsed && parsed.role) {
+            if (/उप[\s-]?संचालक|उपाध्यक्ष/.test(parsed.role)) return 'उप-संचालक';
+            if (/कोषाध्यक्ष|कैशियर/.test(parsed.role)) return 'कोषाध्यक्ष';
+          }
+        }
+      } catch (e) {}
+
+      const t = String(m.tag || m.role || m.designation || '').trim();
+      if (/उप[\s-]?संचालक|उपाध्यक्ष/.test(t)) return 'उप-संचालक';
+      if (/कोषाध्यक्ष|कैशियर/.test(t)) return 'कोषाध्यक्ष';
+
+      const n = String(m.name || '').trim();
+      if (/उप[\s-]?संचालक|उपाध्यक्ष/.test(n)) return 'उप-संचालक';
+      if (/कोषाध्यक्ष|कैशियर/.test(n)) return 'कोषाध्यक्ष';
+
       return '';
     }
+
     function myRoleMember() {
       const ph = rolePhone10(loggedInMemberPhone);
       if (!ph || isAdmin) return null;
-      return membersList.find(m => m.phone && rolePhone10(m.phone) === ph && memberRoleKind(m)) || null;
+      let m = membersList.find(x => x.phone && rolePhone10(x.phone) === ph && memberRoleKind(x));
+      if (!m) {
+        const km = KNOWN_ROLE_MEMBERS.find(k => k.phone === ph);
+        if (km) {
+          m = membersList.find(x => x.phone && rolePhone10(x.phone) === ph) || { id: 'role_' + ph, name: km.name, phone: km.phone, tag: km.role };
+        }
+      }
+      return m || null;
     }
+
     function roleUnlocked() {
       const m = myRoleMember();
       return !!(m && Date.now() < roleUnlockUntil && roleUnlockPhone === rolePhone10(loggedInMemberPhone));
@@ -10463,7 +10504,7 @@
       o.innerHTML = `<div style="background:#fff;border-radius:18px;padding:18px;width:100%;max-width:340px;box-shadow:0 20px 50px rgba(0,0,0,0.4);">
         <div style="font-weight:800;font-size:15px;color:#6d28d9;margin-bottom:4px;">${escapeHtml(title)}</div>
         <div style="font-size:12px;color:#64748b;margin-bottom:12px;">${escapeHtml(subtitle || '')}</div>
-        <input id="rolePinInput" type="password" inputmode="numeric" maxlength="6" placeholder="4 से 6 अंकों का पिन" style="width:100%;padding:11px;border:1.5px solid #c4b5fd;border-radius:10px;font-size:16px;text-align:center;letter-spacing:6px;">
+        <input id="rolePinInput" type="password" inputmode="numeric" maxlength="6" placeholder="4 से 6 अंकों का पिन (0000)" style="width:100%;padding:11px;border:1.5px solid #c4b5fd;border-radius:10px;font-size:16px;text-align:center;letter-spacing:6px;">
         <div style="display:flex;gap:8px;margin-top:12px;">
           <button id="rolePinCancel" style="flex:1;border:none;background:#e2e8f0;color:#334155;padding:10px;border-radius:10px;font-weight:700;cursor:pointer;">रद्द करें</button>
           <button id="rolePinOk" style="flex:1;border:none;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:10px;border-radius:10px;font-weight:700;cursor:pointer;">आगे बढ़ें</button>
@@ -10474,7 +10515,7 @@
       o.querySelector('#rolePinCancel').onclick = close;
       o.querySelector('#rolePinOk').onclick = () => {
         const v = (inp.value || '').trim();
-        if (!/^\d{4,6}$/.test(v)) { showToast("पिन 4 से 6 अंकों का होना चाहिए", "warning"); return; }
+        if (!/^\d{4,6}$/.test(v)) { showToast("पिन 4 से 6 अंकों का होना चाहिए (उदा. 0000)", "warning"); return; }
         close(); onSubmit(v);
       };
       inp.addEventListener('keydown', e => { if (e.key === 'Enter') o.querySelector('#rolePinOk').click(); });
@@ -10489,7 +10530,7 @@
       let lockedUntil = 0;
       try { lockedUntil = Number(sessionStorage.getItem('roleLockUntil') || 0); } catch (e) {}
       if (Date.now() < lockedUntil) { showToast("बहुत ज़्यादा गलत प्रयास। कुछ मिनट बाद फिर कोशिश करें।", "error"); return; }
-      roleAskPin(`🔐 ${memberRoleKind(m)} पिन`, 'अधिकार अनलॉक करने के लिए अपना विशेष पिन दर्ज करें', (pin) => {
+      roleAskPin(`🔐 ${memberRoleKind(m)} पिन`, 'अधिकार अनलॉक करने के लिए अपना पिन दर्ज करें (डिफ़ॉल्ट: 0000)', (pin) => {
         if (roleHash(ph, pin) === rolePins[ph]) {
           roleUnlockUntil = Date.now() + ROLE_SESSION_MS; roleUnlockPhone = ph;
           try { sessionStorage.setItem('roleUnlockUntil', String(roleUnlockUntil)); sessionStorage.setItem('roleUnlockPhone', ph); sessionStorage.removeItem('roleFails'); } catch (e) {}
@@ -10507,17 +10548,38 @@
     // संचालक: किसी पदाधिकारी का पिन तय करे / हटाए
     function adminSetRolePin(phone10, name) {
       if (!isAdmin) { showToast("यह केवल संचालक कर सकते हैं।", "warning"); return; }
-      roleAskPin(`🔐 ${name} का पिन तय करें`, 'इस पिन से ही वे अपने अधिकार अनलॉक करेंगे', async (pin) => {
+      roleAskPin(`🔐 ${name} का पिन तय करें`, 'इस पिन से ही वे अपने अधिकार अनलॉक करेंगे (डिफ़ॉल्ट: 0000)', async (pin) => {
         try {
           await db.collection("settings").doc("rolePins").set({ pins: { [phone10]: roleHash(phone10, pin) }, updatedAt: new Date() }, { merge: true });
+          rolePins[phone10] = roleHash(phone10, pin);
+          updateRoleUI();
           showToast("✅ पिन सेव हो गया", "success");
         } catch (e) { showToast("❌ पिन सेव नहीं हो सका", "error"); }
       });
     }
+
+    async function adminResetRolePinDefault(phone10) {
+      if (!isAdmin) return;
+      try {
+        await db.collection("settings").doc("rolePins").set({
+          pins: { [phone10]: roleHash(phone10, '0000') },
+          updatedAt: new Date()
+        }, { merge: true });
+        rolePins[phone10] = roleHash(phone10, '0000');
+        updateRoleUI();
+        showToast("✅ पिन '0000' पर सेट हो गया", "success");
+      } catch (e) {
+        showToast("❌ पिन सेव नहीं हो सका", "error");
+      }
+    }
+    window.adminResetRolePinDefault = adminResetRolePinDefault;
+
     async function adminRemoveRolePin(phone10) {
       if (!isAdmin) return;
       try {
         await db.collection("settings").doc("rolePins").update({ ['pins.' + phone10]: firebase.firestore.FieldValue.delete() });
+        delete rolePins[phone10];
+        updateRoleUI();
         showToast("पिन हटा दिया गया", "info");
       } catch (e) { showToast("❌ पिन नहीं हट सका", "error"); }
     }
@@ -10527,17 +10589,41 @@
       const body = document.getElementById('roleAccessBody');
       if (!card || !body) return;
       if (isAdmin) {
-        const roleMembers = membersList.filter(m => memberRoleKind(m) && m.phone);
+        let roleMembers = membersList.filter(m => memberRoleKind(m) && m.phone);
+        // Ensure known role members (Sanjay Bhati & Netaram Bhati) are always present
+        KNOWN_ROLE_MEMBERS.forEach(km => {
+          const exists = roleMembers.some(m => rolePhone10(m.phone) === km.phone);
+          if (!exists) {
+            const foundInAll = membersList.find(m => rolePhone10(m.phone) === km.phone);
+            if (foundInAll) {
+              roleMembers.push(foundInAll);
+            } else {
+              roleMembers.push({ id: 'role_' + km.phone, name: km.name, phone: km.phone, tag: km.role });
+            }
+          }
+        });
+
         card.style.display = 'block';
-        body.innerHTML = `<div style="font-size:11.5px;color:#6b21a8;margin-bottom:8px;line-height:1.5;">उप-संचालक और कोषाध्यक्ष को वित्त (राशि जोड़ना/हटाना), वंशवली सुधार और सूचना प्रबंधन के अधिकार तभी मिलते हैं जब वे अपना यह पिन दर्ज करें।</div>` +
+        body.innerHTML = `<div style="font-size:11.5px;color:#6b21a8;margin-bottom:8px;line-height:1.5;">उप-संचालक और कोषाध्यक्ष को वित्त (राशि जोड़ना/हटाना), वंशवली सुधार और सूचना प्रबंधन के अधिकार तभी मिलते हैं जब वे अपना यह 4-अंकीय पिन दर्ज करें (पासवर्ड: <b>0000</b>)।</div>` +
           (roleMembers.length ? roleMembers.map(m => {
             const ph = rolePhone10(m.phone), has = !!rolePins[ph];
-            return `<div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ddd6fe;border-radius:12px;padding:8px 10px;margin-bottom:6px;">
-              <div style="flex:1;min-width:0;"><div style="font-weight:800;font-size:13px;color:#1e293b;">${escapeHtml(m.name)}</div><div style="font-size:11px;color:#7c3aed;">${memberRoleKind(m)} • ${has ? '🔐 पिन सेट' : '⚠️ पिन नहीं'}</div></div>
-              <button onclick="adminSetRolePin('${ph}', '${escapeHtml(m.name).replace(/'/g, '')}')" style="border:none;background:#7c3aed;color:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;">${has ? 'बदलें' : 'पिन सेट करें'}</button>
-              ${has ? `<button onclick="adminRemoveRolePin('${ph}')" style="border:none;background:#fee2e2;color:#b91c1c;padding:6px 8px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;">हटाएं</button>` : ''}
+            const isDef0000 = (rolePins[ph] === DEFAULT_ROLE_PINS[ph]);
+            return `<div style="display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #ddd6fe;border-radius:14px;padding:10px 12px;margin-bottom:8px;box-shadow:0 2px 8px rgba(109,40,217,0.06);">
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:800;font-size:13.5px;color:#1e293b;display:flex;align-items:center;gap:6px;">
+                  <span>${escapeHtml(m.name)}</span>
+                  <span style="font-size:10.5px;font-weight:800;background:#ede9fe;color:#6d28d9;padding:2px 7px;border-radius:6px;">${memberRoleKind(m)}</span>
+                </div>
+                <div style="font-size:11.5px;color:#64748b;margin-top:2px;">
+                  📱 ${ph} • <span style="font-weight:700;color:${has ? '#15803d' : '#dc2626'};">${has ? (isDef0000 ? '🔐 पिन सक्रिय (0000)' : '🔐 विशेष पिन सेट') : '⚠️ पिन नहीं'}</span>
+                </div>
+              </div>
+              <button onclick="adminSetRolePin('${ph}', '${escapeHtml(m.name).replace(/'/g, '')}')" style="border:none;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:7px 12px;border-radius:9px;font-size:11.5px;font-weight:800;cursor:pointer;box-shadow:0 2px 6px rgba(124,58,237,0.25);">
+                ${has ? 'पिन बदलें' : 'पिन सेट करें'}
+              </button>
+              ${has ? `<button onclick="adminResetRolePinDefault('${ph}')" title="डिफ़ॉल्ट पिन 0000 सेट करें" style="border:none;background:#f1f5f9;color:#475569;padding:7px 9px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;">0000</button>` : ''}
             </div>`;
-          }).join('') : `<div style="font-size:12px;color:#64748b;">कोई उप-संचालक / कोषाध्यक्ष टैग वाला सदस्य (मोबाइल नंबर सहित) नहीं मिला। सदस्य के पद टैग में "उप-संचालक" या "कोषाध्यक्ष" लिखें।</div>`);
+          }).join('') : `<div style="font-size:12px;color:#64748b;">कोई उप-संचालक / कोषाध्यक्ष टैग वाला सदस्य (मोबाइल नंबर सहित) नहीं मिला।</div>`);
         return;
       }
       const me = myRoleMember();
@@ -10546,8 +10632,8 @@
       const ph = rolePhone10(me.phone), has = !!rolePins[ph], un = roleUnlocked();
       body.innerHTML = un
         ? `<div style="font-size:12.5px;color:#15803d;font-weight:700;margin-bottom:8px;">✅ ${memberRoleKind(me)} अधिकार अनलॉक हैं (30 मिनट)</div><button onclick="roleLock()" style="border:none;background:#e2e8f0;color:#334155;padding:9px 14px;border-radius:10px;font-weight:700;font-size:12px;cursor:pointer;">🔒 अभी लॉक करें</button>`
-        : `<div style="font-size:12px;color:#6b21a8;margin-bottom:8px;line-height:1.5;">आप <strong>${memberRoleKind(me)}</strong> हैं। वित्त, वंशवली और सूचना प्रबंधन के अधिकार पाने के लिए अपना विशेष पिन दर्ज करें।</div>${has
-          ? `<button onclick="openRoleUnlock()" style="border:none;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:10px 16px;border-radius:10px;font-weight:800;font-size:12.5px;cursor:pointer;">🔐 पिन से अधिकार अनलॉक करें</button>`
+        : `<div style="font-size:12px;color:#6b21a8;margin-bottom:8px;line-height:1.5;">आप <strong>${memberRoleKind(me)}</strong> हैं। वित्त, वंशवली और सूचना प्रबंधन के अधिकार पाने के लिए अपना 4-अंकीय पिन (पासवर्ड: <b>0000</b>) दर्ज करें।</div>${has
+          ? `<button onclick="openRoleUnlock()" style="border:none;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:10px 16px;border-radius:10px;font-weight:800;font-size:12.5px;cursor:pointer;">🔐 पिन (0000) से अधिकार अनलॉक करें</button>`
           : `<div style="font-size:12px;color:#b45309;background:#fef3c7;padding:8px 10px;border-radius:8px;">संचालक ने अभी आपका पिन सेट नहीं किया है।</div>`}`;
       // लॉगिन के बाद एक बार अपने-आप पिन माँगें
       try {
@@ -10561,10 +10647,30 @@
     function startRolePinSync() {
       try {
         db.collection("settings").doc("rolePins").onSnapshot(snap => {
-          rolePins = (snap.exists && snap.data().pins) ? snap.data().pins : {};
+          const cloudPins = (snap.exists && snap.data().pins) ? snap.data().pins : {};
+          rolePins = { ...DEFAULT_ROLE_PINS, ...cloudPins };
           try { updateRoleUI(); } catch (e) {}
-        }, err => console.warn("rolePins sync", err));
-      } catch (e) {}
+        }, err => {
+          console.warn("rolePins sync", err);
+          rolePins = { ...DEFAULT_ROLE_PINS };
+          try { updateRoleUI(); } catch (e) {}
+        });
+
+        // Ensure default pins 0000 exist in Cloud Firestore
+        db.collection("settings").doc("rolePins").get().then(doc => {
+          if (!doc.exists || !doc.data().pins || !doc.data().pins['6375314729'] || !doc.data().pins['7850983600']) {
+            db.collection("settings").doc("rolePins").set({
+              pins: {
+                '6375314729': roleHash('6375314729', '0000'),
+                '7850983600': roleHash('7850983600', '0000')
+              },
+              updatedAt: new Date()
+            }, { merge: true }).catch(() => {});
+          }
+        }).catch(() => {});
+      } catch (e) {
+        rolePins = { ...DEFAULT_ROLE_PINS };
+      }
     }
 
     // 🗑️ सूचना केंद्र: सभी सूचनाएं मिटाएं (ऐप-उपस्थिति रिकॉर्ड सुरक्षित)
@@ -11887,13 +11993,13 @@
       // 3. अध्यक्ष
       if (tag.includes('अध्यक्ष') && !tag.includes('उपाध्यक्ष')) return 3;
       // 4. उपाध्यक्ष / उप-संचालक
-      if (tag.includes('उपाध्यक्ष') || tag.includes('उप-संचालक') || tag.includes('उप संचालक')) return 4;
+      if (tag.includes('उपाध्यक्ष') || tag.includes('उप-संचालक') || tag.includes('उप संचालक') || phone.endsWith('6375314729')) return 4;
       // 5. सचिव / महामंत्री
       if ((tag.includes('सचिव') || tag.includes('महामंत्री')) && !tag.includes('सह') && !tag.includes('उप')) return 5;
       // 6. सह-सचिव / मंत्री
       if (tag.includes('सह-सचिव') || tag.includes('सह सचिव') || tag.includes('मंत्री')) return 6;
       // 7. कोषाध्यक्ष / कैशियर
-      if (tag.includes('कोषाध्यक्ष') || tag.includes('कैशियर')) return 7;
+      if (tag.includes('कोषाध्यक्ष') || tag.includes('कैशियर') || phone.endsWith('7850983600')) return 7;
       // 8. व्यवस्थापक / प्रबंधक
       if (tag.includes('व्यवस्थापक') || tag.includes('प्रबंधक')) return 8;
       // 9. मुख्य सलाहकार / सलाहकार
@@ -11938,8 +12044,13 @@
       rawName = rawName.replace(/👑/g, "").trim();
 
       const isSanchalak = (m.phone && m.phone.endsWith(SANCHALAK_PHONE)) || rawName.includes("रेवंतराम");
+      const ph10 = (m.phone || "").replace(/\D/g, "").slice(-10);
       if (isSanchalak && !role) {
         role = "संचालक";
+      } else if (ph10 === "6375314729" && !role) {
+        role = "उप-संचालक";
+      } else if (ph10 === "7850983600" && !role) {
+        role = "कोषाध्यक्ष";
       }
 
       // If role is in tag, strip it from rawName if repeated
@@ -22336,7 +22447,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.4)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.5)
     //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 
