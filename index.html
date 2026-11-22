@@ -4073,7 +4073,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.3
+            APK v5.5.4
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4100,7 +4100,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.3 (बिल्ड कोड: 553)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.4 (बिल्ड कोड: 554)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4958,7 +4958,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.3 (बिल्ड कोड: 553)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.4 (बिल्ड कोड: 554)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6547,19 +6547,6 @@
 
     <!-- Developer Apps Content Container -->
     <div style="padding:14px 16px 80px 16px; max-width:680px; margin:0 auto; width:100%; box-sizing:border-box;">
-      
-      <!-- Developer Profile Banner Card -->
-      <div class="ios-glass-card" style="border-radius:20px; padding:16px; margin-bottom:16px; background:linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.08) 100%); border:1.5px solid rgba(59,130,246,0.25); display:flex; align-items:center; gap:14px;">
-        <div style="width:52px; height:52px; border-radius:18px; background:linear-gradient(135deg, #1e3a8a, #2563eb); color:white; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 6px 16px rgba(37,99,235,0.3); flex-shrink:0;">
-          <i class="fa-solid fa-code"></i>
-        </div>
-        <div style="flex:1;">
-          <div style="font-size:15.5px; font-weight:900; color:#1e3a8a;">रेवंतराम भाटी (डेवलपर)</div>
-          <div style="font-size:11.5px; color:#475569; margin-top:2px; line-height:1.4;">
-            कुचेरा (नागौर) • आपके लिए विशेष रूप से तैयार किए गए उपयोगी एंड्रॉइड ऐप्स। नीचे दिए गए ऐप्स को 1-क्लिक में सुरक्षित डाउनलोड करें।
-          </div>
-        </div>
-      </div>
 
       <!-- Apps List Dynamic Container -->
       <div id="developerAppsListContainer" style="display:flex; flex-direction:column; gap:14px;">
@@ -6637,10 +6624,67 @@
     </div>
   </div>
 
+  <!-- 📥 समर्पित डेवलपर ऐप डाउनलोड व इंस्टॉलेशन मॉडल (Dedicated In-App Download Modal) -->
+  <div class="modal-overlay" id="devAppDownloadModal" data-no-swipe="true" style="display:none; z-index:1200; overflow-y:auto; -webkit-overflow-scrolling:touch;" onclick="if(event.target === this) closeDevAppDownloadModal()">
+    <div class="modal-content ios-modal-sheet" style="max-width:440px; width:92%; padding:22px 20px; border-radius:24px; box-shadow:0 20px 60px rgba(0,0,0,0.35); text-align:center;">
+      
+      <!-- Icon & Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:10px; text-align:left;">
+          <div id="devDownloadModalIcon" style="width:42px; height:42px; border-radius:14px; background:linear-gradient(135deg, #10b981, #059669); color:white; display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow:0 4px 12px rgba(16,185,129,0.3); flex-shrink:0;">
+            <i class="fa-solid fa-download"></i>
+          </div>
+          <div>
+            <h3 id="devDownloadModalTitle" style="font-size:16px; font-weight:800; color:#0f172a; margin:0;">ऐप डाउनलोड हो रहा है...</h3>
+            <span id="devDownloadModalSub" style="font-size:11.5px; color:#64748b; font-weight:600;">सीधा इन-ऐप डाउनलोड व इंस्टॉलेशन</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeDevAppDownloadModal()" style="border:none; background:rgba(0,0,0,0.06); border-radius:50%; width:30px; height:30px; font-size:14px; color:#64748b; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+      </div>
+
+      <!-- App Meta Pill Row -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:10px 14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+        <span id="devDownloadModalVerBadge" style="font-size:11.5px; font-weight:800; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:2px 8px; border-radius:8px;">v1.0.0</span>
+        <span id="devDownloadModalSizeBadge" style="font-size:11.5px; font-weight:800; background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; padding:2px 8px; border-radius:8px; display:inline-flex; align-items:center; gap:4px;">
+          <i class="fa-solid fa-weight-hanging"></i> <span>वजन: -- MB</span>
+        </span>
+      </div>
+
+      <!-- Live Progress Bar Box -->
+      <div style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:18px; padding:16px; margin-bottom:14px; text-align:left; box-shadow:0 4px 14px rgba(0,0,0,0.03);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-spinner fa-spin" id="devDownloadSpinner" style="color:#10b981; font-size:15px;"></i>
+            <span id="devDownloadStatusText" style="font-size:12.5px; font-weight:700; color:#0f172a;">डाउनलोड प्रारंभ हो रहा है...</span>
+          </div>
+          <span id="devDownloadPercentText" style="font-size:16px; font-weight:900; color:#10b981; font-family:monospace;">0%</span>
+        </div>
+
+        <!-- Track & Fill Bar -->
+        <div style="width:100%; height:12px; background:#e2e8f0; border-radius:10px; overflow:hidden; position:relative; box-shadow:inset 0 1px 3px rgba(0,0,0,0.08); margin:8px 0;">
+          <div id="devDownloadProgressBar" style="width:0%; height:100%; background:linear-gradient(90deg, #10b981, #059669); border-radius:10px; transition:width 0.2s ease;"></div>
+        </div>
+
+        <!-- Transferred / Total MB & Tip -->
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#64748b; font-weight:600;">
+          <span id="devDownloadSizeCounter">0.0 MB / -- MB</span>
+          <span id="devDownloadTipText">कृपया ऐप खुला रखें</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex; gap:10px;">
+        <button type="button" onclick="closeDevAppDownloadModal()" style="flex:1; padding:11px; border-radius:12px; border:1px solid #cbd5e1; background:white; font-weight:700; font-size:12.5px; color:#475569; cursor:pointer;">
+          पृष्ठभूमि में रखें (Hide)
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.3";
+    const APP_VERSION = "5.5.4";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -8352,6 +8396,10 @@
         spinner.className = "fa-solid fa-spinner fa-spin";
         spinner.style.color = "#2563eb";
       }
+
+      if (typeof updateDevAppDownloadProgress === "function") {
+        updateDevAppDownloadProgress(bytesDownloaded, totalBytes, percent);
+      }
     };
 
     window.onAppDownloadComplete = function() {
@@ -8388,6 +8436,10 @@
         badge.style.color = "#15803d";
       }
 
+      if (typeof onDevAppDownloadFinished === "function") {
+        onDevAppDownloadFinished();
+      }
+
       showToast("✅ नया अपडेट डाउनलोड हो गया! कृपया इंस्टॉल करें।", "success");
     };
 
@@ -8414,6 +8466,11 @@
         badge.innerText = "त्रुटि";
         badge.style.background = "#fef2f2";
         badge.style.color = "#dc2626";
+      }
+
+      if (typeof onDevAppDownloadFailed === "function") {
+        onDevAppDownloadFailed(errMsg);
+      }
       }
       showToast("डाउनलोड में समस्या: " + (errMsg || "इंटरनेट चेक करें"), "error");
     };
@@ -17819,7 +17876,10 @@
         name: "RV Bhati Player",
         subtitle: "ऑडियो व वीडियो प्लेयर",
         description: "शानदार ऑडियो-वीडियो प्लेयर, बैकग्राउंड प्लेबैक व राजस्थानी भजनों और भजनों के वीडियो का आनंद लें।",
-        version: "v1.0.0",
+        version: "v1.4.37",
+        size: "22.0 MB",
+        repo: "revantram/rv-bhati-player",
+        directApkUrl: "https://github.com/revantram/rv-bhati-player/releases/download/v1.4.37/RV-Bhati-Player.apk",
         url: "https://github.com/revantram/rv-bhati-player/releases/latest",
         icon: "fa-solid fa-circle-play",
         iconGradient: "linear-gradient(135deg, #7c3aed, #4f46e5)",
@@ -17831,7 +17891,10 @@
         name: "हाजिरी (Hajiri)",
         subtitle: "दैनिक उपस्थिति व हाजिरी रजिस्टर",
         description: "दैनिक उपस्थिति, लेबर/कर्मचारी प्रबंधन, अवकाश रिकॉर्ड व डिजिटल हाजिरी रजिस्टर प्रबंधन ऐप।",
-        version: "v1.0.0",
+        version: "v1.7",
+        size: "2.8 MB",
+        repo: "revantram/hajiri-app",
+        directApkUrl: "https://github.com/revantram/hajiri-app/releases/download/v1.7/Hajiri-v1.7-Release.apk",
         url: "https://github.com/revantram/hajiri-app/releases/latest",
         icon: "fa-solid fa-clipboard-user",
         iconGradient: "linear-gradient(135deg, #059669, #0d9488)",
@@ -17843,8 +17906,11 @@
         name: "मेरी तैयारी (Meri Taiyari)",
         subtitle: "क्विज व परीक्षा तैयारी",
         description: "प्रतियोगी परीक्षाओं की तैयारी, टॉपिक अनुसार टेस्ट सीरीज, दैनिक क्विज एवं परिणाम विश्लेषण।",
-        version: "v1.0.0",
-        url: "https://github.com/revantram/Utkarsh-/releases/latest",
+        version: "v4.8.8",
+        size: "1.6 MB",
+        repo: "revantram/meri-taiyari-mcq-prep",
+        directApkUrl: "https://github.com/revantram/meri-taiyari-mcq-prep/releases/download/v4.8.8/MeriTaiyari_MCQ_Prep.apk",
+        url: "https://github.com/revantram/meri-taiyari-mcq-prep/releases/latest",
         icon: "fa-solid fa-graduation-cap",
         iconGradient: "linear-gradient(135deg, #ea580c, #d97706)",
         badge: "शिक्षा / क्विज",
@@ -17865,13 +17931,98 @@
       return !!((typeof isAdmin !== 'undefined' && isAdmin) || (typeof canFin === 'function' && canFin()));
     }
 
+    function extractGitHubRepoSlug(url) {
+      if (!url) return null;
+      const m = url.match(/github\.com\/([^\/]+)\/([^\/]+)/i);
+      if (m) {
+        let repo = m[2].replace(/\.git$/, '').replace(/\/releases.*$/, '').replace(/\/+$/, '');
+        return `${m[1]}/${repo}`;
+      }
+      return null;
+    }
+
+    function formatBytesToSize(bytes) {
+      if (!bytes || bytes <= 0) return "-- MB";
+      const mb = bytes / (1024 * 1024);
+      if (mb < 0.1) return Math.round(bytes / 1024) + " KB";
+      return mb.toFixed(1) + " MB";
+    }
+
+    function resolveDirectApkFallback(app) {
+      if (app.directApkUrl) return app.directApkUrl;
+      if (app.id === "rv-bhati-player") {
+        return "https://github.com/revantram/rv-bhati-player/releases/latest/download/RV-Bhati-Player.apk";
+      }
+      if (app.id === "hajiri-app") {
+        return "https://github.com/revantram/hajiri-app/releases/latest/download/Hajiri-v1.7-Release.apk";
+      }
+      if (app.id === "meri-taiyari") {
+        return "https://github.com/revantram/meri-taiyari-mcq-prep/releases/latest/download/MeriTaiyari_MCQ_Prep.apk";
+      }
+      if (app.url && app.url.includes("github.com")) {
+        const clean = app.url.replace(/\/releases\/latest\/?$/, '').replace(/\/+$/, '');
+        return `${clean}/releases/latest/download/${app.id || 'app'}.apk`;
+      }
+      return app.url;
+    }
+
+    function resolveAppMeta(app) {
+      let meta = null;
+      try {
+        const raw = localStorage.getItem(`dev_app_meta_${app.id}`);
+        if (raw) meta = JSON.parse(raw);
+      } catch (e) {}
+      return {
+        version: meta?.version || app.version || "v1.0.0",
+        size: meta?.size || app.size || "-- MB",
+        directApkUrl: meta?.directApkUrl || app.directApkUrl || (app.url && app.url.toLowerCase().endsWith('.apk') ? app.url : null) || resolveDirectApkFallback(app),
+        apkName: meta?.apkName || (app.name ? `${app.name}.apk` : 'app.apk')
+      };
+    }
+
+    async function fetchDeveloperAppGitHubMeta(app) {
+      const repoSlug = app.repo || extractGitHubRepoSlug(app.url);
+      if (!repoSlug) return null;
+      try {
+        const res = await fetch(`https://api.github.com/repos/${repoSlug}/releases/latest`, {
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        let apkAsset = null;
+        if (data.assets && data.assets.length > 0) {
+          apkAsset = data.assets.find(a => (a.name || "").toLowerCase().endsWith('.apk'));
+        }
+        const meta = {
+          version: data.tag_name || app.version,
+          publishedAt: data.published_at,
+          size: apkAsset ? formatBytesToSize(apkAsset.size) : (app.size || "-- MB"),
+          directApkUrl: apkAsset ? apkAsset.browser_download_url : (app.directApkUrl || app.url),
+          apkName: apkAsset ? apkAsset.name : `${app.name}.apk`
+        };
+        try {
+          localStorage.setItem(`dev_app_meta_${app.id}`, JSON.stringify(meta));
+        } catch (e) {}
+        return meta;
+      } catch (e) {
+        console.warn("fetchDeveloperAppGitHubMeta for " + app.id + ":", e);
+        return null;
+      }
+    }
+
     function initDeveloperAppsListener() {
       try {
         db.collection("developer_apps").onSnapshot((snapshot) => {
           if (!snapshot.empty) {
             const list = [];
             snapshot.forEach(doc => {
-              list.push({ id: doc.id, ...doc.data() });
+              const data = doc.data();
+              const def = DEFAULT_DEVELOPER_APPS.find(d => d.id === doc.id);
+              list.push({
+                id: doc.id,
+                ...(def || {}),
+                ...data
+              });
             });
             list.sort((a, b) => (Number(a.order) || 999) - (Number(b.order) || 999));
             developerAppsList = list;
@@ -17957,10 +18108,11 @@
         const iconClass = app.icon || "fa-solid fa-shapes";
         const iconGrad = app.iconGradient || (idx % 3 === 0 ? "linear-gradient(135deg, #7c3aed, #4f46e5)" : (idx % 3 === 1 ? "linear-gradient(135deg, #059669, #0d9488)" : "linear-gradient(135deg, #ea580c, #d97706)"));
         const badge = app.badge || "ऑफिशियल ऐप";
-        const version = app.version || "v1.0.0";
+        const meta = resolveAppMeta(app);
+        const version = meta.version;
+        const size = meta.size;
         const subtitle = app.subtitle || "एंड्रॉइड एप्लीकेशन";
         const desc = app.description || "रेवंतराम भाटी द्वारा विकसित सुरक्षित एंड्रॉइड ऐप।";
-        const downloadUrl = app.url || `https://github.com/revantram`;
 
         html += `
           <div class="ios-glass-card" style="background:#ffffff; border-radius:20px; padding:16px 18px; border:1.5px solid rgba(0,0,0,0.07); box-shadow:0 4px 16px rgba(0,0,0,0.04); display:flex; flex-direction:column; gap:12px;">
@@ -17979,20 +18131,30 @@
                 </div>
               </div>
               <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0;">
-                <span style="font-size:10.5px; font-weight:800; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:2px 8px; border-radius:8px;">${escapeHtml(version)}</span>
+                <span id="devAppVer_${app.id}" style="font-size:10.5px; font-weight:800; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; padding:2px 8px; border-radius:8px;">${escapeHtml(version)}</span>
                 <span style="font-size:10px; font-weight:700; background:#f1f5f9; color:#475569; padding:2px 6px; border-radius:6px;">${escapeHtml(badge)}</span>
               </div>
             </div>
 
-            <div style="font-size:12.5px; color:#334155; line-height:1.5; background:#f8fafc; padding:10px 12px; border-radius:12px; border:1px solid #f1f5f9;">
+            <!-- APK Size (वजन) Badge & Info Bar -->
+            <div style="display:flex; align-items:center; justify-content:space-between; background:#f8fafc; border:1px solid #f1f5f9; border-radius:12px; padding:8px 12px;">
+              <span style="font-size:11.5px; font-weight:700; color:#475569;">
+                <i class="fa-brands fa-android" style="color:#10b981; margin-right:4px;"></i> सीधा इन-ऐप डाउनलोड
+              </span>
+              <span id="devAppSize_${app.id}" style="font-size:11.5px; font-weight:800; background:#ecfdf5; color:#047857; border:1.5px solid #a7f3d0; padding:2px 9px; border-radius:8px; display:inline-flex; align-items:center; gap:5px; box-shadow:0 1px 3px rgba(4,120,87,0.08);">
+                <i class="fa-solid fa-weight-hanging" style="font-size:11px;"></i> <span>वजन: ${escapeHtml(size)}</span>
+              </span>
+            </div>
+
+            <div style="font-size:12.5px; color:#334155; line-height:1.5; background:#ffffff; padding:4px 2px;">
               ${escapeHtml(desc)}
             </div>
 
-            <!-- 1-Click Install / Download Button (For Everyone) -->
-            <button onclick="openDeveloperAppDownload('${encodeURI(downloadUrl)}', '${escapeHtml(app.name)}')" style="width:100%; border:none; background:linear-gradient(135deg, #10b981 0%, #059669 100%); color:white; padding:12px 14px; border-radius:14px; font-weight:800; font-size:13.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(16,185,129,0.3); transition:transform 0.1s ease;">
+            <!-- 1-Click In-App Direct Download & Install Button (No Browser Redirect) -->
+            <button type="button" onclick="startDeveloperAppDownload('${app.id}')" style="width:100%; border:none; background:linear-gradient(135deg, #10b981 0%, #059669 100%); color:white; padding:12.5px 14px; border-radius:14px; font-weight:800; font-size:13.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px rgba(16,185,129,0.3); transition:transform 0.1s ease;">
               <i class="fa-solid fa-download"></i>
-              <span>1-क्लिक में इंस्टॉल / डाउनलोड करें</span>
-              <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px; opacity:0.85;"></i>
+              <span>1-क्लिक में डाउनलोड व इंस्टॉल करें</span>
+              <span id="devAppBtnSize_${app.id}" style="background:rgba(255,255,255,0.22); padding:2px 8px; border-radius:8px; font-size:11.5px; font-weight:700;">${escapeHtml(size)}</span>
             </button>
 
             ${isAdminUser ? `
@@ -18011,28 +18173,209 @@
       });
 
       container.innerHTML = html;
+
+      // Dynamically query GitHub API in background for live release size & version updates
+      apps.forEach(app => {
+        fetchDeveloperAppGitHubMeta(app).then(meta => {
+          if (!meta) return;
+          const verEl = document.getElementById(`devAppVer_${app.id}`);
+          if (verEl && meta.version) verEl.innerText = meta.version;
+          const sizeEl = document.getElementById(`devAppSize_${app.id}`);
+          if (sizeEl && meta.size) sizeEl.innerHTML = `<i class="fa-solid fa-weight-hanging" style="font-size:11px;"></i> <span>वजन: ${meta.size}</span>`;
+          const btnSizeEl = document.getElementById(`devAppBtnSize_${app.id}`);
+          if (btnSizeEl && meta.size) btnSizeEl.innerText = meta.size;
+        });
+      });
     }
 
-    function openDeveloperAppDownload(url, appName) {
-      if (!url) return;
+    // 📥 Developer App Direct In-App Download Execution
+    window.activeDevAppDownload = null;
+
+    function closeDevAppDownloadModal() {
+      const modal = document.getElementById("devAppDownloadModal");
+      if (modal) modal.style.display = "none";
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.closeDevAppDownloadModal = closeDevAppDownloadModal;
+
+    function updateDevAppDownloadProgress(bytesDownloaded, totalBytes, percent) {
+      const modal = document.getElementById("devAppDownloadModal");
+      if (!modal || modal.style.display === "none") return;
+
+      let p = Math.round(percent);
+      if (p < 0) p = 0;
+      if (p > 100) p = 100;
+
+      const bar = document.getElementById("devDownloadProgressBar");
+      if (bar) bar.style.width = p + "%";
+
+      const pct = document.getElementById("devDownloadPercentText");
+      if (pct) pct.innerText = p + "%";
+
+      const mbDown = (bytesDownloaded / (1024 * 1024)).toFixed(1);
+      const totalMb = (totalBytes > 0) ? (totalBytes / (1024 * 1024)).toFixed(1) + " MB" : (window.activeDevAppDownload?.size || "-- MB");
+      const szCounter = document.getElementById("devDownloadSizeCounter");
+      if (szCounter) szCounter.innerText = `${mbDown} MB / ${totalMb}`;
+
+      const stText = document.getElementById("devDownloadStatusText");
+      if (stText) stText.innerText = `APK डाउनलोड हो रहा है (${p}%)...`;
+    }
+
+    function onDevAppDownloadFinished() {
+      const modal = document.getElementById("devAppDownloadModal");
+      if (!modal || modal.style.display === "none") return;
+
+      const bar = document.getElementById("devDownloadProgressBar");
+      if (bar) {
+        bar.style.width = "100%";
+        bar.style.background = "linear-gradient(90deg, #10b981, #059669)";
+      }
+      const pct = document.getElementById("devDownloadPercentText");
+      if (pct) {
+        pct.innerText = "100%";
+        pct.style.color = "#15803d";
+      }
+      const stText = document.getElementById("devDownloadStatusText");
+      if (stText) {
+        stText.innerText = "✅ डाउनलोड पूर्ण! इंस्टॉलेशन विंडो खुल रही है...";
+        stText.style.color = "#15803d";
+      }
+      const spinner = document.getElementById("devDownloadSpinner");
+      if (spinner) {
+        spinner.className = "fa-solid fa-circle-check";
+        spinner.style.color = "#15803d";
+      }
+      const tip = document.getElementById("devDownloadTipText");
+      if (tip) tip.innerText = "इंस्टॉल विकल्प चुनें";
+
+      showToast(`✅ ${window.activeDevAppDownload?.appName || 'ऐप'} डाउनलोड पूर्ण! कृपया इंस्टॉल करें।`, "success");
+    }
+
+    function onDevAppDownloadFailed(errMsg) {
+      const modal = document.getElementById("devAppDownloadModal");
+      if (!modal || modal.style.display === "none") return;
+
+      const bar = document.getElementById("devDownloadProgressBar");
+      if (bar) bar.style.background = "#ef4444";
+
+      const stText = document.getElementById("devDownloadStatusText");
+      if (stText) {
+        stText.innerText = "⚠️ डाउनलोड विफल: " + (errMsg || "इंटरनेट चेक करें");
+        stText.style.color = "#dc2626";
+      }
+      const spinner = document.getElementById("devDownloadSpinner");
+      if (spinner) {
+        spinner.className = "fa-solid fa-triangle-exclamation";
+        spinner.style.color = "#dc2626";
+      }
+    }
+
+    async function downloadApkWebFallback(url, fileName) {
       try {
-        if (typeof showToast === "function") {
-          showToast(`🚀 ${appName || 'ऐप'} का डाउनलोड लिंक खोला जा रहा है...`, "info");
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("सर्वर से संपर्क विफल");
+        const contentLength = response.headers.get("content-length");
+        const total = contentLength ? parseInt(contentLength, 10) : 0;
+        const reader = response.body ? response.body.getReader() : null;
+
+        if (reader) {
+          const chunks = [];
+          let received = 0;
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+            received += value.length;
+            const pct = (total > 0) ? (received / total) * 100 : 0;
+            updateDevAppDownloadProgress(received, total, pct);
+          }
+          const blob = new Blob(chunks, { type: "application/vnd.android.package-archive" });
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = fileName || "app.apk";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+          onDevAppDownloadFinished();
+        } else {
+          window.location.href = url;
         }
-        if (window.AndroidApp && typeof window.AndroidApp.downloadAndInstall === "function" && url.toLowerCase().endsWith(".apk")) {
-          window.AndroidApp.downloadAndInstall(url, appName || "app");
-          return;
-        }
-        if (window.AndroidApp && typeof window.AndroidApp.openWhatsApp === "function") {
-          window.AndroidApp.openWhatsApp(url);
-          return;
-        }
-        window.open(url, "_blank");
       } catch (e) {
+        console.warn("Web stream download fallback:", e);
         window.location.href = url;
       }
     }
-    window.openDeveloperAppDownload = openDeveloperAppDownload;
+
+    function startDeveloperAppDownload(appId) {
+      const app = (developerAppsList || []).find(a => a.id === appId) || DEFAULT_DEVELOPER_APPS.find(a => a.id === appId);
+      if (!app) return;
+
+      const meta = resolveAppMeta(app);
+      const directApkUrl = meta.directApkUrl;
+
+      if (!directApkUrl) {
+        showToast("⚠️ APK डाउनलोड लिंक उपलब्ध नहीं है।", "warning");
+        return;
+      }
+
+      window.activeDevAppDownload = {
+        appId: app.id,
+        appName: app.name,
+        size: meta.size || "-- MB",
+        version: meta.version || "v1.0.0"
+      };
+
+      // Open In-App Download Progress Modal
+      const modal = document.getElementById("devAppDownloadModal");
+      if (modal) {
+        const titleEl = document.getElementById("devDownloadModalTitle");
+        if (titleEl) titleEl.innerText = `${app.name} डाउनलोड`;
+        const verEl = document.getElementById("devDownloadModalVerBadge");
+        if (verEl) verEl.innerText = window.activeDevAppDownload.version;
+        const sizeEl = document.getElementById("devDownloadModalSizeBadge");
+        if (sizeEl) sizeEl.innerHTML = `<i class="fa-solid fa-weight-hanging"></i> <span>वजन: ${window.activeDevAppDownload.size}</span>`;
+
+        // Reset progress bar
+        const bar = document.getElementById("devDownloadProgressBar");
+        if (bar) {
+          bar.style.width = "0%";
+          bar.style.background = "linear-gradient(90deg, #10b981, #059669)";
+        }
+        const pct = document.getElementById("devDownloadPercentText");
+        if (pct) {
+          pct.innerText = "0%";
+          pct.style.color = "#10b981";
+        }
+        const stText = document.getElementById("devDownloadStatusText");
+        if (stText) {
+          stText.innerText = "डाउनलोड प्रारंभ हो रहा है...";
+          stText.style.color = "#0f172a";
+        }
+        const szCounter = document.getElementById("devDownloadSizeCounter");
+        if (szCounter) szCounter.innerText = `0.0 MB / ${window.activeDevAppDownload.size}`;
+        const spinner = document.getElementById("devDownloadSpinner");
+        if (spinner) {
+          spinner.className = "fa-solid fa-spinner fa-spin";
+          spinner.style.color = "#10b981";
+        }
+        modal.style.display = "flex";
+        if (typeof updateActiveModalState === "function") updateActiveModalState();
+      }
+
+      showToast(`📲 ${app.name} का इन-ऐप डाउनलोड शुरू हो रहा है...`, "info");
+
+      // 1. Android Native download (Downloads APK and invokes Android package installer)
+      if (window.AndroidApp && typeof window.AndroidApp.downloadAndInstall === "function") {
+        window.AndroidApp.downloadAndInstall(directApkUrl, app.name);
+        return;
+      }
+
+      // 2. Web browser fallback with Stream download & live progress
+      downloadApkWebFallback(directApkUrl, meta.apkName || `${app.name}.apk`);
+    }
+    window.startDeveloperAppDownload = startDeveloperAppDownload;
 
     function openDeveloperAppEditModal(appId = null) {
       if (!canDevAppsAdmin()) {
@@ -21993,7 +22336,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.3)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.4)
     //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 
@@ -22113,6 +22456,7 @@
       'dedicatedCashCounterPage': () => typeof closeDedicatedCashCounterPage === 'function' && closeDedicatedCashCounterPage(),
       'dedicatedDeveloperAppsPage': () => typeof closeDeveloperAppsScreen === 'function' && closeDeveloperAppsScreen(),
       'developerAppEditModal': () => typeof closeDeveloperAppEditModal === 'function' && closeDeveloperAppEditModal(),
+      'devAppDownloadModal': () => typeof closeDevAppDownloadModal === 'function' && closeDevAppDownloadModal(),
       'setMyNameModal': () => {
         const el = document.getElementById('setMyNameModal');
         if (el) el.remove();
@@ -22241,6 +22585,14 @@
         if (cashPage && window.getComputedStyle(cashPage).display !== 'none') {
           if (typeof closeDedicatedCashCounterPage === 'function') closeDedicatedCashCounterPage();
           else cashPage.style.display = 'none';
+          updateActiveModalState();
+          return true;
+        }
+
+        const devDlModal = document.getElementById('devAppDownloadModal');
+        if (devDlModal && window.getComputedStyle(devDlModal).display !== 'none') {
+          if (typeof closeDevAppDownloadModal === 'function') closeDevAppDownloadModal();
+          else devDlModal.style.display = 'none';
           updateActiveModalState();
           return true;
         }

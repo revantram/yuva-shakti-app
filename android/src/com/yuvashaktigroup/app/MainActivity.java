@@ -518,7 +518,19 @@ public class MainActivity extends Activity {
             final long contentLength = Build.VERSION.SDK_INT >= 24 ? conn.getContentLengthLong() : conn.getContentLength();
             in = conn.getInputStream();
 
-            cacheApk = new File(getCacheDir(), "YuvaShaktiGroup.apk");
+            String apkFileName = "YuvaShaktiGroup.apk";
+            try {
+                String path = new URL(targetUrl).getPath();
+                int lastSlash = path.lastIndexOf('/');
+                if (lastSlash >= 0 && lastSlash < path.length() - 1) {
+                    String sub = path.substring(lastSlash + 1);
+                    if (sub.toLowerCase().endsWith(".apk")) {
+                        apkFileName = sub;
+                    }
+                }
+            } catch (Exception ignored) {}
+
+            cacheApk = new File(getCacheDir(), apkFileName);
             if (cacheApk.exists()) cacheApk.delete();
 
             out = new FileOutputStream(cacheApk);
@@ -547,7 +559,7 @@ public class MainActivity extends Activity {
             try {
                 File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                 if (downloadDir != null && (downloadDir.exists() || downloadDir.mkdirs())) {
-                    File pubApk = new File(downloadDir, "YuvaShaktiGroup.apk");
+                    File pubApk = new File(downloadDir, apkFileName);
                     copyFile(cacheApk, pubApk);
                 }
             } catch (Exception ignored) {}
@@ -594,7 +606,7 @@ public class MainActivity extends Activity {
 
     private void promptApkInstall(File apkFile) {
         try {
-            Uri apkUri = Uri.parse("content://" + AppFileProvider.AUTHORITY + "/YuvaShaktiGroup.apk");
+            Uri apkUri = Uri.parse("content://" + AppFileProvider.AUTHORITY + "/" + apkFile.getName());
             Intent installIntent = new Intent(Intent.ACTION_VIEW);
             installIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
             installIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
