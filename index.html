@@ -3414,6 +3414,20 @@
         window.isAuthChecking = true;
         window.authReady = false;
       }
+
+      // 🛡️ Fail-safe Watchdog: guarantees splash screen NEVER gets permanently stuck even if network is stalled
+      setTimeout(function() {
+        try {
+          var sp = document.getElementById("appInitialSplashScreen");
+          if (sp) {
+            sp.style.opacity = "0";
+            sp.style.pointerEvents = "none";
+            setTimeout(function() {
+              if (sp && sp.parentNode) sp.parentNode.removeChild(sp);
+            }, 300);
+          }
+        } catch (e) {}
+      }, 2500);
     })();
   </script>
 </head>
@@ -4073,7 +4087,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.5
+            APK v5.5.6
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4100,7 +4114,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.5 (बिल्ड कोड: 555)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.6 (बिल्ड कोड: 556)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4958,7 +4972,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.5 (बिल्ड कोड: 555)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.6 (बिल्ड कोड: 556)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6684,7 +6698,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.5";
+    const APP_VERSION = "5.5.6";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -8470,7 +8484,6 @@
 
       if (typeof onDevAppDownloadFailed === "function") {
         onDevAppDownloadFailed(errMsg);
-      }
       }
       showToast("डाउनलोड में समस्या: " + (errMsg || "इंटरनेट चेक करें"), "error");
     };
@@ -22447,7 +22460,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.5)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.6)
     //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 
