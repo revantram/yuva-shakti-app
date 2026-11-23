@@ -4087,7 +4087,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.6
+            APK v5.5.7
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4114,7 +4114,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.6 (बिल्ड कोड: 556)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.7 (बिल्ड कोड: 557)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -4972,7 +4972,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.6 (बिल्ड कोड: 556)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.7 (बिल्ड कोड: 557)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6698,7 +6698,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.6";
+    const APP_VERSION = "5.5.7";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -15024,27 +15024,38 @@
         return;
       }
 
-      let totalIn = transactions.filter(t => t.type === 'contribution' && !isGaneshItem(t)).reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      let totalOut = expenses.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      let net = totalIn - totalOut;
+      expenses.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+      const fundSummary = ysGetDynamicFundSummary();
+      const openingBal = fundSummary.openingBal;
+      const ganeshRemaining = fundSummary.ganeshRemaining;
+      const postContributions = fundSummary.postOpeningContributions;
+      const totalExpense = expenses.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      const grossFund = openingBal + ganeshRemaining + postContributions;
+      const availableFund = fundSummary.netAvailableFund; // उपलब्ध कुल कोष (e.g. ₹2,905)
       const todayStr = new Date().toISOString().split('T')[0];
 
       const summaryData = {
         lang: currentLang,
+        reportType: "expense",
         title: "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)",
         subTitle: "सामग्री खर्च एवं व्यय स्प्रेडशीट रिपोर्ट",
         filePrefix: "Yuva_Shakti_Kharch_Report_",
-        totalIn: totalIn,
-        totalOut: totalOut,
-        net: net,
+        totalIn: grossFund,
+        totalOut: totalExpense,
+        net: availableFund,
+        totalInLabel: "कुल प्रारंभिक व जमा कोष",
+        totalOutLabel: "कुल खर्च (व्यय)",
+        netLabel: "उपलब्ध कुल कोष",
+        breakdownText: `सुरक्षित शेष ₹${openingBal.toLocaleString('en-IN')} + विसर्जन ₹${ganeshRemaining.toLocaleString('en-IN')} + जमा ₹${postContributions.toLocaleString('en-IN')}`,
         count: expenses.length,
         date: todayStr
       };
 
       const cleanExpenses = expenses.map(t => ({
         description: t.description || '',
-        date: t.date || '',
-        spentBy: t.spentBy || 'व्यवस्थापक',
+        date: formatDisplayDate(t.date || ''),
+        spentBy: t.spentBy || 'रेवंतराम भाटी',
         payMethod: t.payMethod || 'नकद',
         type: 'expense',
         amount: Number(t.amount) || 0
@@ -15064,9 +15075,13 @@
 
     function shareExpensesToWA() {
       const regularExpenses = transactions.filter(t => t.type === 'expense' && !isGaneshItem(t));
-      let totalIn = transactions.filter(t => t.type === 'contribution' && !isGaneshItem(t)).reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      let totalOut = regularExpenses.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      let net = totalIn - totalOut;
+      const fundSummary = ysGetDynamicFundSummary();
+      const openingBal = fundSummary.openingBal;
+      const ganeshRemaining = fundSummary.ganeshRemaining;
+      const postContributions = fundSummary.postOpeningContributions;
+      const grossFund = openingBal + ganeshRemaining + postContributions;
+      const totalOut = regularExpenses.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
+      const availableFund = fundSummary.netAvailableFund;
 
       const recentExpenses = regularExpenses
         .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
@@ -15074,9 +15089,10 @@
 
       let text = `🚩 *युवा शक्ति ग्रुप (भाटी परिवार • कुचेरा)* 🚩\n\n`;
       text += `📊 *सामग्री खर्च एवं कोष विवरण:*\n`;
+      text += `💰 *उपलब्ध कुल कोष:* ₹${availableFund.toLocaleString('en-IN')}\n`;
       text += `💸 *कुल खर्च:* ₹${totalOut.toLocaleString('en-IN')}\n`;
-      text += `💰 *बाकी बचे पैसे:* ₹${net.toLocaleString('en-IN')}\n`;
-      text += `📥 *कुल जमा राशि:* ₹${totalIn.toLocaleString('en-IN')}\n\n`;
+      text += `📥 *कुल प्रारंभिक व जमा कोष:* ₹${grossFund.toLocaleString('en-IN')}\n`;
+      text += `_(सुरक्षित शेष ₹${openingBal.toLocaleString('en-IN')} + विसर्जन शेष ₹${ganeshRemaining.toLocaleString('en-IN')} + जमा ₹${postContributions.toLocaleString('en-IN')})_\n\n`;
 
       if (recentExpenses.length > 0) {
         text += `🛒 *हालिया सामग्री खर्च:*\n`;
@@ -22460,7 +22476,7 @@
     });
 
     // =========================================================================
-    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.6)
+    //  🔙 GLOBAL APP BACK GESTURE & NAVIGATION CONTROLLER (v5.5.7)
     //  Supports: Android System Back, Edge Swipes, Modal Backdrops & Sub-Pages
     // =========================================================================
 

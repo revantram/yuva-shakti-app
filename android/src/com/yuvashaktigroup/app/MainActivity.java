@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import java.util.List;
+import java.util.ArrayList;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
@@ -901,11 +902,24 @@ public class MainActivity extends Activity {
                     JSONArray transactions = new JSONArray(transactionsJson != null ? transactionsJson : "[]");
 
                     boolean isEnglish = "en".equalsIgnoreCase(summary.optString("lang", "hi"));
+                    String reportType = summary.optString("reportType", "");
+                    String filePrefix = summary.optString("filePrefix", "Yuva_Shakti_BahiKhata_");
+                    boolean isExpenseReport = "expense".equalsIgnoreCase(reportType) || filePrefix.contains("Kharch");
+
                     long totalIn = summary.optLong("totalIn", 0);
                     long totalOut = summary.optLong("totalOut", 0);
                     long net = summary.optLong("net", totalIn - totalOut);
                     int count = summary.optInt("count", transactions.length());
                     String dateStr = summary.optString("date", "");
+                    String breakdownText = summary.optString("breakdownText", "");
+
+                    String defaultInLabel = isEnglish ? "TOTAL DEPOSITS" : (isExpenseReport ? "कुल प्रारंभिक व जमा कोष" : "कुल जमा (अंशदान)");
+                    String defaultOutLabel = isEnglish ? "TOTAL EXPENSES" : "कुल खर्च (व्यय)";
+                    String defaultNetLabel = isEnglish ? "NET BALANCE" : (isExpenseReport ? "उपलब्ध कुल कोष" : "उपलब्ध शेष राशि");
+
+                    String inLabel = summary.optString("totalInLabel", defaultInLabel);
+                    String outLabel = summary.optString("totalOutLabel", defaultOutLabel);
+                    String netLabel = summary.optString("netLabel", defaultNetLabel);
 
                     document = new PdfDocument();
                     int pageWidth = 595;
@@ -921,34 +935,34 @@ public class MainActivity extends Activity {
 
                     // 1. Draw Header Banner
                     paint.setColor(Color.parseColor("#1e3a8a"));
-                    canvas.drawRoundRect(new RectF(36, 36, 559, 105), 8, 8, paint);
+                    canvas.drawRoundRect(new RectF(36, 32, 559, 104), 8, 8, paint);
 
                     paint.setColor(Color.WHITE);
                     paint.setTextSize(16);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                     String defaultTitle = isEnglish ? "Yuva Shakti Group (Bhati Parivar Kuchera)" : "युवा शक्ति ग्रुप (भाटी परिवार कुचेरा)";
                     String title = summary.optString("title", defaultTitle);
-                    canvas.drawText(title, 50, 64, paint);
+                    canvas.drawText(title, 50, 60, paint);
 
                     paint.setColor(Color.parseColor("#fbbf24"));
                     paint.setTextSize(11);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    String defaultSub = isEnglish ? "Official Ledger & Financial Statement" : "आधिकारिक बही-खाता एवं आय-व्यय रिपोर्ट";
+                    String defaultSub = isEnglish ? "Official Ledger & Financial Statement" : "सामग्री खर्च एवं व्यय स्प्रेडशीट रिपोर्ट";
                     String sub = summary.optString("subTitle", defaultSub);
-                    canvas.drawText(sub, 50, 82, paint);
+                    canvas.drawText(sub, 50, 78, paint);
 
                     paint.setColor(Color.parseColor("#e0e7ff"));
                     paint.setTextSize(9);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-                    String dateMeta = (isEnglish ? "Report Date: " : "रिपोर्ट दिनांक: ") + dateStr + "  |  " + (isEnglish ? "Total Records: " : "कुल लेनदेन: ") + count;
-                    canvas.drawText(dateMeta, 50, 96, paint);
+                    String dateMeta = (isEnglish ? "Report Date: " : "रिपोर्ट दिनांक: ") + dateStr + "  |  " + (isEnglish ? "Total Items: " : "कुल सामग्री मद: ") + count;
+                    canvas.drawText(dateMeta, 50, 94, paint);
 
                     // 2. Summary Boxes (3 horizontal cards)
-                    float boxY1 = 115;
-                    float boxY2 = 160;
+                    float boxY1 = 114;
+                    float boxY2 = 172;
                     float boxW = 166;
 
-                    // Box 1: Total In
+                    // Box 1: Total In / Total Available Fund
                     paint.setColor(Color.parseColor("#ecfdf5"));
                     canvas.drawRoundRect(new RectF(36, boxY1, 36 + boxW, boxY2), 6, 6, paint);
                     paint.setColor(Color.parseColor("#a7f3d0"));
@@ -957,14 +971,21 @@ public class MainActivity extends Activity {
                     paint.setStyle(Paint.Style.FILL);
                     paint.setColor(Color.parseColor("#065f46"));
                     paint.setTextSize(9);
-                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-                    canvas.drawText(isEnglish ? "TOTAL DEPOSITS" : "कुल जमा (अंशदान)", 46, boxY1 + 18, paint);
-                    paint.setColor(Color.parseColor("#047857"));
-                    paint.setTextSize(14);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    canvas.drawText("₹" + String.format(Locale.US, "%,d", totalIn), 46, boxY1 + 36, paint);
+                    canvas.drawText(inLabel, 44, boxY1 + 17, paint);
+                    paint.setColor(Color.parseColor("#047857"));
+                    paint.setTextSize(14.5f);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    canvas.drawText("₹" + String.format(Locale.US, "%,d", totalIn), 44, boxY1 + 36, paint);
+                    if (!breakdownText.isEmpty()) {
+                        paint.setColor(Color.parseColor("#059669"));
+                        paint.setTextSize(7.2f);
+                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                        String truncatedBreakdown = breakdownText.length() > 34 ? breakdownText.substring(0, 32) + ".." : breakdownText;
+                        canvas.drawText(truncatedBreakdown, 44, boxY1 + 50, paint);
+                    }
 
-                    // Box 2: Total Out
+                    // Box 2: Total Out / Expenses
                     float box2X = 36 + boxW + 12;
                     paint.setColor(Color.parseColor("#fef2f2"));
                     canvas.drawRoundRect(new RectF(box2X, boxY1, box2X + boxW, boxY2), 6, 6, paint);
@@ -974,12 +995,16 @@ public class MainActivity extends Activity {
                     paint.setStyle(Paint.Style.FILL);
                     paint.setColor(Color.parseColor("#991b1b"));
                     paint.setTextSize(9);
-                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-                    canvas.drawText(isEnglish ? "TOTAL EXPENSES" : "कुल खर्च (व्यय)", box2X + 10, boxY1 + 18, paint);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    canvas.drawText(outLabel, box2X + 10, boxY1 + 17, paint);
                     paint.setColor(Color.parseColor("#b91c1c"));
-                    paint.setTextSize(14);
+                    paint.setTextSize(14.5f);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                     canvas.drawText("₹" + String.format(Locale.US, "%,d", totalOut), box2X + 10, boxY1 + 36, paint);
+                    paint.setColor(Color.parseColor("#b91c1c"));
+                    paint.setTextSize(7.5f);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                    canvas.drawText(isExpenseReport ? "सामग्री व व्यवस्था व्यय" : (isEnglish ? "Total Expenditures" : "कुल दर्ज व्यय"), box2X + 10, boxY1 + 50, paint);
 
                     // Box 3: Net Balance
                     float box3X = box2X + boxW + 12;
@@ -991,21 +1016,41 @@ public class MainActivity extends Activity {
                     paint.setStyle(Paint.Style.FILL);
                     paint.setColor(Color.parseColor("#1e40af"));
                     paint.setTextSize(9);
-                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-                    canvas.drawText(isEnglish ? "NET BALANCE" : "उपलब्ध शेष राशि", box3X + 10, boxY1 + 18, paint);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    canvas.drawText(netLabel, box3X + 10, boxY1 + 17, paint);
                     paint.setColor(Color.parseColor("#1d4ed8"));
-                    paint.setTextSize(14);
+                    paint.setTextSize(14.5f);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                     canvas.drawText("₹" + String.format(Locale.US, "%,d", net), box3X + 10, boxY1 + 36, paint);
+                    paint.setColor(Color.parseColor("#2563eb"));
+                    paint.setTextSize(7.5f);
+                    paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                    canvas.drawText(isExpenseReport ? "शुद्ध उपलब्ध बचत कोष" : (isEnglish ? "Available Balance" : "शुद्ध शेष राशि"), box3X + 10, boxY1 + 50, paint);
 
                     // 3. Table Header
-                    int currentY = 175;
-                    drawTableHeader(canvas, paint, currentY, isEnglish);
-                    currentY += 24;
+                    int currentY = 188;
+                    drawTableHeader(canvas, paint, currentY, isEnglish, isExpenseReport);
+                    currentY += 26;
 
                     // 4. Rows
                     for (int i = 0; i < transactions.length(); i++) {
-                        if (currentY > 790) {
+                        JSONObject row = transactions.getJSONObject(i);
+                        String desc = row.optString("description", "");
+                        String date = row.optString("date", "");
+                        String method = row.optString("payMethod", "नकद");
+                        String spentBy = row.optString("spentBy", "व्यवस्थापक");
+                        String typeStr = row.optString("type", "");
+                        long amount = row.optLong("amount", 0);
+                        boolean isIncome = "contribution".equalsIgnoreCase(typeStr);
+
+                        paint.setTextSize(9.5f);
+                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                        float descColWidth = isExpenseReport ? 190f : 196f;
+                        List<String> descLines = wrapTextLines(desc, paint, descColWidth);
+                        int lineCount = Math.max(1, descLines.size());
+                        int rowHeight = 12 + (lineCount * 14);
+
+                        if (currentY + rowHeight > 780) {
                             drawPageFooter(canvas, paint, pageNumber, isEnglish);
                             document.finishPage(page);
 
@@ -1015,51 +1060,107 @@ public class MainActivity extends Activity {
                             canvas = page.getCanvas();
 
                             currentY = 45;
-                            drawTableHeader(canvas, paint, currentY, isEnglish);
-                            currentY += 24;
+                            drawTableHeader(canvas, paint, currentY, isEnglish, isExpenseReport);
+                            currentY += 26;
                         }
-
-                        JSONObject row = transactions.getJSONObject(i);
-                        String desc = row.optString("description", "");
-                        String date = row.optString("date", "");
-                        String method = row.optString("payMethod", "");
-                        String typeStr = row.optString("type", "");
-                        long amount = row.optLong("amount", 0);
-                        boolean isIncome = "contribution".equalsIgnoreCase(typeStr);
 
                         if (i % 2 == 1) {
                             paint.setColor(Color.parseColor("#f8fafc"));
-                            canvas.drawRect(36, currentY - 14, 559, currentY + 6, paint);
+                            canvas.drawRect(36, currentY - 12, 559, currentY + rowHeight - 12, paint);
                         }
 
                         paint.setColor(Color.parseColor("#e2e8f0"));
-                        paint.setStrokeWidth(0.5f);
-                        canvas.drawLine(36, currentY + 6, 559, currentY + 6, paint);
+                        paint.setStrokeWidth(0.6f);
+                        canvas.drawLine(36, currentY + rowHeight - 12, 559, currentY + rowHeight - 12, paint);
 
-                        paint.setColor(Color.parseColor("#1e293b"));
-                        paint.setTextSize(9);
-                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                        String truncatedDesc = desc.length() > 32 ? desc.substring(0, 30) + "..." : desc;
-                        canvas.drawText(truncatedDesc, 42, currentY, paint);
-
+                        // S.No
+                        paint.setColor(Color.parseColor("#64748b"));
+                        paint.setTextSize(9.5f);
                         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-                        paint.setColor(Color.parseColor("#475569"));
-                        canvas.drawText(date, 245, currentY, paint);
+                        canvas.drawText(String.valueOf(i + 1), 42, currentY + 2, paint);
 
-                        String truncatedMethod = method.length() > 14 ? method.substring(0, 12) + "..." : method;
-                        canvas.drawText(truncatedMethod, 325, currentY, paint);
+                        // Date
+                        paint.setColor(Color.parseColor("#334155"));
+                        canvas.drawText(date, 66, currentY + 2, paint);
 
-                        String displayType = isIncome ? (isEnglish ? "Deposit" : "जमा") : (isEnglish ? "Expense" : "खर्च");
-                        paint.setColor(isIncome ? Color.parseColor("#047857") : Color.parseColor("#b91c1c"));
+                        // Description lines (wrapped, no truncation)
+                        paint.setColor(Color.parseColor("#0f172a"));
                         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                        canvas.drawText(displayType, 410, currentY, paint);
+                        for (int l = 0; l < descLines.size(); l++) {
+                            canvas.drawText(descLines.get(l), 138, currentY + 2 + (l * 14), paint);
+                        }
 
-                        String amtText = "₹" + String.format(Locale.US, "%,d", amount);
-                        paint.setColor(isIncome ? Color.parseColor("#047857") : Color.parseColor("#b91c1c"));
-                        float amtWidth = paint.measureText(amtText);
-                        canvas.drawText(amtText, 550 - amtWidth, currentY, paint);
+                        if (isExpenseReport) {
+                            // Amount (Right-aligned at 400)
+                            String amtText = "₹" + String.format(Locale.US, "%,d", amount);
+                            paint.setColor(Color.parseColor("#dc2626"));
+                            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                            float amtW = paint.measureText(amtText);
+                            canvas.drawText(amtText, 400 - amtW, currentY + 2, paint);
 
-                        currentY += 20;
+                            // Spent By
+                            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                            paint.setColor(Color.parseColor("#475569"));
+                            String sBy = spentBy.length() > 14 ? spentBy.substring(0, 13) + ".." : spentBy;
+                            canvas.drawText(sBy, 412, currentY + 2, paint);
+
+                            // Pay Method
+                            String pMethod = method.length() > 12 ? method.substring(0, 11) + ".." : method;
+                            paint.setColor(Color.parseColor("#2563eb"));
+                            canvas.drawText(pMethod, 492, currentY + 2, paint);
+                        } else {
+                            // Method
+                            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                            paint.setColor(Color.parseColor("#475569"));
+                            String pMethod = method.length() > 12 ? method.substring(0, 11) + ".." : method;
+                            canvas.drawText(pMethod, 350, currentY + 2, paint);
+
+                            // Type
+                            String displayType = isIncome ? (isEnglish ? "Deposit" : "जमा") : (isEnglish ? "Expense" : "खर्च");
+                            paint.setColor(isIncome ? Color.parseColor("#047857") : Color.parseColor("#b91c1c"));
+                            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                            canvas.drawText(displayType, 424, currentY + 2, paint);
+
+                            // Amount
+                            String amtText = "₹" + String.format(Locale.US, "%,d", amount);
+                            paint.setColor(isIncome ? Color.parseColor("#047857") : Color.parseColor("#b91c1c"));
+                            float amtW = paint.measureText(amtText);
+                            canvas.drawText(amtText, 552 - amtW, currentY + 2, paint);
+                        }
+
+                        currentY += rowHeight;
+                    }
+
+                    // Table Footer / Summary Row (Expense Report)
+                    if (isExpenseReport) {
+                        if (currentY + 28 > 780) {
+                            drawPageFooter(canvas, paint, pageNumber, isEnglish);
+                            document.finishPage(page);
+
+                            pageNumber++;
+                            pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create();
+                            page = document.startPage(pageInfo);
+                            canvas = page.getCanvas();
+                            currentY = 45;
+                        }
+
+                        paint.setColor(Color.parseColor("#f1f5f9"));
+                        canvas.drawRoundRect(new RectF(36, currentY - 12, 559, currentY + 16), 2, 2, paint);
+                        paint.setColor(Color.parseColor("#cbd5e1"));
+                        paint.setStrokeWidth(1.0f);
+                        canvas.drawLine(36, currentY - 12, 559, currentY - 12, paint);
+                        canvas.drawLine(36, currentY + 16, 559, currentY + 16, paint);
+
+                        paint.setColor(Color.parseColor("#0f172a"));
+                        paint.setTextSize(10f);
+                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                        canvas.drawText(isEnglish ? "TOTAL EXPENSES:" : "कुल खर्च योग:", 138, currentY + 3, paint);
+
+                        String totalAmtText = "₹" + String.format(Locale.US, "%,d", totalOut);
+                        paint.setColor(Color.parseColor("#dc2626"));
+                        float totalAmtW = paint.measureText(totalAmtText);
+                        canvas.drawText(totalAmtText, 400 - totalAmtW, currentY + 3, paint);
+                        currentY += 28;
                     }
 
                     drawPageFooter(canvas, paint, pageNumber, isEnglish);
@@ -1128,26 +1229,83 @@ public class MainActivity extends Activity {
         });
     }
 
-    private void drawTableHeader(Canvas canvas, Paint paint, int y, boolean isEnglish) {
-        paint.setColor(Color.parseColor("#f1f5f9"));
-        canvas.drawRect(36, y - 14, 559, y + 8, paint);
+    private List<String> wrapTextLines(String text, Paint paint, float maxWidth) {
+        List<String> lines = new ArrayList<>();
+        if (text == null || text.trim().isEmpty()) {
+            lines.add("-");
+            return lines;
+        }
+        String[] words = text.split("\\s+");
+        StringBuilder currentLine = new StringBuilder();
+        for (String word : words) {
+            String testLine = currentLine.length() == 0 ? word : currentLine + " " + word;
+            if (paint.measureText(testLine) <= maxWidth) {
+                currentLine.append(currentLine.length() == 0 ? word : " " + word);
+            } else {
+                if (currentLine.length() > 0) {
+                    lines.add(currentLine.toString());
+                    currentLine = new StringBuilder();
+                }
+                if (paint.measureText(word) > maxWidth) {
+                    StringBuilder subWord = new StringBuilder();
+                    for (int i = 0; i < word.length(); i++) {
+                        char c = word.charAt(i);
+                        if (paint.measureText(subWord.toString() + c) <= maxWidth) {
+                            subWord.append(c);
+                        } else {
+                            lines.add(subWord.toString());
+                            subWord = new StringBuilder();
+                            subWord.append(c);
+                        }
+                    }
+                    if (subWord.length() > 0) {
+                        currentLine = subWord;
+                    }
+                } else {
+                    currentLine.append(word);
+                }
+            }
+        }
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString());
+        }
+        return lines;
+    }
 
-        paint.setColor(Color.parseColor("#334155"));
-        paint.setTextSize(9);
+    private void drawTableHeader(Canvas canvas, Paint paint, int y, boolean isEnglish, boolean isExpenseReport) {
+        paint.setColor(Color.parseColor("#e2e8f0"));
+        canvas.drawRoundRect(new RectF(36, y - 14, 559, y + 10), 4, 4, paint);
+
+        paint.setColor(Color.parseColor("#1e293b"));
+        paint.setTextSize(9.5f);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
-        canvas.drawText(isEnglish ? "DESCRIPTION / MEMBER" : "विवरण / सदस्य", 42, y, paint);
-        canvas.drawText(isEnglish ? "DATE" : "तारीख", 245, y, paint);
-        canvas.drawText(isEnglish ? "METHOD" : "माध्यम", 325, y, paint);
-        canvas.drawText(isEnglish ? "TYPE" : "प्रकार", 410, y, paint);
+        if (isExpenseReport) {
+            canvas.drawText("#", 42, y, paint);
+            canvas.drawText(isEnglish ? "DATE" : "दिनांक", 66, y, paint);
+            canvas.drawText(isEnglish ? "ITEM / DESCRIPTION" : "सामग्री / विवरण", 138, y, paint);
 
-        String amtHeader = isEnglish ? "AMOUNT" : "राशि";
-        float amtWidth = paint.measureText(amtHeader);
-        canvas.drawText(amtHeader, 550 - amtWidth, y, paint);
+            String amtHeader = isEnglish ? "EXPENSE (₹)" : "खर्च (₹)";
+            float amtWidth = paint.measureText(amtHeader);
+            canvas.drawText(amtHeader, 400 - amtWidth, y, paint);
+
+            canvas.drawText(isEnglish ? "SPENT BY" : "खर्चकर्ता", 412, y, paint);
+            canvas.drawText(isEnglish ? "METHOD" : "माध्यम", 492, y, paint);
+        } else {
+            canvas.drawText("#", 42, y, paint);
+            canvas.drawText(isEnglish ? "DATE" : "दिनांक", 66, y, paint);
+            canvas.drawText(isEnglish ? "DESCRIPTION / MEMBER" : "विवरण / सदस्य", 138, y, paint);
+            canvas.drawText(isEnglish ? "METHOD" : "माध्यम", 350, y, paint);
+            canvas.drawText(isEnglish ? "TYPE" : "प्रकार", 424, y, paint);
+
+            String amtHeader = isEnglish ? "AMOUNT" : "राशि (₹)";
+            float amtWidth = paint.measureText(amtHeader);
+            canvas.drawText(amtHeader, 552 - amtWidth, y, paint);
+        }
 
         paint.setColor(Color.parseColor("#cbd5e1"));
         paint.setStrokeWidth(1.0f);
-        canvas.drawLine(36, y + 8, 559, y + 8, paint);
+        canvas.drawLine(36, y + 10, 559, y + 10, paint);
     }
 
     private void drawPageFooter(Canvas canvas, Paint paint, int pageNumber, boolean isEnglish) {
