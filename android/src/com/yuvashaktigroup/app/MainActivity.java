@@ -189,12 +189,15 @@ public class MainActivity extends Activity {
         }
 
         mWebView = new WebView(this);
+        mWebView.setLayerType(android.view.View.LAYER_TYPE_HARDWARE, null);
         setContentView(mWebView);
 
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
+        settings.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        settings.setEnableSmoothTransition(true);
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
         settings.setUseWideViewPort(true);

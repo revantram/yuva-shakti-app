@@ -1994,7 +1994,9 @@
     #dedicatedChoghadiyaPage .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
+      filter: blur(40px);
+      transform: translateZ(0);
+      will-change: transform;
     }
 
     #dedicatedChoghadiyaPage .orb-a { width: 260px; height: 260px; background: var(--orb-gold); top: -70px; left: -50px; }
@@ -4853,7 +4855,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.13
+            APK v5.5.14
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4880,7 +4882,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.13 (बिल्ड कोड: 563)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.14 (बिल्ड कोड: 564)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5738,7 +5740,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.13 (बिल्ड कोड: 563)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.14 (बिल्ड कोड: 564)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -7602,7 +7604,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.13";
+    const APP_VERSION = "5.5.14";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -9708,26 +9710,31 @@
       const now = new Date();
       const diffMs = targetDate.getTime() - now.getTime();
 
-      const nameEl = document.getElementById("nextAmavasyaName");
-      const dateEl = document.getElementById("nextAmavasyaDate");
-      const descEl = document.getElementById("amavasyaTithiDesc");
-
-      if (nameEl) nameEl.innerText = currentNextAmavasya.name;
-      if (dateEl) dateEl.innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${formatDisplayDate(currentNextAmavasya.date)}`;
-      if (descEl) descEl.innerHTML = `<i class="fa-solid fa-om" style="color:#fbbf24;"></i> ${escapeHtml(currentNextAmavasya.desc || 'सत्संग व अंशदान दिवस')}`;
+      let lastAmavasyaRenderedDate = null;
+      if (currentNextAmavasya && currentNextAmavasya.date !== lastAmavasyaRenderedDate) {
+        lastAmavasyaRenderedDate = currentNextAmavasya.date;
+        const nameEl = document.getElementById("nextAmavasyaName");
+        const dateEl = document.getElementById("nextAmavasyaDate");
+        const descEl = document.getElementById("amavasyaTithiDesc");
+        if (nameEl) nameEl.textContent = currentNextAmavasya.name;
+        if (dateEl) dateEl.innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${formatDisplayDate(currentNextAmavasya.date)}`;
+        if (descEl) descEl.innerHTML = `<i class="fa-solid fa-om" style="color:#fbbf24;"></i> ${escapeHtml(currentNextAmavasya.desc || 'सत्संग व अंशदान दिवस')}`;
+      }
 
       if (diffMs <= 0) {
         // Today is Amavasya!
         const isToday = now.toISOString().split('T')[0] === currentNextAmavasya.date;
         if (isToday) {
-          document.getElementById("cdDays").innerText = "00";
-          document.getElementById("cdHours").innerText = "00";
-          document.getElementById("cdMins").innerText = "00";
-          document.getElementById("cdSecs").innerText = "00";
+          const cdD = document.getElementById("cdDays"); if (cdD) cdD.textContent = "00";
+          const cdH = document.getElementById("cdHours"); if (cdH) cdH.textContent = "00";
+          const cdM = document.getElementById("cdMins"); if (cdM) cdM.textContent = "00";
+          const cdS = document.getElementById("cdSecs"); if (cdS) cdS.textContent = "00";
+          const dateEl = document.getElementById("nextAmavasyaDate");
           if (dateEl) dateEl.innerHTML = `🎉 <strong>आज अमावस्या है!</strong>`;
         } else {
           // Switch to next Amavasya
           currentNextAmavasya = getNextAmavasya();
+          lastAmavasyaRenderedDate = null;
         }
         return;
       }
@@ -9741,11 +9748,8 @@
         const el = document.getElementById(id);
         if (!el) return;
         const valStr = String(newVal).padStart(2, '0');
-        if (el.innerText !== valStr) {
-          el.classList.remove('flip-tick');
-          void el.offsetWidth; // trigger reflow
-          el.innerText = valStr;
-          el.classList.add('flip-tick');
+        if (el.textContent !== valStr) {
+          el.textContent = valStr;
         }
       }
 
@@ -9834,6 +9838,7 @@
       renderExpensesSpreadsheet();
       renderLedgerTable();
       handleTransTypeChange();
+      try { if (typeof ysRefreshToolsUi === "function") ysRefreshToolsUi(); } catch (e) {}
     }
 
     function updateSettingsUI() {
@@ -18309,6 +18314,7 @@
     }
 
     // 🌟 Top Bar — "शुभ चौघड़िया" Single-Line Updater
+    let lastTopChoghadiyaSlotKey = "";
     function updateTopShubhChoghadiyaBar() {
       try {
         const now = new Date();
@@ -18326,6 +18332,10 @@
         let currentSlot = all.find(s => nowMs >= s.start.getTime() && nowMs < s.end.getTime());
         if (!currentSlot) currentSlot = all[0];
 
+        const slotKey = currentSlot.name + "_" + currentSlot.tag + "_" + currentSlot.timeWindowStr + "_" + currentChoghadiyaCityObj.id;
+        if (slotKey === lastTopChoghadiyaSlotKey) return;
+        lastTopChoghadiyaSlotKey = slotKey;
+
         const nameEl = document.getElementById("topChoghadiyaName");
         const tagEl = document.getElementById("topChoghadiyaTag");
         const timeEl = document.getElementById("topChoghadiyaTimeWindow");
@@ -18333,9 +18343,9 @@
         const cityPill = document.getElementById("topChoghadiyaCityPill");
         const titleLbl = document.getElementById("topChoghadiyaTitleLabel");
 
-        if (nameEl) nameEl.innerText = currentSlot.name;
+        if (nameEl) nameEl.textContent = currentSlot.name;
         if (tagEl) {
-          tagEl.innerText = currentSlot.tag;
+          tagEl.textContent = currentSlot.tag;
           if (currentSlot.tag === "शुभ") {
             tagEl.style.background = "#dcfce7";
             tagEl.style.color = "#166534";
@@ -18346,8 +18356,8 @@
             tagEl.style.borderColor = "#fca5a5";
           }
         }
-        if (timeEl) timeEl.innerText = currentSlot.timeWindowStr;
-        if (cityPill) cityPill.innerText = currentChoghadiyaCityObj.short.split(" ")[0];
+        if (timeEl) timeEl.textContent = currentSlot.timeWindowStr;
+        if (cityPill) cityPill.textContent = currentChoghadiyaCityObj.short.split(" ")[0];
         if (dotEl) {
           if (currentSlot.tag === "शुभ") {
             dotEl.style.background = "linear-gradient(135deg, #10B981, #059669)";
@@ -18859,12 +18869,12 @@
       updateTopShubhChoghadiyaBar();
       if (choghadiyaLiveTimer) clearInterval(choghadiyaLiveTimer);
       choghadiyaLiveTimer = setInterval(() => {
-        updateTopShubhChoghadiyaBar();
         const p = document.getElementById("dedicatedChoghadiyaPage");
         if (p && p.style.display !== "none") {
           updateChoghadiyaLiveHero();
         }
       }, 1000);
+      setInterval(updateTopShubhChoghadiyaBar, 20000);
     }
 
     function checkAndShowTodayCelebrations() {
@@ -23147,7 +23157,7 @@
       const lb = document.getElementById("ysLangBtn"); if (lb) lb.textContent = ysLang() === "en" ? "🌐 भाषा: English" : "🌐 भाषा: हिंदी";
       const pbl = document.getElementById("pbLangBtn"); if (pbl) pbl.textContent = ysLang() === "en" ? "🌐 हिंदी" : "🌐 English";
     }
-    setInterval(ysRefreshToolsUi, 1500); setTimeout(ysRefreshToolsUi, 500);
+    setTimeout(ysRefreshToolsUi, 500);
 
   
 
