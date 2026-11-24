@@ -1875,70 +1875,734 @@
       color: #4ade80 !important;
     }
 
-    /* Dedicated Choghadiya Full Screen View (iOS 18 Liquid Glass + OLED Dark) */
+    /* ========================================================================= */
+    /* ॐ शुभ चौघड़िया मुहूर्त — द्रिक पंचांग (iOS 18 Liquid Glass & OLED Dark) */
+    /* ========================================================================= */
     #dedicatedChoghadiyaPage {
-      background: #f8fafc;
+      --font-hi: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius-2xl: 28px;
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
-    body.dark-theme #dedicatedChoghadiyaPage {
-      background: #000000 !important;
-      color: #f8fafc !important;
+
+    /* TRUE OLED DARK LIQUID GLASS */
+    #dedicatedChoghadiyaPage[data-theme="dark"],
+    body.dark-theme #dedicatedChoghadiyaPage:not([data-theme="light"]),
+    [data-theme="dark"] #dedicatedChoghadiyaPage {
+      --bg-canvas: #000000;
+      --orb-gold: rgba(245, 158, 11, 0.24);
+      --orb-emerald: rgba(16, 185, 129, 0.20);
+      --orb-indigo: rgba(99, 102, 241, 0.22);
+
+      --glass-surface: rgba(22, 22, 26, 0.74);
+      --glass-elevated: rgba(34, 34, 40, 0.86);
+      --glass-subtle: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-inner-glow: inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+      --glass-shadow: 0 14px 36px -6px rgba(0, 0, 0, 0.88);
+
+      --text-primary: #FFFFFF;
+      --text-secondary: #D4D4D8;
+      --text-muted: #9CA3AF;
+      --brand-accent: #FBBF24;
+      --brand-emerald: #34D399;
+
+      --good-bg: rgba(16, 185, 129, 0.16);
+      --good-border: rgba(52, 211, 153, 0.42);
+      --good-text: #6EE7B7;
+      --good-pill-bg: #059669;
+      --good-pill-fg: #FFFFFF;
+
+      --neutral-bg: rgba(245, 158, 11, 0.15);
+      --neutral-border: rgba(251, 191, 36, 0.40);
+      --neutral-text: #FDE68A;
+      --neutral-pill-bg: #D97706;
+      --neutral-pill-fg: #FFFFFF;
+
+      --bad-bg: rgba(244, 63, 94, 0.16);
+      --bad-border: rgba(251, 113, 133, 0.42);
+      --bad-text: #FDA4AF;
+      --bad-pill-bg: #E11D48;
+      --bad-pill-fg: #FFFFFF;
+
+      --sheet-backdrop: rgba(0, 0, 0, 0.78);
+      --sheet-bg: #121216;
     }
-    body.dark-theme .choghadiya-nav-header {
-      background: rgba(15, 23, 42, 0.96) !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+
+    /* DAY FROSTED LIQUID GLASS */
+    #dedicatedChoghadiyaPage[data-theme="light"],
+    body:not(.dark-theme) #dedicatedChoghadiyaPage:not([data-theme="dark"]),
+    [data-theme="light"] #dedicatedChoghadiyaPage {
+      --bg-canvas: #EDF2F7;
+      --orb-gold: rgba(245, 158, 11, 0.28);
+      --orb-emerald: rgba(16, 185, 129, 0.22);
+      --orb-indigo: rgba(59, 130, 246, 0.22);
+
+      --glass-surface: rgba(255, 255, 255, 0.82);
+      --glass-elevated: rgba(255, 255, 255, 0.94);
+      --glass-subtle: rgba(15, 23, 42, 0.05);
+      --glass-border: rgba(15, 23, 42, 0.12);
+      --glass-inner-glow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+      --glass-shadow: 0 10px 28px -6px rgba(15, 23, 42, 0.10);
+
+      --text-primary: #090D16;
+      --text-secondary: #1E293B;
+      --text-muted: #475569;
+      --brand-accent: #B45309;
+      --brand-emerald: #047857;
+
+      --good-bg: rgba(16, 185, 129, 0.13);
+      --good-border: rgba(5, 150, 105, 0.34);
+      --good-text: #065F46;
+      --good-pill-bg: #059669;
+      --good-pill-fg: #FFFFFF;
+
+      --neutral-bg: rgba(217, 119, 6, 0.13);
+      --neutral-border: rgba(180, 83, 9, 0.34);
+      --neutral-text: #92400E;
+      --neutral-pill-bg: #B45309;
+      --neutral-pill-fg: #FFFFFF;
+
+      --bad-bg: rgba(225, 29, 72, 0.12);
+      --bad-border: rgba(225, 29, 72, 0.34);
+      --bad-text: #9F1239;
+      --bad-pill-bg: #E11D48;
+      --bad-pill-fg: #FFFFFF;
+
+      --sheet-backdrop: rgba(15, 23, 42, 0.55);
+      --sheet-bg: #FFFFFF;
     }
-    body.dark-theme .choghadiya-nav-header h3 {
-      color: #ffffff !important;
+
+    #dedicatedChoghadiyaPage {
+      font-family: var(--font-hi);
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      transition: background 0.3s var(--ease), color 0.3s var(--ease);
     }
-    body.dark-theme .choghadiya-nav-header span#choghadiyaHeaderSub {
-      color: #4ade80 !important;
+
+    #dedicatedChoghadiyaPage .ambient-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
     }
-    body.dark-theme .choghadiya-tab-pills {
-      background: rgba(255, 255, 255, 0.08) !important;
+
+    #dedicatedChoghadiyaPage .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
     }
-    body.dark-theme .choghadiya-tab-pills button.active-pill {
-      background: #1e293b !important;
-      color: #ffffff !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+
+    #dedicatedChoghadiyaPage .orb-a { width: 260px; height: 260px; background: var(--orb-gold); top: -70px; left: -50px; }
+    #dedicatedChoghadiyaPage .orb-b { width: 280px; height: 280px; background: var(--orb-emerald); top: 36%; right: -80px; }
+    #dedicatedChoghadiyaPage .orb-c { width: 240px; height: 240px; background: var(--orb-indigo); bottom: -60px; left: 8%; }
+
+    #dedicatedChoghadiyaPage .screen {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 12px 14px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
-    body.dark-theme .choghadiya-hero-countdown-box {
-      background: rgba(15, 23, 42, 0.8) !important;
-      border-color: rgba(255, 255, 255, 0.15) !important;
+
+    #dedicatedChoghadiyaPage .glass {
+      background: var(--glass-surface);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-inner-glow);
+      border-radius: var(--radius-xl);
     }
-    body.dark-theme #choghadiyaHeroName {
-      color: #ffffff !important;
+
+    #dedicatedChoghadiyaPage .top-header {
+      position: sticky;
+      top: 10px;
+      z-index: 25;
+      padding: 10px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--glass-elevated);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-inner-glow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
-    body.dark-theme #choghadiyaHeroTimeWindow {
-      color: #e2e8f0 !important;
+
+    #dedicatedChoghadiyaPage .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-subtle);
+      color: var(--text-primary);
+      font-family: var(--font-hi);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
     }
-    body.dark-theme #choghadiyaHeroDesc {
-      color: #cbd5e1 !important;
+
+    #dedicatedChoghadiyaPage .back-btn:active,
+    #dedicatedChoghadiyaPage .icon-circle:active,
+    #dedicatedChoghadiyaPage .arrow-btn:active {
+      transform: scale(0.94);
     }
-    body.dark-theme .choghadiya-slot-card {
-      background: rgba(18, 24, 38, 0.85) !important;
-      border-color: rgba(255, 255, 255, 0.10) !important;
+
+    #dedicatedChoghadiyaPage .brand-center {
+      text-align: center;
+      flex: 1;
+      min-width: 0;
     }
-    body.dark-theme .choghadiya-slot-card.active-slot {
-      background: rgba(6, 78, 59, 0.45) !important;
-      border-color: #22c55e !important;
-      box-shadow: 0 0 16px rgba(34, 197, 94, 0.3) !important;
+
+    #dedicatedChoghadiyaPage .brand-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    body.dark-theme .choghadiya-slot-title {
-      color: #ffffff !important;
+
+    #dedicatedChoghadiyaPage .brand-sub {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--brand-emerald);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 1px;
     }
-    body.dark-theme .choghadiya-slot-time {
-      color: #cbd5e1 !important;
+
+    #dedicatedChoghadiyaPage .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    body.dark-theme .choghadiya-slot-desc {
-      color: #94a3b8 !important;
+
+    #dedicatedChoghadiyaPage .icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-subtle);
+      color: var(--text-primary);
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
-    body.dark-theme #choghadiyaSelectedDateText {
-      color: #f8fafc !important;
+
+    #dedicatedChoghadiyaPage .spinning {
+      animation: choghadiyaSpin 0.7s linear infinite;
     }
-    body.dark-theme #choghadiyaCitySelect {
-      background: #1e293b !important;
-      color: #ffffff !important;
-      border-color: #334155 !important;
+
+    @keyframes choghadiyaSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    #dedicatedChoghadiyaPage .controls-card {
+      padding: 13px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    #dedicatedChoghadiyaPage .city-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    #dedicatedChoghadiyaPage .city-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    #dedicatedChoghadiyaPage .city-picker-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-elevated);
+      color: var(--text-primary);
+      font-family: var(--font-hi);
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    #dedicatedChoghadiyaPage .date-bar {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #dedicatedChoghadiyaPage .arrow-btn {
+      height: 38px;
+      padding: 0 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-subtle);
+      color: var(--text-primary);
+      font-family: var(--font-hi);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    #dedicatedChoghadiyaPage .date-pill-btn {
+      height: 38px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-subtle);
+      color: var(--text-primary);
+      font-family: var(--font-hi);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #dedicatedChoghadiyaPage .date-sub-line {
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    #dedicatedChoghadiyaPage .live-badge-mini {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--good-pill-bg);
+      color: var(--good-pill-fg);
+    }
+
+    #dedicatedChoghadiyaPage .sun-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    #dedicatedChoghadiyaPage .sun-card {
+      padding: 12px 14px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    #dedicatedChoghadiyaPage .sun-head {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    #dedicatedChoghadiyaPage .sun-time {
+      font-size: 17px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      margin-top: 2px;
+    }
+
+    #dedicatedChoghadiyaPage .sun-time.rise { color: var(--brand-accent); }
+    #dedicatedChoghadiyaPage .sun-time.set { color: #60A5FA; }
+    #dedicatedChoghadiyaPage[data-theme="light"] .sun-time.set { color: #1D4ED8; }
+
+    #dedicatedChoghadiyaPage .sun-span {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    #dedicatedChoghadiyaPage .active-hero {
+      padding: 16px;
+      border-radius: var(--radius-2xl);
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    #dedicatedChoghadiyaPage .active-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #dedicatedChoghadiyaPage .status-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--brand-emerald);
+    }
+
+    #dedicatedChoghadiyaPage .dot-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+      animation: pulseDotAnim 1.7s infinite;
+    }
+
+    @keyframes pulseDotAnim {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.7; }
+    }
+
+    #dedicatedChoghadiyaPage .period-chip {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--glass-subtle);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+    }
+
+    #dedicatedChoghadiyaPage .active-main {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    #dedicatedChoghadiyaPage .active-name-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #dedicatedChoghadiyaPage .active-name {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    #dedicatedChoghadiyaPage .quality-badge {
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    #dedicatedChoghadiyaPage .active-window {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    #dedicatedChoghadiyaPage .next-banner {
+      padding: 9px 12px;
+      border-radius: var(--radius-md);
+      background: var(--glass-subtle);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+
+    #dedicatedChoghadiyaPage .next-left {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    #dedicatedChoghadiyaPage .next-countdown {
+      color: var(--brand-emerald);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    #dedicatedChoghadiyaPage .progress-track {
+      height: 6px;
+      width: 100%;
+      border-radius: var(--radius-pill);
+      background: var(--glass-subtle);
+      overflow: hidden;
+    }
+
+    #dedicatedChoghadiyaPage .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, #10B981, #FBBF24);
+      transition: width 0.5s ease;
+    }
+
+    #dedicatedChoghadiyaPage .active-desc {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    #dedicatedChoghadiyaPage .tabs-bar {
+      padding: 5px;
+      border-radius: var(--radius-pill);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    #dedicatedChoghadiyaPage .tab-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-hi);
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 9px 12px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s var(--ease);
+    }
+
+    #dedicatedChoghadiyaPage .tab-btn.active {
+      background: var(--glass-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+    }
+
+    #dedicatedChoghadiyaPage .slots-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    #dedicatedChoghadiyaPage .slot-item {
+      padding: 13px 14px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: transform 0.2s var(--ease);
+    }
+
+    #dedicatedChoghadiyaPage .slot-item.current-slot {
+      border-width: 1.5px;
+      transform: scale(1.012);
+    }
+
+    #dedicatedChoghadiyaPage .slot-row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    #dedicatedChoghadiyaPage .slot-left-group {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    #dedicatedChoghadiyaPage .slot-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #dedicatedChoghadiyaPage .slot-name {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    #dedicatedChoghadiyaPage .slot-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    #dedicatedChoghadiyaPage .chalu-pill {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--good-pill-bg);
+      color: var(--good-pill-fg);
+    }
+
+    #dedicatedChoghadiyaPage .slot-time-range {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    #dedicatedChoghadiyaPage .slot-desc {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Semantic Tones */
+    #dedicatedChoghadiyaPage .tone-good { background: var(--good-bg); border-color: var(--good-border); }
+    #dedicatedChoghadiyaPage .tone-good .slot-name, #dedicatedChoghadiyaPage .tone-good .active-name { color: var(--good-text); }
+    #dedicatedChoghadiyaPage .tone-good .slot-tag, #dedicatedChoghadiyaPage .tone-good .quality-badge { background: var(--good-pill-bg); color: var(--good-pill-fg); }
+
+    #dedicatedChoghadiyaPage .tone-neutral { background: var(--neutral-bg); border-color: var(--neutral-border); }
+    #dedicatedChoghadiyaPage .tone-neutral .slot-name, #dedicatedChoghadiyaPage .tone-neutral .active-name { color: var(--neutral-text); }
+    #dedicatedChoghadiyaPage .tone-neutral .slot-tag, #dedicatedChoghadiyaPage .tone-neutral .quality-badge { background: var(--neutral-pill-bg); color: var(--neutral-pill-fg); }
+
+    #dedicatedChoghadiyaPage .tone-bad { background: var(--bad-bg); border-color: var(--bad-border); }
+    #dedicatedChoghadiyaPage .tone-bad .slot-name, #dedicatedChoghadiyaPage .tone-bad .active-name { color: var(--bad-text); }
+    #dedicatedChoghadiyaPage .tone-bad .slot-tag, #dedicatedChoghadiyaPage .tone-bad .quality-badge { background: var(--bad-pill-bg); color: var(--bad-pill-fg); }
+
+    /* City Modal Sheet */
+    #dedicatedChoghadiyaPage .modal-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      background: var(--sheet-backdrop);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    #dedicatedChoghadiyaPage .modal-bg.open { display: flex; }
+
+    #dedicatedChoghadiyaPage .modal-box {
+      width: 100%;
+      max-width: 480px;
+      background: var(--sheet-bg);
+      border-top: 1px solid var(--glass-border);
+      border-radius: 26px 26px 0 0;
+      padding: 18px 16px 28px;
+      max-height: 78vh;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #dedicatedChoghadiyaPage .modal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #dedicatedChoghadiyaPage .modal-heading {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    #dedicatedChoghadiyaPage .search-box {
+      width: 100%;
+      padding: 10px 13px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-subtle);
+      color: var(--text-primary);
+      font-family: var(--font-hi);
+      font-size: 13.5px;
+      font-weight: 600;
+      outline: none;
+    }
+
+    #dedicatedChoghadiyaPage .city-options {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #dedicatedChoghadiyaPage .city-item {
+      padding: 11px 13px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-subtle);
+      color: var(--text-primary);
+      font-family: var(--font-hi);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #dedicatedChoghadiyaPage .city-item.active {
+      border-color: var(--brand-accent);
+      background: var(--neutral-bg);
+    }
+
+    #dedicatedChoghadiyaPage .city-item-title { font-size: 14px; font-weight: 800; color: var(--text-primary); }
+    #dedicatedChoghadiyaPage .city-item-sub { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+
+    #dedicatedChoghadiyaPage #dateInputHidden {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
     }
 
     /* Theme Card Selector in Settings */
@@ -4183,7 +4847,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.8
+            APK v5.5.9
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4210,7 +4874,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.8 (बिल्ड कोड: 558)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.9 (बिल्ड कोड: 559)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5068,7 +5732,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.8 (बिल्ड कोड: 558)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.9 (बिल्ड कोड: 559)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -6794,168 +7458,156 @@
   <!-- ========================================================================= -->
   <!-- 🕉️ समर्पित शुभ चौघड़िया मुहूर्त पेज (Dedicated Choghadiya Muhurat Full Page) -->
   <!-- ========================================================================= -->
-  <div id="dedicatedChoghadiyaPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:var(--bg-color, #f8fafc); overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
+  <div id="dedicatedChoghadiyaPage" data-theme="dark" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:var(--bg-canvas); overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch;">
     
-    <!-- Top Sticky Apple iOS Header Bar -->
-    <div class="choghadiya-nav-header" style="position:sticky; top:0; z-index:100; background:rgba(255, 255, 255, 0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(0, 0, 0, 0.08); padding:10px 14px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.03);">
-      <button onclick="closeDedicatedChoghadiyaPage()" style="border:none; background:rgba(0,0,0,0.06); color:var(--text-main, #0f172a); padding:7px 12px; border-radius:12px; font-weight:700; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
-        <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
-      </button>
-      <div style="text-align:center;">
-        <h3 style="margin:0; font-size:15px; font-weight:800; color:var(--text-main, #0f172a); display:flex; align-items:center; justify-content:center; gap:6px;">
-          <i class="fa-solid fa-om" style="color:#16a34a;"></i>
-          <span>शुभ चौघड़िया मुहूर्त</span>
-        </h3>
-        <span style="font-size:10.5px; color:#16a34a; font-weight:700;" id="choghadiyaHeaderSub">द्रिक पंचांग • कुचेरा (नागौर)</span>
-      </div>
-      <button onclick="refreshChoghadiyaData(true)" title="रीफ्रेश / सिंक करें" style="border:none; background:rgba(22, 163, 74, 0.1); color:#16a34a; width:34px; height:34px; border-radius:12px; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
-        <i class="fa-solid fa-arrows-rotate" id="choghadiyaRefreshIcon"></i>
-      </button>
+    <!-- Ambient Liquid Orbs -->
+    <div class="ambient-layer">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <div class="orb orb-c"></div>
     </div>
 
-    <!-- Page Body Container -->
-    <div style="padding:14px; max-width:600px; margin:0 auto; width:100%; box-sizing:border-box;">
-      
-      <!-- City & Date Selector Card -->
-      <div class="ios-glass-card" style="background:var(--card-bg, #ffffff); border:1px solid var(--border-color, #e2e8f0); border-radius:18px; padding:12px 14px; margin-bottom:12px; box-shadow:0 4px 14px rgba(0,0,0,0.04);">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;">
-          <div style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:800; color:var(--text-main, #0f172a);">
-            <i class="fa-solid fa-location-dot" style="color:#ef4444;"></i>
-            <span>स्थान (City):</span>
+    <div class="screen">
+      <!-- Top Bar -->
+      <header class="top-header">
+        <button class="back-btn" id="backActionBtn" type="button">
+          <span>←</span>
+          <span>वापस</span>
+        </button>
+
+        <div class="brand-center">
+          <div class="brand-title">ॐ शुभ चौघड़िया मुहूर्त</div>
+          <div class="brand-sub" id="syncStatusLabel">
+            <span>द्रिक पंचांग •</span>
+            <span id="headerCitySub">कुचेरा (नागौर)</span>
           </div>
-          <select id="choghadiyaCitySelect" onchange="onChoghadiyaCityChange(this.value)" style="flex:1; max-width:210px; padding:6px 10px; border-radius:10px; border:1px solid var(--border-color, #cbd5e1); font-size:12.5px; font-weight:700; color:var(--text-main, #0f172a); background:var(--card-bg, #ffffff);">
-            <option value="kuchera">कुचेरा (नागौर)</option>
-            <option value="nagaur">नागौर (Nagaur)</option>
-            <option value="jodhpur">जोधपुर (Jodhpur)</option>
-            <option value="jaipur">जयपुर (Jaipur)</option>
-            <option value="bikaner">बीकानेर (Bikaner)</option>
-            <option value="ajmer">अजमेर (Ajmer)</option>
-            <option value="delhi">दिल्ली (Delhi)</option>
-            <option value="ahmedabad">अहमदाबाद (Ahmedabad)</option>
-            <option value="mumbai">मुंबई (Mumbai)</option>
-          </select>
         </div>
 
-        <!-- Date Controls -->
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
-          <button onclick="shiftChoghadiyaDate(-1)" class="btn-sub" style="flex:none; padding:7px 11px; font-size:11.5px; border-radius:10px; border:1px solid var(--border-color, #cbd5e1); background:var(--card-bg, #ffffff); color:var(--text-main, #0f172a); font-weight:700; cursor:pointer;">
-            <i class="fa-solid fa-chevron-left"></i> पिछला
-          </button>
-          <button onclick="resetChoghadiyaToToday()" class="btn-main" style="flex:1; padding:7px 11px; font-size:12px; border-radius:10px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; font-weight:800; cursor:pointer;">
-            <i class="fa-solid fa-calendar-day"></i> <span id="choghadiyaTodayBtnText">आज का मुहूर्त</span>
-          </button>
-          <button onclick="shiftChoghadiyaDate(1)" class="btn-sub" style="flex:none; padding:7px 11px; font-size:11.5px; border-radius:10px; border:1px solid var(--border-color, #cbd5e1); background:var(--card-bg, #ffffff); color:var(--text-main, #0f172a); font-weight:700; cursor:pointer;">
-            अगला <i class="fa-solid fa-chevron-right"></i>
+        <div class="header-actions">
+          <button class="icon-circle" id="refreshBtn" type="button" title="रिफ्रेश करें" aria-label="रिफ्रेश करें">↻</button>
+          <button class="icon-circle" id="themeBtn" type="button" title="थीम बदलें" aria-label="थीम बदलें">☀️</button>
+        </div>
+      </header>
+
+      <!-- Location & Date Controls -->
+      <section class="glass controls-card">
+        <div class="city-row">
+          <span class="city-label">📍 स्थान (City):</span>
+          <button class="city-picker-btn" id="openCityBtn" type="button">
+            <span id="cityBtnText">कुचेरा (नागौर)</span>
+            <span style="font-size:10px; opacity:0.75;">▼</span>
           </button>
         </div>
 
-        <div style="text-align:center; margin-top:10px;">
-          <input type="date" id="choghadiyaDatePicker" onchange="onChoghadiyaDatePicked(this.value)" style="display:inline-block; width:auto; padding:5px 12px; font-size:12px; font-weight:700; border-radius:8px; border:1px solid var(--border-color, #cbd5e1); background:var(--bg-color, #f1f5f9); color:var(--text-main, #0f172a); cursor:pointer;">
-          <div id="choghadiyaSelectedDateText" style="font-size:12.5px; font-weight:800; color:var(--text-main, #0f172a); margin-top:5px;">
-            सोमवार, 23 नवंबर 2026
-          </div>
+        <div class="date-bar">
+          <button class="arrow-btn" id="prevDayBtn" type="button">‹ पिछला</button>
+          <button class="date-pill-btn" id="datePickerBtn" type="button">
+            <span id="dateShortText">24/11/2026</span>
+            <span>📅</span>
+          </button>
+          <button class="arrow-btn" id="nextDayBtn" type="button">अगला ›</button>
+          <input type="date" id="dateInputHidden" />
         </div>
-      </div>
 
-      <!-- Solar Times (सूर्योदय एवं सूर्यास्त) -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
-        <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(254, 243, 199, 0.7) 0%, rgba(255, 251, 235, 0.5) 100%); border:1px solid rgba(245, 158, 11, 0.35); border-radius:16px; padding:10px 12px; text-align:center;">
-          <div style="font-size:11px; font-weight:700; color:#b45309; display:flex; align-items:center; justify-content:center; gap:5px;">
-            <i class="fa-solid fa-sun" style="color:#f59e0b; font-size:13px;"></i> <span>सूर्योदय (Sunrise)</span>
-          </div>
-          <div id="choghadiyaSunriseText" style="font-size:17px; font-weight:900; color:#b45309; margin-top:2px;">07:01 AM</div>
-          <div id="choghadiyaDayLengthText" style="font-size:10px; color:#92400e; font-weight:600;">दिनमान: 10h 41m</div>
+        <div class="date-sub-line">
+          <span id="dateFullHindi">सोमवार, 23 नवम्बर 2026</span>
+          <span class="live-badge-mini" id="todayPill">आज</span>
         </div>
-        <div class="ios-glass-card" style="background:linear-gradient(135deg, rgba(239, 246, 255, 0.7) 0%, rgba(219, 234, 254, 0.5) 100%); border:1px solid rgba(59, 130, 246, 0.35); border-radius:16px; padding:10px 12px; text-align:center;">
-          <div style="font-size:11px; font-weight:700; color:#1e40af; display:flex; align-items:center; justify-content:center; gap:5px;">
-            <i class="fa-solid fa-moon" style="color:#3b82f6; font-size:13px;"></i> <span>सूर्यास्त (Sunset)</span>
-          </div>
-          <div id="choghadiyaSunsetText" style="font-size:17px; font-weight:900; color:#1e40af; margin-top:2px;">05:42 PM</div>
-          <div id="choghadiyaNightLengthText" style="font-size:10px; color:#1e3a8a; font-weight:600;">रात्रिमान: 13h 19m</div>
-        </div>
-      </div>
+      </section>
 
-      <!-- Live Active Choghadiya Hero Card -->
-      <div id="choghadiyaActiveHeroCard" class="ios-glass-card" style="background:linear-gradient(135deg, rgba(22, 163, 74, 0.14) 0%, rgba(5, 150, 105, 0.06) 100%); border:1.5px solid #22c55e; border-radius:18px; padding:14px; margin-bottom:14px; box-shadow:0 6px 20px rgba(34, 197, 94, 0.15); position:relative; overflow:hidden;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <div style="display:flex; align-items:center; gap:6px;">
-            <span class="live-pulse-dot" style="width:8px; height:8px; border-radius:50%; background:#22c55e; display:inline-block; box-shadow:0 0 8px #22c55e;"></span>
-            <span style="font-size:11px; font-weight:800; color:#15803d; letter-spacing:0.3px;">वर्तमान सक्रिय चौघड़िया</span>
-          </div>
-          <span id="choghadiyaHeroSlotBadge" style="font-size:10px; font-weight:800; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:10px; border:1px solid #86efac;">
-            रात का चौघड़िया • #4
+      <!-- Sunrise & Sunset -->
+      <section class="sun-row">
+        <div class="glass sun-card">
+          <div class="sun-head">☀️ सूर्योदय (Sunrise)</div>
+          <div class="sun-time rise" id="sunriseVal">--:-- AM</div>
+          <div class="sun-span" id="daySpanVal">दिनमान: --h --m</div>
+        </div>
+        <div class="glass sun-card">
+          <div class="sun-head">🌙 सूर्यास्त (Sunset)</div>
+          <div class="sun-time set" id="sunsetVal">--:-- PM</div>
+          <div class="sun-span" id="nightSpanVal">रात्रिमान: --h --m</div>
+        </div>
+      </section>
+
+      <!-- Current Active Choghadiya Hero -->
+      <section class="glass active-hero tone-good" id="activeHeroCard">
+        <div class="active-top">
+          <span class="status-live">
+            <span class="dot-pulse"></span>
+            <span id="activeHeadingText">वर्तमान सक्रिय चौघड़िया</span>
           </span>
+          <span class="period-chip" id="activeSlotMeta">रात का चौघड़िया • #4</span>
         </div>
 
-        <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:6px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <h2 id="choghadiyaHeroName" style="font-size:24px; font-weight:900; margin:0; color:#0f172a; letter-spacing:-0.5px;">लाभ</h2>
-            <span id="choghadiyaHeroQualityBadge" style="font-size:11px; font-weight:800; background:#16a34a; color:white; padding:2px 8px; border-radius:8px;">शुभ (उत्तम)</span>
+        <div class="active-main">
+          <div class="active-name-wrap">
+            <span class="active-name" id="activeNameText">लाभ</span>
+            <span class="quality-badge" id="activeQualityText">शुभ</span>
           </div>
-          <div id="choghadiyaHeroTimeWindow" style="font-size:13.5px; font-weight:800; color:#334155;">
-            10:42 PM - 12:22 AM
-          </div>
+          <div class="active-window" id="activeRangeText">10:42 PM - 12:22 AM</div>
         </div>
 
-        <!-- Countdown to Next Slot -->
-        <div class="choghadiya-hero-countdown-box" style="margin-top:10px; background:rgba(255, 255, 255, 0.7); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid rgba(0,0,0,0.06); border-radius:12px; padding:7px 12px; display:flex; align-items:center; justify-content:space-between;">
-          <div style="font-size:11.5px; font-weight:700; color:var(--text-main, #1e293b); display:flex; align-items:center; gap:6px;">
-            <i class="fa-solid fa-hourglass-half" style="color:#16a34a;"></i>
-            <span>अगला चौघड़िया:</span>
-            <span id="choghadiyaNextName" style="font-weight:800; color:#dc2626;">उद्वेग (अशुभ)</span>
-          </div>
-          <div id="choghadiyaCountdownTicker" style="font-size:12.5px; font-weight:900; color:#16a34a; font-variant-numeric:tabular-nums;">
-            01h 22m 14s बाद
-          </div>
+        <div class="next-banner">
+          <span class="next-left">
+            <span>⏳ अगला चौघड़िया:</span>
+            <strong id="nextSlotNameText">उद्वेग (अशुभ)</strong>
+          </span>
+          <span class="next-countdown" id="countdownText">--m --s बाद</span>
         </div>
 
-        <div id="choghadiyaHeroDesc" style="font-size:11.5px; font-weight:600; color:#475569; margin-top:8px; line-height:1.4;">
-          बुध ग्रह • व्यापार, लेन-देन, नए कार्य व खरीदारी हेतु अत्यंत लाभदायक।
+        <div class="progress-track">
+          <div class="progress-fill" id="slotProgressBar"></div>
         </div>
+
+        <div class="active-desc" id="activeDescText">
+          बुध • व्यापार, धन लाभ, नई नौकरी, बहीखाता व खरीदारी हेतु श्रेष्ठ।
+        </div>
+      </section>
+
+      <!-- Day / Night Switch -->
+      <div class="glass tabs-bar">
+        <button class="tab-btn" id="dayTabBtn" type="button">☀️ दिन का चौघड़िया (Day)</button>
+        <button class="tab-btn active" id="nightTabBtn" type="button">🌙 रात्रि का चौघड़िया (Night)</button>
       </div>
 
-      <!-- Day & Night Switcher Pills -->
-      <div class="choghadiya-tab-pills" style="display:flex; background:rgba(0,0,0,0.05); padding:4px; border-radius:14px; margin-bottom:12px; gap:4px;">
-        <button id="btnChoghadiyaDayTab" onclick="switchChoghadiyaViewMode('day')" class="active-pill" style="flex:1; border:none; padding:8px 12px; border-radius:10px; font-size:12.5px; font-weight:800; cursor:pointer; background:#ffffff; color:#0f172a; box-shadow:0 2px 6px rgba(0,0,0,0.08); display:flex; align-items:center; justify-content:center; gap:6px;">
-          <i class="fa-solid fa-sun" style="color:#f59e0b;"></i> <span>दिन का चौघड़िया (Day)</span>
-        </button>
-        <button id="btnChoghadiyaNightTab" onclick="switchChoghadiyaViewMode('night')" style="flex:1; border:none; padding:8px 12px; border-radius:10px; font-size:12.5px; font-weight:700; cursor:pointer; background:none; color:#64748b; display:flex; align-items:center; justify-content:center; gap:6px;">
-          <i class="fa-solid fa-moon" style="color:#6366f1;"></i> <span>रात का चौघड़िया (Night)</span>
-        </button>
-      </div>
+      <!-- 8 Choghadiya Slots -->
+      <main class="slots-stack" id="slotsContainer"></main>
 
-      <!-- Choghadiya Slots List (8 Slots) -->
-      <div id="choghadiyaSlotsContainer" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
-        <!-- Dynamically rendered by JS -->
-      </div>
-
-      <!-- Drik Panchang Sync & Attribution Footer -->
-      <div class="ios-glass-card" style="background:var(--card-bg, #ffffff); border:1px solid var(--border-color, #e2e8f0); border-radius:16px; padding:12px; text-align:center; margin-bottom:24px;">
-        <div style="font-size:11.5px; font-weight:800; color:var(--text-main, #0f172a); display:flex; align-items:center; justify-content:center; gap:6px;">
-          <i class="fa-solid fa-satellite-dish" style="color:#16a34a;"></i>
+      <!-- Attribution Footer -->
+      <div class="glass" style="padding:12px; text-align:center; font-size:11.5px; font-weight:700; color:var(--text-secondary); margin-top:4px;">
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px; color:var(--text-primary); font-weight:800;">
+          <i class="fa-solid fa-satellite-dish" style="color:var(--brand-emerald);"></i>
           <span>स्रोत: द्रिक पंचांग (Drik Panchang) मानक</span>
         </div>
-        <div id="choghadiyaSyncStatusText" style="font-size:10.5px; color:#16a34a; font-weight:700; margin-top:2px;">
-          स्थिति: सत्यापित • लाइव सिंक सक्रिय
-        </div>
-        <div id="choghadiyaLastSyncTime" style="font-size:10px; color:var(--text-muted, #64748b); margin-top:2px;">
-          अंतिम अपडेट: 23/11/2026
+        <div style="font-size:10.5px; color:var(--brand-emerald); margin-top:3px;" id="choghadiyaSyncSubText">
+          सटीक वैदिक खगोलीय सूर्य सिद्धांत पर आधारित लाइव गणना
         </div>
         <div style="margin-top:8px;">
-          <button onclick="openExternalDrikPanchang()" style="border:none; background:rgba(37,99,235,0.08); color:#2563eb; padding:5px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+          <button onclick="openExternalDrikPanchang()" style="border:1px solid var(--glass-border); background:var(--glass-subtle); color:var(--text-primary); padding:5px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
             <span>drikpanchang.com पर देखें</span>
           </button>
         </div>
       </div>
+    </div>
 
+    <!-- City Modal -->
+    <div class="modal-bg" id="cityModal">
+      <div class="modal-box">
+        <div class="modal-top">
+          <span class="modal-heading">📍 शहर चुनें</span>
+          <button class="icon-circle" id="closeCityModalBtn" type="button">✕</button>
+        </div>
+        <input type="text" class="search-box" id="citySearchBox" placeholder="कुचेरा, नागौर, जोधपुर, जयपुर..." />
+        <div class="city-options" id="cityOptionsList"></div>
+      </div>
     </div>
   </div>
 
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.8";
+    const APP_VERSION = "5.5.9";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -17461,322 +18113,176 @@
     }
 
     // =========================================================================
-    // 🕉️ AUTO-UPDATING CHOGHADIYA VIA DRIK PANCHANG & ASTRONOMICAL ENGINE
+    // 🕉️ ॐ शुभ चौघड़िया मुहूर्त — द्रिक पंचांग इंजन (Liquid Glass Engine)
     // =========================================================================
 
-    const CHOGHADIYA_CITIES = {
-      "kuchera": { name: "कुचेरा (नागौर)", lat: 26.9858, lon: 73.9678, tz: 5.5 },
-      "nagaur": { name: "नागौर (Nagaur)", lat: 27.2000, lon: 73.7400, tz: 5.5 },
-      "jodhpur": { name: "जोधपुर (Jodhpur)", lat: 26.2389, lon: 73.0243, tz: 5.5 },
-      "jaipur": { name: "जयपुर (Jaipur)", lat: 26.9124, lon: 75.7873, tz: 5.5 },
-      "bikaner": { name: "बीकानेर (Bikaner)", lat: 28.0229, lon: 73.3119, tz: 5.5 },
-      "ajmer": { name: "अजमेर (Ajmer)", lat: 26.4499, lon: 74.6399, tz: 5.5 },
-      "delhi": { name: "दिल्ली (Delhi)", lat: 28.6139, lon: 77.2090, tz: 5.5 },
-      "ahmedabad": { name: "अहमदाबाद (Ahmedabad)", lat: 23.0225, lon: 72.5714, tz: 5.5 },
-      "mumbai": { name: "मुंबई (Mumbai)", lat: 19.0760, lon: 72.8777, tz: 5.5 }
-    };
-
-    const CHOGHADIYA_TYPES = {
-      "अमृत": { quality: "शुभ", grade: "सर्वोत्तम शुभ", color: "#16a34a", bg: "rgba(34, 197, 94, 0.14)", border: "#86efac", icon: "fa-gem", planet: "चन्द्रमा", desc: "सभी कार्यों के लिए अमृततुल्य व सर्वोत्तम मुहूर्त। सर्वकार्य सिद्धि होती है।" },
-      "शुभ": { quality: "शुभ", grade: "उत्तम शुभ", color: "#16a34a", bg: "rgba(34, 197, 94, 0.12)", border: "#86efac", icon: "fa-circle-check", planet: "बृहस्पति", desc: "मांगलिक, धार्मिक कार्य, विवाह, पूजा एवं उत्सव हेतु अत्यंत उत्तम।" },
-      "लाभ": { quality: "शुभ", grade: "लाभदायक शुभ", color: "#059669", bg: "rgba(16, 185, 129, 0.14)", border: "#6ee7b7", icon: "fa-arrow-trend-up", planet: "बुध", desc: "व्यापार, धन लाभ, नई नौकरी, बहीखाता व खरीदारी हेतु श्रेष्ठ।" },
-      "चर": { quality: "शुभ", grade: "सामान्य शुभ", color: "#2563eb", bg: "rgba(37, 99, 235, 0.12)", border: "#93c5fd", icon: "fa-plane-departure", planet: "शुक्र", desc: "यात्रा, वाहन, पर्यटन, संदेश व गतिशील कार्यों हेतु शुभ मुहूर्त।" },
-      "उद्वेग": { quality: "अशुभ", grade: "अशुभ (मध्यम)", color: "#ea580c", bg: "rgba(234, 88, 12, 0.12)", border: "#fdba74", icon: "fa-triangle-exclamation", planet: "सूर्य", desc: "चिंता व तनाव कारक, सरकारी कार्यों को छोड़कर अन्य में वर्जित।" },
-      "काल": { quality: "अशुभ", grade: "अशुभ (हानिकारक)", color: "#dc2626", bg: "rgba(220, 38, 38, 0.14)", border: "#fca5a5", icon: "fa-skull-crossbones", planet: "शनि", desc: "हानि व कलह का समय, धन निवेश व शुभ कार्य पूरी तरह वर्जित।" },
-      "रोग": { quality: "अशुभ", grade: "अशुभ (कष्टकारी)", color: "#b91c1c", bg: "rgba(185, 28, 28, 0.14)", border: "#fca5a5", icon: "fa-heart-crack", planet: "मंगल", desc: "रोग व कष्ट का समय, कोई भी शुभ या मांगलिक कार्य न करें।" }
-    };
-
-    const CHOGHADIYA_DAY_SEQUENCES = [
-      ["उद्वेग", "चर", "लाभ", "अमृत", "काल", "शुभ", "रोग", "उद्वेग"], // 0: रवि
-      ["अमृत", "काल", "शुभ", "रोग", "उद्वेग", "चर", "लाभ", "अमृत"], // 1: सोम
-      ["रोग", "उद्वेग", "चर", "लाभ", "अमृत", "काल", "शुभ", "रोग"], // 2: मंगल
-      ["लाभ", "अमृत", "काल", "शुभ", "रोग", "उद्वेग", "चर", "लाभ"], // 3: बुध
-      ["शुभ", "रोग", "उद्वेग", "चर", "लाभ", "अमृत", "काल", "शुभ"], // 4: गुरु
-      ["चर", "लाभ", "अमृत", "काल", "शुभ", "रोग", "उद्वेग", "चर"], // 5: शुक्र
-      ["काल", "शुभ", "रोग", "उद्वेग", "चर", "लाभ", "अमृत", "काल"]  // 6: शनि
+    const CHOGHADIYA_CITIES_LIST = [
+      { id: "kuchera", name: "कुचेरा (नागौर)", short: "कुचेरा (नागौर)", lat: 26.9850, lon: 73.9720 },
+      { id: "nagaur", name: "नागौर, राजस्थान", short: "नागौर", lat: 27.2020, lon: 73.7336 },
+      { id: "jodhpur", name: "जोधपुर, राजस्थान", short: "जोधपुर", lat: 26.2389, lon: 73.0243 },
+      { id: "jaipur", name: "जयपुर, राजस्थान", short: "जयपुर", lat: 26.9124, lon: 75.7873 },
+      { id: "bikaner", name: "बीकानेर, राजस्थान", short: "बीकानेर", lat: 28.0229, lon: 73.3119 },
+      { id: "ajmer", name: "अजमेर, राजस्थान", short: "अजमेर", lat: 26.4499, lon: 74.6399 },
+      { id: "udaipur", name: "उदयपुर, राजस्थान", short: "उदयपुर", lat: 24.5854, lon: 73.7125 },
+      { id: "delhi", name: "नई दिल्ली", short: "नई दिल्ली", lat: 28.6139, lon: 77.2090 }
     ];
 
-    const CHOGHADIYA_NIGHT_SEQUENCES = [
-      ["शुभ", "अमृत", "चर", "रोग", "काल", "लाभ", "उद्वेग", "शुभ"], // 0: रवि
-      ["चर", "रोग", "काल", "लाभ", "उद्वेग", "शुभ", "अमृत", "चर"], // 1: सोम
-      ["काल", "लाभ", "उद्वेग", "शुभ", "अमृत", "चर", "रोग", "काल"], // 2: मंगल
-      ["उद्वेग", "शुभ", "अमृत", "चर", "रोग", "काल", "लाभ", "उद्वेग"], // 3: बुध
-      ["अमृत", "चर", "रोग", "काल", "लाभ", "उद्वेग", "शुभ", "अमृत"], // 4: गुरु
-      ["रोग", "काल", "लाभ", "उद्वेग", "शुभ", "अमृत", "चर", "रोग"], // 5: शुक्र
-      ["लाभ", "उद्वेग", "शुभ", "अमृत", "चर", "रोग", "काल", "लाभ"]  // 6: शनि
+    const CHOGHADIYA_META = {
+      "अमृत":  { tag: "शुभ",   tone: "good",    desc: "चंद्र • सभी मांगलिक, शुभ व नवीन कार्यों के लिए सर्वोत्तम मुहूर्त।" },
+      "शुभ":   { tag: "शुभ",   tone: "good",    desc: "गुरु • विवाह, पूजा-पाठ, गृह प्रवेश व शुभ कार्यों के लिए उत्तम।" },
+      "लाभ":   { tag: "शुभ",   tone: "good",    desc: "बुध • व्यापार, धन लाभ, नई नौकरी, बहीखाता व खरीदारी हेतु श्रेष्ठ।" },
+      "चर":    { tag: "शुभ",   tone: "neutral", desc: "शुक्र • यात्रा, वाहन, पर्यटन, संदेश व गतिशील कार्यों हेतु शुभ मुहूर्त।" },
+      "उद्वेग": { tag: "अशुभ",  tone: "bad",     desc: "सूर्य • चिंता व तनाव कारक, सरकारी कार्यों को छोड़कर अन्य में वर्जित।" },
+      "काल":   { tag: "अशुभ",  tone: "bad",     desc: "शनि • हानि व कलह का समय, धन निवेश व शुभ कार्य पूरी तरह वर्जित।" },
+      "रोग":   { tag: "अशुभ",  tone: "bad",     desc: "मंगल • रोग व कष्ट का समय, कोई भी शुभ या मांगलिक कार्य न करें।" }
+    };
+
+    const CHOGHADIYA_DAY_SEQ = [
+      ["उद्वेग", "चर", "लाभ", "अमृत", "काल", "शुभ", "रोग", "उद्वेग"],
+      ["अमृत", "काल", "शुभ", "रोग", "उद्वेग", "चर", "लाभ", "अमृत"],
+      ["रोग", "उद्वेग", "चर", "लाभ", "अमृत", "काल", "शुभ", "रोग"],
+      ["लाभ", "अमृत", "काल", "शुभ", "रोग", "उद्वेग", "चर", "लाभ"],
+      ["शुभ", "रोग", "उद्वेग", "चर", "लाभ", "अमृत", "काल", "शुभ"],
+      ["चर", "लाभ", "अमृत", "काल", "शुभ", "रोग", "उद्वेग", "चर"],
+      ["काल", "शुभ", "रोग", "उद्वेग", "चर", "लाभ", "अमृत", "काल"]
     ];
 
-    let currentChoghadiyaCity = localStorage.getItem("ysg_selected_choghadiya_city") || "kuchera";
-    let currentChoghadiyaDate = new Date();
-    let currentChoghadiyaViewMode = "auto";
+    const CHOGHADIYA_NIGHT_SEQ = [
+      ["शुभ", "अमृत", "चर", "रोग", "काल", "लाभ", "उद्वेग", "शुभ"],
+      ["चर", "रोग", "काल", "लाभ", "उद्वेग", "शुभ", "अमृत", "चर"],
+      ["काल", "लाभ", "उद्वेग", "शुभ", "अमृत", "चर", "रोग", "काल"],
+      ["उद्वेग", "शुभ", "अमृत", "चर", "रोग", "काल", "लाभ", "उद्वेग"],
+      ["अमृत", "चर", "रोग", "काल", "लाभ", "उद्वेग", "शुभ", "अमृत"],
+      ["रोग", "काल", "लाभ", "उद्वेग", "शुभ", "अमृत", "चर", "रोग"],
+      ["लाभ", "उद्वेग", "शुभ", "अमृत", "चर", "रोग", "काल", "लाभ"]
+    ];
+
+    let currentChoghadiyaCityObj = CHOGHADIYA_CITIES_LIST.find(c => c.id === localStorage.getItem("ysg_selected_choghadiya_city")) || CHOGHADIYA_CITIES_LIST[0];
+    let choghadiyaCurrentDate = new Date();
+    choghadiyaCurrentDate.setHours(0, 0, 0, 0);
+    let choghadiyaActiveTab = "day";
+    let choghadiyaTheme = "dark";
+    let choghadiyaScheduleData = { day: [], night: [], sunrise: null, sunset: null, nextSunrise: null };
     let choghadiyaLiveTimer = null;
-    let choghadiyaLastSyncTime = null;
 
-    // 🌞 NOAA High-Precision Astronomical Sunrise/Sunset Engine
-    function calculateAstronomicalSunTimes(lat, lon, date) {
+    function getSunTimes(dateObj, lat, lon) {
+      const start = new Date(dateObj.getFullYear(), 0, 0);
+      const dayOfYear = Math.floor((dateObj - start) / 86400000);
       const rad = Math.PI / 180;
       const deg = 180 / Math.PI;
+      const zenith = 90.833;
 
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
+      function calc(isRise) {
+        const lngHour = lon / 15;
+        const t = dayOfYear + ((isRise ? 6 : 18) - lngHour) / 24;
+        const M = (0.9856 * t) - 3.289;
+        let L = M + (1.916 * Math.sin(M * rad)) + (0.020 * Math.sin(2 * M * rad)) + 282.634;
+        L = (L + 360) % 360;
 
-      let a = Math.floor((14 - month) / 12);
-      let y = year + 4800 - a;
-      let m = month + 12 * a - 3;
-      let jd = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+        let RA = deg * Math.atan(0.91764 * Math.tan(L * rad));
+        RA = (RA + 360) % 360;
+        const lQ = Math.floor(L / 90) * 90;
+        const rQ = Math.floor(RA / 90) * 90;
+        RA = (RA + (lQ - rQ)) / 15;
 
-      const n = jd - 2451545.0 + 0.0008;
-      const Jstar = n - lon / 360;
-      const M = (357.5291 + 0.98560028 * Jstar) % 360;
-      const C = 1.9148 * Math.sin(M * rad) + 0.0200 * Math.sin(2 * M * rad) + 0.0003 * Math.sin(3 * M * rad);
-      const lambda = (M + C + 180 + 102.9372) % 360;
-      const Jtransit = 2451545.0 + Jstar + 0.0053 * Math.sin(M * rad) - 0.0069 * Math.sin(2 * lambda * rad);
+        const sinDec = 0.39782 * Math.sin(L * rad);
+        const cosDec = Math.cos(Math.asin(sinDec));
+        const cosH = (Math.cos(zenith * rad) - (sinDec * Math.sin(lat * rad))) / (cosDec * Math.cos(lat * rad));
+        let H = isRise ? (360 - deg * Math.acos(cosH)) : (deg * Math.acos(cosH));
+        H /= 15;
 
-      const delta = Math.asin(Math.sin(lambda * rad) * Math.sin(23.44 * rad));
-      const cosOmega0 = (Math.sin(-0.8333 * rad) - Math.sin(lat * rad) * Math.sin(delta)) / (Math.cos(lat * rad) * Math.cos(delta));
+        const T = H + RA - (0.06571 * t) - 6.622;
+        let UT = (T - lngHour) % 24;
+        if (UT < 0) UT += 24;
 
-      if (cosOmega0 > 1 || cosOmega0 < -1) return null;
-
-      const omega0 = Math.acos(cosOmega0) * deg;
-      const Jrise = Jtransit - omega0 / 360;
-      const Jset = Jtransit + omega0 / 360;
-
-      function jdToDate(j) {
-        return new Date((j - 2440587.5) * 86400000);
+        const ist = (UT + 5.5) % 24;
+        const hrs = Math.floor(ist);
+        const mins = Math.round((ist - hrs) * 60);
+        return new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), hrs, mins, 0, 0);
       }
 
-      return {
-        sunrise: jdToDate(Jrise),
-        sunset: jdToDate(Jset)
-      };
+      return { sunrise: calc(true), sunset: calc(false) };
     }
 
-    function formatChoghadiyaTime12(date) {
-      if (!date || isNaN(date.getTime())) return "--:--";
-      let hours = date.getHours();
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      return `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+    function formatChoghadiya12(d) {
+      if (!d || isNaN(d.getTime())) return "--:--";
+      let h = d.getHours();
+      const m = String(d.getMinutes()).padStart(2, "0");
+      const ap = h >= 12 ? "PM" : "AM";
+      h = h % 12;
+      if (h === 0) h = 12;
+      return `${String(h).padStart(2, "0")}:${m} ${ap}`;
     }
 
-    function formatDurationHoursMinutes(ms) {
-      const totalMinutes = Math.floor(Math.max(0, ms) / 60000);
-      const hours = Math.floor(totalMinutes / 60);
-      const mins = totalMinutes % 60;
-      return `${hours}h ${mins}m`;
+    function formatChoghadiyaSpan(ms) {
+      const totalMin = Math.max(0, Math.round(ms / 60000));
+      const h = Math.floor(totalMin / 60);
+      const m = totalMin % 60;
+      return `${h}h ${String(m).padStart(2, "0")}m`;
     }
 
-    function computeVedicChoghadiya(targetDate, cityKey) {
-      const city = CHOGHADIYA_CITIES[cityKey] || CHOGHADIYA_CITIES["kuchera"];
-      const sunToday = calculateAstronomicalSunTimes(city.lat, city.lon, targetDate);
-
-      const nextDate = new Date(targetDate.getTime() + 86400000);
-      const sunTomorrow = calculateAstronomicalSunTimes(city.lat, city.lon, nextDate);
-
-      const sunrise = sunToday ? sunToday.sunrise : new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 7, 0);
-      const sunset = sunToday ? sunToday.sunset : new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 17, 45);
-      const nextSunrise = sunTomorrow ? sunTomorrow.sunrise : new Date(nextDate.getFullYear(), nextDate.getMonth(), nextDate.getDate(), 7, 0);
-
-      const dayDurationMs = sunset.getTime() - sunrise.getTime();
-      const daySlotMs = dayDurationMs / 8;
-
-      const nightDurationMs = nextSunrise.getTime() - sunset.getTime();
-      const nightSlotMs = nightDurationMs / 8;
-
-      const weekday = targetDate.getDay();
-      const dayNames = CHOGHADIYA_DAY_SEQUENCES[weekday];
-      const nightNames = CHOGHADIYA_NIGHT_SEQUENCES[weekday];
-
-      const nowTime = new Date().getTime();
-
-      const daySlots = [];
-      for (let i = 0; i < 8; i++) {
-        const start = new Date(sunrise.getTime() + i * daySlotMs);
-        const end = new Date(sunrise.getTime() + (i + 1) * daySlotMs);
-        const name = dayNames[i];
-        const meta = CHOGHADIYA_TYPES[name] || { quality: "शुभ", grade: "शुभ", color: "#16a34a", bg: "rgba(34, 197, 94, 0.12)", border: "#86efac", icon: "fa-om", planet: "", desc: "" };
-        const isActive = nowTime >= start.getTime() && nowTime < end.getTime();
-        daySlots.push({
-          index: i + 1,
-          name: name,
-          period: "day",
-          start: start,
-          end: end,
-          startTimeStr: formatChoghadiyaTime12(start),
-          endTimeStr: formatChoghadiyaTime12(end),
-          timeWindowStr: `${formatChoghadiyaTime12(start)} - ${formatChoghadiyaTime12(end)}`,
-          quality: meta.quality,
-          grade: meta.grade,
-          color: meta.color,
-          bg: meta.bg,
-          border: meta.border,
-          icon: meta.icon,
-          planet: meta.planet,
-          desc: meta.desc,
-          isActive: isActive
-        });
-      }
-
-      const nightSlots = [];
-      for (let i = 0; i < 8; i++) {
-        const start = new Date(sunset.getTime() + i * nightSlotMs);
-        const end = new Date(sunset.getTime() + (i + 1) * nightSlotMs);
-        const name = nightNames[i];
-        const meta = CHOGHADIYA_TYPES[name] || { quality: "शुभ", grade: "शुभ", color: "#16a34a", bg: "rgba(34, 197, 94, 0.12)", border: "#86efac", icon: "fa-om", planet: "", desc: "" };
-        const isActive = nowTime >= start.getTime() && nowTime < end.getTime();
-        nightSlots.push({
-          index: i + 1,
-          name: name,
-          period: "night",
-          start: start,
-          end: end,
-          startTimeStr: formatChoghadiyaTime12(start),
-          endTimeStr: formatChoghadiyaTime12(end),
-          timeWindowStr: `${formatChoghadiyaTime12(start)} - ${formatChoghadiyaTime12(end)}`,
-          quality: meta.quality,
-          grade: meta.grade,
-          color: meta.color,
-          bg: meta.bg,
-          border: meta.border,
-          icon: meta.icon,
-          planet: meta.planet,
-          desc: meta.desc,
-          isActive: isActive
-        });
-      }
-
-      return {
-        city: city,
-        targetDate: targetDate,
-        sunrise: sunrise,
-        sunset: sunset,
-        nextSunrise: nextSunrise,
-        dayDurationMs: dayDurationMs,
-        nightDurationMs: nightDurationMs,
-        daySlots: daySlots,
-        nightSlots: nightSlots
-      };
+    function isSameCalendarDay(a, b) {
+      return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
     }
 
-    // 📡 Drik Panchang Auto-Sync & Cache Handler
-    async function syncChoghadiyaData(targetDate, cityKey) {
-      const city = CHOGHADIYA_CITIES[cityKey] || CHOGHADIYA_CITIES["kuchera"];
-      const dateKey = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`;
-      const cacheKey = `ysg_choghadiya_${cityKey}_${dateKey}`;
+    function computeChoghadiyaSchedule(targetDate, cityObj) {
+      const d = targetDate || choghadiyaCurrentDate;
+      const c = cityObj || currentChoghadiyaCityObj;
+      const sunToday = getSunTimes(d, c.lat, c.lon);
+      const tomorrow = new Date(d);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const sunNext = getSunTimes(tomorrow, c.lat, c.lon);
 
-      // 1. Try local storage cache
-      try {
-        const cached = localStorage.getItem(cacheKey);
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (parsed && parsed.daySlots && parsed.daySlots.length === 8) {
-            choghadiyaLastSyncTime = parsed.syncedAt || new Date().toLocaleTimeString('hi-IN');
-            return parsed;
-          }
-        }
-      } catch (e) {}
+      const riseMs = sunToday.sunrise.getTime();
+      const setMs = sunToday.sunset.getTime();
+      const nextRiseMs = sunNext.sunrise.getTime();
 
-      // 2. Fetch / Proxy from Drik Panchang if online (with 2.5s hard timeout)
-      let syncedFromDrik = false;
-      if (navigator.onLine) {
-        try {
-          const drikUrl = `https://www.drikpanchang.com/muhurat/choghadiya.html?lang=hi&date=${String(targetDate.getDate()).padStart(2, '0')}/${String(targetDate.getMonth() + 1).padStart(2, '0')}/${targetDate.getFullYear()}`;
-          const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(drikUrl)}`;
-          
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 2500);
-          
-          const res = await fetch(proxyUrl, { signal: controller.signal });
-          clearTimeout(timeoutId);
-          if (res && res.ok) {
-            syncedFromDrik = true;
-          }
-        } catch (e) {}
-      }
+      const dayStep = (setMs - riseMs) / 8;
+      const nightStep = (nextRiseMs - setMs) / 8;
+      const dow = d.getDay();
 
-      // 3. Compute via Exact Astronomical Vedic Jyotish Engine
-      const computed = computeVedicChoghadiya(targetDate, cityKey);
-      choghadiyaLastSyncTime = new Date().toLocaleTimeString('hi-IN');
-      computed.syncedAt = choghadiyaLastSyncTime;
-      computed.source = syncedFromDrik ? "द्रिक पंचांग (Live Synced)" : "द्रिक पंचांग मानक • खगोलीय गणना";
+      const day = CHOGHADIYA_DAY_SEQ[dow].map((name, i) => ({
+        index: i + 1,
+        periodLabel: "दिन का चौघड़िया",
+        period: "day",
+        name,
+        start: new Date(riseMs + i * dayStep),
+        end: new Date(riseMs + (i + 1) * dayStep),
+        timeWindowStr: `${formatChoghadiya12(new Date(riseMs + i * dayStep))} - ${formatChoghadiya12(new Date(riseMs + (i + 1) * dayStep))}`,
+        ...CHOGHADIYA_META[name]
+      }));
 
-      // 4. Save to cache
-      try {
-        localStorage.setItem(cacheKey, JSON.stringify({
-          daySlots: computed.daySlots,
-          nightSlots: computed.nightSlots,
-          sunrise: computed.sunrise,
-          sunset: computed.sunset,
-          syncedAt: computed.syncedAt,
-          source: computed.source
-        }));
-      } catch (e) {}
+      const night = CHOGHADIYA_NIGHT_SEQ[dow].map((name, i) => ({
+        index: i + 1,
+        periodLabel: "रात का चौघड़िया",
+        period: "night",
+        name,
+        start: new Date(setMs + i * nightStep),
+        end: new Date(setMs + (i + 1) * nightStep),
+        timeWindowStr: `${formatChoghadiya12(new Date(setMs + i * nightStep))} - ${formatChoghadiya12(new Date(setMs + (i + 1) * nightStep))}`,
+        ...CHOGHADIYA_META[name]
+      }));
 
-      // 5. Sync to Firestore in background if online
-      if (navigator.onLine && typeof db !== 'undefined') {
-        try {
-          db.collection("panchang_cache").doc(`${cityKey}_${dateKey}`).set({
-            city: city.name,
-            date: dateKey,
-            updatedAt: new Date(),
-            source: computed.source
-          }, { merge: true }).catch(() => {});
-        } catch (e) {}
-      }
-
-      return computed;
-    }
-
-    function getCurrentLiveSlot(cityKey) {
-      const now = new Date();
-      const city = CHOGHADIYA_CITIES[cityKey] || CHOGHADIYA_CITIES["kuchera"];
-      const sunToday = calculateAstronomicalSunTimes(city.lat, city.lon, now);
-      
-      let baseDate = now;
-      if (sunToday && now.getTime() < sunToday.sunrise.getTime()) {
-        baseDate = new Date(now.getTime() - 86400000);
-      }
-      
-      const calc = computeVedicChoghadiya(baseDate, cityKey);
-      const allSlots = [...calc.daySlots, ...calc.nightSlots];
-      
-      let currentSlot = null;
-      let nextSlot = null;
-      
-      for (let i = 0; i < allSlots.length; i++) {
-        const slot = allSlots[i];
-        if (now.getTime() >= slot.start.getTime() && now.getTime() < slot.end.getTime()) {
-          currentSlot = slot;
-          nextSlot = allSlots[i + 1] || null;
-          break;
-        }
-      }
-
-      if (!currentSlot) {
-        if (sunToday && now.getTime() < sunToday.sunrise.getTime()) {
-          currentSlot = calc.nightSlots[calc.nightSlots.length - 1];
-        } else {
-          currentSlot = calc.daySlots[0];
-        }
-      }
-
-      if (!nextSlot) {
-        const tomorrowDate = new Date(baseDate.getTime() + 86400000);
-        const nextCalc = computeVedicChoghadiya(tomorrowDate, cityKey);
-        nextSlot = nextCalc.daySlots[0];
-      }
-
-      return { currentSlot, nextSlot, calc, baseDate };
+      return { day, night, sunrise: sunToday.sunrise, sunset: sunToday.sunset, nextSunrise: sunNext.sunrise };
     }
 
     // 🌟 Top Bar — "शुभ चौघड़िया" Single-Line Updater
     function updateTopShubhChoghadiyaBar() {
       try {
-        const { currentSlot } = getCurrentLiveSlot(currentChoghadiyaCity);
-        if (!currentSlot) return;
+        const now = new Date();
+        const schedToday = computeChoghadiyaSchedule(now, currentChoghadiyaCityObj);
+        let all = [...schedToday.day, ...schedToday.night];
+        const nowMs = now.getTime();
+
+        if (nowMs < schedToday.sunrise.getTime()) {
+          const yesterday = new Date(now);
+          yesterday.setDate(yesterday.getDate() - 1);
+          const schedYest = computeChoghadiyaSchedule(yesterday, currentChoghadiyaCityObj);
+          all = [...schedYest.day, ...schedYest.night];
+        }
+
+        let currentSlot = all.find(s => nowMs >= s.start.getTime() && nowMs < s.end.getTime());
+        if (!currentSlot) currentSlot = all[0];
 
         const nameEl = document.getElementById("topChoghadiyaName");
         const tagEl = document.getElementById("topChoghadiyaTag");
@@ -17787,8 +18293,8 @@
 
         if (nameEl) nameEl.innerText = currentSlot.name;
         if (tagEl) {
-          tagEl.innerText = currentSlot.quality;
-          if (currentSlot.quality === "शुभ") {
+          tagEl.innerText = currentSlot.tag;
+          if (currentSlot.tag === "शुभ") {
             tagEl.style.background = "#dcfce7";
             tagEl.style.color = "#166534";
             tagEl.style.borderColor = "#86efac";
@@ -17799,287 +18305,333 @@
           }
         }
         if (timeEl) timeEl.innerText = currentSlot.timeWindowStr;
-        if (cityPill) {
-          const c = CHOGHADIYA_CITIES[currentChoghadiyaCity];
-          cityPill.innerText = c ? c.name.split(" ")[0] : "कुचेरा";
-        }
+        if (cityPill) cityPill.innerText = currentChoghadiyaCityObj.short.split(" ")[0];
         if (dotEl) {
-          if (currentSlot.quality === "शुभ") {
-            dotEl.style.background = "linear-gradient(135deg, #16a34a, #15803d)";
-            dotEl.style.boxShadow = "0 2px 6px rgba(22, 163, 74, 0.35)";
+          if (currentSlot.tag === "शुभ") {
+            dotEl.style.background = "linear-gradient(135deg, #10B981, #059669)";
+            dotEl.style.boxShadow = "0 2px 6px rgba(16, 185, 129, 0.4)";
           } else {
-            dotEl.style.background = "linear-gradient(135deg, #dc2626, #b91c1c)";
-            dotEl.style.boxShadow = "0 2px 6px rgba(220, 38, 38, 0.35)";
+            dotEl.style.background = "linear-gradient(135deg, #E11D48, #BE123C)";
+            dotEl.style.boxShadow = "0 2px 6px rgba(225, 29, 72, 0.4)";
           }
         }
         if (titleLbl) {
-          titleLbl.style.color = currentSlot.quality === "शुभ" ? "#15803d" : "#b91c1c";
+          titleLbl.style.color = currentSlot.tag === "शुभ" ? "#10B981" : "#E11D48";
         }
       } catch (e) {
-        console.warn("Choghadiya top bar update error:", e);
+        console.warn("Top Choghadiya bar update err:", e);
       }
     }
 
-    // 📱 Dedicated Choghadiya Screen Controller
+    function renderChoghadiyaView() {
+      choghadiyaScheduleData = computeChoghadiyaSchedule(choghadiyaCurrentDate, currentChoghadiyaCityObj);
+
+      const dd = String(choghadiyaCurrentDate.getDate()).padStart(2, "0");
+      const mm = String(choghadiyaCurrentDate.getMonth() + 1).padStart(2, "0");
+      const yyyy = choghadiyaCurrentDate.getFullYear();
+
+      const MONTHS_HI = ["जनवरी","फ़रवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितम्बर","अक्टूबर","नवम्बर","दिसम्बर"];
+      const DAYS_HI = ["रविवार","सोमवार","मंगलवार","बुधवार","गुरुवार","शुक्रवार","शनिवार"];
+
+      const headerCitySub = document.getElementById("headerCitySub");
+      if (headerCitySub) headerCitySub.textContent = currentChoghadiyaCityObj.short;
+
+      const cityBtnText = document.getElementById("cityBtnText");
+      if (cityBtnText) cityBtnText.textContent = currentChoghadiyaCityObj.name;
+
+      const dateShortText = document.getElementById("dateShortText");
+      if (dateShortText) dateShortText.textContent = `${dd}/${mm}/${yyyy}`;
+
+      const dateFullHindi = document.getElementById("dateFullHindi");
+      if (dateFullHindi) dateFullHindi.textContent = `${DAYS_HI[choghadiyaCurrentDate.getDay()]}, ${choghadiyaCurrentDate.getDate()} ${MONTHS_HI[choghadiyaCurrentDate.getMonth()]} ${yyyy}`;
+
+      const dateInputHidden = document.getElementById("dateInputHidden");
+      if (dateInputHidden) dateInputHidden.value = `${yyyy}-${mm}-${dd}`;
+
+      const now = new Date();
+      const today = isSameCalendarDay(choghadiyaCurrentDate, now);
+      const todayPill = document.getElementById("todayPill");
+      if (todayPill) todayPill.style.display = today ? "inline-block" : "none";
+
+      const sunriseVal = document.getElementById("sunriseVal");
+      if (sunriseVal) sunriseVal.textContent = formatChoghadiya12(choghadiyaScheduleData.sunrise);
+
+      const sunsetVal = document.getElementById("sunsetVal");
+      if (sunsetVal) sunsetVal.textContent = formatChoghadiya12(choghadiyaScheduleData.sunset);
+
+      const daySpanVal = document.getElementById("daySpanVal");
+      if (daySpanVal) daySpanVal.textContent = `दिनमान: ${formatChoghadiyaSpan(choghadiyaScheduleData.sunset - choghadiyaScheduleData.sunrise)}`;
+
+      const nightSpanVal = document.getElementById("nightSpanVal");
+      if (nightSpanVal) nightSpanVal.textContent = `रात्रिमान: ${formatChoghadiyaSpan(choghadiyaScheduleData.nextSunrise - choghadiyaScheduleData.sunset)}`;
+
+      if (today) {
+        const t = now.getTime();
+        choghadiyaActiveTab = (t >= choghadiyaScheduleData.sunset.getTime() || t < choghadiyaScheduleData.sunrise.getTime()) ? "night" : "day";
+        syncChoghadiyaTabButtons();
+      }
+
+      updateChoghadiyaLiveHero();
+      renderChoghadiyaSlotsList();
+    }
+
+    function syncChoghadiyaTabButtons() {
+      const dayBtn = document.getElementById("dayTabBtn");
+      const nightBtn = document.getElementById("nightTabBtn");
+      if (dayBtn) dayBtn.classList.toggle("active", choghadiyaActiveTab === "day");
+      if (nightBtn) nightBtn.classList.toggle("active", choghadiyaActiveTab === "night");
+    }
+
+    function updateChoghadiyaLiveHero() {
+      const now = new Date();
+      const nowMs = now.getTime();
+      const today = isSameCalendarDay(choghadiyaCurrentDate, now);
+      const all = [...choghadiyaScheduleData.day, ...choghadiyaScheduleData.night];
+
+      let activeIdx = -1;
+      if (today && all.length > 0) {
+        activeIdx = all.findIndex(s => nowMs >= s.start.getTime() && nowMs < s.end.getTime());
+      }
+
+      const hero = document.getElementById("activeHeroCard");
+      if (!hero) return;
+      hero.classList.remove("tone-good", "tone-neutral", "tone-bad");
+
+      const slot = activeIdx >= 0 ? all[activeIdx] : (choghadiyaScheduleData.day[0] || all[0]);
+      const nextSlot = activeIdx >= 0 ? all[(activeIdx + 1) % all.length] : (choghadiyaScheduleData.day[1] || all[1]);
+      if (!slot) return;
+
+      hero.classList.add(`tone-${slot.tone}`);
+      const hHeading = document.getElementById("activeHeadingText");
+      if (hHeading) hHeading.textContent = activeIdx >= 0 ? "वर्तमान सक्रिय चौघड़िया" : "प्रमुख चौघड़िया मुहूर्त";
+
+      const hMeta = document.getElementById("activeSlotMeta");
+      if (hMeta) hMeta.textContent = `${slot.periodLabel} • #${slot.index}`;
+
+      const hName = document.getElementById("activeNameText");
+      if (hName) hName.textContent = slot.name;
+
+      const hQuality = document.getElementById("activeQualityText");
+      if (hQuality) hQuality.textContent = slot.tag;
+
+      const hRange = document.getElementById("activeRangeText");
+      if (hRange) hRange.textContent = slot.timeWindowStr;
+
+      const hNext = document.getElementById("nextSlotNameText");
+      if (hNext && nextSlot) hNext.textContent = `${nextSlot.name} (${nextSlot.tag})`;
+
+      const hDesc = document.getElementById("activeDescText");
+      if (hDesc) hDesc.textContent = slot.desc;
+
+      const countEl = document.getElementById("countdownText");
+      const progEl = document.getElementById("slotProgressBar");
+
+      if (activeIdx >= 0) {
+        const remSec = Math.max(0, Math.floor((slot.end.getTime() - nowMs) / 1000));
+        const m = Math.floor(remSec / 60);
+        const s = remSec % 60;
+        if (countEl) countEl.textContent = `${m}m ${String(s).padStart(2, "0")}s बाद`;
+
+        const total = Math.max(1, slot.end.getTime() - slot.start.getTime());
+        const pct = Math.min(100, Math.max(0, ((nowMs - slot.start.getTime()) / total) * 100));
+        if (progEl) progEl.style.width = `${pct.toFixed(1)}%`;
+      } else {
+        if (countEl) countEl.textContent = "निर्धारित समय";
+        if (progEl) progEl.style.width = "50%";
+      }
+    }
+
+    function renderChoghadiyaSlotsList() {
+      const container = document.getElementById("slotsContainer");
+      if (!container) return;
+      const list = choghadiyaActiveTab === "day" ? choghadiyaScheduleData.day : choghadiyaScheduleData.night;
+      const nowMs = Date.now();
+      const today = isSameCalendarDay(choghadiyaCurrentDate, new Date());
+
+      container.innerHTML = list.map(s => {
+        const isNow = today && nowMs >= s.start.getTime() && nowMs < s.end.getTime();
+        return `
+          <article class="slot-item tone-${s.tone} ${isNow ? "current-slot" : ""}">
+            <div class="slot-row-top">
+              <div class="slot-left-group">
+                <span class="slot-num">#${s.index}</span>
+                <span class="slot-name">${s.name}</span>
+                <span class="slot-tag">${s.tag}</span>
+                ${isNow ? "<span class="chalu-pill">• चालू</span>" : ""}
+              </div>
+              <span class="slot-time-range">${s.timeWindowStr}</span>
+            </div>
+            <div class="slot-desc">${s.desc}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderChoghadiyaCityOptions(q = "") {
+      const term = q.trim().toLowerCase();
+      const filtered = CHOGHADIYA_CITIES_LIST.filter(c => c.name.toLowerCase().includes(term) || c.id.includes(term));
+      const listEl = document.getElementById("cityOptionsList");
+      if (!listEl) return;
+      listEl.innerHTML = filtered.map(c => `
+        <button class="city-item ${c.id === currentChoghadiyaCityObj.id ? "active" : ""}" data-id="${c.id}" type="button">
+          <div>
+            <div class="city-item-title">${c.name}</div>
+            <div class="city-item-sub">अक्षांश ${c.lat}° • देशांतर ${c.lon}°</div>
+          </div>
+          ${c.id === currentChoghadiyaCityObj.id ? "<strong style="color:var(--brand-accent);">✓</strong>" : ""}
+        </button>
+      `).join("");
+
+      listEl.querySelectorAll(".city-item").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const pick = CHOGHADIYA_CITIES_LIST.find(c => c.id === btn.dataset.id);
+          if (pick) {
+            currentChoghadiyaCityObj = pick;
+            localStorage.setItem("ysg_selected_choghadiya_city", pick.id);
+            const cityM = document.getElementById("cityModal");
+            if (cityM) cityM.classList.remove("open");
+            renderChoghadiyaView();
+            updateTopShubhChoghadiyaBar();
+          }
+        });
+      });
+    }
+
     function openDedicatedChoghadiyaPage() {
-      const page = document.getElementById("dedicatedChoghadiyaPage");
-      if (!page) return;
-      page.style.display = "flex";
-      updateActiveModalState();
+      const p = document.getElementById("dedicatedChoghadiyaPage");
+      if (!p) return;
+      p.style.display = "block";
+      const isDark = document.body.classList.contains("dark-theme") || (localStorage.getItem("theme") === "dark");
+      choghadiyaTheme = isDark ? "dark" : "light";
+      p.setAttribute("data-theme", choghadiyaTheme);
+      const thBtn = document.getElementById("themeBtn");
+      if (thBtn) thBtn.textContent = choghadiyaTheme === "dark" ? "☀️" : "🌙";
       renderChoghadiyaView();
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
     }
     window.openDedicatedChoghadiyaPage = openDedicatedChoghadiyaPage;
 
     function closeDedicatedChoghadiyaPage() {
-      const page = document.getElementById("dedicatedChoghadiyaPage");
-      if (page) page.style.display = "none";
-      updateActiveModalState();
+      const p = document.getElementById("dedicatedChoghadiyaPage");
+      if (p) p.style.display = "none";
+      const cityM = document.getElementById("cityModal");
+      if (cityM) cityM.classList.remove("open");
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
     }
     window.closeDedicatedChoghadiyaPage = closeDedicatedChoghadiyaPage;
 
-    function onChoghadiyaCityChange(cityKey) {
-      if (!CHOGHADIYA_CITIES[cityKey]) return;
-      currentChoghadiyaCity = cityKey;
-      localStorage.setItem("ysg_selected_choghadiya_city", cityKey);
-      updateTopShubhChoghadiyaBar();
-      renderChoghadiyaView();
-    }
+    let choghadiyaEventsBound = false;
+    function setupChoghadiyaEvents() {
+      if (choghadiyaEventsBound) return;
+      choghadiyaEventsBound = true;
 
-    function shiftChoghadiyaDate(deltaDays) {
-      currentChoghadiyaDate = new Date(currentChoghadiyaDate.getTime() + deltaDays * 86400000);
-      renderChoghadiyaView();
-    }
-
-    function resetChoghadiyaToToday() {
-      currentChoghadiyaDate = new Date();
-      renderChoghadiyaView();
-    }
-
-    function onChoghadiyaDatePicked(dateStr) {
-      if (!dateStr) return;
-      const parts = dateStr.split('-');
-      if (parts.length === 3) {
-        currentChoghadiyaDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-        renderChoghadiyaView();
-      }
-    }
-
-    function switchChoghadiyaViewMode(mode) {
-      currentChoghadiyaViewMode = mode;
-      renderChoghadiyaSlots();
-      updateChoghadiyaTabPillsUI();
-    }
-
-    function updateChoghadiyaTabPillsUI() {
-      const btnDay = document.getElementById("btnChoghadiyaDayTab");
-      const btnNight = document.getElementById("btnChoghadiyaNightTab");
-      const isDark = document.body.classList.contains("dark-theme");
-
-      if (currentChoghadiyaViewMode === "day") {
-        if (btnDay) {
-          btnDay.style.background = isDark ? "#1e293b" : "#ffffff";
-          btnDay.style.color = isDark ? "#ffffff" : "#0f172a";
-          btnDay.style.fontWeight = "800";
-          btnDay.style.boxShadow = isDark ? "0 2px 8px rgba(0,0,0,0.6)" : "0 2px 6px rgba(0,0,0,0.08)";
-        }
-        if (btnNight) {
-          btnNight.style.background = "none";
-          btnNight.style.color = "#64748b";
-          btnNight.style.fontWeight = "700";
-          btnNight.style.boxShadow = "none";
-        }
-      } else {
-        if (btnNight) {
-          btnNight.style.background = isDark ? "#1e293b" : "#ffffff";
-          btnNight.style.color = isDark ? "#ffffff" : "#0f172a";
-          btnNight.style.fontWeight = "800";
-          btnNight.style.boxShadow = isDark ? "0 2px 8px rgba(0,0,0,0.6)" : "0 2px 6px rgba(0,0,0,0.08)";
-        }
-        if (btnDay) {
-          btnDay.style.background = "none";
-          btnDay.style.color = "#64748b";
-          btnDay.style.fontWeight = "700";
-          btnDay.style.boxShadow = "none";
-        }
-      }
-    }
-
-    async function refreshChoghadiyaData(showToastMsg) {
-      const icon = document.getElementById("choghadiyaRefreshIcon");
-      if (icon) icon.classList.add("fa-spin");
-      await syncChoghadiyaData(currentChoghadiyaDate, currentChoghadiyaCity);
-      updateTopShubhChoghadiyaBar();
-      renderChoghadiyaView();
-      if (icon) setTimeout(() => icon.classList.remove("fa-spin"), 600);
-      if (showToastMsg) showToast("चौघड़िया मुहूर्त सफलतापूर्वक अपडेट हुआ!", "success");
-    }
-
-    function renderChoghadiyaView() {
-      const targetDate = currentChoghadiyaDate;
-      const city = CHOGHADIYA_CITIES[currentChoghadiyaCity] || CHOGHADIYA_CITIES["kuchera"];
-      const calc = computeVedicChoghadiya(targetDate, currentChoghadiyaCity);
-
-      // 1. Header & Controls
-      const headerSub = document.getElementById("choghadiyaHeaderSub");
-      if (headerSub) headerSub.innerText = `द्रिक पंचांग • ${city.name}`;
-
-      const citySelect = document.getElementById("choghadiyaCitySelect");
-      if (citySelect) citySelect.value = currentChoghadiyaCity;
-
-      const datePicker = document.getElementById("choghadiyaDatePicker");
-      const dateYMD = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`;
-      if (datePicker) datePicker.value = dateYMD;
-
-      const WEEKDAYS_HI = ["रविवार", "सोमवार", "मंगलवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार"];
-      const MONTHS_HI = ["जनवरी", "फरवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"];
-      const dateTextEl = document.getElementById("choghadiyaSelectedDateText");
-      if (dateTextEl) {
-        dateTextEl.innerText = `${WEEKDAYS_HI[targetDate.getDay()]}, ${targetDate.getDate()} ${MONTHS_HI[targetDate.getMonth()]} ${targetDate.getFullYear()}`;
+      const openCityBtn = document.getElementById("openCityBtn");
+      if (openCityBtn) {
+        openCityBtn.addEventListener("click", () => {
+          const searchBox = document.getElementById("citySearchBox");
+          if (searchBox) searchBox.value = "";
+          renderChoghadiyaCityOptions("");
+          const cityM = document.getElementById("cityModal");
+          if (cityM) cityM.classList.add("open");
+        });
       }
 
-      // 2. Solar Stats
-      const srEl = document.getElementById("choghadiyaSunriseText");
-      const ssEl = document.getElementById("choghadiyaSunsetText");
-      const dlEl = document.getElementById("choghadiyaDayLengthText");
-      const nlEl = document.getElementById("choghadiyaNightLengthText");
-
-      if (srEl) srEl.innerText = formatChoghadiyaTime12(calc.sunrise);
-      if (ssEl) ssEl.innerText = formatChoghadiyaTime12(calc.sunset);
-      if (dlEl) dlEl.innerText = `दिनमान: ${formatDurationHoursMinutes(calc.dayDurationMs)}`;
-      if (nlEl) nlEl.innerText = `रात्रिमान: ${formatDurationHoursMinutes(calc.nightDurationMs)}`;
-
-      // 3. Auto-Select Day vs Night if mode is "auto"
-      const now = new Date();
-      const isViewingToday = targetDate.toDateString() === now.toDateString();
-      if (currentChoghadiyaViewMode === "auto" || !currentChoghadiyaViewMode) {
-        if (isViewingToday && now.getTime() >= calc.sunset.getTime()) {
-          currentChoghadiyaViewMode = "night";
-        } else {
-          currentChoghadiyaViewMode = "day";
-        }
+      const closeCityModalBtn = document.getElementById("closeCityModalBtn");
+      if (closeCityModalBtn) {
+        closeCityModalBtn.addEventListener("click", () => {
+          const cityM = document.getElementById("cityModal");
+          if (cityM) cityM.classList.remove("open");
+        });
       }
 
-      updateChoghadiyaTabPillsUI();
-      renderChoghadiyaHeroCard();
-      renderChoghadiyaSlots();
-
-      // 4. Sync Info
-      const syncStatus = document.getElementById("choghadiyaSyncStatusText");
-      const syncTime = document.getElementById("choghadiyaLastSyncTime");
-      if (syncStatus) syncStatus.innerText = "स्थिति: सत्यापित • लाइव गणना सक्रिय";
-      if (syncTime) syncTime.innerText = `अंतिम अपडेट: ${choghadiyaLastSyncTime || new Date().toLocaleTimeString('hi-IN')}`;
-    }
-
-    function renderChoghadiyaHeroCard() {
-      const { currentSlot, nextSlot } = getCurrentLiveSlot(currentChoghadiyaCity);
-      if (!currentSlot) return;
-
-      const heroName = document.getElementById("choghadiyaHeroName");
-      const heroQuality = document.getElementById("choghadiyaHeroQualityBadge");
-      const heroSlotBadge = document.getElementById("choghadiyaHeroSlotBadge");
-      const heroTimeWindow = document.getElementById("choghadiyaHeroTimeWindow");
-      const heroDesc = document.getElementById("choghadiyaHeroDesc");
-      const nextName = document.getElementById("choghadiyaNextName");
-      const heroCard = document.getElementById("choghadiyaActiveHeroCard");
-
-      if (heroName) heroName.innerText = currentSlot.name;
-      if (heroQuality) {
-        heroQuality.innerText = `${currentSlot.quality} (${currentSlot.grade})`;
-        heroQuality.style.background = currentSlot.quality === "शुभ" ? "#16a34a" : "#dc2626";
-      }
-      if (heroSlotBadge) {
-        heroSlotBadge.innerText = `${currentSlot.period === "day" ? "दिन का चौघड़िया" : "रात का चौघड़िया"} • #${currentSlot.index}`;
-      }
-      if (heroTimeWindow) heroTimeWindow.innerText = currentSlot.timeWindowStr;
-      if (heroDesc) heroDesc.innerText = `${currentSlot.planet ? currentSlot.planet + " • " : ""}${currentSlot.desc}`;
-      if (nextName && nextSlot) {
-        nextName.innerText = `${nextSlot.name} (${nextSlot.quality})`;
-        nextName.style.color = nextSlot.quality === "शुभ" ? "#16a34a" : "#dc2626";
+      const cityModal = document.getElementById("cityModal");
+      if (cityModal) {
+        cityModal.addEventListener("click", e => {
+          if (e.target.id === "cityModal") cityModal.classList.remove("open");
+        });
       }
 
-      if (heroCard) {
-        if (currentSlot.quality === "शुभ") {
-          heroCard.style.borderColor = "#22c55e";
-          heroCard.style.background = "linear-gradient(135deg, rgba(22, 163, 74, 0.14) 0%, rgba(5, 150, 105, 0.06) 100%)";
-        } else {
-          heroCard.style.borderColor = "#ef4444";
-          heroCard.style.background = "linear-gradient(135deg, rgba(239, 68, 68, 0.14) 0%, rgba(220, 38, 38, 0.05) 100%)";
-        }
+      const searchBox = document.getElementById("citySearchBox");
+      if (searchBox) {
+        searchBox.addEventListener("input", e => renderChoghadiyaCityOptions(e.target.value));
       }
 
-      updateChoghadiyaLiveCountdown();
-    }
-
-    function updateChoghadiyaLiveCountdown() {
-      const ticker = document.getElementById("choghadiyaCountdownTicker");
-      if (!ticker) return;
-
-      const { currentSlot } = getCurrentLiveSlot(currentChoghadiyaCity);
-      if (!currentSlot) return;
-
-      const now = new Date().getTime();
-      const diffMs = currentSlot.end.getTime() - now;
-
-      if (diffMs <= 0) {
-        updateTopShubhChoghadiyaBar();
-        renderChoghadiyaView();
-        return;
+      const prevDayBtn = document.getElementById("prevDayBtn");
+      if (prevDayBtn) {
+        prevDayBtn.addEventListener("click", () => {
+          choghadiyaCurrentDate.setDate(choghadiyaCurrentDate.getDate() - 1);
+          renderChoghadiyaView();
+        });
       }
 
-      const totalSec = Math.floor(diffMs / 1000);
-      const hours = Math.floor(totalSec / 3600);
-      const minutes = Math.floor((totalSec % 3600) / 60);
-      const seconds = totalSec % 60;
-
-      let countdownStr = "";
-      if (hours > 0) {
-        countdownStr = `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s बाद`;
-      } else {
-        countdownStr = `${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s बाद`;
+      const nextDayBtn = document.getElementById("nextDayBtn");
+      if (nextDayBtn) {
+        nextDayBtn.addEventListener("click", () => {
+          choghadiyaCurrentDate.setDate(choghadiyaCurrentDate.getDate() + 1);
+          renderChoghadiyaView();
+        });
       }
 
-      ticker.innerText = countdownStr;
-    }
+      const datePickerBtn = document.getElementById("datePickerBtn");
+      const dateInputHidden = document.getElementById("dateInputHidden");
+      if (datePickerBtn && dateInputHidden) {
+        datePickerBtn.addEventListener("click", () => {
+          if (dateInputHidden.showPicker) dateInputHidden.showPicker();
+          else dateInputHidden.click();
+        });
 
-    function renderChoghadiyaSlots() {
-      const container = document.getElementById("choghadiyaSlotsContainer");
-      if (!container) return;
+        dateInputHidden.addEventListener("change", e => {
+          if (!e.target.value) return;
+          const [y, m, d] = e.target.value.split("-").map(Number);
+          choghadiyaCurrentDate = new Date(y, m - 1, d, 0, 0, 0, 0);
+          renderChoghadiyaView();
+        });
+      }
 
-      const calc = computeVedicChoghadiya(currentChoghadiyaDate, currentChoghadiyaCity);
-      const slots = currentChoghadiyaViewMode === "night" ? calc.nightSlots : calc.daySlots;
-      const isDark = document.body.classList.contains("dark-theme");
+      const dayTabBtn = document.getElementById("dayTabBtn");
+      if (dayTabBtn) {
+        dayTabBtn.addEventListener("click", () => {
+          choghadiyaActiveTab = "day";
+          syncChoghadiyaTabButtons();
+          renderChoghadiyaSlotsList();
+        });
+      }
 
-      let html = "";
-      slots.forEach((s) => {
-        const isAuspicious = s.quality === "शुभ";
-        const badgeBg = isAuspicious ? (isDark ? "#14532d" : "#dcfce7") : (isDark ? "#7f1d1d" : "#fee2e2");
-        const badgeColor = isAuspicious ? (isDark ? "#86efac" : "#166534") : (isDark ? "#fca5a5" : "#991b1b");
-        const activeBorder = s.isActive ? "border:2px solid #22c55e; box-shadow:0 0 16px rgba(34, 197, 94, 0.35);" : `border:1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'var(--border-color, #e2e8f0)'};`;
-        const cardBg = s.isActive 
-          ? (isDark ? "background:rgba(6, 78, 59, 0.45);" : "background:linear-gradient(135deg, rgba(240, 253, 244, 0.95) 0%, rgba(220, 252, 231, 0.7) 100%);")
-          : (isDark ? "background:rgba(18, 24, 38, 0.85);" : "background:var(--card-bg, #ffffff);");
+      const nightTabBtn = document.getElementById("nightTabBtn");
+      if (nightTabBtn) {
+        nightTabBtn.addEventListener("click", () => {
+          choghadiyaActiveTab = "night";
+          syncChoghadiyaTabButtons();
+          renderChoghadiyaSlotsList();
+        });
+      }
 
-        html += `
-          <div class="choghadiya-slot-card ios-glass-card ${s.isActive ? 'active-slot' : ''}" style="${cardBg} ${activeBorder} border-radius:16px; padding:12px 14px; position:relative; overflow:hidden; transition:transform 0.15s ease;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:11px; font-weight:800; color:var(--text-muted, #64748b); width:20px; text-align:center;">#${s.index}</span>
-                <span class="choghadiya-slot-title" style="font-size:16px; font-weight:900; color:var(--text-main, #0f172a);">${s.name}</span>
-                <span style="font-size:10px; font-weight:800; background:${badgeBg}; color:${badgeColor}; padding:2px 7px; border-radius:8px;">${s.quality}</span>
-                ${s.isActive ? `<span style="font-size:9.5px; font-weight:800; background:#22c55e; color:white; padding:1px 6px; border-radius:6px; display:inline-flex; align-items:center; gap:3px;"><span class="live-pulse-dot" style="width:5px; height:5px; background:white; border-radius:50%;"></span> चालू</span>` : ''}
-              </div>
-              <div class="choghadiya-slot-time" style="font-size:12.5px; font-weight:800; color:var(--text-main, #1e293b); font-variant-numeric:tabular-nums;">
-                ${s.timeWindowStr}
-              </div>
-            </div>
-            <div class="choghadiya-slot-desc" style="font-size:11px; font-weight:600; color:var(--text-muted, #64748b); padding-left:28px; line-height:1.35;">
-              ${s.planet ? `<span style="color:#0284c7; font-weight:700;">${s.planet}</span> • ` : ''}${s.desc}
-            </div>
-          </div>
-        `;
-      });
+      const themeBtn = document.getElementById("themeBtn");
+      if (themeBtn) {
+        themeBtn.addEventListener("click", () => {
+          choghadiyaTheme = choghadiyaTheme === "dark" ? "light" : "dark";
+          const p = document.getElementById("dedicatedChoghadiyaPage");
+          if (p) p.setAttribute("data-theme", choghadiyaTheme);
+          themeBtn.textContent = choghadiyaTheme === "dark" ? "☀️" : "🌙";
+        });
+      }
 
-      container.innerHTML = html;
+      const refreshBtn = document.getElementById("refreshBtn");
+      if (refreshBtn) {
+        refreshBtn.addEventListener("click", () => {
+          refreshBtn.classList.add("spinning");
+          renderChoghadiyaView();
+          updateTopShubhChoghadiyaBar();
+          setTimeout(() => refreshBtn.classList.remove("spinning"), 650);
+        });
+      }
+
+      const backBtn = document.getElementById("backActionBtn");
+      if (backBtn) {
+        backBtn.addEventListener("click", () => {
+          closeDedicatedChoghadiyaPage();
+        });
+      }
     }
 
     function openExternalDrikPanchang() {
@@ -18112,16 +18664,16 @@
 
     // Initialize Choghadiya Auto-Sync & Live Timer on Startup
     function initChoghadiyaService() {
+      setupChoghadiyaEvents();
       updateTopShubhChoghadiyaBar();
       if (choghadiyaLiveTimer) clearInterval(choghadiyaLiveTimer);
       choghadiyaLiveTimer = setInterval(() => {
         updateTopShubhChoghadiyaBar();
         const p = document.getElementById("dedicatedChoghadiyaPage");
         if (p && p.style.display !== "none") {
-          updateChoghadiyaLiveCountdown();
+          updateChoghadiyaLiveHero();
         }
       }, 1000);
-      setTimeout(() => syncChoghadiyaData(new Date(), currentChoghadiyaCity), 1500);
     }
 
     function checkAndShowTodayCelebrations() {
