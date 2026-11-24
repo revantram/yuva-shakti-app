@@ -2023,33 +2023,36 @@
 
     #dedicatedChoghadiyaPage .top-header {
       position: sticky;
-      top: 10px;
+      top: 6px;
       z-index: 25;
-      padding: 10px 12px;
-      border-radius: var(--radius-pill);
-      background: var(--glass-elevated);
-      backdrop-filter: blur(30px) saturate(200%);
-      -webkit-backdrop-filter: blur(30px) saturate(200%);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow), var(--glass-inner-glow);
-      display: flex;
+      padding: 9px 12px !important;
+      border-radius: var(--radius-pill) !important;
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #1d4ed8 100%) !important;
+      backdrop-filter: blur(36px) saturate(220%) !important;
+      -webkit-backdrop-filter: blur(36px) saturate(220%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+      box-shadow: 0 14px 32px -4px rgba(30, 64, 175, 0.42),
+                  0 4px 12px rgba(37, 99, 235, 0.35),
+                  inset 0 1.5px 2px rgba(255, 255, 255, 0.6) !important;
+      display: flex !important;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      margin: 4px 0 10px 0 !important;
     }
 
     #dedicatedChoghadiyaPage .back-btn {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      padding: 7px 12px;
+      padding: 6px 12px;
       border-radius: var(--radius-pill);
-      border: 1px solid var(--glass-border);
-      background: var(--glass-subtle);
-      color: var(--text-primary);
+      border: 1.2px solid rgba(255, 255, 255, 0.45) !important;
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: #FFFFFF !important;
       font-family: var(--font-hi);
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
     }
 
@@ -2068,22 +2071,29 @@
     #dedicatedChoghadiyaPage .brand-title {
       font-size: 15.5px;
       font-weight: 800;
-      color: var(--text-primary);
+      color: #FFFFFF !important;
       line-height: 1.2;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
     }
 
     #dedicatedChoghadiyaPage .brand-sub {
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 700;
-      color: var(--brand-emerald);
+      color: #FEF08A !important;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 4px;
       margin-top: 1px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+
+    #dedicatedChoghadiyaPage #headerCitySub {
+      color: #FFFFFF !important;
+      font-weight: 800;
     }
 
     #dedicatedChoghadiyaPage .header-actions {
@@ -2096,10 +2106,11 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 1px solid var(--glass-border);
-      background: var(--glass-subtle);
-      color: var(--text-primary);
+      border: 1.2px solid rgba(255, 255, 255, 0.45) !important;
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: #FFFFFF !important;
       font-size: 15px;
+      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2519,13 +2530,22 @@
     /* City Modal Sheet */
     #dedicatedChoghadiyaPage .modal-bg {
       position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       inset: 0;
-      z-index: 1200;
-      background: var(--sheet-backdrop);
-      backdrop-filter: blur(8px);
+      width: 100vw;
+      height: 100vh;
+      z-index: 99999;
+      background: rgba(0, 0, 0, 0.78) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
       display: none;
       align-items: flex-end;
       justify-content: center;
+      touch-action: none;
+      overscroll-behavior: contain;
     }
 
     #dedicatedChoghadiyaPage .modal-bg.open { display: flex; }
@@ -2534,13 +2554,16 @@
       width: 100%;
       max-width: 480px;
       background: var(--sheet-bg);
-      border-top: 1px solid var(--glass-border);
-      border-radius: 26px 26px 0 0;
+      border-top: 1.5px solid rgba(255, 255, 255, 0.25);
+      border-radius: 28px 28px 0 0;
       padding: 18px 16px 28px;
-      max-height: 78vh;
+      max-height: 82vh;
       display: flex;
       flex-direction: column;
       gap: 12px;
+      touch-action: auto;
+      overscroll-behavior: contain;
+      box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.55);
     }
 
     #dedicatedChoghadiyaPage .modal-top {
@@ -4830,7 +4853,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.12
+            APK v5.5.13
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4857,7 +4880,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.12 (बिल्ड कोड: 562)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.13 (बिल्ड कोड: 563)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5715,7 +5738,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.12 (बिल्ड कोड: 562)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.13 (बिल्ड कोड: 563)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -7561,10 +7584,16 @@
     <div class="modal-bg" id="cityModal">
       <div class="modal-box">
         <div class="modal-top">
-          <span class="modal-heading">📍 शहर चुनें</span>
-          <button class="icon-circle" id="closeCityModalBtn" type="button">✕</button>
+          <span class="modal-heading">📍 स्थान (गाँव या शहर) चुनें</span>
+          <button class="icon-circle" id="closeCityModalBtn" type="button" style="color:var(--text-primary); border-color:var(--glass-border); background:var(--glass-subtle); width:32px; height:32px; font-size:14px; font-weight:800;">✕</button>
         </div>
-        <input type="text" class="search-box" id="citySearchBox" placeholder="कुचेरा, नागौर, जोधपुर, जयपुर..." />
+        <div style="display:flex; gap:6px;">
+          <input type="text" class="search-box" id="citySearchBox" placeholder="गाँव या शहर खोजें (उदा: डेगाना, मेड़ता, कुचेरा...)" style="flex:1;" />
+          <button type="button" id="onlineCitySearchBtn" style="border:none; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; padding:8px 14px; border-radius:var(--radius-md); font-size:12px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; box-shadow:0 3px 10px rgba(37,99,235,0.3);">
+            <i class="fa-solid fa-globe"></i> <span>ऑनलाइन खोजें</span>
+          </button>
+        </div>
+        <div id="onlineSearchStatus" style="display:none; font-size:11.5px; font-weight:700; color:#2563eb; padding:2px 4px; line-height:1.4;"></div>
         <div class="city-options" id="cityOptionsList"></div>
       </div>
     </div>
@@ -7573,7 +7602,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.12";
+    const APP_VERSION = "5.5.13";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -18100,16 +18129,46 @@
     // 🕉️ ॐ शुभ चौघड़िया मुहूर्त — द्रिक पंचांग इंजन (Liquid Glass Engine)
     // =========================================================================
 
-    const CHOGHADIYA_CITIES_LIST = [
+    const DEFAULT_CHOGHADIYA_CITIES = [
       { id: "kuchera", name: "कुचेरा (नागौर)", short: "कुचेरा (नागौर)", lat: 26.9850, lon: 73.9720 },
       { id: "nagaur", name: "नागौर, राजस्थान", short: "नागौर", lat: 27.2020, lon: 73.7336 },
+      { id: "merta", name: "मेड़ता सिटी, नागौर", short: "मेड़ता", lat: 26.6515, lon: 74.0353 },
+      { id: "degana", name: "डेगाना, नागौर", short: "डेगाना", lat: 26.8959, lon: 74.3222 },
+      { id: "didwana", name: "डीडवाना, राजस्थान", short: "डीडवाना", lat: 27.4000, lon: 74.5667 },
+      { id: "makrana", name: "मकराना, नागौर", short: "मकराना", lat: 27.0500, lon: 74.7200 },
+      { id: "ladnun", name: "लाडनूं, राजस्थान", short: "लाडनूं", lat: 27.6500, lon: 74.3833 },
+      { id: "jayal", name: "जायल, नागौर", short: "जायल", lat: 27.2167, lon: 74.1833 },
       { id: "jodhpur", name: "जोधपुर, राजस्थान", short: "जोधपुर", lat: 26.2389, lon: 73.0243 },
       { id: "jaipur", name: "जयपुर, राजस्थान", short: "जयपुर", lat: 26.9124, lon: 75.7873 },
       { id: "bikaner", name: "बीकानेर, राजस्थान", short: "बीकानेर", lat: 28.0229, lon: 73.3119 },
       { id: "ajmer", name: "अजमेर, राजस्थान", short: "अजमेर", lat: 26.4499, lon: 74.6399 },
+      { id: "pushkar", name: "पुष्कर, राजस्थान", short: "पुष्कर", lat: 26.4886, lon: 74.5539 },
+      { id: "pali", name: "पाली, राजस्थान", short: "पाली", lat: 25.7711, lon: 73.3234 },
       { id: "udaipur", name: "उदयपुर, राजस्थान", short: "उदयपुर", lat: 24.5854, lon: 73.7125 },
       { id: "delhi", name: "नई दिल्ली", short: "नई दिल्ली", lat: 28.6139, lon: 77.2090 }
     ];
+
+    let CHOGHADIYA_CITIES_LIST = [...DEFAULT_CHOGHADIYA_CITIES];
+    try {
+      const savedCustom = JSON.parse(localStorage.getItem("ysg_custom_cities") || "[]");
+      if (Array.isArray(savedCustom) && savedCustom.length > 0) {
+        savedCustom.forEach(sc => {
+          if (!CHOGHADIYA_CITIES_LIST.some(c => c.id === sc.id)) {
+            CHOGHADIYA_CITIES_LIST.unshift(sc);
+          }
+        });
+      }
+    } catch (e) {}
+
+    let currentChoghadiyaCityObj = null;
+    try {
+      const cachedCityObj = localStorage.getItem("ysg_selected_choghadiya_city_obj");
+      if (cachedCityObj) currentChoghadiyaCityObj = JSON.parse(cachedCityObj);
+    } catch (e) {}
+    if (!currentChoghadiyaCityObj) {
+      const savedId = localStorage.getItem("ysg_selected_choghadiya_city");
+      currentChoghadiyaCityObj = CHOGHADIYA_CITIES_LIST.find(c => c.id === savedId) || CHOGHADIYA_CITIES_LIST[0];
+    }
 
     const CHOGHADIYA_META = {
       "अमृत":  { tag: "शुभ",   tone: "good",    desc: "चंद्र • सभी मांगलिक, शुभ व नवीन कार्यों के लिए सर्वोत्तम मुहूर्त।" },
@@ -18141,7 +18200,6 @@
       ["लाभ", "उद्वेग", "शुभ", "अमृत", "चर", "रोग", "काल", "लाभ"]
     ];
 
-    let currentChoghadiyaCityObj = CHOGHADIYA_CITIES_LIST.find(c => c.id === localStorage.getItem("ysg_selected_choghadiya_city")) || CHOGHADIYA_CITIES_LIST[0];
     let choghadiyaCurrentDate = new Date();
     choghadiyaCurrentDate.setHours(0, 0, 0, 0);
     let choghadiyaActiveTab = "day";
@@ -18451,40 +18509,180 @@
       }).join("");
     }
 
+    let onlineCitySearchTimeout = null;
+    let onlineSearchResults = [];
+    let isOnlineSearching = false;
+
+    function openCityModal() {
+      const p = document.getElementById("dedicatedChoghadiyaPage");
+      if (p) p.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      const searchBox = document.getElementById("citySearchBox");
+      if (searchBox) searchBox.value = "";
+      onlineSearchResults = [];
+      const statusEl = document.getElementById("onlineSearchStatus");
+      if (statusEl) statusEl.style.display = "none";
+      renderChoghadiyaCityOptions("");
+      const cityM = document.getElementById("cityModal");
+      if (cityM) cityM.classList.add("open");
+    }
+
+    function closeCityModal() {
+      const p = document.getElementById("dedicatedChoghadiyaPage");
+      if (p) p.style.overflow = "auto";
+      document.body.style.overflow = "hidden"; // maintain lock while Choghadiya page is open
+      const cityM = document.getElementById("cityModal");
+      if (cityM) cityM.classList.remove("open");
+    }
+
     function renderChoghadiyaCityOptions(q = "") {
       const term = q.trim().toLowerCase();
-      const filtered = CHOGHADIYA_CITIES_LIST.filter(c => c.name.toLowerCase().includes(term) || c.id.includes(term));
       const listEl = document.getElementById("cityOptionsList");
       if (!listEl) return;
-      listEl.innerHTML = filtered.map(c => `
-        <button class="city-item ${c.id === currentChoghadiyaCityObj.id ? 'active' : ''}" data-id="${c.id}" type="button">
-          <div>
-            <div class="city-item-title">${c.name}</div>
-            <div class="city-item-sub">अक्षांश ${c.lat}° • देशांतर ${c.lon}°</div>
-          </div>
-          ${c.id === currentChoghadiyaCityObj.id ? '<strong style="color:var(--brand-accent);">✓</strong>' : ''}
-        </button>
-      `).join("");
 
-      listEl.querySelectorAll(".city-item").forEach(btn => {
+      const allCities = [...CHOGHADIYA_CITIES_LIST];
+      const filtered = term ? allCities.filter(c => (c.name || "").toLowerCase().includes(term) || (c.short || "").toLowerCase().includes(term) || (c.id || "").includes(term)) : allCities;
+
+      let html = "";
+
+      if (filtered.length > 0) {
+        html += `<div style="font-size:11px; font-weight:800; color:var(--text-secondary); padding:4px 4px 2px; text-transform:uppercase;">📍 मुख्य व सहेजे गए स्थान</div>`;
+        html += filtered.map(c => `
+          <button class="city-item ${c.id === currentChoghadiyaCityObj.id ? 'active' : ''}" data-id="${c.id}" type="button">
+            <div>
+              <div class="city-item-title">${escapeHtml(c.name)}</div>
+              <div class="city-item-sub">अक्षांश ${Number(c.lat).toFixed(4)}° • देशांतर ${Number(c.lon).toFixed(4)}°</div>
+            </div>
+            ${c.id === currentChoghadiyaCityObj.id ? '<strong style="color:var(--brand-accent); font-size:16px;">✓</strong>' : ''}
+          </button>
+        `).join("");
+      }
+
+      if (onlineSearchResults.length > 0) {
+        html += `<div style="font-size:11.5px; font-weight:800; color:#2563eb; padding:10px 4px 4px; text-transform:uppercase;">🌐 इंटरनेट पर मिले स्थान (गाँव / शहर)</div>`;
+        html += onlineSearchResults.map((c, idx) => `
+          <button class="city-item online-city-item" data-idx="${idx}" type="button" style="border-left:4px solid #2563eb; background:rgba(37,99,235,0.06);">
+            <div>
+              <div class="city-item-title" style="color:#1d4ed8;">🏘️ ${escapeHtml(c.name)}</div>
+              <div class="city-item-sub" style="font-size:11px; line-height:1.3; margin-top:2px;">${escapeHtml(c.displayName || c.name)}</div>
+            </div>
+            <span style="font-size:11px; font-weight:800; color:#ffffff; background:#2563eb; padding:4px 10px; border-radius:6px; white-space:nowrap;">चुनें</span>
+          </button>
+        `).join("");
+      } else if (term.length >= 2 && !isOnlineSearching && filtered.length === 0) {
+        html += `<div style="text-align:center; padding:16px 10px; font-size:12.5px; color:var(--text-secondary);">
+          '${escapeHtml(term)}' सूची में नहीं मिला।<br>
+          <button type="button" onclick="searchOnlineCity(document.getElementById('citySearchBox').value)" style="margin-top:8px; border:none; background:#2563eb; color:white; padding:7px 14px; border-radius:8px; font-weight:800; font-size:12px; cursor:pointer;">
+            🌐 इंटरनेट पर '${escapeHtml(term)}' खोजें
+          </button>
+        </div>`;
+      }
+
+      listEl.innerHTML = html;
+
+      // Event listeners for local cities
+      listEl.querySelectorAll(".city-item:not(.online-city-item)").forEach(btn => {
         btn.addEventListener("click", () => {
-          const pick = CHOGHADIYA_CITIES_LIST.find(c => c.id === btn.dataset.id);
+          const pick = allCities.find(c => c.id === btn.dataset.id);
           if (pick) {
-            currentChoghadiyaCityObj = pick;
-            localStorage.setItem("ysg_selected_choghadiya_city", pick.id);
-            const cityM = document.getElementById("cityModal");
-            if (cityM) cityM.classList.remove("open");
-            renderChoghadiyaView();
-            updateTopShubhChoghadiyaBar();
+            selectAndApplyCity(pick);
           }
         });
       });
+
+      // Event listeners for online found cities
+      listEl.querySelectorAll(".online-city-item").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.dataset.idx, 10);
+          const pick = onlineSearchResults[idx];
+          if (pick) {
+            if (!CHOGHADIYA_CITIES_LIST.some(c => c.id === pick.id)) {
+              CHOGHADIYA_CITIES_LIST.unshift(pick);
+              try {
+                let saved = JSON.parse(localStorage.getItem("ysg_custom_cities") || "[]");
+                saved = saved.filter(c => c.id !== pick.id);
+                saved.unshift(pick);
+                localStorage.setItem("ysg_custom_cities", JSON.stringify(saved.slice(0, 30)));
+              } catch (e) {}
+            }
+            selectAndApplyCity(pick);
+          }
+        });
+      });
+    }
+
+    function selectAndApplyCity(pick) {
+      currentChoghadiyaCityObj = pick;
+      localStorage.setItem("ysg_selected_choghadiya_city", pick.id);
+      try {
+        localStorage.setItem("ysg_selected_choghadiya_city_obj", JSON.stringify(pick));
+      } catch (e) {}
+      closeCityModal();
+      renderChoghadiyaView();
+      updateTopShubhChoghadiyaBar();
+      showToast(`📍 स्थान चुना गया: ${pick.short || pick.name}`, "success");
+    }
+
+    async function searchOnlineCity(query) {
+      const q = (query || "").trim();
+      if (!q || q.length < 2) {
+        showToast("कृपया कम से कम 2 अक्षर लिखें", "warning");
+        return;
+      }
+
+      const statusEl = document.getElementById("onlineSearchStatus");
+      if (statusEl) {
+        statusEl.style.display = "block";
+        statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> इंटरनेट पर '${escapeHtml(q)}' को खोजा जा रहा है...`;
+      }
+      isOnlineSearching = true;
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&countrycodes=in&limit=8&accept-language=hi,en`;
+        const res = await fetch(url, { headers: { "Accept": "application/json" } });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        isOnlineSearching = false;
+
+        if (Array.isArray(data) && data.length > 0) {
+          onlineSearchResults = data.map(item => {
+            const shortName = item.name || q;
+            const fullDisp = item.display_name || "";
+            return {
+              id: "geo_" + Number(item.lat).toFixed(4) + "_" + Number(item.lon).toFixed(4),
+              name: `${shortName}`,
+              short: shortName,
+              displayName: fullDisp,
+              lat: parseFloat(item.lat),
+              lon: parseFloat(item.lon)
+            };
+          });
+          if (statusEl) {
+            statusEl.innerHTML = `✅ ${onlineSearchResults.length} स्थान मिले। नीचे से चुनें:`;
+          }
+        } else {
+          onlineSearchResults = [];
+          if (statusEl) {
+            statusEl.innerHTML = `⚠️ इंटरनेट पर '${escapeHtml(q)}' नहीं मिला। कृपया नाम की वर्तनी जांचें।`;
+          }
+        }
+      } catch (err) {
+        console.warn("Online geocode error:", err);
+        isOnlineSearching = false;
+        if (statusEl) {
+          statusEl.innerHTML = `⚠️ इंटरनेट खोज विफल रही। कनेक्शन जांचें।`;
+        }
+      }
+
+      renderChoghadiyaCityOptions(q);
     }
 
     function openDedicatedChoghadiyaPage() {
       const p = document.getElementById("dedicatedChoghadiyaPage");
       if (!p) return;
       p.style.display = "block";
+      p.style.overflow = "auto";
+      document.body.style.overflow = "hidden";
       const isDark = document.body.classList.contains("dark-theme") || (localStorage.getItem("theme") === "dark");
       choghadiyaTheme = isDark ? "dark" : "light";
       p.setAttribute("data-theme", choghadiyaTheme);
@@ -18498,8 +18696,8 @@
     function closeDedicatedChoghadiyaPage() {
       const p = document.getElementById("dedicatedChoghadiyaPage");
       if (p) p.style.display = "none";
-      const cityM = document.getElementById("cityModal");
-      if (cityM) cityM.classList.remove("open");
+      document.body.style.overflow = "";
+      closeCityModal();
       if (typeof updateActiveModalState === "function") updateActiveModalState();
     }
     window.closeDedicatedChoghadiyaPage = closeDedicatedChoghadiyaPage;
@@ -18511,33 +18709,42 @@
 
       const openCityBtn = document.getElementById("openCityBtn");
       if (openCityBtn) {
-        openCityBtn.addEventListener("click", () => {
-          const searchBox = document.getElementById("citySearchBox");
-          if (searchBox) searchBox.value = "";
-          renderChoghadiyaCityOptions("");
-          const cityM = document.getElementById("cityModal");
-          if (cityM) cityM.classList.add("open");
-        });
+        openCityBtn.addEventListener("click", openCityModal);
       }
 
       const closeCityModalBtn = document.getElementById("closeCityModalBtn");
       if (closeCityModalBtn) {
-        closeCityModalBtn.addEventListener("click", () => {
-          const cityM = document.getElementById("cityModal");
-          if (cityM) cityM.classList.remove("open");
-        });
+        closeCityModalBtn.addEventListener("click", closeCityModal);
       }
 
       const cityModal = document.getElementById("cityModal");
       if (cityModal) {
         cityModal.addEventListener("click", e => {
-          if (e.target.id === "cityModal") cityModal.classList.remove("open");
+          if (e.target.id === "cityModal") closeCityModal();
         });
       }
 
+      const onlineCitySearchBtn = document.getElementById("onlineCitySearchBtn");
       const searchBox = document.getElementById("citySearchBox");
+      if (onlineCitySearchBtn && searchBox) {
+        onlineCitySearchBtn.addEventListener("click", () => searchOnlineCity(searchBox.value));
+      }
+
       if (searchBox) {
-        searchBox.addEventListener("input", e => renderChoghadiyaCityOptions(e.target.value));
+        searchBox.addEventListener("input", e => {
+          renderChoghadiyaCityOptions(e.target.value);
+          clearTimeout(onlineCitySearchTimeout);
+          const val = e.target.value.trim();
+          if (val.length >= 3) {
+            onlineCitySearchTimeout = setTimeout(() => searchOnlineCity(val), 800);
+          }
+        });
+        searchBox.addEventListener("keydown", e => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            searchOnlineCity(searchBox.value);
+          }
+        });
       }
 
       const prevDayBtn = document.getElementById("prevDayBtn");
