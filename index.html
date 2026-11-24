@@ -4847,7 +4847,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.9
+            APK v5.5.10
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4874,7 +4874,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.9 (बिल्ड कोड: 559)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.10 (बिल्ड कोड: 560)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5732,7 +5732,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.9 (बिल्ड कोड: 559)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.10 (बिल्ड कोड: 560)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -7607,7 +7607,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.9";
+    const APP_VERSION = "5.5.10";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -7727,7 +7727,17 @@
     }
     let currentLang = localStorage.getItem("appLang") || "hi";
     let membersList = [];
+    try {
+      const cachedMem = localStorage.getItem("ysg_cached_members_list");
+      if (cachedMem) membersList = JSON.parse(cachedMem) || [];
+    } catch (e) {}
+
     let transactions = [];
+    try {
+      const cachedTx = localStorage.getItem("ysg_cached_transactions_list");
+      if (cachedTx) transactions = JSON.parse(cachedTx) || [];
+    } catch (e) {}
+
     let confirmCallback = null;
     let calendarFilter = "festivals";
 
@@ -12731,6 +12741,10 @@
       // Sort alphabetically by name
       membersList.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'hi'));
 
+      try {
+        localStorage.setItem("ysg_cached_members_list", JSON.stringify(membersList));
+      } catch (e) {}
+
       document.getElementById("memberCountText").innerText = `कुल सदस्य: ${membersList.length}`;
       renderMembers();
       if (typeof vamshaRefresh === "function") vamshaRefresh();
@@ -12788,6 +12802,10 @@
           totalOut += amt;
         }
       });
+
+      try {
+        localStorage.setItem("ysg_cached_transactions_list", JSON.stringify(transactions));
+      } catch (e) {}
 
       document.getElementById("totalCollected").innerText = "₹" + totalIn.toLocaleString('en-IN');
       document.getElementById("totalExpense").innerText = "₹" + totalOut.toLocaleString('en-IN');
@@ -18451,13 +18469,13 @@
       container.innerHTML = list.map(s => {
         const isNow = today && nowMs >= s.start.getTime() && nowMs < s.end.getTime();
         return `
-          <article class="slot-item tone-${s.tone} ${isNow ? "current-slot" : ""}">
+          <article class="slot-item tone-${s.tone} ${isNow ? 'current-slot' : ''}">
             <div class="slot-row-top">
               <div class="slot-left-group">
                 <span class="slot-num">#${s.index}</span>
                 <span class="slot-name">${s.name}</span>
                 <span class="slot-tag">${s.tag}</span>
-                ${isNow ? "<span class="chalu-pill">• चालू</span>" : ""}
+                ${isNow ? '<span class="chalu-pill">• चालू</span>' : ''}
               </div>
               <span class="slot-time-range">${s.timeWindowStr}</span>
             </div>
@@ -18473,12 +18491,12 @@
       const listEl = document.getElementById("cityOptionsList");
       if (!listEl) return;
       listEl.innerHTML = filtered.map(c => `
-        <button class="city-item ${c.id === currentChoghadiyaCityObj.id ? "active" : ""}" data-id="${c.id}" type="button">
+        <button class="city-item ${c.id === currentChoghadiyaCityObj.id ? 'active' : ''}" data-id="${c.id}" type="button">
           <div>
             <div class="city-item-title">${c.name}</div>
             <div class="city-item-sub">अक्षांश ${c.lat}° • देशांतर ${c.lon}°</div>
           </div>
-          ${c.id === currentChoghadiyaCityObj.id ? "<strong style="color:var(--brand-accent);">✓</strong>" : ""}
+          ${c.id === currentChoghadiyaCityObj.id ? '<strong style="color:var(--brand-accent);">✓</strong>' : ''}
         </button>
       `).join("");
 
@@ -23931,9 +23949,12 @@
     document.addEventListener("DOMContentLoaded", () => {
       document.body.style.overflow = "";
       checkInitialAuthState();
-      setTimeout(initAuthGateListener, 500);
-      setTimeout(() => typeof initDeveloperAppsListener === "function" && initDeveloperAppsListener(), 600);
-      setTimeout(() => typeof initChoghadiyaService === "function" && initChoghadiyaService(), 700);
+      try { if (typeof updateTopShubhChoghadiyaBar === "function") updateTopShubhChoghadiyaBar(); } catch (e) {}
+      try { if (typeof updateAmavasyaCountdown === "function") updateAmavasyaCountdown(); } catch (e) {}
+      try { if (typeof renderMembers === "function" && typeof membersList !== "undefined" && membersList && membersList.length > 0) renderMembers(); } catch (e) {}
+      try { if (typeof initChoghadiyaService === "function") initChoghadiyaService(); } catch (e) {}
+      setTimeout(initAuthGateListener, 300);
+      setTimeout(() => typeof initDeveloperAppsListener === "function" && initDeveloperAppsListener(), 400);
 
       // Keydown handlers for Enter key
       const setupEnterKey = (id, fn) => {
