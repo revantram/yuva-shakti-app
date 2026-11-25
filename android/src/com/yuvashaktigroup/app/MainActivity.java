@@ -962,7 +962,7 @@ public class MainActivity extends Activity {
 
                     // 2. Summary Boxes (3 horizontal cards)
                     float boxY1 = 114;
-                    float boxY2 = 172;
+                    float boxY2 = 180;
                     float boxW = 166;
 
                     // Box 1: Total In / Total Available Fund
@@ -975,17 +975,19 @@ public class MainActivity extends Activity {
                     paint.setColor(Color.parseColor("#065f46"));
                     paint.setTextSize(9);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    canvas.drawText(inLabel, 44, boxY1 + 17, paint);
+                    canvas.drawText(inLabel, 44, boxY1 + 15, paint);
                     paint.setColor(Color.parseColor("#047857"));
-                    paint.setTextSize(14.5f);
+                    paint.setTextSize(14f);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    canvas.drawText("₹" + String.format(Locale.US, "%,d", totalIn), 44, boxY1 + 36, paint);
+                    canvas.drawText("₹" + String.format(Locale.US, "%,d", totalIn), 44, boxY1 + 33, paint);
                     if (!breakdownText.isEmpty()) {
                         paint.setColor(Color.parseColor("#059669"));
-                        paint.setTextSize(7.2f);
-                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-                        String truncatedBreakdown = breakdownText.length() > 34 ? breakdownText.substring(0, 32) + ".." : breakdownText;
-                        canvas.drawText(truncatedBreakdown, 44, boxY1 + 50, paint);
+                        paint.setTextSize(6.8f);
+                        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                        List<String> bLines = wrapTextLines(breakdownText, paint, boxW - 14);
+                        for (int bl = 0; bl < Math.min(2, bLines.size()); bl++) {
+                            canvas.drawText(bLines.get(bl), 44, boxY1 + 46 + (bl * 9.5f), paint);
+                        }
                     }
 
                     // Box 2: Total Out / Expenses
@@ -999,11 +1001,11 @@ public class MainActivity extends Activity {
                     paint.setColor(Color.parseColor("#991b1b"));
                     paint.setTextSize(9);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    canvas.drawText(outLabel, box2X + 10, boxY1 + 17, paint);
+                    canvas.drawText(outLabel, box2X + 10, boxY1 + 15, paint);
                     paint.setColor(Color.parseColor("#b91c1c"));
-                    paint.setTextSize(14.5f);
+                    paint.setTextSize(14f);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    canvas.drawText("₹" + String.format(Locale.US, "%,d", totalOut), box2X + 10, boxY1 + 36, paint);
+                    canvas.drawText("₹" + String.format(Locale.US, "%,d", totalOut), box2X + 10, boxY1 + 33, paint);
                     paint.setColor(Color.parseColor("#b91c1c"));
                     paint.setTextSize(7.5f);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
@@ -1020,18 +1022,18 @@ public class MainActivity extends Activity {
                     paint.setColor(Color.parseColor("#1e40af"));
                     paint.setTextSize(9);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    canvas.drawText(netLabel, box3X + 10, boxY1 + 17, paint);
+                    canvas.drawText(netLabel, box3X + 10, boxY1 + 15, paint);
                     paint.setColor(Color.parseColor("#1d4ed8"));
-                    paint.setTextSize(14.5f);
+                    paint.setTextSize(14f);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    canvas.drawText("₹" + String.format(Locale.US, "%,d", net), box3X + 10, boxY1 + 36, paint);
+                    canvas.drawText("₹" + String.format(Locale.US, "%,d", net), box3X + 10, boxY1 + 33, paint);
                     paint.setColor(Color.parseColor("#2563eb"));
                     paint.setTextSize(7.5f);
                     paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
                     canvas.drawText(isExpenseReport ? "शुद्ध उपलब्ध बचत कोष" : (isEnglish ? "Available Balance" : "शुद्ध शेष राशि"), box3X + 10, boxY1 + 50, paint);
 
                     // 3. Table Header
-                    int currentY = 188;
+                    int currentY = 196;
                     drawTableHeader(canvas, paint, currentY, isEnglish, isExpenseReport);
                     currentY += 26;
 

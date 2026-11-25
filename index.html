@@ -70,12 +70,18 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
+    html {
+      -webkit-overflow-scrolling: touch;
+    }
+
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
       padding-bottom: 105px;
       min-height: 100vh;
       line-height: 1.5;
+      overflow-x: hidden;
+      touch-action: pan-y;
     }
 
     /* 🌟 Master Header - iOS 18 Liquid Glass Vivid Royal Blue Floating Capsule (Light & Dark) */
@@ -3428,16 +3434,7 @@
 
     /* ===== 🛡️ Modal Backdrop Isolation & Background Screen Lock ===== */
     body.has-active-modal {
-      overflow: hidden !important;
-      height: 100vh !important;
-      touch-action: none !important;
-    }
-    body.has-active-modal #mainAppHeader,
-    body.has-active-modal .nav-bar,
-    body.has-active-modal #appLayout,
-    body.has-active-modal .section-view {
-      pointer-events: none !important;
-      user-select: none !important;
+      overflow: hidden;
     }
     /* Active overlays, modals, and dedicated sub-pages retain pointer events */
     .modal-overlay,
@@ -4841,7 +4838,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.17
+            APK v5.5.18
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4868,7 +4865,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.17 (बिल्ड कोड: 567)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.18 (बिल्ड कोड: 568)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5726,7 +5723,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.17 (बिल्ड कोड: 567)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.18 (बिल्ड कोड: 568)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -7594,7 +7591,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.17";
+    const APP_VERSION = "5.5.18";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -15991,7 +15988,7 @@
         totalInLabel: "कुल प्रारंभिक व जमा कोष",
         totalOutLabel: "कुल खर्च (व्यय)",
         netLabel: "उपलब्ध कुल कोष",
-        breakdownText: `सुरक्षित शेष ₹${openingBal.toLocaleString('en-IN')} + विसर्जन ₹${ganeshRemaining.toLocaleString('en-IN')} + जमा ₹${postContributions.toLocaleString('en-IN')}`,
+        breakdownText: `सुरक्षित शेष ₹${openingBal.toLocaleString('en-IN')} + विसर्जन शेष ₹${ganeshRemaining.toLocaleString('en-IN')} + जमा ₹${postContributions.toLocaleString('en-IN')}`,
         count: expenses.length,
         date: todayStr
       };
@@ -24255,24 +24252,6 @@
       } catch (e) {}
     }
     window.updateActiveModalState = updateActiveModalState;
-
-    // Observe DOM mutations to auto-lock background screen whenever a modal opens
-    if (typeof MutationObserver !== 'undefined') {
-      const modalObserver = new MutationObserver(() => {
-        updateActiveModalState();
-      });
-      modalObserver.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['style', 'class'] });
-    }
-
-    // 🚫 Prevent Touchmove Bleed on Modal Background
-    document.addEventListener('touchmove', function(e) {
-      if (document.body.classList.contains('has-active-modal')) {
-        const scrollable = e.target.closest('.modal-content, .ios-modal-sheet, #passbookBody, #dedicatedGalleryPage, #dedicatedPaymentPage, #dedicatedCashCounterPage, #dedicatedDeveloperAppsPage, #dedicatedChoghadiyaPage, #dedicatedVamshaPage, #dedicatedVamshaLivingPage, #vamshaLivingOverlay > div, #vamshaPopupHost .vf-popup-card, #vamshaFormOverlay > div, #vamshaPosterCard, [style*="overflow-y:auto"], [style*="overflow-y: auto"]');
-        if (!scrollable) {
-          if (e.cancelable) e.preventDefault();
-        }
-      }
-    }, { passive: false });
 
     // 📋 All Modal Close Handlers Map
     window.modalCloseHandlers = {
