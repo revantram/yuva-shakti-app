@@ -34,6 +34,7 @@ cp "${APP_DIR}/login.html" "${BUILD_DIR}/assets/login.html" 2>/dev/null || true
 cp "${APP_DIR}/payment-methods.html" "${BUILD_DIR}/assets/payment-methods.html" 2>/dev/null || true
 cp "${APP_DIR}/cash-counter.html" "${BUILD_DIR}/assets/cash-counter.html" 2>/dev/null || true
 cp "${APP_DIR}/notes_data.js" "${BUILD_DIR}/assets/notes_data.js" 2>/dev/null || true
+cp "${APP_DIR}/icons_data.js" "${BUILD_DIR}/assets/icons_data.js" 2>/dev/null || true
 cp "${APP_DIR}/manifest.json" "${BUILD_DIR}/assets/manifest.json" 2>/dev/null || true
 cp "${APP_DIR}/favicon.png" "${BUILD_DIR}/assets/favicon.png" 2>/dev/null || true
 cp "${APP_DIR}/ic_launcher.png" "${BUILD_DIR}/assets/ic_launcher.png" 2>/dev/null || true

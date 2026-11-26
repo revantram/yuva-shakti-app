@@ -34,6 +34,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="notes_data.js"></script>
+  <script src="icons_data.js"></script>
   <style>
     :root {
       --primary: #007aff;
@@ -5044,7 +5045,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.30
+            APK v5.5.31
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5071,7 +5072,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.30 (बिल्ड कोड: 580)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.31 (बिल्ड कोड: 581)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5295,11 +5296,11 @@
         </div>
         <!-- Real icons preview strip -->
         <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px; padding-top:8px; border-top:1px solid rgba(37,99,235,0.12);">
-          <div style="display:flex; align-items:center; gap:7px;">
-            <img src="assets/icons/rv-bhati-player.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/rv-bhati-player.png';">
-            <img src="assets/icons/photo-tool.svg" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/photo-tool.svg';">
-            <img src="assets/icons/meri-taiyari.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/meri-taiyari.png';">
-            <img src="assets/icons/rv-downloader.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/rv-downloader.png';">
+          <div id="devAppsPreviewStrip" style="display:flex; align-items:center; gap:7px;">
+            <img id="devPreviewIcon_player" src="assets/icons/rv-bhati-player.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/rv-bhati-player.png';">
+            <img id="devPreviewIcon_photo" src="assets/icons/photo-tool.svg" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/photo-tool.svg';">
+            <img id="devPreviewIcon_taiyari" src="assets/icons/meri-taiyari.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/meri-taiyari.png';">
+            <img id="devPreviewIcon_downloader" src="assets/icons/rv-downloader.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/rv-downloader.png';">
           </div>
           <span style="font-size:10.5px; color:#475569; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:4px;">
             <i class="fa-solid fa-cloud-arrow-down" style="color:#2563eb; font-size:10px;"></i>
@@ -5885,7 +5886,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.30 (बिल्ड कोड: 580)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.31 (बिल्ड कोड: 581)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -8078,8 +8079,8 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    let APP_VERSION = "5.5.30";
-    let APP_BUILD_CODE = "580";
+    let APP_VERSION = "5.5.31";
+    let APP_BUILD_CODE = "581";
     try {
       if (window.AndroidApp && typeof window.AndroidApp.getAppVersionName === "function") {
         const nativeVer = window.AndroidApp.getAppVersionName();
@@ -21285,7 +21286,7 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         repo: "revantram/rv-bhati-player",
         directApkUrl: "https://github.com/revantram/rv-bhati-player/releases/download/v1.4.42/RV-Bhati-Player.apk",
         url: "https://github.com/revantram/rv-bhati-player/releases/latest",
-        iconUrl: "assets/icons/rv-bhati-player.png",
+        iconUrl: (typeof window !== "undefined" && window.APP_ICONS_DATA && window.APP_ICONS_DATA["rv-bhati-player"]) ? window.APP_ICONS_DATA["rv-bhati-player"] : "assets/icons/rv-bhati-player.png",
         remoteIconUrl: "https://raw.githubusercontent.com/revantram/rv-bhati-player/main/assets/icon/app_icon.png",
         icon: "fa-solid fa-circle-play",
         iconGradient: "linear-gradient(135deg, #7c3aed, #4f46e5)",
@@ -21302,7 +21303,7 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         repo: "revantram/photo-tool",
         directApkUrl: "https://github.com/revantram/photo-tool/releases/download/v1.0.0/PhotoTool-v1.0.apk",
         url: "https://github.com/revantram/photo-tool/releases/latest",
-        iconUrl: "assets/icons/photo-tool.svg",
+        iconUrl: (typeof window !== "undefined" && window.APP_ICONS_DATA && window.APP_ICONS_DATA["photo-tool"]) ? window.APP_ICONS_DATA["photo-tool"] : "assets/icons/photo-tool.svg",
         remoteIconUrl: "https://raw.githubusercontent.com/revantram/photo-tool/main/assets/icon.svg",
         icon: "fa-solid fa-camera-retro",
         iconGradient: "linear-gradient(135deg, #2563eb, #0284c7)",
@@ -21319,7 +21320,7 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         repo: "revantram/meri-taiyari-mcq-prep",
         directApkUrl: "https://github.com/revantram/meri-taiyari-mcq-prep/releases/download/v5.2.2/MeriTaiyari_MCQ_Prep.apk",
         url: "https://github.com/revantram/meri-taiyari-mcq-prep/releases/latest",
-        iconUrl: "assets/icons/meri-taiyari.png",
+        iconUrl: (typeof window !== "undefined" && window.APP_ICONS_DATA && window.APP_ICONS_DATA["meri-taiyari"]) ? window.APP_ICONS_DATA["meri-taiyari"] : "assets/icons/meri-taiyari.png",
         remoteIconUrl: "https://raw.githubusercontent.com/revantram/meri-taiyari-mcq-prep/main/assets/icon-192.png",
         icon: "fa-solid fa-graduation-cap",
         iconGradient: "linear-gradient(135deg, #ea580c, #d97706)",
@@ -21336,7 +21337,7 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         repo: "revantram/rv-downloader",
         directApkUrl: "https://github.com/revantram/rv-downloader/releases/download/v1.0.10-b11/RV-Downloader.apk",
         url: "https://github.com/revantram/rv-downloader/releases/latest",
-        iconUrl: "assets/icons/rv-downloader.png",
+        iconUrl: (typeof window !== "undefined" && window.APP_ICONS_DATA && window.APP_ICONS_DATA["rv-downloader"]) ? window.APP_ICONS_DATA["rv-downloader"] : "assets/icons/rv-downloader.png",
         remoteIconUrl: "https://raw.githubusercontent.com/revantram/rv-downloader/main/assets/icon/app_icon.png",
         icon: "fa-solid fa-circle-down",
         iconGradient: "linear-gradient(135deg, #059669, #0d9488)",
@@ -21451,11 +21452,15 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
             snapshot.forEach(doc => {
               const data = doc.data();
               const def = DEFAULT_DEVELOPER_APPS.find(d => d.id === doc.id);
-              list.push({
+              const merged = {
                 id: doc.id,
                 ...(def || {}),
                 ...data
-              });
+              };
+              if (window.APP_ICONS_DATA && window.APP_ICONS_DATA[doc.id]) {
+                merged.iconUrl = window.APP_ICONS_DATA[doc.id];
+              }
+              list.push(merged);
             });
             list.sort((a, b) => (Number(a.order) || 999) - (Number(b.order) || 999));
             developerAppsList = list;
@@ -21498,6 +21503,22 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         const count = (developerAppsList && developerAppsList.length) ? developerAppsList.length : 4;
         badge.innerText = `${count} ऐप्स`;
       }
+      updateDevAppsPreviewIcons();
+    }
+
+    function updateDevAppsPreviewIcons() {
+      if (!window.APP_ICONS_DATA) return;
+      const m = {
+        "devPreviewIcon_player": "rv-bhati-player",
+        "devPreviewIcon_photo": "photo-tool",
+        "devPreviewIcon_taiyari": "meri-taiyari",
+        "devPreviewIcon_downloader": "rv-downloader"
+      };
+      Object.keys(m).forEach(id => {
+        const el = document.getElementById(id);
+        const iconData = window.APP_ICONS_DATA[m[id]];
+        if (el && iconData) el.src = iconData;
+      });
     }
 
     function openDeveloperAppsScreen() {
@@ -21546,18 +21567,25 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         const size = meta.size;
         const subtitle = app.subtitle || "एंड्रॉइड एप्लीकेशन";
         const desc = app.description || "रेवंतराम भाटी द्वारा विकसित सुरक्षित एंड्रॉइड ऐप।";
+        const realIcon = (window.APP_ICONS_DATA && window.APP_ICONS_DATA[app.id]) || (app.iconUrl && app.iconUrl.startsWith("data:") ? app.iconUrl : "") || (app.iconUrl || "");
 
         html += `
           <div class="ios-glass-card" style="background:#ffffff; border-radius:20px; padding:16px 18px; border:1.5px solid rgba(0,0,0,0.07); box-shadow:0 4px 16px rgba(0,0,0,0.04); display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
               <div style="display:flex; align-items:center; gap:12px;">
                 <div style="width:52px; height:52px; border-radius:15px; overflow:hidden; flex-shrink:0; background:#f8fafc; box-shadow:0 4px 12px rgba(0,0,0,0.12); border:1px solid rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center; position:relative;">
-                  <img src="${escapeHtml(app.iconUrl || '')}" alt="${escapeHtml(app.name)}" 
-                    onerror="if(this.src!=='${escapeHtml(app.remoteIconUrl || '')}' && '${escapeHtml(app.remoteIconUrl || '')}'){ this.src='${escapeHtml(app.remoteIconUrl || '')}'; } else { this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex'; }"
-                    style="width:100%; height:100%; object-fit:cover; display:block;" />
-                  <div style="display:none; width:100%; height:100%; background:${iconGrad}; color:white; align-items:center; justify-content:center; font-size:22px;">
-                    <i class="${escapeHtml(iconClass)}"></i>
-                  </div>
+                  ${realIcon ? `
+                    <img src="${realIcon}" alt="${escapeHtml(app.name)}" 
+                      style="width:100%; height:100%; object-fit:cover; display:block;"
+                      onerror="if(this.dataset.tried!=='1' && '${escapeHtml(app.remoteIconUrl || '')}'){ this.dataset.tried='1'; this.src='${escapeHtml(app.remoteIconUrl || '')}'; } else { this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex'; }" />
+                    <div style="display:none; width:100%; height:100%; background:${iconGrad}; color:white; align-items:center; justify-content:center; font-size:22px;">
+                      <i class="${escapeHtml(iconClass)}"></i>
+                    </div>
+                  ` : `
+                    <div style="width:100%; height:100%; background:${iconGrad}; color:white; display:flex; align-items:center; justify-content:center; font-size:22px;">
+                      <i class="${escapeHtml(iconClass)}"></i>
+                    </div>
+                  `}
                 </div>
                 <div>
                   <div style="font-weight:900; font-size:16px; color:#0f172a; line-height:1.2;">
@@ -25760,6 +25788,7 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
       try { if (typeof updateAmavasyaCountdown === "function") updateAmavasyaCountdown(); } catch (e) {}
       try { if (typeof renderMembers === "function" && typeof membersList !== "undefined" && membersList && membersList.length > 0) renderMembers(); } catch (e) {}
       try { if (typeof initChoghadiyaService === "function") initChoghadiyaService(); } catch (e) {}
+      try { if (typeof updateDevAppsPreviewIcons === "function") updateDevAppsPreviewIcons(); } catch (e) {}
       setTimeout(initAuthGateListener, 300);
       setTimeout(() => typeof initDeveloperAppsListener === "function" && initDeveloperAppsListener(), 400);
 
