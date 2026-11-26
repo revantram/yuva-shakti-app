@@ -38,7 +38,9 @@ cp "${APP_DIR}/manifest.json" "${BUILD_DIR}/assets/manifest.json" 2>/dev/null ||
 cp "${APP_DIR}/favicon.png" "${BUILD_DIR}/assets/favicon.png" 2>/dev/null || true
 cp "${APP_DIR}/ic_launcher.png" "${BUILD_DIR}/assets/ic_launcher.png" 2>/dev/null || true
 if [ -d "${APP_DIR}/assets" ]; then
-  cp -r "${APP_DIR}/assets" "${BUILD_DIR}/"
+  cp -r "${APP_DIR}/assets"/* "${BUILD_DIR}/assets/"
+  mkdir -p "${BUILD_DIR}/assets/assets"
+  cp -r "${APP_DIR}/assets"/* "${BUILD_DIR}/assets/assets/"
 fi
 
 echo "==> ⚙️ Compiling resources with AAPT2..."
