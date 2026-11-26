@@ -29,8 +29,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 📱 Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: 📱 Accept Android Licenses
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
 
       - name: 🔐 Restore Permanent Release Keystore
         env:
@@ -40,12 +41,10 @@ jobs:
           if [ -n "$KEYSTORE_BASE64" ]; then
             echo "$KEYSTORE_BASE64" | base64 --decode > secrets/release.keystore
             echo "✅ Release Keystore successfully restored from GitHub Repository Secrets."
-          elif [ -f "android/release.keystore" ]; then
-            cp android/release.keystore secrets/release.keystore
-            echo "✅ Local android/release.keystore loaded."
           else
-            echo "❌ ERROR: KEYSTORE_BASE64 secret is not defined in GitHub Repository Secrets!"
-            echo "Please add KEYSTORE_BASE64 in Settings -> Secrets and variables -> Actions."
+            echo "::error ::❌ KEYSTORE_BASE64 secret is not defined in GitHub Repository Secrets!"
+            echo "Please go to: Repository Settings -> Secrets and variables -> Actions -> New repository secret"
+            echo "Name: KEYSTORE_BASE64"
             exit 1
           fi
 
