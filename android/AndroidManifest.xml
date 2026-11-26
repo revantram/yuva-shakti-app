@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yuvashaktigroup.app"
-    android:versionCode="582"
-    android:versionName="5.5.32">
+    android:versionCode="583"
+    android:versionName="5.5.33">
 
     <uses-sdk
         android:minSdkVersion="24"
