@@ -26,8 +26,8 @@ android {
         applicationId "com.yuvashaktigroup.app"
         minSdk 24
         targetSdk 34
-        versionCode 579
-        versionName "5.5.29"
+        versionCode 580
+        versionName "5.5.30"
     }
 
     sourceSets {

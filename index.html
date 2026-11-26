@@ -5034,6 +5034,56 @@
     <!-- 5. सेटिंग्स टैब (व्यवस्थित एवं श्रेणीबद्ध लेआउट) -->
     <div id="viewSettings" class="section-view">
       
+<!-- 1. ℹ️ डेवलपर ऑप्शन एवं अपडेट (Developer & App Version Card) -->
+      <div class="card ios-glass-card" id="developerInfoCard" style="border:1.5px solid rgba(37, 99, 235, 0.25); background:linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(239, 246, 255, 0.90) 100%); box-shadow:0 8px 24px -4px rgba(37,99,235,0.12); margin-bottom:14px;">
+        <div class="card-title">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <div class="ios-icon-tile ios-icon-indigo" style="width:30px; height:30px; font-size:14px; border-radius:9px; background:linear-gradient(135deg, #4338ca, #3b82f6); color:white; box-shadow:0 3px 8px rgba(67, 56, 202, 0.3);">
+              <i class="fa-solid fa-code"></i>
+            </div>
+            <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
+          </span>
+          <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
+            APK v5.5.30
+          </span>
+        </div>
+        <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
+            <span>मुख्य डेवलपर व संचालक:</span>
+            <strong style="color:#1e3a8a; font-weight:800;">रेवंतराम भाटी</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
+            <span>डेवलपर ईमेल (Gmail):</span>
+            <a href="mailto:revantrambhati@gmail.com" style="color:#2563eb; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+              <i class="fa-solid fa-envelope"></i> revantrambhati@gmail.com
+            </a>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
+            <span>डेवलपर मोबाइल नंबर:</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <a href="tel:+918696663615" style="color:#16a34a; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                <i class="fa-solid fa-phone"></i> +91 8696663615
+              </a>
+              <a href="https://wa.me/918696663615" target="_blank" style="color:#16a34a; font-size:14px; text-decoration:none;" title="व्हाट्सएप पर संपर्क करें">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
+            <span>एपीके संस्करण (APK Version):</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.30 (बिल्ड कोड: 580)</span>
+          </div>
+          <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
+            <span>क्लाउड डेटाबेस:</span>
+            <span style="color:#10b981; font-weight:700; font-size:12px;">🟢 Firebase Firestore कनेक्टेड</span>
+          </div>
+        </div>
+        <button class="btn-main" onclick="checkForAppUpdates(false)" style="margin-top:14px; width:100%; font-weight:800; border-radius:14px; background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color:white; padding:12px; font-size:13px; box-shadow:0 4px 14px rgba(37,99,235,0.25); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-solid fa-arrows-rotate"></i> <span>अपडेट की जांच करें (Check for Updates)</span>
+        </button>
+      </div>
+
+      
       <!-- 1. 👤 खाता प्रोफाइल एवं लॉगिन/लॉगआउट (Account Profile Card) -->
       <div class="card" id="settingsAuthCard" style="margin-bottom:14px;">
         <div class="card-title">
@@ -5256,55 +5306,6 @@
             <span>1-क्लिक इन-ऐप डाउनलोड</span>
           </span>
         </div>
-      </div>
-
-      <!-- 6. ℹ️ डेवलपर ऑप्शन एवं अपडेट (Developer & App Version Card) -->
-      <div class="card ios-glass-card" id="developerInfoCard" style="border:1.5px solid rgba(37, 99, 235, 0.25); background:linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(239, 246, 255, 0.90) 100%); box-shadow:0 8px 24px -4px rgba(37,99,235,0.12); margin-bottom:20px;">
-        <div class="card-title">
-          <span style="display:flex; align-items:center; gap:8px;">
-            <div class="ios-icon-tile ios-icon-indigo" style="width:30px; height:30px; font-size:14px; border-radius:9px; background:linear-gradient(135deg, #4338ca, #3b82f6); color:white; box-shadow:0 3px 8px rgba(67, 56, 202, 0.3);">
-              <i class="fa-solid fa-code"></i>
-            </div>
-            <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
-          </span>
-          <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.29
-          </span>
-        </div>
-        <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
-            <span>मुख्य डेवलपर व संचालक:</span>
-            <strong style="color:#1e3a8a; font-weight:800;">रेवंतराम भाटी</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
-            <span>डेवलपर ईमेल (Gmail):</span>
-            <a href="mailto:revantrambhati@gmail.com" style="color:#2563eb; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-              <i class="fa-solid fa-envelope"></i> revantrambhati@gmail.com
-            </a>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
-            <span>डेवलपर मोबाइल नंबर:</span>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <a href="tel:+918696663615" style="color:#16a34a; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
-                <i class="fa-solid fa-phone"></i> +91 8696663615
-              </a>
-              <a href="https://wa.me/918696663615" target="_blank" style="color:#16a34a; font-size:14px; text-decoration:none;" title="व्हाट्सएप पर संपर्क करें">
-                <i class="fa-brands fa-whatsapp"></i>
-              </a>
-            </div>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
-            <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.29 (बिल्ड कोड: 579)</span>
-          </div>
-          <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
-            <span>क्लाउड डेटाबेस:</span>
-            <span style="color:#10b981; font-weight:700; font-size:12px;">🟢 Firebase Firestore कनेक्टेड</span>
-          </div>
-        </div>
-        <button class="btn-main" onclick="checkForAppUpdates(false)" style="margin-top:14px; width:100%; font-weight:800; border-radius:14px; background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color:white; padding:12px; font-size:13px; box-shadow:0 4px 14px rgba(37,99,235,0.25); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
-          <i class="fa-solid fa-arrows-rotate"></i> <span>अपडेट की जांच करें (Check for Updates)</span>
-        </button>
       </div>
 
       <!-- Hidden fallbacks for JS compatibility -->
@@ -5884,7 +5885,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.29 (बिल्ड कोड: 579)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.30 (बिल्ड कोड: 580)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -8077,8 +8078,8 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    let APP_VERSION = "5.5.29";
-    let APP_BUILD_CODE = "579";
+    let APP_VERSION = "5.5.30";
+    let APP_BUILD_CODE = "580";
     try {
       if (window.AndroidApp && typeof window.AndroidApp.getAppVersionName === "function") {
         const nativeVer = window.AndroidApp.getAppVersionName();
