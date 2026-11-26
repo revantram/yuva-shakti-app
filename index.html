@@ -5031,20 +5031,235 @@
       </div>
     </div>
 
-    <!-- 5. सेटिंग्स टैब -->
+    <!-- 5. सेटिंग्स टैब (व्यवस्थित एवं श्रेणीबद्ध लेआउट) -->
     <div id="viewSettings" class="section-view">
       
-      <!-- 1. डेवलपर ऑप्शन एवं अपडेट (सबसे ऊपर) -->
-      <div class="card ios-glass-card" id="developerInfoCard" style="border:1.5px solid rgba(37, 99, 235, 0.25); background:linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(239, 246, 255, 0.90) 100%); box-shadow:0 8px 24px -4px rgba(37,99,235,0.12);">
+      <!-- 1. 👤 खाता प्रोफाइल एवं लॉगिन/लॉगआउट (Account Profile Card) -->
+      <div class="card" id="settingsAuthCard" style="margin-bottom:14px;">
+        <div class="card-title">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <div class="ios-icon-tile ios-icon-gray" style="width:28px; height:28px; font-size:13px; border-radius:8px;">
+              <i class="fa-solid fa-user-gear"></i>
+            </div>
+            <span data-i18n="settings_auth_title">खाता प्रोफाइल एवं लॉगआउट</span>
+          </span>
+          <span class="ios-value-badge" id="settingsAuthBadge" style="font-size:11px; padding:2px 8px;">लॉगिन नहीं हैं</span>
+        </div>
+        <div style="padding:6px 0 12px 0;">
+          <div style="font-size:15px; font-weight:700; color:var(--text-main);" id="settingsUserName">लॉगिन नहीं हैं</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="settingsUserPhone">ग्रुप सदस्य या संचालक लॉगिन करें</div>
+        </div>
+        <div id="settingsAuthActionBox">
+          <button class="btn-main" style="width:100%; border-radius:14px;" id="settingsLoginBtn" onclick="openLoginModal()">
+            <i class="fa-solid fa-right-to-bracket"></i> सदस्य / संचालक लॉगिन करें
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. 👑 संचालक कंट्रोल सेंटर (Admin Control Center - केवल संचालक नंबर 8696663615 के लिए दृश्यमान) -->
+      <div id="settingsAdminEntryPoint" style="display:none; margin-bottom:14px;">
+        <div class="card ios-glass-card" onclick="openDedicatedAdminControlPage()" style="padding:13px 15px; border-radius:20px; cursor:pointer; background:linear-gradient(135deg, rgba(254, 243, 199, 0.95), rgba(255, 251, 235, 0.98)); border:1.5px solid #fde68a; box-shadow:0 4px 16px rgba(217, 119, 6, 0.12); transition:transform 0.15s ease;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg, #d97706, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:17px; box-shadow:0 4px 10px rgba(217,119,6,0.35); flex-shrink:0;">
+                <i class="fa-solid fa-crown"></i>
+              </div>
+              <div>
+                <div style="font-weight:900; font-size:14.5px; color:#92400e; display:flex; align-items:center; gap:6px;">
+                  <span>एडमिन कंट्रोल (Admin Control)</span>
+                </div>
+                <div style="font-size:11px; color:#b45309; margin-top:2px;">संचालक नियंत्रण, UPI, अधिकार पिन, AI ज्योतिष एवं सूचनाएं</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="ios-value-badge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a; font-weight:800; font-size:10.5px;">पूर्ण अधिकार</span>
+              <i class="fa-solid fa-chevron-right ios-chevron" style="color:#d97706;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. ⚙️ ऐप प्राथमिकताएं (App Preferences Card) -->
+      <div class="card ios-glass-card" style="padding:10px 14px; border-radius:20px; margin-bottom:14px;">
+        <div style="font-size:12px; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin:4px 4px 8px 4px; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-sliders" style="color:#3b82f6;"></i>
+          <span>ऐप प्राथमिकताएं (Preferences)</span>
+        </div>
+        <div style="display:flex; flex-direction:column;">
+          
+          <!-- भाषा (Language) -->
+          <div class="settings-list-item" onclick="openLanguageModal()" style="padding:10px 4px; border-bottom:1px solid var(--border-color); cursor:pointer;">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile ios-icon-blue" style="width:32px; height:32px; font-size:14px; border-radius:9px;">
+                <i class="fa-solid fa-language"></i>
+              </div>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:var(--text-main);" data-i18n="lang_title">भाषा (Language)</div>
+                <div style="font-size:11px; color:var(--text-muted);" id="settingLangSub">सक्रिय भाषा: हिन्दी</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge ios-value-blue" id="settingLangPreviewBadge">हिन्दी</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
+
+          <!-- ऐप थीम (App Theme) -->
+          <div class="settings-list-item" onclick="openThemeModal()" style="padding:10px 4px; border-bottom:1px solid var(--border-color); cursor:pointer;">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile ios-icon-orange" style="width:32px; height:32px; font-size:14px; border-radius:9px;">
+                <i class="fa-solid fa-palette"></i>
+              </div>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:var(--text-main);" data-i18n="theme_title">ऐप थीम</div>
+                <div style="font-size:11px; color:var(--text-muted);" id="settingThemeSub">क्लासिक सफेद व साफ रूप</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge ios-value-orange" id="settingThemePreviewBadge">लाइट मोड</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
+
+          <!-- नोटिफिकेशन व अनुमति (Notifications & Permissions) -->
+          <div class="settings-list-item" onclick="handleNotificationSettingClick()" style="padding:10px 4px; border-bottom:1px solid var(--border-color); cursor:pointer;">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile" style="width:32px; height:32px; font-size:14px; border-radius:9px; background:linear-gradient(135deg, #ef4444, #dc2626); color:white; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-bell"></i>
+              </div>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:var(--text-main);">नोटिफिकेशन व अनुमति</div>
+                <div style="font-size:11px; color:var(--text-muted);" id="settingNotificationSub">दैनिक सुविचार व बकाया अंशदान अलर्ट</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge" style="background:#fee2e2; color:#b91c1c; border:1px solid #fecaca;" id="settingNotificationBadge">जांचें / चालू करें</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
+
+          <!-- आज का सुविचार (Daily Suvichar) -->
+          <div class="settings-list-item" onclick="openDailySuvicharModal()" style="padding:10px 4px; border-bottom:1px solid var(--border-color); cursor:pointer;">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile ios-icon-orange" style="width:32px; height:32px; font-size:14px; border-radius:9px; background:linear-gradient(135deg, #f59e0b, #d97706); box-shadow:0 3px 8px rgba(245, 158, 11, 0.35); color:white; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-sun"></i>
+              </div>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:var(--text-main);">आज का सुविचार</div>
+                <div style="font-size:11px; color:var(--text-muted);">दैनिक प्रेरक विचार पढ़ें व शेयर करें</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a;">सुविचार</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
+
+          <!-- वेलकम संदेश (Welcome Message) -->
+          <div class="settings-list-item" onclick="openAppObjectiveModal()" style="padding:10px 4px; cursor:pointer;">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile ios-icon-green" style="width:32px; height:32px; font-size:14px; border-radius:9px;">
+                <i class="fa-solid fa-hands-praying"></i>
+              </div>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:var(--text-main);">वेलकम संदेश</div>
+                <div style="font-size:11px; color:var(--text-muted);">स्वागत संदेश, पारिवारिक एकता व सहयोग नियम</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge ios-value-green">संदेश</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 4. 🤝 शेयरिंग व समुदाय (Sharing & Community Card) -->
+      <div class="card ios-glass-card" style="padding:10px 14px; border-radius:20px; margin-bottom:14px;">
+        <div style="font-size:12px; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin:4px 4px 8px 4px; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-share-nodes" style="color:#10b981;"></i>
+          <span>शेयरिंग व समुदाय (Sharing & Community)</span>
+        </div>
+        <div style="display:flex; flex-direction:column;">
+          
+          <!-- ऐप शेयर करें (APK Send) -->
+          <div class="settings-list-item" onclick="shareAppDirectly()" style="padding:10px 4px; border-bottom:1px solid var(--border-color); cursor:pointer;">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile ios-icon-orange" style="width:32px; height:32px; font-size:14px; border-radius:9px; background:linear-gradient(135deg, #ea580c, #c2410c);">
+                <i class="fa-solid fa-paper-plane"></i>
+              </div>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:var(--text-main);">ऐप शेयर करें (APK Send)</div>
+                <div style="font-size:11px; color:var(--text-muted);">व्हाट्सएप पर सीधी ऐप (APK फाइल) भेजें</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge ios-value-orange">APK शेयर</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
+
+          <!-- व्हाट्सएप ग्रुप (WhatsApp Group) -->
+          <div class="settings-list-item" onclick="openWhatsAppUrl('https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh')" style="padding:10px 4px; cursor:pointer;">
+            <div class="settings-item-left">
+              <div class="ios-icon-tile" style="width:32px; height:32px; font-size:15px; border-radius:9px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-brands fa-whatsapp"></i>
+              </div>
+              <div>
+                <div style="font-weight:800; font-size:14px; color:var(--text-main);">व्हाट्सएप ग्रुप</div>
+                <div style="font-size:11px; color:var(--text-muted);">भाटी परिवार आधिकारिक ग्रुप से जुड़ें</div>
+              </div>
+            </div>
+            <div class="settings-item-right">
+              <span class="ios-value-badge ios-value-green">व्हाट्सएप</span>
+              <i class="fa-solid fa-chevron-right ios-chevron"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 5. 📱 डेवलपर एवं अन्य एप्लीकेशन (Developer & Other Apps Card) -->
+      <div class="card ios-glass-card" id="developerAppsEntryCard" onclick="openDeveloperAppsScreen()" style="padding:14px 16px; border-radius:20px; margin-bottom:14px; cursor:pointer; border:1.5px solid rgba(59, 130, 246, 0.28); background:linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(255, 255, 255, 0.98)); box-shadow:0 4px 16px rgba(37, 99, 235, 0.08); transition:transform 0.15s ease;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="ios-icon-tile" style="width:38px; height:38px; font-size:17px; border-radius:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(37, 99, 235, 0.35); flex-shrink:0;">
+              <i class="fa-solid fa-shapes"></i>
+            </div>
+            <div>
+              <div style="font-weight:800; font-size:14.5px; color:#1e3a8a; display:flex; align-items:center; gap:6px;">
+                <span>डेवलपर के और दूसरे एप्लीकेशन</span>
+              </div>
+              <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">RV Bhati Player, Photo Tool, मेरी तैयारी व Rv-downloader</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="ios-value-badge" id="devAppsCountBadge" style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; font-size:11px; font-weight:800; padding:3px 9px;">4 ऐप्स</span>
+            <i class="fa-solid fa-chevron-right ios-chevron" style="color:#94a3b8; font-size:13px;"></i>
+          </div>
+        </div>
+        <!-- Real icons preview strip -->
+        <div style="display:flex; align-items:center; gap:8px; margin-top:10px; padding-top:8px; border-top:1px solid rgba(37,99,235,0.1);">
+          <img src="assets/icons/rv-bhati-player.png" style="width:26px; height:26px; border-radius:7px; object-fit:cover; border:1px solid #cbd5e1;" onerror="this.style.display='none'">
+          <img src="assets/icons/photo-tool.svg" style="width:26px; height:26px; border-radius:7px; object-fit:cover; border:1px solid #cbd5e1;" onerror="this.style.display='none'">
+          <img src="assets/icons/meri-taiyari.png" style="width:26px; height:26px; border-radius:7px; object-fit:cover; border:1px solid #cbd5e1;" onerror="this.style.display='none'">
+          <img src="assets/icons/rv-downloader.png" style="width:26px; height:26px; border-radius:7px; object-fit:cover; border:1px solid #cbd5e1;" onerror="this.style.display='none'">
+          <span style="font-size:10.5px; color:#64748b; font-weight:600; margin-left:auto;">1-क्लिक इन-ऐप डाउनलोड</span>
+        </div>
+      </div>
+
+      <!-- 6. ℹ️ डेवलपर ऑप्शन एवं अपडेट (Developer & App Version Card) -->
+      <div class="card ios-glass-card" id="developerInfoCard" style="border:1.5px solid rgba(37, 99, 235, 0.25); background:linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(239, 246, 255, 0.90) 100%); box-shadow:0 8px 24px -4px rgba(37,99,235,0.12); margin-bottom:20px;">
         <div class="card-title">
           <span style="display:flex; align-items:center; gap:8px;">
             <div class="ios-icon-tile ios-icon-indigo" style="width:30px; height:30px; font-size:14px; border-radius:9px; background:linear-gradient(135deg, #4338ca, #3b82f6); color:white; box-shadow:0 3px 8px rgba(67, 56, 202, 0.3);">
-              <i class="fa-solid fa-sliders"></i>
+              <i class="fa-solid fa-code"></i>
             </div>
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.24
+            APK v5.5.25
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5071,7 +5286,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.24 (बिल्ड कोड: 574)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.25 (बिल्ड कोड: 575)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5083,321 +5298,10 @@
         </button>
       </div>
 
-      <!-- 🚀 2. डेवलपर के और दूसरे एप्लीकेशन (Developer Apps Entry Card) -->
-      <div class="card ios-glass-card" id="developerAppsEntryCard" onclick="openDeveloperAppsScreen()" style="padding: 13px 16px; border-radius: 20px; margin-bottom: 14px; cursor: pointer; border: 1.5px solid rgba(59, 130, 246, 0.28); background: linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(255, 255, 255, 0.98)); box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08); transition: transform 0.15s ease, box-shadow 0.15s ease;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="ios-icon-tile" style="width: 38px; height: 38px; font-size: 17px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35); flex-shrink: 0;">
-              <i class="fa-solid fa-shapes"></i>
-            </div>
-            <div>
-              <div style="font-weight: 800; font-size: 14.5px; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
-                <span>डेवलपर के और दूसरे एप्लीकेशन</span>
-              </div>
-              <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">रेवंतराम भाटी के अन्य ऐप्स देखें व 1-क्लिक में इंस्टॉल करें</div>
-            </div>
-          </div>
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <span class="ios-value-badge" id="devAppsCountBadge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 11px; font-weight: 800; padding: 3px 9px;">3+ ऐप्स</span>
-            <i class="fa-solid fa-chevron-right ios-chevron" style="color: #94a3b8; font-size: 13px;"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- 📱 सेटिंग्स एवं प्राथमिकताएं (सभी विकल्प पॉपअप द्वारा) -->
-      <div class="card ios-glass-card" style="padding: 6px 12px; border-radius: 20px; margin-bottom: 14px;">
-        <div style="display: flex; flex-direction: column;">
-          
-          <!-- 1. 👑 एडमिन कंट्रोल (Admin Control) -->
-          <div class="settings-list-item" onclick="openAdminControlModal()" style="padding: 12px 6px; border-bottom: 1.5px solid #fde68a; cursor: pointer; background: linear-gradient(135deg, rgba(254, 243, 199, 0.55), rgba(255, 251, 235, 0.45)); border-radius: 14px; margin-bottom: 8px;">
-            <div class="settings-item-left">
-              <div class="ios-icon-tile" style="width: 34px; height: 34px; font-size: 15px; border-radius: 10px; background: linear-gradient(135deg, #d97706, #b45309); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 8px rgba(217, 119, 6, 0.35);">
-                <i class="fa-solid fa-crown"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 14.5px; color: #92400e;">एडमिन कंट्रोल (Admin Control)</div>
-                <div style="font-size: 11px; color: var(--text-muted);" id="adminControlSubText">एडमिन पासवर्ड डालकर नियंत्रण प्राप्त करें</div>
-              </div>
-            </div>
-            <div class="settings-item-right">
-              <span class="ios-value-badge" id="adminControlBadge" style="background:#fef3c7; color:#92400e; border:1px solid #fde68a; font-weight:800;">पासवर्ड सुरक्षित</span>
-              <i class="fa-solid fa-chevron-right ios-chevron"></i>
-            </div>
-          </div>
-
-          <!-- 2. APK Send (व्हाट्सएप पर सीधी ऐप भेजें) -->
-          <div class="settings-list-item" onclick="shareAppDirectly()" style="padding: 10px 4px; border-bottom: 1px solid var(--border-color); cursor: pointer;">
-            <div class="settings-item-left">
-              <div class="ios-icon-tile ios-icon-orange" style="width: 32px; height: 32px; font-size: 14px; border-radius: 9px; background: linear-gradient(135deg, #ea580c, #c2410c);">
-                <i class="fa-solid fa-paper-plane"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);">ऐप शेयर करें (APK Send)</div>
-                <div style="font-size: 11px; color: var(--text-muted);">व्हाट्सएप पर सीधी ऐप (APK फाइल) भेजें</div>
-              </div>
-            </div>
-            <div class="settings-item-right">
-              <span class="ios-value-badge ios-value-orange">APK शेयर</span>
-              <i class="fa-solid fa-chevron-right ios-chevron"></i>
-            </div>
-          </div>
-
-          <!-- 3. व्हाट्सएप ग्रुप (WhatsApp Group) -->
-          <div class="settings-list-item" onclick="openWhatsAppUrl('https://chat.whatsapp.com/JOVKSohSoBHEokrCXOSkTh')" style="padding: 10px 4px; border-bottom: 1px solid var(--border-color); cursor: pointer;">
-            <div class="settings-item-left">
-              <div class="ios-icon-tile" style="width: 32px; height: 32px; font-size: 15px; border-radius: 9px; background: linear-gradient(135deg, #16a34a, #15803d); color: white; display: flex; align-items: center; justify-content: center;">
-                <i class="fa-brands fa-whatsapp"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);">व्हाट्सएप ग्रुप</div>
-                <div style="font-size: 11px; color: var(--text-muted);">भाटी परिवार आधिकारिक ग्रुप से जुड़ें</div>
-              </div>
-            </div>
-            <div class="settings-item-right">
-              <span class="ios-value-badge ios-value-green">व्हाट्सएप</span>
-              <i class="fa-solid fa-chevron-right ios-chevron"></i>
-            </div>
-          </div>
-
-          <!-- 4. भाषा (Language Modal) -->
-          <div class="settings-list-item" onclick="openLanguageModal()" style="padding: 10px 4px; border-bottom: 1px solid var(--border-color); cursor: pointer;">
-            <div class="settings-item-left">
-              <div class="ios-icon-tile ios-icon-blue" style="width: 32px; height: 32px; font-size: 14px; border-radius: 9px;">
-                <i class="fa-solid fa-language"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);" data-i18n="lang_title">भाषा (Language)</div>
-                <div style="font-size: 11px; color: var(--text-muted);" id="settingLangSub">सक्रिय भाषा: हिन्दी</div>
-              </div>
-            </div>
-            <div class="settings-item-right">
-              <span class="ios-value-badge ios-value-blue" id="settingLangPreviewBadge">हिन्दी</span>
-              <i class="fa-solid fa-chevron-right ios-chevron"></i>
-            </div>
-          </div>
-
-          <!-- 5. ऐप थीम (Theme Modal) -->
-          <div class="settings-list-item" onclick="openThemeModal()" style="padding: 10px 4px; border-bottom: 1px solid var(--border-color); cursor: pointer;">
-            <div class="settings-item-left">
-              <div class="ios-icon-tile ios-icon-orange" style="width: 32px; height: 32px; font-size: 14px; border-radius: 9px;">
-                <i class="fa-solid fa-palette"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);" data-i18n="theme_title">ऐप थीम</div>
-                <div style="font-size: 11px; color: var(--text-muted);" id="settingThemeSub">क्लासिक सफेद व साफ रूप</div>
-              </div>
-            </div>
-            <div class="settings-item-right">
-              <span class="ios-value-badge ios-value-orange" id="settingThemePreviewBadge">लाइट मोड</span>
-              <i class="fa-solid fa-chevron-right ios-chevron"></i>
-            </div>
-          </div>
-
-          <!-- 6. आज का सुविचार (Daily Suvichar Modal) -->
-          <div class="settings-list-item" onclick="openDailySuvicharModal()" style="padding: 10px 4px; border-bottom: 1px solid var(--border-color); cursor: pointer;">
-            <div class="settings-item-left">
-              <div class="ios-icon-tile ios-icon-orange" style="width: 32px; height: 32px; font-size: 14px; border-radius: 9px; background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 3px 8px rgba(245, 158, 11, 0.35); color: white; display: flex; align-items: center; justify-content: center;">
-                <i class="fa-solid fa-sun"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);">आज का सुविचार</div>
-                <div style="font-size: 11px; color: var(--text-muted);">दैनिक प्रेरक विचार पढ़ें व शेयर करें</div>
-              </div>
-            </div>
-            <div class="settings-item-right">
-              <span class="ios-value-badge" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">सुविचार</span>
-              <i class="fa-solid fa-chevron-right ios-chevron"></i>
-            </div>
-          </div>
-
-          <!-- 7. वेलकम संदेश (Welcome Message Modal) -->
-          <div class="settings-list-item" onclick="openAppObjectiveModal()" style="padding: 10px 4px; border-bottom: 1px solid var(--border-color); cursor: pointer;">
-            <div class="settings-item-left">
-              <div class="ios-icon-tile ios-icon-green" style="width: 32px; height: 32px; font-size: 14px; border-radius: 9px;">
-                <i class="fa-solid fa-hands-praying"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);">वेलकम संदेश</div>
-                <div style="font-size: 11px; color: var(--text-muted);">स्वागत संदेश, पारिवारिक एकता व सहयोग नियम</div>
-              </div>
-            </div>
-            <div class="settings-item-right">
-              <span class="ios-value-badge ios-value-green">संदेश</span>
-              <i class="fa-solid fa-chevron-right ios-chevron"></i>
-            </div>
-          </div>
-
-          <!-- 7.5. नोटिफिकेशन अलर्ट व अनुमति (Notification & Permissions) -->
-          <div class="settings-list-item" onclick="handleNotificationSettingClick()" style="padding: 10px 4px; border-bottom: 1px solid var(--border-color); cursor: pointer;">
-            <div class="settings-item-left">
-              <div class="ios-icon-tile" style="width: 32px; height: 32px; font-size: 14px; border-radius: 9px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; display: flex; align-items: center; justify-content: center;">
-                <i class="fa-solid fa-bell"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);">नोटिफिकेशन व अनुमति</div>
-                <div style="font-size: 11px; color: var(--text-muted);" id="settingNotificationSub">दैनिक सुविचार व बकाया अंशदान अलर्ट</div>
-              </div>
-            </div>
-            <div class="settings-item-right">
-              <span class="ios-value-badge" style="background:#fee2e2; color:#b91c1c; border:1px solid #fecaca;" id="settingNotificationBadge">जांचें / चालू करें</span>
-              <i class="fa-solid fa-chevron-right ios-chevron"></i>
-            </div>
-          </div>
-
-          <!-- 8. PhonePe / UPI खाता (टैप करने पर पेमेंट पॉपअप खुलेगा) -->
-          <div class="settings-list-item" onclick="openPhonePeModal('ग्रुप अंशदान')" style="padding: 10px 4px; cursor: pointer;">
-            <div class="settings-item-left">
-              <div class="ios-icon-tile ios-icon-purple" style="width: 32px; height: 32px; font-size: 14px; border-radius: 9px;">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px; color: var(--text-main);">
-                  UPI खाता: <span id="settingsUpiName">Yuva Shakti Bhati Parivar</span>
-                </div>
-                <div style="font-size: 11.5px; color: #6d28d9; font-weight: 700; margin-top: 1px; font-family: monospace;">
-                  <span id="settingsUpiId">7850983600@ibl</span> • <span style="font-family: inherit; color: #475569; font-weight: 600;">टैप करके QR व पेमेंट देखें</span>
-                </div>
-              </div>
-            </div>
-            <div class="settings-item-right">
-              <span class="ios-value-badge ios-value-purple">PhonePe / UPI</span>
-              <i class="fa-solid fa-chevron-right ios-chevron"></i>
-            </div>
-          </div>
-
-        </div>
-        
-        <!-- Hidden/Admin UPI ID edit box for JS compatibility -->
-        <div id="adminUpiControlBox" style="display: none;"></div>
-      </div>
-
-      <!-- 🔐 उप-संचालक / कोषाध्यक्ष अधिकार (पिन) -->
-      <div class="card ios-glass-card" id="roleAccessCard" style="display:none; border:1.5px solid #c4b5fd; background:#faf5ff; margin-bottom:12px; padding:14px; border-radius:18px;">
-        <div style="font-weight:800; font-size:13.5px; color:#6d28d9; margin-bottom:8px;">🔐 उप-संचालक / कोषाध्यक्ष अधिकार (पिन सुरक्षित)</div>
-        <div id="roleAccessBody"></div>
-      </div>
-
-      <!-- संचालक कोड सत्यापन (Admin Unlock with Code ******) -->
-      <div class="card ios-glass-card" id="adminUnlockBox" style="display:none; border:1.5px dashed #f59e0b; background:#fffbeb; margin-bottom:12px; padding:14px; border-radius:18px;">
-        <div style="font-weight:800; font-size:13.5px; color:#9a3412; display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-          <i class="fa-solid fa-lock" style="color:#d97706;"></i>
-          <span>संचालक मोड अनलॉक करें</span>
-        </div>
-        <p style="font-size:11.5px; color:#78350f; margin-bottom:10px; line-height:1.4;">
-          संचालक रेवंतराम भाटी (8696663615 / revantrambhati@gmail.com) अपने 6-अंकीय गुप्त कोड से एडमिन शक्तियां सक्षम करें।
-        </p>
-        <div style="display:flex; gap:8px;">
-          <input type="password" id="adminSecretCodeInput" placeholder="कोड दर्ज करें" maxlength="6" inputmode="numeric" style="flex:1; border:1px solid #fdba74; border-radius:10px; padding:8px 12px; font-size:13px; font-weight:700;">
-          <button onclick="verifyAdminSecretCode()" style="background:linear-gradient(135deg, #d97706, #b45309); color:white; border:none; padding:8px 16px; border-radius:10px; font-size:12.5px; font-weight:800; cursor:pointer;">
-            अनलॉक
-          </button>
-        </div>
-      </div>
-
-      <!-- 4. संचालक नियंत्रण (Admin Settings - केवल रेवंतराम भाटी के लिए कोड सत्यापन उपरांत) -->
-      <div class="card ios-glass-card" id="adminSettingsCard" style="display:none; border:1px solid rgba(217, 119, 6, 0.35); background:linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(245, 158, 11, 0.02) 100%);">
-        <div class="card-title">
-          <span style="display:flex; align-items:center; gap:8px;">
-            <div class="ios-icon-tile" style="background:#d97706; color:white; width:28px; height:28px; font-size:13px; border-radius:8px;">
-              <i class="fa-solid fa-crown"></i>
-            </div>
-            <span>संचालक नियंत्रण (Admin Settings)</span>
-          </span>
-          <span class="badge" style="background:linear-gradient(135deg, #d97706, #b45309); color:white; font-size:11px; padding:2px 8px; border-radius:6px;">संचालक: रेवंतराम भाटी</span>
-        </div>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px; line-height:1.5;">
-          आप संचालक (रेवंतराम भाटी) के रूप में पूर्ण एडमिन शक्तियों के साथ सक्रिय हैं।
-        </p>
-        <div style="background:#fffbeb; border:1.5px dashed #f59e0b; border-radius:14px; padding:10px; margin-bottom:10px;">
-          <div style="font-size:12.5px; font-weight:800; color:#92400e; margin-bottom:6px;">📢 परिवार सूचना पट्टी (Notice Board)</div>
-          <textarea id="noticeAdminInput" maxlength="220" placeholder="उदा. विशेष सूचना: कल सायं 7:00 बजे भाटी परिवार बैठक रखी गई है, सभी सदस्य सादर आमंत्रित हैं।" style="width:100%; min-height:62px; border:1px solid #fdba74; border-radius:10px; padding:8px 10px; font-size:12.5px; font-family:inherit; resize:vertical;"></textarea>
-          <label style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; margin-top:6px; color:#78350f;"><input type="checkbox" id="noticeRsvpChk"> इस सूचना पर RSVP (आऊँगा / नहीं आ पाऊँगा) माँगें</label>
-          <div style="display:flex; gap:8px; margin-top:8px;">
-            <button class="btn-main" onclick="ysSaveNotice()" style="flex:1; background:linear-gradient(135deg,#d97706,#b45309); border-radius:12px; padding:9px; font-size:12.5px; font-weight:800;"><i class="fa-solid fa-bullhorn"></i> प्रकाशित / अपडेट</button>
-            <button class="btn-tool" onclick="ysDeleteNotice()" style="flex:0.6; border-color:#fca5a5; color:#b91c1c; border-radius:12px; font-weight:800;"><i class="fa-solid fa-trash"></i> हटाएं</button>
-          </div>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          <!-- 🛡️ पेंडिंग गेस्ट अप्रूवल डैशबोर्ड बटन -->
-          <button class="btn-main" onclick="openAdminApprovalModal()" style="background:linear-gradient(135deg, #1e40af, #2563eb); border-radius:14px; display:flex; justify-content:space-between; align-items:center;">
-            <span style="display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user-shield"></i> <span>पेंडिंग गेस्ट अप्रूवल डैशबोर्ड</span></span>
-            <span id="adminPendingGuestsBadge" style="background:#ffffff; color:#1e40af; font-weight:800; font-size:11px; padding:2px 8px; border-radius:10px;">0</span>
-          </button>
-          <button class="btn-main" onclick="sendDueReminderToAllPending()" style="background:linear-gradient(135deg, #dc2626, #b91c1c); border-radius:14px;">
-            <i class="fa-solid fa-bell"></i> <span>सभी बकायादारों को 1-क्लिक में रिमाइंडर भेजें</span>
-          </button>
-          <button class="btn-tool" onclick="previewAmavasyaEveAlert()" style="width:100%; border-color:#cbd5e1; font-weight:600; border-radius:14px;">
-            <i class="fa-solid fa-moon" style="color:#2563eb;"></i> <span>अमावस्या पूर्व सूचना (कल अमावस्या है) पूर्वावलोकन</span>
-          </button>
-          <button class="btn-main" onclick="promptChangeUpiId()" style="background:#5f259f; border-radius:14px;">
-            <i class="fa-solid fa-pen-to-square"></i> <span>PhonePe / UPI ID व नाम बदलें</span>
-          </button>
-
-          <!-- 🤖 Google Gemini AI ज्योतिष नियंत्रण (Admin Mode Only) -->
-          <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:14px; padding:12px; margin-top:6px; box-shadow:0 3px 10px rgba(22,101,52,0.06);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <div style="font-size:12.5px; font-weight:800; color:#166534; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-sparkles" style="color:#15803d;"></i> <span>Google Gemini AI ज्योतिष इंजन</span>
-              </div>
-              <span id="geminiAiStatusBadge" style="font-size:10.5px; font-weight:800; background:#dcfce7; color:#15803d; padding:2px 8px; border-radius:999px; border:1px solid #bbf7d0;">
-                🟢 सक्रिय
-              </span>
-            </div>
-            <p style="font-size:11px; color:#14532d; margin:0 0 8px 0; line-height:1.45;">
-              यहाँ अपनी Google Gemini API Key दर्ज करें। इससे ऐप में सभी सदस्यों को SwarnSiddhi जैसा 100% सटीक दैनिक राशिफल व गोचर सूचकांक मिलेगा।
-            </p>
-            <div style="display:flex; gap:6px; margin-bottom:8px;">
-              <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy... (Gemini API Key)" style="flex:1; border:1px solid #86efac; border-radius:10px; padding:8px 10px; font-size:12px; font-family:monospace; background:white;">
-              <button type="button" onclick="toggleGeminiKeyVisibility()" style="border:1px solid #86efac; background:white; color:#166534; border-radius:10px; padding:0 11px; font-size:13px; cursor:pointer;" id="geminiKeyToggleBtn" title="दिखाएं / छुपाएं">
-                <i class="fa-solid fa-eye"></i>
-              </button>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px;">
-              <label style="font-size:11.5px; font-weight:700; color:#166534; white-space:nowrap;">AI मॉडल:</label>
-              <select id="geminiModelSelect" style="flex:1; border:1px solid #86efac; border-radius:8px; padding:6px 8px; font-size:11.5px; background:white; font-weight:700; color:#14532d;">
-                <option value="gemini-1.5-flash">gemini-1.5-flash (v1 / v1beta ऑटो-डिटेक्ट)</option>
-                <option value="gemini-1.5-flash-latest">gemini-1.5-flash-latest</option>
-                <option value="gemini-2.0-flash">gemini-2.0-flash (अत्याधुनिक 2.0)</option>
-                <option value="gemini-1.5-pro">gemini-1.5-pro (गहन विश्लेषण)</option>
-              </select>
-            </div>
-            <div style="display:flex; gap:6px;">
-              <button type="button" onclick="saveGeminiApiKeyAdmin()" style="flex:1; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:8px 10px; border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px;">
-                <i class="fa-solid fa-floppy-disk"></i> सहेजें
-              </button>
-              <button type="button" onclick="testGeminiApiKeyAdmin()" style="flex:1; background:white; color:#15803d; border:1.5px solid #16a34a; padding:8px 10px; border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px;">
-                <i class="fa-solid fa-vial-circle-check"></i> टेस्ट करें
-              </button>
-              <button type="button" onclick="removeGeminiApiKeyAdmin()" style="border:1px solid #fca5a5; background:#fff1f2; color:#be123c; border-radius:10px; padding:8px 11px; font-size:12px; font-weight:800; cursor:pointer;" title="की हटाएं">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </div>
-            <div id="geminiTestFeedback" style="display:none; font-size:11px; font-weight:700; margin-top:8px; padding:6px 10px; border-radius:8px; line-height:1.4;"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5. खाता प्रोफाइल एवं लॉगआउट (Account Profile) -->
-      <div class="card" id="settingsAuthCard" style="margin-bottom:20px;">
-        <div class="card-title">
-          <span style="display:flex; align-items:center; gap:8px;">
-            <div class="ios-icon-tile ios-icon-gray" style="width:28px; height:28px; font-size:13px; border-radius:8px;">
-              <i class="fa-solid fa-user-gear"></i>
-            </div>
-            <span data-i18n="settings_auth_title">खाता प्रोफाइल एवं लॉगआउट</span>
-          </span>
-          <span class="ios-value-badge" id="settingsAuthBadge" style="font-size:11px; padding:2px 8px;">लॉगिन नहीं हैं</span>
-        </div>
-        <div style="padding:6px 0 12px 0;">
-          <div style="font-size:15px; font-weight:700; color:var(--text-main);" id="settingsUserName">लॉगिन नहीं हैं</div>
-          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="settingsUserPhone">ग्रुप सदस्य या संचालक लॉगिन करें</div>
-        </div>
-        <div id="settingsAuthActionBox">
-          <button class="btn-main" style="width:100%; border-radius:14px;" id="settingsLoginBtn" onclick="openLoginModal()">
-            <i class="fa-solid fa-right-to-bracket"></i> सदस्य / संचालक लॉगिन करें
-          </button>
-        </div>
-      </div>
+      <!-- Hidden fallbacks for JS compatibility -->
+      <span id="settingsUpiName" style="display:none;"></span>
+      <span id="settingsUpiId" style="display:none;"></span>
+      <div id="adminUpiControlBox" style="display:none;"></div>
 
     </div>
 
@@ -5971,7 +5875,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.24 (बिल्ड कोड: 574)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.25 (बिल्ड कोड: 575)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -7540,6 +7444,170 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- 👑 समर्पित संचालक कंट्रोल सेंटर पेज (Dedicated Full-Screen Admin Control Page) -->
+  <!-- ========================================================================= -->
+  <div id="dedicatedAdminControlPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1180; background:#f8fafc; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
+    
+    <!-- Top Sticky Apple iOS Header Bar -->
+    <div style="position:sticky; top:0; z-index:100; background:rgba(255, 255, 255, 0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(0, 0, 0, 0.08); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.03);">
+      <button onclick="closeDedicatedAdminControlPage()" style="border:none; background:rgba(0,0,0,0.06); color:#0f172a; padding:7px 12px; border-radius:12px; font-weight:700; font-size:12.5px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+        <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
+      </button>
+      <div style="text-align:center;">
+        <h3 style="margin:0; font-size:15px; font-weight:900; color:#92400e; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <i class="fa-solid fa-crown" style="color:#d97706;"></i> <span>संचालक कंट्रोल सेंटर</span>
+        </h3>
+        <span style="font-size:11px; color:#64748b; font-weight:600;">रेवंतराम भाटी • पूर्ण प्रशासनिक अधिकार</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <span style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; font-size:10.5px; font-weight:800; padding:3px 8px; border-radius:8px;">🟢 सक्रिय</span>
+      </div>
+    </div>
+
+    <!-- Admin Page Body Container -->
+    <div style="padding:14px 16px 80px 16px; max-width:640px; margin:0 auto; width:100%; box-sizing:border-box; display:flex; flex-direction:column; gap:14px;">
+
+      <!-- 1. 📢 परिवार सूचना पट्टी (Notice Board) -->
+      <div class="card ios-glass-card" style="border:1.5px solid #fde68a; background:#fffbeb; border-radius:18px; padding:14px; box-shadow:0 4px 14px rgba(217, 119, 6, 0.08);">
+        <div style="font-size:13.5px; font-weight:900; color:#92400e; margin-bottom:8px; display:flex; align-items:center; gap:7px;">
+          <i class="fa-solid fa-bullhorn" style="color:#d97706;"></i>
+          <span>परिवार सूचना पट्टी (Notice Board)</span>
+        </div>
+        <textarea id="noticeAdminInput" maxlength="220" placeholder="उदा. विशेष सूचना: कल सायं 7:00 बजे भाटी परिवार बैठक रखी गई है, सभी सदस्य सादर आमंत्रित हैं।" style="width:100%; min-height:68px; border:1px solid #fdba74; border-radius:12px; padding:10px; font-size:13px; font-family:inherit; resize:vertical; box-sizing:border-box; background:white;"></textarea>
+        <label style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; margin-top:8px; color:#78350f;">
+          <input type="checkbox" id="noticeRsvpChk"> इस सूचना पर RSVP (आऊँगा / नहीं आ पाऊँगा) माँगें
+        </label>
+        <div style="display:flex; gap:8px; margin-top:10px;">
+          <button class="btn-main" onclick="ysSaveNotice()" style="flex:1; background:linear-gradient(135deg,#d97706,#b45309); border-radius:12px; padding:10px; font-size:13px; font-weight:800;">
+            <i class="fa-solid fa-bullhorn"></i> प्रकाशित / अपडेट
+          </button>
+          <button class="btn-tool" onclick="ysDeleteNotice()" style="flex:0.6; border-color:#fca5a5; color:#b91c1c; border-radius:12px; font-weight:800;">
+            <i class="fa-solid fa-trash"></i> हटाएं
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. 🛡️ सदस्य व गेस्ट प्रबंधन (Guest Approvals & Bakayadar Reminder) -->
+      <div class="card ios-glass-card" style="border:1.5px solid rgba(37,99,235,0.2); background:white; border-radius:18px; padding:14px; box-shadow:0 4px 14px rgba(0,0,0,0.04);">
+        <div style="font-size:13.5px; font-weight:900; color:#1e3a8a; margin-bottom:10px; display:flex; align-items:center; gap:7px;">
+          <i class="fa-solid fa-users-gear" style="color:#2563eb;"></i>
+          <span>सदस्य व गेस्ट प्रबंधन</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <!-- पेंडिंग गेस्ट अप्रूवल डैशबोर्ड -->
+          <button class="btn-main" onclick="openAdminApprovalModal()" style="background:linear-gradient(135deg, #1e40af, #2563eb); border-radius:14px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="display:flex; align-items:center; gap:8px; font-weight:800; font-size:13px;">
+              <i class="fa-solid fa-user-shield"></i> <span>पेंडिंग गेस्ट अप्रूवल डैशबोर्ड</span>
+            </span>
+            <span id="adminPendingGuestsBadge" style="background:#ffffff; color:#1e40af; font-weight:900; font-size:11.5px; padding:2px 9px; border-radius:10px;">0</span>
+          </button>
+
+          <!-- 1-क्लिक बकायादार रिमाइंडर -->
+          <button class="btn-main" onclick="sendDueReminderToAllPending()" style="background:linear-gradient(135deg, #dc2626, #b91c1c); border-radius:14px; padding:12px 14px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px;">
+            <i class="fa-solid fa-bell"></i> <span>सभी बकायादारों को 1-क्लिक में रिमाइंडर भेजें</span>
+          </button>
+
+          <!-- अमावस्या पूर्व सूचना पूर्वावलोकन -->
+          <button class="btn-tool" onclick="previewAmavasyaEveAlert()" style="width:100%; border-color:#cbd5e1; font-weight:700; border-radius:14px; padding:11px; font-size:12.5px; display:flex; align-items:center; justify-content:center; gap:8px;">
+            <i class="fa-solid fa-moon" style="color:#2563eb;"></i> <span>अमावस्या पूर्व सूचना (कल अमावस्या है) पूर्वावलोकन</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. 💳 वित्तीय एवं UPI खाता नियंत्रण (Financial & UPI Controls) -->
+      <div class="card ios-glass-card" style="border:1.5px solid #ddd6fe; background:#faf5ff; border-radius:18px; padding:14px; box-shadow:0 4px 14px rgba(109,40,217,0.06);">
+        <div style="font-size:13.5px; font-weight:900; color:#6d28d9; margin-bottom:10px; display:flex; align-items:center; gap:7px;">
+          <i class="fa-solid fa-wallet" style="color:#7c3aed;"></i>
+          <span>UPI खाता व वित्तीय नियंत्रण</span>
+        </div>
+        <div style="background:white; border:1px solid #e9d5ff; border-radius:14px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:11px; color:#64748b; font-weight:700;">सक्रिय UPI खाता:</div>
+            <div style="font-weight:900; font-size:14px; color:#0f172a; margin-top:2px;" id="settingsUpiNameAdmin">Yuva Shakti Bhati Parivar</div>
+            <div style="font-size:12px; color:#7c3aed; font-weight:800; font-family:monospace; margin-top:2px;" id="settingsUpiIdAdmin">7850983600@ibl</div>
+          </div>
+          <button type="button" onclick="openPhonePeModal('ग्रुप अंशदान')" style="border:none; background:#ede9fe; color:#6d28d9; padding:8px 12px; border-radius:10px; font-weight:800; font-size:11.5px; cursor:pointer;">
+            QR देखें
+          </button>
+        </div>
+        <button class="btn-main" onclick="promptChangeUpiId()" style="background:linear-gradient(135deg, #7c3aed, #6d28d9); border-radius:14px; width:100%; padding:11px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fa-solid fa-pen-to-square"></i> <span>PhonePe / UPI ID व नाम बदलें</span>
+        </button>
+      </div>
+
+      <!-- 4. 🔐 उप-संचालक / कोषाध्यक्ष अधिकार (Role PINs) -->
+      <div class="card ios-glass-card" id="roleAccessCard" style="border:1.5px solid #c4b5fd; background:#ffffff; border-radius:18px; padding:14px; box-shadow:0 4px 14px rgba(109,40,217,0.06);">
+        <div style="font-weight:900; font-size:13.5px; color:#6d28d9; margin-bottom:8px; display:flex; align-items:center; gap:7px;">
+          <i class="fa-solid fa-key" style="color:#7c3aed;"></i>
+          <span>उप-संचालक / कोषाध्यक्ष अधिकार पिन (PIN)</span>
+        </div>
+        <div id="roleAccessBody"></div>
+      </div>
+
+      <!-- 5. 🤖 Google Gemini AI ज्योतिष इंजन (API Key & Engine Settings) -->
+      <div class="card ios-glass-card" style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:18px; padding:14px; box-shadow:0 4px 14px rgba(22,101,52,0.08);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:13.5px; font-weight:900; color:#166534; display:flex; align-items:center; gap:7px;">
+            <i class="fa-solid fa-sparkles" style="color:#15803d;"></i> <span>Google Gemini AI ज्योतिष इंजन</span>
+          </div>
+          <span id="geminiAiStatusBadge" style="font-size:11px; font-weight:800; background:#dcfce7; color:#15803d; padding:2px 9px; border-radius:999px; border:1px solid #bbf7d0;">
+            🟢 सक्रिय
+          </span>
+        </div>
+        <p style="font-size:11.5px; color:#14532d; margin:0 0 10px 0; line-height:1.5;">
+          यहाँ अपनी Google Gemini API Key दर्ज करें। इससे ऐप में सभी सदस्यों को SwarnSiddhi जैसा 100% सटीक दैनिक राशिफल व गोचर सूचकांक मिलेगा।
+        </p>
+        <div style="display:flex; gap:6px; margin-bottom:8px;">
+          <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy... (Gemini API Key)" style="flex:1; border:1px solid #86efac; border-radius:10px; padding:9px 11px; font-size:12.5px; font-family:monospace; background:white; box-sizing:border-box;">
+          <button type="button" onclick="toggleGeminiKeyVisibility()" style="border:1px solid #86efac; background:white; color:#166534; border-radius:10px; padding:0 12px; font-size:14px; cursor:pointer;" id="geminiKeyToggleBtn" title="दिखाएं / छुपाएं">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px;">
+          <label style="font-size:12px; font-weight:800; color:#166534; white-space:nowrap;">AI मॉडल:</label>
+          <select id="geminiModelSelect" style="flex:1; border:1px solid #86efac; border-radius:10px; padding:8px 10px; font-size:12px; background:white; font-weight:700; color:#14532d;">
+            <option value="gemini-2.5-flash">gemini-2.5-flash (सुपरफ़ास्ट व नवीनतम)</option>
+            <option value="gemini-1.5-flash">gemini-1.5-flash (मानक स्टेबल)</option>
+            <option value="gemini-1.5-flash-latest">gemini-1.5-flash-latest</option>
+            <option value="gemini-2.0-flash">gemini-2.0-flash (अत्याधुनिक)</option>
+            <option value="gemini-1.5-pro">gemini-1.5-pro (गहन विश्लेषण)</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" onclick="saveGeminiApiKeyAdmin()" style="flex:1; background:linear-gradient(135deg, #16a34a, #15803d); color:white; border:none; padding:10px; border-radius:11px; font-size:12.5px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px;">
+            <i class="fa-solid fa-floppy-disk"></i> सहेजें
+          </button>
+          <button type="button" onclick="testGeminiApiKeyAdmin()" style="flex:1; background:white; color:#15803d; border:1.5px solid #16a34a; padding:10px; border-radius:11px; font-size:12.5px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px;">
+            <i class="fa-solid fa-vial-circle-check"></i> टेस्ट करें
+          </button>
+          <button type="button" onclick="removeGeminiApiKeyAdmin()" style="border:1px solid #fca5a5; background:#fff1f2; color:#be123c; border-radius:11px; padding:10px 14px; font-size:13px; font-weight:800; cursor:pointer;" title="की हटाएं">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        <div id="geminiTestFeedback" style="display:none; font-size:11.5px; font-weight:700; margin-top:10px; padding:8px 12px; border-radius:10px; line-height:1.45;"></div>
+      </div>
+
+      <!-- 6. 🔑 एडमिन सुरक्षा व पासवर्ड (Admin Security) -->
+      <div class="card ios-glass-card" style="border:1px solid #e2e8f0; background:white; border-radius:18px; padding:14px; box-shadow:0 4px 14px rgba(0,0,0,0.04);">
+        <div style="font-size:13.5px; font-weight:900; color:#334155; margin-bottom:10px; display:flex; align-items:center; gap:7px;">
+          <i class="fa-solid fa-shield-halved" style="color:#64748b;"></i>
+          <span>सुरक्षा एवं सत्र नियंत्रण</span>
+        </div>
+        <button type="button" onclick="openAdminChangePasswordModal()" style="width:100%; padding:11px 14px; background:#eff6ff; border:1.5px solid #bfdbfe; color:#1d4ed8; border-radius:12px; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; margin-bottom:8px;">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-key" style="color:#2563eb;"></i> <span>एडमिन पासवर्ड बदलें (Change Password)</span>
+          </span>
+          <i class="fa-solid fa-chevron-right" style="font-size:11px; opacity:0.6;"></i>
+        </button>
+        <button type="button" onclick="closeDedicatedAdminControlPage()" style="width:100%; padding:10px; background:#f1f5f9; border:none; color:#475569; border-radius:12px; font-weight:800; font-size:12.5px; cursor:pointer;">
+          <i class="fa-solid fa-xmark"></i> बंद करें
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- 🚀 समर्पित डेवलपर के अन्य ऐप्स पेज (Dedicated Developer Apps Full Page View) -->
   <!-- ========================================================================= -->
   <div id="dedicatedDeveloperAppsPage" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:#f8fafc; overflow-y:auto; flex-direction:column; -webkit-overflow-scrolling:touch;">
@@ -8234,16 +8302,16 @@
     let pendingGuestsList = [];
     let isAdmin = false;
     // संचालक (रेवंतराम भाटी - 8696663615 / revantrambhati@gmail.com) के वैध सत्र में ही संचालक मोड सक्रिय रहेगा
-    if (localStorage.getItem("isAdminSession") === "true") {
+    // 👑 स्वचालित नंबर सत्यापन: पंजीकृत संचालक (8696663615) को बिना किसी पासवर्ड के स्वतः पूर्ण एडमिन एक्सेस
+    if (localStorage.getItem("isAdminSession") === "true" || (loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE))) {
       isAdmin = true;
       userRole = "admin";
       isUserVerified = true;
       loggedInMemberPhone = SANCHALAK_PHONE;
       localStorage.setItem("loggedInMemberPhone", SANCHALAK_PHONE);
+      localStorage.setItem("isAdminSession", "true");
       localStorage.setItem("userRole", "admin");
       localStorage.setItem("isUserVerified", "true");
-    } else if (loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE)) {
-      isAdmin = false;
     }
     let currentLang = localStorage.getItem("appLang") || "hi";
     let membersList = [];
@@ -9313,61 +9381,73 @@
       }
     }
 
-    // 👑 एडमिन कंट्रोल सेंटर (Admin Control Center & Verification)
-    function openAdminControlModal() {
-      const modal = document.getElementById("adminControlModal");
-      if (!modal) return;
-      const loginView = document.getElementById("adminControlLoginView");
-      const dashView = document.getElementById("adminControlDashboardView");
-      const subHead = document.getElementById("adminModalSubHeader");
-      const inp = document.getElementById("adminControlPasswordInput");
-      if (inp) inp.value = "";
-
-      if (isAdmin) {
-        if (loginView) loginView.style.display = "none";
-        if (dashView) dashView.style.display = "block";
-        if (subHead) subHead.innerText = "एडमिन मोड सक्रिय • पूर्ण नियंत्रण";
-        const ctrlBadge = document.getElementById("adminCtrlPendingBadge");
-        if (ctrlBadge) ctrlBadge.innerText = (pendingGuestsList || []).length;
-      } else {
-        if (loginView) loginView.style.display = "block";
-        if (dashView) dashView.style.display = "none";
-        if (subHead) subHead.innerText = "पासवर्ड सत्यापन आवश्यक";
-      }
-      modal.style.display = "flex";
-      if (!isAdmin && inp) setTimeout(() => inp.focus(), 150);
-    }
-
-    function closeAdminControlModal() {
-      const modal = document.getElementById("adminControlModal");
-      if (modal) modal.style.display = "none";
-    }
-
-    function submitAdminControlLogin() {
-      const inp = document.getElementById("adminControlPasswordInput");
-      const pass = (inp ? inp.value : "").trim();
-      if (!pass) {
-        showToast("कृपया एडमिन पासवर्ड दर्ज करें।", "warning");
+    // 👑 समर्पित संचालक कंट्रोल सेंटर (Dedicated Admin Control Center)
+    function openDedicatedAdminControlPage() {
+      const cleanPhone = (loggedInMemberPhone || "").replace(/\D/g, "");
+      const isSanchalak = cleanPhone.endsWith(SANCHALAK_PHONE) || cleanPhone === SANCHALAK_PHONE;
+      
+      if (!isSanchalak && !isAdmin) {
+        showToast("⚠️ केवल पंजीकृत संचालक (रेवंतराम भाटी) के लिए!", "error");
         return;
       }
-      if (ysVerifyAdminPassword(pass)) {
-        isAdmin = true;
-        userRole = "admin";
-        isUserVerified = true;
-        if (!loggedInMemberPhone) {
-          loggedInMemberPhone = SANCHALAK_PHONE;
-          localStorage.setItem("loggedInMemberPhone", SANCHALAK_PHONE);
-        }
-        localStorage.setItem("isAdminSession", "true");
-        localStorage.setItem("userRole", "admin");
-        localStorage.setItem("isUserVerified", "true");
 
-        showToast("👑 एडमिन कंट्रोल सफलतापूर्वक अनलॉक हुआ!", "success");
-        closeAdminControlModal();
-        updateAuthUI();
-      } else {
-        showToast("❌ गलत एडमिन पासवर्ड! कृपया सही पासवर्ड दर्ज करें।", "error");
+      // Automatically grant full admin access without password
+      isAdmin = true;
+      userRole = "admin";
+      isUserVerified = true;
+      localStorage.setItem("isAdminSession", "true");
+      localStorage.setItem("userRole", "admin");
+      localStorage.setItem("isUserVerified", "true");
+
+      const page = document.getElementById("dedicatedAdminControlPage");
+      if (page) {
+        page.style.display = "flex";
+        document.body.style.overflow = "hidden";
+
+        const noticeInput = document.getElementById("noticeAdminInput");
+        if (noticeInput && window.currentNoticeText) {
+          noticeInput.value = window.currentNoticeText;
+        }
+        const noticeRsvp = document.getElementById("noticeRsvpChk");
+        if (noticeRsvp && window.currentNoticeRsvp !== undefined) {
+          noticeRsvp.checked = !!window.currentNoticeRsvp;
+        }
+
+        const pendingBadge = document.getElementById("adminPendingGuestsBadge");
+        if (pendingBadge) {
+          pendingBadge.innerText = (pendingGuestsList || []).length;
+        }
+
+        const upiNameEl = document.getElementById("settingsUpiNameAdmin");
+        const upiIdEl = document.getElementById("settingsUpiIdAdmin");
+        if (upiNameEl) upiNameEl.innerText = window.currentUpiName || "Yuva Shakti Bhati Parivar";
+        if (upiIdEl) upiIdEl.innerText = window.currentUpiId || "7850983600@ibl";
+
+        try { updateRoleUI(); } catch (e) {}
+        if (typeof updateGeminiAdminUIState === "function") {
+          updateGeminiAdminUIState();
+        }
       }
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.openDedicatedAdminControlPage = openDedicatedAdminControlPage;
+    window.openAdminControlModal = openDedicatedAdminControlPage;
+
+    function closeDedicatedAdminControlPage() {
+      const page = document.getElementById("dedicatedAdminControlPage");
+      if (page) page.style.display = "none";
+      document.body.style.overflow = "";
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.closeDedicatedAdminControlPage = closeDedicatedAdminControlPage;
+    window.closeAdminControlModal = closeDedicatedAdminControlPage;
+
+    function exitAdminControlMode() {
+      isAdmin = false;
+      localStorage.removeItem("isAdminSession");
+      showToast("संचालक मोड बंद कर दिया गया है।", "info");
+      closeDedicatedAdminControlPage();
+      updateAuthUI();
     }
 
     // 🔑 एडमिन पासवर्ड बदलें (Change Admin Password Modal & Logic)
@@ -10369,40 +10449,25 @@
       const userName = document.getElementById("settingsUserName");
       const userPhone = document.getElementById("settingsUserPhone");
       const authActionBox = document.getElementById("settingsAuthActionBox");
-      const adminSettingsCard = document.getElementById("adminSettingsCard");
-      const adminUnlockBox = document.getElementById("adminUnlockBox");
       const currentGoogleEmail = (firebase.auth().currentUser?.email || "").toLowerCase();
-      const isAuthorizedAdminUser = (loggedInMemberPhone && loggedInMemberPhone.endsWith(SANCHALAK_PHONE)) || (currentGoogleEmail === SANCHALAK_EMAIL.toLowerCase());
+      const cleanPhone = (loggedInMemberPhone || "").replace(/\D/g, "");
+      const isSanchalak = cleanPhone.endsWith(SANCHALAK_PHONE) || cleanPhone === SANCHALAK_PHONE || (currentGoogleEmail === SANCHALAK_EMAIL.toLowerCase());
 
-      if (adminSettingsCard) {
-        adminSettingsCard.style.display = isAdmin ? "block" : "none";
-        if (isAdmin && typeof updateGeminiAdminUIState === "function") updateGeminiAdminUIState();
-      }
-      if (adminUnlockBox) {
-        adminUnlockBox.style.display = (isAuthorizedAdminUser && !isAdmin) ? "block" : "none";
+      if (isSanchalak) {
+        isAdmin = true;
+        userRole = "admin";
+        isUserVerified = true;
       }
 
-      const ctrlBadge = document.getElementById("adminControlBadge");
-      const ctrlSub = document.getElementById("adminControlSubText");
-      if (ctrlBadge && ctrlSub) {
-        if (isAdmin) {
-          ctrlBadge.innerText = "👑 सक्रिय (Active)";
-          ctrlBadge.style.background = "#dcfce7";
-          ctrlBadge.style.color = "#15803d";
-          ctrlBadge.style.border = "1px solid #86efac";
-          ctrlSub.innerText = "एडमिन मोड सक्रिय • कंट्रोल सेंटर खोलें";
-        } else {
-          ctrlBadge.innerText = "पासवर्ड सुरक्षित";
-          ctrlBadge.style.background = "#fef3c7";
-          ctrlBadge.style.color = "#92400e";
-          ctrlBadge.style.border = "1px solid #fde68a";
-          ctrlSub.innerText = "एडमिन पासवर्ड डालकर नियंत्रण प्राप्त करें";
-        }
+      // Show Admin Control entry ONLY for Sanchalak (8696663615), hide completely for others
+      const adminEntry = document.getElementById("settingsAdminEntryPoint");
+      if (adminEntry) {
+        adminEntry.style.display = (isSanchalak || isAdmin) ? "block" : "none";
       }
 
       const pendingBadge = document.getElementById("adminPendingGuestsBadge");
       if (pendingBadge) {
-        pendingBadge.innerText = pendingGuestsList.length;
+        pendingBadge.innerText = (pendingGuestsList || []).length;
       }
 
       const duesBar = document.getElementById("adminDuesReminderBar");
@@ -10417,7 +10482,7 @@
 
       if (authBadge && userName && userPhone) {
         if (loggedInMemberPhone) {
-          if (isAdmin) {
+          if (isAdmin || isSanchalak) {
             authBadge.innerText = currentLang === 'en' ? "Sanchalak (Admin)" : "संचालक (Admin)";
             authBadge.style.background = "linear-gradient(135deg, #d97706, #b45309)";
             authBadge.style.color = "#ffffff";
@@ -10432,30 +10497,29 @@
             }
           } else {
             const found = membersList.find(m => m.phone && m.phone.endsWith(loggedInMemberPhone));
-            const memberTag = found?.tag || (currentLang === 'en' ? "Member" : "सदस्य");
-            authBadge.innerText = memberTag;
-            authBadge.style.background = "#dbeafe";
-            authBadge.style.color = "#1d4ed8";
-            userName.innerText = found ? found.name : (currentLang === 'en' ? "Member" : "सदस्य");
-            userPhone.innerText = `📱 +91 ${loggedInMemberPhone}`;
+            const memName = found ? found.name : loggedInMemberPhone;
+            authBadge.innerText = currentLang === 'en' ? "Family Member" : "परिवार सदस्य";
+            authBadge.style.background = "#e0e7ff";
+            authBadge.style.color = "#3730a3";
+            userName.innerText = memName;
+            userPhone.innerText = "📱 +91 " + loggedInMemberPhone;
             if (authActionBox) {
               authActionBox.innerHTML = `
-                <button class="btn-main" onclick="logoutMember()" style="background:#dc2626; width:100%; font-weight:700;">
-                  <i class="fa-solid fa-right-from-bracket"></i> ${currentLang === 'en' ? 'Logout (Exit Account)' : 'लॉगआउट करें (खाता बंद करें)'}
+                <button class="btn-main" onclick="logoutMember()" style="background:#475569; width:100%; font-weight:700;">
+                  <i class="fa-solid fa-right-from-bracket"></i> ${currentLang === 'en' ? 'Logout' : 'लॉगआउट करें'}
                 </button>
               `;
             }
           }
         } else {
           authBadge.innerText = currentLang === 'en' ? "Not Logged In" : "लॉगिन नहीं हैं";
-          authBadge.className = "ios-value-badge";
-          authBadge.style.background = "rgba(142, 142, 147, 0.12)";
-          authBadge.style.color = "#8e8e93";
-          userName.innerText = currentLang === 'en' ? "Not Logged In" : "लॉगिन नहीं हैं";
-          userPhone.innerText = currentLang === 'en' ? "Login with phone number and PIN" : "ग्रुप सदस्य या संचालक व्यक्तिगत लॉगिन करें";
+          authBadge.style.background = "#f1f5f9";
+          authBadge.style.color = "#64748b";
+          userName.innerText = currentLang === 'en' ? "Guest / Member" : "लॉगिन नहीं हैं";
+          userPhone.innerText = currentLang === 'en' ? "Login with registered mobile number" : "ग्रुप सदस्य या संचालक लॉगिन करें";
           if (authActionBox) {
             authActionBox.innerHTML = `
-              <button class="btn-main" onclick="openLoginModal()" style="width:100%; font-weight:700; border-radius:14px;">
+              <button class="btn-main" style="width:100%; border-radius:14px;" id="settingsLoginBtn" onclick="openLoginModal()">
                 <i class="fa-solid fa-right-to-bracket"></i> ${currentLang === 'en' ? 'Member / Admin Login' : 'सदस्य / संचालक लॉगिन करें'}
               </button>
             `;
@@ -10463,41 +10527,24 @@
         }
       }
 
-      // Update Language and Theme preview badges in Settings list items
+      // Badges
       const langBadge = document.getElementById("settingLangPreviewBadge");
       const langSub = document.getElementById("settingLangSub");
       if (langBadge) {
-        langBadge.style.background = "";
-        langBadge.style.color = "";
-        langBadge.className = "ios-value-badge ios-value-blue";
         langBadge.innerText = currentLang === 'en' ? "English" : "हिन्दी";
         if (langSub) langSub.innerText = currentLang === 'en' ? "Active Language: English" : "सक्रिय भाषा: हिन्दी";
       }
-
       const theme = localStorage.getItem('appTheme') || 'light';
       const themeBadge = document.getElementById("settingThemePreviewBadge");
       const themeSub = document.getElementById("settingThemeSub");
       if (themeBadge) {
-        themeBadge.style.background = "";
-        themeBadge.style.color = "";
-        if (theme === 'dark') {
-          themeBadge.innerText = currentLang === 'en' ? "Dark Mode" : "डार्क मोड";
-          themeBadge.className = "ios-value-badge ios-value-purple";
-          if (themeSub) themeSub.innerText = currentLang === 'en' ? "Comfortable Night Mode" : "आंखों के लिए आरामदायक डार्क रूप";
-        } else {
-          themeBadge.innerText = currentLang === 'en' ? "Light Mode" : "लाइट मोड";
-          themeBadge.className = "ios-value-badge ios-value-orange";
-          if (themeSub) themeSub.innerText = currentLang === 'en' ? "Classic White & Blue" : "क्लासिक सफेद व साफ रूप";
-        }
+        themeBadge.innerText = theme === 'dark' ? (currentLang === 'en' ? "Dark Mode" : "डार्क मोड") : (currentLang === 'en' ? "Light Mode" : "लाइट मोड");
+        if (themeSub) themeSub.innerText = theme === 'dark' ? "आंखों के लिए आरामदायक डार्क रूप" : "क्लासिक सफेद व साफ रूप";
       }
 
       const adminUpiBox = document.getElementById("adminUpiControlBox");
-      if (adminUpiBox) {
-        adminUpiBox.style.display = isAdmin ? "flex" : "none";
-      }
-      if (typeof updateUpiDisplayEverywhere === "function") {
-        updateUpiDisplayEverywhere();
-      }
+      if (adminUpiBox) adminUpiBox.style.display = isAdmin ? "flex" : "none";
+      if (typeof updateUpiDisplayEverywhere === "function") updateUpiDisplayEverywhere();
     }
 
     function changeAdminPinPrompt() {
@@ -19870,30 +19917,57 @@
       if (typeof showToast === "function") showToast("Gemini API Key सुरक्षित सहेज ली गई!");
     }
 
-    // 🌐 Unified Robust Gemini API Invocation (v1 + v1beta + Auto Model Fallback)
+    // 🌐 Unified Robust Gemini API Invocation (v1beta + v1 + Auto Discovery, No decommissioned gemini-pro)
     async function callGeminiGenerateContent(apiKey, preferredModel, contentsPayload, generationConfig) {
       const cleanKey = (apiKey || "").trim();
       if (!cleanKey) return { ok: false, error: "API Key नहीं मिली" };
 
-      const m = preferredModel || "gemini-1.5-flash";
-      const candidateUrls = [
-        `https://generativelanguage.googleapis.com/v1/models/${m}:generateContent?key=${encodeURIComponent(cleanKey)}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(cleanKey)}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/${m}-latest:generateContent?key=${encodeURIComponent(cleanKey)}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${encodeURIComponent(cleanKey)}`,
-        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(cleanKey)}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(cleanKey)}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${encodeURIComponent(cleanKey)}`,
-        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${encodeURIComponent(cleanKey)}`,
-        `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${encodeURIComponent(cleanKey)}`
-      ];
+      // Try discovering available models dynamically
+      let discovered = [];
+      try {
+        const dResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(cleanKey)}`, {
+          headers: { "Content-Type": "application/json", "x-goog-api-key": cleanKey }
+        });
+        if (dResp.ok) {
+          const dData = await dResp.json();
+          if (dData && Array.isArray(dData.models)) {
+            discovered = dData.models
+              .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes("generateContent"))
+              .map(m => m.name.replace(/^models\//, ''));
+          }
+        }
+      } catch (e) {}
+
+      const candidateModels = [];
+      if (preferredModel && !preferredModel.includes("gemini-pro")) candidateModels.push(preferredModel);
+      discovered.forEach(m => { if (!candidateModels.includes(m)) candidateModels.push(m); });
+      ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-flash-latest", "gemini-2.0-flash", "gemini-1.5-pro"].forEach(m => {
+        if (!candidateModels.includes(m)) candidateModels.push(m);
+      });
+
+      const versions = ["v1beta", "v1"];
+      const candidateUrls = [];
+      for (const ver of versions) {
+        for (const m of candidateModels) {
+          candidateUrls.push({
+            url: `https://generativelanguage.googleapis.com/${ver}/models/${m}:generateContent?key=${encodeURIComponent(cleanKey)}`,
+            model: m,
+            version: ver
+          });
+        }
+      }
 
       let lastError = null;
-      for (const url of candidateUrls) {
+      let isPermissionOrTokenIssue = false;
+
+      for (const item of candidateUrls) {
         try {
-          const resp = await fetch(url, {
+          const resp = await fetch(item.url, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              "x-goog-api-key": cleanKey
+            },
             body: JSON.stringify({
               contents: contentsPayload,
               generationConfig: generationConfig || { temperature: 0.3 }
@@ -19901,14 +19975,16 @@
           });
           const data = await resp.json();
           if (resp.ok && data.candidates && data.candidates.length > 0) {
-            const mMatch = url.match(/\/models\/([^:]+):/);
-            const resolvedModel = mMatch ? mMatch[1] : m;
-            return { ok: true, data, resolvedModel };
+            return { ok: true, data, resolvedModel: item.model, apiVersion: item.version };
           }
           if (data && data.error) {
             lastError = data.error.message;
-            if (resp.status === 404 || (data.error.code === 404) || (data.error.message && data.error.message.includes("not found"))) {
-              continue; // Model not at this version/endpoint, try next
+            if (data.error.status === "PERMISSION_DENIED" || (data.error.message && data.error.message.includes("ACCESS_TOKEN_TYPE_UNSUPPORTED"))) {
+              isPermissionOrTokenIssue = true;
+              break;
+            }
+            if (resp.status === 404 || data.error.code === 404 || (data.error.message && data.error.message.includes("not found"))) {
+              continue;
             } else {
               return { ok: false, error: data.error.message };
             }
@@ -19917,14 +19993,22 @@
           lastError = e.message;
         }
       }
-      return { ok: false, error: lastError || "सभी मॉडल एंडपॉइंट्स पर प्रयास विफल रहा" };
+
+      if (isPermissionOrTokenIssue) {
+        return {
+          ok: false,
+          error: `Google AI Studio एक्सेस त्रुटि (${lastError})। कृपया Google AI Studio (aistudio.google.com) पर 'Get API key' -> 'Create API key in new project' चुनकर बिना प्रतिबंध वाली नई कुंजी बनाएं।`
+        };
+      }
+
+      return { ok: false, error: lastError || "सभी समर्थित Gemini मॉडल्स (gemini-2.5-flash / gemini-1.5-flash) पर प्रयास विफल रहा।" };
     }
 
     async function testGeminiApiKeyAdmin() {
       const input = document.getElementById("geminiApiKeyInput");
       const modelSelect = document.getElementById("geminiModelSelect");
       const key = (input && input.value.trim()) || appGeminiApiKey;
-      const model = (modelSelect && modelSelect.value) || appGeminiModel || "gemini-1.5-flash";
+      const model = (modelSelect && modelSelect.value) || appGeminiModel || "gemini-2.5-flash";
       const fb = document.getElementById("geminiTestFeedback");
 
       if (!key) {
@@ -19952,7 +20036,7 @@
           fb.style.background = "#f0fdf4";
           fb.style.color = "#15803d";
           fb.style.border = "1px solid #bbf7d0";
-          fb.innerHTML = `<i class="fa-solid fa-circle-check"></i> <strong>कनेक्शन सफल!</strong> Google Gemini AI सक्रिय है (${res.resolvedModel} से कनेक्टेड)।`;
+          fb.innerHTML = `<i class="fa-solid fa-circle-check"></i> <strong>कनेक्शन सफल!</strong> Google Gemini AI सक्रिय है (${res.resolvedModel} [${res.apiVersion || 'v1beta'}] से कनेक्टेड)।`;
         }
         if (modelSelect && res.resolvedModel) {
           let optExists = Array.from(modelSelect.options).some(o => o.value === res.resolvedModel);
@@ -21371,29 +21455,33 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         name: "RV Bhati Player",
         subtitle: "ऑडियो व वीडियो प्लेयर",
         description: "शानदार ऑडियो-वीडियो प्लेयर, बैकग्राउंड प्लेबैक व राजस्थानी भजनों और भजनों के वीडियो का आनंद लें।",
-        version: "v1.4.37",
+        version: "v1.4.42",
         size: "22.0 MB",
         repo: "revantram/rv-bhati-player",
-        directApkUrl: "https://github.com/revantram/rv-bhati-player/releases/download/v1.4.37/RV-Bhati-Player.apk",
+        directApkUrl: "https://github.com/revantram/rv-bhati-player/releases/download/v1.4.42/RV-Bhati-Player.apk",
         url: "https://github.com/revantram/rv-bhati-player/releases/latest",
+        iconUrl: "assets/icons/rv-bhati-player.png",
+        remoteIconUrl: "https://raw.githubusercontent.com/revantram/rv-bhati-player/main/assets/icon/app_icon.png",
         icon: "fa-solid fa-circle-play",
         iconGradient: "linear-gradient(135deg, #7c3aed, #4f46e5)",
         badge: "मल्टीमीडिया",
         order: 1
       },
       {
-        id: "hajiri-app",
-        name: "हाजिरी (Hajiri)",
-        subtitle: "दैनिक उपस्थिति व हाजिरी रजिस्टर",
-        description: "दैनिक उपस्थिति, लेबर/कर्मचारी प्रबंधन, अवकाश रिकॉर्ड व डिजिटल हाजिरी रजिस्टर प्रबंधन ऐप।",
-        version: "v1.7",
-        size: "2.8 MB",
-        repo: "revantram/hajiri-app",
-        directApkUrl: "https://github.com/revantram/hajiri-app/releases/download/v1.7/Hajiri-v1.7-Release.apk",
-        url: "https://github.com/revantram/hajiri-app/releases/latest",
-        icon: "fa-solid fa-clipboard-user",
-        iconGradient: "linear-gradient(135deg, #059669, #0d9488)",
-        badge: "उपस्थिति",
+        id: "photo-tool",
+        name: "Photo Tool",
+        subtitle: "ऑफलाइन प्रो फोटो व आईडी टूल",
+        description: "आधार/पैन कार्ड फ्रंट-बैक मर्जर, पासपोर्ट फोटो मेकर, सिग्नेचर क्लीनर व A4 प्रिंटेबल शीट क्रिएटर।",
+        version: "v1.0.0",
+        size: "5.5 MB",
+        repo: "revantram/photo-tool",
+        directApkUrl: "https://github.com/revantram/photo-tool/releases/download/v1.0.0/PhotoTool-v1.0.apk",
+        url: "https://github.com/revantram/photo-tool/releases/latest",
+        iconUrl: "assets/icons/photo-tool.svg",
+        remoteIconUrl: "https://raw.githubusercontent.com/revantram/photo-tool/main/assets/icon.svg",
+        icon: "fa-solid fa-camera-retro",
+        iconGradient: "linear-gradient(135deg, #2563eb, #0284c7)",
+        badge: "आईडी व फोटो",
         order: 2
       },
       {
@@ -21401,22 +21489,47 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         name: "मेरी तैयारी (Meri Taiyari)",
         subtitle: "क्विज व परीक्षा तैयारी",
         description: "प्रतियोगी परीक्षाओं की तैयारी, टॉपिक अनुसार टेस्ट सीरीज, दैनिक क्विज एवं परिणाम विश्लेषण।",
-        version: "v4.8.8",
+        version: "v5.2.2",
         size: "1.6 MB",
         repo: "revantram/meri-taiyari-mcq-prep",
-        directApkUrl: "https://github.com/revantram/meri-taiyari-mcq-prep/releases/download/v4.8.8/MeriTaiyari_MCQ_Prep.apk",
+        directApkUrl: "https://github.com/revantram/meri-taiyari-mcq-prep/releases/download/v5.2.2/MeriTaiyari_MCQ_Prep.apk",
         url: "https://github.com/revantram/meri-taiyari-mcq-prep/releases/latest",
+        iconUrl: "assets/icons/meri-taiyari.png",
+        remoteIconUrl: "https://raw.githubusercontent.com/revantram/meri-taiyari-mcq-prep/main/assets/icon-192.png",
         icon: "fa-solid fa-graduation-cap",
         iconGradient: "linear-gradient(135deg, #ea580c, #d97706)",
         badge: "शिक्षा / क्विज",
         order: 3
+      },
+      {
+        id: "rv-downloader",
+        name: "Rv-downloader",
+        subtitle: "फास्ट स्टेटस व वीडियो डाउनलोडर",
+        description: "सोशल मीडिया वीडियो, रील्स, स्टेटस एवं मीडिया फाइल्स को सुपरफास्ट स्पीड में ऑफलाइन डाउनलोड करें।",
+        version: "v1.0.10",
+        size: "24.0 MB",
+        repo: "revantram/rv-downloader",
+        directApkUrl: "https://github.com/revantram/rv-downloader/releases/download/v1.0.10-b11/RV-Downloader.apk",
+        url: "https://github.com/revantram/rv-downloader/releases/latest",
+        iconUrl: "assets/icons/rv-downloader.png",
+        remoteIconUrl: "https://raw.githubusercontent.com/revantram/rv-downloader/main/assets/icon/app_icon.png",
+        icon: "fa-solid fa-circle-down",
+        iconGradient: "linear-gradient(135deg, #059669, #0d9488)",
+        badge: "डाउनलोडर",
+        order: 4
       }
     ];
 
     let developerAppsList = [];
     try {
       const cached = localStorage.getItem("cache_developer_apps");
-      if (cached) developerAppsList = JSON.parse(cached);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        developerAppsList = DEFAULT_DEVELOPER_APPS.map(def => {
+          const m = parsed.find(p => p.id === def.id);
+          return m ? { ...def, ...m, iconUrl: def.iconUrl, remoteIconUrl: def.remoteIconUrl } : def;
+        });
+      }
     } catch (e) {}
     if (!developerAppsList || !developerAppsList.length) {
       developerAppsList = DEFAULT_DEVELOPER_APPS.slice();
@@ -21613,8 +21726,13 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
           <div class="ios-glass-card" style="background:#ffffff; border-radius:20px; padding:16px 18px; border:1.5px solid rgba(0,0,0,0.07); box-shadow:0 4px 16px rgba(0,0,0,0.04); display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
               <div style="display:flex; align-items:center; gap:12px;">
-                <div style="width:48px; height:48px; border-radius:14px; background:${iconGrad}; color:white; display:flex; align-items:center; justify-content:center; font-size:22px; box-shadow:0 4px 12px rgba(0,0,0,0.15); flex-shrink:0;">
-                  <i class="${escapeHtml(iconClass)}"></i>
+                <div style="width:52px; height:52px; border-radius:15px; overflow:hidden; flex-shrink:0; background:#f8fafc; box-shadow:0 4px 12px rgba(0,0,0,0.12); border:1px solid rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center; position:relative;">
+                  <img src="${escapeHtml(app.iconUrl || '')}" alt="${escapeHtml(app.name)}" 
+                    onerror="if(this.src!=='${escapeHtml(app.remoteIconUrl || '')}' && '${escapeHtml(app.remoteIconUrl || '')}'){ this.src='${escapeHtml(app.remoteIconUrl || '')}'; } else { this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex'; }"
+                    style="width:100%; height:100%; object-fit:cover; display:block;" />
+                  <div style="display:none; width:100%; height:100%; background:${iconGrad}; color:white; align-items:center; justify-content:center; font-size:22px;">
+                    <i class="${escapeHtml(iconClass)}"></i>
+                  </div>
                 </div>
                 <div>
                   <div style="font-weight:900; font-size:16px; color:#0f172a; line-height:1.2;">
