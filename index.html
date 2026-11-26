@@ -1881,6 +1881,154 @@
       color: #4ade80 !important;
     }
 
+    /* ✨ iOS 18 Liquid Glass Daily Rashifal (दैनिक राशिफल) */
+    .top-twin-capsules-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .rashifal-top-banner {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(254, 243, 199, 0.90) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.10);
+    }
+    body.dark-theme .rashifal-top-banner {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(120, 53, 15, 0.35) 100%) !important;
+      border: 1px solid rgba(251, 191, 36, 0.35) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6) !important;
+    }
+    body.dark-theme #topRashifalSignName {
+      color: #ffffff !important;
+    }
+    body.dark-theme #topRashifalSubText {
+      color: #fde68a !important;
+    }
+    body.dark-theme #topRashifalTitleLabel {
+      color: #fbbf24 !important;
+    }
+
+    #dedicatedRashifalPage {
+      font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius-2xl: 28px;
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #dedicatedRashifalPage[data-theme="dark"],
+    body.dark-theme #dedicatedRashifalPage:not([data-theme="light"]),
+    [data-theme="dark"] #dedicatedRashifalPage {
+      --bg-canvas: #000000;
+      --orb-amber: rgba(245, 158, 11, 0.28);
+      --orb-violet: rgba(139, 92, 246, 0.22);
+      --orb-rose: rgba(244, 63, 94, 0.18);
+      --glass-surface: rgba(22, 22, 26, 0.74);
+      --glass-elevated: rgba(30, 27, 24, 0.88);
+      --glass-subtle: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-inner-glow: inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+      --glass-shadow: 0 14px 36px -6px rgba(0, 0, 0, 0.88);
+      --text-primary: #FFFFFF;
+      --text-secondary: #E2E8F0;
+      --text-muted: #94A3B8;
+      --brand-accent: #FBBF24;
+    }
+    #dedicatedRashifalPage[data-theme="light"],
+    body:not(.dark-theme) #dedicatedRashifalPage:not([data-theme="dark"]),
+    [data-theme="light"] #dedicatedRashifalPage {
+      --bg-canvas: #FFFBEB;
+      --orb-amber: rgba(251, 191, 36, 0.32);
+      --orb-violet: rgba(196, 181, 253, 0.30);
+      --orb-rose: rgba(254, 205, 211, 0.26);
+      --glass-surface: rgba(255, 255, 255, 0.86);
+      --glass-elevated: rgba(255, 255, 255, 0.95);
+      --glass-subtle: rgba(180, 83, 9, 0.05);
+      --glass-border: rgba(180, 83, 9, 0.15);
+      --glass-inner-glow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+      --glass-shadow: 0 10px 28px -6px rgba(180, 83, 9, 0.12);
+      --text-primary: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #64748B;
+      --brand-accent: #B45309;
+    }
+    #dedicatedRashifalPage {
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      transition: background 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    #dedicatedRashifalPage .ambient-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    #dedicatedRashifalPage .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      transform: translateZ(0);
+      will-change: transform;
+    }
+    #dedicatedRashifalPage .orb-a { width: 280px; height: 280px; background: var(--orb-amber); top: -70px; right: -50px; }
+    #dedicatedRashifalPage .orb-b { width: 260px; height: 260px; background: var(--orb-violet); top: 40%; left: -80px; }
+    #dedicatedRashifalPage .orb-c { width: 250px; height: 250px; background: var(--orb-rose); bottom: -60px; right: 10%; }
+    #dedicatedRashifalPage .screen {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 12px 14px 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .rashi-pill-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      border-radius: 14px;
+      background: var(--glass-surface);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      font-weight: 800;
+      font-size: 11.5px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      min-width: 62px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .rashi-pill-item.active {
+      background: linear-gradient(135deg, #d97706, #b45309) !important;
+      color: #ffffff !important;
+      border-color: #fde68a !important;
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.45) !important;
+      transform: translateY(-2px);
+    }
+    .rashi-pill-item .rashi-pill-sym {
+      font-size: 15px;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .rashi-pill-item .user-badge-dot {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      background: #22c55e;
+      color: white;
+      font-size: 7.5px;
+      padding: 1px 4px;
+      border-radius: 6px;
+      font-weight: 900;
+      box-shadow: 0 2px 4px rgba(34, 197, 94, 0.5);
+    }
+
     /* ========================================================================= */
     /* ॐ शुभ चौघड़िया मुहूर्त — द्रिक पंचांग (iOS 18 Liquid Glass & OLED Dark) */
     /* ========================================================================= */
@@ -4337,26 +4485,45 @@
     <!-- 1. सदस्य डायरेक्टरी टैब -->
     <div id="viewMembers" class="section-view active-view">
       
-      <!-- 🕉️ Live Shubh Choghadiya Single-Line Capsule Bar (iOS 18 Liquid Glass) -->
-      <div id="topShubhChoghadiyaBar" onclick="openDedicatedChoghadiyaPage()" class="choghadiya-top-banner" style="cursor:pointer; margin-bottom:12px; border-radius:16px; padding:9px 12px; display:flex; align-items:center; justify-content:space-between; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); transition:all 0.2s ease;">
-        <div style="display:flex; align-items:center; gap:8px; overflow:hidden; flex:1; min-width:0;">
-          <div id="choghadiyaLiveBadgeDot" style="width:26px; height:26px; border-radius:9px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; box-shadow:0 2px 6px rgba(22, 163, 74, 0.35);">
-            <i class="fa-solid fa-om"></i>
-          </div>
-          <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0;">
-            <div style="display:flex; align-items:center; gap:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-              <span style="font-size:10.5px; font-weight:800; color:#15803d; letter-spacing:0.2px; flex-shrink:0;" id="topChoghadiyaTitleLabel">शुभ चौघड़िया:</span>
-              <span id="topChoghadiyaName" style="font-size:12.5px; font-weight:900; color:var(--text-main, #0f172a); flex-shrink:0;">लोड हो रहा है...</span>
-              <span id="topChoghadiyaTag" style="font-size:9.5px; font-weight:800; background:#dcfce7; color:#166534; padding:1px 6px; border-radius:8px; border:1px solid #86efac; flex-shrink:0;">शुभ</span>
-              <span style="color:#94a3b8; font-size:10px;">•</span>
-              <span id="topChoghadiyaTimeWindow" style="font-size:11.5px; font-weight:700; color:var(--text-muted, #334155); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">गणना हो रही है...</span>
+      <!-- 🕉️ Live Shubh Choghadiya & ✨ Dainik Rashifal Twin Capsules (iOS 18 Liquid Glass) -->
+      <div class="top-twin-capsules-bar">
+        
+        <!-- Left: Shubh Choghadiya Capsule -->
+        <div id="topShubhChoghadiyaBar" onclick="openDedicatedChoghadiyaPage()" class="choghadiya-top-banner" style="cursor:pointer; border-radius:16px; padding:8px 10px; display:flex; align-items:center; justify-content:space-between; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); transition:all 0.2s ease; min-width:0;">
+          <div style="display:flex; align-items:center; gap:7px; overflow:hidden; flex:1; min-width:0;">
+            <div id="choghadiyaLiveBadgeDot" style="width:24px; height:24px; border-radius:8px; background:linear-gradient(135deg, #16a34a, #15803d); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; box-shadow:0 2px 6px rgba(22, 163, 74, 0.35);">
+              <i class="fa-solid fa-om"></i>
+            </div>
+            <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; gap:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                <span style="font-size:10px; font-weight:800; color:#15803d; letter-spacing:0.2px; flex-shrink:0;" id="topChoghadiyaTitleLabel">चौघड़िया:</span>
+                <span id="topChoghadiyaName" style="font-size:11.5px; font-weight:900; color:var(--text-main, #0f172a); flex-shrink:0;">लोड...</span>
+                <span id="topChoghadiyaTag" style="font-size:8.5px; font-weight:800; background:#dcfce7; color:#166534; padding:0 4px; border-radius:6px; border:1px solid #86efac; flex-shrink:0;">शुभ</span>
+              </div>
+              <div id="topChoghadiyaTimeWindow" style="font-size:9.5px; font-weight:700; color:var(--text-muted, #64748b); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">गणना हो रही है...</div>
             </div>
           </div>
+          <span id="topChoghadiyaCityPill" style="display:none;">कुचेरा</span>
+          <i class="fa-solid fa-chevron-right" style="font-size:10px; color:#16a34a; margin-left:3px; flex-shrink:0;"></i>
         </div>
-        <div style="display:flex; align-items:center; gap:5px; flex-shrink:0; margin-left:6px;">
-          <span id="topChoghadiyaCityPill" style="font-size:9.5px; font-weight:800; background:rgba(22, 163, 74, 0.12); color:#16a34a; padding:2px 7px; border-radius:6px;">कुचेरा</span>
-          <i class="fa-solid fa-chevron-right" style="font-size:11px; color:#16a34a;"></i>
+
+        <!-- Right: Daily Rashifal Capsule (User-highlighted area) -->
+        <div id="topRashifalBar" onclick="openDedicatedRashifalPage()" class="rashifal-top-banner" style="cursor:pointer; border-radius:16px; padding:8px 10px; display:flex; align-items:center; justify-content:space-between; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); transition:all 0.2s ease; min-width:0;">
+          <div style="display:flex; align-items:center; gap:7px; overflow:hidden; flex:1; min-width:0;">
+            <div id="topRashifalBadgeIcon" style="width:24px; height:24px; border-radius:8px; background:linear-gradient(135deg, #f59e0b, #d97706); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; box-shadow:0 2px 6px rgba(217, 119, 6, 0.35);">
+              <span id="topRashifalSymbol" style="font-size:12.5px; font-weight:900;">♈</span>
+            </div>
+            <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; gap:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                <span style="font-size:10px; font-weight:800; color:#b45309; letter-spacing:0.2px; flex-shrink:0;" id="topRashifalTitleLabel">राशिफल:</span>
+                <span id="topRashifalSignName" style="font-size:11.5px; font-weight:900; color:var(--text-main, #0f172a); flex-shrink:0;">तुला ♎</span>
+              </div>
+              <div id="topRashifalSubText" style="font-size:9.5px; font-weight:700; color:#b45309; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">आज का भाग्य 88%</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="font-size:10px; color:#d97706; margin-left:3px; flex-shrink:0;"></i>
         </div>
+
       </div>
 
       <!-- 🌙 Amavasya Live Countdown Card (Compact Class-10 iOS Liquid Glass) -->
@@ -4838,7 +5005,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.18
+            APK v5.5.19
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -4865,7 +5032,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.18 (बिल्ड कोड: 568)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.19 (बिल्ड कोड: 569)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5723,7 +5890,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.18 (बिल्ड कोड: 568)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.19 (बिल्ड कोड: 569)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -7588,10 +7755,185 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- ✨ समर्पित दैनिक राशिफल पेज (Dedicated Dainik Rashifal Full Page - iOS 18) -->
+  <!-- ========================================================================= -->
+  <div id="dedicatedRashifalPage" data-theme="dark" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; inset:0; z-index:1150; background:var(--bg-canvas, #000); overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch;">
+    
+    <!-- Ambient Liquid Orbs -->
+    <div class="ambient-layer">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <div class="orb orb-c"></div>
+    </div>
+
+    <div class="screen">
+      <!-- Top Sticky Apple iOS Header Bar -->
+      <header class="top-header" style="position:sticky; top:6px; z-index:25; padding:8px 12px; border-radius:999px; background:linear-gradient(135deg, #78350f 0%, #b45309 50%, #d97706 100%); backdrop-filter:blur(36px); display:flex; justify-content:space-between; align-items:center; box-shadow:0 8px 24px rgba(180,83,9,0.35); border:1px solid rgba(255,255,255,0.25);">
+        <button onclick="closeDedicatedRashifalPage()" style="border:none; background:rgba(255,255,255,0.18); color:white; padding:6px 13px; border-radius:999px; font-weight:800; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:5px;">
+          <i class="fa-solid fa-arrow-left"></i> <span>वापस</span>
+        </button>
+        <div style="text-align:center;">
+          <div style="font-size:13px; font-weight:900; color:white; letter-spacing:0.3px; display:flex; align-items:center; justify-content:center; gap:5px;">
+            <i class="fa-solid fa-sparkles" style="color:#fde68a;"></i> <span>दैनिक राशिफल</span>
+          </div>
+          <div id="rashifalHeaderDate" style="font-size:10px; font-weight:700; color:#fef3c7; opacity:0.95;">आज का दिन</div>
+        </div>
+        <button onclick="shareRashifalWhatsApp()" style="border:none; background:#22c55e; color:white; padding:6px 12px; border-radius:999px; font-weight:800; font-size:11.5px; cursor:pointer; display:flex; align-items:center; gap:5px; box-shadow:0 3px 8px rgba(34,197,94,0.4);">
+          <i class="fa-brands fa-whatsapp"></i> <span>शेयर</span>
+        </button>
+      </header>
+
+      <!-- 👑 Personalized Member Hero Card (iOS 18 Liquid Glass) -->
+      <div style="background:var(--glass-elevated); border:1px solid var(--glass-border); border-radius:var(--radius-xl); padding:16px; box-shadow:var(--glass-shadow); position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; left:15%; right:15%; height:1px; background:linear-gradient(90deg, transparent, rgba(251,191,36,0.6), transparent);"></div>
+        
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div>
+            <div style="font-size:11px; font-weight:800; color:#d97706; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;" id="rashifalMemberBadge">
+              <i class="fa-solid fa-user-check"></i> सदस्य नाम राशि
+            </div>
+            <h2 id="rashifalMemberGreeting" style="font-size:16px; font-weight:900; color:var(--text-primary); margin:0 0 2px 0;">
+              नमस्ते रेवंतराम भाटी जी!
+            </h2>
+            <div id="rashifalDetectedText" style="font-size:11.5px; font-weight:600; color:var(--text-muted);">
+              नाम अनुसार निर्धारित राशि: <strong id="rashifalDetectedSignName" style="color:#f59e0b;">तुला ♎</strong>
+            </div>
+          </div>
+          <div id="rashifalSymbolBigBadge" style="width:50px; height:50px; border-radius:16px; background:linear-gradient(135deg, #f59e0b, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:0 6px 18px rgba(217,119,6,0.4); flex-shrink:0;">
+            ♎
+          </div>
+        </div>
+
+        <!-- 4-Stat Pills Grid -->
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; margin-top:12px;">
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:12px; padding:8px 10px; display:flex; align-items:center; gap:8px;">
+            <div style="width:28px; height:28px; border-radius:8px; background:rgba(236,72,153,0.15); color:#ec4899; display:flex; align-items:center; justify-content:center; font-size:12px;">🎨</div>
+            <div>
+              <div style="font-size:9.5px; font-weight:700; color:var(--text-muted);">शुभ रंग</div>
+              <div id="rashifalStatColor" style="font-size:11.5px; font-weight:900; color:var(--text-primary);">गुलाबी व सफेद</div>
+            </div>
+          </div>
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:12px; padding:8px 10px; display:flex; align-items:center; gap:8px;">
+            <div style="width:28px; height:28px; border-radius:8px; background:rgba(59,130,246,0.15); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:12px;">🔢</div>
+            <div>
+              <div style="font-size:9.5px; font-weight:700; color:var(--text-muted);">शुभ अंक</div>
+              <div id="rashifalStatNumber" style="font-size:11.5px; font-weight:900; color:var(--text-primary);">6</div>
+            </div>
+          </div>
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:12px; padding:8px 10px; display:flex; align-items:center; gap:8px;">
+            <div style="width:28px; height:28px; border-radius:8px; background:rgba(16,185,129,0.15); color:#10b981; display:flex; align-items:center; justify-content:center; font-size:12px;">🌟</div>
+            <div>
+              <div style="font-size:9.5px; font-weight:700; color:var(--text-muted);">भाग्य प्रतिशत</div>
+              <div id="rashifalStatLuck" style="font-size:11.5px; font-weight:900; color:#10b981;">88% अनुकूल</div>
+            </div>
+          </div>
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:12px; padding:8px 10px; display:flex; align-items:center; gap:8px;">
+            <div style="width:28px; height:28px; border-radius:8px; background:rgba(245,158,11,0.15); color:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:12px;">⏰</div>
+            <div>
+              <div style="font-size:9.5px; font-weight:700; color:var(--text-muted);">अनुकूल समय</div>
+              <div id="rashifalStatTime" style="font-size:11px; font-weight:800; color:var(--text-primary);">09:15 - 11:30 AM</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 🪐 12 Rashis Horizontal Carousel Selector -->
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:0 2px;">
+          <span style="font-size:11px; font-weight:800; color:var(--text-muted);">अन्य राशि चुनें (12 राशियाँ):</span>
+          <span id="rashifalActiveRashiLabel" style="font-size:11px; font-weight:900; color:#d97706;">तुला ♎ सक्रिय</span>
+        </div>
+        <div id="rashiSelectorCarousel" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none; -webkit-overflow-scrolling:touch;">
+          <!-- 12 pills populated dynamically -->
+        </div>
+      </div>
+
+      <!-- 📜 Detailed Prediction Cards (Liquid Glass) -->
+      
+      <!-- Card 1: Today's Overview -->
+      <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:var(--radius-lg); padding:14px; box-shadow:var(--glass-shadow);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg, #f59e0b, #d97706); color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">
+            <i class="fa-solid fa-sun"></i>
+          </div>
+          <span style="font-size:13px; font-weight:900; color:var(--text-primary);">आज का मुख्य फल</span>
+        </div>
+        <p id="rashifalDescGeneral" style="font-size:12.5px; line-height:1.6; color:var(--text-secondary); margin:0;">
+          डेटा लोड हो रहा है...
+        </p>
+      </div>
+
+      <!-- Card 2: Career & Business -->
+      <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:var(--radius-lg); padding:14px; box-shadow:var(--glass-shadow);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg, #3b82f6, #1d4ed8); color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">
+            <i class="fa-solid fa-briefcase"></i>
+          </div>
+          <span style="font-size:13px; font-weight:900; color:var(--text-primary);">कार्यक्षेत्र, नौकरी व व्यापार</span>
+        </div>
+        <p id="rashifalDescCareer" style="font-size:12.5px; line-height:1.6; color:var(--text-secondary); margin:0;">
+          डेटा लोड हो रहा है...
+        </p>
+      </div>
+
+      <!-- Card 3: Family & Love -->
+      <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:var(--radius-lg); padding:14px; box-shadow:var(--glass-shadow);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg, #ec4899, #be185d); color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">
+            <i class="fa-solid fa-heart"></i>
+          </div>
+          <span style="font-size:13px; font-weight:900; color:var(--text-primary);">परिवार, संबंध व दांपत्य</span>
+        </div>
+        <p id="rashifalDescFamily" style="font-size:12.5px; line-height:1.6; color:var(--text-secondary); margin:0;">
+          डेटा लोड हो रहा है...
+        </p>
+      </div>
+
+      <!-- Card 4: Health & Wellness -->
+      <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:var(--radius-lg); padding:14px; box-shadow:var(--glass-shadow);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg, #10b981, #047857); color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <span style="font-size:13px; font-weight:900; color:var(--text-primary);">स्वास्थ्य व मनोबल</span>
+        </div>
+        <p id="rashifalDescHealth" style="font-size:12.5px; line-height:1.6; color:var(--text-secondary); margin:0;">
+          डेटा लोड हो रहा है...
+        </p>
+      </div>
+
+      <!-- Card 5: Remedy & Mantra -->
+      <div style="background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(217,119,6,0.06)); border:1px solid rgba(245,158,11,0.3); border-radius:var(--radius-lg); padding:14px; box-shadow:var(--glass-shadow);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <div style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg, #f59e0b, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">
+            <i class="fa-solid fa-om"></i>
+          </div>
+          <span style="font-size:13px; font-weight:900; color:#b45309;">आज का विशेष वैदिक उपाय व मंत्र</span>
+        </div>
+        <p id="rashifalDescRemedy" style="font-size:12.5px; line-height:1.6; color:var(--text-primary); font-weight:700; margin:0;">
+          डेटा लोड हो रहा है...
+        </p>
+      </div>
+
+      <!-- Bottom Action Buttons -->
+      <div style="display:flex; gap:8px; margin-top:4px;">
+        <button type="button" onclick="saveActiveRashiAsUserDefault()" id="saveDefaultRashiBtn" style="flex:1; border:1px solid var(--glass-border); background:var(--glass-surface); color:var(--text-primary); padding:11px; border-radius:var(--radius-md); font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <i class="fa-solid fa-bookmark" style="color:#d97706;"></i> <span>इसे मेरी मुख्य राशि बनाएं</span>
+        </button>
+        <button type="button" onclick="closeDedicatedRashifalPage(); openDedicatedChoghadiyaPage();" style="flex:1; border:none; background:linear-gradient(135deg, #10b981, #059669); color:white; padding:11px; border-radius:var(--radius-md); font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 10px rgba(16,185,129,0.3);">
+          <i class="fa-solid fa-om"></i> <span>शुभ चौघड़िया देखें</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.18";
+    const APP_VERSION = "5.5.19";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
@@ -13342,6 +13684,9 @@
           });
         }
       }
+      try {
+        if (typeof updateTopRashifalBanner === "function") updateTopRashifalBanner();
+      } catch (e) {}
     }
 
     function openMemberProfileModal(memberId) {
@@ -18894,6 +19239,551 @@
       }
     }
 
+    // =========================================================================
+    // ✨ दैनिक राशिफल (Dainik Rashifal Engine - iOS 18 Liquid Glass)
+    // वैदिक नाम-राशि ऑटो-डिटेक्शन + 12 राशियाँ + दैनिक फल + WhatsApp शेयर
+    // =========================================================================
+
+    const RASHI_DATA = [
+      {
+        id: "aries",
+        name: "मेष",
+        en: "Aries",
+        symbol: "♈",
+        lord: "मंगल देव",
+        element: "अग्नि तत्व",
+        lettersHi: "चू, चे, चो, ला, ली, लू, ले, लो, अ, आ",
+        colors: ["केसरिया", "लाल", "पीला", "सुनहरा"],
+        numbers: [9, 1, 3, 7],
+        times: ["08:30 AM - 10:15 AM", "02:00 PM - 03:45 PM", "06:15 PM - 07:30 PM"],
+        mantra: "ॐ क्रां क्रीं क्रौं सः भौमाय नमः",
+        remedy: "हनुमान चालीसा का पाठ करें एवं लाल चंदन का तिलक लगाएं।"
+      },
+      {
+        id: "taurus",
+        name: "वृषभ",
+        en: "Taurus",
+        symbol: "♉",
+        lord: "शुक्र देव",
+        element: "पृथ्वी तत्व",
+        lettersHi: "ई, ऊ, ए, ऐ, ओ, वा, वी, वू, वे, वो, ब",
+        colors: ["सफेद", "चमकीला हरा", "गुलाबी", "हल्का नीला"],
+        numbers: [6, 2, 5, 8],
+        times: ["09:00 AM - 11:00 AM", "04:30 PM - 06:00 PM", "07:30 PM - 09:00 PM"],
+        mantra: "ॐ द्रां द्रीं द्रौं सः शुक्राय नमः",
+        remedy: "माता लक्ष्मी की आराधना करें एवं कन्याओं को मीठा खिलाएं।"
+      },
+      {
+        id: "gemini",
+        name: "मिथुन",
+        en: "Gemini",
+        symbol: "♊",
+        lord: "बुध देव",
+        element: "वायु तत्व",
+        lettersHi: "का, की, कू, घ, ङ, छ, के, को, हा, ह",
+        colors: ["पन्ना हरा", "हल्का पीला", "आसमानी", "सफेद"],
+        numbers: [5, 3, 1, 6],
+        times: ["10:30 AM - 12:15 PM", "03:00 PM - 04:30 PM", "06:30 PM - 08:00 PM"],
+        mantra: "ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः",
+        remedy: "गणपति जी को दूर्वा (दूब) अर्पित करें एवं गौमाता को हरा चारा खिलाएं।"
+      },
+      {
+        id: "cancer",
+        name: "कर्क",
+        en: "Cancer",
+        symbol: "♋",
+        lord: "चंद्र देव",
+        element: "जल तत्व",
+        lettersHi: "ही, हू, हे, हो, डा, डी, डू, डे, डो, ड",
+        colors: ["दूधिया सफेद", "सिल्वर", "हल्का नीला", "क्रीम"],
+        numbers: [2, 7, 4, 9],
+        times: ["07:45 AM - 09:30 AM", "01:30 PM - 03:00 PM", "07:00 PM - 08:30 PM"],
+        mantra: "ॐ श्रां श्रीं श्रौं सः चंद्रमसे नमः",
+        remedy: "शिवलिंग पर कच्चा दूध व जल अर्पित करें और माता का आशीर्वाद लें।"
+      },
+      {
+        id: "leo",
+        name: "सिंह",
+        en: "Leo",
+        symbol: "♌",
+        lord: "सूर्य देव",
+        element: "अग्नि तत्व",
+        lettersHi: "मा, मी, मू, मे, मो, टा, टी, टू, टे, म",
+        colors: ["सुनहरा", "नारंगी", "गहरा लाल", "पीला"],
+        numbers: [1, 9, 3, 5],
+        times: ["09:15 AM - 11:00 AM", "01:00 PM - 02:30 PM", "05:00 PM - 06:45 PM"],
+        mantra: "ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः",
+        remedy: "प्रातःकाल तांबे के लोटे से सूर्यदेव को अर्घ्य दें और गायत्री मंत्र जपें।"
+      },
+      {
+        id: "virgo",
+        name: "कन्या",
+        en: "Virgo",
+        symbol: "♍",
+        lord: "बुध देव",
+        element: "पृथ्वी तत्व",
+        lettersHi: "टो, पा, पी, पू, ष, ण, ठ, पे, पो, प",
+        colors: ["गहरा हरा", "नीला", "हल्का भूरा", "सफेद"],
+        numbers: [5, 6, 8, 2],
+        times: ["11:00 AM - 12:45 PM", "04:00 PM - 05:30 PM", "07:15 PM - 08:45 PM"],
+        mantra: "ॐ बुं बुधाय नमः",
+        remedy: "पक्षियों को दाना डालें एवं किसी जरूरतमंद को हरी मूंग दान करें।"
+      },
+      {
+        id: "libra",
+        name: "तुला",
+        en: "Libra",
+        symbol: "♎",
+        lord: "शुक्र देव",
+        element: "वायु तत्व",
+        lettersHi: "रा, री, रू, रे, रो, ता, ती, तू, ते, र, त",
+        colors: ["गुलाबी", "सफेद", "फिरोज़ी", "रुपहला"],
+        numbers: [6, 7, 2, 8],
+        times: ["09:30 AM - 11:30 AM", "03:30 PM - 05:15 PM", "08:00 PM - 09:30 PM"],
+        mantra: "ॐ शुं शुक्राय नमः",
+        remedy: "सफेद पुष्प व मिठाई से लक्ष्मी नारायण जी की पूजा करें और इत्र लगाएं।"
+      },
+      {
+        id: "scorpio",
+        name: "वृश्चिक",
+        en: "Scorpio",
+        symbol: "♏",
+        lord: "मंगल / केतु",
+        element: "जल तत्व",
+        lettersHi: "तो, ना, नी, नू, ने, नो, या, यी, यू, न, य",
+        colors: ["लाल", "महरून", "केसरिया", "तांबई"],
+        numbers: [9, 1, 4, 3],
+        times: ["08:00 AM - 09:45 AM", "02:30 PM - 04:15 PM", "06:30 PM - 08:00 PM"],
+        mantra: "ॐ अं अंगारकाय नमः",
+        remedy: "हनुमान जी को सिंदूर व चमेली का तेल चढ़ाएं तथा गुड़ का भोग लगाएं।"
+      },
+      {
+        id: "sagittarius",
+        name: "धनु",
+        en: "Sagittarius",
+        symbol: "♐",
+        lord: "गुरु (बृहस्पति)",
+        element: "अग्नि तत्व",
+        lettersHi: "ये, यो, भा, भी, भू, धा, फा, ढा, भे, भ, ध",
+        colors: ["पीला", "सुनहरा", "केसरिया", "हल्का नारंगी"],
+        numbers: [3, 9, 7, 1],
+        times: ["10:00 AM - 11:45 AM", "03:00 PM - 04:45 PM", "07:00 PM - 08:30 PM"],
+        mantra: "ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः",
+        remedy: "चने की दाल व गुड़ गाय को खिलाएं एवं माथे पर केसर का तिलक लगाएं।"
+      },
+      {
+        id: "capricorn",
+        name: "मकर",
+        en: "Capricorn",
+        symbol: "♑",
+        lord: "शनि देव",
+        element: "पृथ्वी तत्व",
+        lettersHi: "भो, जा, जी, खी, खू, खे, खो, गा, गी, ज, ख, ग",
+        colors: ["गहरा नीला", "आसमानी", "स्लेटी", "काला"],
+        numbers: [8, 5, 6, 4],
+        times: ["11:30 AM - 01:15 PM", "05:15 PM - 06:45 PM", "08:30 PM - 10:00 PM"],
+        mantra: "ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः",
+        remedy: "पीपल के वृक्ष के पास सरसों के तेल का दीपक प्रज्वलित करें।"
+      },
+      {
+        id: "aquarius",
+        name: "कुंभ",
+        en: "Aquarius",
+        symbol: "♒",
+        lord: "शनि देव",
+        element: "वायु तत्व",
+        lettersHi: "गू, गे, गो, सा, सी, सू, से, सो, दा, स, द, श",
+        colors: ["जामुनी", "नीला", "सिल्वर", "फिरोजी"],
+        numbers: [8, 4, 7, 3],
+        times: ["09:00 AM - 10:45 AM", "04:15 PM - 05:45 PM", "07:45 PM - 09:15 PM"],
+        mantra: "ॐ शं शनैश्चराय नमः",
+        remedy: "शनि चालीसा का पाठ करें और काले तिल अथवा उड़द की दाल का दान करें।"
+      },
+      {
+        id: "pisces",
+        name: "मीन",
+        en: "Pisces",
+        symbol: "♓",
+        lord: "गुरु (बृहस्पति)",
+        element: "जल तत्व",
+        lettersHi: "दी, दू, थ, झ, ञ, दे, दो, चा, ची, द, थ",
+        colors: ["हल्दी पीला", "केसरिया", "सुनहरा", "सफेद"],
+        numbers: [3, 2, 9, 7],
+        times: ["08:15 AM - 10:00 AM", "02:45 PM - 04:30 PM", "06:45 PM - 08:15 PM"],
+        mantra: "ॐ बृं बृहस्पतये नमः",
+        remedy: "भगवान विष्णु को पीले पुष्प अर्पित करें एवं विष्णु सहस्रनाम या ॐ नमो भगवते वासुदेवाय का जप करें।"
+      }
+    ];
+
+    let currentActiveRashiIndex = 6; // Default to Libra (तुला)
+    let rashifalInitialized = false;
+
+    // 👤 Get current member name from logged-in session / Firestore cache
+    function getLoggedInAppMemberName() {
+      try {
+        const custom = localStorage.getItem("ysg_custom_member_name");
+        if (custom && custom.trim()) return custom.trim();
+
+        const raw = localStorage.getItem("currentAppUser");
+        if (raw) {
+          const u = JSON.parse(raw);
+          if (u && u.name && u.name !== "सदस्य" && u.name !== "Guest") return u.name.trim();
+        }
+      } catch (e) {}
+
+      const phone = (localStorage.getItem("loggedInMemberPhone") || (typeof loggedInMemberPhone !== "undefined" ? loggedInMemberPhone : "") || "").replace(/\D/g, '').slice(-10);
+      if (phone) {
+        if (phone === "8696663615") return "रेवंतराम भाटी";
+        if (Array.isArray(membersList) && membersList.length) {
+          const mem = membersList.find(m => m.phone && String(m.phone).replace(/\D/g, '').endsWith(phone));
+          if (mem && mem.name) return mem.name.trim();
+        }
+      }
+
+      if (typeof isAdmin !== "undefined" && isAdmin) return "रेवंतराम भाटी";
+      if (Array.isArray(membersList) && membersList.length > 0 && membersList[0].name) {
+        return membersList[0].name.trim();
+      }
+      return "रेवंतराम भाटी";
+    }
+
+    // 🕉️ Name-to-Rashi Vedic Astrological Matcher
+    function computeRashiFromMemberName(name) {
+      if (!name || typeof name !== "string") return 6;
+      const clean = name.trim();
+      if (!clean) return 6;
+
+      const savedRashiId = localStorage.getItem("ysg_user_selected_rashi_id");
+      if (savedRashiId) {
+        const foundIdx = RASHI_DATA.findIndex(r => r.id === savedRashiId);
+        if (foundIdx !== -1) return foundIdx;
+      }
+
+      const firstCharUpper = clean.charAt(0).toUpperCase();
+      const first2Upper = clean.substring(0, 2).toUpperCase();
+
+      // 0: मेष (चू, चे, चो, ला, ली, लू, ले, लो, अ, आ)
+      if (/^(चू|चे|चो|ला|ली|लू|ले|लो|अ|आ)/.test(clean) || /^(A|L)/.test(firstCharUpper) || first2Upper === "CH") return 0;
+
+      // 1: वृषभ (ई, ऊ, ए, ऐ, ओ, वा, वी, वू, वे, वो, ब)
+      if (/^(ई|ऊ|ए|ऐ|ओ|वा|वी|वू|वे|वो|व|ब|बा|बी|बू|बे|बो)/.test(clean) || /^(B|V|U|W)/.test(firstCharUpper)) return 1;
+
+      // 2: मिथुन (का, की, कू, घ, ङ, छ, के, को, हा, ह)
+      if (/^(का|की|कू|के|को|क|घ|छ|हा|ह)/.test(clean) || /^(K)/.test(firstCharUpper) || /^(GH|CHH)/.test(first2Upper)) return 2;
+
+      // 3: कर्क (ही, हू, हे, हो, डा, डी, डू, डे, डो, ड)
+      if (/^(ही|हू|हे|हो|डा|डी|डू|डे|डो|ड)/.test(clean) || /^(D)/.test(firstCharUpper)) return 3;
+
+      // 4: सिंह (मा, मी, मू, मे, मो, टा, टी, टू, टे, म)
+      if (/^(मा|मी|मू|मे|मो|म|टा|टी|टू|टे|ट)/.test(clean) || /^(M)/.test(firstCharUpper)) return 4;
+
+      // 5: कन्या (टो, पा, पी, पू, ष, ण, ठ, पे, पो, प)
+      if (/^(टो|पा|पी|पू|पे|पो|प|ष|ण|ठ)/.test(clean) || /^(P)/.test(firstCharUpper) || first2Upper === "TH") return 5;
+
+      // 6: तुला (रा, री, रू, रे, रो, ता, ती, तू, ते, र, त)
+      if (/^(रा|री|रू|रे|रो|र|ता|ती|तू|ते|त)/.test(clean) || /^(R)/.test(firstCharUpper)) return 6;
+
+      // 7: वृश्चिक (तो, ना, नी, नू, ने, नो, या, यी, यू, न, य)
+      if (/^(तो|ना|नी|नू|ने|नो|न|या|यी|यू|य)/.test(clean) || /^(N|Y)/.test(firstCharUpper)) return 7;
+
+      // 8: धनु (ये, यो, भा, भी, भू, धा, फा, ढा, भे, भ, ध)
+      if (/^(ये|यो|भा|भी|भू|भे|भ|धा|ध|फा|फ|ढा|ढ)/.test(clean) || /^(F)/.test(firstCharUpper) || /^(BH|DH)/.test(first2Upper)) return 8;
+
+      // 9: मकर (भो, जा, जी, खी, खू, खे, खो, गा, गी, ज, ख, ग)
+      if (/^(भो|जा|जी|जे|जो|ज|खी|खू|खे|खो|ख|गा|गी|गे|गो|ग)/.test(clean) || /^(J|G)/.test(firstCharUpper) || first2Upper === "KH") return 9;
+
+      // 10: कुंभ (गू, गे, गो, सा, सी, सू, से, सो, दा, स, द, श)
+      if (/^(गू|गे|गो|सा|सी|सू|से|सो|स|दा|श|ष)/.test(clean) || /^(S)/.test(firstCharUpper) || first2Upper === "SH") return 10;
+
+      // 11: मीन (दी, दू, थ, झ, ञ, दे, दो, चा, ची, द, थ)
+      if (/^(दी|दू|दे|दो|द|थ|झ|चा|ची)/.test(clean) || first2Upper === "JH") return 11;
+
+      return 6; // Default to Libra
+    }
+
+    // 🔮 Date-Seeded Authentic Daily Astrological Prediction Generator
+    function getDailyAstrologicalForecast(rashiIdx, targetDate) {
+      const rashi = RASHI_DATA[rashiIdx];
+      const d = targetDate || new Date();
+      const y = d.getFullYear();
+      const m = d.getMonth() + 1;
+      const day = d.getDate();
+      const dayOfWeek = d.getDay(); // 0 = Sun, 1 = Mon...
+
+      // Unique deterministic seed per day & sign
+      const seed = (y * 10000 + m * 100 + day) * 31 + rashiIdx * 17;
+
+      const luckPercentages = [85, 88, 92, 78, 82, 90, 86, 94, 89, 84, 87, 91];
+      const luckPercent = luckPercentages[(seed + dayOfWeek) % luckPercentages.length];
+
+      const luckyColor = rashi.colors[seed % rashi.colors.length];
+      const luckyNumber = rashi.numbers[(seed + 1) % rashi.numbers.length];
+      const favorableTime = rashi.times[(seed + dayOfWeek) % rashi.times.length];
+
+      // Pool of authentic Vedic day aspects
+      const GENERAL_POOL = [
+        `आज का दिन आपके लिए ऊर्जा और सकारात्मकता से भरपूर रहेगा। सोचे हुए कार्यों में प्रगति होगी और समाज व परिवार में आपकी प्रतिष्ठा बढ़ेगी। किसी खास मित्र या वरिष्ठ व्यक्ति का अच्छा सहयोग मिलेगा। मन प्रसन्न और शांत रहेगा।`,
+        `ग्रहों की स्थिति आपके पक्ष में बन रही है। दिन की शुरुआत किसी शुभ समाचार से हो सकती है। आत्मविश्वास में वृद्धि होगी और रुके हुए काम गति पकड़ेंगे। आज लिए गए महत्वपूर्ण निर्णय भविष्य में लाभकारी सिद्ध होंगे।`,
+        `आज आपका दिन सामान्य से बेहतर और फलदायी रहेगा। किसी नए काम की योजना बनाने के लिए समय अनुकूल है। वाणी में मधुरता बनाए रखें, इससे आपके बिगड़े काम भी सरलता से बन जाएंगे। धार्मिक कार्यों में रुचि बढ़ेगी।`,
+        `आज आपको भाग्य का अच्छा साथ मिलने के संकेत हैं। परिवार के साथ सामंजस्य बढ़ेगा और मानसिक शांति का अनुभव होगा। किसी भी प्रकार की जल्दबाजी से बचें, सोच-समझकर आगे बढ़ने से हर क्षेत्र में सफलता मिलेगी।`,
+        `आज आपका दिन उत्साह और नई उम्मीदों वाला रहेगा। कार्यक्षेत्र और सामाजिक गतिविधियों में आपकी सक्रियता बढ़ेगी। पुराने संपर्कों से लाभ होगा। बड़ों के आशीर्वाद से दिन बहुत ही मंगलकारी बीतेगा।`
+      ];
+
+      const CAREER_POOL = [
+        `कार्यक्षेत्र और व्यापार में नए अवसर प्राप्त होंगे। आर्थिक लेन-देन में सावधानी रखें लेकिन निवेश के लिए दिन अनुकूल है। उच्चाधिकारियों व सहयोगियों के साथ तालमेल बहुत अच्छा रहेगा।`,
+        `व्यापार में आ रहे गतिरोध दूर होंगे और लाभ के नए मार्ग खुलेंगे। नौकरीपेशा लोगों को अपनी मेहनत का पूरा प्रतिफल मिलेगा। किसी महत्वपूर्ण मीटिंग या बातचीत में आपकी बात का सम्मान होगा।`,
+        `धन लाभ के प्रबल योग बन रहे हैं। कार्यस्थल पर आपकी कार्यशैली की प्रशंसा होगी। यदि किसी नए अनुबंध या प्रोजेक्ट पर काम कर रहे हैं तो आज सकारात्मक परिणाम देखने को मिलेंगे।`,
+        `व्यापारिक यात्रा लाभदायक सिद्ध होगी। साझेदारी के कामों में स्पष्टता रखें। आर्थिक स्थिति पहले से अधिक सुदृढ़ होगी और लंबे समय से रुका हुआ धन वापस मिलने की पूरी संभावना है।`,
+        `नौकरी व व्यवसाय दोनों में तरक्की के योग हैं। विद्यार्थियों को प्रतियोगिता में सफलता मिलेगी। अपनी योजनाओं को गुप्त रखकर कार्य करें, सफलता निश्चित रूप से कदम चूमेगी।`
+      ];
+
+      const FAMILY_POOL = [
+        `पारिवारिक वातावरण सौहार्दपूर्ण और सुखद रहेगा। जीवनसाथी का भरपूर सहयोग मिलेगा। घर में किसी मांगलिक या शुभ चर्चा का माहौल बन सकता है। बच्चों की ओर से शुभ समाचार मिलेगा।`,
+        `घर के वरिष्ठ सदस्यों का आशीर्वाद प्राप्त होगा और आपसी प्रेम में वृद्धि होगी। दांपत्य जीवन में मधुरता बनी रहेगी। शाम का समय परिवार के साथ आनंदपूर्वक व्यतीत होगा।`,
+        `रिश्तों में गलतफहमियां दूर होंगी और एक-दूसरे के प्रति विश्वास बढ़ेगा। भाई-बहनों से स्नेह व सहयोग मिलेगा। किसी पुराने पारिवारिक मित्र से मुलाकात मन को प्रफुल्लित करेगी।`,
+        `घर-परिवार में खुशियों का आगमन होगा। जीवनसाथी के साथ सामंजस्य बेहतरीन रहेगा। किसी महत्वपूर्ण घरेलू निर्णय में सबकी सहमति बनेगी जिससे घर में शांति का वास होगा।`,
+        `पारिवारिक जिम्मेदारियों को आप बखुबी निभाएंगे। रिश्तेदारों से संबंध प्रगाढ़ होंगे। परिवार के साथ किसी धार्मिक या मनोरंजक स्थल पर जाने की योजना बन सकती है।`
+      ];
+
+      const HEALTH_POOL = [
+        `स्वास्थ्य उत्तम रहेगा और दिनभर स्फूर्ति बनी रहेगी। नियमित योग व व्यायाम को दिनचर्या का हिस्सा बनाएं। खानपान में संतुलन रखें और भरपूर पानी पिएं।`,
+        `मानसिक शांति और शारीरिक ताजगी बनी रहेगी। मौसमी बदलाव से थोड़ा सतर्क रहें, बाकी स्वास्थ्य को लेकर कोई चिंता की बात नहीं है। ध्यान व प्राणायाम से मन एकाग्र रहेगा।`,
+        `ऊर्जा का स्तर उच्च रहेगा। पुरानी किसी स्वास्थ्य समस्या में सुधार के संकेत हैं। सकारात्मक सोच बनाए रखें, इससे दिनभर आपका मनोबल ऊंचा रहेगा।`,
+        `स्वास्थ्य सामान्य और संतुलित रहेगा। अत्यधिक तनाव लेने से बचें और समय पर विश्राम करें। सुबह की ताजी हवा में टहलना आपके स्वास्थ्य के लिए विशेष लाभकारी रहेगा।`,
+        `शारीरिक और मानसिक रूप से आप खुद को सबल महसूस करेंगे। दिनचर्या व्यवस्थित रखें और सुपाच्य भोजन लें। स्वास्थ्य के प्रति आपकी सजगता आपको निरोगी रखेगी।`
+      ];
+
+      const gIdx = (seed + 0) % GENERAL_POOL.length;
+      const cIdx = (seed + 1) % CAREER_POOL.length;
+      const fIdx = (seed + 2) % FAMILY_POOL.length;
+      const hIdx = (seed + 3) % HEALTH_POOL.length;
+
+      return {
+        rashi,
+        date: d,
+        luckPercent: luckPercent + "%",
+        luckyColor,
+        luckyNumber,
+        favorableTime,
+        general: GENERAL_POOL[gIdx],
+        career: CAREER_POOL[cIdx],
+        family: FAMILY_POOL[fIdx],
+        health: HEALTH_POOL[hIdx],
+        remedy: rashi.remedy,
+        mantra: rashi.mantra
+      };
+    }
+
+    // 🎨 Render Rashifal View on Dedicated Page
+    function renderDedicatedRashifalView(rashiIdx) {
+      if (typeof rashiIdx === "undefined" || rashiIdx === null) {
+        rashiIdx = currentActiveRashiIndex;
+      }
+      currentActiveRashiIndex = rashiIdx;
+
+      const memberName = getLoggedInAppMemberName();
+      const detectedRashiIdx = computeRashiFromMemberName(memberName);
+      const data = getDailyAstrologicalForecast(rashiIdx, new Date());
+      const rashi = data.rashi;
+
+      // Update Header Date
+      const DAYS_HI = ["रविवार","सोमवार","मंगलवार","बुधवार","गुरुवार","शुक्रवार","शनिवार"];
+      const MONTHS_HI = ["जनवरी","फ़रवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितम्बर","अक्टूबर","नवम्बर","दिसम्बर"];
+      const now = new Date();
+      const dateText = `${DAYS_HI[now.getDay()]}, ${now.getDate()} ${MONTHS_HI[now.getMonth()]} ${now.getFullYear()}`;
+      
+      const headerDateEl = document.getElementById("rashifalHeaderDate");
+      if (headerDateEl) headerDateEl.textContent = dateText;
+
+      // Update Member Greeting Hero Card
+      const greetingEl = document.getElementById("rashifalMemberGreeting");
+      if (greetingEl) greetingEl.textContent = `नमस्ते ${memberName} जी!`;
+
+      const detectedSignEl = document.getElementById("rashifalDetectedSignName");
+      if (detectedSignEl) {
+        const detectedRashi = RASHI_DATA[detectedRashiIdx];
+        detectedSignEl.textContent = `${detectedRashi.name} (${detectedRashi.symbol})`;
+      }
+
+      const memberBadgeEl = document.getElementById("rashifalMemberBadge");
+      if (memberBadgeEl) {
+        memberBadgeEl.innerHTML = (rashiIdx === detectedRashiIdx) ?
+          `<i class="fa-solid fa-user-check"></i> आपकी अपनी नाम राशि` :
+          `<i class="fa-solid fa-eye"></i> चुनी गई राशि`;
+      }
+
+      const symBigEl = document.getElementById("rashifalSymbolBigBadge");
+      if (symBigEl) symBigEl.textContent = rashi.symbol;
+
+      const statColorEl = document.getElementById("rashifalStatColor");
+      if (statColorEl) statColorEl.textContent = data.luckyColor;
+
+      const statNumEl = document.getElementById("rashifalStatNumber");
+      if (statNumEl) statNumEl.textContent = data.luckyNumber;
+
+      const statLuckEl = document.getElementById("rashifalStatLuck");
+      if (statLuckEl) statLuckEl.textContent = `${data.luckPercent} अनुकूल`;
+
+      const statTimeEl = document.getElementById("rashifalStatTime");
+      if (statTimeEl) statTimeEl.textContent = data.favorableTime;
+
+      // Update Active Rashi Label
+      const activeLbl = document.getElementById("rashifalActiveRashiLabel");
+      if (activeLbl) activeLbl.textContent = `${rashi.name} ${rashi.symbol} सक्रिय`;
+
+      // Update Description Cards
+      const descGeneral = document.getElementById("rashifalDescGeneral");
+      if (descGeneral) descGeneral.textContent = data.general;
+
+      const descCareer = document.getElementById("rashifalDescCareer");
+      if (descCareer) descCareer.textContent = data.career;
+
+      const descFamily = document.getElementById("rashifalDescFamily");
+      if (descFamily) descFamily.textContent = data.family;
+
+      const descHealth = document.getElementById("rashifalDescHealth");
+      if (descHealth) descHealth.textContent = data.health;
+
+      const descRemedy = document.getElementById("rashifalDescRemedy");
+      if (descRemedy) {
+        descRemedy.innerHTML = `<div><strong>उपाय:</strong> ${data.remedy}</div><div style="margin-top:6px; color:#d97706; font-size:12px;"><strong>मंत्र:</strong> ${data.mantra}</div>`;
+      }
+
+      // Render 12 Rashi Carousel Pills
+      const carouselEl = document.getElementById("rashiSelectorCarousel");
+      if (carouselEl) {
+        carouselEl.innerHTML = RASHI_DATA.map((r, idx) => {
+          const isActive = idx === rashiIdx;
+          const isUserDefault = idx === detectedRashiIdx;
+          return `
+            <div onclick="renderDedicatedRashifalView(${idx})" class="rashi-pill-item ${isActive ? 'active' : ''}">
+              ${isUserDefault ? '<span class="user-badge-dot">आपकी</span>' : ''}
+              <span class="rashi-pill-sym">${r.symbol}</span>
+              <span>${r.name}</span>
+            </div>
+          `;
+        }).join("");
+
+        // Auto-scroll active pill into view smoothly
+        setTimeout(() => {
+          const activeItem = carouselEl.querySelector(".rashi-pill-item.active");
+          if (activeItem) {
+            activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+        }, 80);
+      }
+    }
+
+    // 🚀 Open Dedicated Rashifal Page
+    function openDedicatedRashifalPage(customRashiIdx) {
+      const page = document.getElementById("dedicatedRashifalPage");
+      if (!page) return;
+
+      const memberName = getLoggedInAppMemberName();
+      const detectedIdx = computeRashiFromMemberName(memberName);
+      const targetIdx = (typeof customRashiIdx === "number") ? customRashiIdx : detectedIdx;
+
+      page.style.display = "block";
+      page.style.overflow = "auto";
+      document.body.style.overflow = "hidden";
+
+      const isDark = document.body.classList.contains("dark-theme") || (localStorage.getItem("theme") === "dark");
+      page.setAttribute("data-theme", isDark ? "dark" : "light");
+
+      renderDedicatedRashifalView(targetIdx);
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.openDedicatedRashifalPage = openDedicatedRashifalPage;
+
+    // 🔙 Close Dedicated Rashifal Page
+    function closeDedicatedRashifalPage() {
+      const page = document.getElementById("dedicatedRashifalPage");
+      if (page) page.style.display = "none";
+      document.body.style.overflow = "";
+      if (typeof updateActiveModalState === "function") updateActiveModalState();
+    }
+    window.closeDedicatedRashifalPage = closeDedicatedRashifalPage;
+
+    // 📌 Save currently selected rashi as user's default rashi preference
+    function saveActiveRashiAsUserDefault() {
+      const rashi = RASHI_DATA[currentActiveRashiIndex];
+      localStorage.setItem("ysg_user_selected_rashi_id", rashi.id);
+      updateTopRashifalBanner();
+      renderDedicatedRashifalView(currentActiveRashiIndex);
+      if (typeof showToast === "function") {
+        showToast(`आपकी स्थायी राशि '${rashi.name} (${rashi.symbol})' सेट कर दी गई है!`, "success");
+      } else {
+        alert(`आपकी स्थायी राशि '${rashi.name} (${rashi.symbol})' सेट कर दी गई है!`);
+      }
+    }
+    window.saveActiveRashiAsUserDefault = saveActiveRashiAsUserDefault;
+
+    // 📲 Share today's rashifal on WhatsApp
+    function shareRashifalWhatsApp() {
+      const memberName = getLoggedInAppMemberName();
+      const data = getDailyAstrologicalForecast(currentActiveRashiIndex, new Date());
+      const rashi = data.rashi;
+      const DAYS_HI = ["रविवार","सोमवार","मंगलवार","बुधवार","गुरुवार","शुक्रवार","शनिवार"];
+      const now = new Date();
+      const dateText = `${DAYS_HI[now.getDay()]}, ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+
+      const text = `✨ *दैनिक राशिफल • युवा शक्ति ग्रुप* ✨\n` +
+        `👤 सदस्य: ${memberName}\n` +
+        `🪐 राशि: *${rashi.name} (${rashi.symbol})* | स्वामी: ${rashi.lord}\n` +
+        `📅 दिनांक: ${dateText}\n\n` +
+        `🎨 *शुभ रंग:* ${data.luckyColor}\n` +
+        `🔢 *शुभ अंक:* ${data.luckyNumber}\n` +
+        `🌟 *भाग्य प्रतिशत:* ${data.luckPercent} अनुकूल\n` +
+        `⏰ *अनुकूल समय:* ${data.favorableTime}\n\n` +
+        `🌟 *आज का मुख्य फल:*\n${data.general}\n\n` +
+        `💼 *कार्यक्षेत्र व व्यापार:*\n${data.career}\n\n` +
+        `💖 *परिवार व संबंध:*\n${data.family}\n\n` +
+        `🩺 *स्वास्थ्य:*\n${data.health}\n\n` +
+        `🪔 *आज का विशेष उपाय:*\n${data.remedy}\n` +
+        `🕉️ मंत्र: ${data.mantra}\n\n` +
+        `📲 _युवा शक्ति ग्रुप (कुचेरा) ऐप से देखा गया_`;
+
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      if (typeof openWhatsAppUrl === "function") {
+        openWhatsAppUrl(url);
+      } else {
+        window.open(url, "_blank");
+      }
+    }
+    window.shareRashifalWhatsApp = shareRashifalWhatsApp;
+
+    // 🔄 Update the Top Home Banner Capsule (where user put the red circle)
+    function updateTopRashifalBanner() {
+      try {
+        const memberName = getLoggedInAppMemberName();
+        const rashiIdx = computeRashiFromMemberName(memberName);
+        currentActiveRashiIndex = rashiIdx;
+
+        const data = getDailyAstrologicalForecast(rashiIdx, new Date());
+        const rashi = data.rashi;
+
+        const symEl = document.getElementById("topRashifalSymbol");
+        if (symEl) symEl.textContent = rashi.symbol;
+
+        const signNameEl = document.getElementById("topRashifalSignName");
+        if (signNameEl) signNameEl.textContent = `${rashi.name} ${rashi.symbol}`;
+
+        const subTextEl = document.getElementById("topRashifalSubText");
+        if (subTextEl) subTextEl.textContent = `आज का भाग्य ${data.luckPercent}`;
+      } catch (e) {
+        console.warn("Top Rashifal Banner update error:", e);
+      }
+    }
+    window.updateTopRashifalBanner = updateTopRashifalBanner;
+
+    // ⚡ Initialize Rashifal System
+    function initRashifalSystem() {
+      if (rashifalInitialized) return;
+      rashifalInitialized = true;
+      updateTopRashifalBanner();
+    }
+    setTimeout(initRashifalSystem, 300);
+
     // 🌟 Automatic Daily Suvichar on First Open of the Day
     function triggerDailyAutoSuvichar() {
       try {
@@ -24216,7 +25106,7 @@
     // 🛡️ Modal Backdrop Isolation & Screen Lock State Checker
     function isAnyModalOrOverlayOpen() {
       // 1. Dedicated Sub-Pages
-      const fullPages = ['dedicatedGalleryPage', 'dedicatedPaymentPage', 'dedicatedCashCounterPage', 'dedicatedDeveloperAppsPage', 'dedicatedChoghadiyaPage', 'passbookOverlay', 'dedicatedVamshaPage', 'dedicatedVamshaLivingPage'];
+      const fullPages = ['dedicatedGalleryPage', 'dedicatedPaymentPage', 'dedicatedCashCounterPage', 'dedicatedDeveloperAppsPage', 'dedicatedChoghadiyaPage', 'dedicatedRashifalPage', 'passbookOverlay', 'dedicatedVamshaPage', 'dedicatedVamshaLivingPage'];
       for (const pid of fullPages) {
         const el = document.getElementById(pid);
         if (el && window.getComputedStyle(el).display !== 'none') return true;
@@ -24256,6 +25146,7 @@
     // 📋 All Modal Close Handlers Map
     window.modalCloseHandlers = {
       'dedicatedChoghadiyaPage': () => typeof closeDedicatedChoghadiyaPage === 'function' && closeDedicatedChoghadiyaPage(),
+      'dedicatedRashifalPage': () => typeof closeDedicatedRashifalPage === 'function' && closeDedicatedRashifalPage(),
       'dedicatedVamshaPage': () => typeof closeDedicatedVamshaPage === 'function' && closeDedicatedVamshaPage(),
       'dedicatedVamshaLivingPage': () => typeof closeDedicatedVamshaLivingPage === 'function' && closeDedicatedVamshaLivingPage(),
       'languageModal': () => typeof closeLanguageModal === 'function' && closeLanguageModal(),
@@ -24465,6 +25356,14 @@
         if (choghadiyaPage && window.getComputedStyle(choghadiyaPage).display !== 'none') {
           if (typeof closeDedicatedChoghadiyaPage === 'function') closeDedicatedChoghadiyaPage();
           else choghadiyaPage.style.display = 'none';
+          updateActiveModalState();
+          return true;
+        }
+
+        const rashifalPage = document.getElementById('dedicatedRashifalPage');
+        if (rashifalPage && window.getComputedStyle(rashifalPage).display !== 'none') {
+          if (typeof closeDedicatedRashifalPage === 'function') closeDedicatedRashifalPage();
+          else rashifalPage.style.display = 'none';
           updateActiveModalState();
           return true;
         }
