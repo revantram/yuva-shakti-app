@@ -5259,7 +5259,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.25
+            APK v5.5.26
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5286,7 +5286,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.25 (बिल्ड कोड: 575)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.26 (बिल्ड कोड: 576)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5875,7 +5875,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.25 (बिल्ड कोड: 575)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.26 (बिल्ड कोड: 576)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -7933,27 +7933,24 @@
         </button>
       </header>
 
-      <!-- 👑 Personalized Member Profile Card (Clean, Focused, No Truncation) -->
-      <div style="background:var(--glass-elevated); border:1px solid var(--glass-border); border-radius:20px; padding:16px; box-shadow:var(--glass-shadow); position:relative;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div style="min-width:0;">
-            <div style="display:inline-flex; align-items:center; gap:5px; background:rgba(217,119,6,0.1); color:#b45309; padding:2.5px 9px; border-radius:999px; font-size:10.5px; font-weight:800; margin-bottom:4px;" id="rashifalMemberBadge">
-              <i class="fa-solid fa-user-check"></i> आपकी अपनी नाम राशि
-            </div>
-            <h2 id="rashifalMemberGreeting" style="font-size:17px; font-weight:900; color:var(--text-primary); margin:0 0 3px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-              नमस्ते रेवंतराम भाटी जी!
+      <!-- 👑 Personalized Member Profile Card (Clean Header) -->
+      <div style="background:var(--glass-elevated); border:1px solid var(--glass-border); border-radius:20px; padding:16px 18px; box-shadow:var(--glass-shadow); position:relative;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:14px;">
+          <div style="min-width:0; flex:1;">
+            <h2 id="rashifalMemberGreeting" style="font-size:18px; font-weight:900; color:var(--text-primary); margin:0; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+              नमस्ते रेवंतराम भाटी
             </h2>
-            <div id="rashifalDetectedText" style="font-size:12px; font-weight:700; color:var(--text-muted);">
-              नाम अनुसार निर्धारित राशि: <strong id="rashifalDetectedSignName" style="color:#d97706;">तुला (♎)</strong>
+            <div style="font-size:12px; font-weight:600; color:var(--text-muted); margin-top:3px;">
+              दैनिक राशिफल एवं ग्रह गोचर
             </div>
           </div>
-          <div id="rashifalSymbolBigBadge" style="width:52px; height:52px; border-radius:16px; background:linear-gradient(135deg, #f59e0b, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:0 6px 18px rgba(217,119,6,0.35); flex-shrink:0; margin-left:14px;">
-            ♎
+          <div id="rashifalMemberPhotoBox" style="width:50px; height:50px; border-radius:16px; overflow:hidden; background:linear-gradient(135deg, #d97706, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; box-shadow:0 4px 14px rgba(217,119,6,0.25); flex-shrink:0; border:2px solid rgba(255,255,255,0.8);">
+            <!-- Populated dynamically with profile photo or initial -->
           </div>
         </div>
       </div>
 
-      <!-- 🪐 12 Rashis Horizontal Carousel Selector (Uniform Height & Full Right Clearance) -->
+      <!-- 🪐 12 Rashis Horizontal Carousel Selector -->
       <div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; padding:0 2px;">
           <span style="font-size:11.5px; font-weight:800; color:var(--text-muted);">अन्य राशि चुनें (12 राशियाँ):</span>
@@ -7964,159 +7961,10 @@
         </div>
       </div>
 
-      <!-- 🌟 SwarnSiddhi Hero Card: गोचर सूचकांक Dial Gauge व आज का प्रवाह -->
-      <div style="background:linear-gradient(135deg, rgba(254,243,199,0.7) 0%, var(--glass-elevated) 100%); border:1px solid rgba(245,158,11,0.35); border-radius:20px; padding:16px; box-shadow:var(--glass-shadow);">
-        
-        <!-- Dial & Info Header -->
-        <div style="display:flex; align-items:center; gap:16px;">
-          <!-- SVG Circular Dial Gauge (SwarnSiddhi style) -->
-          <div style="position:relative; width:86px; height:86px; flex-shrink:0;">
-            <svg viewBox="0 0 100 100" style="width:100%; height:100%; transform:rotate(-90deg);">
-              <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(245,158,11,0.18)" stroke-width="8" />
-              <circle id="swDialCircle" cx="50" cy="50" r="40" fill="none" stroke="url(#swDialGrad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="251.32" stroke-dashoffset="17.6" style="transition: stroke-dashoffset 0.8s ease;" />
-              <defs>
-                <linearGradient id="swDialGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#10b981" />
-                  <stop offset="100%" stop-color="#059669" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
-              <span id="swDialScore" style="font-size:22px; font-weight:900; color:var(--text-primary); line-height:1;">9.3</span>
-              <span style="font-size:9.5px; font-weight:800; color:var(--text-muted); margin-top:2px;">/ 10</span>
-            </div>
-          </div>
-
-          <!-- Metadata -->
-          <div style="flex:1; min-width:0;">
-            <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px; flex-wrap:wrap;">
-              <span id="swDialVerdictPill" style="font-size:11px; font-weight:900; background:#dcfce7; color:#15803d; padding:2px 10px; border-radius:999px; border:1px solid #bbf7d0;">
-                अति उत्तम
-              </span>
-              <span id="rashifalAiBadge" style="display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:800; background:rgba(99,102,241,0.12); color:#4338ca; padding:2px 8px; border-radius:999px;">
-                <i class="fa-solid fa-sparkles"></i> <span id="rashifalAiBadgeText">वैदिक ज्योतिष</span>
-              </span>
-            </div>
-            <div id="swDialHeading" style="font-size:16px; font-weight:900; color:var(--text-primary);">
-              तुला · Libra
-            </div>
-            <div id="swDialHouseBadge" style="font-size:11.5px; font-weight:800; color:#b45309; margin-top:2px;">
-              चंद्रमा 9वें भाव में
-            </div>
-          </div>
-        </div>
-
-        <!-- Flow Summary -->
-        <p id="swDialFlowSummary" style="font-size:12.5px; line-height:1.75; color:var(--text-secondary); margin:12px 0 0 0; padding-top:10px; border-top:1px solid rgba(0,0,0,0.06);">
-          गणना हो रही है...
-        </p>
-      </div>
-
-      <!-- 📋 SwarnSiddhi 5 Area Cards (क्षेत्रवार फल) -->
-      <div>
-        <div style="font-size:13px; font-weight:900; color:var(--text-primary); margin:4px 0 8px 2px; display:flex; align-items:center; gap:6px;">
-          <span>📋</span> <span>क्षेत्रवार गोचर विश्लेषण</span>
-        </div>
-
-        <div style="display:flex; flex-direction:column; gap:9px;">
-          <!-- 1. प्रेम और रिश्ते -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:15px; padding:12px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-              <span style="font-weight:900; font-size:13px; color:#db2777; display:flex; align-items:center; gap:6px;">
-                <span>💖</span> <span>प्रेम और रिश्ते</span>
-              </span>
-              <span id="swScoreLove" style="font-size:11px; font-weight:800; background:rgba(219,39,119,0.1); color:#db2777; padding:2px 8px; border-radius:999px;">8.1/10 · अति उत्तम</span>
-            </div>
-            <div id="swTextLove" style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin-bottom:7px;">...</div>
-            <div style="background:rgba(219,39,119,0.05); border-left:3px solid #db2777; border-radius:4px 8px 8px 4px; padding:6px 9px; font-size:11px; line-height:1.45; color:var(--text-muted);">
-              <strong style="color:#db2777; font-weight:800;">किस आधार पर:</strong> <span id="swBasisLove">...</span>
-            </div>
-          </div>
-
-          <!-- 2. काम और करियर -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:15px; padding:12px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-              <span style="font-weight:900; font-size:13px; color:#2563eb; display:flex; align-items:center; gap:6px;">
-                <span>💼</span> <span>काम और करियर</span>
-              </span>
-              <span id="swScoreCareer" style="font-size:11px; font-weight:800; background:rgba(37,99,235,0.1); color:#2563eb; padding:2px 8px; border-radius:999px;">8.6/10 · अति उत्तम</span>
-            </div>
-            <div id="swTextCareer" style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin-bottom:7px;">...</div>
-            <div style="background:rgba(37,99,235,0.05); border-left:3px solid #2563eb; border-radius:4px 8px 8px 4px; padding:6px 9px; font-size:11px; line-height:1.45; color:var(--text-muted);">
-              <strong style="color:#2563eb; font-weight:800;">किस आधार पर:</strong> <span id="swBasisCareer">...</span>
-            </div>
-          </div>
-
-          <!-- 3. धन और वित्त -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:15px; padding:12px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-              <span style="font-weight:900; font-size:13px; color:#059669; display:flex; align-items:center; gap:6px;">
-                <span>💰</span> <span>धन और वित्त</span>
-              </span>
-              <span id="swScoreWealth" style="font-size:11px; font-weight:800; background:rgba(5,150,105,0.1); color:#059669; padding:2px 8px; border-radius:999px;">9.0/10 · अति उत्तम</span>
-            </div>
-            <div id="swTextWealth" style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin-bottom:7px;">...</div>
-            <div style="background:rgba(5,150,105,0.05); border-left:3px solid #059669; border-radius:4px 8px 8px 4px; padding:6px 9px; font-size:11px; line-height:1.45; color:var(--text-muted);">
-              <strong style="color:#059669; font-weight:800;">किस आधार पर:</strong> <span id="swBasisWealth">...</span>
-            </div>
-          </div>
-
-          <!-- 4. ऊर्जा और दिनचर्या -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:15px; padding:12px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-              <span style="font-weight:900; font-size:13px; color:#0891b2; display:flex; align-items:center; gap:6px;">
-                <span>🩺</span> <span>ऊर्जा और दिनचर्या</span>
-              </span>
-              <span id="swScoreHealth" style="font-size:11px; font-weight:800; background:rgba(8,145,178,0.1); color:#0891b2; padding:2px 8px; border-radius:999px;">8.0/10 · अति उत्तम</span>
-            </div>
-            <div id="swTextHealth" style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin-bottom:7px;">...</div>
-            <div style="background:rgba(8,145,178,0.05); border-left:3px solid #0891b2; border-radius:4px 8px 8px 4px; padding:6px 9px; font-size:11px; line-height:1.45; color:var(--text-muted);">
-              <strong style="color:#0891b2; font-weight:800;">किस आधार पर:</strong> <span id="swBasisHealth">...</span>
-            </div>
-          </div>
-
-          <!-- 5. परिवार और घर -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:15px; padding:12px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-              <span style="font-weight:900; font-size:13px; color:#7c3aed; display:flex; align-items:center; gap:6px;">
-                <span>🏡</span> <span>परिवार और घर</span>
-              </span>
-              <span id="swScoreFamily" style="font-size:11px; font-weight:800; background:rgba(124,58,237,0.1); color:#7c3aed; padding:2px 8px; border-radius:999px;">7.9/10 · अनुकूल</span>
-            </div>
-            <div id="swTextFamily" style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin-bottom:7px;">...</div>
-            <div style="background:rgba(124,58,237,0.05); border-left:3px solid #7c3aed; border-radius:4px 8px 8px 4px; padding:6px 9px; font-size:11px; line-height:1.45; color:var(--text-muted);">
-              <strong style="color:#7c3aed; font-weight:800;">किस आधार पर:</strong> <span id="swBasisFamily">...</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 🟢 Card 3: शुभ पक्ष (Positive Aspects) -->
-      <div style="background:linear-gradient(135deg, rgba(220,252,231,0.5) 0%, var(--glass-surface) 100%); border:1px solid rgba(34,197,94,0.35); border-radius:16px; padding:13px 15px; box-shadow:0 3px 10px rgba(0,0,0,0.03);">
-        <div style="display:flex; align-items:center; gap:7px; margin-bottom:4px;">
-          <span style="width:9px; height:9px; border-radius:50%; background:#16a34a; display:inline-block;"></span>
-          <span style="font-size:12.5px; font-weight:900; color:#15803d;">शुभ पक्ष (अनुकूल फल)</span>
-        </div>
-        <p id="rashifalSubhPaksh" style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin:0;">
-          ...
-        </p>
-      </div>
-
-      <!-- 🟠 Card 4: सतर्कता (Precautions) -->
-      <div style="background:linear-gradient(135deg, rgba(254,242,242,0.5) 0%, var(--glass-surface) 100%); border:1px solid rgba(239,68,68,0.35); border-radius:16px; padding:13px 15px; box-shadow:0 3px 10px rgba(0,0,0,0.03);">
-        <div style="display:flex; align-items:center; gap:7px; margin-bottom:4px;">
-          <span style="width:9px; height:9px; border-radius:50%; background:#ea580c; display:inline-block;"></span>
-          <span style="font-size:12.5px; font-weight:900; color:#c2410c;">सतर्कता (सावधानी)</span>
-        </div>
-        <p id="rashifalSatarkta" style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin:0;">
-          ...
-        </p>
-      </div>
-
-      <!-- ✨ SwarnSiddhi 4-Tile Auspicious Grid (शुभ अंक, शुभ रंग और स्वामी) -->
-      <div>
-        <div style="font-size:13px; font-weight:900; color:var(--text-primary); margin:4px 0 8px 2px; display:flex; align-items:center; gap:6px;">
-          <span>✨</span> <span>आज के शुभ संकेत व मुहूर्त</span>
+      <!-- ✨ आज के शुभ संकेत (Shifted directly below 12 Rashis list, Clean 2-Tile Grid) -->
+      <div style="background:var(--glass-elevated); border:1px solid var(--glass-border); border-radius:18px; padding:14px 16px; box-shadow:var(--glass-shadow);">
+        <div style="font-size:13px; font-weight:900; color:var(--text-primary); margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+          <span>✨</span> <span>आज के शुभ संकेत</span>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
@@ -8127,7 +7975,7 @@
             </div>
             <div style="min-width:0;">
               <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">शुभ रंग</div>
-              <div id="swTileColor" style="font-size:12px; font-weight:900; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">सफेद, गुलाबी</div>
+              <div id="swTileColor" style="font-size:12.5px; font-weight:900; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">सफेद, गुलाबी</div>
             </div>
           </div>
 
@@ -8138,35 +7986,80 @@
             </div>
             <div style="min-width:0;">
               <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">शुभ अंक</div>
-              <div id="swTileNumber" style="font-size:13px; font-weight:900; color:var(--text-primary);">6</div>
-            </div>
-          </div>
-
-          <!-- 3. स्वामी का वार -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:11px 12px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
-            <div style="width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg, #8b5cf6, #a78bfa); display:flex; align-items:center; justify-content:center; color:white; font-size:14px; box-shadow:0 3px 8px rgba(139,92,246,0.25); flex-shrink:0;">
-              🪐
-            </div>
-            <div style="min-width:0;">
-              <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">स्वामी का वार</div>
-              <div id="swTileRulerDay" style="font-size:11.5px; font-weight:900; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">शुक्रवार (शुक्र)</div>
-            </div>
-          </div>
-
-          <!-- 4. अनुकूल समय -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:11px 12px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
-            <div style="width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg, #10b981, #34d399); display:flex; align-items:center; justify-content:center; color:white; font-size:14px; box-shadow:0 3px 8px rgba(16,185,129,0.25); flex-shrink:0;">
-              ⏰
-            </div>
-            <div style="min-width:0;">
-              <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">अनुकूल समय</div>
-              <div id="swTileTime" style="font-size:11px; font-weight:900; color:var(--text-primary); word-break:break-word;">09:30–11:30 AM</div>
+              <div id="swTileNumber" style="font-size:13.5px; font-weight:900; color:var(--text-primary);">6</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 🪔 Card 6: आज का विशेष वैदिक उपाय व मंत्र -->
+      <!-- 🪐 मुख्य दैनिक राशिफल कार्ड (Clean Rashi Name & AI Daily Prediction) -->
+      <div style="background:var(--glass-elevated); border:1px solid var(--glass-border); border-radius:20px; padding:16px 18px; box-shadow:var(--glass-shadow);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.06);">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div style="width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg, #d97706, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; box-shadow:0 3px 8px rgba(217,119,6,0.3);">
+              <span id="rashifalSignSymbolMini">♎</span>
+            </div>
+            <div>
+              <h3 id="rashifalSignTitle" style="font-size:17px; font-weight:900; color:var(--text-primary); margin:0;">
+                तुला
+              </h3>
+            </div>
+          </div>
+          <span id="rashifalAiBadge" style="display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:800; background:rgba(99,102,241,0.1); color:#4338ca; padding:3px 9px; border-radius:999px;">
+            <i class="fa-solid fa-sparkles"></i> <span id="rashifalAiBadgeText">AI पावर्ड</span>
+          </span>
+        </div>
+
+        <!-- Main Daily Horoscope Summary Text -->
+        <p id="rashifalMainSummary" style="font-size:13px; line-height:1.75; color:var(--text-primary); margin:0; font-weight:500;">
+          गणना हो रही है...
+        </p>
+      </div>
+
+      <!-- 💡 आज का मार्गदर्शन एवं मुख्य बातें (Point-wise AI Insights) -->
+      <div style="background:var(--glass-elevated); border:1px solid var(--glass-border); border-radius:20px; padding:16px 18px; box-shadow:var(--glass-shadow); display:flex; flex-direction:column; gap:14px;">
+        <div style="font-size:14px; font-weight:900; color:var(--text-primary); display:flex; align-items:center; gap:7px;">
+          <span>💡</span> <span>आज का मार्गदर्शन एवं मुख्य बातें</span>
+        </div>
+
+        <!-- 1. आज क्या करें (What To Do) -->
+        <div style="background:rgba(16,185,129,0.06); border:1.5px solid rgba(16,185,129,0.25); border-radius:15px; padding:13px 14px;">
+          <div style="font-size:12.5px; font-weight:900; color:#065f46; display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+            <i class="fa-solid fa-circle-check" style="color:#10b981;"></i>
+            <span>आज क्या करें (शुभ व फलदायी कार्य)</span>
+          </div>
+          <ul id="rashifalWhatToDoList" style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.7; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
+            <li>योजनाबद्ध तरीके से आवश्यक कार्यों को प्राथमिकता दें।</li>
+            <li>महत्वपूर्ण वार्ताओं व फैसलों में आत्मविश्वास से आगे बढ़ें।</li>
+            <li>परिजनों एवं वरिष्ठों का मार्गदर्शन लेकर निर्णय लें।</li>
+          </ul>
+        </div>
+
+        <!-- 2. आज क्या न करें / सावधानी (What To Avoid) -->
+        <div style="background:rgba(239,68,68,0.06); border:1.5px solid rgba(239,68,68,0.25); border-radius:15px; padding:13px 14px;">
+          <div style="font-size:12.5px; font-weight:900; color:#991b1b; display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+            <i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i>
+            <span>आज क्या न करें (सावधानी व बचाव)</span>
+          </div>
+          <ul id="rashifalWhatToAvoidList" style="margin:0; padding-left:18px; font-size:12.5px; line-height:1.7; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px;">
+            <li>जल्दबाज़ी में कोई बड़ा आर्थिक या कानूनी समझौता न करें।</li>
+            <li>बहस या तीखी प्रतिक्रिया देने से बचें, वाणी में संयम रखें।</li>
+          </ul>
+        </div>
+
+        <!-- 3. मुख्य ज्योतिषीय सलाह (Key Practical Advice) -->
+        <div style="background:linear-gradient(135deg, rgba(245,158,11,0.1), rgba(217,119,6,0.05)); border:1.5px solid rgba(245,158,11,0.3); border-radius:15px; padding:12px 14px;">
+          <div style="font-size:12px; font-weight:900; color:#92400e; display:flex; align-items:center; gap:6px; margin-bottom:5px;">
+            <i class="fa-solid fa-compass" style="color:#d97706;"></i>
+            <span>दिन की मुख्य सलाह</span>
+          </div>
+          <p id="rashifalKeyAdvice" style="margin:0; font-size:12.5px; line-height:1.65; color:var(--text-primary); font-weight:600;">
+            धैर्य और संतुलन बनाए रखें; अपने सकारात्मक दृष्टिकोण से दिन को अनुकूल बना सकते हैं।
+          </p>
+        </div>
+      </div>
+
+      <!-- 🪔 Card 5: आज का विशेष वैदिक उपाय व मंत्र -->
       <div style="background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(217,119,6,0.06)); border:1px solid rgba(245,158,11,0.3); border-radius:18px; padding:15px; box-shadow:var(--glass-shadow);">
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
           <div style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg, #f59e0b, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">
@@ -8178,7 +8071,6 @@
           गणना हो रही है...
         </p>
       </div>
-
       <!-- 📌 Bottom Sticky Action Bar (Fixed, Safe-Area Padded, Non-colliding) -->
       <div class="bottom-sticky-bar">
         <button type="button" onclick="saveActiveRashiAsUserDefault()" id="saveDefaultRashiBtn" style="flex:1; border:1px solid var(--glass-border); background:var(--glass-surface); color:var(--text-primary); padding:12px; border-radius:14px; font-size:12.5px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 2px 6px rgba(0,0,0,0.04);">
@@ -19736,6 +19628,33 @@
       return "रेवंतराम भाटी";
     }
 
+
+    // 🖼️ Get current member profile photo for header avatar
+    function getLoggedInAppMemberPhoto() {
+      try {
+        const raw = localStorage.getItem("currentAppUser");
+        if (raw) {
+          const u = JSON.parse(raw);
+          if (u && (u.photoUrl || u.photo)) return u.photoUrl || u.photo;
+        }
+      } catch (e) {}
+
+      const p = localStorage.getItem("myMemberPhoto");
+      if (p) return p;
+
+      const phone = (localStorage.getItem("loggedInMemberPhone") || (typeof loggedInMemberPhone !== "undefined" ? loggedInMemberPhone : "") || "").replace(/\D/g, '').slice(-10);
+      if (phone && Array.isArray(membersList) && membersList.length) {
+        const mem = membersList.find(m => m.phone && String(m.phone).replace(/\D/g, '').endsWith(phone));
+        if (mem && (mem.photoUrl || mem.photo)) return mem.photoUrl || mem.photo;
+      }
+
+      if ((phone === "8696663615" || (typeof isAdmin !== "undefined" && isAdmin)) && Array.isArray(membersList)) {
+        const revant = membersList.find(m => (m.phone && m.phone.endsWith("8696663615")) || (m.name && m.name.includes("रेवंतराम")));
+        if (revant && (revant.photoUrl || revant.photo)) return revant.photoUrl || revant.photo;
+      }
+      return null;
+    }
+
     // 🕉️ Name-to-Rashi Vedic Astrological Matcher
     function computeRashiFromMemberName(name) {
       if (!name || typeof name !== "string") return 6;
@@ -20083,156 +20002,117 @@
       if (typeof showToast === "function") showToast("Gemini Key हटा दी गई!");
     }
 
-    // 🔮 Authentic Vedic Daily Astrological Forecast Engine (Swarn Siddhi Baseline)
+    // 🔮 Authentic Vedic Daily Astrological Forecast Engine (Point-wise Baseline)
     function getDailyAstrologicalForecast(rashiIdx, targetDate) {
       const rashi = RASHI_DATA[rashiIdx];
       const d = targetDate || new Date();
-      const y = d.getFullYear();
-      const m = d.getMonth() + 1;
-      const day = d.getDate();
-      const dayOfWeek = d.getDay();
-
       const moonInfo = getVedicMoonInfo(d);
-      const moonRashiIdx = moonInfo.rashiIdx;
       const nakshatra = moonInfo.nakshatra;
-      const houseIdx = ((moonRashiIdx - rashiIdx + 12) % 12);
+      const houseIdx = ((moonInfo.rashiIdx - rashiIdx + 12) % 12);
       const houseNum = houseIdx + 1;
       const house = HOUSE_DESCRIPTIONS_VEDIC[houseIdx];
 
-      // Verbatim Swarn Siddhi Accurate Model for Libra (तुला)
+      // Verbatim tailored baseline predictions for Libra (तुला)
       if (rashiIdx === 6) {
         return {
           rashi,
-          date: d,
-          houseNum: 9,
-          houseBadge: "9वां भाव गोचर",
-          nakshatra: nakshatra || "मृगशिरा",
-          gocharIndex: 9.3,
-          verdict: "अति उत्तम",
-          flowSummary: "आज का प्रवाह सहायक है। पहल का लाभ मिल सकता है, इसलिए अपनी योजना आगे रखें और जरूरी काम शुरू करें। चंद्रमा मिथुन राशि में, तुला से नौवें भाव में संचरण कर रहा है। आज सबसे मजबूत साथ शनि का है, इसलिए अनुशासन, जिम्मेदारी और धैर्य से प्रगति मिलेगी।",
-          categories: {
-            love: {
-              title: "प्रेम और रिश्ते",
-              score: "8.1/10",
-              verdict: "अति उत्तम",
-              text: "आज साथ बिताया अच्छा समय और छोटे स्नेहपूर्ण संकेत गहरा असर डालेंगे। मन की बात कहनी हो तो यह सही समय है।",
-              basis: "शुक्र (पहले भाव में, अनुकूल), चंद्र (नौवें भाव में, सामान्य), मंगल (ग्यारहवें भाव में, अनुकूल), गुरु (ग्यारहवें भाव में, अनुकूल)।"
-            },
-            career: {
-              title: "काम और करियर",
-              score: "8.6/10",
-              verdict: "अति उत्तम",
-              text: "अपनी उपस्थिति बढ़ाएं; बैठकें, प्रस्तुतियां और निर्णय आपके पक्ष में जा सकते हैं। पहचान मिलने की प्रतीक्षा करने के बजाय आगे आएं।",
-              basis: "सूर्य (दूसरे भाव में, प्रतिकूल), शनि (छठे भाव में, अनुकूल), मंगल (ग्यारहवें भाव में, अनुकूल), बुध (पहले भाव में, प्रतिकूल), गुरु (ग्यारहवें भाव में, अनुकूल)।"
-            },
-            wealth: {
-              title: "धन और वित्त",
-              score: "9.0/10",
-              verdict: "अति उत्तम",
-              text: "आमदनी या अटकी रकम लौटने के संकेत हैं, और बकाया, हिसाब-किताब व लंबित कागज़ी काम आज सामान्य से आसानी से निपट सकते हैं।",
-              basis: "गुरु (ग्यारहवें भाव में, अनुकूल), बुध (पहले भाव में, प्रतिकूल), शुक्र (पहले भाव में, अनुकूल), शनि (छठे भाव में, अनुकूल)।"
-            },
-            health: {
-              title: "ऊर्जा और दिनचर्या",
-              score: "8.0/10",
-              verdict: "अति उत्तम",
-              text: "ऊर्जा और सुधार की क्षमता अच्छी है। व्यायाम करें, पर्याप्त पानी पिएं और नींद का नियमित समय रखें; शरीर अच्छी आदतों का जल्दी साथ देगा।",
-              basis: "सूर्य (दूसरे भाव में, प्रतिकूल), चंद्र (नौवें भाव में, सामान्य), मंगल (ग्यारहवें भाव में, अनुकूल), शनि (छठे भाव में, अनुकूल)।"
-            },
-            family: {
-              title: "परिवार और घर",
-              score: "7.9/10",
-              verdict: "अनुकूल",
-              text: "घर में अपनापन बढ़ेगा, आपसी समझ बेहतर होगी और घर से जुड़े रुके काम शांतिपूर्वक आगे बढ़ेंगे।",
-              basis: "चंद्र (नौवें भाव में, अनुकूल), गुरु (ग्यारहवें भाव में, अनुकूल), शुक्र (प्रथम भाव, अनुकूल)।"
-            }
-          },
-          subhPaksh: "आज मंगल (लाभ/इच्छा), गुरु (लाभ/इच्छा), शुक्र (स्वयं/स्वास्थ्य) के शुभ गोचर से इन क्षेत्रों में अनुकूल फल के योग हैं।",
-          satarkta: "सतर्कता: सूर्य (धन/परिवार), चंद्र (भाग्य/धर्म), बुध (स्वयं/स्वास्थ्य) के गोचर में जल्दबाज़ी व टकराव से बचें।",
+          summary: "आज का प्रवाह अत्यंत सहायक और सकारात्मक है। चंद्रमा आपके 9वें भाव (भाग्य व धर्म) में गोचर कर रहा है। आज आपके सोचे हुए कार्य गति पकड़ेंगे और अनुशासन व धैर्य से काम करने पर सफलता के नए द्वार खुलेंगे। आर्थिक स्थिति सुदृढ़ होगी और मान-सम्मान में वृद्धि होगी।",
+          whatToDo: [
+            "जरूरी व लंबित योजनाओं को आत्मविश्वास से आगे बढ़ाएं।",
+            "महत्वपूर्ण बैठकों और आर्थिक मामलों में सक्रिय पहल करें।",
+            "परिवार के वरिष्ठों व गुरुजनों का आशीर्वाद लेकर काम शुरू करें।"
+          ],
+          whatToAvoid: [
+            "जल्दबाज़ी में कोई जोखिम भरा वित्तीय लेन-देन न करें।",
+            "व्यर्थ की चर्चाओं या बहसों में समय नष्ट करने से बचें।"
+          ],
+          keyAdvice: "आज सबसे मजबूत साथ शनि का है, अतः अनुशासन, जिम्मेदारी और धैर्य से आगे बढ़ें।",
           luckyColor: rashi.luckyColor,
           luckyNumber: rashi.luckyNumber,
-          rulerDay: rashi.rulerDay || "शुक्रवार",
-          luckyTime: rashi.times,
           remedy: rashi.remedy,
           mantra: rashi.mantra
         };
       }
 
-      // General Authentic Vedic Computation
-      const seed = (y * 10000 + m * 100 + day) * 31 + rashiIdx * 17;
-      const scores = [8.8, 9.2, 8.5, 7.9, 8.7, 9.1, 9.3, 8.4, 9.0, 8.2, 8.6, 8.9];
-      const gScore = scores[(seed + dayOfWeek) % scores.length];
-      const verdict = gScore >= 9.0 ? "अति उत्तम" : (gScore >= 8.2 ? "उत्तम" : "अनुकूल");
+      // Authentic tailored baseline predictions for other signs
+      const summaries = [
+        "आज साहस और पराक्रम में वृद्धि होगी। कार्यक्षेत्र में आपकी योजनाएं सफल होंगी और आर्थिक लाभ के उत्तम अवसर प्राप्त होंगे।", // मेष
+        "आर्थिक दृष्टिकोण से आज का दिन शुभ है। परिवार का पूरा सहयोग मिलेगा और धन संचय के नए मार्ग प्रशस्त होंगे।", // वृषभ
+        "आज मान-सम्मान व प्रतिष्ठा में वृद्धि होगी। अटके हुए कार्यों को पूरा करने में मित्रों व परिजनों का साथ मिलेगा।", // मिथुन
+        "आज का दिन मिला-जुला रहेगा। सोचे हुए कार्यों में प्रगति होगी, आत्मसंयम और धैर्य से काम लें।", // कर्क
+        "आज भाग्य का भरपूर साथ मिलेगा। व्यापार व नौकरी में नए अवसर मिलेंगे, आर्थिक स्थिति मजबूत रहेगी।", // सिंह
+        "कार्यक्षेत्र में प्रगति और सफलता के संकेत हैं। सूझबूझ और योजनाबद्ध परिश्रम से मनवांछित फल प्राप्त होंगे।", // कन्या
+        "आज का प्रवाह सहायक है। चंद्रमा 9वें भाव में गोचर कर रहा है; धैर्य और सूझबूझ से आगे बढ़ें।", // तुला
+        "आज का दिन नई ऊर्जा और उत्साह लेकर आएगा। वरिष्ठों का सहयोग प्राप्त होगा और सोचे हुए काम पूरे होंगे।", // वृश्चिक
+        "आज आध्यात्मिक व ज्ञानवर्धक कार्यों में मन लगेगा। यात्रा के योग बन सकते हैं, आर्थिक पक्ष अनुकूल रहेगा।", // धनु
+        "मेहनत का पूर्ण फल मिलेगा। कार्यक्षेत्र में जिम्मेदारी बढ़ सकती है, आर्थिक स्थिति संतोषजनक रहेगी।", // मकर
+        "आज नए संपर्क लाभकारी सिद्ध होंगे। मित्रों का सहयोग मिलेगा और परिवार में सुखद वातावरण रहेगा।", // कुंभ
+        "आज रचनात्मक कार्यों में सफलता मिलेगी। पुराने निवेश से लाभ हो सकता है, मानसिक शांति बनी रहेगी।" // मीन
+      ];
 
-      const flowSummary = `आज चंद्रमा आपकी राशि से ${house.name} में, ${nakshatra} नक्षत्र में संचरण कर रहा है — अतः आज ${house.focus} से जुड़े मामलों में सकारात्मक प्रवाह रहेगा। सूझबूझ और योजनाबद्ध तरीके से काम करने पर उत्तम फल प्राप्त होंगे।`;
+      const whatToDos = [
+        ["योजनाबद्ध तरीके से काम निपटाएं।", "महत्वपूर्ण वार्ताओं में आगे आएं।", "आर्थिक लेन-देन में सतर्कता रखें।"],
+        ["परिवार के साथ समय बिताएं।", "नए निवेश की योजना बनाएं।", "आत्मविश्वास से निर्णय लें।"],
+        ["संचार व संपर्कों का विस्तार करें।", "लंबित कागज़ी काम पूरे करें।", "सकारात्मक दृष्टिकोण रखें।"],
+        ["स्वास्थ्य व खान-पान पर ध्यान दें।", "आर्थिक बजट बनाकर चलें।", "धैर्य से काम लें।"],
+        ["नेतृत्व की क्षमता दिखाएं।", "वरिष्ठों से तालमेल रखें।", "अवसरों का लाभ उठाएं।"],
+        ["कार्यकुशलता और एकाग्रता बनाए रखें।", "दस्तावेज़ों की ठीक से जांच करें।", "शांत मन से कार्य करें।"],
+        ["जरूरी योजनाओं को आगे बढ़ाएं।", "पहल का लाभ उठाएं।", "धैर्य और अनुशासन बनाए रखें।"],
+        ["आत्मविश्वास से नई शुरुआत करें।", "अनावश्यक बहस टालें।", "अपने लक्ष्यों पर अडिग रहें।"],
+        ["धार्मिक व सकारात्मक कार्यों में मन लगाएं।", "अनुभवी लोगों से सलाह लें।", "ईमानदारी से कर्तव्य निभाएं।"],
+        ["कर्मठता और अनुशासन बनाए रखें।", "दायित्वों को समय पर पूरा करें।", "सावधानी से निवेश करें।"],
+        ["नए विचारों पर काम करें।", "मित्रों व शुभचिंतकों का साथ लें।", "वाणी में मधुरता रखें।"],
+        ["मन की शांति के लिए ध्यान करें।", "आर्थिक संतुलन बनाए रखें।", "दूसरों की मदद करें।"]
+      ];
 
-      const categories = {
-        love: {
-          title: "प्रेम और रिश्ते",
-          score: (gScore - 0.5).toFixed(1) + "/10",
-          verdict: verdict,
-          text: "संबंधों में मधुरता व परस्पर समझ बढ़ेगी; प्रियजनों के साथ सुखद वार्तालाप से मन प्रसन्न रहेगा।",
-          basis: `शुक्र (अनुकूल), चंद्र (${house.name}, सामान्य), गुरु (सहायक)।`
-        },
-        career: {
-          title: "काम और करियर",
-          score: (gScore - 0.3).toFixed(1) + "/10",
-          verdict: verdict,
-          text: "कार्यक्षेत्र में सक्रियता बढ़ाएं; सहकर्मियों व वरिष्ठों का सहयोग मिलेगा और लंबित काम गति पकड़ेंगे।",
-          basis: `शनि (छठे भाव, अनुकूल), मंगल (ऊर्जा प्रदाता), बुध (व्यापार में सहायक)।`
-        },
-        wealth: {
-          title: "धन और वित्त",
-          score: (gScore - 0.2).toFixed(1) + "/10",
-          verdict: verdict,
-          text: "आर्थिक स्थिति संतुलित रहेगी; आय के नए मार्ग खुल सकते हैं व पुराने निवेश से लाभ संभव है।",
-          basis: `गुरु (ग्यारहवें भाव, धन प्रदाता), बुध (संतुलन), शुक्र (ऐश्वर्य)।`
-        },
-        health: {
-          title: "ऊर्जा और दिनचर्या",
-          score: (gScore - 0.6).toFixed(1) + "/10",
-          verdict: "अनुकूल",
-          text: "ऊर्जा का स्तर अच्छा रहेगा; समय पर भोजन, नियमित योग और पर्याप्त विश्राम से स्वास्थ्य उत्तम बना रहेगा।",
-          basis: `सूर्य (आरोग्य कारक), शनि (दिनचर्या अनुशासन), चंद्र (मानसिक शांति)।`
-        },
-        family: {
-          title: "परिवार और घर",
-          score: (gScore - 0.7).toFixed(1) + "/10",
-          verdict: "अनुकूल",
-          text: "पारिवारिक वातावरण सौहार्दपूर्ण रहेगा; घर के मांगलिक व आवश्यक कार्यों में परिजनों का साथ मिलेगा।",
-          basis: `चंद्र (चौथे/नौवें भाव, शांति), गुरु (पारिवारिक सौहार्द)।`
-        }
-      };
+      const whatToAvoids = [
+        ["क्रोध व उतावलेपन से बचें।", "बिना सोचे-समझें किसी विवाद में न पड़ें।"],
+        ["अति-व्यय से बचें।", "दूसरों पर आँख मूंदकर भरोसा न करें।"],
+        ["दोहरे विचारों में समय न गंवाएं।", "जल्दबाज़ी में दस्तावेज साइन न करें।"],
+        ["भावुकता में गलत निर्णय न लें।", "अनावश्यक चिंता से बचें।"],
+        ["अहंकार व जिद से दूर रहें।", "वाणी पर संयम रखें।"],
+        ["दूसरों की कमियां निकालने से बचें।", "तनाव को हावी न होने दें।"],
+        ["जल्दबाज़ी में बड़ा समझौता न करें।", "तीखी प्रतिक्रिया देने से बचें।"],
+        ["गुप्त शत्रुओं से सतर्क रहें।", "आवेश में आकर कोई फैसला न लें।"],
+        ["अति-उत्साह में गलती न करें।", "अनपेक्षित खर्चों से बचें।"],
+        ["आलस्य और काम टालने से बचें।", "स्वास्थ्य की अनदेखी न करें।"],
+        ["अकेलेपन व नकारात्मक विचारों से दूर रहें।", "अनावश्यक वाद-विवाद टालें।"],
+        ["दिन में सपने देखने के बजाय कर्म पर ध्यान दें।", "ऋण लेने से बचें।"]
+      ];
 
-      const subhPaksh = `आज ${rashi.lord} की अनुकूल स्थिति से कार्यक्षेत्र व सामाजिक प्रतिष्ठा में वृद्धि के शुभ योग हैं।`;
-      const satarkta = `सतर्कता: किसी भी निर्णय में जल्दबाज़ी या उतावलेपन से बचें; वाणी में मधुरता और संयम बनाए रखें।`;
+      const keyAdvices = [
+        "धैर्य और विवेक से आज हर बाधा को पार कर सकते हैं।",
+        "आर्थिक सुरक्षा और पारिवारिक सहयोग पर ध्यान केंद्रित रखें।",
+        "सही समय पर सही बात कहना ही आज आपकी सबसे बड़ी सफलता होगी।",
+        "मन को शांत रखें, कठिन परिस्थिति भी सहजता से सुलझ जाएगी।",
+        "अपनी योग्यता पर भरोसा रखें और आगे बढ़कर नेतृत्व करें।",
+        "बारीकियों पर ध्यान दें, आपकी मेहनत रंग लाएगी।",
+        "अनुशासन और संतुलन आज आपका सबसे बड़ा संबल हैं।",
+        "अपनी दृढ़ इच्छाशक्ति से सभी चुनौतियों को पार करें।",
+        "सदाचार और सकारात्मक सोच से दिन मंगलमय रहेगा।",
+        "कठिन परिश्रम ही सफलता की कुंजी है, विचलित न हों।",
+        "सहयोग और समझदारी से हर कार्य संभव होगा।",
+        "आत्म-विश्वास रखें और ईश्वर पर भरोसा रखें।"
+      ];
 
       return {
         rashi,
-        date: d,
-        houseNum,
-        houseBadge: `${houseNum}वां भाव गोचर`,
-        nakshatra,
-        gocharIndex: gScore,
-        verdict,
-        flowSummary,
-        categories,
-        subhPaksh,
-        satarkta,
+        summary: summaries[rashiIdx % summaries.length],
+        whatToDo: whatToDos[rashiIdx % whatToDos.length],
+        whatToAvoid: whatToAvoids[rashiIdx % whatToAvoids.length],
+        keyAdvice: keyAdvices[rashiIdx % keyAdvices.length],
         luckyColor: rashi.luckyColor,
         luckyNumber: rashi.luckyNumber,
-        rulerDay: rashi.rulerDay || "शुक्रवार",
-        luckyTime: rashi.times,
         remedy: rashi.remedy,
         mantra: rashi.mantra
       };
     }
 
-    // 🚀 Google Gemini API Live Horoscope Fetcher (Cached 24h)
+    // 🚀 Google Gemini API Live Point-Wise Horoscope Fetcher (Cached 24h)
     async function fetchGeminiHoroscopeForRashi(rashiIdx, targetDate) {
       if (!appGeminiApiKey) return null;
       const d = targetDate || new Date();
-      const cacheKey = `ys_gemini_sw_${rashiIdx}_${d.getFullYear()}_${d.getMonth()+1}_${d.getDate()}`;
+      const cacheKey = `ys_gemini_pw_${rashiIdx}_${d.getFullYear()}_${d.getMonth()+1}_${d.getDate()}`;
 
       try {
         const cached = localStorage.getItem(cacheKey);
@@ -20249,29 +20129,26 @@
       const MONTHS_HI = ["जनवरी","फ़रवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितम्बर","अक्टूबर","नवम्बर","दिसम्बर"];
       const dateStr = `${DAYS_HI[d.getDay()]}, ${d.getDate()} ${MONTHS_HI[d.getMonth()]} ${d.getFullYear()}`;
 
-      const prompt = `You are a master Vedic Astrologer providing today's accurate horoscope in Hindi following the exact structure, tone, and depth of Swarn Siddhi (swarnsiddhi.com).
+      const prompt = `You are a master Vedic Astrologer generating today's accurate daily horoscope in Hindi for a mobile application.
 Date: ${dateStr}.
 Target Sign: ${rashi.name} (${rashi.en}), Ruling planet: ${rashi.lord}.
 Planetary Transit: Moon in house ${houseNum} (${house.name}) in ${moonInfo.nakshatra} nakshatra.
 
 Return ONLY pure valid JSON (no markdown fences, no explanation) with this structure:
 {
-  "gocharIndex": 9.3,
-  "verdict": "अति उत्तम",
-  "flowSummary": "2-3 sentences of today's transit summary in Hindi...",
-  "categories": {
-    "love": { "score": "8.1/10", "verdict": "अति उत्तम", "text": "...", "basis": "शुक्र (...), चंद्र (...)" },
-    "career": { "score": "8.6/10", "verdict": "अति उत्तम", "text": "...", "basis": "शनि (...), सूर्य (...)" },
-    "wealth": { "score": "9.0/10", "verdict": "अति उत्तम", "text": "...", "basis": "गुरु (...), बुध (...)" },
-    "health": { "score": "8.0/10", "verdict": "अति उत्तम", "text": "...", "basis": "शनि (...), मंगल (...)" },
-    "family": { "score": "7.9/10", "verdict": "अनुकूल", "text": "...", "basis": "चंद्र (...), गुरु (...)" }
-  },
-  "subhPaksh": "शुभ पक्ष का विवरण...",
-  "satarkta": "सतर्कता का विवरण...",
+  "summary": "आज का समग्र दैनिक राशिफल (2-3 पंक्तियों में सरल, स्पष्ट व प्रभावशाली विश्लेषण)",
+  "whatToDo": [
+    "पहला शुभ व अनुकूल कार्य जो आज अवश्य करना चाहिए",
+    "दूसरा सकारात्मक व फलदायी कदम",
+    "तीसरा उपयोगी कार्य"
+  ],
+  "whatToAvoid": [
+    "आज किस बात, गतिविधि या निर्णय से बचना चाहिए (सावधानी)",
+    "दूसरी आवश्यक सावधानी जिसे आज टालना चाहिए"
+  ],
+  "keyAdvice": "दिन की सबसे मुख्य व्यावहारिक व ज्योतिषीय सलाह",
   "luckyColor": "${rashi.luckyColor}",
   "luckyNumber": "${rashi.luckyNumber}",
-  "rulerDay": "${rashi.rulerDay || 'शुक्रवार'}",
-  "luckyTime": "${rashi.times}",
   "remedy": "${rashi.remedy}",
   "mantra": "${rashi.mantra}"
 }`;
@@ -20285,26 +20162,25 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         raw = raw.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
         const parsed = JSON.parse(raw);
         parsed.rashi = rashi;
-        parsed.houseNum = houseNum;
-        parsed.nakshatra = moonInfo.nakshatra;
         parsed.resolvedModel = res.resolvedModel;
         try { localStorage.setItem(cacheKey, JSON.stringify(parsed)); } catch (e) {}
         return parsed;
       } catch (err) {
-        console.warn("Gemini horoscope fetch fallback:", err);
+        console.warn("Gemini horoscope fetch error:", err);
         return null;
       }
     }
 
-    // 🎨 Render Rashifal View on Dedicated Page (Swarn Siddhi Style)
+    // 🎨 Render Clean Point-Wise Rashifal View on Dedicated Page
     function renderDedicatedRashifalView(rashiIdx) {
       if (typeof rashiIdx === "undefined" || rashiIdx === null) {
         rashiIdx = currentActiveRashiIndex;
       }
       currentActiveRashiIndex = rashiIdx;
 
-      const memberName = getLoggedInAppMemberName();
-      const detectedRashiIdx = computeRashiFromMemberName(memberName);
+      const rawMemberName = getLoggedInAppMemberName();
+      const cleanMemberName = rawMemberName.replace(/\s*जी!?$/g, '').trim();
+      const detectedRashiIdx = computeRashiFromMemberName(rawMemberName);
       const data = getDailyAstrologicalForecast(rashiIdx, new Date());
       const rashi = data.rashi;
 
@@ -20317,126 +20193,78 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
       const headerDateEl = document.getElementById("rashifalHeaderDate");
       if (headerDateEl) headerDateEl.textContent = dateText;
 
-      // Update Member Greeting Hero Card
+      // 1. Update Member Greeting Hero Card (Strictly "नमस्ते [नाम]", NO "जी")
       const greetingEl = document.getElementById("rashifalMemberGreeting");
-      if (greetingEl) greetingEl.textContent = `नमस्ते ${memberName} जी!`;
+      if (greetingEl) greetingEl.textContent = `नमस्ते ${cleanMemberName}`;
 
-      const detectedSignEl = document.getElementById("rashifalDetectedSignName");
-      if (detectedSignEl) {
-        const detectedRashi = RASHI_DATA[detectedRashiIdx];
-        detectedSignEl.textContent = `${detectedRashi.name} (${detectedRashi.symbol})`;
+      // Update Member Real Profile Photo or Initial
+      const photoBox = document.getElementById("rashifalMemberPhotoBox");
+      if (photoBox) {
+        const photo = getLoggedInAppMemberPhoto();
+        if (photo) {
+          photoBox.innerHTML = `<img src="${vEsc(photo)}" alt="${escapeHtml(cleanMemberName)}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.parentElement.textContent='${escapeHtml(cleanMemberName[0] || 'भा')}';">`;
+        } else {
+          photoBox.textContent = cleanMemberName[0] || "भा";
+        }
       }
 
-      const memberBadgeEl = document.getElementById("rashifalMemberBadge");
-      if (memberBadgeEl) {
-        memberBadgeEl.innerHTML = (rashiIdx === detectedRashiIdx) ?
-          `<i class="fa-solid fa-user-check"></i> आपकी अपनी नाम राशि` :
-          `<i class="fa-solid fa-eye"></i> चुनी गई राशि`;
-      }
-
-      const symBigEl = document.getElementById("rashifalSymbolBigBadge");
-      if (symBigEl) symBigEl.textContent = rashi.symbol;
-
-      // Update Active Rashi Label
+      // Update Active Rashi Label in Carousel Header
       const activeLbl = document.getElementById("rashifalActiveRashiLabel");
       if (activeLbl) activeLbl.textContent = `${rashi.name} ${rashi.symbol} सक्रिय`;
 
-      // Helper to apply dataset to Swarn Siddhi UI
-      function applyHoroscopeDataToSwarnSiddhiUI(hData, isAiPowered) {
-        // Dial Progress
-        const score = parseFloat(hData.gocharIndex) || 9.0;
-        const circle = document.getElementById("swDialCircle");
-        if (circle) {
-          const dashoffset = 251.32 * (1 - Math.min(10, Math.max(0, score)) / 10);
-          circle.style.strokeDashoffset = dashoffset;
-        }
+      // Helper to apply dataset to UI
+      function applyHoroscopeDataToUI(hData, isAiPowered) {
+        // Selected Rashi Title and Symbol
+        const signTitle = document.getElementById("rashifalSignTitle");
+        if (signTitle) signTitle.textContent = `${rashi.name} (${rashi.symbol})`;
 
-        const scoreEl = document.getElementById("swDialScore");
-        if (scoreEl) scoreEl.textContent = score.toFixed(1);
-
-        const verdictPill = document.getElementById("swDialVerdictPill");
-        if (verdictPill) {
-          verdictPill.textContent = hData.verdict || "अति उत्तम";
-          if (score >= 9.0) {
-            verdictPill.style.background = "#dcfce7";
-            verdictPill.style.color = "#15803d";
-            verdictPill.style.borderColor = "#bbf7d0";
-          } else if (score >= 8.0) {
-            verdictPill.style.background = "#e0f2fe";
-            verdictPill.style.color = "#0369a1";
-            verdictPill.style.borderColor = "#bae6fd";
-          } else {
-            verdictPill.style.background = "#fef3c7";
-            verdictPill.style.color = "#b45309";
-            verdictPill.style.borderColor = "#fde68a";
-          }
-        }
+        const signSym = document.getElementById("rashifalSignSymbolMini");
+        if (signSym) signSym.textContent = rashi.symbol;
 
         const aiBadgeText = document.getElementById("rashifalAiBadgeText");
         if (aiBadgeText) {
           aiBadgeText.textContent = isAiPowered ? "Gemini AI पावर्ड" : "वैदिक ज्योतिष";
         }
 
-        const dialHeading = document.getElementById("swDialHeading");
-        if (dialHeading) dialHeading.textContent = `${rashi.name} · ${rashi.en}`;
-
-        const houseBadge = document.getElementById("swDialHouseBadge");
-        if (houseBadge) {
-          const hNum = hData.houseNum || data.houseNum;
-          const nak = hData.nakshatra || data.nakshatra;
-          houseBadge.textContent = `चंद्रमा ${hNum}वें भाव में (${nak} नक्षत्र)`;
+        // Main Daily Prediction Summary
+        const summaryEl = document.getElementById("rashifalMainSummary");
+        if (summaryEl) {
+          summaryEl.textContent = hData.summary || hData.flowSummary || "आज का दिन सकारात्मक प्रवाह लेकर आया है।";
         }
 
-        const flowEl = document.getElementById("swDialFlowSummary");
-        if (flowEl) flowEl.textContent = hData.flowSummary || "...";
-
-        // 5 Area Cards
-        const cats = hData.categories || {};
-        if (cats.love) {
-          const s = document.getElementById("swScoreLove"); if (s) s.textContent = `${cats.love.score} · ${cats.love.verdict}`;
-          const t = document.getElementById("swTextLove"); if (t) t.textContent = cats.love.text;
-          const b = document.getElementById("swBasisLove"); if (b) b.textContent = cats.love.basis;
-        }
-        if (cats.career) {
-          const s = document.getElementById("swScoreCareer"); if (s) s.textContent = `${cats.career.score} · ${cats.career.verdict}`;
-          const t = document.getElementById("swTextCareer"); if (t) t.textContent = cats.career.text;
-          const b = document.getElementById("swBasisCareer"); if (b) b.textContent = cats.career.basis;
-        }
-        if (cats.wealth) {
-          const s = document.getElementById("swScoreWealth"); if (s) s.textContent = `${cats.wealth.score} · ${cats.wealth.verdict}`;
-          const t = document.getElementById("swTextWealth"); if (t) t.textContent = cats.wealth.text;
-          const b = document.getElementById("swBasisWealth"); if (b) b.textContent = cats.wealth.basis;
-        }
-        if (cats.health) {
-          const s = document.getElementById("swScoreHealth"); if (s) s.textContent = `${cats.health.score} · ${cats.health.verdict}`;
-          const t = document.getElementById("swTextHealth"); if (t) t.textContent = cats.health.text;
-          const b = document.getElementById("swBasisHealth"); if (b) b.textContent = cats.health.basis;
-        }
-        if (cats.family) {
-          const s = document.getElementById("swScoreFamily"); if (s) s.textContent = `${cats.family.score} · ${cats.family.verdict}`;
-          const t = document.getElementById("swTextFamily"); if (t) t.textContent = cats.family.text;
-          const b = document.getElementById("swBasisFamily"); if (b) b.textContent = cats.family.basis;
-        }
-
-        // Subh Paksh & Satarkta
-        const subhEl = document.getElementById("rashifalSubhPaksh");
-        if (subhEl) subhEl.textContent = hData.subhPaksh || data.subhPaksh;
-
-        const satarktaEl = document.getElementById("rashifalSatarkta");
-        if (satarktaEl) satarktaEl.textContent = hData.satarkta || data.satarkta;
-
-        // Swarn Siddhi 4-Tile Grid
+        // Shubh Sanket: Color & Number
         const tileColor = document.getElementById("swTileColor");
         if (tileColor) tileColor.textContent = hData.luckyColor || rashi.luckyColor;
 
         const tileNumber = document.getElementById("swTileNumber");
         if (tileNumber) tileNumber.textContent = hData.luckyNumber || rashi.luckyNumber;
 
-        const tileRuler = document.getElementById("swTileRulerDay");
-        if (tileRuler) tileRuler.textContent = `${hData.rulerDay || rashi.rulerDay || 'शुक्रवार'} (${rashi.lord})`;
+        // What To Do (Point-wise bullet list)
+        const todoList = document.getElementById("rashifalWhatToDoList");
+        if (todoList) {
+          const todos = Array.isArray(hData.whatToDo) && hData.whatToDo.length ? hData.whatToDo : [
+            "योजनाबद्ध तरीके से आवश्यक कार्यों को प्राथमिकता दें।",
+            "महत्वपूर्ण वार्ताओं व फैसलों में आत्मविश्वास से आगे बढ़ें।",
+            "परिजनों एवं वरिष्ठों का मार्गदर्शन लेकर निर्णय लें।"
+          ];
+          todoList.innerHTML = todos.map(t => `<li>${escapeHtml(t)}</li>`).join("");
+        }
 
-        const tileTime = document.getElementById("swTileTime");
-        if (tileTime) tileTime.textContent = hData.luckyTime || rashi.times;
+        // What To Avoid (Point-wise bullet list)
+        const avoidList = document.getElementById("rashifalWhatToAvoidList");
+        if (avoidList) {
+          const avoids = Array.isArray(hData.whatToAvoid) && hData.whatToAvoid.length ? hData.whatToAvoid : [
+            "जल्दबाज़ी में कोई बड़ा आर्थिक या कानूनी समझौता न करें।",
+            "बहस या तीखी प्रतिक्रिया देने से बचें, वाणी में संयम रखें।"
+          ];
+          avoidList.innerHTML = avoids.map(t => `<li>${escapeHtml(t)}</li>`).join("");
+        }
+
+        // Key Practical Advice
+        const adviceEl = document.getElementById("rashifalKeyAdvice");
+        if (adviceEl) {
+          adviceEl.textContent = hData.keyAdvice || "धैर्य और संतुलन बनाए रखें; अपने सकारात्मक दृष्टिकोण से दिन को अनुकूल बना सकते हैं।";
+        }
 
         // Remedy & Mantra
         const remedyEl = document.getElementById("rashifalDescRemedy");
@@ -20451,17 +20279,17 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
         }
       }
 
-      // 1. Immediately apply authentic baseline Vedic data (Zero waiting lag)
-      applyHoroscopeDataToSwarnSiddhiUI(data, false);
+      // 1. Immediately apply baseline authentic data
+      applyHoroscopeDataToUI(data, false);
 
-      // 2. If Gemini API Key is configured, fetch AI-enhanced live prediction in background
+      // 2. If Gemini API Key is configured, fetch live prediction in background
       if (appGeminiApiKey) {
         const aiBadgeText = document.getElementById("rashifalAiBadgeText");
         if (aiBadgeText) aiBadgeText.textContent = "AI लोड हो रहा है...";
 
         fetchGeminiHoroscopeForRashi(rashiIdx, new Date()).then(aiData => {
           if (aiData && currentActiveRashiIndex === rashiIdx) {
-            applyHoroscopeDataToSwarnSiddhiUI(aiData, true);
+            applyHoroscopeDataToUI(aiData, true);
           } else if (aiBadgeText) {
             aiBadgeText.textContent = "वैदिक ज्योतिष";
           }
@@ -20541,31 +20369,26 @@ Return ONLY pure valid JSON (no markdown fences, no explanation) with this struc
 
     // 📲 Share today's rashifal on WhatsApp
     function shareRashifalWhatsApp() {
-      const memberName = getLoggedInAppMemberName();
-      const data = getDailyAstrologicalForecast(currentActiveRashiIndex, new Date());
-      const rashi = data.rashi;
+      const memberName = getLoggedInAppMemberName().replace(/\s*जी!?$/g, '').trim();
+      const rashi = RASHI_DATA[currentActiveRashiIndex];
       const DAYS_HI = ["रविवार","सोमवार","मंगलवार","बुधवार","गुरुवार","शुक्रवार","शनिवार"];
       const now = new Date();
       const dateText = `${DAYS_HI[now.getDay()]}, ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+      const summary = (document.getElementById("rashifalMainSummary")?.textContent || "").trim();
+      const color = document.getElementById("swTileColor")?.textContent || rashi.luckyColor;
+      const num = document.getElementById("swTileNumber")?.textContent || rashi.luckyNumber;
+      const advice = (document.getElementById("rashifalKeyAdvice")?.textContent || "").trim();
 
       const text = `✨ *दैनिक राशिफल • युवा शक्ति ग्रुप* ✨\n` +
         `👤 *सदस्य:* ${memberName}\n` +
-        `🪐 *राशि:* ${rashi.name} (${rashi.symbol}) | स्वामी: ${rashi.lord} (${data.rulerDay || 'शुक्रवार'})\n` +
-        `📅 *दिनांक:* ${dateText}\n` +
-        `📊 *गोचर सूचकांक:* ${data.gocharIndex}/10 (${data.verdict})\n\n` +
-        `🎨 *शुभ रंग:* ${data.luckyColor}\n` +
-        `🔢 *शुभ अंक:* ${data.luckyNumber}\n` +
-        `⏰ *अनुकूल समय:* ${data.luckyTime}\n\n` +
-        `🌟 *आज का प्रवाह:*\n${data.flowSummary}\n\n` +
-        `💖 *प्रेम और रिश्ते:* ${data.categories.love.text} [${data.categories.love.score}]\n` +
-        `💼 *काम और करियर:* ${data.categories.career.text} [${data.categories.career.score}]\n` +
-        `💰 *धन और वित्त:* ${data.categories.wealth.text} [${data.categories.wealth.score}]\n` +
-        `🩺 *ऊर्जा और दिनचर्या:* ${data.categories.health.text} [${data.categories.health.score}]\n` +
-        `🏡 *परिवार और घर:* ${data.categories.family.text} [${data.categories.family.score}]\n\n` +
-        `🟢 *शुभ पक्ष:* ${data.subhPaksh}\n` +
-        `🟠 *सतर्कता:* ${data.satarkta}\n\n` +
-        `🪔 *आज का विशेष वैदिक उपाय:*\n${data.remedy}\n` +
-        `🕉️ *वैदिक मंत्र:* ${data.mantra}\n\n` +
+        `🪐 *राशि:* ${rashi.name} (${rashi.symbol})\n` +
+        `📅 *दिनांक:* ${dateText}\n\n` +
+        `🎨 *शुभ रंग:* ${color}\n` +
+        `🔢 *शुभ अंक:* ${num}\n\n` +
+        `📖 *आज का राशिफल:*\n${summary}\n\n` +
+        `💡 *दिन की मुख्य सलाह:*\n${advice}\n\n` +
+        `🪔 *विशेष वैदिक उपाय:*\n${rashi.remedy}\n` +
+        `🕉️ *बीज मंत्र:* ${rashi.mantra}\n\n` +
         `📲 _युवा शक्ति ग्रुप (कुचेरा) ऐप_`;
 
       const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
