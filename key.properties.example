@@ -1,0 +1,8 @@
+# Example key.properties for signing release APKs
+# Copy this file to 'key.properties' and fill in your actual credentials.
+# Note: 'key.properties' is gitignored for security.
+
+storeFile=../release.keystore
+storePassword=yuvashakti123
+keyAlias=yuvashakti
+keyPassword=yuvashakti123

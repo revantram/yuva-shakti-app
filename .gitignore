@@ -1,0 +1,21 @@
+# Keystores & Signing credentials
+*.keystore
+*.jks
+key.properties
+secrets/
+
+# Build artifacts & temp directories
+build/
+.gradle/
+**/build/
+gen/
+bin/
+*.idsig
+
+# OS & IDE
+.DS_Store
+*.iml
+.idea/
+local.properties
+.env
+.keystore_base64.txt

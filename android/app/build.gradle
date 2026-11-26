@@ -1,0 +1,117 @@
+plugins {
+    id 'com.android.application'
+}
+
+import java.util.Properties
+
+// 🔐 1. Load key.properties if available
+def keyProperties = new Properties()
+def keyPropFiles = [
+    rootProject.file('key.properties'),
+    file('key.properties'),
+    rootProject.file('android/key.properties')
+]
+for (File propFile : keyPropFiles) {
+    if (propFile.exists()) {
+        propFile.withInputStream { stream -> keyProperties.load(stream) }
+        break
+    }
+}
+
+android {
+    namespace 'com.yuvashaktigroup.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.yuvashaktigroup.app"
+        minSdk 24
+        targetSdk 34
+        versionCode 576
+        versionName "5.5.26"
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile '../AndroidManifest.xml'
+            java.srcDirs = ['../src']
+            res.srcDirs = ['../res']
+            assets.srcDirs = ['src/main/assets']
+        }
+    }
+
+    signingConfigs {
+        release {
+            // Read from environment variables, key.properties, or standard local path
+            def storeFilePath = System.getenv("KEYSTORE_FILE") ?: keyProperties.getProperty('storeFile')
+            def storePasswordVal = System.getenv("KEYSTORE_PASSWORD") ?: keyProperties.getProperty('storePassword')
+            def keyAliasVal = System.getenv("KEY_ALIAS") ?: keyProperties.getProperty('keyAlias')
+            def keyPasswordVal = System.getenv("KEY_PASSWORD") ?: keyProperties.getProperty('keyPassword')
+
+            if (storeFilePath != null && file(storeFilePath).exists()) {
+                storeFile file(storeFilePath)
+                storePassword storePasswordVal ?: "yuvashakti123"
+                keyAlias keyAliasVal ?: "yuvashakti"
+                keyPassword keyPasswordVal ?: "yuvashakti123"
+            } else if (file('../release.keystore').exists()) {
+                storeFile file('../release.keystore')
+                storePassword storePasswordVal ?: "yuvashakti123"
+                keyAlias keyAliasVal ?: "yuvashakti"
+                keyPassword keyPasswordVal ?: "yuvashakti123"
+            } else if (rootProject.file('android/release.keystore').exists()) {
+                storeFile rootProject.file('android/release.keystore')
+                storePassword storePasswordVal ?: "yuvashakti123"
+                keyAlias keyAliasVal ?: "yuvashakti"
+                keyPassword keyPasswordVal ?: "yuvashakti123"
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // 🔒 Permanently enforce the release signing config (no debug key)
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+// 📦 Automatic Asset Syncing Before Build
+tasks.register('syncWebAssets') {
+    doLast {
+        def assetsTarget = file("src/main/assets")
+        assetsTarget.mkdirs()
+        
+        // Copy root HTML & JavaScript assets
+        copy {
+            from rootProject.file(".")
+            into assetsTarget
+            include "index.html", "cash-counter.html", "payment-methods.html", "login.html", "notes_data.js", "manifest.json", "favicon.png", "ic_launcher.png"
+        }
+        
+        // Copy assets subfolder (icons, notes, etc.)
+        def assetsSource = rootProject.file("assets")
+        if (assetsSource.exists()) {
+            copy {
+                from assetsSource
+                into file("${assetsTarget}/assets")
+            }
+            // Also copy directly into root for relative resolution
+            copy {
+                from assetsSource
+                into assetsTarget
+            }
+        }
+    }
+}
+
+preBuild.dependsOn syncWebAssets
+
+dependencies {
+    // Pure native Android SDK without external dependencies
+}
