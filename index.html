@@ -5045,7 +5045,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.31
+            APK v5.5.32
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5072,7 +5072,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.31 (बिल्ड कोड: 581)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.32 (बिल्ड कोड: 582)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5084,30 +5084,7 @@
         </button>
       </div>
 
-      
-      <!-- 1. 👤 खाता प्रोफाइल एवं लॉगिन/लॉगआउट (Account Profile Card) -->
-      <div class="card" id="settingsAuthCard" style="margin-bottom:14px;">
-        <div class="card-title">
-          <span style="display:flex; align-items:center; gap:8px;">
-            <div class="ios-icon-tile ios-icon-gray" style="width:28px; height:28px; font-size:13px; border-radius:8px;">
-              <i class="fa-solid fa-user-gear"></i>
-            </div>
-            <span data-i18n="settings_auth_title">खाता प्रोफाइल एवं लॉगआउट</span>
-          </span>
-          <span class="ios-value-badge" id="settingsAuthBadge" style="font-size:11px; padding:2px 8px;">लॉगिन नहीं हैं</span>
-        </div>
-        <div style="padding:6px 0 12px 0;">
-          <div style="font-size:15px; font-weight:700; color:var(--text-main);" id="settingsUserName">लॉगिन नहीं हैं</div>
-          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="settingsUserPhone">ग्रुप सदस्य या संचालक लॉगिन करें</div>
-        </div>
-        <div id="settingsAuthActionBox">
-          <button class="btn-main" style="width:100%; border-radius:14px;" id="settingsLoginBtn" onclick="openLoginModal()">
-            <i class="fa-solid fa-right-to-bracket"></i> सदस्य / संचालक लॉगिन करें
-          </button>
-        </div>
-      </div>
-
-      <!-- 2. 👑 संचालक कंट्रोल सेंटर (Admin Control Center - केवल संचालक नंबर 8696663615 के लिए दृश्यमान) -->
+      <!-- 1. 👑 संचालक कंट्रोल सेंटर (Admin Control Center - केवल संचालक नंबर 8696663615 के लिए दृश्यमान) -->
       <div id="settingsAdminEntryPoint" style="display:none; margin-bottom:14px;">
         <div class="card ios-glass-card" onclick="openDedicatedAdminControlPage()" style="padding:13px 15px; border-radius:20px; cursor:pointer; background:linear-gradient(135deg, rgba(254, 243, 199, 0.95), rgba(255, 251, 235, 0.98)); border:1.5px solid #fde68a; box-shadow:0 4px 16px rgba(217, 119, 6, 0.12); transition:transform 0.15s ease;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -5306,6 +5283,28 @@
             <i class="fa-solid fa-cloud-arrow-down" style="color:#2563eb; font-size:10px;"></i>
             <span>1-क्लिक इन-ऐप डाउनलोड</span>
           </span>
+        </div>
+      </div>
+
+            <!-- 👤 खाता प्रोफाइल एवं लॉगिन/लॉगआउट (Account Profile Card - सेटिंग्स में सबसे नीचे) -->
+      <div class="card" id="settingsAuthCard" style="margin-bottom:14px;">
+        <div class="card-title">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <div class="ios-icon-tile ios-icon-gray" style="width:28px; height:28px; font-size:13px; border-radius:8px;">
+              <i class="fa-solid fa-user-gear"></i>
+            </div>
+            <span data-i18n="settings_auth_title">खाता प्रोफाइल एवं लॉगआउट</span>
+          </span>
+          <span class="ios-value-badge" id="settingsAuthBadge" style="font-size:11px; padding:2px 8px;">लॉगिन नहीं हैं</span>
+        </div>
+        <div style="padding:6px 0 12px 0;">
+          <div style="font-size:15px; font-weight:700; color:var(--text-main);" id="settingsUserName">लॉगिन नहीं हैं</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="settingsUserPhone">ग्रुप सदस्य या संचालक लॉगिन करें</div>
+        </div>
+        <div id="settingsAuthActionBox">
+          <button class="btn-main" style="width:100%; border-radius:14px;" id="settingsLoginBtn" onclick="openLoginModal()">
+            <i class="fa-solid fa-right-to-bracket"></i> सदस्य / संचालक लॉगिन करें
+          </button>
         </div>
       </div>
 
@@ -5886,7 +5885,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.31 (बिल्ड कोड: 581)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.32 (बिल्ड कोड: 582)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -8079,8 +8078,8 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    let APP_VERSION = "5.5.31";
-    let APP_BUILD_CODE = "581";
+    let APP_VERSION = "5.5.32";
+    let APP_BUILD_CODE = "582";
     try {
       if (window.AndroidApp && typeof window.AndroidApp.getAppVersionName === "function") {
         const nativeVer = window.AndroidApp.getAppVersionName();
