@@ -5259,7 +5259,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.27
+            APK v5.5.28
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5286,7 +5286,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.27 (बिल्ड कोड: 577)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.28 (बिल्ड कोड: 578)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5875,7 +5875,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.27 (बिल्ड कोड: 577)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.28 (बिल्ड कोड: 578)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -7467,25 +7467,6 @@
     <!-- Admin Page Body Container -->
     <div style="padding:14px 16px 80px 16px; max-width:640px; margin:0 auto; width:100%; box-sizing:border-box; display:flex; flex-direction:column; gap:14px;">
 
-      <!-- 1. 📢 परिवार सूचना पट्टी (Notice Board) -->
-      <div class="card ios-glass-card" style="border:1.5px solid #fde68a; background:#fffbeb; border-radius:18px; padding:14px; box-shadow:0 4px 14px rgba(217, 119, 6, 0.08);">
-        <div style="font-size:13.5px; font-weight:900; color:#92400e; margin-bottom:8px; display:flex; align-items:center; gap:7px;">
-          <i class="fa-solid fa-bullhorn" style="color:#d97706;"></i>
-          <span>परिवार सूचना पट्टी (Notice Board)</span>
-        </div>
-        <textarea id="noticeAdminInput" maxlength="220" placeholder="उदा. विशेष सूचना: कल सायं 7:00 बजे भाटी परिवार बैठक रखी गई है, सभी सदस्य सादर आमंत्रित हैं।" style="width:100%; min-height:68px; border:1px solid #fdba74; border-radius:12px; padding:10px; font-size:13px; font-family:inherit; resize:vertical; box-sizing:border-box; background:white;"></textarea>
-        <label style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; margin-top:8px; color:#78350f;">
-          <input type="checkbox" id="noticeRsvpChk"> इस सूचना पर RSVP (आऊँगा / नहीं आ पाऊँगा) माँगें
-        </label>
-        <div style="display:flex; gap:8px; margin-top:10px;">
-          <button class="btn-main" onclick="ysSaveNotice()" style="flex:1; background:linear-gradient(135deg,#d97706,#b45309); border-radius:12px; padding:10px; font-size:13px; font-weight:800;">
-            <i class="fa-solid fa-bullhorn"></i> प्रकाशित / अपडेट
-          </button>
-          <button class="btn-tool" onclick="ysDeleteNotice()" style="flex:0.6; border-color:#fca5a5; color:#b91c1c; border-radius:12px; font-weight:800;">
-            <i class="fa-solid fa-trash"></i> हटाएं
-          </button>
-        </div>
-      </div>
 
       <!-- 2. 🛡️ सदस्य व गेस्ट प्रबंधन (Guest Approvals & Bakayadar Reminder) -->
       <div class="card ios-glass-card" style="border:1.5px solid rgba(37,99,235,0.2); background:white; border-radius:18px; padding:14px; box-shadow:0 4px 14px rgba(0,0,0,0.04);">
@@ -8087,8 +8068,8 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    let APP_VERSION = "5.5.27";
-    let APP_BUILD_CODE = "577";
+    let APP_VERSION = "5.5.28";
+    let APP_BUILD_CODE = "578";
     try {
       if (window.AndroidApp && typeof window.AndroidApp.getAppVersionName === "function") {
         const nativeVer = window.AndroidApp.getAppVersionName();
