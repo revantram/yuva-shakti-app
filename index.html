@@ -1980,30 +1980,47 @@
       z-index: 1;
       max-width: 480px;
       margin: 0 auto;
-      padding: 12px 14px 50px;
+      padding: 12px 14px 20px;
       display: flex;
       flex-direction: column;
       gap: 12px;
+    }
+    .rashi-carousel-wrap {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 14px 8px;
+      margin: 0 -14px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+    .rashi-carousel-wrap::-webkit-scrollbar {
+      display: none;
     }
     .rashi-pill-item {
       display: inline-flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 6px 10px;
+      padding: 6px 12px;
       border-radius: 14px;
       background: var(--glass-surface);
       border: 1px solid var(--glass-border);
       color: var(--text-secondary);
       font-weight: 800;
-      font-size: 11px;
+      font-size: 11.5px;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s ease;
-      min-width: 66px;
-      height: 52px;
+      min-width: 70px;
+      height: 56px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
       position: relative;
+      flex-shrink: 0;
+    }
+    .rashi-pill-item:last-child {
+      margin-right: 14px;
     }
     .rashi-pill-item.active {
       background: linear-gradient(135deg, #d97706, #b45309) !important;
@@ -2013,22 +2030,42 @@
       transform: translateY(-2px);
     }
     .rashi-pill-item .rashi-pill-sym {
-      font-size: 17px;
+      font-size: 18px;
       line-height: 1;
       margin-bottom: 2px;
     }
     .rashi-pill-item .user-badge-dot {
       position: absolute;
-      top: 3px;
-      right: 3px;
+      top: -6px;
+      right: 2px;
       background: #16a34a;
       color: #ffffff;
-      font-size: 7.5px;
-      padding: 1px 4.5px;
+      font-size: 8px;
+      padding: 1.5px 5.5px;
       border-radius: 999px;
       font-weight: 900;
-      line-height: 1;
+      line-height: 1.1;
       z-index: 5;
+      box-shadow: 0 2px 5px rgba(22, 163, 74, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+    #dedicatedRashifalPage .bottom-sticky-bar {
+      position: sticky;
+      bottom: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      padding: 10px 14px calc(14px + env(safe-area-inset-bottom, 12px));
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      gap: 10px;
+      margin: 14px -14px -20px -14px;
+      box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06);
+    }
+    #dedicatedRashifalPage[data-theme="dark"] .bottom-sticky-bar,
+    body.dark-theme #dedicatedRashifalPage .bottom-sticky-bar {
+      background: rgba(18, 18, 22, 0.94) !important;
     }
 
     /* ========================================================================= */
@@ -5007,7 +5044,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.21
+            APK v5.5.22
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5034,7 +5071,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.21 (बिल्ड कोड: 571)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.22 (बिल्ड कोड: 572)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5892,7 +5929,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.21 (बिल्ड कोड: 571)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.22 (बिल्ड कोड: 572)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -7786,93 +7823,53 @@
         </button>
       </header>
 
-      <!-- 👑 Personalized Member Profile Card (Sleek, Clean, No Overflow) -->
-      <div style="background:var(--glass-elevated); border:1px solid var(--glass-border); border-radius:20px; padding:14px 16px; box-shadow:var(--glass-shadow); position:relative;">
+      <!-- 👑 Personalized Member Profile Card (Clean, Focused, No Truncation) -->
+      <div style="background:var(--glass-elevated); border:1px solid var(--glass-border); border-radius:20px; padding:16px; box-shadow:var(--glass-shadow); position:relative;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div style="min-width:0;">
-            <div style="display:inline-flex; align-items:center; gap:5px; background:rgba(217,119,6,0.1); color:#b45309; padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:800; margin-bottom:3px;" id="rashifalMemberBadge">
+            <div style="display:inline-flex; align-items:center; gap:5px; background:rgba(217,119,6,0.1); color:#b45309; padding:2.5px 9px; border-radius:999px; font-size:10.5px; font-weight:800; margin-bottom:4px;" id="rashifalMemberBadge">
               <i class="fa-solid fa-user-check"></i> आपकी अपनी नाम राशि
             </div>
-            <h2 id="rashifalMemberGreeting" style="font-size:16px; font-weight:900; color:var(--text-primary); margin:0 0 2px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+            <h2 id="rashifalMemberGreeting" style="font-size:17px; font-weight:900; color:var(--text-primary); margin:0 0 3px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
               नमस्ते रेवंतराम भाटी जी!
             </h2>
-            <div id="rashifalDetectedText" style="font-size:11.5px; font-weight:700; color:var(--text-muted);">
+            <div id="rashifalDetectedText" style="font-size:12px; font-weight:700; color:var(--text-muted);">
               नाम अनुसार निर्धारित राशि: <strong id="rashifalDetectedSignName" style="color:#d97706;">तुला (♎)</strong>
             </div>
           </div>
-          <div id="rashifalSymbolBigBadge" style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg, #f59e0b, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 6px 18px rgba(217,119,6,0.35); flex-shrink:0; margin-left:12px;">
+          <div id="rashifalSymbolBigBadge" style="width:52px; height:52px; border-radius:16px; background:linear-gradient(135deg, #f59e0b, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:0 6px 18px rgba(217,119,6,0.35); flex-shrink:0; margin-left:14px;">
             ♎
-          </div>
-        </div>
-
-        <!-- Astrological Attributes Quick Pill Strip (Fits elegantly on 1 single row) -->
-        <div style="display:flex; gap:6px; margin-top:10px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px;">
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:10px; padding:4px 9px; font-size:11px; white-space:nowrap; display:flex; align-items:center; gap:5px;">
-            <span style="color:var(--text-muted); font-weight:700;">स्वामी:</span>
-            <strong id="rashifalStatLord" style="color:var(--text-primary); font-weight:800;">शुक्र देव</strong>
-          </div>
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:10px; padding:4px 9px; font-size:11px; white-space:nowrap; display:flex; align-items:center; gap:5px;">
-            <span style="color:var(--text-muted); font-weight:700;">शुभ अंक:</span>
-            <strong id="rashifalStatNumber" style="color:#d97706; font-weight:900;">6</strong>
-          </div>
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:10px; padding:4px 9px; font-size:11px; white-space:nowrap; display:flex; align-items:center; gap:5px;">
-            <span style="color:var(--text-muted); font-weight:700;">रंग:</span>
-            <strong id="rashifalStatColor" style="color:var(--text-primary); font-weight:800;">सफेद, गुलाबी</strong>
-          </div>
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:10px; padding:4px 9px; font-size:11px; white-space:nowrap; display:flex; align-items:center; gap:5px;">
-            <span style="color:var(--text-muted); font-weight:700;">दिशा:</span>
-            <strong id="rashifalStatDirection" style="color:#10b981; font-weight:800;">आग्नेय</strong>
           </div>
         </div>
       </div>
 
-      <!-- 🪐 12 Rashis Horizontal Carousel Selector (Uniform Height & Clean Badges) -->
+      <!-- 🪐 12 Rashis Horizontal Carousel Selector (Uniform Height & Full Right Clearance) -->
       <div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; padding:0 2px;">
-          <span style="font-size:11px; font-weight:800; color:var(--text-muted);">अन्य राशि चुनें (12 राशियाँ):</span>
-          <span id="rashifalActiveRashiLabel" style="font-size:11px; font-weight:900; color:#d97706;">तुला ♎ सक्रिय</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; padding:0 2px;">
+          <span style="font-size:11.5px; font-weight:800; color:var(--text-muted);">अन्य राशि चुनें (12 राशियाँ):</span>
+          <span id="rashifalActiveRashiLabel" style="font-size:11.5px; font-weight:900; color:#d97706;">तुला ♎ सक्रिय</span>
         </div>
-        <div id="rashiSelectorCarousel" style="display:flex; gap:6px; overflow-x:auto; padding:4px 2px; scrollbar-width:none; -webkit-overflow-scrolling:touch;">
+        <div id="rashiSelectorCarousel" class="rashi-carousel-wrap">
           <!-- 12 pills populated dynamically -->
         </div>
       </div>
 
-      <!-- 🌟 Card 1: मुख्य खगोलीय गोचर सारांश (Compact & Elegant Highlight Box) -->
-      <div style="background:linear-gradient(135deg, rgba(254,243,199,0.65) 0%, var(--glass-elevated) 100%); border:1px solid rgba(245,158,11,0.35); border-radius:18px; padding:14px; box-shadow:var(--glass-shadow);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:7px;">
-          <div style="display:flex; align-items:center; gap:7px;">
-            <span id="rashifalHeroSignHeading" style="font-size:15.5px; font-weight:900; color:var(--text-primary);">तुला ♎</span>
-            <span id="rashifalTransitBadge" style="font-size:10.5px; font-weight:800; background:#fef3c7; color:#b45309; padding:2px 8px; border-radius:6px; border:1px solid #fde68a;">9वां भाव गोचर</span>
+      <!-- 🌟 Card 1: मुख्य खगोलीय गोचर सारांश (Clean & Focused Transit Context) -->
+      <div style="background:linear-gradient(135deg, rgba(254,243,199,0.65) 0%, var(--glass-elevated) 100%); border:1px solid rgba(245,158,11,0.35); border-radius:18px; padding:15px; box-shadow:var(--glass-shadow);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span id="rashifalHeroSignHeading" style="font-size:16px; font-weight:900; color:var(--text-primary);">तुला ♎</span>
+            <span id="rashifalTransitBadge" style="font-size:11px; font-weight:800; background:#fef3c7; color:#b45309; padding:2px 8px; border-radius:6px; border:1px solid #fde68a;">9वां भाव गोचर</span>
           </div>
-          <span id="rashifalOverallStars" style="color:#f59e0b; font-size:13px; font-weight:900; letter-spacing:1px;">★★★★☆</span>
+          <span id="rashifalOverallStars" style="color:#f59e0b; font-size:14px; font-weight:900; letter-spacing:1px;">★★★★☆</span>
         </div>
         
-        <p id="rashifalTransitSummary" style="font-size:12.5px; line-height:1.65; color:var(--text-secondary); margin:0 0 10px 0;">
+        <p id="rashifalTransitSummary" style="font-size:12.5px; line-height:1.7; color:var(--text-secondary); margin:0;">
           गणना हो रही है...
         </p>
-
-        <!-- 4-Pill Mini Ratings Strip (Nakshatra Tak Style) -->
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; background:var(--glass-surface); padding:8px 10px; border-radius:12px; border:1px solid var(--glass-border); font-size:11px;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="color:var(--text-muted); font-weight:700;">करियर व धन:</span>
-            <span id="starCareerMini" style="color:#f59e0b; font-weight:800; font-size:10.5px;">★★★★☆</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="color:var(--text-muted); font-weight:700;">प्रेम व संबंध:</span>
-            <span id="starLoveMini" style="color:#f59e0b; font-weight:800; font-size:10.5px;">★★★★★</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="color:var(--text-muted); font-weight:700;">स्वास्थ्य:</span>
-            <span id="starHealthMini" style="color:#f59e0b; font-weight:800; font-size:10.5px;">★★★☆☆</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="color:var(--text-muted); font-weight:700;">भाग्य व यात्रा:</span>
-            <span id="starLuckMini" style="color:#f59e0b; font-weight:800; font-size:10.5px;">★★★★☆</span>
-          </div>
-        </div>
       </div>
 
-      <!-- 📋 Card 2: क्षेत्रवार फल (6 Clean Cardlets with Rich Formatting) -->
+      <!-- 📋 Card 2: क्षेत्रवार फल (6 Clean Cardlets with Rich Formatting & Individual Stars) -->
       <div>
         <div style="font-size:13px; font-weight:900; color:var(--text-primary); margin:2px 0 8px 2px; display:flex; align-items:center; gap:6px;">
           <span>📋</span> <span>क्षेत्रवार फल</span>
@@ -7880,67 +7877,67 @@
 
         <div style="display:flex; flex-direction:column; gap:8px;">
           <!-- 1. सामान्य -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:10px 12px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
-              <span style="font-weight:800; font-size:12px; color:#b45309; display:flex; align-items:center; gap:6px;">
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:11px 13px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="font-weight:800; font-size:12.5px; color:#b45309; display:flex; align-items:center; gap:6px;">
                 <span>☀️</span> <span>सामान्य</span>
               </span>
-              <span id="starGeneral" style="color:#f59e0b; font-size:10.5px; font-weight:800; background:rgba(245,158,11,0.1); padding:1px 6px; border-radius:999px;">★★★★☆</span>
+              <span id="starGeneral" style="color:#f59e0b; font-size:11px; font-weight:800; background:rgba(245,158,11,0.1); padding:1.5px 7px; border-radius:999px;">★★★★☆</span>
             </div>
             <div id="rashifalFieldGeneral" style="font-size:12px; line-height:1.55; color:var(--text-secondary);">...</div>
           </div>
 
           <!-- 2. प्रेम व संबंध -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:10px 12px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
-              <span style="font-weight:800; font-size:12px; color:#db2777; display:flex; align-items:center; gap:6px;">
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:11px 13px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="font-weight:800; font-size:12.5px; color:#db2777; display:flex; align-items:center; gap:6px;">
                 <span>💖</span> <span>प्रेम व संबंध</span>
               </span>
-              <span id="starLove" style="color:#f59e0b; font-size:10.5px; font-weight:800; background:rgba(245,158,11,0.1); padding:1px 6px; border-radius:999px;">★★★★★</span>
+              <span id="starLove" style="color:#f59e0b; font-size:11px; font-weight:800; background:rgba(245,158,11,0.1); padding:1.5px 7px; border-radius:999px;">★★★★★</span>
             </div>
             <div id="rashifalFieldLove" style="font-size:12px; line-height:1.55; color:var(--text-secondary);">...</div>
           </div>
 
           <!-- 3. करियर व व्यवसाय -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:10px 12px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
-              <span style="font-weight:800; font-size:12px; color:#2563eb; display:flex; align-items:center; gap:6px;">
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:11px 13px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="font-weight:800; font-size:12.5px; color:#2563eb; display:flex; align-items:center; gap:6px;">
                 <span>💼</span> <span>करियर व व्यवसाय</span>
               </span>
-              <span id="starCareer" style="color:#f59e0b; font-size:10.5px; font-weight:800; background:rgba(245,158,11,0.1); padding:1px 6px; border-radius:999px;">★★★☆☆</span>
+              <span id="starCareer" style="color:#f59e0b; font-size:11px; font-weight:800; background:rgba(245,158,11,0.1); padding:1.5px 7px; border-radius:999px;">★★★☆☆</span>
             </div>
             <div id="rashifalFieldCareer" style="font-size:12px; line-height:1.55; color:var(--text-secondary);">...</div>
           </div>
 
           <!-- 4. धन व लाभ -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:10px 12px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
-              <span style="font-weight:800; font-size:12px; color:#059669; display:flex; align-items:center; gap:6px;">
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:11px 13px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="font-weight:800; font-size:12.5px; color:#059669; display:flex; align-items:center; gap:6px;">
                 <span>💰</span> <span>धन व लाभ</span>
               </span>
-              <span id="starWealth" style="color:#f59e0b; font-size:10.5px; font-weight:800; background:rgba(245,158,11,0.1); padding:1px 6px; border-radius:999px;">★★★★☆</span>
+              <span id="starWealth" style="color:#f59e0b; font-size:11px; font-weight:800; background:rgba(245,158,11,0.1); padding:1.5px 7px; border-radius:999px;">★★★★☆</span>
             </div>
             <div id="rashifalFieldWealth" style="font-size:12px; line-height:1.55; color:var(--text-secondary);">...</div>
           </div>
 
           <!-- 5. स्वास्थ्य -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:10px 12px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
-              <span style="font-weight:800; font-size:12px; color:#0891b2; display:flex; align-items:center; gap:6px;">
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:11px 13px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="font-weight:800; font-size:12.5px; color:#0891b2; display:flex; align-items:center; gap:6px;">
                 <span>🩺</span> <span>स्वास्थ्य</span>
               </span>
-              <span id="starHealth" style="color:#f59e0b; font-size:10.5px; font-weight:800; background:rgba(245,158,11,0.1); padding:1px 6px; border-radius:999px;">★★★☆☆</span>
+              <span id="starHealth" style="color:#f59e0b; font-size:11px; font-weight:800; background:rgba(245,158,11,0.1); padding:1.5px 7px; border-radius:999px;">★★★☆☆</span>
             </div>
             <div id="rashifalFieldHealth" style="font-size:12px; line-height:1.55; color:var(--text-secondary);">...</div>
           </div>
 
           <!-- 6. भाग्य व यात्रा -->
-          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:10px 12px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
-              <span style="font-weight:800; font-size:12px; color:#7c3aed; display:flex; align-items:center; gap:6px;">
+          <div style="background:var(--glass-surface); border:1px solid var(--glass-border); border-radius:14px; padding:11px 13px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span style="font-weight:800; font-size:12.5px; color:#7c3aed; display:flex; align-items:center; gap:6px;">
                 <span>🧭</span> <span>भाग्य व यात्रा</span>
               </span>
-              <span id="starLuck" style="color:#f59e0b; font-size:10.5px; font-weight:800; background:rgba(245,158,11,0.1); padding:1px 6px; border-radius:999px;">★★★★☆</span>
+              <span id="starLuck" style="color:#f59e0b; font-size:11px; font-weight:800; background:rgba(245,158,11,0.1); padding:1.5px 7px; border-radius:999px;">★★★★☆</span>
             </div>
             <div id="rashifalFieldLuck" style="font-size:12px; line-height:1.55; color:var(--text-secondary);">...</div>
           </div>
@@ -7948,10 +7945,10 @@
       </div>
 
       <!-- 🟢 Card 3: शुभ पक्ष (Positive Aspects) -->
-      <div style="background:linear-gradient(135deg, rgba(220,252,231,0.5) 0%, var(--glass-surface) 100%); border:1px solid rgba(34,197,94,0.35); border-radius:16px; padding:12px 14px; box-shadow:0 3px 10px rgba(0,0,0,0.03);">
+      <div style="background:linear-gradient(135deg, rgba(220,252,231,0.5) 0%, var(--glass-surface) 100%); border:1px solid rgba(34,197,94,0.35); border-radius:16px; padding:13px 15px; box-shadow:0 3px 10px rgba(0,0,0,0.03);">
         <div style="display:flex; align-items:center; gap:7px; margin-bottom:4px;">
           <span style="width:9px; height:9px; border-radius:50%; background:#16a34a; display:inline-block;"></span>
-          <span style="font-size:12px; font-weight:900; color:#15803d;">शुभ पक्ष (अनुकूल फल)</span>
+          <span style="font-size:12.5px; font-weight:900; color:#15803d;">शुभ पक्ष (अनुकूल फल)</span>
         </div>
         <p id="rashifalSubhPaksh" style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin:0;">
           ...
@@ -7959,38 +7956,39 @@
       </div>
 
       <!-- 🟠 Card 4: सतर्कता (Precautions) -->
-      <div style="background:linear-gradient(135deg, rgba(254,242,242,0.5) 0%, var(--glass-surface) 100%); border:1px solid rgba(239,68,68,0.35); border-radius:16px; padding:12px 14px; box-shadow:0 3px 10px rgba(0,0,0,0.03);">
+      <div style="background:linear-gradient(135deg, rgba(254,242,242,0.5) 0%, var(--glass-surface) 100%); border:1px solid rgba(239,68,68,0.35); border-radius:16px; padding:13px 15px; box-shadow:0 3px 10px rgba(0,0,0,0.03);">
         <div style="display:flex; align-items:center; gap:7px; margin-bottom:4px;">
           <span style="width:9px; height:9px; border-radius:50%; background:#ea580c; display:inline-block;"></span>
-          <span style="font-size:12px; font-weight:900; color:#c2410c;">सतर्कता (सावधानी)</span>
+          <span style="font-size:12.5px; font-weight:900; color:#c2410c;">सतर्कता (सावधानी)</span>
         </div>
         <p id="rashifalSatarkta" style="font-size:12px; line-height:1.6; color:var(--text-secondary); margin:0;">
           ...
         </p>
       </div>
 
-      <!-- ✨ Card 5: आज के शुभ (Exact Box as Nakshatra Tak) -->
-      <div style="background:linear-gradient(135deg, rgba(254,243,199,0.85) 0%, rgba(254,249,195,0.7) 100%); border:1.5px solid rgba(245,158,11,0.4); border-radius:18px; padding:14px; box-shadow:0 6px 18px rgba(245,158,11,0.1);">
-        <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
-          <span style="font-size:15px;">✨</span>
-          <span style="font-size:13px; font-weight:900; color:#854d0e;">आज के शुभ</span>
+      <!-- ✨ Card 5: आज के शुभ मुहूर्त व संकेत (All Auspicious Elements in One Dedicated Place) -->
+      <div style="background:linear-gradient(135deg, rgba(254,243,199,0.85) 0%, rgba(254,249,195,0.7) 100%); border:1.5px solid rgba(245,158,11,0.4); border-radius:18px; padding:15px; box-shadow:0 6px 18px rgba(245,158,11,0.1);">
+        <div style="display:flex; align-items:center; gap:6px; margin-bottom:10px;">
+          <span style="font-size:16px;">✨</span>
+          <span style="font-size:13.5px; font-weight:900; color:#854d0e;">आज के शुभ मुहूर्त व संकेत</span>
         </div>
-        <div style="font-size:12px; line-height:1.8; color:var(--text-primary);">
-          <div style="display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; border-bottom:1px dashed rgba(180,83,9,0.25); padding-bottom:6px; margin-bottom:6px;">
-            <span><strong>रंग:</strong> <span id="boxSubhRang" style="color:#b45309; font-weight:800;">सफेद, गुलाबी</span></span>
+        <div style="font-size:12.5px; line-height:1.8; color:var(--text-primary);">
+          <div style="display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; border-bottom:1px dashed rgba(180,83,9,0.25); padding-bottom:8px; margin-bottom:8px;">
+            <span>🎨 <strong>शुभ रंग:</strong> <span id="boxSubhRang" style="color:#b45309; font-weight:800;">सफेद, गुलाबी</span></span>
             <span>•</span>
-            <span><strong>अंक:</strong> <span id="boxSubhAnk" style="color:#b45309; font-weight:900;">6</span></span>
+            <span>🔢 <strong>शुभ अंक:</strong> <span id="boxSubhAnk" style="color:#b45309; font-weight:900;">6</span></span>
             <span>•</span>
-            <span><strong>दिशा:</strong> <span id="boxSubhDisha" style="color:#b45309; font-weight:800;">आग्नेय</span></span>
+            <span>🧭 <strong>शुभ दिशा:</strong> <span id="boxSubhDisha" style="color:#b45309; font-weight:800;">आग्नेय</span></span>
           </div>
-          <div>
-            <strong>शुभ समय:</strong> <span id="boxSubhSamay" style="color:#1e293b; font-weight:700;">09:30–10:22 AM, 03:38–04:31 PM, 11:01–12:08 AM</span>
+          <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:baseline;">
+            <span>⏰ <strong>अनुकूल समय:</strong></span>
+            <span id="boxSubhSamay" style="color:#1e293b; font-weight:700; word-break:break-word;">09:30–10:22 AM, 03:38–04:31 PM, 11:01–12:08 AM</span>
           </div>
         </div>
       </div>
 
       <!-- 🪔 Card 6: आज का विशेष वैदिक उपाय व मंत्र -->
-      <div style="background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(217,119,6,0.06)); border:1px solid rgba(245,158,11,0.3); border-radius:18px; padding:14px; box-shadow:var(--glass-shadow);">
+      <div style="background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(217,119,6,0.06)); border:1px solid rgba(245,158,11,0.3); border-radius:18px; padding:15px; box-shadow:var(--glass-shadow);">
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
           <div style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg, #f59e0b, #b45309); color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">
             <i class="fa-solid fa-om"></i>
@@ -8002,12 +8000,12 @@
         </p>
       </div>
 
-      <!-- Bottom Action Buttons -->
-      <div style="display:flex; gap:8px; margin-top:4px;">
-        <button type="button" onclick="saveActiveRashiAsUserDefault()" id="saveDefaultRashiBtn" style="flex:1; border:1px solid var(--glass-border); background:var(--glass-surface); color:var(--text-primary); padding:11px; border-radius:14px; font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-          <i class="fa-solid fa-bookmark" style="color:#d97706;"></i> <span>इसे मुख्य राशि बनाएं</span>
+      <!-- 📌 Bottom Sticky Action Bar (Fixed, Safe-Area Padded, Non-colliding) -->
+      <div class="bottom-sticky-bar">
+        <button type="button" onclick="saveActiveRashiAsUserDefault()" id="saveDefaultRashiBtn" style="flex:1; border:1px solid var(--glass-border); background:var(--glass-surface); color:var(--text-primary); padding:12px; border-radius:14px; font-size:12.5px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 2px 6px rgba(0,0,0,0.04);">
+          <i class="fa-solid fa-bookmark" style="color:#d97706;"></i> <span>मुख्य राशि बनाएं</span>
         </button>
-        <button type="button" onclick="closeDedicatedRashifalPage(); openDedicatedChoghadiyaPage();" style="flex:1; border:none; background:linear-gradient(135deg, #10b981, #059669); color:white; padding:11px; border-radius:14px; font-size:12px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 10px rgba(16,185,129,0.3);">
+        <button type="button" onclick="closeDedicatedRashifalPage(); openDedicatedChoghadiyaPage();" style="flex:1; border:none; background:linear-gradient(135deg, #10b981, #059669); color:white; padding:12px; border-radius:14px; font-size:12.5px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 4px 14px rgba(16,185,129,0.35);">
           <i class="fa-solid fa-om"></i> <span>शुभ चौघड़िया देखें</span>
         </button>
       </div>
@@ -8018,7 +8016,7 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    const APP_VERSION = "5.5.21";
+    const APP_VERSION = "5.5.22";
     const GITHUB_REPO = "revantram/yuva-shakti-app";
     let latestDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/latest/download/YuvaShaktiGroup.apk`;
 
