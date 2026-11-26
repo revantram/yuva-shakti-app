@@ -59,6 +59,28 @@ public class MainActivity extends Activity {
 
     public class WebAppInterface {
         @JavascriptInterface
+        public String getAppVersionName() {
+            try {
+                return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            } catch (Exception e) {
+                return "5.5.27";
+            }
+        }
+
+        @JavascriptInterface
+        public int getAppVersionCode() {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    return (int) getPackageManager().getPackageInfo(getPackageName(), 0).getLongVersionCode();
+                } else {
+                    return getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                }
+            } catch (Exception e) {
+                return 577;
+            }
+        }
+
+        @JavascriptInterface
         public void promptGoogleAccountPicker() {
             runOnUiThread(new Runnable() {
                 @Override
