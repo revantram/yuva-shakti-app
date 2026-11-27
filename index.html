@@ -5085,7 +5085,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.37
+            APK v5.5.38
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5112,7 +5112,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.37 (बिल्ड कोड: 587)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.38 (बिल्ड कोड: 588)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5315,7 +5315,7 @@
         <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px; padding-top:8px; border-top:1px solid rgba(37,99,235,0.12);">
           <div id="devAppsPreviewStrip" style="display:flex; align-items:center; gap:7px;">
             <img id="devPreviewIcon_player" src="assets/icons/rv-bhati-player.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/rv-bhati-player.png';">
-            <img id="devPreviewIcon_photo" src="assets/icons/photo-tool.svg" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/photo-tool.svg';">
+            <img id="devPreviewIcon_photo" src="assets/icons/photo-tool.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='assets/icons/photo-tool.png';">
             <img id="devPreviewIcon_taiyari" src="assets/icons/meri-taiyari.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/meri-taiyari.png';">
             <img id="devPreviewIcon_downloader" src="assets/icons/rv-downloader.png" style="width:24px; height:24px; border-radius:6px; object-fit:cover; border:1px solid #cbd5e1; background:white;" onerror="this.onerror=null; this.src='icons/rv-downloader.png';">
           </div>
@@ -5925,7 +5925,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.37 (बिल्ड कोड: 587)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.38 (बिल्ड कोड: 588)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -8238,8 +8238,8 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    let APP_VERSION = "5.5.37";
-    let APP_BUILD_CODE = "587";
+    let APP_VERSION = "5.5.38";
+    let APP_BUILD_CODE = "588";
     try {
       if (window.AndroidApp && typeof window.AndroidApp.getAppVersionName === "function") {
         const nativeVer = window.AndroidApp.getAppVersionName();
@@ -21923,7 +21923,7 @@ Return ONLY pure valid JSON strictly matching this schema (no markdown, no quote
         repo: "revantram/photo-tool",
         directApkUrl: "https://github.com/revantram/photo-tool/releases/download/v1.0.0/PhotoTool-v1.0.apk",
         url: "https://github.com/revantram/photo-tool/releases/latest",
-        iconUrl: (typeof window !== "undefined" && window.APP_ICONS_DATA && window.APP_ICONS_DATA["photo-tool"]) ? window.APP_ICONS_DATA["photo-tool"] : "assets/icons/photo-tool.svg",
+        iconUrl: (typeof window !== "undefined" && window.APP_ICONS_DATA && window.APP_ICONS_DATA["photo-tool"]) ? window.APP_ICONS_DATA["photo-tool"] : "assets/icons/photo-tool.png",
         remoteIconUrl: "https://raw.githubusercontent.com/revantram/photo-tool/main/assets/icon.svg",
         icon: "fa-solid fa-camera-retro",
         iconGradient: "linear-gradient(135deg, #2563eb, #0284c7)",
@@ -22064,6 +22064,35 @@ Return ONLY pure valid JSON strictly matching this schema (no markdown, no quote
       }
     }
 
+        function resolveAppIcon(app) {
+      if (!app) return "";
+      const nameLower = (app.name || "").toLowerCase().replace(/[\s\-_]/g, "");
+      const idLower = (app.id || "").toLowerCase().replace(/[\s\-_]/g, "");
+
+      if (window.APP_ICONS_DATA) {
+        if (window.APP_ICONS_DATA[app.id]) return window.APP_ICONS_DATA[app.id];
+        if (nameLower.includes("photo") || idLower.includes("photo")) {
+          return window.APP_ICONS_DATA["photo-tool"] || "assets/icons/photo-tool.png";
+        }
+        if (nameLower.includes("downloader") || idLower.includes("downloader")) {
+          return window.APP_ICONS_DATA["rv-downloader"] || "assets/icons/rv-downloader.png";
+        }
+        if (nameLower.includes("player") || idLower.includes("player")) {
+          return window.APP_ICONS_DATA["rv-bhati-player"] || "assets/icons/rv-bhati-player.png";
+        }
+        if (nameLower.includes("taiyari") || idLower.includes("taiyari")) {
+          return window.APP_ICONS_DATA["meri-taiyari"] || "assets/icons/meri-taiyari.png";
+        }
+      }
+
+      if (nameLower.includes("photo") || idLower.includes("photo")) return "assets/icons/photo-tool.png";
+      if (nameLower.includes("downloader") || idLower.includes("downloader")) return "assets/icons/rv-downloader.png";
+      if (nameLower.includes("player") || idLower.includes("player")) return "assets/icons/rv-bhati-player.png";
+      if (nameLower.includes("taiyari") || idLower.includes("taiyari")) return "assets/icons/meri-taiyari.png";
+
+      return (app.iconUrl && app.iconUrl.startsWith("data:") ? app.iconUrl : "") || (app.iconUrl || "");
+    }
+
     function initDeveloperAppsListener() {
       try {
         db.collection("developer_apps").onSnapshot((snapshot) => {
@@ -22077,9 +22106,8 @@ Return ONLY pure valid JSON strictly matching this schema (no markdown, no quote
                 ...(def || {}),
                 ...data
               };
-              if (window.APP_ICONS_DATA && window.APP_ICONS_DATA[doc.id]) {
-                merged.iconUrl = window.APP_ICONS_DATA[doc.id];
-              }
+              const realIcon = resolveAppIcon(merged);
+              if (realIcon) merged.iconUrl = realIcon;
               list.push(merged);
             });
             list.sort((a, b) => (Number(a.order) || 999) - (Number(b.order) || 999));
@@ -22187,7 +22215,7 @@ Return ONLY pure valid JSON strictly matching this schema (no markdown, no quote
         const size = meta.size;
         const subtitle = app.subtitle || "एंड्रॉइड एप्लीकेशन";
         const desc = app.description || "रेवंतराम भाटी द्वारा विकसित सुरक्षित एंड्रॉइड ऐप।";
-        const realIcon = (window.APP_ICONS_DATA && window.APP_ICONS_DATA[app.id]) || (app.iconUrl && app.iconUrl.startsWith("data:") ? app.iconUrl : "") || (app.iconUrl || "");
+        const realIcon = resolveAppIcon(app);
 
         html += `
           <div class="ios-glass-card" style="background:#ffffff; border-radius:20px; padding:16px 18px; border:1.5px solid rgba(0,0,0,0.07); box-shadow:0 4px 16px rgba(0,0,0,0.04); display:flex; flex-direction:column; gap:12px;">
