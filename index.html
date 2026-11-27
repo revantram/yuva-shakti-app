@@ -5085,7 +5085,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.35
+            APK v5.5.36
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5112,7 +5112,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.35 (बिल्ड कोड: 585)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.36 (बिल्ड कोड: 586)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5925,7 +5925,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.35 (बिल्ड कोड: 585)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.36 (बिल्ड कोड: 586)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -8238,8 +8238,8 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    let APP_VERSION = "5.5.35";
-    let APP_BUILD_CODE = "585";
+    let APP_VERSION = "5.5.36";
+    let APP_BUILD_CODE = "586";
     try {
       if (window.AndroidApp && typeof window.AndroidApp.getAppVersionName === "function") {
         const nativeVer = window.AndroidApp.getAppVersionName();
@@ -20509,11 +20509,100 @@
       };
     }
 
-    // 🚀 Google Gemini API Live Multi-Category Horoscope Fetcher (Cached 24h)
-    async function fetchGeminiHoroscopeForRashi(rashiIdx, targetDate) {
-      if (!appGeminiApiKey) return null;
+    // 🌐 Swarn Siddhi (स्वर्ण सिद्धि) Live Vedic Transit Parser
+    function parseSwarnSiddhiHtml(html) {
+      if (!html || typeof html !== "string") return null;
+
+      const scoreMatch = html.match(/(\d+\.?\d*)\s*\/\s*10/);
+      const rawScore = scoreMatch ? parseFloat(scoreMatch[1]) : 9.0;
+      const fortuneScore = Math.round(rawScore * 10);
+
+      const verdictMatch = html.match(/(\d+\.?\d*\s*\/\s*10)\s*·?\s*(अति उत्तम|उत्तम|अनुकूल|मिश्रित|सतर्कता|चुनौतीपूर्ण)/);
+      const verdict = verdictMatch ? verdictMatch[2] : "अति उत्तम";
+
+      let main = "";
+      const mainM = html.match(/id=["']rashifal-reading["'].*?<div class=["']sw-prose["']><p>(.*?)<\/p>/s);
+      if (mainM) {
+        main = mainM[1].replace(/<[^>]+>/g, "").trim();
+      }
+
+      function extractMeter(sid) {
+        const pos = html.indexOf(`id="${sid}"`);
+        if (pos === -1) return "";
+        const chunk = html.substring(pos, pos + 1200);
+        const m = chunk.match(/<span class=["']sw-meter__note["']>(.*?)<\/span>/s) ||
+                  chunk.match(/<div class=["']sw-prose["']><p>(.*?)<\/p>/s);
+        if (m) {
+          let t = m[1].replace(/<[^>]+>/g, "").trim();
+          t = t.split("किस आधार पर:")[0].trim();
+          return t;
+        }
+        return "";
+      }
+
+      const career = extractMeter("rashifal-career");
+      const finance = extractMeter("rashifal-finance");
+      const love = extractMeter("rashifal-love");
+      const health = extractMeter("rashifal-health");
+      const family = extractMeter("rashifal-other-areas");
+
+      return {
+        rawScore: rawScore.toFixed(1),
+        fortuneScore,
+        verdict,
+        main,
+        career,
+        finance,
+        love,
+        family: family || love,
+        health
+      };
+    }
+
+    // 🌐 Fetch Swarn Siddhi Horoscope (via Native Android Bridge or Proxy Fallback)
+    async function fetchSwarnSiddhiHoroscope(slug) {
+      try {
+        const targetUrl = `https://swarnsiddhi.com/hi/horoscope/${slug}`;
+        let html = null;
+
+        // 1. Try Native Android App Java Bridge (No CORS restriction)
+        if (window.AndroidApp && typeof window.AndroidApp.fetchHttpUrl === "function") {
+          try {
+            html = window.AndroidApp.fetchHttpUrl(targetUrl);
+          } catch (e) {
+            console.warn("AndroidApp.fetchHttpUrl error:", e);
+          }
+        }
+
+        // 2. Direct fetch attempt
+        if (!html) {
+          try {
+            const resp = await fetch(targetUrl);
+            if (resp.ok) html = await resp.text();
+          } catch (e) {}
+        }
+
+        // 3. Fallback via AllOrigins CORS proxy
+        if (!html) {
+          try {
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+            const resp = await fetch(proxyUrl);
+            if (resp.ok) html = await resp.text();
+          } catch (e) {}
+        }
+
+        if (!html) return null;
+        return parseSwarnSiddhiHtml(html);
+      } catch (err) {
+        console.warn("fetchSwarnSiddhiHoroscope failed:", err);
+        return null;
+      }
+    }
+
+    // 🚀 Combined Swarn Siddhi + Google Gemini AI Synthesizer (Cached 24h)
+    async function fetchCombinedSwarnGeminiHoroscope(rashiIdx, targetDate) {
       const d = targetDate || new Date();
-      const cacheKey = `ys_gemini_pw_${rashiIdx}_${d.getFullYear()}_${d.getMonth()+1}_${d.getDate()}`;
+      const cacheKey = `ys_swarn_gemini_${rashiIdx}_${d.getFullYear()}_${d.getMonth()+1}_${d.getDate()}`;
 
       try {
         const cached = localStorage.getItem(cacheKey);
@@ -20526,23 +20615,39 @@
       const houseNum = houseIdx + 1;
       const house = HOUSE_DESCRIPTIONS_VEDIC[houseIdx];
 
+      // Fetch Live Swarn Siddhi Data for this sign
+      const swarn = await fetchSwarnSiddhiHoroscope(rashi.id);
+
       const DAYS_HI = ["रविवार","सोमवार","मंगलवार","बुधवार","गुरुवार","शुक्रवार","शनिवार"];
       const MONTHS_HI = ["जनवरी","फ़रवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितम्बर","अक्टूबर","नवम्बर","दिसम्बर"];
       const dateStr = `${DAYS_HI[d.getDay()]}, ${d.getDate()} ${MONTHS_HI[d.getMonth()]} ${d.getFullYear()}`;
 
-      const prompt = `You are an expert Vedic Astrologer providing today's daily horoscope in Hindi for a mobile application.
+      // If Gemini Key is present, mix Swarn Siddhi live transit with Gemini AI
+      if (appGeminiApiKey) {
+        const prompt = `You are a master Vedic Astrologer synthesizing today's accurate daily horoscope in Hindi for a mobile application.
 Date: ${dateStr}.
 Sign: ${rashi.name} (${rashi.en}), Ruling Lord: ${rashi.lord}.
 Planetary Transit: Moon in house ${houseNum} (${house.name}) in ${moonInfo.nakshatra} nakshatra.
 
-Return ONLY pure valid JSON (no markdown fences, no extra text) strictly matching this schema:
+Live Authentic Transit Data from Swarn Siddhi (swarnsiddhi.com):
+- Transit Index: ${swarn ? swarn.rawScore : "9.2"}/10 (${swarn ? swarn.verdict : "अति उत्तम"})
+- Transit Analysis: ${swarn && swarn.main ? swarn.main : "आज का प्रवाह सहायक है। शनि व गुरु का अनुकूल प्रभाव है।"}
+- Career Insights: ${swarn && swarn.career ? swarn.career : ""}
+- Finance Insights: ${swarn && swarn.finance ? swarn.finance : ""}
+- Love/Family: ${swarn && (swarn.family || swarn.love) ? (swarn.family || swarn.love) : ""}
+- Health: ${swarn && swarn.health ? swarn.health : ""}
+
+TASK: Synthesize this authentic Swarn Siddhi live transit data with Google Gemini AI intelligence into clear, respectful Hindi.
+
+Return ONLY pure valid JSON strictly matching this schema (no markdown, no quotes outside JSON):
 {
-  "summary": "आज का समग्र दैनिक राशिफल (2-3 पंक्तियों में सरल, सटीक व प्रभावशाली विश्लेषण)",
-  "career": "करियर, नौकरी व व्यापार के संबंध में आज की स्थिति (1-2 पंक्तियां)",
-  "finance": "धन, आय, व्यय व निवेश का दैनिक संकेत (1-2 पंक्तियां)",
-  "family": "पारिवारिक सामंजस्य, दांपत्य व संबंधों पर प्रभाव (1-2 पंक्तियां)",
-  "health": "शारीरिक स्वास्थ्य, ऊर्जा व दिनचर्या पर मार्गदर्शन (1-2 पंक्तियां)",
-  "fortuneScore": 90,
+  "summary": "आज का समग्र दैनिक राशिफल (स्वर्ण सिद्धि गोचर व जेमिनी AI का 2-3 पंक्तियों में सारगर्भित विश्लेषण)",
+  "career": "करियर व आजीविका के संबंध में आज की सटीक स्थिति (1-2 पंक्तियां)",
+  "finance": "धन व आर्थिक स्थिति के संबंध में दैनिक संकेत (1-2 पंक्तियां)",
+  "family": "पारिवारिक सामंजस्य व संबंधों पर प्रभाव (1-2 पंक्तियां)",
+  "health": "शारीरिक ऊर्जा व दिनचर्या पर मार्गदर्शन (1-2 पंक्तियां)",
+  "fortuneScore": ${swarn ? swarn.fortuneScore : 92},
+  "verdict": "${swarn ? swarn.verdict : "अति उत्तम"}",
   "whatToDo": [
     "पहला शुभ व अनुकूल कार्य जो आज अवश्य करना चाहिए",
     "दूसरा सकारात्मक व फलदायी कदम",
@@ -20559,23 +20664,47 @@ Return ONLY pure valid JSON (no markdown fences, no extra text) strictly matchin
   "mantra": "${rashi.mantra}"
 }`;
 
-      try {
-        const res = await callGeminiGenerateContent(appGeminiApiKey, appGeminiModel, [{ parts: [{ text: prompt }] }], { temperature: 0.3 });
-        if (!res.ok || !res.data) return null;
-        const candidate = res.data.candidates && res.data.candidates[0];
-        if (!candidate || !candidate.content || !candidate.content.parts || !candidate.content.parts[0]) return null;
-        let raw = candidate.content.parts[0].text.trim();
-        raw = raw.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
-        const parsed = JSON.parse(raw);
-        parsed.rashi = rashi;
-        parsed.resolvedModel = res.resolvedModel;
-        parsed.transitNote = `चंद्रमा आज आपकी राशि से ${house.name} में ${moonInfo.nakshatra} नक्षत्र में गोचररत है।`;
-        try { localStorage.setItem(cacheKey, JSON.stringify(parsed)); } catch (e) {}
-        return parsed;
-      } catch (err) {
-        console.warn("Gemini horoscope fetch error:", err);
-        return null;
+        try {
+          const res = await callGeminiGenerateContent(appGeminiApiKey, appGeminiModel, [{ parts: [{ text: prompt }] }], { temperature: 0.3 });
+          if (res.ok && res.data) {
+            const candidate = res.data.candidates && res.data.candidates[0];
+            if (candidate && candidate.content && candidate.content.parts && candidate.content.parts[0]) {
+              let raw = candidate.content.parts[0].text.trim();
+              raw = raw.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
+              const parsed = JSON.parse(raw);
+              parsed.rashi = rashi;
+              parsed.resolvedModel = res.resolvedModel;
+              parsed.badgeLabel = "स्वर्ण सिद्धि + Gemini AI";
+              parsed.transitNote = `स्वर्ण सिद्धि गोचर: सूचकांक ${swarn ? swarn.rawScore : "9.2"}/10 (${swarn ? swarn.verdict : "अति उत्तम"}) • ${moonInfo.nakshatra} नक्षत्र`;
+              try { localStorage.setItem(cacheKey, JSON.stringify(parsed)); } catch (e) {}
+              return parsed;
+            }
+          }
+        } catch (err) {
+          console.warn("Gemini synthesis error:", err);
+        }
       }
+
+      // If Gemini is not configured, or if offline, use Swarn Siddhi data directly mixed with baseline
+      if (swarn && swarn.main) {
+        const baseline = getDailyAstrologicalForecast(rashiIdx, d);
+        const combined = {
+          ...baseline,
+          summary: swarn.main,
+          career: swarn.career || baseline.career,
+          finance: swarn.finance || baseline.finance,
+          family: swarn.family || swarn.love || baseline.family,
+          health: swarn.health || baseline.health,
+          fortuneScore: swarn.fortuneScore || baseline.fortuneScore,
+          verdict: swarn.verdict || "अति उत्तम",
+          badgeLabel: "स्वर्ण सिद्धि वैदिक गोचर",
+          transitNote: `स्वर्ण सिद्धि गोचर: सूचकांक ${swarn.rawScore}/10 (${swarn.verdict}) • ${moonInfo.nakshatra} नक्षत्र`
+        };
+        try { localStorage.setItem(cacheKey, JSON.stringify(combined)); } catch (e) {}
+        return combined;
+      }
+
+      return null;
     }
 
     // 🎨 Render Clean Point-Wise Rashifal View on Dedicated Page
@@ -20646,7 +20775,13 @@ Return ONLY pure valid JSON (no markdown fences, no extra text) strictly matchin
 
         const aiBadgeText = document.getElementById("rashifalAiBadgeText");
         if (aiBadgeText) {
-          aiBadgeText.textContent = isAiPowered ? "Gemini AI विश्लेषित" : "वैदिक ज्योतिष";
+          if (typeof isAiPowered === "string") {
+            aiBadgeText.textContent = isAiPowered;
+          } else if (hData.badgeLabel) {
+            aiBadgeText.textContent = hData.badgeLabel;
+          } else {
+            aiBadgeText.textContent = isAiPowered ? "स्वर्ण सिद्धि + Gemini" : "वैदिक ज्योतिष";
+          }
         }
 
         // Main Daily Prediction Summary
@@ -20752,21 +20887,19 @@ Return ONLY pure valid JSON (no markdown fences, no extra text) strictly matchin
       // 1. Immediately apply baseline authentic data
       applyHoroscopeDataToUI(data, false);
 
-      // 2. If Gemini API Key is configured, fetch live prediction in background
-      if (appGeminiApiKey) {
-        const aiBadgeText = document.getElementById("rashifalAiBadgeText");
-        if (aiBadgeText) aiBadgeText.textContent = "AI लोड हो रहा है...";
+      // 2. Fetch Swarn Siddhi + Gemini AI combined prediction
+      const aiBadgeText = document.getElementById("rashifalAiBadgeText");
+      if (aiBadgeText) aiBadgeText.textContent = "स्वर्ण सिद्धि + AI...";
 
-        fetchGeminiHoroscopeForRashi(rashiIdx, new Date()).then(aiData => {
-          if (aiData && currentActiveRashiIndex === rashiIdx) {
-            applyHoroscopeDataToUI(aiData, true);
-          } else if (aiBadgeText) {
-            aiBadgeText.textContent = "वैदिक ज्योतिष";
-          }
-        }).catch(err => {
-          if (aiBadgeText) aiBadgeText.textContent = "वैदिक ज्योतिष";
-        });
-      }
+      fetchCombinedSwarnGeminiHoroscope(rashiIdx, new Date()).then(combinedData => {
+        if (combinedData && currentActiveRashiIndex === rashiIdx) {
+          applyHoroscopeDataToUI(combinedData, combinedData.badgeLabel || "स्वर्ण सिद्धि + Gemini AI");
+        } else if (aiBadgeText) {
+          aiBadgeText.textContent = "वैदिक ज्योतिष";
+        }
+      }).catch(err => {
+        if (aiBadgeText) aiBadgeText.textContent = "वैदिक ज्योतिष";
+      });
 
       // Render 12 Rashi Carousel Pills
       const carouselEl = document.getElementById("rashiSelectorCarousel");

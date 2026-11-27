@@ -164,6 +164,36 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
+        public String fetchHttpUrl(String targetUrl) {
+            HttpURLConnection conn = null;
+            try {
+                URL url = new URL(targetUrl);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 10; Mobile)");
+                conn.setConnectTimeout(8000);
+                conn.setReadTimeout(8000);
+                int code = conn.getResponseCode();
+                if (code >= 200 && code < 400) {
+                    InputStream in = conn.getInputStream();
+                    java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+                    byte[] buffer = new byte[4096];
+                    int len;
+                    while ((len = in.read(buffer)) != -1) {
+                        out.write(buffer, 0, len);
+                    }
+                    in.close();
+                    return new String(out.toByteArray(), "UTF-8");
+                }
+            } catch (Exception e) {
+                // Silently return null on network failure
+            } finally {
+                if (conn != null) conn.disconnect();
+            }
+            return null;
+        }
+
+        @JavascriptInterface
         public boolean hasNotificationPermission() {
             if (Build.VERSION.SDK_INT >= 33) {
                 return checkSelfPermission("android.permission.POST_NOTIFICATIONS") == PackageManager.PERMISSION_GRANTED;
