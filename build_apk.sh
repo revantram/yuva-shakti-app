@@ -44,9 +44,18 @@ if [ -d "${APP_DIR}/assets" ]; then
   cp -r "${APP_DIR}/assets"/* "${BUILD_DIR}/assets/assets/"
 fi
 
+VERSION_CODE=$(grep -oE 'versionCode [0-9]+' "${APP_DIR}/android/app/build.gradle" | awk '{print $2}')
+VERSION_NAME=$(grep -oE 'versionName "[^"]+"' "${APP_DIR}/android/app/build.gradle" | cut -d'"' -f2)
+
+if [ -n "${VERSION_CODE}" ] && [ -n "${VERSION_NAME}" ]; then
+  echo "==> 🏷️ Syncing version ${VERSION_NAME} (build ${VERSION_CODE}) into AndroidManifest.xml..."
+  sed -i 's/android:versionCode="[0-9]*"/android:versionCode="'"${VERSION_CODE}"'"/' "${APP_DIR}/android/AndroidManifest.xml"
+  sed -i 's/android:versionName="[^"]*"/android:versionName="'"${VERSION_NAME}"'"/' "${APP_DIR}/android/AndroidManifest.xml"
+fi
+
 echo "==> ⚙️ Compiling resources with AAPT2..."
 aapt2 compile --dir "${APP_DIR}/android/res" -o "${BUILD_DIR}/res.zip"
-aapt2 link -I "${ANDROID_JAR}" --manifest "${APP_DIR}/android/AndroidManifest.xml" -o "${BUILD_DIR}/base.apk" -A "${BUILD_DIR}/assets" --java "${BUILD_DIR}/gen" "${BUILD_DIR}/res.zip"
+aapt2 link -I "${ANDROID_JAR}" --manifest "${APP_DIR}/android/AndroidManifest.xml" --version-code "${VERSION_CODE}" --version-name "${VERSION_NAME}" -o "${BUILD_DIR}/base.apk" -A "${BUILD_DIR}/assets" --java "${BUILD_DIR}/gen" "${BUILD_DIR}/res.zip"
 
 echo "==> ☕ Compiling Java sources..."
 javac --release 8 -cp "${ANDROID_JAR}:${BUILD_DIR}/gen" -d "${BUILD_DIR}/classes" "${APP_DIR}/android/src/com/yuvashaktigroup/app/"*.java "${BUILD_DIR}/gen/com/yuvashaktigroup/app/R.java"
