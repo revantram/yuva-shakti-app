@@ -4596,10 +4596,9 @@
             </div>
             <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0;">
               <div style="display:flex; align-items:center; gap:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                <span style="font-size:10px; font-weight:800; color:#b45309; letter-spacing:0.2px; flex-shrink:0;" id="topRashifalTitleLabel">राशिफल:</span>
-                <span id="topRashifalSignName" style="font-size:11.5px; font-weight:900; color:var(--text-main, #0f172a); flex-shrink:0;">तुला ♎</span>
+                <span id="topRashifalTitleLabel" style="font-size:11px; font-weight:900; color:var(--text-main, #0f172a); flex-shrink:0;">आज का राशिफल</span>
               </div>
-              <div id="topRashifalSubText" style="font-size:9.5px; font-weight:700; color:#b45309; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">आज का भाग्य 88%</div>
+              <div id="topRashifalSubText" style="font-size:9.5px; font-weight:800; color:#b45309; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">आपकी राशि: तुला (♎)</div>
             </div>
           </div>
           <i class="fa-solid fa-chevron-right" style="font-size:10px; color:#d97706; margin-left:3px; flex-shrink:0;"></i>
@@ -5086,7 +5085,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.34
+            APK v5.5.35
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5113,7 +5112,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.34 (बिल्ड कोड: 584)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.35 (बिल्ड कोड: 585)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5926,7 +5925,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.34 (बिल्ड कोड: 584)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.35 (बिल्ड कोड: 585)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -8239,8 +8238,8 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    let APP_VERSION = "5.5.34";
-    let APP_BUILD_CODE = "584";
+    let APP_VERSION = "5.5.35";
+    let APP_BUILD_CODE = "585";
     try {
       if (window.AndroidApp && typeof window.AndroidApp.getAppVersionName === "function") {
         const nativeVer = window.AndroidApp.getAppVersionName();
@@ -20881,24 +20880,34 @@ Return ONLY pure valid JSON (no markdown fences, no extra text) strictly matchin
     }
     window.shareRashifalWhatsApp = shareRashifalWhatsApp;
 
-    // 🔄 Update the Top Home Banner Capsule (where user put the red circle)
+    // 🔄 Update the Top Home Banner Capsule (आज का राशिफल व सदस्य की राशि)
     function updateTopRashifalBanner() {
       try {
         const memberName = getLoggedInAppMemberName();
-        const rashiIdx = computeRashiFromMemberName(memberName);
+        let rashiIdx = computeRashiFromMemberName(memberName);
+
+        const savedRashiId = localStorage.getItem("ysg_user_selected_rashi_id");
+        if (savedRashiId) {
+          const foundIdx = RASHI_DATA.findIndex(r => r.id === savedRashiId);
+          if (foundIdx !== -1) rashiIdx = foundIdx;
+        }
         currentActiveRashiIndex = rashiIdx;
 
-        const data = getDailyAstrologicalForecast(rashiIdx, new Date());
-        const rashi = data.rashi;
+        const rashi = RASHI_DATA[rashiIdx] || RASHI_DATA[6];
 
         const symEl = document.getElementById("topRashifalSymbol");
         if (symEl) symEl.textContent = rashi.symbol;
+
+        const titleEl = document.getElementById("topRashifalTitleLabel");
+        if (titleEl) titleEl.textContent = "आज का राशिफल";
 
         const signNameEl = document.getElementById("topRashifalSignName");
         if (signNameEl) signNameEl.textContent = `${rashi.name} ${rashi.symbol}`;
 
         const subTextEl = document.getElementById("topRashifalSubText");
-        if (subTextEl) subTextEl.textContent = `सूचकांक ${data.gocharIndex} • ${data.verdict}`;
+        if (subTextEl) {
+          subTextEl.textContent = `आपकी राशि: ${rashi.name} (${rashi.symbol})`;
+        }
       } catch (e) {
         console.warn("Top Rashifal Banner update error:", e);
       }
