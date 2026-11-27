@@ -5085,7 +5085,7 @@
             <span style="font-weight:800; color:#1e3a8a;" data-i18n="app_info_title">डेवलपर ऑप्शन एवं अपडेट</span>
           </span>
           <span class="ios-value-badge ios-value-blue" style="font-size:11.5px; padding:3px 10px; font-weight:800; border-radius:12px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
-            APK v5.5.39
+            APK v5.5.40
           </span>
         </div>
         <div style="font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:9px; margin-top:6px;">
@@ -5112,7 +5112,7 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:6px;">
             <span>एपीके संस्करण (APK Version):</span>
-            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.39 (बिल्ड कोड: 589)</span>
+            <span style="background:linear-gradient(135deg, #1e3a8a, #0284c7); color:white; padding:3px 10px; border-radius:6px; font-weight:800; font-size:11.5px; letter-spacing:0.3px;">v5.5.40 (बिल्ड कोड: 590)</span>
           </div>
           <div id="developerCardCloudDbRow" style="display:none; justify-content:space-between; align-items:center;">
             <span>क्लाउड डेटाबेस:</span>
@@ -5925,7 +5925,7 @@
       </div>
       
       <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px; padding:12px; margin-bottom:12px;">
-        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.39 (बिल्ड कोड: 589)</div>
+        <div style="font-size:13.5px; font-weight:800; color:#1e40af;" id="updateModalVersion">संस्करण: v5.5.40 (बिल्ड कोड: 590)</div>
         <div style="font-size:11.5px; color:#3b82f6;" id="updateModalDate">नवीनतम आधिकारिक रिलीज</div>
       </div>
 
@@ -8238,8 +8238,8 @@
   <!-- Firebase & Application Logic -->
   <script>
     // 1. Application Metadata & Update Configuration
-    let APP_VERSION = "5.5.39";
-    let APP_BUILD_CODE = "589";
+    let APP_VERSION = "5.5.40";
+    let APP_BUILD_CODE = "590";
     try {
       if (window.AndroidApp && typeof window.AndroidApp.getAppVersionName === "function") {
         const nativeVer = window.AndroidApp.getAppVersionName();
@@ -20486,6 +20486,7 @@
 
       const template = HOUSE_TEMPLATES[houseIdx][varIdx];
       const finalScore = Math.min(98, Math.max(70, template.score + ((day % 5) - 2)));
+      const dailyDateNum = calculateDailyDateNumerology(d);
 
       return {
         rashi,
@@ -20500,13 +20501,29 @@
         whatToAvoid: template.whatToAvoid,
         keyAdvice: template.keyAdvice,
         luckyColor: rashi.luckyColor,
-        luckyNumber: rashi.luckyNumber,
+        luckyNumber: dailyDateNum,
+        rashiNumber: rashi.luckyNumber,
         luckyDirection: rashi.luckyDirection || "उत्तर-पूर्व",
         luckyTime: (rashi.times && rashi.times.split(",")[0]) || "प्रातः काल",
         remedy: rashi.remedy,
         mantra: rashi.mantra,
         nakshatra
       };
+    }
+
+    // 🔢 Calculate Daily Numerology Root Number (तारीख के अंकों का योग)
+    function calculateDailyDateNumerology(targetDate) {
+      const d = targetDate || new Date();
+      const str = `${d.getFullYear()}${d.getMonth() + 1}${d.getDate()}`;
+      let sum = 0;
+      for (let i = 0; i < str.length; i++) sum += parseInt(str[i], 10);
+      while (sum > 9) {
+        let nsum = 0;
+        const s = String(sum);
+        for (let i = 0; i < s.length; i++) nsum += parseInt(s[i], 10);
+        sum = nsum;
+      }
+      return sum;
     }
 
     // 🌐 Swarn Siddhi (स्वर्ण सिद्धि) Live Vedic Transit Parser
@@ -20546,6 +20563,19 @@
       const health = extractMeter("rashifal-health");
       const family = extractMeter("rashifal-other-areas");
 
+      // Extract lucky color, lucky number, and explanation from Swarn Siddhi
+      let luckyColor = "";
+      const colorM = html.match(/शुभ रंग<\/h3>.*?<strong[^>]*data-lucky-value[^>]*>(.*?)<\/strong>/s);
+      if (colorM) luckyColor = colorM[1].replace(/<[^>]+>/g, "").trim();
+
+      let luckyNumber = "";
+      const numM = html.match(/शुभ अंक<\/h3>.*?<strong[^>]*data-lucky-value[^>]*>(.*?)<\/strong>/s);
+      if (numM) luckyNumber = numM[1].replace(/<[^>]+>/g, "").trim();
+
+      let luckyNumberExplain = "";
+      const numExpM = html.match(/शुभ अंक<\/h3>.*?<\/strong><\/p><p>(.*?)<\/p>/s);
+      if (numExpM) luckyNumberExplain = numExpM[1].replace(/<[^>]+>/g, "").trim();
+
       return {
         rawScore: rawScore.toFixed(1),
         fortuneScore,
@@ -20555,7 +20585,10 @@
         finance,
         love,
         family: family || love,
-        health
+        health,
+        luckyColor,
+        luckyNumber,
+        luckyNumberExplain
       };
     }
 
@@ -20602,7 +20635,7 @@
     // 🚀 Combined Swarn Siddhi + Google Gemini AI Synthesizer (Cached 24h)
     async function fetchCombinedSwarnGeminiHoroscope(rashiIdx, targetDate) {
       const d = targetDate || new Date();
-      const cacheKey = `ys_swarn_gemini_${rashiIdx}_${d.getFullYear()}_${d.getMonth()+1}_${d.getDate()}`;
+      const cacheKey = `ys_swarn_gemini_v4_${rashiIdx}_${d.getFullYear()}_${d.getMonth()+1}_${d.getDate()}`;
 
       try {
         const cached = localStorage.getItem(cacheKey);
@@ -20617,6 +20650,10 @@
 
       // Fetch Live Swarn Siddhi Data for this sign
       const swarn = await fetchSwarnSiddhiHoroscope(rashi.id);
+
+      const dailyDateNum = calculateDailyDateNumerology(d);
+      const effectiveLuckyNum = (swarn && swarn.luckyNumber) ? swarn.luckyNumber : dailyDateNum;
+      const effectiveLuckyColor = (swarn && swarn.luckyColor) ? swarn.luckyColor : rashi.luckyColor;
 
       const DAYS_HI = ["रविवार","सोमवार","मंगलवार","बुधवार","गुरुवार","शुक्रवार","शनिवार"];
       const MONTHS_HI = ["जनवरी","फ़रवरी","मार्च","अप्रैल","मई","जून","जुलाई","अगस्त","सितम्बर","अक्टूबर","नवम्बर","दिसम्बर"];
@@ -20636,6 +20673,8 @@ Live Authentic Transit Data from Swarn Siddhi (swarnsiddhi.com):
 - Finance Insights: ${swarn && swarn.finance ? swarn.finance : ""}
 - Love/Family: ${swarn && (swarn.family || swarn.love) ? (swarn.family || swarn.love) : ""}
 - Health: ${swarn && swarn.health ? swarn.health : ""}
+- Lucky Number (Date Numerology): ${effectiveLuckyNum}
+- Lucky Color: ${effectiveLuckyColor}
 
 TASK: Synthesize this authentic Swarn Siddhi live transit data with Google Gemini AI intelligence into clear, respectful Hindi.
 
@@ -20658,8 +20697,8 @@ Return ONLY pure valid JSON strictly matching this schema (no markdown, no quote
     "दूसरी आवश्यक सावधानी जिसे आज टालना चाहिए"
   ],
   "keyAdvice": "दिन की सबसे मुख्य व्यावहारिक व ज्योतिषीय सलाह",
-  "luckyColor": "${rashi.luckyColor}",
-  "luckyNumber": "${rashi.luckyNumber}",
+  "luckyColor": "${effectiveLuckyColor}",
+  "luckyNumber": "${effectiveLuckyNum}",
   "remedy": "${rashi.remedy}",
   "mantra": "${rashi.mantra}"
 }`;
@@ -20676,6 +20715,8 @@ Return ONLY pure valid JSON strictly matching this schema (no markdown, no quote
               parsed.resolvedModel = res.resolvedModel;
               parsed.badgeLabel = "स्वर्ण सिद्धि + Gemini AI";
               parsed.transitNote = `स्वर्ण सिद्धि गोचर: सूचकांक ${swarn ? swarn.rawScore : "9.2"}/10 (${swarn ? swarn.verdict : "अति उत्तम"}) • ${moonInfo.nakshatra} नक्षत्र`;
+              parsed.luckyColor = parsed.luckyColor || effectiveLuckyColor;
+              parsed.luckyNumber = parsed.luckyNumber || effectiveLuckyNum;
               try { localStorage.setItem(cacheKey, JSON.stringify(parsed)); } catch (e) {}
               return parsed;
             }
@@ -20698,7 +20739,10 @@ Return ONLY pure valid JSON strictly matching this schema (no markdown, no quote
           fortuneScore: swarn.fortuneScore || baseline.fortuneScore,
           verdict: swarn.verdict || "अति उत्तम",
           badgeLabel: "स्वर्ण सिद्धि वैदिक गोचर",
-          transitNote: `स्वर्ण सिद्धि गोचर: सूचकांक ${swarn.rawScore}/10 (${swarn.verdict}) • ${moonInfo.nakshatra} नक्षत्र`
+          transitNote: `स्वर्ण सिद्धि गोचर: सूचकांक ${swarn.rawScore}/10 (${swarn.verdict}) • ${moonInfo.nakshatra} नक्षत्र`,
+          luckyColor: effectiveLuckyColor,
+          luckyNumber: effectiveLuckyNum,
+          luckyNumberExplain: swarn.luckyNumberExplain || ""
         };
         try { localStorage.setItem(cacheKey, JSON.stringify(combined)); } catch (e) {}
         return combined;
@@ -20819,7 +20863,11 @@ Return ONLY pure valid JSON strictly matching this schema (no markdown, no quote
         if (tileColor) tileColor.textContent = hData.luckyColor || rashi.luckyColor;
 
         const tileNumber = document.getElementById("swTileNumber");
-        if (tileNumber) tileNumber.textContent = hData.luckyNumber || rashi.luckyNumber;
+        if (tileNumber) {
+          const lNum = hData.luckyNumber || data.luckyNumber || calculateDailyDateNumerology();
+          const rNum = rashi.luckyNumber;
+          tileNumber.innerHTML = `<span style="font-size:16px; font-weight:900; color:#1e3a8a;">${lNum}</span> <span style="font-size:11px; font-weight:700; color:#64748b; margin-left:3px;" title="दैनिक मूलांक: ${lNum} | राशि स्वामी अंक: ${rNum}">(राशि: ${rNum})</span>`;
+        }
 
         const tileDirection = document.getElementById("swTileDirection");
         if (tileDirection) tileDirection.textContent = hData.luckyDirection || rashi.luckyDirection || "दक्षिण-पूर्व";

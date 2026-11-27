@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
             try {
                 return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
             } catch (Exception e) {
-                return "5.5.39";
+                return "5.5.40";
             }
         }
 
@@ -76,7 +76,7 @@ public class MainActivity extends Activity {
                     return getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
                 }
             } catch (Exception e) {
-                return 589;
+                return 590;
             }
         }
 
